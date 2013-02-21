@@ -6,9 +6,8 @@ import se.sveaekonomi.webpay.integration.order.OrderBuilder;
  * @author klar-sar
  * @since 2012-12-06
  */
-public class FixedDiscountBuilder<T extends OrderBuilder<T>> implements RowBuilder {
+public class FixedDiscountBuilder implements RowBuilder {
     
- //   private OrderBuilder<T> orderBuilder;
     private String discountId;
     private String name;
     private String description;
@@ -17,15 +16,11 @@ public class FixedDiscountBuilder<T extends OrderBuilder<T>> implements RowBuild
     private String unit;
     private double amount;
     
-    public FixedDiscountBuilder(/*T orderBuilder*/) {
-   //     this.orderBuilder = orderBuilder;
-    }
-  
     public String getDiscountId() {
         return discountId;
     }
     
-    public FixedDiscountBuilder<T> setDiscountId(String discountId) {
+    public FixedDiscountBuilder setDiscountId(String discountId) {
         this.discountId = discountId;
         return this;
     }
@@ -34,7 +29,7 @@ public class FixedDiscountBuilder<T extends OrderBuilder<T>> implements RowBuild
         return name;
     }
     
-    public FixedDiscountBuilder<T> setName(String name) {
+    public FixedDiscountBuilder setName(String name) {
         this.name = name;
         return this;
     }
@@ -43,7 +38,7 @@ public class FixedDiscountBuilder<T extends OrderBuilder<T>> implements RowBuild
         return description;
     }
     
-    public FixedDiscountBuilder<T> setDescription(String description) {
+    public FixedDiscountBuilder setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -52,7 +47,7 @@ public class FixedDiscountBuilder<T extends OrderBuilder<T>> implements RowBuild
         return discount;
     }
     
-    public FixedDiscountBuilder<T> setDiscount(double discount) {
+    public FixedDiscountBuilder setDiscount(double discount) {
         this.discount = discount;
         return this;
     }
@@ -71,7 +66,7 @@ public class FixedDiscountBuilder<T extends OrderBuilder<T>> implements RowBuild
     /**
      * @param unit of (i.e. "pcs", "st" etc)
      */
-    public FixedDiscountBuilder<T> setUnit(String unit) {
+    public FixedDiscountBuilder setUnit(String unit) {
         this.unit = unit;
         return this;
     }
@@ -80,7 +75,7 @@ public class FixedDiscountBuilder<T extends OrderBuilder<T>> implements RowBuild
         return amount;
     }
     
-    public FixedDiscountBuilder<T> setAmountIncVat(double amountDisountOnTotalPrice) {
+    public FixedDiscountBuilder setAmountIncVat(double amountDisountOnTotalPrice) {
         this.amount = amountDisountOnTotalPrice;
         return this;
     }

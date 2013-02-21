@@ -119,7 +119,7 @@ public class HostedRowFormatter {
             return;
         }
         
-        for (FixedDiscountBuilder<T> row : orderBuilder.getFixedDiscountRows()) {
+        for (FixedDiscountBuilder row : orderBuilder.getFixedDiscountRows()) {
             HostedOrderRowBuilder tempRow = new HostedOrderRowBuilder();
             
             if (row.getName() != null) {
