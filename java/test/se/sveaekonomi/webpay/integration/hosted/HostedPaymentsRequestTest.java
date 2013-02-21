@@ -4,12 +4,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
-import se.sveaekonomi.webpay.integration.order.create.BuildCustomerIdentity;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.row.BuildInvoiceFeeRow;
-import se.sveaekonomi.webpay.integration.order.row.BuildOrderRow;
-import se.sveaekonomi.webpay.integration.order.row.BuildRelativeDiscountRow;
-import se.sveaekonomi.webpay.integration.order.row.BuildShippingFeeRow;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 

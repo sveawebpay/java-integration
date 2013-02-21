@@ -1,6 +1,5 @@
 package se.sveaekonomi.webpay.integration.order.row;
 
-import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 
 /**
  * @author klar-sar

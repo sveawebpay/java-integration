@@ -1,7 +1,6 @@
 package se.sveaekonomi.webpay.integration.hosted.payment;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -10,9 +9,6 @@ import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.row.BuildInvoiceFeeRow;
-import se.sveaekonomi.webpay.integration.order.row.BuildRelativeDiscountRow;
-import se.sveaekonomi.webpay.integration.order.row.BuildShippingFeeRow;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;

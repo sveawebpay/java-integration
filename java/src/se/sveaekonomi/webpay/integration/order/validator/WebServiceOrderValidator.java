@@ -1,7 +1,6 @@
 package se.sveaekonomi.webpay.integration.order.validator;
 
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 
 public class WebServiceOrderValidator extends OrderValidator {

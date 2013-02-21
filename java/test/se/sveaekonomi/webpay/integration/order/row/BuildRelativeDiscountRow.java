@@ -1,9 +1,7 @@
 package se.sveaekonomi.webpay.integration.order.row;
 
 import se.sveaekonomi.webpay.integration.order.BuilderCommand;
-import se.sveaekonomi.webpay.integration.order.CreateBuilderCommand;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
-import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 
 public class BuildRelativeDiscountRow implements BuilderCommand  {
     

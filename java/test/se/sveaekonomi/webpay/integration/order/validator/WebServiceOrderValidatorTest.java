@@ -1,6 +1,6 @@
 package se.sveaekonomi.webpay.integration.order.validator;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
 
 import javax.xml.bind.ValidationException;
 
