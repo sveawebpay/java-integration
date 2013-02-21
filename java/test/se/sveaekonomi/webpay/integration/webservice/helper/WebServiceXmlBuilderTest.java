@@ -31,7 +31,7 @@ public class WebServiceXmlBuilderTest {
                 .setAmountExVat(100.00)
                 .setQuantity(1)
                 .setVatPercent(25));
-        SveaRequest request = orderBuilder.setCountryCode(COUNTRYCODE.SE)
+        SveaRequest<SveaCreateOrder> request = orderBuilder.setCountryCode(COUNTRYCODE.SE)
                 .setOrderDate("2012-12-12")
                 .setClientOrderNumber("33")
                 .setCurrency("SEK")
