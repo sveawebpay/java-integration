@@ -11,7 +11,7 @@ import se.sveaekonomi.webpay.integration.order.row.RelativeDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrderRow;
 
-public class WebserviceRowFormatter {
+public class WebServiceRowFormatter {
        
     private OrderBuilder<?> order;
     
@@ -22,7 +22,7 @@ public class WebserviceRowFormatter {
     
     private ArrayList<SveaOrderRow> newRows;
     
-    public WebserviceRowFormatter(OrderBuilder<?>  order) {
+    public WebServiceRowFormatter(OrderBuilder<?>  order) {
         this.order = order;    
     }
     

@@ -8,7 +8,7 @@ import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
 import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
-import se.sveaekonomi.webpay.integration.webservice.helper.WebserviceRowFormatter;
+import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceRowFormatter;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverInvoiceDetails;
@@ -64,7 +64,7 @@ public class HandleOrder {
             invoiceDetails.NumberofCreditDays = (order.getNumberOfCreditDays()!=null 
                     ? order.getNumberOfCreditDays() : 0);
             
-            WebserviceRowFormatter formatter = new WebserviceRowFormatter(order);           
+            WebServiceRowFormatter formatter = new WebServiceRowFormatter(order);           
             invoiceDetails.OrderRows  = formatter.formatRows(); 
             orderInformation.deliverInvoiceDetails = invoiceDetails;            
         }
