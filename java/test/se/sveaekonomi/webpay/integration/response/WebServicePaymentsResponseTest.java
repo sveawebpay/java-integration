@@ -23,7 +23,7 @@ public class WebServicePaymentsResponseTest {
     @Test
     public void testDeliverInvoiceOrderResult() throws Exception {
         DeliverOrderBuilder orderBuilder = WebPay.deliverOrder();
-        long orderId = getInvoiceOrderId();
+        long orderId = createInvoiceAndReturnOrderId();
         orderBuilder.setTestmode();
             orderBuilder.addOrderRow(Item.orderRow()
             .setArticleNumber("1")
@@ -64,7 +64,7 @@ public class WebServicePaymentsResponseTest {
         assertEquals(response.isOrderAccepted(), true);
         assertEquals(response.getResultCode(), 0);
         assertEquals(response.getCampaignCodes().get(0).getCampaignCode(), "213060");
-        assertEquals(response.getCampaignCodes().get(0).getDescription(), "Köp nu betala om 3 månader (räntefritt)");
+        assertEquals(response.getCampaignCodes().get(0).getDescription(), "Kï¿½p nu betala om 3 mï¿½nader (rï¿½ntefritt)");
         assertEquals(response.getCampaignCodes().get(0).getPaymentPlanType(), "InterestAndAmortizationFree");
         assertEquals(response.getCampaignCodes().get(0).getContractLengthInMonths(), "3");
         assertEquals(response.getCampaignCodes().get(0).getInitialFee(), "100");
@@ -76,7 +76,7 @@ public class WebServicePaymentsResponseTest {
         assertEquals(response.getCampaignCodes().get(0).getToAmount(), "50000");
     }
     
-    private long getInvoiceOrderId() throws Exception {
+    private long createInvoiceAndReturnOrderId() throws Exception {
         CreateOrderBuilder order = WebPay.createOrder()
                 .setTestmode();
         order.addOrderRow(Item.orderRow()

@@ -13,7 +13,7 @@ import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.WebServiceOrderValidator;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceRowFormatter;
+import se.sveaekonomi.webpay.integration.webservice.helper.WebserviceRowFormatter;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
@@ -194,7 +194,7 @@ public abstract class WebServicePayment {
         orderInformation = new SveaCreateOrderInformation(((!(this.createOrderBuilder.getCampaignCode() == null)) ? this.createOrderBuilder.getCampaignCode() : ""),
                 (!(this.createOrderBuilder.getSendAutomaticGiroPaymentForm() == null)) ? this.createOrderBuilder.getSendAutomaticGiroPaymentForm() : false);
         
-        WebServiceRowFormatter formatter = new WebServiceRowFormatter(this.createOrderBuilder);
+        WebserviceRowFormatter formatter = new WebserviceRowFormatter(this.createOrderBuilder);
         ArrayList<SveaOrderRow> formattedOrderRows = formatter.formatRows();
         
         Iterator<SveaOrderRow> iter = formattedOrderRows.iterator();
