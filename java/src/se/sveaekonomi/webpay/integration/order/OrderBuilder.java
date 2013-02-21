@@ -121,7 +121,7 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
         if (FixedDiscountBuilder.class.equals(itemDiscount.getClass())) 
             this.fixedDiscountRows.add((FixedDiscountBuilder) itemDiscount);
         else           
-            this.relativeDiscountRows.add((RelativeDiscountBuilder<?>)itemDiscount);
+            this.relativeDiscountRows.add((RelativeDiscountBuilder)itemDiscount);
         
         return this;
     }

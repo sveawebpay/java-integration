@@ -158,7 +158,7 @@ public class HostedRowFormatter {
             return;
         }
         
-        for (RelativeDiscountBuilder<T> row : orderBuilder.getRelativeDiscountRows()) {
+        for (RelativeDiscountBuilder row : orderBuilder.getRelativeDiscountRows()) {
             HostedOrderRowBuilder tempRow = new HostedOrderRowBuilder();
             double discountFactor = row.getDiscountPercent() * 0.01;
             

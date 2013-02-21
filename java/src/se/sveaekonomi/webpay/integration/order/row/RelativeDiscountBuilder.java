@@ -1,13 +1,11 @@
 package se.sveaekonomi.webpay.integration.order.row;
 
-import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 
 /**
  * @author klar-sar
  */
-public class RelativeDiscountBuilder<T extends OrderBuilder<T>> implements RowBuilder {
+public class RelativeDiscountBuilder implements RowBuilder {
     
-//    private OrderBuilder<T> orderBuilder;
     private String discountId;
     private String name;
     private String description;
@@ -15,15 +13,11 @@ public class RelativeDiscountBuilder<T extends OrderBuilder<T>> implements RowBu
     private int quantity;
     private String unit;
     
-    public RelativeDiscountBuilder(/*OrderBuilder<T> order*/) {
-      //  orderBuilder = order;
-    }
-    
     public String getDiscountId() {
         return discountId;
     }
     
-    public RelativeDiscountBuilder<T> setDiscountId(String discountId) {
+    public RelativeDiscountBuilder setDiscountId(String discountId) {
         this.discountId = discountId;
         return this;
     }
@@ -32,7 +26,7 @@ public class RelativeDiscountBuilder<T extends OrderBuilder<T>> implements RowBu
         return name;
     }
     
-    public RelativeDiscountBuilder<T> setName(String name) {
+    public RelativeDiscountBuilder setName(String name) {
         this.name = name;
         return this;
     }
@@ -41,7 +35,7 @@ public class RelativeDiscountBuilder<T extends OrderBuilder<T>> implements RowBu
         return description;
     }
     
-    public RelativeDiscountBuilder<T> setDescription(String description) {
+    public RelativeDiscountBuilder setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -60,7 +54,7 @@ public class RelativeDiscountBuilder<T extends OrderBuilder<T>> implements RowBu
     /**
      * @param unit (i.e. "pcs", "st" etc)
      */
-    public RelativeDiscountBuilder<T> setUnit(String unit) {
+    public RelativeDiscountBuilder setUnit(String unit) {
         this.unit = unit;
         return this;
     }
@@ -69,7 +63,7 @@ public class RelativeDiscountBuilder<T extends OrderBuilder<T>> implements RowBu
         return discountPercent;
     }
     
-    public RelativeDiscountBuilder<T> setDiscountPercent(int discountPercent) {
+    public RelativeDiscountBuilder setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
         return this;
     }
