@@ -50,7 +50,7 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
         return fixedDiscountRows;
     }
     
-    public OrderBuilder setFixedDiscountRows(ArrayList<FixedDiscountBuilder> fixedDiscountRows) {
+    public OrderBuilder<T> setFixedDiscountRows(ArrayList<FixedDiscountBuilder> fixedDiscountRows) {
         this.fixedDiscountRows = fixedDiscountRows;
         return this;
     }
@@ -59,7 +59,7 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
         return relativeDiscountRows;
     }
     
-    public OrderBuilder setRelativeDiscountRows(ArrayList<RelativeDiscountBuilder> relativeDiscountRows) {
+    public OrderBuilder<T> setRelativeDiscountRows(ArrayList<RelativeDiscountBuilder> relativeDiscountRows) {
         this.relativeDiscountRows = relativeDiscountRows;
         return this;
     }
@@ -107,17 +107,17 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
         return runner.run(this);
     }
     
-    public OrderBuilder addOrderRow(OrderRowBuilder itemOrderRow) {
+    public OrderBuilder<T> addOrderRow(OrderRowBuilder itemOrderRow) {
         this.orderRows.add(itemOrderRow);
         return this;
     }
     
-    public OrderBuilder addOrderRows(ArrayList<OrderRowBuilder> itemOrderRow) {
+    public OrderBuilder<T> addOrderRows(ArrayList<OrderRowBuilder> itemOrderRow) {
         this.orderRows.addAll(itemOrderRow);
         return this;
     }
     
-    public OrderBuilder addDiscount(RowBuilder itemDiscount) {
+    public OrderBuilder<T> addDiscount(RowBuilder itemDiscount) {
         if (FixedDiscountBuilder.class.equals(itemDiscount.getClass())) 
             this.fixedDiscountRows.add((FixedDiscountBuilder) itemDiscount);
         else           
@@ -126,7 +126,7 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
         return this;
     }
     
-    public OrderBuilder addFee(RowBuilder itemFee) {
+    public OrderBuilder<T> addFee(RowBuilder itemFee) {
         if (ShippingFeeBuilder.class.equals(itemFee.getClass()))
             this.shippingFeeRows.add((ShippingFeeBuilder) itemFee);
         else
