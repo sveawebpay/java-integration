@@ -21,7 +21,7 @@ public abstract class OrderValidator {
     
     protected void validateOrderRow(CreateOrderBuilder order) {   
         try {
-            for (OrderRowBuilder<?> orderRow : order.getOrderRows()) {
+            for (OrderRowBuilder orderRow : order.getOrderRows()) {
                 if(orderRow.getQuantity() <= 0)
                     errors += "MISSING VALUE - Quantity is required in Item object. Use function Item.setQuantity().\n";
                 

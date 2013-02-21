@@ -32,7 +32,7 @@ public class HostedRowFormatter {
     }
 
     private <T extends OrderBuilder<T>> void formatOrderRows(OrderBuilder<T> orderBuilder) {
-        for (OrderRowBuilder<T> row : orderBuilder.getOrderRows()) {
+        for (OrderRowBuilder row : orderBuilder.getOrderRows()) {
             HostedOrderRowBuilder tempRow = new HostedOrderRowBuilder();
             double vatFactor = row.getVatPercent()>0 ? (row.getVatPercent() * 0.01) + 1 : 0;
             

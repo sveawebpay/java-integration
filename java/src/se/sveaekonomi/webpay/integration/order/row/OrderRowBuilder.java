@@ -6,7 +6,7 @@ import se.sveaekonomi.webpay.integration.order.OrderBuilder;
  * @author klar-sar
  * @since 2012-12-04
  */
-public class OrderRowBuilder<T extends OrderBuilder<T>> implements RowBuilder {
+public class OrderRowBuilder implements RowBuilder {
         
     private String articleNumber;
     private String name;
@@ -26,7 +26,7 @@ public class OrderRowBuilder<T extends OrderBuilder<T>> implements RowBuilder {
         return articleNumber;
     }
     
-    public OrderRowBuilder<T> setArticleNumber(String articleNumber) {
+    public OrderRowBuilder setArticleNumber(String articleNumber) {
         this.articleNumber = articleNumber;
         return this;
     }
@@ -35,7 +35,7 @@ public class OrderRowBuilder<T extends OrderBuilder<T>> implements RowBuilder {
         return name;
     }
     
-    public OrderRowBuilder<T> setName(String name) {
+    public OrderRowBuilder setName(String name) {
         this.name = name;
         return this;
     }
@@ -44,7 +44,7 @@ public class OrderRowBuilder<T extends OrderBuilder<T>> implements RowBuilder {
         return description;
     }
     
-    public OrderRowBuilder<T> setDescription(String description) {
+    public OrderRowBuilder setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -53,7 +53,7 @@ public class OrderRowBuilder<T extends OrderBuilder<T>> implements RowBuilder {
         return amountExVat;
     }
     
-    public OrderRowBuilder<T> setAmountExVat(double dExVatAmount) {
+    public OrderRowBuilder setAmountExVat(double dExVatAmount) {
         this.amountExVat = dExVatAmount;
         return this;
     }
@@ -62,7 +62,7 @@ public class OrderRowBuilder<T extends OrderBuilder<T>> implements RowBuilder {
         return vatPercent;
     }
     
-    public OrderRowBuilder<T> setVatPercent(int vatPercent) {
+    public OrderRowBuilder setVatPercent(int vatPercent) {
         this.vatPercent = vatPercent;
         return this;
     }
@@ -71,7 +71,7 @@ public class OrderRowBuilder<T extends OrderBuilder<T>> implements RowBuilder {
         return quantity;
     }
     
-    public OrderRowBuilder<T> setQuantity(int quantity) {
+    public OrderRowBuilder setQuantity(int quantity) {
         this.quantity = quantity;
         return this;
     }
@@ -86,7 +86,7 @@ public class OrderRowBuilder<T extends OrderBuilder<T>> implements RowBuilder {
     /**
      * @param unit (i.e. "pcs", "st" etc)
      */
-    public OrderRowBuilder<T> setUnit(String unit) {
+    public OrderRowBuilder setUnit(String unit) {
         this.unit = unit;
         return this;
     }
@@ -95,7 +95,7 @@ public class OrderRowBuilder<T extends OrderBuilder<T>> implements RowBuilder {
         return vatDiscount;
     }
     
-    public OrderRowBuilder<T> setVatDiscount(int vatDiscount) {
+    public OrderRowBuilder setVatDiscount(int vatDiscount) {
         this.vatDiscount = vatDiscount;
         return this;
     }
@@ -104,7 +104,7 @@ public class OrderRowBuilder<T extends OrderBuilder<T>> implements RowBuilder {
         return discountPercent;
     }
     
-    public OrderRowBuilder<T> setDiscountPercent(int discountPercent) {
+    public OrderRowBuilder setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
         return this;
     }
@@ -113,7 +113,7 @@ public class OrderRowBuilder<T extends OrderBuilder<T>> implements RowBuilder {
         return amountIncVat;
     }
 
-    public OrderRowBuilder<T> setAmountIncVat(double amountIncVat) {
+    public OrderRowBuilder setAmountIncVat(double amountIncVat) {
         this.amountIncVat = amountIncVat;
         return this;
     }
