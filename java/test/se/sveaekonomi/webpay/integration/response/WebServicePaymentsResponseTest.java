@@ -64,7 +64,7 @@ public class WebServicePaymentsResponseTest {
         assertEquals(response.isOrderAccepted(), true);
         assertEquals(response.getResultCode(), 0);
         assertEquals(response.getCampaignCodes().get(0).getCampaignCode(), "213060");
-        assertEquals(response.getCampaignCodes().get(0).getDescription(), "K�p nu betala om 3 m�nader (r�ntefritt)");
+        assertEquals(response.getCampaignCodes().get(0).getDescription(), "Köp nu betala om 3 månader (räntefritt)");
         assertEquals(response.getCampaignCodes().get(0).getPaymentPlanType(), "InterestAndAmortizationFree");
         assertEquals(response.getCampaignCodes().get(0).getContractLengthInMonths(), "3");
         assertEquals(response.getCampaignCodes().get(0).getInitialFee(), "100");
