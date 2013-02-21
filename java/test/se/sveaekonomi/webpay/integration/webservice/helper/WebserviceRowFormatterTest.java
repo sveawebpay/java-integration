@@ -12,7 +12,7 @@ import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrderRow;
 
-public class WebServiceRowFormatterTest {
+public class WebserviceRowFormatterTest {
     
     @Test
     public void testFormatOrderRows() {
@@ -30,7 +30,7 @@ public class WebServiceRowFormatterTest {
         order.addOrderRow(row);
         //order.setOrderRows(rows);
         
-        ArrayList<SveaOrderRow> newRows = new WebServiceRowFormatter(order).formatRows();
+        ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(0);
 
         assertTrue("0".equals(newRow.ArticleNumber));
@@ -54,7 +54,7 @@ public class WebServiceRowFormatterTest {
             .setVatPercent(25)
             .setUnit("st"));        
         
-        ArrayList<SveaOrderRow> newRows = new WebServiceRowFormatter(order).formatRows();
+        ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(1);
 
         assertEquals("0", newRow.ArticleNumber);
@@ -75,7 +75,7 @@ public class WebServiceRowFormatterTest {
             .setVatPercent(25)
             .setUnit("st"));        
         
-        ArrayList<SveaOrderRow> newRows = new WebServiceRowFormatter(order).formatRows();
+        ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(0);
 
         assertTrue("".equals(newRow.ArticleNumber));
@@ -102,7 +102,7 @@ public class WebServiceRowFormatterTest {
             .setAmountIncVat(1)
             .setUnit("st"));
          
-        ArrayList<SveaOrderRow> newRows = new WebServiceRowFormatter(order).formatRows();
+        ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(1);
 
         assertTrue("0".equals(newRow.ArticleNumber));
@@ -128,7 +128,7 @@ public class WebServiceRowFormatterTest {
             .setDiscountPercent(10)
             .setUnit("st"));
         
-        ArrayList<SveaOrderRow> newRows = new WebServiceRowFormatter(order).formatRows();
+        ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(1);
 
         assertTrue("0".equals(newRow.ArticleNumber));

@@ -18,7 +18,7 @@ import se.sveaekonomi.webpay.integration.order.validator.HostedOrderValidatorTes
 import se.sveaekonomi.webpay.integration.order.validator.WebServiceOrderValidatorTest;
 import se.sveaekonomi.webpay.integration.util.security.Base64UtilTest;
 import se.sveaekonomi.webpay.integration.util.security.HashUtilTest;
-import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceRowFormatterTest;
+import se.sveaekonomi.webpay.integration.webservice.helper.WebserviceRowFormatterTest;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilderTest;
 import se.sveaekonomi.webpay.integration.webservice.payment.InvoicePaymentTest;
 
@@ -37,7 +37,7 @@ import se.sveaekonomi.webpay.integration.webservice.payment.InvoicePaymentTest;
     WebServiceOrderValidatorTest.class,
     Base64UtilTest.class,
     HashUtilTest.class,
-    WebServiceRowFormatterTest.class,
+    WebserviceRowFormatterTest.class,
     WebServiceXmlBuilderTest.class,
     InvoicePaymentTest.class,
     NewOrderBuilderTest.class})
