@@ -74,11 +74,7 @@ public abstract class WebServicePayment {
      */
     public SveaRequest<SveaCreateOrder> prepareRequest() throws ValidationException {
         String errors = "";
-        try{
-            errors = validateOrder();
-        } catch (Exception e) {
-            throw e;
-        }        
+        errors = validateOrder();
         if(errors.length() > 0)
             throw new ValidationException(errors);
         
