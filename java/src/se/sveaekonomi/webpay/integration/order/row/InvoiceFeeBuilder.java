@@ -1,10 +1,8 @@
 package se.sveaekonomi.webpay.integration.order.row;
 
-import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 
-public class InvoiceFeeBuilder <T extends OrderBuilder<T>> implements RowBuilder {
+public class InvoiceFeeBuilder implements RowBuilder {
 
-    //private OrderBuilder<T> orderBuilder;
     private String name;
     private String description;
     private double amountExVat;
@@ -14,15 +12,11 @@ public class InvoiceFeeBuilder <T extends OrderBuilder<T>> implements RowBuilder
     private String unit;
     private Integer discountPercent;
     
-    public InvoiceFeeBuilder(/*T orderBuilder*/) {
-        //this.orderBuilder = orderBuilder;
-    }
-    
     public String getName() {
         return name;
     }
     
-    public InvoiceFeeBuilder<T> setName(String name) {
+    public InvoiceFeeBuilder setName(String name) {
         this.name = name;
         return this;
     }
@@ -31,7 +25,7 @@ public class InvoiceFeeBuilder <T extends OrderBuilder<T>> implements RowBuilder
         return description;
     }
     
-    public InvoiceFeeBuilder<T> setDescription(String description) {
+    public InvoiceFeeBuilder setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -40,7 +34,7 @@ public class InvoiceFeeBuilder <T extends OrderBuilder<T>> implements RowBuilder
         return amountExVat;
     }
     
-    public InvoiceFeeBuilder<T> setAmountExVat(int amountExVat) {
+    public InvoiceFeeBuilder setAmountExVat(int amountExVat) {
         this.amountExVat = amountExVat;
         return this;
     }
@@ -59,7 +53,7 @@ public class InvoiceFeeBuilder <T extends OrderBuilder<T>> implements RowBuilder
     /**
      * @param unit (i.e. "pcs", "st" etc)
      */
-    public InvoiceFeeBuilder<T> setUnit(String unit) {
+    public InvoiceFeeBuilder setUnit(String unit) {
         this.unit = unit;
         return this;
     }
@@ -68,7 +62,7 @@ public class InvoiceFeeBuilder <T extends OrderBuilder<T>> implements RowBuilder
         return vatPercent;
     }
     
-    public InvoiceFeeBuilder<T> setVatPercent(int vatPercent) {
+    public InvoiceFeeBuilder setVatPercent(int vatPercent) {
         this.vatPercent = vatPercent;
         return this;
     }
@@ -77,7 +71,7 @@ public class InvoiceFeeBuilder <T extends OrderBuilder<T>> implements RowBuilder
         return discountPercent;
     }
     
-    public InvoiceFeeBuilder<T> setDiscountPercent(int discountPercent) {
+    public InvoiceFeeBuilder setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
         return this;
     }
@@ -86,7 +80,7 @@ public class InvoiceFeeBuilder <T extends OrderBuilder<T>> implements RowBuilder
         return amountIncVat;
     }
 
-    public InvoiceFeeBuilder<T> setAmountIncVat(double amountIncVat) {
+    public InvoiceFeeBuilder setAmountIncVat(double amountIncVat) {
         this.amountIncVat = amountIncVat;
         return this;
     }
