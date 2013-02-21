@@ -1,5 +1,7 @@
 package se.sveaekonomi.webpay.integration.hosted;
 
+import junit.framework.Assert;
+
 import org.junit.Before;
 import org.junit.Test;
 
@@ -21,7 +23,6 @@ public class HostedPaymentsRequestTest {
     @Test
     public void testDoCardPaymentRequest() throws Exception {        
         order.setTestmode();
-       // .run(new BuildOrderRow())
         order.addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
                 .setQuantity(2)
@@ -39,9 +40,7 @@ public class HostedPaymentsRequestTest {
                 .setUnit("st")
                 .setVatPercent(25)
                 .setDiscountPercent(0));
-      //  .run(new BuildShippingFeeRow())
         
-       // .run(new BuildInvoiceFeeRow())
         order.addFee(Item.invoiceFee()
                 .setName("Svea fee")
                         .setDescription("Fee for invoice")
@@ -49,25 +48,23 @@ public class HostedPaymentsRequestTest {
                         .setUnit("st")
                         .setVatPercent(25)
                         .setDiscountPercent(0));
-    //    .run(new BuildRelativeDiscountRow())
         order.addDiscount(Item.relativeDiscount()
                 .setDiscountId("1")
                 .setName("Relative")
                 .setDescription("RelativeDiscount")
                 .setUnit("st")               
                 .setDiscountPercent(50));
-     //   .run(new BuildCustomerIdentity())
-       
         order.addCustomerDetails(Item.companyCustomer()
             .setVatNumber("2345234")
             .setCompanyName("TestCompagniet"));
-       // .endCompanyCustomerIdentity()
         PaymentForm form = order.setCountryCode(COUNTRYCODE.SE)
         .setOrderDate("2012-12-12")
         .setClientOrderNumber("33")
         .setCurrency("SEK")
         .usePayPageCardOnly()
             .setReturnUrl("http://myurl.se")            
-            .getPaymentForm();        
+            .getPaymentForm();
+        
+        Assert.assertNotNull(form);
        }
 }

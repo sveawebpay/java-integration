@@ -14,7 +14,6 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder.DistributionType;
 import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 
@@ -221,7 +220,6 @@ public class WebServiceOrderValidatorTest {
     public void testFailOnMissingOrderIdOnDeliverOrder() throws Exception {
         String expectedMessage = "MISSING VALUE - setOrderId is required.\n";
         DeliverOrderBuilder deliverOrderBuilder = WebPay.deliverOrder();
-        long orderId = getInvoiceOrderId();
         
         deliverOrderBuilder.setTestmode();
         deliverOrderBuilder.addOrderRow(Item.orderRow()
@@ -233,7 +231,6 @@ public class WebServiceOrderValidatorTest {
             .setUnit("st")
             .setVatPercent(25)
             .setDiscountPercent(0));
-        //    .setOrderId(orderId)
             HandleOrder handleOrder = deliverOrderBuilder
             .setNumberOfCreditDays(1)
             .setInvoiceDistributionType(DistributionType.Post)
@@ -242,28 +239,4 @@ public class WebServiceOrderValidatorTest {
         assertEquals(expectedMessage, handleOrder.validateOrder());  
     }
     
-    private long getInvoiceOrderId() throws Exception {
-        CreateOrderBuilder order = WebPay.createOrder()
-                .setTestmode();
-        order.addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
-                .setQuantity(2)
-                .setAmountExVat(100.00)
-                .setDescription("Specification")
-                .setName("Prod")
-                .setUnit("st")
-                .setVatPercent(25)
-                .setDiscountPercent(0));
-        
-        order.addCustomerDetails(Item.individualCustomer()
-                .setSsn(194605092222L));
-        CreateOrderResponse response = order.setCountryCode(COUNTRYCODE.SE)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
-                .setCurrency("SEK")
-                .useInvoicePayment()// returns an InvoiceOrder object
-                .doRequest();
-      
-        return response.orderId;
-    }
 }
