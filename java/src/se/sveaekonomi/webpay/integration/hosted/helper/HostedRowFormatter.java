@@ -82,7 +82,7 @@ public class HostedRowFormatter {
             return;
         }
         
-        for (ShippingFeeBuilder<T> row : orderBuilder.getShippingFeeRows()) {
+        for (ShippingFeeBuilder row : orderBuilder.getShippingFeeRows()) {
             HostedOrderRowBuilder tempRow = new HostedOrderRowBuilder();
             double plusVatCounter = (row.getVatPercent() * 0.01) + 1;            
             if (row.getName() != null) {

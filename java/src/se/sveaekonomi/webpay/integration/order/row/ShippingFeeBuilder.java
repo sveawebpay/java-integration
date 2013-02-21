@@ -1,14 +1,12 @@
 package se.sveaekonomi.webpay.integration.order.row;
 
-import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 
 /**
  * @author klar-sar
  * @since 2012-12-05
  */
-public class ShippingFeeBuilder<T extends OrderBuilder<T>> implements RowBuilder {
+public class ShippingFeeBuilder implements RowBuilder {
     
-    //private OrderBuilder<T> orderBuilder;
     private String shippingId;
     private String name;
     private String description;
@@ -19,15 +17,11 @@ public class ShippingFeeBuilder<T extends OrderBuilder<T>> implements RowBuilder
     private String unit;
     private Integer discountPercent;
     
-    public ShippingFeeBuilder(/*OrderBuilder<T> orderBuilder*/) {
-        //this.orderBuilder = orderBuilder;
-    }
-    
     public String getShippingId() {
         return shippingId;
     }
     
-    public ShippingFeeBuilder<T> setShippingId(String id) {
+    public ShippingFeeBuilder setShippingId(String id) {
         this.shippingId = id;
         return this;
     }
@@ -36,7 +30,7 @@ public class ShippingFeeBuilder<T extends OrderBuilder<T>> implements RowBuilder
         return name;
     }
     
-    public ShippingFeeBuilder<T> setName(String name) {
+    public ShippingFeeBuilder setName(String name) {
         this.name = name;
         return this;
     }
@@ -45,7 +39,7 @@ public class ShippingFeeBuilder<T extends OrderBuilder<T>> implements RowBuilder
         return description;
     }
     
-    public ShippingFeeBuilder<T> setDescription(String description) {
+    public ShippingFeeBuilder setDescription(String description) {
         this.description = description;
         return this;
     }
@@ -54,7 +48,7 @@ public class ShippingFeeBuilder<T extends OrderBuilder<T>> implements RowBuilder
         return amountExVat;
     }
     
-    public ShippingFeeBuilder<T> setAmountExVat(double amountExVat) {
+    public ShippingFeeBuilder setAmountExVat(double amountExVat) {
         this.amountExVat = amountExVat;
         return this;
     }
@@ -63,7 +57,7 @@ public class ShippingFeeBuilder<T extends OrderBuilder<T>> implements RowBuilder
         return vatPercent;
     }
     
-    public ShippingFeeBuilder<T> setVatPercent(int vatPercent) {
+    public ShippingFeeBuilder setVatPercent(int vatPercent) {
         this.vatPercent = vatPercent;
         return this;
     }
@@ -83,7 +77,7 @@ public class ShippingFeeBuilder<T extends OrderBuilder<T>> implements RowBuilder
      * @param unit
      *            (i.e. "pcs", "st" etc)
      */
-    public ShippingFeeBuilder<T> setUnit(String unit) {
+    public ShippingFeeBuilder setUnit(String unit) {
         this.unit = unit;
         return this;
     }
@@ -92,7 +86,7 @@ public class ShippingFeeBuilder<T extends OrderBuilder<T>> implements RowBuilder
         return discountPercent;
     }
     
-    public ShippingFeeBuilder<T> setDiscountPercent(int discountPercent) {
+    public ShippingFeeBuilder setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
         return this;
     }
@@ -105,7 +99,7 @@ public class ShippingFeeBuilder<T extends OrderBuilder<T>> implements RowBuilder
         return amountIncVat;
     }
 
-    public ShippingFeeBuilder<T> setAmountIncVat(double amountIncVat) {
+    public ShippingFeeBuilder setAmountIncVat(double amountIncVat) {
         this.amountIncVat = amountIncVat;
         return this;
     }
