@@ -44,17 +44,7 @@ public class WebServicePaymentsResponseTest {
         
         assertEquals(response.isOrderAccepted(), true);        
     }
-        
-    @Test
-    public void testResultGetAddresses() throws Exception {
-        GetAddresses addressRequest = WebPay.getAddresses(); 
-        GetAddressesResponse request = addressRequest.setTestmode()
-            .setCountryCode("SE")
-            .setOrderTypeInvoice()
-            .setIndividual("194605092222")
-            .doRequest();
-        
-    }
+
     
     @Test
     public void testResultGetPaymentPlanParams() throws Exception {
@@ -75,6 +65,18 @@ public class WebServicePaymentsResponseTest {
         assertEquals(response.getCampaignCodes().get(0).getFromAmount(), "1000");
         assertEquals(response.getCampaignCodes().get(0).getToAmount(), "50000");
     }
+    
+    
+	@Test
+	public void testResultGetAddresses() throws Exception {
+	    GetAddresses addressRequest = WebPay.getAddresses(); 
+	    GetAddressesResponse request = addressRequest.setTestmode()
+	        .setCountryCode("SE")
+	        .setOrderTypeInvoice()
+	        .setIndividual("194605092222")
+	        .doRequest();
+	    
+	}
     
     private long createInvoiceAndReturnOrderId() throws Exception {
         CreateOrderBuilder order = WebPay.createOrder()
