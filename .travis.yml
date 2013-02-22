@@ -1,0 +1,15 @@
+language: java
+
+jdk:
+  - openjdk6
+  - openjdk7
+  - oraclejdk7
+
+matrix:
+ 
+branches:
+  only:
+    - develop
+
+before_script: cd java
+script: ant clean-jar
