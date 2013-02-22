@@ -1,0 +1,88 @@
+<project name="sveawebpay" basedir="." default="jar">
+
+    <property name="src.dir"     location="src"/>
+    <property name="test.dir"     location="test"/>
+
+    <property name="src.lib.dir"     location="lib/src"/>
+    <property name="test.lib.dir"     location="lib/test"/>
+
+    <path id="src.classpath">
+        <fileset dir="${src.lib.dir}" includes="**/*.jar" />
+    </path>
+
+    <path id="test.classpath">
+        <fileset dir="${test.lib.dir}" includes="**/*.jar"/>
+        <path refid="src.classpath" />
+    </path>
+	
+    
+    <property name="build.dir"   location="target"/>
+    <property name="src.classes.dir" location="${build.dir}/classes"/>
+    <property name="test.classes.dir" location="${build.dir}/testclasses"/>
+    <property name="jar.dir"     location="${build.dir}/jar"/>
+    <property name="report.dir"  location="${build.dir}/junitreport"/>
+
+
+	
+    <target name="clean" >
+        <delete dir="${build.dir}"/>
+    </target>
+
+	<target name="src.compile">
+        <mkdir dir="${src.classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${src.classes.dir}" classpathref="src.classpath"/>
+        <path id="compiled.src.classpath" location="${src.classes.dir}"/>
+    </target>
+
+    <target name="test.compile">
+        <mkdir dir="${test.classes.dir}"/>
+        <path id="compile.test.classpath">
+            <path refid="compiled.src.classpath" />
+        	<path refid="test.classpath" />
+        </path>
+
+        <javac srcdir="${test.dir}" destdir="${test.classes.dir}" classpathref="compile.test.classpath" />
+    	
+        <path id="all.test.classpath">
+            <path refid="compile.test.classpath" />
+            <path location="${test.classes.dir}" />
+        </path>
+    </target>
+
+    <target name="junit">
+        <mkdir dir="${report.dir}"/>
+        
+    	<junit printsummary="yes" >
+            <classpath refid="all.test.classpath"/>
+            
+            <formatter type="xml"/>
+            
+            <batchtest fork="yes" todir="${report.dir}" >
+                <fileset dir="${test.dir}" includes="**/*Suite.java"/>
+            </batchtest>
+        </junit>
+    </target>
+    
+    <target name="junitreport">
+        <junitreport todir="${report.dir}">
+            <fileset dir="${report.dir}" includes="TEST-*.xml"/>
+            <report todir="${report.dir}"/>
+        </junitreport>
+    </target>
+
+    <target name="jar">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${src.classes.dir}">
+            <manifest>
+                <attribute name="License" value="Apache 2.0 License"/>
+            </manifest>
+        </jar>
+    </target>
+    
+
+    <target name="build" depends="src.compile, test.compile" description="Compile src and test"/>
+    <target name="clean-build" depends="clean, build" description="Clean, then compile src and test"/>
+    <target name="clean-test" depends="clean-build, junit" description="Clean, build and test"/>
+    <target name="clean-jar" depends="clean-test, jar" description="Clean, build, test and package a jar file"/>
+
+</project>
