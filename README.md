@@ -1,5 +1,7 @@
 # Java Integration Package API for SveaWebPay
 
+*NOTE:* This documentation is not yet fully converted from PHP. The general flow and methods should be all the same. Let the fluent API guide you using code completion in your IDE, and you should be fairly well on the way. Sorry for any inconvenience.
+
 ## Index
 * [Introduction](https://github.com/sveawebpay/java-integration/tree/develop#introduction)
 * [Configuration](https://github.com/sveawebpay/java-integration/tree/develop#configuration)
