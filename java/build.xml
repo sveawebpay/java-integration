@@ -1,24 +1,26 @@
-<project name="sveawebpay" basedir="." default="jar">
-
+<project name="sveawebpay" basedir="." default="clean-jar">
+ 
     <property name="src.dir"     location="src"/>
     <property name="test.dir"     location="test"/>
+    <property name="integrationtest.dir"     location="integrationtest"/>
 
     <property name="src.lib.dir"     location="lib/src"/>
     <property name="test.lib.dir"     location="lib/test"/>
 
-    <path id="src.classpath">
+    <path id="src.jars">
         <fileset dir="${src.lib.dir}" includes="**/*.jar" />
     </path>
 
-    <path id="test.classpath">
+    <path id="test.jars">
         <fileset dir="${test.lib.dir}" includes="**/*.jar"/>
-        <path refid="src.classpath" />
+        <path refid="src.jars" />
     </path>
 	
     
     <property name="build.dir"   location="target"/>
     <property name="src.classes.dir" location="${build.dir}/classes"/>
     <property name="test.classes.dir" location="${build.dir}/testclasses"/>
+    <property name="integrationtest.classes.dir" location="${build.dir}/integrationtestclasses"/>
     <property name="jar.dir"     location="${build.dir}/jar"/>
     <property name="report.dir"  location="${build.dir}/junitreport"/>
 
@@ -30,7 +32,7 @@
 
 	<target name="src.compile">
         <mkdir dir="${src.classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${src.classes.dir}" classpathref="src.classpath"/>
+        <javac srcdir="${src.dir}" destdir="${src.classes.dir}" classpathref="src.jars"/>
         <path id="compiled.src.classpath" location="${src.classes.dir}"/>
     </target>
 
@@ -38,7 +40,7 @@
         <mkdir dir="${test.classes.dir}"/>
         <path id="compile.test.classpath">
             <path refid="compiled.src.classpath" />
-        	<path refid="test.classpath" />
+        	<path refid="test.jars" />
         </path>
 
         <javac srcdir="${test.dir}" destdir="${test.classes.dir}" classpathref="compile.test.classpath" />
@@ -49,6 +51,7 @@
         </path>
     </target>
 
+	
     <target name="junit">
         <mkdir dir="${report.dir}"/>
         
@@ -57,12 +60,13 @@
             
             <formatter type="xml"/>
             
-            <batchtest fork="yes" todir="${report.dir}" >
-                <fileset dir="${test.dir}" includes="**/*Suite.java"/>
+            <batchtest fork="no" todir="${report.dir}"  failureproperty="tests.failed">
+                <fileset dir="${test.dir}" includes="**/*Test.java"/>
             </batchtest>
         </junit>
+    	<fail if="tests.failed"/>
     </target>
-    
+
     <target name="junitreport">
         <junitreport todir="${report.dir}">
             <fileset dir="${report.dir}" includes="TEST-*.xml"/>
@@ -78,11 +82,43 @@
             </manifest>
         </jar>
     </target>
-    
+
+    <target name="integrationtest.compile">
+        <mkdir dir="${integrationtest.classes.dir}"/>
+        <path id="compile.integrationtest.classpath">
+            <path location="${jar.dir}/${ant.project.name}.jar" />
+            <path refid="test.jars" />
+        </path>
+
+        <javac srcdir="${integrationtest.dir}" destdir="${integrationtest.classes.dir}" classpathref="compile.integrationtest.classpath" />
+        
+        <path id="all.integrationtest.classpath">
+            <path refid="compile.integrationtest.classpath" />
+            <path location="${integrationtest.classes.dir}" />
+        </path>
+    </target>
+
+
+    <target name="integrationtest">
+        <mkdir dir="${report.dir}"/>
+        
+        <junit printsummary="yes" >
+            <classpath refid="all.integrationtest.classpath"/>
+            
+            <formatter type="xml"/>
+            
+            <batchtest fork="no" todir="${report.dir}" failureproperty="integrationtests.failed">
+                <fileset dir="${integrationtest.dir}" includes="**/*Test.java"/>
+            </batchtest>
+        </junit>
+        <fail if="integrationtests.failed"/>
+    </target> 
+
 
     <target name="build" depends="src.compile, test.compile" description="Compile src and test"/>
     <target name="clean-build" depends="clean, build" description="Clean, then compile src and test"/>
     <target name="clean-test" depends="clean-build, junit" description="Clean, build and test"/>
-    <target name="clean-jar" depends="clean-test, jar" description="Clean, build, test and package a jar file"/>
+    <target name="clean-jar" depends="clean-test, jar" description="Clean, build, unit test and package a jar file"/>
+    <target name="clean-integrationtest" depends="clean-jar, integrationtest.compile, integrationtest" description="Run integration tests from created jar file"/>
 
 </project>

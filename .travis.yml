@@ -11,4 +11,4 @@ branches:
     - master
 
 before_script: cd java
-script: ant clean-jar
+script: ant clean-integrationtest

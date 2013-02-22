@@ -4,6 +4,7 @@
 
 ## Index
 * [Introduction](https://github.com/sveawebpay/java-integration/tree/develop#introduction)
+* [Build](https://github.com/sveawebpay/java-integration/tree/develop#build)
 * [Configuration](https://github.com/sveawebpay/java-integration/tree/develop#configuration)
 * [1. CreateOrder](https://github.com/sveawebpay/java-integration/tree/develop#1-createorder)
     * [Test mode](https://github.com/sveawebpay/java-integration/tree/develop#11-test-mode)
@@ -28,6 +29,17 @@ Using this package will make your implementation sustainable and unaffected for 
 in our payment system. Just make sure to update the package regularly.
 
 The API is built as a *Fluent API* so you can use *method chaining* when implementing it in your code.
+
+[<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
+
+## Build                                                             
+To build a jar file, use the ant build file located at `java/build.xml`. Use the command
+
+```
+ant clean-jar
+``` 
+
+to clean, build, test, and create the jar file. Other public targets can be found in the build.xml file.
 
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
