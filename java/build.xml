@@ -1,0 +1,82 @@
+<project name="SveaWebPay" basedir="." default="jar">
+
+    <property name="src.dir"     location="src"/>
+    <property name="test.dir"     location="test"/>
+
+    <property name="src.lib.dir"     location="lib/src"/>
+    <property name="test.lib.dir"     location="lib/test"/>
+
+    <path id="src.classpath">
+        <fileset dir="${src.lib.dir}" includes="**/*.jar"/>
+    </path>
+
+    <path id="test.classpath">
+        <fileset dir="${test.lib.dir}" includes="**/*.jar"/>
+        <fileset refid="src.classpath" />
+    </path>
+    
+    <property name="build.dir"   location="target"/>
+    <property name="src.classes.dir" location="${build.dir}/classes"/>
+    <property name="test.classes.dir" location="${build.dir}/testclasses"/>
+    <property name="jar.dir"     location="${build.dir}/jar"/>
+    <property name="report.dir"  location="${build.dir}/junitreport"/>
+
+    <target name="clean">
+        <delete dir="${build.dir}"/>
+    </target>
+
+	<target name="src.compile">
+        <mkdir dir="${src.classes.dir}"/>
+        <javac srcdir="${src.dir}" destdir="${src.classes.dir}" classpathref="src.classpath"/>
+    </target>
+
+    <target name="test.compile">
+        <mkdir dir="${test.classes.dir}"/>
+        <path id="compiled.src.classpath">
+            <fileset dir="${src.classes.dir}" includes="**/*.*"/>
+        </path>
+    	
+        <javac srcdir="${test.dir}" destdir="${test.classes.dir}" classpathref="src.classpath, test.classpath, compiled.src.classpath" />
+    </target>
+
+    <target name="junit" depends="test.compile">
+        <mkdir dir="${report.dir}"/>
+        <path id="compiled.test.classpath">
+            <fileset dir="${test.classes.dir}" includes="**/*.*"/>
+        </path>
+        <junit printsummary="yes">
+            <classpath>
+                <path refid="compiled.src.classpath"/>
+                <path refid="compiled.test.classpath"/>
+                <path refid="src.classpath"/>
+                <path refid="test.classpath"/>
+            </classpath>
+            
+            <formatter type="xml"/>
+            
+            <batchtest fork="yes" todir="${report.dir}">
+                <fileset dir="${test.dir}" includes="*.java"/>
+            </batchtest>
+        </junit>
+    </target>
+    
+    <target name="junitreport">
+        <junitreport todir="${report.dir}">
+            <fileset dir="${report.dir}" includes="TEST-*.xml"/>
+            <report todir="${report.dir}"/>
+        </junitreport>
+    </target>
+
+    <target name="jar" depends="junit">
+        <mkdir dir="${jar.dir}"/>
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${classes.dir}">
+            <manifest>
+                <attribute name="Main-Class" value="${main-class}"/>
+            </manifest>
+        </jar>
+    </target>
+    
+
+    <target name="clean-build" depends="clean,jar"/>
+
+</project>
