@@ -110,34 +110,7 @@ public class HostedPaymentResponseTest {
         assertEquals(response.getResultCode(), 0);
     }
     
-        @Test
-    public void testDoCardPaymentRequest() throws Exception {
-        HttpUnitOptions.setScriptingEnabled( false );
-        
-        order.setTestmode();
-        order.addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
-                .setQuantity(2)
-                .setAmountExVat(100.00)
-                .setDescription("Specification")
-                .setName("Prod")
-                .setUnit("st")
-                .setVatPercent(25)
-                .setDiscountPercent(0));
-        order.addCustomerDetails(Item.companyCustomer()
-                .setVatNumber("2345234")
-                .setCompanyName("TestCompagniet"));
-            PaymentForm form = order.setCountryCode(COUNTRYCODE.SE)
-        .setClientOrderNumber(String.valueOf(Calendar.DATE) + String.valueOf(Calendar.MILLISECOND))
-        .setCurrency("SEK")
-        .usePayPageCardOnly()
-            .setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtml")
-            .getPaymentForm();
-                        
-        WebResponse result = postRequest(SveaConfig.SWP_TEST_URL, form);        
-        assertEquals("OK", result.getResponseMessage());        
-    }
-    
+
     private WebResponse postRequest(String sveaUrl, PaymentForm form) throws IOException, SAXException {
         WebConversation conversation = new WebConversation();
         WebRequest request = new PostMethodWebRequest(sveaUrl);       
