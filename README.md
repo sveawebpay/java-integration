@@ -33,13 +33,19 @@ The API is built as a *Fluent API* so you can use *method chaining* when impleme
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
 ## Build                                                             
-To build a jar file, use the ant build file located at `java/build.xml`. Use the command
 
+To build a jar file, use the ant build file located at `java/build.xml`. Use the command
 ```
 ant clean-jar
 ``` 
+to build, unit test, and create the `sveawebpay.jar` file (in the `target\jar` directory), or preferrably 
+```
+ant clean-integrationtest
+``` 
+that will build the jar and also run the integration tests on the created jar. 
 
-to clean, build, test, and create the jar file. Other public targets can be found in the build.xml file.
+
+Other public targets can be found in the build.xml file.
 
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
