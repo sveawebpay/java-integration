@@ -38,7 +38,7 @@ To build a jar file, use the ant build file located at `java/build.xml`. Use the
 ```
 ant clean-jar
 ``` 
-to build, unit test, and create the `sveawebpay.jar` file (in the `target\jar` directory), or preferrably 
+to build, unit test, and create the `sveawebpay.jar` file (in the `target/jar` directory), or preferrably 
 ```
 ant clean-integrationtest
 ``` 
