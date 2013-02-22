@@ -51,21 +51,6 @@
         </path>
     </target>
 
-    <target name="integrationtest.compile">
-        <mkdir dir="${integrationtest.classes.dir}"/>
-        <path id="compile.integrationtest.classpath">
-            <path refid="compiled.src.classpath" />
-            <path refid="test.jars" />
-        </path>
-
-        <javac srcdir="${test.dir}" destdir="${test.classes.dir}" classpathref="compile.integrationtest.classpath" />
-        
-        <path id="all.integrationtest.classpath">
-            <path refid="compile.integrationtest.classpath" />
-            <path location="${test.classes.dir}" />
-        </path>
-    </target>
-
 	
     <target name="junit">
         <mkdir dir="${report.dir}"/>
@@ -82,21 +67,6 @@
     	<fail if="tests.failed"/>
     </target>
 
-    <target name="integrationtest">
-        <mkdir dir="${report.dir}"/>
-        
-        <junit printsummary="yes" >
-            <classpath refid="all.integrationtest.classpath"/>
-            
-            <formatter type="xml"/>
-            
-            <batchtest fork="no" todir="${report.dir}" failureproperty="integrationtests.failed">
-                <fileset dir="${test.dir}" includes="**/*Test.java"/>
-            </batchtest>
-        </junit>
-        <fail if="integrationtests.failed"/>
-    </target> 
-
     <target name="junitreport">
         <junitreport todir="${report.dir}">
             <fileset dir="${report.dir}" includes="TEST-*.xml"/>
@@ -112,13 +82,43 @@
             </manifest>
         </jar>
     </target>
-    
 
-    <target name="build" depends="src.compile, test.compile, integrationtest.compile" description="Compile src and test"/>
+    <target name="integrationtest.compile">
+        <mkdir dir="${integrationtest.classes.dir}"/>
+        <path id="compile.integrationtest.classpath">
+            <path location="${jar.dir}/${ant.project.name}.jar" />
+            <path refid="test.jars" />
+        </path>
+
+        <javac srcdir="${integrationtest.dir}" destdir="${integrationtest.classes.dir}" classpathref="compile.integrationtest.classpath" />
+        
+        <path id="all.integrationtest.classpath">
+            <path refid="compile.integrationtest.classpath" />
+            <path location="${integrationtest.classes.dir}" />
+        </path>
+    </target>
+
+
+    <target name="integrationtest">
+        <mkdir dir="${report.dir}"/>
+        
+        <junit printsummary="yes" >
+            <classpath refid="all.integrationtest.classpath"/>
+            
+            <formatter type="xml"/>
+            
+            <batchtest fork="no" todir="${report.dir}" failureproperty="integrationtests.failed">
+                <fileset dir="${integrationtest.dir}" includes="**/*Test.java"/>
+            </batchtest>
+        </junit>
+        <fail if="integrationtests.failed"/>
+    </target> 
+
+
+    <target name="build" depends="src.compile, test.compile" description="Compile src and test"/>
     <target name="clean-build" depends="clean, build" description="Clean, then compile src and test"/>
     <target name="clean-test" depends="clean-build, junit" description="Clean, build and test"/>
-    <target name="clean-integrationtest" depends="clean-build, integrationtest" description="Clean, build and test"/>
-    <target name="clean-test-all" depends="clean-build, junit, integrationtest" description="Clean, build, test, integrationtest"/>
-    <target name="clean-jar" depends="clean-test-all, jar" description="Clean, build, test and package a jar file"/>
+    <target name="clean-jar" depends="clean-test, jar" description="Clean, build, unit test and package a jar file"/>
+    <target name="clean-integrationtest" depends="clean-jar, integrationtest.compile, integrationtest" description="Run integration tests from created jar file"/>
 
 </project>
