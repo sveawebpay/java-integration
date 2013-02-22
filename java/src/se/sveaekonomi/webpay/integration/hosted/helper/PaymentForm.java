@@ -31,7 +31,7 @@ public class PaymentForm {
         switch(countryCode) {
             case SE:
                 this.setSubmitText("Betala");
-                this.setNoScriptMessage("Javascript ‰r inaktiverat i er webbl‰sare, sÂ ni fÂr manuellt omdirigera till paypage");
+                this.setNoScriptMessage("Javascript √§r inaktiverat i er webbl√§sare, s√• ni f√•r manuellt dirigera om till paypage");
                 break;
             default:
                 this.setSubmitText("Submit");
