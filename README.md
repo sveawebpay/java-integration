@@ -2,6 +2,11 @@
 
 *NOTE:* This documentation is not yet fully converted from PHP. The general flow and methods should be all the same. Let the fluent API guide you using code completion in your IDE, and you should be fairly well on the way. Sorry for any inconvenience.
 
+| Branch                            | Build status                               |
+|---------------------------------- |------------------------------------------- |
+| master (latest release)           | [![Build Status](https://travis-ci.org/sveawebpay/java-integration.png?branch=master)](https://travis-ci.org/sveawebpay/java-integration) |
+| develop                           | [![Build Status](https://travis-ci.org/sveawebpay/java-integration.png?branch=develop)](https://travis-ci.org/sveawebpay/java-integration) |
+
 ## Index
 * [Introduction](https://github.com/sveawebpay/java-integration/tree/develop#introduction)
 * [Build](https://github.com/sveawebpay/java-integration/tree/develop#build)
