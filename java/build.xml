@@ -1,14 +1,13 @@
-<project name="sveawebpay" basedir="." default="clean-jar">
+<project name="sveawebpay" basedir="." default="clean-integrationtest">
  
     <property name="src.dir"     location="src"/>
     <property name="test.dir"     location="test"/>
     <property name="integrationtest.dir"     location="integrationtest"/>
 
-    <property name="src.lib.dir"     location="lib/src"/>
     <property name="test.lib.dir"     location="lib/test"/>
 
     <path id="src.jars">
-        <fileset dir="${src.lib.dir}" includes="**/*.jar" />
+        <!-- no such jars at the moment -->
     </path>
 
     <path id="test.jars">
