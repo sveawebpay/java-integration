@@ -69,23 +69,23 @@ For every new payment type implementation, you follow the steps from the beginni
 Build order -> choose payment type -> doRequest/getPaymentForm
 
 ```java
-CreateOrderBuilder createOrder = WebPay.createOrder()               
+CreateOrderResponse response = WebPay.createOrder()               
 //If test mode
-    .setTestmode()
+.setTestmode()
 //For all products and other items
-createOrder.addOrderRow(Item.orderRow()...)
+.addOrderRow(Item.orderRow()...)
 //If shipping fee
-createOrder.addFee(Item.shippingFee()...)
+.addFee(Item.shippingFee()...)
 //If invoice with invoice fee
-createOrder.addFee(Item.invoiceFee()...)
+.addFee(Item.invoiceFee()...)
 //If discount or coupon with fixed amount
-createOrder.addDiscount(Item.fixedDiscount()...)
+.addDiscount(Item.fixedDiscount()...)
 //If discount or coupon with percent discount
-createOrder.addDiscount(Item.relativeDiscount()...)
+.addDiscount(Item.relativeDiscount()...)
 //Individual customer values
-createOrder.addCustomerDetails(Item.individualCustomer()...)
+.addCustomerDetails(Item.individualCustomer()...)
 //Company customer values
-createOrder.addCustomerDetails(Item.companyCustomer()...)
+.addCustomerDetails(Item.companyCustomer()...)
 //Other values
     .setCountryCode("SE")
     .setOrderDate("2012-12-12")
@@ -98,15 +98,15 @@ createOrder.addCustomerDetails(Item.companyCustomer()...)
     //Continue as a card payment
     .usePayPageCardOnly() 
         ...
-        .getPaymentForm();
+    .getPaymentForm();
     //Continue as a direct bank payment		
     .usePayPageDirectBankOnly()
         ...
-        .getPaymentForm();
+    .getPaymentForm();
     //Continue as a PayPage payment
     .usePayPage()
         ...
-        .getPaymentForm();
+    .getPaymentForm();
     //Continue as a PayPage payment
     .usePaymentMethod (PaymentMethod.DBSEBSE) //see APPENDIX for Constants
         ...
@@ -135,82 +135,79 @@ Continue by adding values for products and other. You can add order row, fee and
 You can use the *add* functions with an Item object or an ArrayList of Item objects as parameters. 
 
 ```java
-.addOrderRow(Item.orderRow()->...)
+.addOrderRow(Item.orderRow(). ...)
 
 //or
-$orderRows[] = Item.orderRow()->...;
-->addOrderRow($orderRows)
+List<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>(); //or use another preferrable Collection
+orderRows.add(Item.orderRow(). ...)
+...
+createOrder.addOrderRows(orderRows);
 ```
 	
 #### 1.2.1 OrderRow
-All products and other items. It´s required to have a minimum of one orderrow.
+All products and other items. It´s required to have a minimum of one order row.
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
-```php
-->addOrderRow(
-      Item::orderRow()     
-        ->setQuantity(2)                        //Required
-        ->setAmountExVat(100.00)                //Optional, see info above
-        ->setAmountIncVat(125.00)               //Optional, see info above
-        ->setVatPercent(25)                     //Optional, see info above
-        ->setArticleNumber(1)                   //Optional
-        ->setDescription("Specification")       //Optional
-        ->setName('Prod')                       //Optional
-        ->setUnit("st")                         //Optional              
-        ->setDiscountPercent(0)                 //Optional
+```java
+.addOrderRow(Item.orderRow()     
+        .setQuantity(2)                        //Required
+        .setAmountExVat(100.00)                //Optional, see info above
+        .setAmountIncVat(125.00)               //Optional, see info above
+        .setVatPercent(25)                     //Optional, see info above
+        .setArticleNumber("1")                 //Optional
+        .setDescription("Specification")       //Optional
+        .setName("Prod")                       //Optional
+        .setUnit("st")                         //Optional              
+        .setDiscountPercent(0)                 //Optional
     )
 ```
 
 #### 1.2.2 ShippingFee
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat()and setVatPercent().**
-```php
-->addFee(
-    Item::shippingFee()
-        ->setShippingId('33')                   //Optional
-        ->setName('shipping')                   //Optional
-        ->setDescription("Specification")       //Optional
-        ->setAmountExVat(50)                    //Optional, see info above
-        ->setAmountIncVat(62.50)                //Optional, see info above
-        ->setVatPercent(25)                     //Optional, see info above
-        ->setUnit("st")                         //Optional             
-        ->setDiscountPercent(0)                 //Optional
+```java
+.addFee(Item.shippingFee()
+        .setShippingId("33")                   //Optional
+        .setName("shipping")                   //Optional
+        .setDescription("Specification")       //Optional
+        .setAmountExVat(50)                    //Optional, see info above
+        .setAmountIncVat(62.50)                //Optional, see info above
+        .setVatPercent(25)                     //Optional, see info above
+        .setUnit("st")                         //Optional             
+        .setDiscountPercent(0)                 //Optional
    )
 ```
 #### 1.2.3 InvoiceFee
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
-```php
-->addFee(
-    Item::invoiceFee()
-        ->setName('Svea fee')                   //Optional
-        ->setDescription("Fee for invoice")     //Optional
-        ->setAmountExVat(50)                    //Optional, see info above
-        ->setAmountIncVat(62.50)                //Optional, see info above
-        ->setVatPercent(25)                     //Optional, see info above
-        ->setUnit("st")                         //Optional
-        ->setDiscountPercent(0)                 //Optional
+```java
+.addFee(Item.invoiceFee()
+        .setName("Svea fee")                   //Optional
+        .setDescription("Fee for invoice")     //Optional
+        .setAmountExVat(50)                    //Optional, see info above
+        .setAmountIncVat(62.50)                //Optional, see info above
+        .setVatPercent(25)                     //Optional, see info above
+        .setUnit("st")                         //Optional
+        .setDiscountPercent(0)                 //Optional
     )
 ```
 #### 1.2.4 Fixed Discount
 When discount or coupon is a fixed amount on total product amount.
-```php
-->addDiscount(
-    Item::fixedDiscount()                
-        ->setAmountIncVat(100.00)               //Required
-        ->setDiscountId("1")                    //Optional        
-        ->setUnit("st")                         //Optional
-        ->setDescription("FixedDiscount")       //Optional
-        ->setName("Fixed")                      //Optional
+```java
+.addDiscount(Item.fixedDiscount()                
+        .setAmountIncVat(100.00)               //Required
+        .setDiscountId("1")                    //Optional        
+        .setUnit("st")                         //Optional
+        .setDescription("FixedDiscount")       //Optional
+        .setName("Fixed")                      //Optional
     )
 ```
 #### 1.2.5 Relative Discount
 When discount or coupon is a percentage on total product amount.
-```php
-->addDiscount(
-    Item::relativeDiscount()
-        ->setDiscountPercent(50)                //Required
-        ->setDiscountId("1")                    //Optional      
-        ->setUnit("st")                         //Optional
-        ->setName('Relative')                   //Optional
-        ->setDescription("RelativeDiscount")    //Optional
+```java
+.addDiscount(Item.relativeDiscount()
+        .setDiscountPercent(50)                //Required
+        .setDiscountId("1")                    //Optional      
+        .setUnit("st")                         //Optional
+        .setName("Relative")                   //Optional
+        .setDescription("RelativeDiscount")    //Optional
     )
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
@@ -221,42 +218,40 @@ depending on country and customer type. For SE, NO, DK and FI ssn (Social Securi
 or company id number is required. Email and ip address are desirable.
 
 ####1.3.1 Options for individual customers
-```php
-->addCustomerDetails(
-    Item::individualCustomer()
-    ->setSsn(194605092222)              //Required for individual customers in SE, NO, DK, FI
-    ->setInitials("SB")                 //Required for individual customers in NL 
-    ->setBirthDate(1923, 12, 12)        //Required for individual customers in NL and DE
-    ->setName("Tess", "Testson")        //Required for individual customers in NL and DE    
-    ->setStreetAddress("Gatan", 23)     //Required in NL and DE    
-    ->setZipCode(9999)                  //Required in NL and DE
-    ->setLocality("Stan")               //Required in NL and DE    
-    ->setEmail("test@svea.com")         //Optional but desirable    
-    ->setIpAddress("123.123.123")       //Optional but desirable
-    ->setCoAddress("c/o Eriksson")      //Optional
-    ->setPhoneNumber(999999)            //Optional
+```java
+.addCustomerDetails(Item.individualCustomer()
+    .setSsn(194605092222)              //Required for individual customers in SE, NO, DK, FI
+    .setInitials("SB")                 //Required for individual customers in NL 
+    .setBirthDate(1923, 12, 12)        //Required for individual customers in NL and DE
+    .setName("Tess", "Testson")        //Required for individual customers in NL and DE    
+    .setStreetAddress("Gatan", 23)     //Required in NL and DE    
+    .setZipCode(9999)                  //Required in NL and DE
+    .setLocality("Stan")               //Required in NL and DE    
+    .setEmail("test@svea.com")         //Optional but desirable    
+    .setIpAddress("123.123.123")       //Optional but desirable
+    .setCoAddress("c/o Eriksson")      //Optional
+    .setPhoneNumber(999999)            //Optional
     )
 ```
 
 ####1.3.2 Options for company customers
-```php
-->addCustomerDetails(
-    Item::companyCustomer()
-    ->setCompanyIdNumber(2345234)       //Required for company customers in SE, NO, DK, FI
-    ->setVatNumber("NL2345234")  //Required for NL and DE
-    ->setCompanyName("TestCompagniet")  //Required for Eu countries like NL and DE
+```java
+.addCustomerDetails(Item.companyCustomer()
+    .setCompanyIdNumber("2345234")		//Required for company customers in SE, NO, DK, FI
+    .setVatNumber("NL2345234")			//Required for NL and DE
+    .setCompanyName("TestCompagniet")  	//Required for Eu countries like NL and DE
     )
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 ### 1.4 Other values  
-```php
-    ->setCountryCode("SE")                      //Required for synchronous payments    
-    ->setCurrency("SEK")                        //Required for card payment, direct payment and PayPage payment.
-    ->setClientOrderNumber("nr26")              //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
-    ->setAddressSelector("7fd7768")             //Optional. Recieved from getAddresses
-    ->setOrderDate("2012-12-12")                //Required for synchronous payments
-    ->setCustomerReference("33")                //Optional
+```java
+    .setCountryCode("SE")                      //Required for synchronous payments    
+    .setCurrency("SEK")                        //Required for card payment, direct payment and PayPage payment.
+    .setClientOrderNumber("nr26")              //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
+    .setAddressSelector("7fd7768")             //Optional. Recieved from getAddresses
+    .setOrderDate("2012-12-12")                //Required for synchronous payments
+    .setCustomerReference("33")                //Optional
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
@@ -273,7 +268,7 @@ formatted object as well.
 
 #### Asynchronous payments - Hosted solutions
 Build order and recieve a *PaymentForm* object. Send the *PaymentForm* parameters: *merchantid*, *xmlMessageBase64* and *mac* by POST to
-SveaConfig::SWP_TEST_URL or SveaConfig::SWP_PROD_URL. The *PaymentForm* object also contains a complete html form as string 
+SveaConfig.SWP_TEST_URL or SveaConfig.SWP_PROD_URL. The *PaymentForm* object also contains a complete html form as string 
 and the html form element as array.
 
 ```html
@@ -292,28 +287,27 @@ and the html form element as array.
 
 ##### 1.5.1.1 Request
 If Config/SveaConfig.php is not modified you can set your store authorization here.
-```php
-$form = WebPay::createOrder()
-->addOrderRow(
-    Item::orderRow()
-        ->setArticleNumber(1)
-        ->setQuantity(2)
-        ->setAmountExVat(100.00)
-        ->setDescription("Specification")
-        ->setName('Prod')
-        ->setUnit("st")
-        ->setVatPercent(25)
-        ->setDiscountPercent(0)
-    )
-    ->setCountryCode("SE")
-    ->setClientOrderNumber("33")
-    ->setOrderDate("2012-12-12")
-    ->setCurrency("SEK")
-        ->usePayPageCardOnly()
-            ->setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
-            ->setReturnUrl("http://myurl.se")                   //Required
-            ->setCancelUrl("http://myurl.se")                   //Optional
-            ->getPaymentForm();
+```java
+PaymentForm form = WebPay.createOrder()
+	.addOrderRow(Item.orderRow()
+        .setArticleNumber("1")
+        .setQuantity(2)
+        .setAmountExVat(100.00)
+        .setDescription("Specification")
+        .setName("Prod")
+        .setUnit("st")
+        .setVatPercent(25)
+        .setDiscountPercent(0)
+	)
+    .setCountryCode(COUNTRYCODE.SE)
+    .setClientOrderNumber("33")
+    .setOrderDate("2012-12-12")
+    .setCurrency("SEK")
+        .usePayPageCardOnly()
+            .setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+            .setReturnUrl("http://myurl.se")                   //Required
+            .setCancelUrl("http://myurl.se")                   //Optional
+            .getPaymentForm();
 
 ```
 ##### 1.5.1.2 Return
@@ -331,11 +325,10 @@ Function getPaymentForm() returns object type *PaymentForm* with accessible memb
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
 | rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
             
-```php
-$form = ...
-        ->getPaymentForm();
+```java
+PaymentForm form = ...
+        .getPaymentForm();
 
-echo $form->completeHtmlFormWithSubmitButton; //Will render a hidden form with submit button in browser
 ```
 
 #### 1.5.2 PayPage with direct bank payment options

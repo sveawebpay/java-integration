@@ -77,7 +77,7 @@ public class DirectPaymentTest {
                 .setReturnUrl("http://myurl.se")
                 .getPaymentForm();
         
-        String base64Payment = form.getMessageBase64();        
+        String base64Payment = form.getXmlMessageBase64();        
         String html = Base64Util.decodeBase64String(base64Payment);
         String amount = html.substring(html.indexOf("<amount>") + 8, html.indexOf("</amount>"));
         assertEquals("18750", amount);

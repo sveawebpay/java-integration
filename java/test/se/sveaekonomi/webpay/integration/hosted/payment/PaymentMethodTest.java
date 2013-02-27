@@ -45,7 +45,7 @@ public class PaymentMethodTest {
             .setReturnUrl("http://myurl.se")                 
             .getPaymentForm();
 
-        String base64Payment = form.getMessageBase64();        
+        String base64Payment = form.getXmlMessageBase64();        
         String html = Base64Util.decodeBase64String(base64Payment);
         String amount = html.substring(html.indexOf("<paymentmethod>") + 15, html.indexOf("</paymentmethod>"));
         assertEquals("KORTCERT", amount);

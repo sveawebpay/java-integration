@@ -9,6 +9,7 @@ import javax.xml.bind.ValidationException;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
@@ -99,6 +100,8 @@ public class NewOrderBuilderTest {
                 .useInvoicePayment()
                 .prepareRequest();
         
-        assertEquals("666666", request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber);
+        assertEquals("666666", request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber); 
     }
+    
+   
 }

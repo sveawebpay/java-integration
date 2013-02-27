@@ -117,7 +117,7 @@ public abstract class HostedPayment {
         }
         
         PaymentForm form = new PaymentForm();        
-        form.setMessageAsXML(xml);       
+        form.setXmlMessage(xml);       
         form.setMessageBase64(Base64Util.encodeBase64String(xml));
 
         form.setMerchantId(createOrderBuilder.config.getMerchantId());
