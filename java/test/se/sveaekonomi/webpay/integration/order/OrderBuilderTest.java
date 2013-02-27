@@ -8,6 +8,7 @@ import javax.xml.bind.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
@@ -18,7 +19,7 @@ public class OrderBuilderTest {
     
     @Before
     public void setUp() {
-        order = new CreateOrderBuilder();
+        order = WebPay.createOrder();
         order.setValidator(new VoidValidator());
     }
     
@@ -151,7 +152,7 @@ public class OrderBuilderTest {
     }
     
     private CreateOrderBuilder createTestCustomerIdentity(CreateOrderBuilder orderBuilder) {
-         orderBuilder.addCustomerDetails(Item.individualCustomer()
+         return orderBuilder.addCustomerDetails(Item.individualCustomer()
                 .setSsn(194609052222L)
                 .setInitials("SB")
                 .setBirthDate(1923, 12, 12)
@@ -162,9 +163,7 @@ public class OrderBuilderTest {
                 .setStreetAddress("Gatan", 23)             
                 .setCoAddress("c/o Eriksson")
                 .setZipCode("9999")
-                .setLocality("Stan"));
-         
-        return orderBuilder;
+                .setLocality("Stan"));                
     }
 
     private CreateOrderBuilder createCompanyDetails(CreateOrderBuilder orderBuilder) {
