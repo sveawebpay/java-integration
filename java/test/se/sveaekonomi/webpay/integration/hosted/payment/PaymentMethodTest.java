@@ -18,8 +18,8 @@ public class PaymentMethodTest {
     public void testPayPagePaymentWithSetPaymentMethod() throws Exception {
         
         CreateOrderBuilder order = WebPay.createOrder()
-                 .setTestmode();
-        order.addOrderRow(Item.orderRow()
+                 .setTestmode()
+        .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
             .setAmountExVat(100.00)
@@ -27,16 +27,16 @@ public class PaymentMethodTest {
             .setName("Prod")
             .setUnit("st")
             .setVatPercent(25)
-            .setDiscountPercent(0));
-        order.addDiscount(Item.relativeDiscount()
+            .setDiscountPercent(0))
+        .addDiscount(Item.relativeDiscount()
             .setDiscountId("1")
             .setDiscountPercent(50)
             .setUnit("st")
             .setName("Relative")
-            .setDescription("RelativeDiscount"));
-        order.addCustomerDetails(Item.individualCustomer()
+            .setDescription("RelativeDiscount"))
+        .addCustomerDetails(Item.individualCustomer()
                 .setSsn(194605092222L));
-                PaymentForm form = order
+        PaymentForm form = order
             .setCountryCode(COUNTRYCODE.SE)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
@@ -45,7 +45,7 @@ public class PaymentMethodTest {
             .setReturnUrl("http://myurl.se")                 
             .getPaymentForm();
 
-        String base64Payment = form.getMessageBase64();        
+        String base64Payment = form.getXmlMessageBase64();        
         String html = Base64Util.decodeBase64String(base64Payment);
         String amount = html.substring(html.indexOf("<paymentmethod>") + 15, html.indexOf("</paymentmethod>"));
         assertEquals("KORTCERT", amount);

@@ -50,8 +50,8 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
         CreateOrderBuilder order = new CreateOrderBuilder();
         order.setValidator(new VoidValidator())
-        .setClientOrderNumber("1");
-        order.addCustomerDetails(Item.individualCustomer().setSsn(194609052222L));         
+        	.setClientOrderNumber("1")
+        	.addCustomerDetails(Item.individualCustomer().setSsn(194609052222L));         
                 
        assertEquals(expectedMessage, orderValidator.validate(order));
     }
@@ -62,8 +62,8 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n" 
                 + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
         CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addCustomerDetails(Item.individualCustomer());
-        order.setValidator(new VoidValidator())
+        order.addCustomerDetails(Item.individualCustomer())
+        	.setValidator(new VoidValidator())
             .setClientOrderNumber("1")
             .setCountryCode(COUNTRYCODE.SE);
  
@@ -77,8 +77,8 @@ public class WebServiceOrderValidatorTest {
         CreateOrderBuilder order = new CreateOrderBuilder();
         order.setValidator(new VoidValidator())
             .setClientOrderNumber("1")
-            .setCountryCode(COUNTRYCODE.SE);
-        order.addCustomerDetails(Item.individualCustomer().setSsn(194609052222L));            
+            .setCountryCode(COUNTRYCODE.SE)
+        	.addCustomerDetails(Item.individualCustomer().setSsn(194609052222L));            
 
         assertEquals(expectedMessage, orderValidator.validate(order));
     }
@@ -89,11 +89,11 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - Two of the values must be set: AmountExVat(not set), AmountIncVat(not set) or VatPercent(not set) for Orderrow. Use two functions of: setAmountExVat(), setAmountIncVat or setVatPercent().\n"
                 + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
         CreateOrderBuilder order = new CreateOrderBuilder();
-        order.setClientOrderNumber("1");
-        order.addOrderRow(Item.orderRow());
-        order.addCustomerDetails(Item.individualCustomer()
-                .setSsn(194605092222L));
-        order.setCountryCode(COUNTRYCODE.SE)
+        order.setClientOrderNumber("1")
+        	.addOrderRow(Item.orderRow())
+        	.addCustomerDetails(Item.individualCustomer()
+                .setSsn(194605092222L))
+                .setCountryCode(COUNTRYCODE.SE)
             .setValidator(new VoidValidator());
          
        assertEquals(expectedMessage, orderValidator.validate(order));
@@ -105,8 +105,8 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n"
                 + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
         CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addCustomerDetails(Item.individualCustomer());
-        order.setValidator(new VoidValidator())
+        order.addCustomerDetails(Item.individualCustomer())
+        	.setValidator(new VoidValidator())
             .setCountryCode(COUNTRYCODE.SE);        
        
         assertEquals(expectedMessage, orderValidator.validate(order));
@@ -123,8 +123,8 @@ public class WebServiceOrderValidatorTest {
                + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
        CreateOrderBuilder order = new CreateOrderBuilder();
         order.setValidator(new VoidValidator())
-            .setCountryCode(COUNTRYCODE.DE);
-        order.addCustomerDetails(Item.individualCustomer());
+            .setCountryCode(COUNTRYCODE.DE)
+        	.addCustomerDetails(Item.individualCustomer());
                
         assertEquals(expectedMessage, orderValidator.validate(order));
     }
@@ -137,13 +137,13 @@ public class WebServiceOrderValidatorTest {
         CreateOrderBuilder order = new CreateOrderBuilder();
 
         order.addCustomerDetails(Item.individualCustomer()
-            .setName("Tess", "Testson")
-            .setStreetAddress("Gatan", 23)
-            .setZipCode("9999")
-            .setLocality("Stan"));         
-            order.setCountryCode(COUNTRYCODE.DE);
+	            .setName("Tess", "Testson")
+	            .setStreetAddress("Gatan", 23)
+	            .setZipCode("9999")
+	            .setLocality("Stan"))         
+            .setCountryCode(COUNTRYCODE.DE)
         
-        order.setValidator(new VoidValidator());
+        	.setValidator(new VoidValidator());
         assertEquals(orderValidator.validate(order), expectedMessage);
     }
     
@@ -160,9 +160,9 @@ public class WebServiceOrderValidatorTest {
         CreateOrderBuilder order = new CreateOrderBuilder();
         order
             .setClientOrderNumber("1")
-            .setCountryCode(COUNTRYCODE.DE);
-        order.addCustomerDetails(Item.individualCustomer());
-        order.setValidator(new VoidValidator());   
+            .setCountryCode(COUNTRYCODE.DE)
+        	.addCustomerDetails(Item.individualCustomer())
+        	.setValidator(new VoidValidator());   
         assertEquals(expectedMessage, orderValidator.validate(order));
     }
     
@@ -178,8 +178,8 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
         CreateOrderBuilder order = new CreateOrderBuilder();
         order.setValidator(new VoidValidator())
-            .setCountryCode(COUNTRYCODE.NL).build(); 
-        order.addCustomerDetails(Item.individualCustomer());
+            .setCountryCode(COUNTRYCODE.NL).build() 
+            .addCustomerDetails(Item.individualCustomer());
         assertEquals(expectedMessage, orderValidator.validate(order));
     }
     
@@ -194,10 +194,9 @@ public class WebServiceOrderValidatorTest {
             .setName("Tess", "Testson")
             .setStreetAddress("Gatan", 23)               
             .setZipCode("9999")
-            .setLocality("Stan"));
-        order.setCountryCode(COUNTRYCODE.NL);
-        
-        order.setValidator(new VoidValidator());        
+            .setLocality("Stan"))
+        	.setCountryCode(COUNTRYCODE.NL)        
+        	.setValidator(new VoidValidator());        
         assertEquals(expectedMessage, orderValidator.validate(order));
     }
     
@@ -205,14 +204,13 @@ public class WebServiceOrderValidatorTest {
     public void succeedOnGoodValuesSe() {
         CreateOrderBuilder order = new CreateOrderBuilder();
         order.addOrderRow(Item.orderRow()
-            .setAmountExVat(5.0)
-            .setVatPercent(25)
-            .setQuantity(1));            
-        order.addCustomerDetails(Item.individualCustomer()
-                .setSsn(194605092222L));
-        order.setCountryCode(COUNTRYCODE.SE).setOrderDate("2012-05-01");
-        
-        order.setValidator(new VoidValidator());
+	            .setAmountExVat(5.0)
+	            .setVatPercent(25)
+	            .setQuantity(1))            
+            .addCustomerDetails(Item.individualCustomer()
+            		.setSsn(194605092222L))
+            .setCountryCode(COUNTRYCODE.SE).setOrderDate("2012-05-01")        
+            .setValidator(new VoidValidator());
         assertEquals("", orderValidator.validate(order));
     }
     
@@ -231,7 +229,7 @@ public class WebServiceOrderValidatorTest {
             .setUnit("st")
             .setVatPercent(25)
             .setDiscountPercent(0));
-            HandleOrder handleOrder = deliverOrderBuilder
+        HandleOrder handleOrder = deliverOrderBuilder
             .setNumberOfCreditDays(1)
             .setInvoiceDistributionType(DistributionType.Post)
             .deliverInvoiceOrder();            

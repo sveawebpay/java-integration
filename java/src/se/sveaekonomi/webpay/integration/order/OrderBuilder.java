@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.order;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import se.sveaekonomi.webpay.integration.order.row.FixedDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
@@ -15,11 +16,11 @@ import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
  */
 public abstract class OrderBuilder<T extends OrderBuilder<T>> {
     
-    protected ArrayList<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>();
-    protected ArrayList<InvoiceFeeBuilder> invoiceFeeRows = new ArrayList<InvoiceFeeBuilder>();
-    protected ArrayList<ShippingFeeBuilder> shippingFeeRows = new ArrayList<ShippingFeeBuilder>();
-    protected ArrayList<FixedDiscountBuilder> fixedDiscountRows = new ArrayList<FixedDiscountBuilder>();
-    protected ArrayList<RelativeDiscountBuilder> relativeDiscountRows = new ArrayList<RelativeDiscountBuilder>();
+    protected List<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>();
+    protected List<InvoiceFeeBuilder> invoiceFeeRows = new ArrayList<InvoiceFeeBuilder>();
+    protected List<ShippingFeeBuilder> shippingFeeRows = new ArrayList<ShippingFeeBuilder>();
+    protected List<FixedDiscountBuilder> fixedDiscountRows = new ArrayList<FixedDiscountBuilder>();
+    protected List<RelativeDiscountBuilder> relativeDiscountRows = new ArrayList<RelativeDiscountBuilder>();
     
     private boolean testmode;
 
@@ -27,11 +28,11 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
         
     }
     
-    public ArrayList<OrderRowBuilder> getOrderRows() {
+    public List<OrderRowBuilder> getOrderRows() {
         return orderRows;
     }  
     
-    public ArrayList<InvoiceFeeBuilder> getInvoiceFeeRows() {
+    public List<InvoiceFeeBuilder> getInvoiceFeeRows() {
         return invoiceFeeRows;
     }
     
@@ -39,23 +40,23 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
         this.invoiceFeeRows = invoiceFeeRows;
     }
     
-    public ArrayList<ShippingFeeBuilder> getShippingFeeRows() {
+    public List<ShippingFeeBuilder> getShippingFeeRows() {
         return shippingFeeRows;
     }
     
     public void setShippingFeeRows(ArrayList<ShippingFeeBuilder> shippingFeeRows) {
         this.shippingFeeRows = shippingFeeRows;
     }
-    public ArrayList<FixedDiscountBuilder> getFixedDiscountRows() {
+    public List<FixedDiscountBuilder> getFixedDiscountRows() {
         return fixedDiscountRows;
     }
     
-    public OrderBuilder<T> setFixedDiscountRows(ArrayList<FixedDiscountBuilder> fixedDiscountRows) {
+    public T setFixedDiscountRows(ArrayList<FixedDiscountBuilder> fixedDiscountRows) {
         this.fixedDiscountRows = fixedDiscountRows;
-        return this;
+        return getGenericThis();
     }
     
-    public ArrayList<RelativeDiscountBuilder> getRelativeDiscountRows() {
+    public List<RelativeDiscountBuilder> getRelativeDiscountRows() {
         return relativeDiscountRows;
     }
     
@@ -70,7 +71,7 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
     
     public T setTestmode() {
         this.testmode = true;
-        return (T)this;
+        return getGenericThis();
     }
     
   /*  public OrderRowBuilder<T> beginOrderRow() {
@@ -107,30 +108,34 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
         return runner.run(this);
     }
     
-    public OrderBuilder<T> addOrderRow(OrderRowBuilder itemOrderRow) {
+    public T addOrderRow(OrderRowBuilder itemOrderRow) {
         this.orderRows.add(itemOrderRow);
-        return this;
+        return getGenericThis();
     }
+
+	protected T getGenericThis() {
+		return (T) this;
+	}
     
-    public OrderBuilder<T> addOrderRows(ArrayList<OrderRowBuilder> itemOrderRow) {
+    public T addOrderRows(List<OrderRowBuilder> itemOrderRow) {
         this.orderRows.addAll(itemOrderRow);
-        return this;
+        return getGenericThis();
     }
     
-    public OrderBuilder<T> addDiscount(RowBuilder itemDiscount) {
+    public T addDiscount(RowBuilder itemDiscount) {
         if (FixedDiscountBuilder.class.equals(itemDiscount.getClass())) 
             this.fixedDiscountRows.add((FixedDiscountBuilder) itemDiscount);
         else           
             this.relativeDiscountRows.add((RelativeDiscountBuilder)itemDiscount);
         
-        return this;
+        return getGenericThis();
     }
     
-    public OrderBuilder<T> addFee(RowBuilder itemFee) {
+    public T addFee(RowBuilder itemFee) {
         if (ShippingFeeBuilder.class.equals(itemFee.getClass()))
             this.shippingFeeRows.add((ShippingFeeBuilder) itemFee);
         else
             this.invoiceFeeRows.add((InvoiceFeeBuilder) itemFee);
-        return this;
+        return getGenericThis();
     }
 }

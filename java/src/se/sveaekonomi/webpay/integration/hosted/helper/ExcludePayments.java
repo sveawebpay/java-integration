@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.hosted.helper;
 
 import java.util.ArrayList;
+import java.util.List;
 
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
@@ -14,7 +15,7 @@ public class ExcludePayments {
         excludedPaymentMethods = new ArrayList<PAYMENTMETHOD>();
     }
     
-    public ArrayList<PAYMENTMETHOD> excludeInvoicesAndPaymentPlan() {
+    public List<PAYMENTMETHOD> excludeInvoicesAndPaymentPlan() {
    
             excludedPaymentMethods.add(PAYMENTMETHOD.SVEAINVOICESE);
             excludedPaymentMethods.add(PAYMENTMETHOD.SVEASPLITSE);

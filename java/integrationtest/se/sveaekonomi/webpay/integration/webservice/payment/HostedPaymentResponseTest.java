@@ -67,9 +67,9 @@ public class HostedPaymentResponseTest {
     private WebResponse postRequest(String sveaUrl, PaymentForm form) throws IOException, SAXException {
         WebConversation conversation = new WebConversation();
         WebRequest request = new PostMethodWebRequest(sveaUrl);       
-        form.setMacSha512(HashUtil.createHash(form.getMessageBase64() + order.config.getSecretWord(), HASHALGORITHM.SHA_512));
+        form.setMacSha512(HashUtil.createHash(form.getXmlMessageBase64() + order.config.getSecretWord(), HASHALGORITHM.SHA_512));
         request.setParameter("mac", form.getMacSha512());
-        request.setParameter("message", form.getMessageBase64());
+        request.setParameter("message", form.getXmlMessageBase64());
         request.setParameter("merchantid", form.getMerchantId());        
         return conversation.getResponse(request);               
     }         

@@ -44,29 +44,29 @@ public class DirectPaymentTest {
                 .setDescription("Specification")
                 .setVatPercent(25)
                 .setDiscountPercent(0)
-                .setName("Prod"));
-         order.addFee(Item.shippingFee()
+                .setName("Prod"))
+         .addFee(Item.shippingFee()
                  .setShippingId("33")
                  .setName("shipping")
                  .setDescription("Specification")
                  .setAmountExVat(50)
                  .setUnit("st")
                  .setVatPercent(25)
-                 .setDiscountPercent(0));
-         order.addFee(Item.invoiceFee()
+                 .setDiscountPercent(0))
+         .addFee(Item.invoiceFee()
                  .setName("Svea fee")
                  .setDescription("Fee for invoice")
                  .setAmountExVat(50)
                  .setUnit("st")
                  .setVatPercent(25)
-                 .setDiscountPercent(0));
-         order.addDiscount(Item.relativeDiscount()
+                 .setDiscountPercent(0))
+         .addDiscount(Item.relativeDiscount()
                  .setDiscountId("1")
                  .setName("Relative")
                  .setDescription("RelativeDiscount")
                  .setUnit("st")               
-                 .setDiscountPercent(50));        
-         order.addCustomerDetails(Item.companyCustomer()
+                 .setDiscountPercent(50))      
+         .addCustomerDetails(Item.companyCustomer()
                 .setVatNumber("2345234")
                 .setCompanyName("TestCompagniet"));
          PaymentForm form =   order.setCountryCode(COUNTRYCODE.SE)
@@ -77,7 +77,7 @@ public class DirectPaymentTest {
                 .setReturnUrl("http://myurl.se")
                 .getPaymentForm();
         
-        String base64Payment = form.getMessageBase64();        
+        String base64Payment = form.getXmlMessageBase64();        
         String html = Base64Util.decodeBase64String(base64Payment);
         String amount = html.substring(html.indexOf("<amount>") + 8, html.indexOf("</amount>"));
         assertEquals("18750", amount);
