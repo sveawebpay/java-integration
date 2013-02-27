@@ -65,8 +65,8 @@ public class HostedXmlBuilderTest {
         
         order = new CreateOrderBuilder();
        // order.setOrderRows(orderRows);
-        order.addOrderRow(row);
-        order.setCountryCode(COUNTRYCODE.SE);
+        order.addOrderRow(row)
+        	.setCountryCode(COUNTRYCODE.SE);
         
         HostedPayment payment = new FakeHostedPayment(order);
         payment.calculateRequestValues();
@@ -120,8 +120,8 @@ public class HostedXmlBuilderTest {
         
         order = new CreateOrderBuilder();
        // order.setOrderRows(orderRows);
-        order.addOrderRow(row);
-        order.setCountryCode(COUNTRYCODE.SE);
+        order.addOrderRow(row)
+        	.setCountryCode(COUNTRYCODE.SE);
         
         HostedPayment payment = new FakeHostedPayment(order);
         payment.calculateRequestValues();

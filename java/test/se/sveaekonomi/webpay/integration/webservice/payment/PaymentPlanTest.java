@@ -32,18 +32,18 @@ public class PaymentPlanTest {
               .setName("Prod")
               .setUnit("st")
               .setVatPercent(25)
-              .setDiscountPercent(0));
+              .setDiscountPercent(0))
         
-        orderBuilder.addFee(Item.shippingFee()
+        .addFee(Item.shippingFee()
                 .setShippingId("33")
                 .setName("shipping")
                 .setDescription("Specification")
                 .setAmountExVat(50)
                 .setUnit("st")
                 .setVatPercent(25)
-                .setDiscountPercent(0));
+                .setDiscountPercent(0))
         
-        orderBuilder.addCustomerDetails(Item.individualCustomer()
+        .addCustomerDetails(Item.individualCustomer()
               .setSsn(194605092222L)
               .setBirthDate(1923,  12, 12)
               .setName("Tess", "Testson")

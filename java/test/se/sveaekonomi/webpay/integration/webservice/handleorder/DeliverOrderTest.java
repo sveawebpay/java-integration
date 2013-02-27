@@ -40,18 +40,18 @@ public class DeliverOrderTest {
             .setName("Prod")
             .setUnit("st")
             .setVatPercent(25)
-            .setDiscountPercent(0));
+            .setDiscountPercent(0))
 
-        order.addFee(Item.shippingFee()
+        .addFee(Item.shippingFee()
             .setShippingId("33")
             .setName("shipping")
             .setDescription("Specification")
             .setAmountExVat(50)
             .setUnit("st")
             .setVatPercent(25)
-            .setDiscountPercent(0));
+            .setDiscountPercent(0))
         
-        order.addDiscount(Item.fixedDiscount()
+        .addDiscount(Item.fixedDiscount()
            .setAmountIncVat(10));
         
         SveaRequest<SveaDeliverOrder> request = order

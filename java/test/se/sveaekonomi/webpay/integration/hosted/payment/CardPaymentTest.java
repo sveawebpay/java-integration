@@ -47,22 +47,22 @@ public class CardPaymentTest {
                 .setDescription("Specification")
                 .setVatPercent(25)
                 .setDiscountPercent(0)
-                .setName("Prod"));
+                .setName("Prod"))
         
-        order.addCustomerDetails(Item.companyCustomer()
+        .addCustomerDetails(Item.companyCustomer()
                 .setVatNumber("2345234")
-                .setCompanyName("TestCompagniet"));
+                .setCompanyName("TestCompagniet"))
         
-       order.addFee(Item.shippingFee()
+       .addFee(Item.shippingFee()
                .setShippingId("33")
                .setName("shipping")
                .setDescription("Specification")
                .setAmountExVat(50)
                .setUnit("st")
                .setVatPercent(25)
-               .setDiscountPercent(0));
+               .setDiscountPercent(0))
            
-       order.addDiscount(Item.relativeDiscount()
+       .addDiscount(Item.relativeDiscount()
                .setDiscountId("1")
                .setName("Relative")
                .setDescription("RelativeDiscount")
@@ -91,8 +91,8 @@ public class CardPaymentTest {
     @Test
     public void testSetAuthorization() throws Exception {
         order = WebPay.createOrder()
-                .setTestmode();                
-       order.addOrderRow(Item.orderRow()
+                .setTestmode()                
+       .addOrderRow(Item.orderRow()
                 .setAmountExVat(100.00)
                 .setArticleNumber("1")
                 .setQuantity(2)
@@ -100,31 +100,31 @@ public class CardPaymentTest {
                 .setDescription("Specification")
                 .setVatPercent(25)
                 .setDiscountPercent(0)
-                .setName("Prod"));
+                .setName("Prod"))
           
-       order.addFee(Item.shippingFee()
+       .addFee(Item.shippingFee()
                   .setShippingId("33")
                   .setName("shipping")
                   .setDescription("Specification")
                   .setAmountExVat(50)
                   .setUnit("st")
                   .setVatPercent(25)
-                  .setDiscountPercent(0));
+                  .setDiscountPercent(0))
           
-       order.addFee(Item.invoiceFee()
+       .addFee(Item.invoiceFee()
                   .setName("Svea fee")
                   .setDescription("Fee for invoice")
                   .setAmountExVat(50)
                   .setUnit("st")
                   .setVatPercent(25)
-                  .setDiscountPercent(0));
-       order.addDiscount(Item.relativeDiscount()
+                  .setDiscountPercent(0))
+       .addDiscount(Item.relativeDiscount()
                   .setName("Svea fee")
                   .setDescription("Fee for invoice")
                   .setUnit("st")               
-                  .setDiscountPercent(0));
+                  .setDiscountPercent(0))
               
-       order.addCustomerDetails(Item.companyCustomer()
+       .addCustomerDetails(Item.companyCustomer()
                   .setVatNumber("2345234")
                   .setCompanyName("TestCompagniet"));
       

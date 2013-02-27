@@ -108,37 +108,37 @@ createOrder.addCustomerDetails(Item.companyCustomer()...)
         ...
         .getPaymentForm();
     //Continue as a PayPage payment
-    ->usePaymentMethod (PaymentMethod::DBSEBSE) //see APPENDIX for Constants
+    .usePaymentMethod (PaymentMethod.DBSEBSE) //see APPENDIX for Constants
         ...
-        ->getPaymentForm();
+    .getPaymentForm();
     //Continue as an invoice payment
-    ->useInvoicePayment()
+    .useInvoicePayment()
     ...
-        ->doRequest();
+    .doRequest();
     //Continue as a payment plan payment
-    ->usePaymentPlanPayment("campaigncode", 0)
+    .usePaymentPlanPayment("campaigncode", 0)
     ...
-        ->doRequest();
+    .doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 ### 1.1 Test mode                                                            
 Set test mode while developing to make the calls to our test server.
 Remove when you change to production mode.	
-```php
-    ->setTestmode()
+```java
+    .setTestmode()
 ```
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 	
 ### 1.2 Specify order                                                        
-Continue by adding values for products and other. You can add OrderRow, Fee and Discount. Chose the right Item object as parameter.
-You can use the *add-* functions with an Item object or an array of Item objects as parameters. 
+Continue by adding values for products and other. You can add order row, fee and discount. Chose the right Item object as parameter.
+You can use the *add* functions with an Item object or an ArrayList of Item objects as parameters. 
 
-```php
-->addOrderRow(Item::orderRow()->...)
+```java
+.addOrderRow(Item.orderRow()->...)
 
 //or
-$orderRows[] = Item::orderRow()->...;
+$orderRows[] = Item.orderRow()->...;
 ->addOrderRow($orderRows)
 ```
 	

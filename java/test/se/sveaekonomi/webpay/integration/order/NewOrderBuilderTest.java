@@ -47,8 +47,7 @@ public class NewOrderBuilderTest {
     
 	@Test
 	public void testBuildOrderRowArrayList() throws ValidationException {
-		CreateOrderBuilder createOrder = WebPay.createOrder()
-                .setTestmode();
+		
 		ArrayList<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>(); 
 		orderRows.add(Item.orderRow()
 				.setArticleNumber("1")
@@ -59,6 +58,7 @@ public class NewOrderBuilderTest {
                 .setUnit("st")
                 .setVatPercent(25)
                 .setDiscountPercent(0));
+		
 		orderRows.add(Item.orderRow()
 				.setArticleNumber("2")
                 .setQuantity(2)
@@ -68,9 +68,11 @@ public class NewOrderBuilderTest {
                 .setUnit("st")
                 .setVatPercent(25)
                 .setDiscountPercent(0));
-		createOrder.addOrderRows(orderRows);
+		CreateOrderBuilder createOrder = WebPay.createOrder()
+                .setTestmode()
+                .addOrderRows(orderRows)
 		
-		createOrder.addCustomerDetails(Item.companyCustomer()
+                .addCustomerDetails(Item.companyCustomer()
                 .setCompanyIdNumber("666666")
                 .setEmail("test@svea.com")
                 .setPhoneNumber(999999)
@@ -79,6 +81,7 @@ public class NewOrderBuilderTest {
                 .setCoAddress("c/o Eriksson")
                 .setZipCode("9999")
                 .setLocality("Stan"));
+		
 		SveaRequest<SveaCreateOrder> request = createOrder.setCountryCode(COUNTRYCODE.SE)
                 .setCustomerReference("33")
                 .setOrderDate("2012-12-12")
@@ -94,8 +97,8 @@ public class NewOrderBuilderTest {
     @Test
     public void testBuildOrderWithCompanyCustomer() throws ValidationException {
         CreateOrderBuilder createOrder = WebPay.createOrder()
-                .setTestmode();
-        createOrder.addOrderRow(Item.orderRow()
+                .setTestmode()
+        .addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
                 .setQuantity(2)
                 .setAmountExVat(100.00)
@@ -103,9 +106,9 @@ public class NewOrderBuilderTest {
                 .setName("Prod")
                 .setUnit("st")
                 .setVatPercent(25)
-                .setDiscountPercent(0));
+                .setDiscountPercent(0))
         
-        createOrder.addCustomerDetails(Item.companyCustomer()
+        .addCustomerDetails(Item.companyCustomer()
                 .setCompanyIdNumber("666666")
                 .setEmail("test@svea.com")
                 .setPhoneNumber(999999)

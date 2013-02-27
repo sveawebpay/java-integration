@@ -99,9 +99,9 @@ public class HostedRowFormatterTest {
     @Test
     public void testFormatFixedDiscountRowsVat() {
         CreateOrderBuilder order = new CreateOrderBuilder();
-        order.setTestmode();
-        order.addOrderRow(Item.orderRow().setAmountExVat(4).setVatPercent(25).setQuantity(1));
-        order.addDiscount(Item.fixedDiscount().setDiscount(1));
+        order.setTestmode()
+        .addOrderRow(Item.orderRow().setAmountExVat(4).setVatPercent(25).setQuantity(1))
+        .addDiscount(Item.fixedDiscount().setDiscount(1));
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(1);
         
@@ -112,8 +112,8 @@ public class HostedRowFormatterTest {
     @Test
     public void testFormatRelativeDiscountRows() {
         CreateOrderBuilder order = new CreateOrderBuilder();
-        order.setTestmode();
-        order.addDiscount(Item.relativeDiscount().setDiscountId("0").setName("Tess").setDescription("Tester").setUnit("st"));
+        order.setTestmode()
+        .addDiscount(Item.relativeDiscount().setDiscountId("0").setName("Tess").setDescription("Tester").setUnit("st"));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder)newRows.get(0);
@@ -128,8 +128,8 @@ public class HostedRowFormatterTest {
     @Test
     public void testFormatRelativeDiscountRowsAmount() {
         CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addOrderRow(Item.orderRow().setAmountExVat(4).setVatPercent(25).setQuantity(1));
-        order.addDiscount(Item.relativeDiscount().setDiscountPercent(10));
+        order.addOrderRow(Item.orderRow().setAmountExVat(4).setVatPercent(25).setQuantity(1))
+        .addDiscount(Item.relativeDiscount().setDiscountPercent(10));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(1);
@@ -140,8 +140,8 @@ public class HostedRowFormatterTest {
     @Test
     public void testFormatRelativeDiscountRowsVat() {
         CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addOrderRow(Item.orderRow().setAmountExVat(4).setVatPercent(25).setQuantity(1));
-        order.addDiscount(Item.relativeDiscount().setDiscountPercent(10));
+        order.addOrderRow(Item.orderRow().setAmountExVat(4).setVatPercent(25).setQuantity(1))
+        .addDiscount(Item.relativeDiscount().setDiscountPercent(10));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(1);

@@ -45,8 +45,8 @@ public class WebserviceRowFormatterTest {
     @Test
     public void testFormatShippingFeeRows() {
         CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addOrderRow(Item.orderRow());
-        order.addFee(Item.shippingFee()  
+        order.addOrderRow(Item.orderRow())
+        .addFee(Item.shippingFee()  
             .setShippingId("0")
             .setName("Tess")
             .setDescription("Tester")
@@ -93,8 +93,8 @@ public class WebserviceRowFormatterTest {
         order.addOrderRow(Item.orderRow()
             .setAmountExVat(4)
             .setVatPercent(25)
-            .setQuantity(1));
-        order.addDiscount(Item.fixedDiscount()
+            .setQuantity(1))
+        .addDiscount(Item.fixedDiscount()
             .setDiscountId("0")
             .setName("Tess")
             .setDescription("Tester")
@@ -120,8 +120,8 @@ public class WebserviceRowFormatterTest {
         order.addOrderRow(Item.orderRow()
             .setAmountExVat(4)
             .setVatPercent(25)
-            .setQuantity(1));
-        order.addDiscount(Item.relativeDiscount()
+            .setQuantity(1))
+        .addDiscount(Item.relativeDiscount()
             .setDiscountId("0")
             .setName("Tess")
             .setDescription("Tester")

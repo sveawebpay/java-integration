@@ -50,9 +50,9 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
         return fixedDiscountRows;
     }
     
-    public OrderBuilder<T> setFixedDiscountRows(ArrayList<FixedDiscountBuilder> fixedDiscountRows) {
+    public T setFixedDiscountRows(ArrayList<FixedDiscountBuilder> fixedDiscountRows) {
         this.fixedDiscountRows = fixedDiscountRows;
-        return this;
+        return getGenericThis();
     }
     
     public ArrayList<RelativeDiscountBuilder> getRelativeDiscountRows() {
@@ -70,7 +70,7 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
     
     public T setTestmode() {
         this.testmode = true;
-        return (T)this;
+        return getGenericThis();
     }
     
   /*  public OrderRowBuilder<T> beginOrderRow() {
@@ -107,30 +107,34 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
         return runner.run(this);
     }
     
-    public OrderBuilder<T> addOrderRow(OrderRowBuilder itemOrderRow) {
+    public T addOrderRow(OrderRowBuilder itemOrderRow) {
         this.orderRows.add(itemOrderRow);
-        return this;
+        return getGenericThis();
     }
+
+	protected T getGenericThis() {
+		return (T) this;
+	}
     
-    public OrderBuilder<T> addOrderRows(ArrayList<OrderRowBuilder> itemOrderRow) {
+    public T addOrderRows(ArrayList<OrderRowBuilder> itemOrderRow) {
         this.orderRows.addAll(itemOrderRow);
-        return this;
+        return getGenericThis();
     }
     
-    public OrderBuilder<T> addDiscount(RowBuilder itemDiscount) {
+    public T addDiscount(RowBuilder itemDiscount) {
         if (FixedDiscountBuilder.class.equals(itemDiscount.getClass())) 
             this.fixedDiscountRows.add((FixedDiscountBuilder) itemDiscount);
         else           
             this.relativeDiscountRows.add((RelativeDiscountBuilder)itemDiscount);
         
-        return this;
+        return getGenericThis();
     }
     
-    public OrderBuilder<T> addFee(RowBuilder itemFee) {
+    public T addFee(RowBuilder itemFee) {
         if (ShippingFeeBuilder.class.equals(itemFee.getClass()))
             this.shippingFeeRows.add((ShippingFeeBuilder) itemFee);
         else
             this.invoiceFeeRows.add((InvoiceFeeBuilder) itemFee);
-        return this;
+        return getGenericThis();
     }
 }

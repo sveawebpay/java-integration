@@ -22,8 +22,8 @@ public class HostedPaymentsRequestTest {
     
     @Test
     public void testDoCardPaymentRequest() throws Exception {        
-        order.setTestmode();
-        order.addOrderRow(Item.orderRow()
+        order.setTestmode()
+        .addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
                 .setQuantity(2)
                 .setAmountExVat(100.00)
@@ -31,30 +31,30 @@ public class HostedPaymentsRequestTest {
                 .setName("Prod")
                 .setUnit("st")
                 .setVatPercent(25)
-                .setDiscountPercent(0));
-        order.addFee(Item.shippingFee()
+                .setDiscountPercent(0))
+        .addFee(Item.shippingFee()
                 .setShippingId("33")
                 .setName("shipping")
                 .setDescription("Specification")
                 .setAmountExVat(50)
                 .setUnit("st")
                 .setVatPercent(25)
-                .setDiscountPercent(0));
+                .setDiscountPercent(0))
         
-        order.addFee(Item.invoiceFee()
+        .addFee(Item.invoiceFee()
                 .setName("Svea fee")
-                        .setDescription("Fee for invoice")
-                        .setAmountExVat(50)
-                        .setUnit("st")
-                        .setVatPercent(25)
-                        .setDiscountPercent(0));
-        order.addDiscount(Item.relativeDiscount()
+                .setDescription("Fee for invoice")
+                .setAmountExVat(50)
+                .setUnit("st")
+                .setVatPercent(25)
+                .setDiscountPercent(0))
+        .addDiscount(Item.relativeDiscount()
                 .setDiscountId("1")
                 .setName("Relative")
                 .setDescription("RelativeDiscount")
                 .setUnit("st")               
-                .setDiscountPercent(50));
-        order.addCustomerDetails(Item.companyCustomer()
+                .setDiscountPercent(50))
+        .addCustomerDetails(Item.companyCustomer()
             .setVatNumber("2345234")
             .setCompanyName("TestCompagniet"));
         PaymentForm form = order.setCountryCode(COUNTRYCODE.SE)
