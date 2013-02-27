@@ -22,7 +22,7 @@ public class HostedPaymentsRequestTest {
     
     @Test
     public void testDoCardPaymentRequest() throws Exception {        
-        order.setTestmode()
+    	PaymentForm form = order.setTestmode()
         .addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
                 .setQuantity(2)
@@ -56,8 +56,8 @@ public class HostedPaymentsRequestTest {
                 .setDiscountPercent(50))
         .addCustomerDetails(Item.companyCustomer()
             .setVatNumber("2345234")
-            .setCompanyName("TestCompagniet"));
-        PaymentForm form = order.setCountryCode(COUNTRYCODE.SE)
+            .setCompanyName("TestCompagniet"))
+        .setCountryCode(COUNTRYCODE.SE)
         .setOrderDate("2012-12-12")
         .setClientOrderNumber("33")
         .setCurrency("SEK")

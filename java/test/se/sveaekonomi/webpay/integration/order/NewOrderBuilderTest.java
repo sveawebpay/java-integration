@@ -68,21 +68,22 @@ public class NewOrderBuilderTest {
                 .setUnit("st")
                 .setVatPercent(25)
                 .setDiscountPercent(0));
-		CreateOrderBuilder createOrder = WebPay.createOrder()
+		
+		SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
                 .setTestmode()
-                .addOrderRows(orderRows)
-		
+                
+                .addOrderRows(orderRows)		
                 .addCustomerDetails(Item.companyCustomer()
-                .setCompanyIdNumber("666666")
-                .setEmail("test@svea.com")
-                .setPhoneNumber(999999)
-                .setIpAddress("123.123.123.123")
-                .setStreetAddress("Gatan", 23)
-                .setCoAddress("c/o Eriksson")
-                .setZipCode("9999")
-                .setLocality("Stan"));
+	                .setCompanyIdNumber("666666")
+	                .setEmail("test@svea.com")
+	                .setPhoneNumber(999999)
+	                .setIpAddress("123.123.123.123")
+	                .setStreetAddress("Gatan", 23)
+	                .setCoAddress("c/o Eriksson")
+	                .setZipCode("9999")
+	                .setLocality("Stan"))
 		
-		SveaRequest<SveaCreateOrder> request = createOrder.setCountryCode(COUNTRYCODE.SE)
+                .setCountryCode(COUNTRYCODE.SE)
                 .setCustomerReference("33")
                 .setOrderDate("2012-12-12")
                 .setCurrency("SEK")                
@@ -96,9 +97,9 @@ public class NewOrderBuilderTest {
 	
     @Test
     public void testBuildOrderWithCompanyCustomer() throws ValidationException {
-        CreateOrderBuilder createOrder = WebPay.createOrder()
+    	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
                 .setTestmode()
-        .addOrderRow(Item.orderRow()
+                .addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
                 .setQuantity(2)
                 .setAmountExVat(100.00)
@@ -116,9 +117,9 @@ public class NewOrderBuilderTest {
                 .setStreetAddress("Gatan", 23)
                 .setCoAddress("c/o Eriksson")
                 .setZipCode("9999")
-                .setLocality("Stan"));
+                .setLocality("Stan"))
         
-        SveaRequest<SveaCreateOrder> request = createOrder.setCountryCode(COUNTRYCODE.SE)
+                .setCountryCode(COUNTRYCODE.SE)
                 .setCustomerReference("33")
                 .setOrderDate("2012-12-12")
                 .setCurrency("SEK")                

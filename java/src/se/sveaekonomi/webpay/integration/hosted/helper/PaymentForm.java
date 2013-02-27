@@ -45,6 +45,7 @@ public class PaymentForm {
     
     public PaymentForm setMessageBase64(String messageBase64) {
         this.messageBase64 = messageBase64;
+        
         return this;
     }
     
@@ -144,11 +145,11 @@ public class PaymentForm {
         this.noScriptMessage = noScriptMessage;
     }
 
-    public String getMessage() {
+    public String getMessageAsXML() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public void setMessageAsXML(String message) {
         this.message = message;
     }
 }
