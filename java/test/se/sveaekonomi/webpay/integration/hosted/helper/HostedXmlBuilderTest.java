@@ -3,18 +3,14 @@ package se.sveaekonomi.webpay.integration.hosted.helper;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
-
 import org.junit.Before;
 import org.junit.Test;
 
-import se.sveaekonomi.webpay.integration.hosted.payment.CardPayment;
-import se.sveaekonomi.webpay.integration.hosted.payment.DirectPayment;
+import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.payment.FakeHostedPayment;
 import se.sveaekonomi.webpay.integration.hosted.payment.HostedPayment;
-import se.sveaekonomi.webpay.integration.hosted.payment.PayPagePayment;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
+import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
@@ -27,18 +23,14 @@ public class HostedXmlBuilderTest {
     @Before
     public void setUp() {
         xmlBuilder = new HostedXmlBuilder();
-        //orderBuilder = new OrderBuilder();
         xml = "";
     }
     
     @Test
     public void testXmlNoOrderRows() throws Exception {
-       // ArrayList<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>();
         
-        order = new CreateOrderBuilder();
-       // order.setOrderRows(orderRows);
-      //  order.addOrderRow(null);
-        order.setCountryCode(COUNTRYCODE.SE);
+        order = WebPay.createOrder()
+        		.setCountryCode(COUNTRYCODE.SE);
         
         HostedPayment payment = new FakeHostedPayment(order);
         payment.calculateRequestValues();
@@ -55,19 +47,13 @@ public class HostedXmlBuilderTest {
     
     @Test
     public void testAmountXml() throws Exception {
-        OrderRowBuilder row = new OrderRowBuilder();
-        row.setAmountExVat(4)
-            .setVatPercent(25)
-            .setQuantity(1);
-        
-        ArrayList<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>();
-        orderRows.add(row);
-        
-        order = new CreateOrderBuilder();
-       // order.setOrderRows(orderRows);
-        order.addOrderRow(row);
-        order.setCountryCode(COUNTRYCODE.SE);
-        
+    	order = WebPay.createOrder()    			
+    			.addOrderRow(Item.orderRow()
+    					.setAmountExVat(4)
+    					.setVatPercent(25)
+    					.setQuantity(1))
+    			.setCountryCode(COUNTRYCODE.SE);
+    	
         HostedPayment payment = new FakeHostedPayment(order);
         payment.calculateRequestValues();
         
@@ -83,12 +69,8 @@ public class HostedXmlBuilderTest {
     
     @Test
     public void testXmlCancelUrl() throws Exception {
-        ArrayList<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>();
-        
-        order = new CreateOrderBuilder();
-       // order.setOrderRows(orderRows);
-     //   order.addOrderRow(null);
-        order.setCountryCode(COUNTRYCODE.SE);
+    	order = WebPay.createOrder() 
+    			.setCountryCode(COUNTRYCODE.SE);
         
         HostedPayment payment = new FakeHostedPayment(order);
         payment.setCancelUrl("http://www.cancel.com");
@@ -106,22 +88,16 @@ public class HostedXmlBuilderTest {
     
     @Test
     public void testOrderRowXml() throws Exception {
-        OrderRowBuilder row = new OrderRowBuilder();
-        row.setArticleNumber("0")
-            .setName("Product")
-            .setDescription("Good product")
-            .setAmountExVat(4)
-            .setVatPercent(25)
-            .setQuantity(1)
-            .setUnit("kg");
-        
-        ArrayList<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>();
-        orderRows.add(row);
-        
-        order = new CreateOrderBuilder();
-       // order.setOrderRows(orderRows);
-        order.addOrderRow(row);
-        order.setCountryCode(COUNTRYCODE.SE);
+    	order = WebPay.createOrder() 
+    			.addOrderRow(Item.orderRow()
+    					.setArticleNumber("0")
+			            .setName("Product")
+			            .setDescription("Good product")
+			            .setAmountExVat(4)
+			            .setVatPercent(25)
+			            .setQuantity(1)
+			            .setUnit("kg"))
+			    .setCountryCode(COUNTRYCODE.SE);
         
         HostedPayment payment = new FakeHostedPayment(order);
         payment.calculateRequestValues();
@@ -138,73 +114,49 @@ public class HostedXmlBuilderTest {
     
     @Test
     public void testDirectPaymentSpecificXml() throws Exception {
-        order = new CreateOrderBuilder();
-        order.setCountryCode(COUNTRYCODE.SE);
-        
-        DirectPayment payment = new DirectPayment(order);
-        payment.calculateRequestValues();
-        
-        try {
-            xml = xmlBuilder.getXml(payment);
-        } catch (Exception e) {
-            throw e;
-        }
-        
+    	xml = WebPay.createOrder()
+                .setCountryCode(COUNTRYCODE.SE)
+                .usePayPageDirectBankOnly()
+                .getPaymentForm()
+                .getXmlMessage();
+              
         final String EXPECTED_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--Message generated by Integration package Java--><payment><returnurl></returnurl><amount>0</amount><vat>0</vat><excludepaymentmethods><exclude>PAYPAL</exclude><exclude>KORTCERT</exclude><exclude>SKRILL</exclude><exclude>SVEAINVOICESE</exclude><exclude>SVEASPLITSE</exclude><exclude>SVEAINVOICEEU_SE</exclude><exclude>SVEASPLITEU_SE</exclude><exclude>SVEAINVOICEEU_DE</exclude><exclude>SVEASPLITEU_DE</exclude><exclude>SVEAINVOICEEU_DK</exclude><exclude>SVEASPLITEU_DK</exclude><exclude>SVEAINVOICEEU_FI</exclude><exclude>SVEASPLITEU_FI</exclude><exclude>SVEAINVOICEEU_NL</exclude><exclude>SVEASPLITEU_NL</exclude><exclude>SVEAINVOICEEU_NO</exclude><exclude>SVEASPLITEU_NO</exclude></excludepaymentmethods></payment>";
         assertTrue(EXPECTED_XML.equals(xml));
     }
     
     @Test
     public void testCardPaymentSpecificXml() throws Exception {
-        order = new CreateOrderBuilder();
-        order.setCountryCode(COUNTRYCODE.SE);
-        
-        CardPayment payment = new CardPayment(order);
-        payment.calculateRequestValues();
-        
-        try {
-            xml = xmlBuilder.getXml(payment);
-        } catch (Exception e) {
-            throw e;
-        }
-        
+    	xml = WebPay.createOrder()
+    			.setCountryCode(COUNTRYCODE.SE)
+    			.usePayPageCardOnly()
+    			.getPaymentForm()
+    			.getXmlMessage();
+               
         final String EXPECTED_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--Message generated by Integration package Java--><payment><returnurl></returnurl><amount>0</amount><vat>0</vat><excludepaymentmethods><exclude>SKRILL</exclude><exclude>PAYPAL</exclude><exclude>DBNORDEASE</exclude><exclude>DBSEBSE</exclude><exclude>DBSEBFTGSE</exclude><exclude>DBSHBSE</exclude><exclude>DBSWEDBANKSE</exclude><exclude>SVEAINVOICESE</exclude><exclude>SVEASPLITSE</exclude><exclude>SVEAINVOICEEU_SE</exclude><exclude>SVEASPLITEU_SE</exclude><exclude>SVEAINVOICEEU_DE</exclude><exclude>SVEASPLITEU_DE</exclude><exclude>SVEAINVOICEEU_DK</exclude><exclude>SVEASPLITEU_DK</exclude><exclude>SVEAINVOICEEU_FI</exclude><exclude>SVEASPLITEU_FI</exclude><exclude>SVEAINVOICEEU_NL</exclude><exclude>SVEASPLITEU_NL</exclude><exclude>SVEAINVOICEEU_NO</exclude><exclude>SVEASPLITEU_NO</exclude></excludepaymentmethods></payment>";
         assertEquals(EXPECTED_XML, xml);
     }
     
     @Test
     public void testPayPagePaymentSpecificXmlNullPaymentMethod() throws Exception {
-        order = new CreateOrderBuilder();
-        order.setCountryCode(COUNTRYCODE.SE);
+    	xml = WebPay.createOrder()
+    			.setCountryCode(COUNTRYCODE.SE)
+    			.usePayPage()
+    			.getPaymentForm()
+    			.getXmlMessage();
         
-        PayPagePayment payment = new PayPagePayment(order);
-        payment.calculateRequestValues();
-        
-        try {
-            xml = xmlBuilder.getXml(payment);
-        } catch (Exception e) {
-            throw e;
-        }
-
         final String EXPECTED_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--Message generated by Integration package Java--><payment><returnurl></returnurl><amount>0</amount><vat>0</vat><excludepaymentmethods></excludepaymentmethods></payment>";
         assertTrue(EXPECTED_XML.equals(xml));
     }
     
     @Test
     public void testPayPagePaymentSetLanguageCode() throws Exception {
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order.setCountryCode(COUNTRYCODE.SE);
-        
-        PayPagePayment payment = new PayPagePayment(order);
-        payment.setPayPageLanguage("sv");
-        payment.setPaymentMethod(PAYMENTMETHOD.SVEAINVOICEEU_SE);
-        payment.calculateRequestValues();
-        
-        try {
-            xml = xmlBuilder.getXml(payment);
-        } catch (Exception e) {
-            throw e;
-        }
+    	xml = WebPay.createOrder()
+    			.setCountryCode(COUNTRYCODE.SE)
+    			.usePayPage()
+    			.setPayPageLanguage("sv")
+    			.setPaymentMethod(PAYMENTMETHOD.SVEAINVOICEEU_SE)
+    			.getPaymentForm()
+    			.getXmlMessage();               
         
         final String EXPECTED_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--Message generated by Integration package Java--><payment><paymentmethod>SVEAINVOICEEU_SE</paymentmethod><returnurl></returnurl><amount>0</amount><lang>sv</lang><vat>0</vat><excludepaymentmethods></excludepaymentmethods></payment>";
         assertEquals(EXPECTED_XML,xml);
@@ -212,19 +164,13 @@ public class HostedXmlBuilderTest {
     
     @Test
     public void testPayPagePaymentSpecificXml() throws Exception {
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order.setCountryCode(COUNTRYCODE.SE);
-        
-        PayPagePayment payment = new PayPagePayment(order);
-        payment.setPaymentMethod(PAYMENTMETHOD.SVEAINVOICEEU_SE);
-        payment.calculateRequestValues();
-        
-        try {
-            xml = xmlBuilder.getXml(payment);
-        } catch (Exception e) {
-            throw e;
-        }
-        
+    	xml = WebPay.createOrder()
+    			.setCountryCode(COUNTRYCODE.SE)
+    			.usePayPage()
+    			.setPaymentMethod(PAYMENTMETHOD.SVEAINVOICEEU_SE)  			
+    			.getPaymentForm()
+    			.getXmlMessage();
+               
         final String EXPECTED_XML = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--Message generated by Integration package Java--><payment><paymentmethod>SVEAINVOICEEU_SE</paymentmethod><returnurl></returnurl><amount>0</amount><vat>0</vat><excludepaymentmethods></excludepaymentmethods></payment>";
         assertEquals(EXPECTED_XML,xml);
     }

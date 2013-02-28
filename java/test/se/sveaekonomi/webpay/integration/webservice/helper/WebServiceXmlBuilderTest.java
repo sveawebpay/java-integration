@@ -26,11 +26,11 @@ public class WebServiceXmlBuilderTest {
     @Test
     public void testCreateOrderEu() throws Exception {        
         orderBuilder.addCustomerDetails(Item.individualCustomer()
-                .setSsn(194609052222L));
-        orderBuilder.addOrderRow(Item.orderRow()
-                .setAmountExVat(100.00)
-                .setQuantity(1)
-                .setVatPercent(25));
+                	.setSsn(194609052222L))
+                .addOrderRow(Item.orderRow()
+                		.setAmountExVat(100.00)
+                		.setQuantity(1)
+                		.setVatPercent(25));
         SveaRequest<SveaCreateOrder> request = orderBuilder.setCountryCode(COUNTRYCODE.SE)
                 .setOrderDate("2012-12-12")
                 .setClientOrderNumber("33")

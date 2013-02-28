@@ -114,7 +114,7 @@ public class HostedRowFormatter {
         }
     }
 
-    private <T extends OrderBuilder<T>> void formatFixedDiscountRows(CreateOrderBuilder orderBuilder) {
+    private void formatFixedDiscountRows(CreateOrderBuilder orderBuilder) {
         if (orderBuilder.getFixedDiscountRows() == null) {
             return;
         }
@@ -153,7 +153,7 @@ public class HostedRowFormatter {
         }
     }
 
-    private <T extends OrderBuilder<T>> void formatRelativeDiscountRows(CreateOrderBuilder orderBuilder) {
+    private void formatRelativeDiscountRows(CreateOrderBuilder orderBuilder) {
         if (orderBuilder.getRelativeDiscountRows() == null) {
             return;
         }

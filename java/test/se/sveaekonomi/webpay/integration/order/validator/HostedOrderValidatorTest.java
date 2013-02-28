@@ -32,9 +32,11 @@ public class HostedOrderValidatorTest {
         CreateOrderBuilder order = new CreateOrderBuilder();
         order.addCustomerDetails(Item.companyCustomer()
                 .setVatNumber("2345234")
-                .setCompanyName("TestCompagniet"));
-        order.setValidator(new VoidValidator());
-        order.build();
+                .setCompanyName("TestCompagniet"))
+                .setValidator(new VoidValidator())
+                .build();
+        //order.setValidator(new VoidValidator());
+        //order.build();
         assertEquals(orderValidator.validate(order), expectedMessage);      
     }
     
@@ -42,15 +44,15 @@ public class HostedOrderValidatorTest {
     public void testFailOnEmptyClientOrderNumber() throws ValidationException {
         String expectedMessage = "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use function setClientOrderNumber().\n";
         CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addOrderRow(Item.orderRow().setQuantity(1).setAmountExVat(100).setVatPercent(25));
-        order.setCurrency("SEK");
-        order.setClientOrderNumber("");
-        order.addCustomerDetails(Item.companyCustomer()
+        order.addOrderRow(Item.orderRow().setQuantity(1).setAmountExVat(100).setVatPercent(25))
+        	.setCurrency("SEK")
+        	.setClientOrderNumber("")
+        	.addCustomerDetails(Item.companyCustomer()
                 .setVatNumber("2345234")                
                 .setCompanyName("TestCompagniet")
-                .setCompanyIdNumber("1222"));
-        order.setValidator(new VoidValidator());
-        order.build();
+                .setCompanyIdNumber("1222"))
+                .setValidator(new VoidValidator())
+                .build();
         orderValidator = new HostedOrderValidator();
         assertEquals(orderValidator.validate(order), expectedMessage);
       
@@ -59,13 +61,13 @@ public class HostedOrderValidatorTest {
     @Test
     public void succeedOnGoodValuesSe() throws ValidationException {
         CreateOrderBuilder order = new CreateOrderBuilder();
-        order.setValidator(new VoidValidator());
-        order.setClientOrderNumber("1");
-        order.addOrderRow(Item.orderRow()
+        order.setValidator(new VoidValidator())
+        	.setClientOrderNumber("1")
+        	.addOrderRow(Item.orderRow()
             .setAmountExVat(5.0)
             .setVatPercent(25)
-            .setQuantity(1));
-        order.addCustomerDetails(Item.companyCustomer()
+            .setQuantity(1))
+        	.addCustomerDetails(Item.companyCustomer()
             .setVatNumber("2345234")
             .setCompanyName("TestCompagniet"));
         orderValidator = new HostedOrderValidator();

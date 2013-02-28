@@ -2,6 +2,7 @@ package se.sveaekonomi.webpay.integration.webservice.helper;
 
 import java.math.BigDecimal;
 import java.util.ArrayList;
+import java.util.List;
 
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.FixedDiscountBuilder;
@@ -42,7 +43,7 @@ public class WebserviceRowFormatter {
     private void calculateTotals() {
         totalAmountExVat = 0;
         totalVatAsAmount = 0;
-        ArrayList<OrderRowBuilder> orderRows = order.getOrderRows();
+        List<OrderRowBuilder> orderRows = order.getOrderRows();
         double vatPercentAsHundredth;
         for (OrderRowBuilder existingRow : orderRows) {
             vatPercentAsHundredth = existingRow.getVatPercent() > 0 ? existingRow.getVatPercent() * 0.01 : 0;
@@ -65,7 +66,7 @@ public class WebserviceRowFormatter {
     }
     
     private void formatOrderRows() {
-        ArrayList<OrderRowBuilder> orderRows = order.getOrderRows();
+        List<OrderRowBuilder> orderRows = order.getOrderRows();
         for (OrderRowBuilder existingRow : orderRows) {
             SveaOrderRow orderRow = new SveaOrderRow();
             orderRow = serializeOrder(existingRow.getArticleNumber(), existingRow.getDescription(), existingRow.getName(), existingRow.getUnit(), orderRow);          
@@ -82,7 +83,7 @@ public class WebserviceRowFormatter {
         if (this.order.getShippingFeeRows() == null) {
             return;
         }
-        ArrayList<ShippingFeeBuilder> shippingFeeRows = order.getShippingFeeRows();
+        List<ShippingFeeBuilder> shippingFeeRows = order.getShippingFeeRows();
         for (ShippingFeeBuilder row : shippingFeeRows) {
             SveaOrderRow orderRow = new SveaOrderRow();
             orderRow = serializeOrder(row.getShippingId(), row.getDescription(), row.getName(), row.getUnit(), orderRow);          
@@ -98,7 +99,7 @@ public class WebserviceRowFormatter {
         if (this.order.getInvoiceFeeRows() == null) {
             return;
         }
-        ArrayList<InvoiceFeeBuilder> invoiceFeeRows = order.getInvoiceFeeRows();
+        List<InvoiceFeeBuilder> invoiceFeeRows = order.getInvoiceFeeRows();
         for (InvoiceFeeBuilder row : invoiceFeeRows) {
             SveaOrderRow orderRow = new SveaOrderRow();     
             orderRow = serializeOrder("", row.getDescription(), row.getName(), row.getUnit(), orderRow);     
@@ -115,7 +116,7 @@ public class WebserviceRowFormatter {
         if (this.order.getFixedDiscountRows() == null) {
             return;
         }
-        ArrayList<FixedDiscountBuilder> fixedDiscountRows = order.getFixedDiscountRows();
+        List<FixedDiscountBuilder> fixedDiscountRows = order.getFixedDiscountRows();
         for (FixedDiscountBuilder row : fixedDiscountRows) {
             double productTotalAfterDiscount = this.totalAmountInclVat - row.getAmount();
             double totalProductVatAsAmountAfterDiscount = this.totalVatAsPercent * productTotalAfterDiscount;
@@ -139,7 +140,7 @@ public class WebserviceRowFormatter {
         if (this.order.getRelativeDiscountRows() == null) {
             return;
         }
-        ArrayList<RelativeDiscountBuilder> relativeDiscountRows = order.getRelativeDiscountRows();
+        List<RelativeDiscountBuilder> relativeDiscountRows = order.getRelativeDiscountRows();
         for (RelativeDiscountBuilder row : relativeDiscountRows) {
             SveaOrderRow orderRow = new SveaOrderRow();
             

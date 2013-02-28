@@ -1,14 +1,13 @@
-<project name="sveawebpay" basedir="." default="clean-jar">
+<project name="sveawebpay" basedir="." default="clean-integrationtest">
  
     <property name="src.dir"     location="src"/>
     <property name="test.dir"     location="test"/>
     <property name="integrationtest.dir"     location="integrationtest"/>
 
-    <property name="src.lib.dir"     location="lib/src"/>
     <property name="test.lib.dir"     location="lib/test"/>
 
     <path id="src.jars">
-        <fileset dir="${src.lib.dir}" includes="**/*.jar" />
+        <!-- no such jars at the moment -->
     </path>
 
     <path id="test.jars">
@@ -22,7 +21,8 @@
     <property name="test.classes.dir" location="${build.dir}/testclasses"/>
     <property name="integrationtest.classes.dir" location="${build.dir}/integrationtestclasses"/>
     <property name="jar.dir"     location="${build.dir}/jar"/>
-    <property name="report.dir"  location="${build.dir}/junitreport"/>
+    <property name="integration.report.dir"  location="${build.dir}/junitreport/integration"/>
+    <property name="unit.report.dir"  location="${build.dir}/junitreport/unit"/>
 
 
 	
@@ -53,18 +53,18 @@
 
 	
     <target name="junit">
-        <mkdir dir="${report.dir}"/>
+        <mkdir dir="${unit.report.dir}"/>
         
     	<junit printsummary="yes" >
             <classpath refid="all.test.classpath"/>
             
             <formatter type="xml"/>
             
-            <batchtest fork="no" todir="${report.dir}"  failureproperty="tests.failed">
+            <batchtest fork="no" todir="${unit.report.dir}"  failureproperty="unittests.failed">
                 <fileset dir="${test.dir}" includes="**/*Test.java"/>
             </batchtest>
         </junit>
-    	<fail if="tests.failed"/>
+        <antcall target="fail-unit-tests" inheritall="true" inheritrefs="true" />
     </target>
 
     <target name="junitreport">
@@ -100,20 +100,33 @@
 
 
     <target name="integrationtest">
-        <mkdir dir="${report.dir}"/>
+        <mkdir dir="${integration.report.dir}"/>
         
         <junit printsummary="yes" >
             <classpath refid="all.integrationtest.classpath"/>
             
             <formatter type="xml"/>
             
-            <batchtest fork="no" todir="${report.dir}" failureproperty="integrationtests.failed">
+            <batchtest fork="no" todir="${integration.report.dir}" failureproperty="integrationtests.failed">
                 <fileset dir="${integrationtest.dir}" includes="**/*Test.java"/>
             </batchtest>
         </junit>
-        <fail if="integrationtests.failed"/>
+        <antcall target="fail-integration-tests" inheritall="true" inheritrefs="true" />
     </target> 
 
+	<target name="fail-integration-tests" if="integrationtests.failed">
+        <concat>
+            <fileset dir="${integration.report.dir}" includes="TEST*"/>
+        </concat>
+        <fail/>
+	</target>
+
+    <target name="fail-unit-tests" if="unittests.failed">
+        <concat>
+            <fileset dir="${unit.report.dir}" includes="TEST*"/>
+        </concat>
+        <fail/>
+    </target>
 
     <target name="build" depends="src.compile, test.compile" description="Compile src and test"/>
     <target name="clean-build" depends="clean, build" description="Clean, then compile src and test"/>

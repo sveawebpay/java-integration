@@ -32,19 +32,18 @@ public class InvoicePaymentTest {
                 .setName("Prod")
                 .setUnit("st")
                 .setVatPercent(25)
-                .setDiscountPercent(0));
+                .setDiscountPercent(0))
                 
-         orderBuilder.addOrderRow(Item.orderRow()
+         .addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
                 .setQuantity(2)
                 .setAmountExVat(100.00)
                 .setDescription("Specification")
                 .setName("Prod")
                 .setVatPercent(25)
-                .setDiscountPercent(0));
-                
-                
-         orderBuilder.addCustomerDetails(Item.individualCustomer()
+                .setDiscountPercent(0))
+                                
+         .addCustomerDetails(Item.individualCustomer()
                  .setSsn(194609052222L));
          SveaRequest<SveaCreateOrder> request = this.orderBuilder
                 .setTestmode()
@@ -74,17 +73,17 @@ public class InvoicePaymentTest {
                     .setUnit("st")
                     .setVatPercent(25)
                     .setDiscountPercent(0)
-                    .setAmountExVat(100.00));
-        orderBuilder.addFee(Item.shippingFee()
+                    .setAmountExVat(100.00))
+        .addFee(Item.shippingFee()
                 .setShippingId("33")
                 .setName("shipping")
                 .setDescription("Specification")
                 .setAmountExVat(50)
                 .setUnit("st")
                 .setVatPercent(25)
-                .setDiscountPercent(0));
+                .setDiscountPercent(0))
                 
-        orderBuilder.addCustomerDetails(Item.individualCustomer()                
+        .addCustomerDetails(Item.individualCustomer()                
                 .setInitials("SB")                
                 .setName("Tess", "Testson")
                 .setEmail("test@svea.com")
@@ -123,17 +122,17 @@ public class InvoicePaymentTest {
                 .setName("Prod")
                 .setUnit("st")
                 .setVatPercent(25)
-                .setDiscountPercent(0));
+                .setDiscountPercent(0))
                 
-        orderBuilder.addOrderRow(Item.orderRow()
+        .addOrderRow(Item.orderRow()
                     .setArticleNumber("1")
                     .setQuantity(2)
                     .setAmountExVat(100.00)
                     .setDescription("Specification")
                     .setName("Prod")
                     .setVatPercent(25)
-                    .setDiscountPercent(0));                
-        orderBuilder.addCustomerDetails(Item.individualCustomer()
+                    .setDiscountPercent(0))                
+        .addCustomerDetails(Item.individualCustomer()
                 .setSsn(194605092222L));
         
         SveaRequest<SveaCreateOrder> request = this.orderBuilder
@@ -163,28 +162,30 @@ public class InvoicePaymentTest {
             .setName("Prod")
             .setUnit("st")
             .setVatPercent(25)
-            .setDiscountPercent(0));
-        orderBuilder.addCustomerDetails(Item.individualCustomer()
-               .setInitials("SB")
-               .setBirthDate(1923, 12, 12)
-               .setName("Tess", "Testson")
-               .setEmail("test@svea.com")
-               .setPhoneNumber(999999)
-               .setIpAddress("123.123.123")
-               .setStreetAddress("Gatan",23)
-               .setCoAddress("c/o Eriksson")
-               .setZipCode("9999")
-               .setLocality("Stan"));
-        
-        orderBuilder.addOrderRow(Item.orderRow()
-                   .setArticleNumber("1")
-                   .setQuantity(2)
-                   .setDescription("Specification")
-                   .setName("Prod")
-                   .setUnit("st")
-                   .setVatPercent(25)
-                   .setDiscountPercent(0)
-                   .setAmountExVat(100.00));
+            .setDiscountPercent(0))
+            
+        .addCustomerDetails(Item.individualCustomer()
+           .setInitials("SB")
+           .setBirthDate(1923, 12, 12)
+           .setName("Tess", "Testson")
+           .setEmail("test@svea.com")
+           .setPhoneNumber(999999)
+           .setIpAddress("123.123.123")
+           .setStreetAddress("Gatan",23)
+           .setCoAddress("c/o Eriksson")
+           .setZipCode("9999")
+           .setLocality("Stan"))
+    
+        .addOrderRow(Item.orderRow()
+           .setArticleNumber("1")
+           .setQuantity(2)
+           .setDescription("Specification")
+           .setName("Prod")
+           .setUnit("st")
+           .setVatPercent(25)
+           .setDiscountPercent(0)
+           .setAmountExVat(100.00));
+         
         SveaRequest<SveaCreateOrder> request = orderBuilder
             .setTestmode()
             .setCountryCode(COUNTRYCODE.NL)
@@ -223,9 +224,9 @@ public class InvoicePaymentTest {
             .setName("Prod")
             .setUnit("st")
             .setVatPercent(25)
-            .setDiscountPercent(0));
+            .setDiscountPercent(0))
         
-        orderBuilder.addCustomerDetails(Item.individualCustomer()          
+        .addCustomerDetails(Item.individualCustomer()          
            .setInitials("SB")
            .setBirthDate(1923,  12,  12)
            .setName("Svea bakkerij", "123")
@@ -235,12 +236,12 @@ public class InvoicePaymentTest {
            .setStreetAddress("Gatan", 23)
            .setCoAddress("c/o Eriksson")
            .setZipCode("9999")
-           .setLocality("Stan"));
+           .setLocality("Stan"))
          //  .setCompanyIdNumber("NL123456789A12")
           // .setVatNumber("NL123456789A12")
           // .setCompanyName("Svea bakkerij 123"));
         
-        orderBuilder.addOrderRow(Item.orderRow()
+        .addOrderRow(Item.orderRow()
                .setArticleNumber("1")
                .setQuantity(2)
                .setAmountExVat(100.00)
@@ -283,12 +284,12 @@ public class InvoicePaymentTest {
                 .setName("Prod")
                 .setUnit("st")
                 .setVatPercent(25)
-                .setDiscountPercent(0));
+                .setDiscountPercent(0))
                        
-        orderBuilder.addCustomerDetails(Item.companyCustomer()
-                    .setCompanyIdNumber("vat234"));
+                .addCustomerDetails(Item.companyCustomer()
+                    .setCompanyIdNumber("vat234"))
         
-        orderBuilder.addOrderRow(Item.orderRow()
+        .addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
                 .setQuantity(2)
                 .setAmountExVat(100.00)
@@ -315,33 +316,33 @@ public class InvoicePaymentTest {
     @Test
     public void testInvoiceRequestObjectForSEorderOnOneProductRow() throws ValidationException {
          this.orderBuilder.addOrderRow(Item.orderRow()
-                 .setArticleNumber("1")
-                 .setQuantity(2)
-                 .setAmountExVat(100.00)
-                 .setDescription("Specification")
-                 .setName("Prod")
-                 .setUnit("st")
-                 .setVatPercent(25)
-                 .setDiscountPercent(0));
+             .setArticleNumber("1")
+             .setQuantity(2)
+             .setAmountExVat(100.00)
+             .setDescription("Specification")
+             .setName("Prod")
+             .setUnit("st")
+             .setVatPercent(25)
+             .setDiscountPercent(0))
             
-         orderBuilder.addFee(Item.shippingFee()
-                 .setShippingId("33")
-                 .setName("shipping")
-                 .setDescription("Specification")
-                 .setAmountExVat(50)
-                 .setUnit("st")
-                 .setVatPercent(25)
-                 .setDiscountPercent(0));
+         .addFee(Item.shippingFee()
+             .setShippingId("33")
+             .setName("shipping")
+             .setDescription("Specification")
+             .setAmountExVat(50)
+             .setUnit("st")
+             .setVatPercent(25)
+             .setDiscountPercent(0))
          
-         orderBuilder.addFee(Item.invoiceFee()
-                 .setName("Svea fee")
-                 .setDescription("Fee for invoice")
-                 .setAmountExVat(50)
-                 .setUnit("st")
-                 .setVatPercent(25)
-                 .setDiscountPercent(0));
+         .addFee(Item.invoiceFee()
+             .setName("Svea fee")
+             .setDescription("Fee for invoice")
+             .setAmountExVat(50)
+             .setUnit("st")
+             .setVatPercent(25)
+             .setDiscountPercent(0))
 
-         orderBuilder.addCustomerDetails(Item.individualCustomer()
+         .addCustomerDetails(Item.individualCustomer()
             .setSsn(194605092222L)
             .setInitials("SB")
             .setBirthDate(1923, 12, 12)
@@ -399,21 +400,21 @@ public class InvoicePaymentTest {
             .setQuantity(1)
             .setAmountExVat(240.00)
             .setDescription("CD")
-            .setVatPercent(25));
+            .setVatPercent(25))
 
-        orderBuilder.addOrderRow(Item.orderRow()
+        .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(1)
             .setAmountExVat(188.68)
             .setDescription("Bok")
-            .setVatPercent(6));
+            .setVatPercent(6))
         
-        orderBuilder.addDiscount(Item.relativeDiscount()
+        .addDiscount(Item.relativeDiscount()
             .setDiscountId("1")
             .setDiscountPercent(20)
-            .setDescription("RelativeDiscount"));
+            .setDescription("RelativeDiscount"))
          
-        orderBuilder.addCustomerDetails(Item.individualCustomer()
+        .addCustomerDetails(Item.individualCustomer()
             .setSsn(194605092222L)
             .setInitials("SB")
             .setBirthDate(1923, 12, 12)
@@ -424,9 +425,8 @@ public class InvoicePaymentTest {
             .setStreetAddress("Gatan", 23)
             .setCoAddress("c/o Eriksson")
             .setZipCode("2222")
-            .setLocality("Stan"));
+            .setLocality("Stan"))
         
-        orderBuilder
             .setTestmode()
             .setCountryCode(COUNTRYCODE.SE)
             .setOrderDate("2012-12-12")
@@ -454,22 +454,22 @@ public class InvoicePaymentTest {
             .setQuantity(1)
             .setAmountExVat(240.00)
             .setDescription("CD")
-            .setVatPercent(25));
+            .setVatPercent(25))
         
-        orderBuilder.addOrderRow(Item.orderRow()
+        .addOrderRow(Item.orderRow()
              .setArticleNumber("1")
              .setQuantity(1)
              .setAmountExVat(188.68)
              .setDescription("Bok")
-             .setVatPercent(6));
+             .setVatPercent(6))
         
-        orderBuilder.addDiscount(Item.fixedDiscount()
+        .addDiscount(Item.fixedDiscount()
              .setDiscountId("1")
              //.setDiscount(100.00)
              .setAmountIncVat(100.00)
-             .setDescription("FixedDiscount"));
+             .setDescription("FixedDiscount"))
        
-        orderBuilder.addCustomerDetails(Item.individualCustomer()
+        .addCustomerDetails(Item.individualCustomer()
             .setSsn(194605092222L)
             .setInitials("SB")
             .setBirthDate(1923, 12, 12)
@@ -480,9 +480,9 @@ public class InvoicePaymentTest {
             .setStreetAddress("Gatan", 23)
             .setCoAddress("c/o Eriksson")
             .setZipCode("2222")
-            .setLocality("Stan"));
+            .setLocality("Stan"))
         
-        orderBuilder.addCustomerDetails(Item.companyCustomer()
+        .addCustomerDetails(Item.companyCustomer()
                 .setCompanyIdNumber("666666")
                 .setEmail("test@svea.com")
                 .setPhoneNumber(999999)

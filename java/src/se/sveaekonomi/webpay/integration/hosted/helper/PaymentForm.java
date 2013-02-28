@@ -10,8 +10,8 @@ import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 
 public class PaymentForm {
 
-    private String messageBase64;
-    private String message;
+    private String xmlMessageBase64;
+    private String xmlMessage;
     private String merchantid;
     private String secretWord;
     private String testmode;
@@ -39,12 +39,13 @@ public class PaymentForm {
         }
     }
     
-    public String getMessageBase64() {
-        return messageBase64;
+    public String getXmlMessageBase64() {
+        return xmlMessageBase64;
     }
     
     public PaymentForm setMessageBase64(String messageBase64) {
-        this.messageBase64 = messageBase64;
+        this.xmlMessageBase64 = messageBase64;
+        
         return this;
     }
     
@@ -98,13 +99,13 @@ public class PaymentForm {
 
     public PaymentForm setForm() {
         url = (testmode != null ? SveaConfig.SWP_TEST_URL : SveaConfig.SWP_PROD_URL);
-        macSha512 = HashUtil.createHash(messageBase64 + secretWord, HASHALGORITHM.SHA_512);
+        macSha512 = HashUtil.createHash(xmlMessageBase64 + secretWord, HASHALGORITHM.SHA_512);
         
         form = "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\""
                 + url
                 + "\">"
                 + "<input type=\"hidden\" name=\"merchantid\" value=\"" + merchantid + "\" />"
-                + "<input type=\"hidden\" name=\"message\" value=\"" + messageBase64 + "\" />"
+                + "<input type=\"hidden\" name=\"message\" value=\"" + xmlMessageBase64 + "\" />"
                 + "<input type=\"hidden\" name=\"mac\" value=\"" + macSha512 + "\" />"
                 + "<noscript><p>" + this.noScriptMessage + "</p></noscript>"
                 + "<input type=\"submit\" name=\"submit\" value=\"" + this.submitText + "\" />"
@@ -115,11 +116,11 @@ public class PaymentForm {
     
     public PaymentForm setHtmlFields() {
         url = (testmode != null ? SveaConfig.SWP_TEST_URL : SveaConfig.SWP_PROD_URL);
-        macSha512 = HashUtil.createHash(messageBase64 + secretWord, HASHALGORITHM.SHA_512);
+        macSha512 = HashUtil.createHash(xmlMessageBase64 + secretWord, HASHALGORITHM.SHA_512);
         
         formHtmlFields.put("form_start_tag", "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\"" + url + "\">");
         formHtmlFields.put("input_merchantId", "<input type=\"hidden\" name=\"merchantid\" value=\"" + merchantid + "\" />");
-        formHtmlFields.put("input_message", "<input type=\"hidden\" name=\"message\" value=\"" + messageBase64 + "\" />");
+        formHtmlFields.put("input_message", "<input type=\"hidden\" name=\"message\" value=\"" + xmlMessageBase64 + "\" />");
         formHtmlFields.put("input_mac", "<input type=\"hidden\" name=\"mac\" value=\"" + macSha512 + "\" />");
         formHtmlFields.put("noscript_p_tag", "<noscript><p>" + this.noScriptMessage + "</p></noscript>");
         formHtmlFields.put("input_submit", "<input type=\"submit\" name=\"submit\" value=\""+ this.submitText +"\" />");
@@ -144,11 +145,11 @@ public class PaymentForm {
         this.noScriptMessage = noScriptMessage;
     }
 
-    public String getMessage() {
-        return message;
+    public String getXmlMessage() {
+        return xmlMessage;
     }
 
-    public void setMessage(String message) {
-        this.message = message;
+    public void setXmlMessage(String xmlMessage) {
+        this.xmlMessage = xmlMessage;
     }
 }

@@ -116,10 +116,9 @@ public abstract class HostedPayment {
             throw e;
         }
         
-        String messageBase64 = Base64Util.encodeBase64String(xml);
-        
-        PaymentForm form = new PaymentForm();
-        form.setMessageBase64(messageBase64);
+        PaymentForm form = new PaymentForm();        
+        form.setXmlMessage(xml);       
+        form.setMessageBase64(Base64Util.encodeBase64String(xml));
 
         form.setMerchantId(createOrderBuilder.config.getMerchantId());
         form.setSecretWord(createOrderBuilder.config.getSecretWord());

@@ -2,6 +2,7 @@ package se.sveaekonomi.webpay.integration.webservice.payment;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.List;
 
 import javax.xml.bind.ValidationException;
 
@@ -190,7 +191,7 @@ public abstract class WebServicePayment {
         return customerIdentity;
     }
     
-    public SveaCreateOrderInformation formatOrderInformationWithOrderRows(ArrayList<OrderRowBuilder> rows) {
+    public SveaCreateOrderInformation formatOrderInformationWithOrderRows(List<OrderRowBuilder> rows) {
         orderInformation = new SveaCreateOrderInformation(((!(this.createOrderBuilder.getCampaignCode() == null)) ? this.createOrderBuilder.getCampaignCode() : ""),
                 (!(this.createOrderBuilder.getSendAutomaticGiroPaymentForm() == null)) ? this.createOrderBuilder.getSendAutomaticGiroPaymentForm() : false);
         

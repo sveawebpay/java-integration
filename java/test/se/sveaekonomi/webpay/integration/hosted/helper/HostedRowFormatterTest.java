@@ -7,6 +7,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.HostedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -15,17 +16,16 @@ import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 public class HostedRowFormatterTest {
     
     @Test
-    public void testFormatOrderRows() {
-        OrderRowBuilder row = new OrderRowBuilder();
-        row.setArticleNumber("0")
-            .setName("Tess")
-            .setDescription("Tester")
-            .setAmountExVat(4)
-            .setVatPercent(25)
-            .setQuantity(1)
-            .setUnit("st");
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addOrderRow(row);
+    public void testFormatOrderRows() {       
+        CreateOrderBuilder order = WebPay.createOrder()
+        		.addOrderRow(Item.orderRow()
+				.setArticleNumber("0")
+	            .setName("Tess")
+	            .setDescription("Tester")
+	            .setAmountExVat(4)
+	            .setVatPercent(25)
+	            .setQuantity(1)
+	            .setUnit("st"));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder)newRows.get(0);
@@ -41,8 +41,8 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatShippingFeeRows() {
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order = (CreateOrderBuilder) order.addFee(Item.shippingFee()
+    	CreateOrderBuilder order = WebPay.createOrder()
+    			.addFee(Item.shippingFee()
                 .setShippingId("0")
                 .setName("Tess")
                 .setDescription("Tester")
@@ -60,8 +60,10 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatShippingFeeRowsVat() {
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order = (CreateOrderBuilder) order.addFee(Item.shippingFee().setAmountExVat(4).setVatPercent(25));
+    	CreateOrderBuilder order = WebPay.createOrder()
+    			.addFee(Item.shippingFee()
+    					.setAmountExVat(4)
+    					.setVatPercent(25));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(0);
@@ -72,8 +74,12 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatFixedDiscountRows() {
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addDiscount(Item.fixedDiscount().setDiscountId("0").setName("Tess").setDescription("Tester").setUnit("st"));
+    	CreateOrderBuilder order = WebPay.createOrder()
+    			.addDiscount(Item.fixedDiscount()
+    					.setDiscountId("0")
+    					.setName("Tess")
+    					.setDescription("Tester")
+    					.setUnit("st"));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder)newRows.get(0);
@@ -87,8 +93,9 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatFixedDiscountRowsAmount() {
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addDiscount(Item.fixedDiscount().setDiscount(4));
+    	CreateOrderBuilder order = WebPay.createOrder()
+    			.addDiscount(Item.fixedDiscount()
+    					.setDiscount(4));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(0);
@@ -98,10 +105,14 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatFixedDiscountRowsVat() {
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order.setTestmode();
-        order.addOrderRow(Item.orderRow().setAmountExVat(4).setVatPercent(25).setQuantity(1));
-        order.addDiscount(Item.fixedDiscount().setDiscount(1));
+    	CreateOrderBuilder order = WebPay.createOrder()
+    			.setTestmode()
+    			.addOrderRow(Item.orderRow()
+    					.setAmountExVat(4)
+    					.setVatPercent(25)
+    					.setQuantity(1))
+    					.addDiscount(Item.fixedDiscount()
+    					.setDiscount(1));
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(1);
         
@@ -111,9 +122,13 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatRelativeDiscountRows() {
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order.setTestmode();
-        order.addDiscount(Item.relativeDiscount().setDiscountId("0").setName("Tess").setDescription("Tester").setUnit("st"));
+    	CreateOrderBuilder order = WebPay.createOrder()
+    			.setTestmode()
+    			.addDiscount(Item.relativeDiscount()
+    					.setDiscountId("0")
+    					.setName("Tess")
+    					.setDescription("Tester")
+    					.setUnit("st"));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder)newRows.get(0);
@@ -127,9 +142,13 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatRelativeDiscountRowsAmount() {
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addOrderRow(Item.orderRow().setAmountExVat(4).setVatPercent(25).setQuantity(1));
-        order.addDiscount(Item.relativeDiscount().setDiscountPercent(10));
+    	CreateOrderBuilder order = WebPay.createOrder()
+    			.addOrderRow(Item.orderRow()
+    					.setAmountExVat(4)
+    					.setVatPercent(25)
+    					.setQuantity(1))
+    			.addDiscount(Item.relativeDiscount()
+    					.setDiscountPercent(10));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(1);
@@ -139,9 +158,13 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatRelativeDiscountRowsVat() {
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addOrderRow(Item.orderRow().setAmountExVat(4).setVatPercent(25).setQuantity(1));
-        order.addDiscount(Item.relativeDiscount().setDiscountPercent(10));
+    	CreateOrderBuilder order = WebPay.createOrder()
+    			.addOrderRow(Item.orderRow()
+    					.setAmountExVat(4)
+    					.setVatPercent(25)
+    					.setQuantity(1))
+    			.addDiscount(Item.relativeDiscount()
+    					.setDiscountPercent(10));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(1);
