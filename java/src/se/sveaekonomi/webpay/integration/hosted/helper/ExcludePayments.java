@@ -15,6 +15,9 @@ public class ExcludePayments {
         excludedPaymentMethods = new ArrayList<PAYMENTMETHOD>();
     }
     
+    /**  
+     * @return List of all payment methods for invoices and payment plans 
+     */
     public List<PAYMENTMETHOD> excludeInvoicesAndPaymentPlan() {
    
             excludedPaymentMethods.add(PAYMENTMETHOD.SVEAINVOICESE);
