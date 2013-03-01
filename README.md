@@ -87,12 +87,12 @@ CreateOrderResponse response = WebPay.createOrder()
 //Company customer values
 .addCustomerDetails(Item.companyCustomer()...)
 //Other values
-    .setCountryCode("SE")
-    .setOrderDate("2012-12-12")
-    .setCustomerReference("33")
-    .setClientOrderNumber("nr26")
-    .setCurrency("SEK")
-    .setAddressSelector("7fd7768")
+.setCountryCode("SE")
+.setOrderDate("2012-12-12")
+.setCustomerReference("33")
+.setClientOrderNumber("nr26")
+.setCurrency("SEK")
+.setAddressSelector("7fd7768")
 
 //Continue by choosing one of the following paths
     //Continue as a card payment
@@ -132,7 +132,7 @@ Remove when you change to production mode.
 	
 ### 1.2 Specify order                                                        
 Continue by adding values for products and other. You can add order row, fee and discount. Chose the right Item object as parameter.
-You can use the *add* functions with an Item object or an ArrayList of Item objects as parameters. 
+You can use the *add* functions with an Item object or a List of Item objects as parameters. 
 
 ```java
 .addOrderRow(Item.orderRow(). ...)
@@ -165,12 +165,12 @@ All products and other items. It´s required to have a minimum of one order row.
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat()and setVatPercent().**
 ```java
 .addFee(Item.shippingFee()
-        .setShippingId("33")                   //Optional
-        .setName("shipping")                   //Optional
-        .setDescription("Specification")       //Optional
         .setAmountExVat(50)                    //Optional, see info above
         .setAmountIncVat(62.50)                //Optional, see info above
         .setVatPercent(25)                     //Optional, see info above
+		.setShippingId("33")                   //Optional
+        .setName("shipping")                   //Optional
+        .setDescription("Specification")       //Optional
         .setUnit("st")                         //Optional             
         .setDiscountPercent(0)                 //Optional
    )
@@ -179,11 +179,11 @@ All products and other items. It´s required to have a minimum of one order row.
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
 ```java
 .addFee(Item.invoiceFee()
-        .setName("Svea fee")                   //Optional
-        .setDescription("Fee for invoice")     //Optional
         .setAmountExVat(50)                    //Optional, see info above
         .setAmountIncVat(62.50)                //Optional, see info above
         .setVatPercent(25)                     //Optional, see info above
+        .setName("Svea fee")                   //Optional
+        .setDescription("Fee for invoice")     //Optional		
         .setUnit("st")                         //Optional
         .setDiscountPercent(0)                 //Optional
     )
@@ -246,12 +246,12 @@ or company id number is required. Email and ip address are desirable.
 
 ### 1.4 Other values  
 ```java
-    .setCountryCode("SE")                      //Required for synchronous payments    
-    .setCurrency("SEK")                        //Required for card payment, direct payment and PayPage payment.
-    .setClientOrderNumber("nr26")              //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
-    .setAddressSelector("7fd7768")             //Optional. Recieved from getAddresses
-    .setOrderDate("2012-12-12")                //Required for synchronous payments
-    .setCustomerReference("33")                //Optional
+.setCountryCode("SE")                   //Required for synchronous payments    
+.setCurrency("SEK")                     //Required for card payment, direct payment and PayPage payment.
+.setClientOrderNumber("nr26")           //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
+.setAddressSelector("7fd7768")          //Optional. Recieved from getAddresses
+.setOrderDate("2012-12-12")             //Required for synchronous payments
+.setCustomerReference("33")             //Optional
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
@@ -297,17 +297,17 @@ PaymentForm form = WebPay.createOrder()
         .setName("Prod")
         .setUnit("st")
         .setVatPercent(25)
-        .setDiscountPercent(0)
-	)
+        .setDiscountPercent(0))
+		
     .setCountryCode(COUNTRYCODE.SE)
     .setClientOrderNumber("33")
     .setOrderDate("2012-12-12")
     .setCurrency("SEK")
-        .usePayPageCardOnly()
-            .setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
-            .setReturnUrl("http://myurl.se")                   //Required
-            .setCancelUrl("http://myurl.se")                   //Optional
-            .getPaymentForm();
+    .usePayPageCardOnly()
+		.setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+		.setReturnUrl("http://myurl.se")                   //Required
+		.setCancelUrl("http://myurl.se")                   //Optional
+		.getPaymentForm();
 
 ```
 ##### 1.5.1.2 Return
@@ -327,7 +327,7 @@ Function getPaymentForm() returns object type *PaymentForm* with accessible memb
             
 ```java
 PaymentForm form = ...
-        .getPaymentForm();
+    .getPaymentForm();
 ```
 
 #### 1.5.2 PayPage with direct bank payment options
@@ -339,24 +339,24 @@ If Config/SveaConfig.php is not modified you can set your store authorization he
 PaymentForm form = WebPay.createOrder()
 .setTestmode()
 .addOrderRow(Item.orderRow()
-        .setArticleNumber("1")
-        .setQuantity(2)
-        .setAmountExVat(100.00)
-        .setDescription("Specification")
-        .setName("Prod")
-        .setUnit("st")
-        .setVatPercent(25)
-        .setDiscountPercent(0)
-    )                   
+	.setArticleNumber("1")
+	.setQuantity(2)
+	.setAmountExVat(100.00)
+	.setDescription("Specification")
+	.setName("Prod")
+	.setUnit("st")
+	.setVatPercent(25)
+	.setDiscountPercent(0))
+		
     .setCountryCode(COUNTRYCODE.SE)
     .setCustomerReference("33")
     .setOrderDate("2012-12-12")
     .setCurrency("SEK")
-        .usePayPageDirectBankOnly()
-            .setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
-            .setReturnUrl("http://myurl.se")                   //Required
-            .setCancelUrl("http://myurl.se")                   //Optional
-            .getPaymentForm();
+	.usePayPageDirectBankOnly()
+		.setReturnUrl("http://myurl.se")                   //Required	
+		.setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+		.setCancelUrl("http://myurl.se")                   //Optional
+		.getPaymentForm();
 ```
 ##### 1.5.2.2 Return
 Returns object type PaymentForm:
@@ -394,17 +394,17 @@ PaymentForm form = WebPay.createOrder()
         .setName("Prod")
         .setUnit("st")
         .setVatPercent(25)
-        .setDiscountPercent(0)
-    )   
-        .setCountryCode("SE")
-        .setCustomerReference("33")
-        .setOrderDate("2012-12-12")
-        .setCurrency("SEK")
-            .usePayPage()
-                .setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
-                .setReturnUrl("http://myurl.se")                   //Required
-                .setCancelUrl("http://myurl.se")                   //Optional
-                .getPaymentForm();
+        .setDiscountPercent(0))   
+	
+	.setCountryCode("SE")
+	.setCustomerReference("33")
+	.setOrderDate("2012-12-12")
+	.setCurrency("SEK")
+	.usePayPage()
+		.setReturnUrl("http://myurl.se")                   //Required	
+		.setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional		
+		.setCancelUrl("http://myurl.se")                   //Optional
+		.getPaymentForm();
 ```               
 
 ###### 1.5.3.1.1 Exclude specific payment methods
@@ -469,23 +469,23 @@ If Config/SveaConfig.php is not modified you can set your store authorization he
 ```java
 PaymentForm form = WebPay.createOrder()
 .addOrderRow(Item.orderRow()
-        .setArticleNumber("1")
-        .setQuantity(2)
-        .setAmountExVat(100.00)
-        .setDescription("Specification")
-        .setName("Prod")
-        .setUnit("st")
-        .setVatPercent(25)
-        .setDiscountPercent(0)
-    )                  
+	.setArticleNumber("1")
+	.setQuantity(2)
+	.setAmountExVat(100.00)
+	.setDescription("Specification")
+	.setName("Prod")
+	.setUnit("st")
+	.setVatPercent(25)
+	.setDiscountPercent(0))                  
+		
     .setCountryCode("SE")
     .setClientOrderNumber("33")
     .setOrderDate("2012-12-12")
     .setCurrency("SEK")
         .usePaymentMethod(PaymentMethod.KORTCERT)             //Se APPENDIX for paymentmethods
-            .setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
-            .setReturnUrl("http://myurl.se")                   //Required
-            .setCancelUrl("http://myurl.se")                   //Optional
+            .setMerchantIdBasedAuthorization(1200, "f78hv9")  //Optional
+            .setReturnUrl("http://myurl.se")                  //Required
+            .setCancelUrl("http://myurl.se")                  //Optional
             .getPaymentForm();
 
 ```
@@ -506,7 +506,7 @@ Function getPaymentForm() returns Object type PaymentForm with accessible member
             
 ```
 PaymentForm form = ...
-        .getPaymentForm();
+    .getPaymentForm();
 
 ```
 
@@ -520,22 +520,22 @@ If Config/SveaConfig.php is not modified you can set your store authorization he
     CreateOrderResponse response = WebPay.createOrder()
       .setTestmode()
       .addOrderRow(Item.orderRow()
-        .setArticleNumber("1")
+		.setArticleNumber("1")
         .setQuantity(2)
         .setAmountExVat(100.00)
         .setDescription("Specification")
         .setName("Prod")
         .setUnit("st")
         .setVatPercent(25)
-        .setDiscountPercent(0)
-    )   
-        .setCountryCode(COUNTRYCODE.SE)
-        .setCustomerReference("33")
-        .setOrderDate("2012-12-12")
-        .setCurrency("SEK")
-			.useInvoicePayment()
-            .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
-            .doRequest();
+        .setDiscountPercent(0))   
+	
+	.setCountryCode(COUNTRYCODE.SE)
+	.setCustomerReference("33")
+	.setOrderDate("2012-12-12")
+	.setCurrency("SEK")
+		.useInvoicePayment()
+		.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
+		.doRequest();
 ```
 #### 1.5.5 PaymentPlanPayment
 Perform *PaymentPlanPayment*. This payment form will perform a synchronous payment and return a response.
@@ -553,15 +553,16 @@ CreateOrderResponse response = WebPay.createOrder()
         .setName("Prod")
         .setUnit("st")
         .setVatPercent(25)
-        .setDiscountPercent(0)
-    )   
-        .setCountryCode(COUNTRYCODE.SE)
-        .setCustomerReference("33")
-        .setOrderDate("2012-12-12")
-        .setCurrency("SEK")
-        .usePaymentPlanPayment("camp1")                //Parameter: campaign code recieved from getPaymentPlanParams
-           .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
-           .doRequest();
+        .setDiscountPercent(0))   
+	
+	.setCountryCode(COUNTRYCODE.SE)
+	.setCustomerReference("33")
+	.setOrderDate("2012-12-12")
+	.setCurrency("SEK")
+	.usePaymentPlanPayment("camp1", false)              //Parameter1: campaign code recieved from getPaymentPlanParams
+														//Paremeter2: True if Automatic autogiro form will be sent with the first notification		
+	   .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
+	   .doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
