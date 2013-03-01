@@ -10,6 +10,7 @@ import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
 import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebserviceRowFormatter;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
+import se.sveaekonomi.webpay.integration.webservice.payment.WebServicePayment;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverInvoiceDetails;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrder;
@@ -32,6 +33,11 @@ public class HandleOrder {
         
     protected SveaAuth getStoreAuthorization() {
         return conf.getAuthorizationForWebServicePayments(order.getOrderType());
+    }
+    
+    public HandleOrder setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
+        conf.setPasswordBasedAuthorization(userName, password, clientNumber, order.getOrderType());    
+        return this;
     }
     
     public String validateOrder() {
