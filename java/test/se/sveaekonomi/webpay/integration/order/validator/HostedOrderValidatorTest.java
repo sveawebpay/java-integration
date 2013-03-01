@@ -8,6 +8,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -29,22 +30,25 @@ public class HostedOrderValidatorTest {
                     + "MISSING VALUE - ClientOrderNumber is required. Use function setClientOrderNumber().\n"
                     + "MISSING VALUE - Currency is required. Use function setCurrency().\n"
                     + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n";
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addCustomerDetails(Item.companyCustomer()
+        
+        CreateOrderBuilder order = WebPay.createOrder()
+        		.addCustomerDetails(Item.companyCustomer()
                 .setVatNumber("2345234")
                 .setCompanyName("TestCompagniet"))
                 .setValidator(new VoidValidator())
                 .build();
-        //order.setValidator(new VoidValidator());
-        //order.build();
+        
         assertEquals(orderValidator.validate(order), expectedMessage);      
     }
     
     @Test
     public void testFailOnEmptyClientOrderNumber() throws ValidationException {
         String expectedMessage = "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use function setClientOrderNumber().\n";
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addOrderRow(Item.orderRow().setQuantity(1).setAmountExVat(100).setVatPercent(25))
+        CreateOrderBuilder order = WebPay.createOrder()
+        	.addOrderRow(Item.orderRow()
+        		.setQuantity(1)
+        		.setAmountExVat(100)
+        		.setVatPercent(25))
         	.setCurrency("SEK")
         	.setClientOrderNumber("")
         	.addCustomerDetails(Item.companyCustomer()
@@ -60,16 +64,16 @@ public class HostedOrderValidatorTest {
     
     @Test
     public void succeedOnGoodValuesSe() throws ValidationException {
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order.setValidator(new VoidValidator())
+        CreateOrderBuilder order = WebPay.createOrder()
+        	.setValidator(new VoidValidator())
         	.setClientOrderNumber("1")
         	.addOrderRow(Item.orderRow()
-            .setAmountExVat(5.0)
-            .setVatPercent(25)
-            .setQuantity(1))
+        		.setAmountExVat(5.0)
+        		.setVatPercent(25)
+        		.setQuantity(1))
         	.addCustomerDetails(Item.companyCustomer()
-            .setVatNumber("2345234")
-            .setCompanyName("TestCompagniet"));
+        		.setVatNumber("2345234")
+        		.setCompanyName("TestCompagniet"));
         orderValidator = new HostedOrderValidator();
         orderValidator.validate(order);
     }

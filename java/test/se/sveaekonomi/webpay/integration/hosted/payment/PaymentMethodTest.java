@@ -6,7 +6,6 @@ import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
-import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
@@ -17,8 +16,8 @@ public class PaymentMethodTest {
     @Test
     public void testPayPagePaymentWithSetPaymentMethod() throws Exception {
         
-        CreateOrderBuilder order = WebPay.createOrder()
-                 .setTestmode()
+    	PaymentForm form = WebPay.createOrder()
+             .setTestmode()
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
@@ -35,8 +34,8 @@ public class PaymentMethodTest {
             .setName("Relative")
             .setDescription("RelativeDiscount"))
         .addCustomerDetails(Item.individualCustomer()
-                .setSsn(194605092222L));
-        PaymentForm form = order
+             .setSsn(194605092222L))
+        
             .setCountryCode(COUNTRYCODE.SE)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
