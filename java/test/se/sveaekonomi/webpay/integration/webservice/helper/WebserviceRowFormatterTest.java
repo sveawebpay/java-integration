@@ -98,7 +98,7 @@ public class WebserviceRowFormatterTest {
             .setDiscountId("0")
             .setName("Tess")
             .setDescription("Tester")
-            .setDiscount(1)
+           // .setDiscount(1)
             .setAmountIncVat(1)
             .setUnit("st"));
          

@@ -108,7 +108,8 @@ public class OrderBuilderTest {
         createTestFixedDiscountRow();
 
         assertEquals("1", order.getFixedDiscountRows().get(0).getDiscountId());
-        assertEquals(100.00, order.getFixedDiscountRows().get(0).getDiscount(), 0);
+        //assertEquals(100.00, order.getFixedDiscountRows().get(0).getDiscount(), 0);
+        assertEquals(100.00, order.getFixedDiscountRows().get(0).getAmount(), 0);
         assertEquals("FixedDiscount", order.getFixedDiscountRows().get(0).getDescription());
     }
     
@@ -205,7 +206,8 @@ public class OrderBuilderTest {
         order.addDiscount(Item.fixedDiscount()
                 .setDiscountId("1")
                 .setAmountIncVat((double) 100.00)
-                .setDiscount((double) 100.00)
+              //  .setDiscount((double) 100.00)
+                  .setAmountIncVat((double) 100.00)
                 .setDescription("FixedDiscount"));
     }
     
