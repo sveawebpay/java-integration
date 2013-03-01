@@ -116,7 +116,7 @@ CreateOrderResponse response = WebPay.createOrder()
     ...
     .doRequest();
     //Continue as a payment plan payment
-    .usePaymentPlanPayment("campaigncode", 0)
+    .usePaymentPlanPayment("campaigncode", false)
     ...
     .doRequest();
 ```
@@ -272,10 +272,10 @@ SveaConfig.SWP_TEST_URL or SveaConfig.SWP_PROD_URL. The *PaymentForm* object als
 and the html form element as array.
 
 ```html
-    <form name='paymentForm' id='paymentForm' method='post' action='SveaConfig::SWP_TEST_URL'>
-        <input type='hidden' name='merchantid' value='{$this->merchantid}' />
-        <input type='hidden' name='message' value='{$this->xmlMessageBase64}' />
-        <input type='hidden' name='mac' value='{$this->mac}' />
+    <form name="paymentForm" id="paymentForm" method="post" action="SveaConfig.SWP_TEST_URL">
+        <input type="hidden" name="merchantid" value=" + merchantId + " />
+        <input type="hidden" name="message" value=" + xmlMessageBase64 + " />
+        <input type="hidden" name="mac" value=" + mac + "/>
         <noscript><p>Javascript is inactivated.</p></noscript>
         <input type="submit" name="submit" value="Submit" />
     </form>
@@ -323,7 +323,7 @@ Function getPaymentForm() returns object type *PaymentForm* with accessible memb
 | mac                               | Message authentication code.              |    
 | completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
+| rawFields                         | Array of values to send in Html form. (merchantid, xmlMessageBase64, mac) |
             
 ```java
 PaymentForm form = ...
@@ -370,7 +370,7 @@ Returns object type PaymentForm:
 | mac                               | Message authentication code.              |
 | completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
+| rawFields                         | Array of values to send in Html form. (merchantid, xmlMessageBase64, mac) |
 
 ```java
 PaymentForm form = ...
@@ -454,7 +454,7 @@ Returns object type *PaymentForm*:
 | mac                               | Message authentication code.              |
 | completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
+| rawFields                         | Array of values to send in Html form. (merchantid, xmlMessageBase64, mac) |
 
 ```java
 PaymentForm form = ...
@@ -502,7 +502,7 @@ Function getPaymentForm() returns Object type PaymentForm with accessible member
 | mac                               | Message authentication code.              |    
 | completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
 | htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. ($merchantid, $xmlMessageBase64, $mac) |
+| rawFields                         | Array of values to send in Html form. (merchantid, xmlMessageBase64, mac) |
             
 ```
 PaymentForm form = ...
@@ -691,9 +691,9 @@ All products and other items. It is required to have a minimum of one row.
 Required is the order id received when creating the order. Required for invoice orders are *InvoiceDistributionType*. 
 If invoice order is credit invoice use setCreditInvoice(invoiceId) and setNumberOfCreditDays(creditDaysAsInt)
 ```java
-    .setOrderId($orderId)                  //Required. Received when creating order.
+    .setOrderId(orderId)                  //Required. Received when creating order.
     .setNumberOfCreditDays(1)              //Use for Invoice orders.
-    .setInvoiceDistributionType('Post')    //Use for Invoice orders. "Post" or "Email"
+    .setInvoiceDistributionType("Post")    //Use for Invoice orders. "Post" or "Email"
     .setCreditInvoice                      //Use for invoice orders, if this should be a credit invoice.
     .setNumberOfCreditDays(1)              //Use for invoice orders.
 ```
@@ -735,7 +735,7 @@ or
 ```java
     CloseOrderResponse  =  WebPay.closeOrder()
         .setTestmode()
-        .setOrderId($orderId)                                                  //Required, received when creating an order.
+        .setOrderId(orderId)                                                  //Required, received when creating an order.
         .closeInvoiceOrder()
             .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)//Optional
             .doRequest();
@@ -766,27 +766,27 @@ Used in usePaymentMethod(paymentMethod) and in usePayPage(),
 
 | Payment method                    | Description                                   |
 |-----------------------------------|-----------------------------------------------|
-| PaymentMethod::DBNORDEASE         | Direct bank payment, Nordea, Sweden.          | 
-| PaymentMethod::DBSEBSE            | Direct bank payment, private, SEB, Sweden.    |
-| PaymentMethod::DBSEBFTGSE         | Direct bank payment, company, SEB, Sweden.    |
-| PaymentMethod::DBSHBSE            | Direct bank payment, Handelsbanken, Sweden.   |
-| PaymentMethod::DBSWEDBANKSE       | Direct bank payment, Swedbank, Sweden.        |
-| PaymentMethod::KORTCERT           | Card payments, Certitrade.                    |
-| PaymentMethod::PAYPAL             | Paypal                                        |
-| PaymentMethod::SKRILL             | Card payment with Dankort, Skrill.            |
-| PaymentMethod::SVEAINVOICESE      | Invoice by PayPage in SE only.                |
-| PaymentMethod::SVEASPLITSE        | PaymentPlan by PayPage in SE only.            |
-| PaymentMethod::SVEAINVOICEEU_SE   | Invoice by PayPage in SE.                     |
-| PaymentMethod::SVEAINVOICEEU_NO   | Invoice by PayPage in NO.                     |
-| PaymentMethod::SVEAINVOICEEU_DK   | Invoice by PayPage in DK.                     |
-| PaymentMethod::SVEAINVOICEEU_FI   | Invoice by PayPage in FI.                     |
-| PaymentMethod::SVEAINVOICEEU_NL   | Invoice by PayPage in NL.                     |
-| PaymentMethod::SVEAINVOICEEU_DE   | Invoice by PayPage in DE.                     |
-| PaymentMethod::SVEASPLITEU_SE     | PaymentPlan by PayPage in SE.                 |
-| PaymentMethod::SVEASPLITEU_NO     | PaymentPlan by PayPage in NO.                 |
-| PaymentMethod::SVEASPLITEU_DK     | PaymentPlan by PayPage in DK.                 |
-| PaymentMethod::SVEASPLITEU_FI     | PaymentPlan by PayPage in FI.                 |
-| PaymentMethod::SVEASPLITEU_DE     | PaymentPlan by PayPage in DE.                 |
-| PaymentMethod::SVEASPLITEU_NL     | PaymentPlan by PayPage in NL.                 |
+| PaymentMethod.DBNORDEASE         | Direct bank payment, Nordea, Sweden.          | 
+| PaymentMethod.DBSEBSE            | Direct bank payment, private, SEB, Sweden.    |
+| PaymentMethod.DBSEBFTGSE         | Direct bank payment, company, SEB, Sweden.    |
+| PaymentMethod.DBSHBSE            | Direct bank payment, Handelsbanken, Sweden.   |
+| PaymentMethod.DBSWEDBANKSE       | Direct bank payment, Swedbank, Sweden.        |
+| PaymentMethod.KORTCERT           | Card payments, Certitrade.                    |
+| PaymentMethod.PAYPAL             | Paypal                                        |
+| PaymentMethod.SKRILL             | Card payment with Dankort, Skrill.            |
+| PaymentMethod.SVEAINVOICESE      | Invoice by PayPage in SE only.                |
+| PaymentMethod.SVEASPLITSE        | PaymentPlan by PayPage in SE only.            |
+| PaymentMethod.SVEAINVOICEEU_SE   | Invoice by PayPage in SE.                     |
+| PaymentMethod.SVEAINVOICEEU_NO   | Invoice by PayPage in NO.                     |
+| PaymentMethod.SVEAINVOICEEU_DK   | Invoice by PayPage in DK.                     |
+| PaymentMethod.SVEAINVOICEEU_FI   | Invoice by PayPage in FI.                     |
+| PaymentMethod.SVEAINVOICEEU_NL   | Invoice by PayPage in NL.                     |
+| PaymentMethod.SVEAINVOICEEU_DE   | Invoice by PayPage in DE.                     |
+| PaymentMethod.SVEASPLITEU_SE     | PaymentPlan by PayPage in SE.                 |
+| PaymentMethod.SVEASPLITEU_NO     | PaymentPlan by PayPage in NO.                 |
+| PaymentMethod.SVEASPLITEU_DK     | PaymentPlan by PayPage in DK.                 |
+| PaymentMethod.SVEASPLITEU_FI     | PaymentPlan by PayPage in FI.                 |
+| PaymentMethod.SVEASPLITEU_DE     | PaymentPlan by PayPage in DE.                 |
+| PaymentMethod.SVEASPLITEU_NL     | PaymentPlan by PayPage in NL.                 |
 
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
