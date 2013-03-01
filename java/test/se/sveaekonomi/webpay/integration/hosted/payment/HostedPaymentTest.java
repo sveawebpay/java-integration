@@ -3,7 +3,6 @@ package se.sveaekonomi.webpay.integration.hosted.payment;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
@@ -14,7 +13,6 @@ import se.sveaekonomi.webpay.integration.hosted.helper.ExcludePayments;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
 public class HostedPaymentTest {
