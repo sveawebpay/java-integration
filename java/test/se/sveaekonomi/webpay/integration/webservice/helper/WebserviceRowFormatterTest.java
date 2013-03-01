@@ -7,28 +7,24 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrderRow;
 
 public class WebserviceRowFormatterTest {
     
     @Test
     public void testFormatOrderRows() {
-        OrderRowBuilder row = new OrderRowBuilder();
-        row.setArticleNumber("0")
+    	CreateOrderBuilder order = WebPay.createOrder()
+    	.addOrderRow(Item.orderRow()
+            .setArticleNumber("0")
             .setName("Tess")
             .setDescription("Tester")
             .setAmountExVat(4)
             .setVatPercent(25)
             .setQuantity(1)
-            .setUnit("st");
-        ArrayList<OrderRowBuilder> rows = new ArrayList<OrderRowBuilder>();
-        rows.add(row);
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addOrderRow(row);
-        //order.setOrderRows(rows);
+            .setUnit("st"));
         
         ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(0);
@@ -44,8 +40,8 @@ public class WebserviceRowFormatterTest {
     
     @Test
     public void testFormatShippingFeeRows() {
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addOrderRow(Item.orderRow())
+    	CreateOrderBuilder order = WebPay.createOrder()
+        .addOrderRow(Item.orderRow())
         .addFee(Item.shippingFee()  
             .setShippingId("0")
             .setName("Tess")
@@ -68,12 +64,12 @@ public class WebserviceRowFormatterTest {
     
     @Test
     public void testFormatInvoiceFeeRows() {
-        CreateOrderBuilder order = new CreateOrderBuilder();        
-        order.addFee(Item.invoiceFee()       
-            .setDescription("Tester")
-            .setAmountExVat(4)
-            .setVatPercent(25)
-            .setUnit("st"));        
+    	CreateOrderBuilder order = WebPay.createOrder()  
+    		.addFee(Item.invoiceFee()       
+    			.setDescription("Tester")
+    			.setAmountExVat(4)
+    			.setVatPercent(25)
+    			.setUnit("st"));        
         
         ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(0);
@@ -89,18 +85,18 @@ public class WebserviceRowFormatterTest {
     
     @Test
     public void testFormatFixedDiscountRows() {
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addOrderRow(Item.orderRow()
-            .setAmountExVat(4)
-            .setVatPercent(25)
-            .setQuantity(1))
-        .addDiscount(Item.fixedDiscount()
-            .setDiscountId("0")
-            .setName("Tess")
-            .setDescription("Tester")
-            .setDiscount(1)
-            .setAmountIncVat(1)
-            .setUnit("st"));
+    	CreateOrderBuilder order = WebPay.createOrder()
+    		.addOrderRow(Item.orderRow()
+    			.setAmountExVat(4)
+    			.setVatPercent(25)
+    			.setQuantity(1))
+    		.addDiscount(Item.fixedDiscount()
+    			.setDiscountId("0")
+    			.setName("Tess")
+    			.setDescription("Tester")
+           // 	.setDiscount(1)
+    			.setAmountIncVat(1)
+    			.setUnit("st"));
          
         ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(1);
@@ -116,8 +112,8 @@ public class WebserviceRowFormatterTest {
     
     @Test
     public void testFormatRelativeDiscountRows() {
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order.addOrderRow(Item.orderRow()
+    	CreateOrderBuilder order = WebPay.createOrder()
+        .addOrderRow(Item.orderRow()
             .setAmountExVat(4)
             .setVatPercent(25)
             .setQuantity(1))

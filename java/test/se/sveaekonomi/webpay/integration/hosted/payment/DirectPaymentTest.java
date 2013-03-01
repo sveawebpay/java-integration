@@ -4,39 +4,40 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
+import javax.xml.bind.ValidationException;
+
 import org.junit.Before;
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
-import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 
-public class DirectPaymentTest {
-    
-    private CreateOrderBuilder order;
+public class DirectPaymentTest {      
     
     @Before
     public void setUp() {
-        order = new CreateOrderBuilder();
+     
     }    
     
     @Test
-    public void testConfigureExcludedPaymentMethodsSe() {
-        order.setCountryCode(COUNTRYCODE.SE);
-        DirectPayment payment = new DirectPayment(order);
-        
-        payment.configureExcludedPaymentMethods();
-        List<PAYMENTMETHOD> excluded = payment.getExcludedPaymentMethods();
+    public void testConfigureExcludedPaymentMethodsSe() throws ValidationException {
+    	List<PAYMENTMETHOD> excluded  = WebPay.createOrder() 
+    			.setCountryCode(COUNTRYCODE.SE)
+    			.usePayPageDirectBankOnly()
+    			.configureExcludedPaymentMethods()
+    			.getExcludedPaymentMethods();
         
         assertEquals(17, excluded.size());
     }
     
     @Test
     public void testBuildDirectBankPayment() throws Exception {
-         order.addOrderRow(Item.orderRow()
+    	PaymentForm form = WebPay.createOrder()    			
+    	.addOrderRow(Item.orderRow()
                 .setAmountExVat(100.00)
                 .setArticleNumber("1")
                 .setQuantity(2)
@@ -68,8 +69,8 @@ public class DirectPaymentTest {
                  .setDiscountPercent(50))      
          .addCustomerDetails(Item.companyCustomer()
                 .setVatNumber("2345234")
-                .setCompanyName("TestCompagniet"));
-         PaymentForm form =   order.setCountryCode(COUNTRYCODE.SE)
+                .setCompanyName("TestCompagniet"))
+         .setCountryCode(COUNTRYCODE.SE)
                 .setOrderDate("2012-12-12")
                 .setClientOrderNumber("33")
                 .setCurrency("SEK")

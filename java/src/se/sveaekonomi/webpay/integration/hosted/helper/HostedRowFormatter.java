@@ -129,9 +129,13 @@ public class HostedRowFormatter {
             if (row.getDescription() != null) {
                 tempRow.setDescription(row.getDescription());
             }
-            
-            tempRow.setAmount(new Double(-(row.getDiscount() * 100)).longValue());
-            totalAmount -= new Double(row.getDiscount()).longValue();
+                       
+            //changed
+            //tempRow.setAmount(new Double(-(row.getDiscount() * 100)).longValue());
+            tempRow.setAmount(new Double(-(row.getAmount() * 100)).longValue());
+            //changed
+            //totalAmount -= new Double(row.getDiscount()).longValue();
+            totalAmount -= new Double(row.getAmount()).longValue();
 
             double discountFactor = tempRow.getAmount() * 1.0 / totalAmount;
             

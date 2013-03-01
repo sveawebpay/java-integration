@@ -71,6 +71,7 @@ public class CloseOrderTest {
                 .setTestmode()
                 .setOrderId(orderId)
                 .closeInvoiceOrder()
+                .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
                 .doRequest();   
          
             assertEquals(true, closeResponse.isOrderAccepted());      

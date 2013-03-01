@@ -10,9 +10,8 @@ public class FixedDiscountBuilder implements RowBuilder {
     private String discountId;
     private String name;
     private String description;
-    private double discount;
     private int quantity;
-    private String unit;
+    private String unit = "";
     private double amount;
     
     public String getDiscountId() {
@@ -39,15 +38,6 @@ public class FixedDiscountBuilder implements RowBuilder {
     
     public FixedDiscountBuilder setDescription(String description) {
         this.description = description;
-        return this;
-    }
-    
-    public double getDiscount() {
-        return discount;
-    }
-    
-    public FixedDiscountBuilder setDiscount(double discount) {
-        this.discount = discount;
         return this;
     }
     

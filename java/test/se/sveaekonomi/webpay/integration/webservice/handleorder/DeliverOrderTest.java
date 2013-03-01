@@ -63,6 +63,7 @@ public class DeliverOrderTest {
         .setNumberOfCreditDays(1)
         .setInvoiceIdToCredit("id")
         .deliverInvoiceOrder()
+        .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
             .prepareRequest();   
         
         //First order row is a product
@@ -98,6 +99,7 @@ public class DeliverOrderTest {
         .setTestmode()
         .setOrderId(54086L)
         .deliverPaymentPlanOrder()
+        .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
         .prepareRequest();
         
         assertEquals("54086", request.request.deliverOrderInformation.sveaOrderId);
@@ -106,22 +108,21 @@ public class DeliverOrderTest {
     
     @Test
     public void testDeliverPaymentPlanOrderDoRequest() throws Exception {
-    	DeliverOrderResponse response = WebPay.deliverOrder()
-    			.setTestmode()
-    			.addOrderRow(Item.orderRow()
-    			        .setArticleNumber("1")
-    			        .setQuantity(2)
-    			        .setAmountExVat(100.00)
-    			        .setDescription("Specification")
-    			        .setName("Prod")
-    			        .setUnit("st")
-    			        .setVatPercent(25)
-    			        .setDiscountPercent(0)
-    			    )  
-    			        .setOrderId(3434)
-    			        .setInvoiceDistributionType(DistributionType.Post)
-    			        .deliverInvoiceOrder()
-    			        //    .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
-    			            .doRequest();
+    	WebPay.deliverOrder()
+    		.setTestmode()
+    		.addOrderRow(Item.orderRow()
+    			.setArticleNumber("1")
+    			.setQuantity(2)
+    			.setAmountExVat(100.00)
+    			.setDescription("Specification")
+    			.setName("Prod")
+    			.setUnit("st")
+    			.setVatPercent(25)
+    			.setDiscountPercent(0))  
+    		.setOrderId(3434)
+    		.setInvoiceDistributionType(DistributionType.Post)
+    		.deliverInvoiceOrder()
+    			.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
+    			.doRequest();    	
     }
 }

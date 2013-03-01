@@ -5,6 +5,7 @@ import org.w3c.dom.NodeList;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.handle.CloseOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
+import se.sveaekonomi.webpay.integration.webservice.getaddresses.GetAddresses;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCloseOrder;
@@ -15,6 +16,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 public class CloseOrder {
     
     private CloseOrderBuilder order;
+    private final SveaConfig conf = new SveaConfig();
     
     public CloseOrder(CloseOrderBuilder order) {
         this.order = order;
@@ -22,6 +24,11 @@ public class CloseOrder {
 
     protected SveaAuth getStoreAuthorization() {
         return order.config.getAuthorizationForWebServicePayments(this.order.getOrderType());        
+    }
+    
+    public CloseOrder setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
+        conf.setPasswordBasedAuthorization(userName, password, clientNumber, order.getOrderType());    
+        return this;
     }
     
     public SveaRequest<SveaCloseOrder> prepareRequest() {

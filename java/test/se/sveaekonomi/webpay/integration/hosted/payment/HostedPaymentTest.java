@@ -3,32 +3,30 @@ package se.sveaekonomi.webpay.integration.hosted.payment;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.helper.ExcludePayments;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
+import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
 public class HostedPaymentTest {
 
     @Test
     public void testCalculateRequestValuesNullExtraRows() throws Exception {
-        OrderRowBuilder row = new OrderRowBuilder();
-        row.setAmountExVat(4)
-            .setVatPercent(25)
-            .setQuantity(1);
-        ArrayList<OrderRowBuilder> rows = new ArrayList<OrderRowBuilder>();
-        
-        rows.add(row);
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        
-        order.addOrderRow(row);
+    	CreateOrderBuilder order = new CreateOrderBuilder();
+    	order = WebPay.createOrder()
+    		.setTestmode()
+            .addOrderRow(Item.orderRow()
+            		.setAmountExVat(4)
+                    .setVatPercent(25)
+                    .setQuantity(1));            
+            
         order.setShippingFeeRows(null);
         order.setFixedDiscountRows(null);
         order.setRelativeDiscountRows(null);
@@ -39,17 +37,15 @@ public class HostedPaymentTest {
     }
 
     @Test
-    public void testVatPercentAndAmountIncVatCalculation() {
-        OrderRowBuilder row = new OrderRowBuilder();
-        row.setAmountIncVat(5)
-            .setVatPercent(25)
-            .setQuantity(1);
-        ArrayList<OrderRowBuilder> rows = new ArrayList<OrderRowBuilder>();
-        
-        rows.add(row);
+    public void testVatPercentAndAmountIncVatCalculation() {        
         CreateOrderBuilder order = new CreateOrderBuilder();
+        order = WebPay.createOrder()
+        		.setTestmode()
+                .addOrderRow(Item.orderRow()
+                		.setAmountExVat(4)
+                        .setVatPercent(25)
+                        .setQuantity(1));            
         
-        order.addOrderRow(row);
         order.setShippingFeeRows(null);
         order.setFixedDiscountRows(null);
         order.setRelativeDiscountRows(null);
@@ -61,16 +57,19 @@ public class HostedPaymentTest {
     
     @Test
     public void testAmountIncVatAndAmountExVatCalculation() {
-        OrderRowBuilder row = new OrderRowBuilder();
-        row.setAmountIncVat(5)
-            .setAmountExVat(4)
-            .setQuantity(1);
-        ArrayList<OrderRowBuilder> rows = new ArrayList<OrderRowBuilder>();
+    	CreateOrderBuilder order = new CreateOrderBuilder();
+        order = WebPay.createOrder()
+        		.setTestmode()
+                .addOrderRow(Item.orderRow()
+                		.setAmountExVat(4)
+                        .setVatPercent(25)
+                        .setQuantity(1)); 
+        /*ArrayList<OrderRowBuilder> rows = new ArrayList<OrderRowBuilder>();
         
         rows.add(row);
         CreateOrderBuilder order = new CreateOrderBuilder();
         
-        order.addOrderRow(row);
+        order.addOrderRow(row);*/
         order.setShippingFeeRows(null);
         order.setFixedDiscountRows(null);
         order.setRelativeDiscountRows(null);
@@ -82,15 +81,18 @@ public class HostedPaymentTest {
     
     @Test
     public void testCreatePaymentForm() throws Exception {
-        OrderRowBuilder row = new OrderRowBuilder();
-        row.setAmountExVat(4)
-            .setVatPercent(25)
-            .setQuantity(1);
-        ArrayList<OrderRowBuilder> rows = new ArrayList<OrderRowBuilder>();
+    	CreateOrderBuilder order = new CreateOrderBuilder();
+        order = WebPay.createOrder()
+        		.setTestmode()
+                .addOrderRow(Item.orderRow()
+                		.setAmountExVat(4)
+                        .setVatPercent(25)
+                        .setQuantity(1)); 
+      /*  ArrayList<OrderRowBuilder> rows = new ArrayList<OrderRowBuilder>();
         rows.add(row);
         CreateOrderBuilder order = new CreateOrderBuilder();
 
-        order.addOrderRow(row);
+        order.addOrderRow(row);*/
         HostedPayment payment = new FakeHostedPayment(order);
         PaymentForm form;
         

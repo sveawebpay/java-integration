@@ -34,6 +34,11 @@ public class HandleOrder {
         return conf.getAuthorizationForWebServicePayments(order.getOrderType());
     }
     
+    public HandleOrder setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
+        conf.setPasswordBasedAuthorization(userName, password, clientNumber, order.getOrderType());    
+        return this;
+    }
+    
     public String validateOrder() {
         try{
         HandleOrderValidator validator = new HandleOrderValidator();

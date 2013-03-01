@@ -16,7 +16,6 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
-import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 
 public class CardPaymentTest {
     
@@ -35,11 +34,6 @@ public class CardPaymentTest {
         .configureExcludedPaymentMethods()
         .getExcludedPaymentMethods();
     	
-        /*CardPayment payment = new CardPayment(order);
-        
-        payment.configureExcludedPaymentMethods();
-        List<PAYMENTMETHOD> excluded = payment.getExcludedPaymentMethods();
-        */
         assertEquals(21, excluded.size());
     }
     
@@ -94,7 +88,7 @@ public class CardPaymentTest {
     
     @Test
     public void testSetAuthorization() throws Exception {
-        order = WebPay.createOrder()
+    	PaymentForm form = WebPay.createOrder()
                 .setTestmode()                
        .addOrderRow(Item.orderRow()
                 .setAmountExVat(100.00)
@@ -130,9 +124,8 @@ public class CardPaymentTest {
               
        .addCustomerDetails(Item.companyCustomer()
                   .setVatNumber("2345234")
-                  .setCompanyName("TestCompagniet"));
-      
-        PaymentForm form = order
+                  .setCompanyName("TestCompagniet"))
+              
                 .setCountryCode(COUNTRYCODE.SE)
                 .setOrderDate("2012-12-12")
                 .setClientOrderNumber("33")
