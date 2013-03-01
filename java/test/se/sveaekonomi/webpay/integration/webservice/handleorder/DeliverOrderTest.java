@@ -63,6 +63,7 @@ public class DeliverOrderTest {
         .setNumberOfCreditDays(1)
         .setInvoiceIdToCredit("id")
         .deliverInvoiceOrder()
+        .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
             .prepareRequest();   
         
         //First order row is a product
@@ -98,6 +99,7 @@ public class DeliverOrderTest {
         .setTestmode()
         .setOrderId(54086L)
         .deliverPaymentPlanOrder()
+        .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
         .prepareRequest();
         
         assertEquals("54086", request.request.deliverOrderInformation.sveaOrderId);
@@ -121,7 +123,7 @@ public class DeliverOrderTest {
     			        .setOrderId(3434)
     			        .setInvoiceDistributionType(DistributionType.Post)
     			        .deliverInvoiceOrder()
-    			        //    .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
+    			            .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
     			            .doRequest();
     }
 }
