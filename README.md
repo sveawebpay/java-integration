@@ -313,16 +313,15 @@ PaymentForm form = WebPay.createOrder()
 The values of *xmlMessageBase64*, *merchantid* and *mac* are to be sent as xml to SveaWebPay.
 Function getPaymentForm() returns object type *PaymentForm* with accessible members:
 
-| Member                            | Description                               |
-|---------------------------------- |-------------------------------------------|
-| xmlMessageBase64                  | Payment information in XML-format, Base64 encoded.| 
-| xmlMessage                        | Payment information in XML-format.        |
-| merchantid                        | Authorization                             |
-| secretWord                        | Authorization                             |
-| mac                               | Message authentication code.              |    
-| completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
-| htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. (merchantid, xmlMessageBase64, mac) |
+| Value                 | Returns    | Description                               |
+|-----------------------|----------- |-------------------------------------------|
+| getXmlMessageBase64() | String     | Payment information in XML-format, Base64 encoded.| 
+| getXmlMessage()       | String     | Payment information in XML-format.        |
+| getMerchantId()       | String     | Authorization                             |
+| getSecretWord()       | String     | Authorization                             |
+| getMacSha512()        | String     | Message authentication code.              |    
+| getCompleteForm()		| String     | A complete Html form with method= "post" with submit button to include in your code. |
+| getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
             
 ```java
 PaymentForm form = ...
@@ -360,17 +359,16 @@ PaymentForm form = WebPay.createOrder()
 ##### 1.5.2.2 Return
 Returns object type PaymentForm:
            
-| Member                            | Description                               |
-|---------------------------------- |-------------------------------------------|
-| xmlMessageBase64                  | Payment information in XML-format, Base64 encoded.| 
-| xmlMessage                        | Payment information in XML-format.        |
-| merchantid                        | Authorization                             |
-| secretWord                        | Authorization                             |
-| mac                               | Message authentication code.              |
-| completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
-| htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. (merchantid, xmlMessageBase64, mac) |
-
+| Value                 | Returns    | Description                               |
+|-----------------------|----------- |-------------------------------------------|
+| getXmlMessageBase64() | String     | Payment information in XML-format, Base64 encoded.| 
+| getXmlMessage()       | String     | Payment information in XML-format.        |
+| getMerchantId()       | String     | Authorization                             |
+| getSecretWord()       | String     | Authorization                             |
+| getMacSha512()        | String     | Message authentication code.              |    
+| getCompleteForm()		| String     | A complete Html form with method= "post" with submit button to include in your code. |
+| getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
+ 
 ```java
 PaymentForm form = ...
     .getPaymentForm();
@@ -444,17 +442,16 @@ Optional if you want to exclude all direct bank payments methods from *PayPage*.
 ##### 1.5.3.6 Return
 Returns object type *PaymentForm*:
                 
-| Member                            | Description                               |
-|---------------------------------- |-------------------------------------------|
-| xmlMessageBase64                  | Payment information in XML-format, Base64 encoded.| 
-| xmlMessage                        | Payment information in XML-format.        |
-| merchantid                        | Authorization                             |
-| secretWord                        | Authorization                             |
-| mac                               | Message authentication code.              |
-| completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
-| htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. (merchantid, xmlMessageBase64, mac) |
-
+| Value                 | Returns    | Description                               |
+|-----------------------|----------- |-------------------------------------------|
+| getXmlMessageBase64() | String     | Payment information in XML-format, Base64 encoded.| 
+| getXmlMessage()       | String     | Payment information in XML-format.        |
+| getMerchantId()       | String     | Authorization                             |
+| getSecretWord()       | String     | Authorization                             |
+| getMacSha512()        | String     | Message authentication code.              |    
+| getCompleteForm()		| String     | A complete Html form with method= "post" with submit button to include in your code. |
+| getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
+ 
 ```java
 PaymentForm form = ...
         .getPaymentForm();
