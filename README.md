@@ -749,7 +749,7 @@ hosted solutions can also be processed through the *SveaResponse* class.
 
 The response from server will be sent to the *returnUrl* with POST or GET. The response contains the parameters: 
 *response*, *mac* and *merchantid*.
-Class *SveaResponse* will return a structured object similar to the synchronous answer instead. 
+Class *SveaResponse* will return an object structured similar to the synchronous answer. 
 Params: 
 * The POST or GET message 
 * Your *secret word*. //Optional if set in SveaConfig.php

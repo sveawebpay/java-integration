@@ -31,11 +31,11 @@ public class PaymentForm {
         switch(countryCode) {
             case SE:
                 this.setSubmitText("Betala");
-                this.setNoScriptMessage("Javascript är inaktiverat i er webbläsare, så ni får manuellt dirigera om till paypage");
+                this.noScriptMessage = "Javascript är inaktiverat i er webbläsare, så ni får manuellt dirigera om till paypage";
                 break;
             default:
                 this.setSubmitText("Submit");
-                this.setNoScriptMessage("Javascript is inactivated in your browser, you will manually have to redirect to the paypage");            
+                this.noScriptMessage = "Javascript is inactivated in your browser, you will manually have to redirect to the paypage";            
         }
     }
     
@@ -87,11 +87,7 @@ public class PaymentForm {
     
     public String getMacSha512() {
         return this.macSha512;
-    }
-    
-    public String getUrl() {
-        return url;
-    }
+    }    
     
     public Map<String, String> getFormHtmlFields() {
         return formHtmlFields;
@@ -135,15 +131,7 @@ public class PaymentForm {
 
     public void setSubmitText(String submitText) {
         this.submitText = submitText;
-    }
-
-    public String getNoScriptMessage() {
-        return noScriptMessage;
-    }
-
-    public void setNoScriptMessage(String noScriptMessage) {
-        this.noScriptMessage = noScriptMessage;
-    }
+    } 
 
     public String getXmlMessage() {
         return xmlMessage;
