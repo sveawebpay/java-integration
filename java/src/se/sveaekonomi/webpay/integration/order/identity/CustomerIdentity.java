@@ -16,6 +16,11 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
         return this.email;
     }
     
+    /**
+     * Optional but desirable
+     * @param type email
+     * @return CustomerIdentity
+     */
     @SuppressWarnings("unchecked")
     public T setEmail(String email) {
         this.email = email;
@@ -26,6 +31,11 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
         return this.phoneNumber;
     }
     
+    /**
+     * Optional
+     * @param type phoneNumber
+     * @return CustomerIdentity
+     */
     @SuppressWarnings("unchecked")
     public T setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
@@ -36,6 +46,11 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
         return zipCode;
     }
     
+    /**
+     * Required for company customers in NL and DE
+     * @param type zipCode
+     * @return CustomerIdentity
+     */
     @SuppressWarnings("unchecked")
     public T setZipCode(String zipCode) {
         this.zipCode = zipCode;
@@ -60,6 +75,12 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
         return this.housenumber;
     }
     
+    /**
+     * Required for company customers in NL and DE
+     * @param type streetAddress
+     * @param type houseNumber
+     * @return CustomerIdentity
+     */
     @SuppressWarnings("unchecked")
     public T setStreetAddress(String streetAddress, Integer houseNumber) {
         this.streetAddress = streetAddress;
@@ -71,6 +92,11 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
         return locality;
     }
     
+    /**
+     * Required for company customers in NL and DE
+     * @param type locality
+     * @return CustomerIdentity
+     */
     @SuppressWarnings("unchecked")
     public T setLocality(String locality) {
         this.locality = locality;
