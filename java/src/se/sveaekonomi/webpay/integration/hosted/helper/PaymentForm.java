@@ -16,7 +16,7 @@ public class PaymentForm {
     private String merchantid;
     private String secretWord;
     private String testmode;
-    private String form;
+    private String completeHtmlFormWithSubmitButton;
     private String macSha512;
     private String url;
     private Map<String, String> formHtmlFields;
@@ -77,8 +77,8 @@ public class PaymentForm {
         return this;
     }
     
-    public String getForm() {
-        return form;
+    public String getCompleteForm() {
+        return completeHtmlFormWithSubmitButton;
     }
     
     public PaymentForm setMacSha512(String macSha512) {
@@ -98,7 +98,7 @@ public class PaymentForm {
         url = (testmode != null ? SveaConfig.SWP_TEST_URL : SveaConfig.SWP_PROD_URL);
         macSha512 = HashUtil.createHash(xmlMessageBase64 + secretWord, HASHALGORITHM.SHA_512);
         
-        form = "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\""
+        completeHtmlFormWithSubmitButton = "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\""
                 + url
                 + "\">"
                 + "<input type=\"hidden\" name=\"merchantid\" value=\"" + merchantid + "\" />"
