@@ -51,7 +51,7 @@ public class WebServiceOrderValidatorTest {
         	.setValidator(new VoidValidator())
         	.setClientOrderNumber("1")
         	.addCustomerDetails(Item.individualCustomer()
-        			.setSsn(194609052222L));         
+        			.setNationalIdNumber(194609052222L));         
                 
        assertEquals(expectedMessage, orderValidator.validate(order));
     }
@@ -78,7 +78,7 @@ public class WebServiceOrderValidatorTest {
         	.setValidator(new VoidValidator())
             .setClientOrderNumber("1")
             .setCountryCode(COUNTRYCODE.SE)
-        	.addCustomerDetails(Item.individualCustomer().setSsn(194609052222L));            
+        	.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(194609052222L));            
 
         assertEquals(expectedMessage, orderValidator.validate(order));
     }
@@ -92,7 +92,7 @@ public class WebServiceOrderValidatorTest {
         	.setClientOrderNumber("1")
         	.addOrderRow(Item.orderRow())
         	.addCustomerDetails(Item.individualCustomer()
-                .setSsn(194605092222L))
+                .setNationalIdNumber(194605092222L))
                 .setCountryCode(COUNTRYCODE.SE)
             .setValidator(new VoidValidator());
          
@@ -208,7 +208,7 @@ public class WebServiceOrderValidatorTest {
 	            .setVatPercent(25)
 	            .setQuantity(1))            
             .addCustomerDetails(Item.individualCustomer()
-            		.setSsn(194605092222L))
+            		.setNationalIdNumber(194605092222L))
             .setCountryCode(COUNTRYCODE.SE).setOrderDate("2012-05-01")        
             .setValidator(new VoidValidator());
         

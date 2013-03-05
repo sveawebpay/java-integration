@@ -34,7 +34,7 @@ public class PaymentMethodTest {
             .setName("Relative")
             .setDescription("RelativeDiscount"))
         .addCustomerDetails(Item.individualCustomer()
-             .setSsn(194605092222L))
+             .setNationalIdNumber(194605092222L))
         
             .setCountryCode(COUNTRYCODE.SE)
             .setClientOrderNumber("33")

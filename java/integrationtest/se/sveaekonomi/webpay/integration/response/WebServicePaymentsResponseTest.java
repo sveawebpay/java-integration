@@ -97,7 +97,7 @@ public class WebServicePaymentsResponseTest {
                 .setVatPercent(25)
                 .setDiscountPercent(0));
                              
-        order.addCustomerDetails(Item.individualCustomer().setSsn(194605092222L));
+        order.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(194605092222L));
         CreateOrderResponse response = order.setCountryCode(COUNTRYCODE.SE)
                 .setClientOrderNumber("33")
                 .setOrderDate("2012-12-12")

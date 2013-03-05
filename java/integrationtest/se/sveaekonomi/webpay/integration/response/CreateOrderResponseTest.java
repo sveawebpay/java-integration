@@ -31,7 +31,7 @@ private CreateOrderBuilder orderBuilder;
                 .setName("Prod")
                 .setVatPercent(25)
                 .setDiscountPercent(0));              
-        orderBuilder.addCustomerDetails(Item.individualCustomer().setSsn(194605092222L));
+        orderBuilder.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(194605092222L));
         CreateOrderResponse response = orderBuilder
                 .setCountryCode(COUNTRYCODE.SE)
                 .setOrderDate("2012-12-12")

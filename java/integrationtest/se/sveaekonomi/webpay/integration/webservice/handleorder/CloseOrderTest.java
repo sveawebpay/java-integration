@@ -41,7 +41,7 @@ public class CloseOrderTest {
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         
         order.addCustomerDetails(Item.individualCustomer()          
-                .setSsn(194605092222L));
+                .setNationalIdNumber(194605092222L));
         SveaRequest<SveaCreateOrder> request = order
                 .setCountryCode(COUNTRYCODE.SE)
                 .setClientOrderNumber("33")

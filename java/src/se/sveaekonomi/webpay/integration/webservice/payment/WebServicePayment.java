@@ -157,7 +157,7 @@ public abstract class WebServicePayment {
                 || this.createOrderBuilder.getCountryCode() == COUNTRYCODE.DK) {
             // set companyVat
             customerIdentity.NationalIdNumber = (String) (isCompany ? String.valueOf(this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber())
-                    : String.valueOf(createOrderBuilder.getIndividualCustomer().getSsn()));
+                    : String.valueOf(createOrderBuilder.getIndividualCustomer().getNationalIdNumber()));
         }
         
         if(isCompany) {

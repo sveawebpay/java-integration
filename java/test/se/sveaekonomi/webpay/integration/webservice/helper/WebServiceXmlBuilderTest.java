@@ -30,7 +30,7 @@ public class WebServiceXmlBuilderTest {
     public void testCreateOrderEu() throws Exception {        
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
         	.addCustomerDetails(Item.individualCustomer()
-        			.setSsn(194605092222L))
+        			.setNationalIdNumber(194605092222L))
             .addOrderRow(Item.orderRow()
         		.setAmountExVat(100.00)
         		.setQuantity(1)

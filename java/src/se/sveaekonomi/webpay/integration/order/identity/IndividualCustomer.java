@@ -26,12 +26,12 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
         return this;
     }
     
-    public long getSsn() {
+    public long getNationalIdNumber() {
         return ssn;
     }
 
-    public IndividualCustomer setSsn(long yyyymmddxxxx) {
-        this.ssn = yyyymmddxxxx;
+    public IndividualCustomer setNationalIdNumber(long nationalIdNumber) {
+        this.ssn = nationalIdNumber;
         return this;
     }
      

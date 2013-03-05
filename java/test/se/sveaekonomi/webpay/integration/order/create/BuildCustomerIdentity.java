@@ -7,7 +7,7 @@ public class BuildCustomerIdentity implements CreateBuilderCommand<CreateOrderBu
     
     public CreateOrderBuilder run(CreateOrderBuilder orderBuilder) {
         return orderBuilder.addCustomerDetails(Item.individualCustomer()            
-                .setSsn(194609052222L)
+                .setNationalIdNumber(194609052222L)
                 .setInitials("SB")
                 .setBirthDate(1923, 12, 12)
                 .setName("Tess", "Testson")
