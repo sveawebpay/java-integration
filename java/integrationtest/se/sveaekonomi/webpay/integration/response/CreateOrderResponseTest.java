@@ -114,7 +114,7 @@ private CreateOrderBuilder orderBuilder;
           assertEquals(true, response.isOrderAccepted());
           assertEquals(true, response.sveaWillBuyOrder);
           assertEquals(250.00, response.amount, 0);
-          assertEquals(0, response.getResultCode());
+          assertEquals("0", response.getResultCode());
           assertEquals("Invoice" , response.orderType);
           //CustomerIdentity            
           assertEquals(null, response.customerIdentity.getEmail());

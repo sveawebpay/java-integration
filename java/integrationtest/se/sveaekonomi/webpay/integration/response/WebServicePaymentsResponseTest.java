@@ -51,8 +51,8 @@ public class WebServicePaymentsResponseTest {
         GetPaymentPlanParams addressRequest = WebPay.getPaymentPlanParams();
         PaymentPlanParamsResponse response = addressRequest.setTestmode()
             .doRequest();
+        
         assertEquals(response.isOrderAccepted(), true);
-        assertEquals(response.getResultCode(), 0);
         assertEquals(response.getCampaignCodes().get(0).getCampaignCode(), "213060");
         assertEquals(response.getCampaignCodes().get(0).getDescription(), "Köp nu betala om 3 månader (räntefritt)");
         assertEquals(response.getCampaignCodes().get(0).getPaymentPlanType(), "InterestAndAmortizationFree");
@@ -76,6 +76,12 @@ public class WebServicePaymentsResponseTest {
 	        .setIndividual("194605092222")
 	        .doRequest();
 	    
+	    assertEquals(request.isOrderAccepted(), true);
+	    assertEquals(request.getFirstName(), "Tess T");
+	    assertEquals(request.getLastName(), "Persson");
+	    assertEquals(request.getAddressLine2(), "Testgatan 1");
+	    assertEquals(request.getPostcode(), "99999");
+	    assertEquals(request.getPostarea(), "Stan");
 	}
     
     private long createInvoiceAndReturnOrderId() throws Exception {

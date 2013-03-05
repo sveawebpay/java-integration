@@ -42,7 +42,7 @@ public class HostedPaymentResponseTest {
         assertEquals(response.getClientOrderNumber(), "3737823987_id_001");
         assertEquals(response.getAmount(), 5, 0);
         assertEquals(response.getCurrency(), "SEK");
-        assertEquals(response.getResultCode(), 0);        
+        assertEquals(response.getResultCode(),"0 (ORDER_ACCEPTED)");        
     }
     
     @Test
@@ -68,7 +68,7 @@ public class HostedPaymentResponseTest {
         SveaResponse response = new SveaResponse(testXMLResponseBase64, mac, null);
         
         assertEquals(response.isOrderAccepted(), true);
-        assertEquals(response.getResultCode(), 0);
+        assertEquals(response.getResultCode(), "0 (ORDER_ACCEPTED)");
         assertEquals(response.getTransactionId(), "567056");
         assertEquals(response.getMerchantId(), "1175");
         assertEquals(response.getAmount(), 5, 0);
@@ -82,7 +82,7 @@ public class HostedPaymentResponseTest {
         String testXMLResponseBase64 = "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48cmVzcG9uc2U+DQogIDx0cmFuc2FjdGlvbiBpZD0iNTY3MDYyIj4NCiAgICA8cGF5bWVudG1ldGhvZD5EQk5PUkRFQVNFPC9wYXltZW50bWV0aG9kPg0KICAgIDxtZXJjaGFudGlkPjExNzU8L21lcmNoYW50aWQ+DQogICAgPGN1c3RvbWVycmVmbm8+dGVzdF8xMzU5NjIzMDIyMTQzPC9jdXN0b21lcnJlZm5vPg0KICAgIDxhbW91bnQ+NTAwPC9hbW91bnQ+DQogICAgPGN1cnJlbmN5PlNFSzwvY3VycmVuY3k+DQogIDwvdHJhbnNhY3Rpb24+DQogIDxzdGF0dXNjb2RlPjEwNzwvc3RhdHVzY29kZT4NCjwvcmVzcG9uc2U+DQo=";
         String mac = "17960e06bb6eea06ec6066116f41683c814c391fdce4685fdc4e218c506c855b3f59da75c84c1ca99c8bd319c6e87960770e0c7f6e10c0f52b5276835183eb9b";
         SveaResponse response = new SveaResponse(testXMLResponseBase64, mac, null);
-        assertEquals(response.getResultCode(), 107);
+        assertEquals(response.getResultCode(), "107 (DENIED_BY_BANK)");
     }
     
     @Test
@@ -102,7 +102,7 @@ public class HostedPaymentResponseTest {
         assertEquals(response.getExpiryMonth(), "03");
         assertEquals(response.getExpiryYear(), "20");
         assertEquals(response.getAuthCode(), "764877");
-        assertEquals(response.getResultCode(), 0);
+        assertEquals(response.getResultCode(), "0 (ORDER_ACCEPTED)");
     }
     
 
