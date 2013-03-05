@@ -214,13 +214,12 @@ When discount or coupon is a percentage on total product amount.
 
 ### 1.3 Customer Identity   
 Customer identity is required for invoice and payment plan orders. Required values varies 
-depending on country and customer type. For SE, NO, DK and FI ssn (Social Security Number)
-or company id number is required. Email and ip address are desirable.
+depending on country and customer type. For SE, NO, DK and FI national id number is required. Email and ip address are desirable.
 
 ####1.3.1 Options for individual customers
 ```java
 .addCustomerDetails(Item.individualCustomer()
-    .setSsn(194605092222)              //Required for individual customers in SE, NO, DK, FI
+    .setNationalIdNumber(194605092222) //Required for individual customers in SE, NO, DK, FI
     .setInitials("SB")                 //Required for individual customers in NL 
     .setBirthDate(1923, 12, 12)        //Required for individual customers in NL and DE
     .setName("Tess", "Testson")        //Required for individual customers in NL and DE    
@@ -237,7 +236,7 @@ or company id number is required. Email and ip address are desirable.
 ####1.3.2 Options for company customers
 ```java
 .addCustomerDetails(Item.companyCustomer()
-    .setCompanyIdNumber("2345234")		//Required for company customers in SE, NO, DK, FI
+    .setNationalIdNumber("2345234")		//Required for company customers in SE, NO, DK, FI
     .setVatNumber("NL2345234")			//Required for NL and DE
     .setCompanyName("TestCompagniet")  	//Required for Eu countries like NL and DE
     )
@@ -598,7 +597,7 @@ or
 ```java
     .setIndividual("194605092222") //Required if this is an individual customer
 or
-    .setCompany("CompanyId")       //Required if this is a company customer
+    .setCompany("companyId")       //Required if this is a company customer
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
