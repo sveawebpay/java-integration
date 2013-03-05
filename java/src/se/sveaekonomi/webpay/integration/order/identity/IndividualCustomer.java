@@ -20,6 +20,12 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
         return lastName;
     }
     
+    /**
+     * Required for private Customers in NL and DE
+     * @param type firstName
+     * @param type lastName
+     * @return IndividualCustomer
+     */
     public IndividualCustomer setName(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
@@ -30,6 +36,14 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
         return ssn;
     }
 
+    /**
+     * Required for private customers in SE, NO, DK, FI
+     * @param nationalIdNumber
+     * format SE, DK:  yyyymmddxxxx
+     * format FI:  ddmmyyxxxx
+     * format NO:  ddmmyyxxxxx
+     * @return IndividualCustomer
+     */
     public IndividualCustomer setNationalIdNumber(long nationalIdNumber) {
         this.ssn = nationalIdNumber;
         return this;
@@ -39,6 +53,11 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
         return this.initials;
     }
     
+    /**
+     * Required for private customers in NL 
+     * @param type initials
+     * @return IndividualCustomer
+     */
     public IndividualCustomer setInitials(String initials) {
         this.initials = initials;
         return this;
@@ -48,6 +67,13 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
         return this.birthDate;
     }    
     
+    /**
+     * Required for private customers in NL and DE
+     * @param type yyyy
+     * @param type mm
+     * @param type dd
+     * @return IndividualCustomer
+     */
     public IndividualCustomer setBirthDate(int year, int month, int day) {
         String monthString = String.valueOf(month);        
         if(monthString.length()==1)

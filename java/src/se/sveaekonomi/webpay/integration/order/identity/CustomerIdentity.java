@@ -47,7 +47,7 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
     }
     
     /**
-     * Required for company customers in NL and DE
+     * Required for company and private customers in NL and DE
      * @param type zipCode
      * @return CustomerIdentity
      */
@@ -93,7 +93,7 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
     }
     
     /**
-     * Required for company customers in NL and DE
+     * Required for company and private customers in NL and DE
      * @param type locality
      * @return CustomerIdentity
      */
