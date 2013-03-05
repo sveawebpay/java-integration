@@ -5,6 +5,7 @@ import java.util.Map;
 
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 
@@ -43,7 +44,7 @@ public class PaymentForm {
         return xmlMessageBase64;
     }
     
-    public PaymentForm setMessageBase64(String messageBase64) {
+    protected PaymentForm setMessageBase64(String messageBase64) {
         this.xmlMessageBase64 = messageBase64;
         
         return this;
@@ -139,5 +140,6 @@ public class PaymentForm {
 
     public void setXmlMessage(String xmlMessage) {
         this.xmlMessage = xmlMessage;
+        this.setMessageBase64(Base64Util.encodeBase64String(xmlMessage));
     }
 }
