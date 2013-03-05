@@ -32,12 +32,12 @@ public class PayPagePayment extends HostedPayment {
 		return includedPaymentMethods;
 	}
 
-	public HostedPayment setIncludedPaymentMethods(
+	/*public HostedPayment setIncludedPaymentMethods(
 			List<PAYMENTMETHOD> paymentMethods) {
 		this.includedPaymentMethods.addAll(paymentMethods);
 		includePaymentMethods();
 		return this;
-	}
+	}*/
 
 	/**
 	 * Only used in CardPayment and DirectPayment
@@ -61,7 +61,13 @@ public class PayPagePayment extends HostedPayment {
 		return this;
 	}
 
-	protected PayPagePayment includePaymentMethods() {
+	public PayPagePayment includePaymentMethods() {
+		List<PAYMENTMETHOD> emptyList = new ArrayList<PAYMENTMETHOD>(); 
+		return includePaymentMethods(emptyList);
+	}
+	
+	public PayPagePayment includePaymentMethods(List<PAYMENTMETHOD> paymentMethods) {
+		this.includedPaymentMethods.addAll(paymentMethods);
 		// Exclude all payment methods
 		ExcludePayments excluded = new ExcludePayments();
 		excludedPaymentMethods = excluded.excludeInvoicesAndPaymentPlan();

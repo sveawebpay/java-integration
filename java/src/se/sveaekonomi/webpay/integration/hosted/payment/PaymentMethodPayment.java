@@ -3,13 +3,14 @@ package se.sveaekonomi.webpay.integration.hosted.payment;
 import javax.xml.stream.XMLStreamWriter;
 
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
 
 public class PaymentMethodPayment extends HostedPayment {
     
-    private String paymentMethod;
+    private PAYMENTMETHOD paymentMethod;
     
-    public PaymentMethodPayment(CreateOrderBuilder createOrderBuilder, String paymentMethod) {
+    public PaymentMethodPayment(CreateOrderBuilder createOrderBuilder, PAYMENTMETHOD paymentMethod) {
         super(createOrderBuilder);
         this.paymentMethod = paymentMethod;
     }

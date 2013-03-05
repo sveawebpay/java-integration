@@ -8,6 +8,7 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 
 
@@ -40,7 +41,7 @@ public class PaymentMethodTest {
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
             .setCurrency("SEK")
-            .usePaymentMethod("KORTCERT")
+            .usePaymentMethod(PAYMENTMETHOD.KORTCERT)
             .setReturnUrl("http://myurl.se")                 
             .getPaymentForm();
 
