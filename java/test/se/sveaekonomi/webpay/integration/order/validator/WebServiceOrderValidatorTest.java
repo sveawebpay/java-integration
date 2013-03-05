@@ -32,7 +32,7 @@ public class WebServiceOrderValidatorTest {
     public void testCheckOfIdentityClass() {
         CreateOrderBuilder order = WebPay.createOrder()
         	.addCustomerDetails(Item.companyCustomer()
-                .setCompanyIdNumber("666666")
+                .setNationalIdNumber("666666")
                 .setEmail("test@svea.com")
                 .setPhoneNumber(999999)
                 .setIpAddress("123.123.123.123")

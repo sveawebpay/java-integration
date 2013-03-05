@@ -20,11 +20,11 @@ public class CompanyCustomer extends CustomerIdentity<CompanyCustomer> {
         return this;
     }
     
-    public String getCompanyIdNumber() {
+    public String getNationalIdNumber() {
         return orgNumber;
     }
 
-    public CompanyCustomer setCompanyIdNumber(String companyIdNumber) {
+    public CompanyCustomer setNationalIdNumber(String companyIdNumber) {
         this.orgNumber = companyIdNumber;
         return this;
     }

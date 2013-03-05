@@ -13,7 +13,7 @@ public class IdentityValidator {
     protected String validateNordicIdentity(CreateOrderBuilder order) {
         String errors = "";
         //check Company identity
-        if(isCompany && order.getCompanyCustomer().getCompanyIdNumber()==null)
+        if(isCompany && order.getCompanyCustomer().getNationalIdNumber()==null)
             errors += "MISSING VALUE - OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use function setCompanyIdNumber().\n";
         else if(!isCompany && order.getIndividualCustomer().getSsn()<=0)
             errors += "MISSING VALUE - Ssn is required for individual customers when countrycode is SE, NO, DK or FI. Use function setSsn().\n";

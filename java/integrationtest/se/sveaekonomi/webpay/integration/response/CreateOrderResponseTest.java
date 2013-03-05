@@ -62,7 +62,7 @@ private CreateOrderBuilder orderBuilder;
                 .setCountryCode(COUNTRYCODE.SE)
                 .setOrderDate("2012-12-12")
                 .setCurrency("SEK");            
-        orderBuilder.addCustomerDetails(Item.companyCustomer().setCompanyIdNumber("4608142222"));               
+        orderBuilder.addCustomerDetails(Item.companyCustomer().setNationalIdNumber("4608142222"));               
         orderBuilder.addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
                 .setQuantity(2)

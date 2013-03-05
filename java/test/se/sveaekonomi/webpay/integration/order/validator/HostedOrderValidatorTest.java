@@ -54,7 +54,7 @@ public class HostedOrderValidatorTest {
         	.addCustomerDetails(Item.companyCustomer()
                 .setVatNumber("2345234")                
                 .setCompanyName("TestCompagniet")
-                .setCompanyIdNumber("1222"))
+                .setNationalIdNumber("1222"))
                 .setValidator(new VoidValidator())
                 .build();
         orderValidator = new HostedOrderValidator();

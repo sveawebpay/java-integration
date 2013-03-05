@@ -8,7 +8,7 @@ public class HostedOrderValidator extends OrderValidator {
           
     public String validate(CreateOrderBuilder order) {
         errors = "";
-        Boolean isCompany = order.getCompanyCustomer().getCompanyIdNumber()!=null ||order.getCompanyCustomer().getVatNumber()!=null;
+        Boolean isCompany = order.getCompanyCustomer().getNationalIdNumber()!=null ||order.getCompanyCustomer().getVatNumber()!=null;
         if(order.getCountryCode()!=null && order.getCountryCode()==COUNTRYCODE.NL)
             errors += new IdentityValidator(isCompany).validateNLIdentity(order);
         else if(order.getCountryCode()!=null && order.getCountryCode()==COUNTRYCODE.DE)

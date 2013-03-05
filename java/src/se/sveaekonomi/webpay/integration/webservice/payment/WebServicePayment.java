@@ -118,11 +118,11 @@ public abstract class WebServicePayment {
         boolean isCompany = false;
         String companyId = "";
         if(this.createOrderBuilder.getIsCompanyIdentity() 
-                && (this.createOrderBuilder.getCompanyCustomer().getCompanyIdNumber()!=null 
+                && (this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()!=null 
                 || this.createOrderBuilder.getCompanyCustomer().getVatNumber()!=null)) {
             isCompany = true;
-            companyId = (this.createOrderBuilder.getCompanyCustomer().getCompanyIdNumber()!=null) 
-                    ? this.createOrderBuilder.getCompanyCustomer().getCompanyIdNumber()
+            companyId = (this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()!=null) 
+                    ? this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()
                     : this.createOrderBuilder.getCompanyCustomer().getVatNumber();
         }
         // For European countries Individual/Company - identity required
@@ -156,7 +156,7 @@ public abstract class WebServicePayment {
                 || this.createOrderBuilder.getCountryCode() == COUNTRYCODE.FI
                 || this.createOrderBuilder.getCountryCode() == COUNTRYCODE.DK) {
             // set companyVat
-            customerIdentity.NationalIdNumber = (String) (isCompany ? String.valueOf(this.createOrderBuilder.getCompanyCustomer().getCompanyIdNumber())
+            customerIdentity.NationalIdNumber = (String) (isCompany ? String.valueOf(this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber())
                     : String.valueOf(createOrderBuilder.getIndividualCustomer().getSsn()));
         }
         

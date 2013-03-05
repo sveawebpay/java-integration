@@ -280,7 +280,7 @@ public class InvoicePaymentTest {
                 .setDiscountPercent(0))
                        
                 .addCustomerDetails(Item.companyCustomer()
-                    .setCompanyIdNumber("vat234"))
+                    .setNationalIdNumber("vat234"))
         
         .addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
@@ -477,7 +477,7 @@ public class InvoicePaymentTest {
             .setLocality("Stan"))
         
         .addCustomerDetails(Item.companyCustomer()
-            .setCompanyIdNumber("666666")
+            .setNationalIdNumber("666666")
             .setEmail("test@svea.com")
             .setPhoneNumber(999999)
             .setIpAddress("123.123.123.123")
