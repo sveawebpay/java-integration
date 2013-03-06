@@ -758,31 +758,31 @@ Params:
 
 ### PaymentMethods
 Used in usePaymentMethod(paymentMethod) and in usePayPage(), 
-.includePaymentMethods(...,...,...), .excludeCardPaymentMethods(...,...,...), .excludeDirectPaymentMethods(), .excludeCardPaymentMethods().
+.includePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods), .includePaymentMethods(), .excludeCardPaymentMethods(Collection<PAYMENTMETHOD> paymentMethods), .excludeCardPaymentMethods(), .excludeDirectPaymentMethods(), .excludeCardPaymentMethods().
 
 | Payment method                    | Description                                   |
 |-----------------------------------|-----------------------------------------------|
-| PaymentMethod.DBNORDEASE         | Direct bank payment, Nordea, Sweden.          | 
-| PaymentMethod.DBSEBSE            | Direct bank payment, private, SEB, Sweden.    |
-| PaymentMethod.DBSEBFTGSE         | Direct bank payment, company, SEB, Sweden.    |
-| PaymentMethod.DBSHBSE            | Direct bank payment, Handelsbanken, Sweden.   |
-| PaymentMethod.DBSWEDBANKSE       | Direct bank payment, Swedbank, Sweden.        |
-| PaymentMethod.KORTCERT           | Card payments, Certitrade.                    |
-| PaymentMethod.PAYPAL             | Paypal                                        |
-| PaymentMethod.SKRILL             | Card payment with Dankort, Skrill.            |
-| PaymentMethod.SVEAINVOICESE      | Invoice by PayPage in SE only.                |
-| PaymentMethod.SVEASPLITSE        | PaymentPlan by PayPage in SE only.            |
-| PaymentMethod.SVEAINVOICEEU_SE   | Invoice by PayPage in SE.                     |
-| PaymentMethod.SVEAINVOICEEU_NO   | Invoice by PayPage in NO.                     |
-| PaymentMethod.SVEAINVOICEEU_DK   | Invoice by PayPage in DK.                     |
-| PaymentMethod.SVEAINVOICEEU_FI   | Invoice by PayPage in FI.                     |
-| PaymentMethod.SVEAINVOICEEU_NL   | Invoice by PayPage in NL.                     |
-| PaymentMethod.SVEAINVOICEEU_DE   | Invoice by PayPage in DE.                     |
-| PaymentMethod.SVEASPLITEU_SE     | PaymentPlan by PayPage in SE.                 |
-| PaymentMethod.SVEASPLITEU_NO     | PaymentPlan by PayPage in NO.                 |
-| PaymentMethod.SVEASPLITEU_DK     | PaymentPlan by PayPage in DK.                 |
-| PaymentMethod.SVEASPLITEU_FI     | PaymentPlan by PayPage in FI.                 |
-| PaymentMethod.SVEASPLITEU_DE     | PaymentPlan by PayPage in DE.                 |
-| PaymentMethod.SVEASPLITEU_NL     | PaymentPlan by PayPage in NL.                 |
+| PAYMENTMETHOD.DBNORDEASE         | Direct bank payment, Nordea, Sweden.          | 
+| PAYMENTMETHOD.DBSEBSE            | Direct bank payment, private, SEB, Sweden.    |
+| PAYMENTMETHOD.DBSEBFTGSE         | Direct bank payment, company, SEB, Sweden.    |
+| PAYMENTMETHOD.DBSHBSE            | Direct bank payment, Handelsbanken, Sweden.   |
+| PAYMENTMETHOD.DBSWEDBANKSE       | Direct bank payment, Swedbank, Sweden.        |
+| PAYMENTMETHOD.KORTCERT           | Card payments, Certitrade.                    |
+| PAYMENTMETHOD.PAYPAL             | Paypal                                        |
+| PAYMENTMETHOD.SKRILL             | Card payment with Dankort, Skrill.            |
+| PAYMENTMETHOD.SVEAINVOICESE      | Invoice by PayPage in SE only.                |
+| PAYMENTMETHOD.SVEASPLITSE        | PaymentPlan by PayPage in SE only.            |
+| PAYMENTMETHOD.SVEAINVOICEEU_SE   | Invoice by PayPage in SE.                     |
+| PAYMENTMETHOD.SVEAINVOICEEU_NO   | Invoice by PayPage in NO.                     |
+| PAYMENTMETHOD.SVEAINVOICEEU_DK   | Invoice by PayPage in DK.                     |
+| PAYMENTMETHOD.SVEAINVOICEEU_FI   | Invoice by PayPage in FI.                     |
+| PAYMENTMETHOD.SVEAINVOICEEU_NL   | Invoice by PayPage in NL.                     |
+| PAYMENTMETHOD.SVEAINVOICEEU_DE   | Invoice by PayPage in DE.                     |
+| PAYMENTMETHOD.SVEASPLITEU_SE     | PaymentPlan by PayPage in SE.                 |
+| PAYMENTMETHOD.SVEASPLITEU_NO     | PaymentPlan by PayPage in NO.                 |
+| PAYMENTMETHOD.SVEASPLITEU_DK     | PaymentPlan by PayPage in DK.                 |
+| PAYMENTMETHOD.SVEASPLITEU_FI     | PaymentPlan by PayPage in FI.                 |
+| PAYMENTMETHOD.SVEASPLITEU_DE     | PaymentPlan by PayPage in DE.                 |
+| PAYMENTMETHOD.SVEASPLITEU_NL     | PaymentPlan by PayPage in NL.                 |
 
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
