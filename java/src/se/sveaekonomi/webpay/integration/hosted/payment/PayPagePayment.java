@@ -96,17 +96,10 @@ public class PayPagePayment extends HostedPayment {
 
 		return this;
 	}
-
 	
 	public PayPagePayment setPayPageLanguage(LANGUAGECODE languageCode) {
-		if (LANGUAGECODE.SV.equals(languageCode)
-				|| LANGUAGECODE.FI.equals(languageCode)
-				|| LANGUAGECODE.ES.equals(languageCode)
-				|| LANGUAGECODE.EN.equals(languageCode)) {
-			this.languageCode = languageCode.toString();
-		} else {
-			this.languageCode = LANGUAGECODE.EN.toString();
-		}
+		this.languageCode = languageCode.toString();
+		
 		return this;
 	}
 

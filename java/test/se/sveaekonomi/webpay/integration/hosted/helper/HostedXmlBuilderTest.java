@@ -154,7 +154,7 @@ public class HostedXmlBuilderTest {
     	xml = WebPay.createOrder()
     			.setCountryCode(COUNTRYCODE.SE)
     			.usePayPage()
-    			.setPayPageLanguage(LANGUAGECODE.SV)
+    			.setPayPageLanguage(LANGUAGECODE.sv)
     			.setPaymentMethod(PAYMENTMETHOD.SVEAINVOICEEU_SE)
     			.getPaymentForm()
     			.getXmlMessage();               

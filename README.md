@@ -398,9 +398,10 @@ PaymentForm form = WebPay.createOrder()
 	.setOrderDate("2012-12-12")
 	.setCurrency("SEK")
 	.usePayPage()
-		.setReturnUrl("http://myurl.se")                   //Required	
-		.setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional		
-		.setCancelUrl("http://myurl.se")                   //Optional
+		.setReturnUrl("http://myurl.se")                   	//Required	
+		.setMerchantIdBasedAuthorization(1200, "f78hv9")   	//Optional		
+		.setCancelUrl("http://myurl.se")                   	//Optional
+		.setPayPagePayment(LANGUAGECODE.SV)					//Optional, English is default. LANGUAGECODE see APPENDIX
 		.getPaymentForm();
 ```               
 
@@ -785,9 +786,11 @@ Used in usePaymentMethod(paymentMethod) and in usePayPage(),
 | PAYMENTMETHOD.SVEASPLITEU_DE     | PaymentPlan by PayPage in DE.                 |
 | PAYMENTMETHOD.SVEASPLITEU_NL     | PaymentPlan by PayPage in NL.                 |
 
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
 ## CountryCode
-Used in .setCountryCode(...) method.
-| CountryCode						| Description				|
+ISO 3166-1 standard. Used in .setCountryCode(...) method.
+| CountryCode						| Country					|
 |-----------------------------------|---------------------------|
 | COUNTRYCODE.DE					| Germany					|
 | COUNTRYCODE.DK					| Denmark 					|
@@ -795,5 +798,21 @@ Used in .setCountryCode(...) method.
 | COUNTRYCODE.NL					| Netherlands				|
 | COUNTRYCODE.NO					| Norway					|
 | COUNTRYCODE.SE					| Sweden					|
+
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
+## LanguageCode
+ISO 639-1 standard. Used in .setPayPageLanguage(...) method.
+| LanguageCode						| Language name				|
+|-----------------------------------|---------------------------|
+| LANGUAGECODE.da					| Danish					|
+| LANGUAGECODE.de					| German					|
+| LANGUAGECODE.en					| English					|
+| LANGUAGECODE.es					| Spanish, Castilian		|
+| LANGUAGECODE.fr					| French					|
+| LANGUAGECODE.fi					| Finnish					|
+| LANGUAGECODE.it					| Italian					|
+| LANGUAGECODE.no					| Norwegian					|
+| LANGUAGECODE.sv					| Swedish					|
 
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)

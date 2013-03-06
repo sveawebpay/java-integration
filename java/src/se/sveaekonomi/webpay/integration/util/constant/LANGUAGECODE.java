@@ -6,8 +6,13 @@ package se.sveaekonomi.webpay.integration.util.constant;
  *
  */
  public enum LANGUAGECODE {
-	 SV,
-	 ES, 
-	 EN,
-	 FI
+	 sv,
+	 es, 
+	 en,
+	 fi,
+	 da,
+	 de,
+	 fr,
+	 it,
+	 no
 }
