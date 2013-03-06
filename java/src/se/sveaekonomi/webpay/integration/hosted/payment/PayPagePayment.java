@@ -61,6 +61,16 @@ public class PayPagePayment extends HostedPayment {
 		return this;
 	}
 
+	public PayPagePayment excludePaymentMethods(List<PAYMENTMETHOD> paymentMethods) {
+		excludedPaymentMethods.addAll(paymentMethods);
+		return this;
+	}
+	
+	public PayPagePayment excludePaymentMethods() {
+		List<PAYMENTMETHOD> emptyList = new ArrayList<PAYMENTMETHOD>(); 
+		return excludePaymentMethods(emptyList);
+	}
+	
 	public PayPagePayment includePaymentMethods() {
 		List<PAYMENTMETHOD> emptyList = new ArrayList<PAYMENTMETHOD>(); 
 		return includePaymentMethods(emptyList);
