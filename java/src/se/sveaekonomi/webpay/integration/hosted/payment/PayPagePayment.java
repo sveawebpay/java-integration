@@ -8,6 +8,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import se.sveaekonomi.webpay.integration.hosted.helper.ExcludePayments;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
 public class PayPagePayment extends HostedPayment {
@@ -96,14 +97,15 @@ public class PayPagePayment extends HostedPayment {
 		return this;
 	}
 
-	public PayPagePayment setPayPageLanguage(String languageCodeAsISO639) {
-		if ("sv".equals(languageCodeAsISO639)
-				|| "fi".equals(languageCodeAsISO639)
-				|| "es".equals(languageCodeAsISO639)
-				|| "en".equals(languageCodeAsISO639)) {
-			this.languageCode = languageCodeAsISO639;
+	
+	public PayPagePayment setPayPageLanguage(LANGUAGECODE languageCode) {
+		if (LANGUAGECODE.SV.equals(languageCode)
+				|| LANGUAGECODE.FI.equals(languageCode)
+				|| LANGUAGECODE.ES.equals(languageCode)
+				|| LANGUAGECODE.EN.equals(languageCode)) {
+			this.languageCode = languageCode.toString();
 		} else {
-			this.languageCode = "en";
+			this.languageCode = LANGUAGECODE.EN.toString();
 		}
 		return this;
 	}
