@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.hosted.payment;
 
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 
 import javax.xml.stream.XMLStreamWriter;
@@ -61,7 +62,7 @@ public class PayPagePayment extends HostedPayment {
 		return this;
 	}
 
-	public PayPagePayment excludePaymentMethods(List<PAYMENTMETHOD> paymentMethods) {
+	public PayPagePayment excludePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods) {
 		excludedPaymentMethods.addAll(paymentMethods);
 		return this;
 	}
@@ -76,7 +77,7 @@ public class PayPagePayment extends HostedPayment {
 		return includePaymentMethods(emptyList);
 	}
 	
-	public PayPagePayment includePaymentMethods(List<PAYMENTMETHOD> paymentMethods) {
+	public PayPagePayment includePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods) {
 		this.includedPaymentMethods.addAll(paymentMethods);
 		// Exclude all payment methods
 		ExcludePayments excluded = new ExcludePayments();
