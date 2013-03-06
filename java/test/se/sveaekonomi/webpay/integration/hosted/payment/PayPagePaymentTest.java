@@ -100,6 +100,12 @@ public class PayPagePaymentTest {
         includedPaymentMethods.add(PAYMENTMETHOD.SVEASPLITEU_NL);
         includedPaymentMethods.add(PAYMENTMETHOD.SVEAINVOICEEU_NO);
         includedPaymentMethods.add(PAYMENTMETHOD.SVEASPLITEU_NO);
+        includedPaymentMethods.add(PAYMENTMETHOD.DBSWEDBANKSE);
+        includedPaymentMethods.add(PAYMENTMETHOD.DBSHBSE);
+        includedPaymentMethods.add(PAYMENTMETHOD.DBSEBFTGSE);
+        includedPaymentMethods.add(PAYMENTMETHOD.DBSEBSE);
+        includedPaymentMethods.add(PAYMENTMETHOD.DBNORDEASE);
+        
         payPagePayment.includePaymentMethods(includedPaymentMethods);
                
         assertEquals(1, payPagePayment.getExcludedPaymentMethods().size());

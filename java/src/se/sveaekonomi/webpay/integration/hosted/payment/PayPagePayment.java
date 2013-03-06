@@ -79,13 +79,14 @@ public class PayPagePayment extends HostedPayment {
 	
 	public PayPagePayment includePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods) {
 		this.includedPaymentMethods.addAll(paymentMethods);
-		// Exclude all payment methods
+		// Exclude all payment methods		
 		ExcludePayments excluded = new ExcludePayments();
 		excludedPaymentMethods = excluded.excludeInvoicesAndPaymentPlan();
 
 		excludedPaymentMethods.add(PAYMENTMETHOD.KORTCERT);
 		excludedPaymentMethods.add(PAYMENTMETHOD.SKRILL);
 		excludedPaymentMethods.add(PAYMENTMETHOD.PAYPAL);
+		excludeDirectPaymentMethods();
 
 		// Remove the included methods from the excluded payment methods
 		for (PAYMENTMETHOD pm : includedPaymentMethods) {
