@@ -87,7 +87,7 @@ CreateOrderResponse response = WebPay.createOrder()
 //Company customer values
 .addCustomerDetails(Item.companyCustomer()...)
 //Other values
-.setCountryCode("SE")
+.setCountryCode(COUNTRYCODE.SE)
 .setOrderDate("2012-12-12")
 .setCustomerReference("33")
 .setClientOrderNumber("nr26")
@@ -245,7 +245,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
 
 ### 1.4 Other values  
 ```java
-.setCountryCode("SE")                   //Required for synchronous payments    
+.setCountryCode(COUNTRYCODE.SE)                   //Required for synchronous payments    
 .setCurrency("SEK")                     //Required for card payment, direct payment and PayPage payment.
 .setClientOrderNumber("nr26")           //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
 .setAddressSelector("7fd7768")          //Optional. Recieved from getAddresses
@@ -393,7 +393,7 @@ PaymentForm form = WebPay.createOrder()
         .setVatPercent(25)
         .setDiscountPercent(0))   
 	
-	.setCountryCode("SE")
+	.setCountryCode(COUNTRYCODE.SE)
 	.setCustomerReference("33")
 	.setOrderDate("2012-12-12")
 	.setCurrency("SEK")
@@ -474,7 +474,7 @@ PaymentForm form = WebPay.createOrder()
 	.setVatPercent(25)
 	.setDiscountPercent(0))                  
 		
-    .setCountryCode("SE")
+    .setCountryCode(COUNTRYCODE.SE)
     .setClientOrderNumber("33")
     .setOrderDate("2012-12-12")
     .setCurrency("SEK")
@@ -603,7 +603,7 @@ or
         .setTestmode()
         .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
         .setOrderTypeInvoice()                                              //See 3.1   
-        .setCountryCode("SE")                                               //Required
+        .setCountryCode(COUNTRYCODE.SE)                                               //Required
         .setIndividual(194605092222)                                        //See 3.2   
         .doRequest();
 ```
@@ -784,5 +784,16 @@ Used in usePaymentMethod(paymentMethod) and in usePayPage(),
 | PAYMENTMETHOD.SVEASPLITEU_FI     | PaymentPlan by PayPage in FI.                 |
 | PAYMENTMETHOD.SVEASPLITEU_DE     | PaymentPlan by PayPage in DE.                 |
 | PAYMENTMETHOD.SVEASPLITEU_NL     | PaymentPlan by PayPage in NL.                 |
+
+## CountryCode
+Used in .setCountryCode(...) method.
+| CountryCode						| Description				|
+|-----------------------------------|---------------------------|
+| COUNTRYCODE.DE					| Germany					|
+| COUNTRYCODE.DK					| Denmark 					|
+| COUNTRYCODE.FI					| Finland					|
+| COUNTRYCODE.NL					| Netherlands				|
+| COUNTRYCODE.NO					| Norway					|
+| COUNTRYCODE.SE					| Sweden					|
 
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
