@@ -2,10 +2,9 @@ package se.sveaekonomi.webpay.integration.response;
 
 import static org.junit.Assert.assertEquals;
 
-import org.junit.Before;
 import org.junit.Test;
 
-import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
@@ -13,34 +12,27 @@ import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 
 
 public class CreateOrderResponseTest {
-    
-private CreateOrderBuilder orderBuilder;
-    
-    @Before
-    public void setUp() {
-        orderBuilder = new CreateOrderBuilder();
-    }
-        
+            
     @Test
     public void testInvoiceRequestForCustomerIdentityIndividualFromSE() throws Exception {
-        this.orderBuilder.setTestmode();
-        orderBuilder.addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
-                .setQuantity(2)
-                .setAmountExVat(100.00)
-                .setDescription("Specification")
-                .setName("Prod")
-                .setVatPercent(25)
-                .setDiscountPercent(0));              
-        orderBuilder.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(194605092222L));
-        CreateOrderResponse response = orderBuilder
-                .setCountryCode(COUNTRYCODE.SE)
-                .setOrderDate("2012-12-12")
-                .setClientOrderNumber("33")
-                .setCurrency(CURRENCY.SEK)
-                .useInvoicePayment()
-                    .doRequest();
-        
+    	CreateOrderResponse response = WebPay.createOrder()
+    		.setTestmode()
+        .addOrderRow(Item.orderRow()
+            .setArticleNumber("1")
+            .setQuantity(2)
+            .setAmountExVat(100.00)
+            .setDescription("Specification")
+            .setName("Prod")
+            .setVatPercent(25)
+            .setDiscountPercent(0))              
+        .addCustomerDetails(Item.individualCustomer().setNationalIdNumber(194605092222L))        
+            .setCountryCode(COUNTRYCODE.SE)
+            .setOrderDate("2012-12-12")
+            .setClientOrderNumber("33")
+            .setCurrency(CURRENCY.SEK)
+            .useInvoicePayment()
+                .doRequest();
+    
         assertEquals(true, response.isOrderAccepted());
         assertEquals(true, response.sveaWillBuyOrder);
         assertEquals(250.00, response.amount, 0);
@@ -58,21 +50,22 @@ private CreateOrderBuilder orderBuilder;
     
     @Test
     public void testInvoiceCompanySe() throws Exception {
-        this.orderBuilder
+    	CreateOrderResponse response = WebPay.createOrder()
                 .setTestmode()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK);            
-        orderBuilder.addCustomerDetails(Item.companyCustomer().setNationalIdNumber("4608142222"));               
-        orderBuilder.addOrderRow(Item.orderRow()
+                .setCurrency(CURRENCY.SEK)            
+        .addCustomerDetails(Item.companyCustomer()
+        		.setNationalIdNumber("4608142222"))               
+        .addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
                 .setQuantity(2)
                 .setAmountExVat(100.00)
                 .setDescription("Specification")
                 .setName("Prod")
                 .setVatPercent(25)
-                .setDiscountPercent(0));                
-       CreateOrderResponse response = orderBuilder.useInvoicePayment()
+                .setDiscountPercent(0))                
+       .useInvoicePayment()
                 .doRequest();
 
         assertEquals(true, response.isOrderAccepted());
@@ -83,9 +76,9 @@ private CreateOrderBuilder orderBuilder;
     
     @Test
     public void testInvoiceRequestObjectForCustomerIdentityIndividualFromNL() throws Exception {
-
-        this.orderBuilder.setTestmode();
-        orderBuilder.addOrderRow(Item.orderRow()
+    	CreateOrderResponse response = WebPay.createOrder()
+    	.setTestmode()
+    	.addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
             .setAmountExVat(100.00)
@@ -93,18 +86,18 @@ private CreateOrderBuilder orderBuilder;
             .setName("Prod")
             .setUnit("st")
             .setVatPercent(25)
-            .setDiscountPercent(0));
+            .setDiscountPercent(0))
         
-        orderBuilder.addCustomerDetails(Item.individualCustomer()
+        .addCustomerDetails(Item.individualCustomer()
            .setBirthDate(1955, 03, 07)
            .setInitials("SB")
            .setName("Sneider", "Boasman")
            .setStreetAddress("Gate",42)
            .setLocality("BARENDRECHT")               
            .setZipCode("1102 HG")           
-           .setCoAddress("138"));
+           .setCoAddress("138"))
            
-           CreateOrderResponse response = orderBuilder.setCountryCode(COUNTRYCODE.NL)           
+           .setCountryCode(COUNTRYCODE.NL)           
            .setClientOrderNumber("33")
            .setOrderDate("2012-12-12")
            .setCurrency(CURRENCY.EUR)

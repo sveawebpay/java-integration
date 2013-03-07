@@ -10,6 +10,7 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
+import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
@@ -19,7 +20,7 @@ public class DeliverOrderTest {
     
     @Before
     public void setUp() {
-        order = new DeliverOrderBuilder();
+        order = WebPay.deliverOrder();// new DeliverOrderBuilder();
         //order.setValidator(new VoidValidator());
     }  
     
@@ -106,8 +107,8 @@ public class DeliverOrderTest {
     
     @Test
     public void testDeliverPaymentPlanOrderDoRequest() throws Exception {
-    	WebPay.deliverOrder()
-    		.setTestmode()
+    	DeliverOrderResponse response = WebPay.deliverOrder()
+    		//.setTestmode()
     		.addOrderRow(Item.orderRow()
     			.setArticleNumber("1")
     			.setQuantity(2)
@@ -117,10 +118,12 @@ public class DeliverOrderTest {
     			.setUnit("st")
     			.setVatPercent(25)
     			.setDiscountPercent(0))  
-    		.setOrderId(3434)
+    		.setOrderId(54086L)
     		.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
     		.deliverInvoiceOrder()
     			.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
-    			.doRequest();    	
+    			.doRequest();    
+
+    	String s = response.getErrorMessage();
     }
 }

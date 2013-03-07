@@ -7,7 +7,7 @@ import javax.xml.bind.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
-import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
@@ -16,16 +16,17 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class PaymentPlanTest {
     
-    private CreateOrderBuilder orderBuilder;
+  
     
     @Before
     public void setUp() {
-        orderBuilder = new CreateOrderBuilder();
+    
     }
     
     @Test
     public void testPaymentPlanRequestObjectSpecifics() throws ValidationException{
-        this.orderBuilder.addOrderRow(Item.orderRow()
+    	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+    	.addOrderRow(Item.orderRow()
               .setArticleNumber("1")
               .setQuantity(2)
               .setAmountExVat(100.00)
@@ -54,9 +55,9 @@ public class PaymentPlanTest {
               .setStreetAddress("Gatan", 23)
               .setCoAddress("c/o Eriksson")
               .setZipCode("9999")
-              .setLocality("Stan"));
+              .setLocality("Stan"))
 
-        SveaRequest<SveaCreateOrder> request = this.orderBuilder
+         
               .setTestmode()
               .setCountryCode(COUNTRYCODE.SE)
               .setAddressSelector("ad33")

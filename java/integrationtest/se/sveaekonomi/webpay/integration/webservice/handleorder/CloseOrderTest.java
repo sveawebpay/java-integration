@@ -5,9 +5,8 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
-import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.CloseOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
@@ -24,10 +23,9 @@ public class CloseOrderTest {
     public void testCloseOrder() throws Exception {
         Long orderId = 0L;
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
-        
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        
-        order.addOrderRow(Item.orderRow()
+                   
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
             .setAmountExVat(100.00)
@@ -35,26 +33,23 @@ public class CloseOrderTest {
             .setName("Prod")
             .setUnit("st")
             .setVatPercent(25)
-            .setDiscountPercent(0));
+            .setDiscountPercent(0))
+        .addCustomerDetails(Item.individualCustomer()          
+                .setNationalIdNumber(194605092222L))        
+            .setCountryCode(COUNTRYCODE.SE)
+            .setClientOrderNumber("33")
+            .setOrderDate("2012-12-12")
+            .setCurrency(CURRENCY.SEK)
+            .useInvoicePayment()
+                .prepareRequest();
         
-        order.setTestmode();
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
-        
-        order.addCustomerDetails(Item.individualCustomer()          
-                .setNationalIdNumber(194605092222L));
-        SveaRequest<SveaCreateOrder> request = order
-                .setCountryCode(COUNTRYCODE.SE)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK)
-                .useInvoicePayment()
-                    .prepareRequest();
-       
+                       
         try {
             String xml = xmlBuilder.getCreateOrderEuXml(request.request);
-            
-            String url = order.getTestmode() ? SveaConfig.SWP_TEST_WS_URL : SveaConfig.SWP_PROD_WS_URL;
+                    
+            String url = SveaConfig.SWP_TEST_WS_URL;
             String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
             NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
             CreateOrderResponse response = new CreateOrderResponse(soapResponse);            
@@ -65,10 +60,9 @@ public class CloseOrderTest {
             throw e;
         }
        
-        CloseOrderBuilder closeOrder = new CloseOrderBuilder();
         soapBuilder = new SveaSoapBuilder();
         
-          CloseOrderResponse closeResponse = closeOrder
+          CloseOrderResponse closeResponse = WebPay.closeOrder()
                 .setTestmode()
                 .setOrderId(orderId)
                 .closeInvoiceOrder()

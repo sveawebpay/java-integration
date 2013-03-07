@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
-import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
@@ -17,13 +16,11 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 public class WebServiceXmlBuilderTest {
     
     WebServiceXmlBuilder xmlBuilder;
-    CreateOrderBuilder orderBuilder;
     String xml;
     
     @Before
     public void setUp() {
         xmlBuilder = new WebServiceXmlBuilder();
-        orderBuilder = new CreateOrderBuilder();
         xml = "";
     }
     

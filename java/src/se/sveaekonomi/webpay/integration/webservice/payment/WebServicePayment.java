@@ -1,5 +1,6 @@
 package se.sveaekonomi.webpay.integration.webservice.payment;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,7 +9,6 @@ import javax.xml.bind.ValidationException;
 
 import org.w3c.dom.NodeList;
 
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.WebServiceOrderValidator;
@@ -106,10 +106,11 @@ public abstract class WebServicePayment {
             throw e;
         }
         
-        String url = createOrderBuilder.getTestmode() ? SveaConfig.SWP_TEST_WS_URL : SveaConfig.SWP_PROD_WS_URL;
+       //String url = createOrderBuilder.getTestmode() ? SveaConfig.SWP_TEST_WS_URL : SveaConfig.SWP_PROD_WS_URL;
+        URL url = createOrderBuilder.getWebserviceUrl();
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
-        NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
+        NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url.toString());
         CreateOrderResponse response = new CreateOrderResponse(soapResponse);
         return response;
     }      

@@ -1,5 +1,7 @@
 package se.sveaekonomi.webpay.integration.webservice.handleorder;
 
+import java.net.URL;
+
 import javax.xml.bind.ValidationException;
 
 import org.w3c.dom.NodeList;
@@ -80,8 +82,11 @@ public class HandleOrder {
     }
     
     public DeliverOrderResponse doRequest() throws Exception {        
-        String url = order.getTestmode() ? SveaConfig.SWP_TEST_WS_URL : SveaConfig.SWP_PROD_WS_URL;      
-        
+        //String url = order.getTestmode() ? SveaConfig.SWP_TEST_WS_URL : SveaConfig.SWP_PROD_WS_URL;
+    	URL url = order.getWebserviceUrl();
+    	//String url = SveaConfig.SWP_TEST_WS_URL;
+   // 	
+    	
         SveaRequest<SveaDeliverOrder> request = this.prepareRequest();
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml;
@@ -94,7 +99,7 @@ public class HandleOrder {
         
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("DeliverOrderEu", xml);
-        NodeList soapResponse = soapBuilder.deliverOrderEuRequest(soapMessage, url);
+        NodeList soapResponse = soapBuilder.deliverOrderEuRequest(soapMessage, url.toString());
         DeliverOrderResponse response = new DeliverOrderResponse(soapResponse);      
         return response;               
     }

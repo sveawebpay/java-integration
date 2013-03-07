@@ -25,6 +25,15 @@ public class SveaConfig {
         this.secret = "d153477288051d6001adf0648405e0fcfaa3ee2a8dc90dd3151341a1d68b1a4388616585fe7bc15cd06882070b0d92aa92de6cde1e7a21dc7e65e81cee6af43f";
     }     
     
+    public static Config createProductionConfig() {
+    	return new ProductionConfig();
+    }
+
+    public static Config createTestConfig() {
+    	return new TestConfig();
+    }
+    
+
     public SveaAuth getAuthorizationForWebServicePayments(String type) {
         SveaAuth auth = new SveaAuth();
         auth.Username = this.userName;

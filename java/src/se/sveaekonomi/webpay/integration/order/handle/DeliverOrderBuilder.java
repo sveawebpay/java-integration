@@ -1,7 +1,10 @@
 package se.sveaekonomi.webpay.integration.order.handle;
 
+import java.net.URL;
+
 import javax.xml.bind.ValidationException;
 
+import se.sveaekonomi.webpay.integration.config.Config;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
@@ -17,11 +20,21 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
     private String invoiceIdToCredit;
     private Integer numberOfCreditDays;
     public final SveaConfig config = new SveaConfig();
+    private Config configMode;
     
-    public DeliverOrderBuilder() {
-        
+    
+    public DeliverOrderBuilder(Config config) {
+        this.configMode = config;
     }
 
+    public URL getPayPageUrl() {
+    	return this.configMode.getPayPageUrl();
+    }
+    
+    public URL getWebserviceUrl() {
+    	return this.configMode.getWebserviceUrl();
+    }
+    
     public HandleOrderValidator getValidator() {
         return validator;
     }

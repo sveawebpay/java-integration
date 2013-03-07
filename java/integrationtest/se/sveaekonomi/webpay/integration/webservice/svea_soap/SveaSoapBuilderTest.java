@@ -3,24 +3,22 @@ package se.sveaekonomi.webpay.integration.webservice.svea_soap;
 import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
-import org.w3c.dom.NodeList;
 
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
-import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
-import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 
 public class SveaSoapBuilderTest {
     
     @Test
     public void testRequest() throws Exception {
-        SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
-        
-        CreateOrderBuilder order = new CreateOrderBuilder();      
-        order.addOrderRow(Item.orderRow()
+      //  SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
+              
+        CreateOrderResponse response = WebPay.createOrder()
+        .setTestmode()
+        .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
             .setAmountExVat(100.00)
@@ -28,24 +26,23 @@ public class SveaSoapBuilderTest {
             .setName("Prod")
             .setUnit("st")
             .setVatPercent(25)
-            .setDiscountPercent(0));
+            .setDiscountPercent(0))                       
+        .addCustomerDetails(Item.individualCustomer()
+        		.setNationalIdNumber(194605092222L))
+    
+        .setCountryCode(COUNTRYCODE.SE)
+        .setClientOrderNumber("33")
+        .setOrderDate("2012-12-12")
+        .setCurrency(CURRENCY.SEK)
+        .useInvoicePayment()
+            .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
+            //returns an InvoicePayment object
+            	.doRequest();
+                //.prepareRequest();
         
-        order.setTestmode();
-        WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
-        
-           
-        order.addCustomerDetails(Item.individualCustomer()
-                    .setNationalIdNumber(194605092222L));
-        SveaRequest<SveaCreateOrder> request = order
-                .setCountryCode(COUNTRYCODE.SE)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK)
-                .useInvoicePayment()
-                .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
-                //returns an InvoicePayment object
-                    .prepareRequest();
-       
+        assertEquals(true, response.isOrderAccepted());
+        //WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
+     /*   CreateOrderBuilder order = WebPay.createOrder();
        try {
             String xml = xmlBuilder.getCreateOrderEuXml(request.request);
             
@@ -57,6 +54,6 @@ public class SveaSoapBuilderTest {
             assertEquals(true, response.isOrderAccepted());
         } catch (Exception e) {
             throw e;
-        }
+        }*/
     }
 }
