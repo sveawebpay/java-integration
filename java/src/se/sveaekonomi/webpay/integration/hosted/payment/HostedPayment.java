@@ -15,7 +15,7 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
-import se.sveaekonomi.webpay.integration.util.security.Base64Util;
+
 
 /*******************************************************************************
  * Description of HostedPayment: Parent to CardPayment, DirectPayment and PayPagePayment 

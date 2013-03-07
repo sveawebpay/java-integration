@@ -33,7 +33,7 @@ public class DeliverOrderTest {
     @Test
     public void testDeliverInvoice() throws ValidationException {
          
-        order.addOrderRow(Item.orderRow()
+    	SveaRequest<SveaDeliverOrder> request = order.addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
             .setAmountExVat(100.00)
@@ -53,9 +53,8 @@ public class DeliverOrderTest {
             .setDiscountPercent(0))
         
         .addDiscount(Item.fixedDiscount()
-           .setAmountIncVat(10));
-        
-        SveaRequest<SveaDeliverOrder> request = order
+           .setAmountIncVat(10))  
+           
         .setTestmode()
         .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
         .setOrderId(54086L)
