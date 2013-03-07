@@ -789,7 +789,7 @@ Used in usePaymentMethod(paymentMethod) and in usePayPage(),
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 ### CountryCode
-ISO 3166-1 standard. Used in .setCountryCode(...) method.
+ISO 3166-1 standard. Used in .setCountryCode(...).
 
 | CountryCode						| Country					|
 |-----------------------------------|---------------------------|
@@ -803,14 +803,14 @@ ISO 3166-1 standard. Used in .setCountryCode(...) method.
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
 ### LanguageCode
-ISO 639-1 standard. Used in .setPayPageLanguage(...) method.
+ISO 639-1 standard. Used in .setPayPageLanguage(...).
 
 | LanguageCode						| Language name				|
 |-----------------------------------|---------------------------|
 | LANGUAGECODE.da					| Danish					|
 | LANGUAGECODE.de					| German					|
 | LANGUAGECODE.en					| English					|
-| LANGUAGECODE.es					| Spanish, Castilian		|
+| LANGUAGECODE.es					| Spanish					|
 | LANGUAGECODE.fr					| French					|
 | LANGUAGECODE.fi					| Finnish					|
 | LANGUAGECODE.it					| Italian					|
@@ -818,8 +818,10 @@ ISO 639-1 standard. Used in .setPayPageLanguage(...) method.
 | LANGUAGECODE.no					| Norwegian					|
 | LANGUAGECODE.sv					| Swedish					|
 
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
 ### Currency 
-ISO 4217 standard. Used in .setCurrency(...) method.
+ISO 4217 standard. Used in .setCurrency(...).
 
 | CurrencyCode						| Currency name				|
 |-----------------------------------|---------------------------|
@@ -828,8 +830,10 @@ ISO 4217 standard. Used in .setCurrency(...) method.
 | CURRENCY.NOK						| Norwegian krone			|
 | CURRENCY.SEK						| Swedish krona				|
 
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
 ### Invoice Distribution Type 
-Used in .setInvoiceDistributionType(...) method.
+Used in .setInvoiceDistributionType(...).
 
 | DistributionType					| Description				|
 |-----------------------------------|---------------------------|
