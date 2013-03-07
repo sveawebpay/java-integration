@@ -825,4 +825,11 @@ ISO 4217 standard. Used in .setCurrency(...) method.
 | CURRENCY.NOK						| Norwegian krone			|
 | CURRENCY.SEK						| Swedish krona				|
 
+## Invoice Distribution Type 
+Used in .setInvoiceDistributionType(...) method.
+| DistributionType					| Description				|
+|-----------------------------------|---------------------------|
+| Post								| Invoice is sent by mail	|
+| Email								| Invoice is sent by e-mail	|
+
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
