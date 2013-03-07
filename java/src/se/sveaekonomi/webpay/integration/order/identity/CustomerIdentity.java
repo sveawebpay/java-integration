@@ -24,7 +24,7 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
     
     public T setEmail(String email) {
         this.email = email;
-        return getThis();
+        return getGenericThis();
     }
     
     public Integer getPhoneNumber() {
@@ -39,11 +39,11 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
    
     public T setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
-        return getThis();
+        return getGenericThis();
     }
 
     @SuppressWarnings("unchecked")
-	private T getThis() {
+	private T getGenericThis() {
 		return (T) this;
 	}
     
@@ -58,7 +58,7 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
      */   
     public T setZipCode(String zipCode) {
         this.zipCode = zipCode;
-        return getThis();
+        return getGenericThis();
     }
     
     public String getIpAddress() {
@@ -67,7 +67,7 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
         
     public T setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
-        return getThis();
+        return getGenericThis();
     }
            
     public String getStreetAddress() {
@@ -87,7 +87,7 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
     public T setStreetAddress(String streetAddress, Integer houseNumber) {
         this.streetAddress = streetAddress;
         this.housenumber = houseNumber;
-        return getThis();
+        return getGenericThis();
     }
         
     public String getLocality() {
@@ -101,7 +101,7 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
      */    
     public T setLocality(String locality) {
         this.locality = locality;
-        return getThis();
+        return getGenericThis();
     }
     
     public String getCoAddress() {
@@ -110,6 +110,6 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
       
     public T setCoAddress(String coAddress) {
         this.coAddress = coAddress;
-        return getThis();
+        return getGenericThis();
     }    
 }
