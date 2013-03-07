@@ -11,9 +11,9 @@ import org.junit.rules.ExpectedException;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder.DistributionType;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 
 public class WebServiceOrderValidatorTest {
@@ -32,7 +32,7 @@ public class WebServiceOrderValidatorTest {
     public void testCheckOfIdentityClass() {
         CreateOrderBuilder order = WebPay.createOrder()
         	.addCustomerDetails(Item.companyCustomer()
-                .setCompanyIdNumber("666666")
+                .setNationalIdNumber("666666")
                 .setEmail("test@svea.com")
                 .setPhoneNumber(999999)
                 .setIpAddress("123.123.123.123")
@@ -51,7 +51,7 @@ public class WebServiceOrderValidatorTest {
         	.setValidator(new VoidValidator())
         	.setClientOrderNumber("1")
         	.addCustomerDetails(Item.individualCustomer()
-        			.setSsn(194609052222L));         
+        			.setNationalIdNumber(194609052222L));         
                 
        assertEquals(expectedMessage, orderValidator.validate(order));
     }
@@ -78,7 +78,7 @@ public class WebServiceOrderValidatorTest {
         	.setValidator(new VoidValidator())
             .setClientOrderNumber("1")
             .setCountryCode(COUNTRYCODE.SE)
-        	.addCustomerDetails(Item.individualCustomer().setSsn(194609052222L));            
+        	.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(194609052222L));            
 
         assertEquals(expectedMessage, orderValidator.validate(order));
     }
@@ -92,7 +92,7 @@ public class WebServiceOrderValidatorTest {
         	.setClientOrderNumber("1")
         	.addOrderRow(Item.orderRow())
         	.addCustomerDetails(Item.individualCustomer()
-                .setSsn(194605092222L))
+                .setNationalIdNumber(194605092222L))
                 .setCountryCode(COUNTRYCODE.SE)
             .setValidator(new VoidValidator());
          
@@ -208,7 +208,7 @@ public class WebServiceOrderValidatorTest {
 	            .setVatPercent(25)
 	            .setQuantity(1))            
             .addCustomerDetails(Item.individualCustomer()
-            		.setSsn(194605092222L))
+            		.setNationalIdNumber(194605092222L))
             .setCountryCode(COUNTRYCODE.SE).setOrderDate("2012-05-01")        
             .setValidator(new VoidValidator());
         
@@ -230,7 +230,7 @@ public class WebServiceOrderValidatorTest {
             .setVatPercent(25)
             .setDiscountPercent(0))        
             .setNumberOfCreditDays(1)
-            .setInvoiceDistributionType(DistributionType.Post)
+            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .deliverInvoiceOrder();            
    
         assertEquals(expectedMessage, handleOrder.validateOrder());  

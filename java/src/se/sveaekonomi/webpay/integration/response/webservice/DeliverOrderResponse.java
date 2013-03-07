@@ -32,7 +32,7 @@ public class DeliverOrderResponse extends Response {
             {
                 Element node = (Element) soapResponse.item(i);
                 this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
-                this.setResultCode(Long.parseLong(getTagValue(node, "ResultCode")));
+                this.setResultCode(getTagValue(node, "ResultCode"));
                 String errorMsg = getTagValue(node, "ErrorMessage");
                 
                 if(errorMsg != null)

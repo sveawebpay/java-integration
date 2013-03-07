@@ -24,7 +24,7 @@ public class CloseOrderResponse extends Response{
                 Element node = (Element) soapMessage.item(i);
                 // mandatory
                 this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
-                this.setResultCode(Long.parseLong(getTagValue(node, "ResultCode")));
+                this.setResultCode(getTagValue(node, "ResultCode"));
                 this.setErrorMessage(getTagValue(node, "ErrorMessage"));
                 //this.orderId = Long.parseLong(getTagValue(node, "SveaOrderId"));
             }

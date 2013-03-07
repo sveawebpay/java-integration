@@ -9,6 +9,7 @@ import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 
 
 public class HostedPaymentsRequestTest {
@@ -60,7 +61,7 @@ public class HostedPaymentsRequestTest {
         .setCountryCode(COUNTRYCODE.SE)
         .setOrderDate("2012-12-12")
         .setClientOrderNumber("33")
-        .setCurrency("SEK")
+        .setCurrency(CURRENCY.SEK)
         .usePayPageCardOnly()
             .setReturnUrl("http://myurl.se")            
             .getPaymentForm();

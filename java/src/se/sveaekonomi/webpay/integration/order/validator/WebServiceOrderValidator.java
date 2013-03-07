@@ -11,7 +11,7 @@ public class WebServiceOrderValidator extends OrderValidator {
             if(order.getCustomerIdentity()==null)
                 errors += "MISSING VALUE - CustomerIdentity must be set.\n"; 
             
-        if (order.getIsCompanyIdentity() && (order.getCompanyCustomer().getCompanyIdNumber() != null 
+        if (order.getIsCompanyIdentity() && (order.getCompanyCustomer().getNationalIdNumber() != null 
                 || order.getCompanyCustomer().getVatNumber() != null
                 || order.getCompanyCustomer().getCompanyName() != null))
             isCompany = true;              

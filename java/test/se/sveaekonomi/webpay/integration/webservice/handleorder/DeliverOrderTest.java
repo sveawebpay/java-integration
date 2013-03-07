@@ -9,9 +9,8 @@ import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder.DistributionType;
 import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
@@ -34,7 +33,7 @@ public class DeliverOrderTest {
     @Test
     public void testDeliverInvoice() throws ValidationException {
          
-        order.addOrderRow(Item.orderRow()
+    	SveaRequest<SveaDeliverOrder> request = order.addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
             .setAmountExVat(100.00)
@@ -54,11 +53,10 @@ public class DeliverOrderTest {
             .setDiscountPercent(0))
         
         .addDiscount(Item.fixedDiscount()
-           .setAmountIncVat(10));
-        
-        SveaRequest<SveaDeliverOrder> request = order
+           .setAmountIncVat(10))  
+           
         .setTestmode()
-        .setInvoiceDistributionType(DistributionType.Post)
+        .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
         .setOrderId(54086L)
         .setNumberOfCreditDays(1)
         .setInvoiceIdToCredit("id")
@@ -120,7 +118,7 @@ public class DeliverOrderTest {
     			.setVatPercent(25)
     			.setDiscountPercent(0))  
     		.setOrderId(3434)
-    		.setInvoiceDistributionType(DistributionType.Post)
+    		.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
     		.deliverInvoiceOrder()
     			.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
     			.doRequest();    	

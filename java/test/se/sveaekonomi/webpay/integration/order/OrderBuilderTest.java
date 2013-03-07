@@ -12,6 +12,7 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 
 public class OrderBuilderTest {
     
@@ -45,7 +46,7 @@ public class OrderBuilderTest {
         order = createTestCustomerIdentity(order);
 
         assertEquals(order.getIndividualCustomer().getInitials(), "SB");
-        assertEquals(order.getIndividualCustomer().getSsn(), 194609052222L);
+        assertEquals(order.getIndividualCustomer().getNationalIdNumber(), 194609052222L);
         assertEquals(order.getIndividualCustomer().getFirstName(), "Tess");
         assertEquals(order.getIndividualCustomer().getLastName(), "Testson");
         assertEquals(order.getIndividualCustomer().getBirthDate(), 19231212);
@@ -140,7 +141,7 @@ public class OrderBuilderTest {
     
     @Test
     public void testBuildOrderWithCurrency() {
-        order.setCurrency("SEK");
+        order.setCurrency(CURRENCY.SEK);
         
         assertEquals("SEK", order.getCurrency());
     }
@@ -154,7 +155,7 @@ public class OrderBuilderTest {
     
     private CreateOrderBuilder createTestCustomerIdentity(CreateOrderBuilder orderBuilder) {
          return orderBuilder.addCustomerDetails(Item.individualCustomer()
-                .setSsn(194609052222L)
+                .setNationalIdNumber(194609052222L)
                 .setInitials("SB")
                 .setBirthDate(1923, 12, 12)
                 .setName("Tess", "Testson")

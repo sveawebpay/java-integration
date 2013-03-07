@@ -12,6 +12,7 @@ import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
@@ -41,12 +42,12 @@ public class CloseOrderTest {
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         
         order.addCustomerDetails(Item.individualCustomer()          
-                .setSsn(194605092222L));
+                .setNationalIdNumber(194605092222L));
         SveaRequest<SveaCreateOrder> request = order
                 .setCountryCode(COUNTRYCODE.SE)
                 .setClientOrderNumber("33")
                 .setOrderDate("2012-12-12")
-                .setCurrency("SEK")
+                .setCurrency(CURRENCY.SEK)
                 .useInvoicePayment()
                     .prepareRequest();
        

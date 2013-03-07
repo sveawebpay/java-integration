@@ -7,13 +7,14 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder.DistributionType;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.GetAddressesResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.getaddresses.GetAddresses;
 import se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams.GetPaymentPlanParams;
 
@@ -38,7 +39,7 @@ public class WebServicePaymentsResponseTest {
         
         DeliverOrderResponse response = orderBuilder.setOrderId(orderId)
             .setNumberOfCreditDays(1)
-            .setInvoiceDistributionType(DistributionType.Post)
+            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .deliverInvoiceOrder()
             .doRequest();
         
@@ -51,8 +52,8 @@ public class WebServicePaymentsResponseTest {
         GetPaymentPlanParams addressRequest = WebPay.getPaymentPlanParams();
         PaymentPlanParamsResponse response = addressRequest.setTestmode()
             .doRequest();
+        
         assertEquals(response.isOrderAccepted(), true);
-        assertEquals(response.getResultCode(), 0);
         assertEquals(response.getCampaignCodes().get(0).getCampaignCode(), "213060");
         assertEquals(response.getCampaignCodes().get(0).getDescription(), "Köp nu betala om 3 månader (räntefritt)");
         assertEquals(response.getCampaignCodes().get(0).getPaymentPlanType(), "InterestAndAmortizationFree");
@@ -76,6 +77,12 @@ public class WebServicePaymentsResponseTest {
 	        .setIndividual("194605092222")
 	        .doRequest();
 	    
+	    assertEquals(request.isOrderAccepted(), true);
+	    assertEquals(request.getFirstName(), "Tess T");
+	    assertEquals(request.getLastName(), "Persson");
+	    assertEquals(request.getAddressLine2(), "Testgatan 1");
+	    assertEquals(request.getPostcode(), "99999");
+	    assertEquals(request.getPostarea(), "Stan");
 	}
     
     private long createInvoiceAndReturnOrderId() throws Exception {
@@ -91,11 +98,11 @@ public class WebServicePaymentsResponseTest {
                 .setVatPercent(25)
                 .setDiscountPercent(0));
                              
-        order.addCustomerDetails(Item.individualCustomer().setSsn(194605092222L));
+        order.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(194605092222L));
         CreateOrderResponse response = order.setCountryCode(COUNTRYCODE.SE)
                 .setClientOrderNumber("33")
                 .setOrderDate("2012-12-12")
-                .setCurrency("SEK")
+                .setCurrency(CURRENCY.SEK)
                 .useInvoicePayment()// returnerar InvoiceOrder object
                 .doRequest();
       

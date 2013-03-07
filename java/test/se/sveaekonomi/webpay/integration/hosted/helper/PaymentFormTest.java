@@ -39,7 +39,7 @@ public class PaymentFormTest {
                 + "<input type=\"submit\" name=\"submit\" value=\"Submit\" />"
                 + "</form>";
         
-        assertEquals(EXPECTED, form.getForm());
+        assertEquals(EXPECTED, form.getCompleteForm());
     }
 
     @Test

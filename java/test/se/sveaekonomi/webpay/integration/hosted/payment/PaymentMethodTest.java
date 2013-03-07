@@ -8,6 +8,8 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 
 
@@ -34,13 +36,13 @@ public class PaymentMethodTest {
             .setName("Relative")
             .setDescription("RelativeDiscount"))
         .addCustomerDetails(Item.individualCustomer()
-             .setSsn(194605092222L))
+             .setNationalIdNumber(194605092222L))
         
             .setCountryCode(COUNTRYCODE.SE)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
-            .setCurrency("SEK")
-            .usePaymentMethod("KORTCERT")
+            .setCurrency(CURRENCY.SEK)
+            .usePaymentMethod(PAYMENTMETHOD.KORTCERT)
             .setReturnUrl("http://myurl.se")                 
             .getPaymentForm();
 

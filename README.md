@@ -87,7 +87,7 @@ CreateOrderResponse response = WebPay.createOrder()
 //Company customer values
 .addCustomerDetails(Item.companyCustomer()...)
 //Other values
-.setCountryCode("SE")
+.setCountryCode(COUNTRYCODE.SE)
 .setOrderDate("2012-12-12")
 .setCustomerReference("33")
 .setClientOrderNumber("nr26")
@@ -214,13 +214,12 @@ When discount or coupon is a percentage on total product amount.
 
 ### 1.3 Customer Identity   
 Customer identity is required for invoice and payment plan orders. Required values varies 
-depending on country and customer type. For SE, NO, DK and FI ssn (Social Security Number)
-or company id number is required. Email and ip address are desirable.
+depending on country and customer type. For SE, NO, DK and FI national id number is required. Email and ip address are desirable.
 
 ####1.3.1 Options for individual customers
 ```java
 .addCustomerDetails(Item.individualCustomer()
-    .setSsn(194605092222)              //Required for individual customers in SE, NO, DK, FI
+    .setNationalIdNumber(194605092222) //Required for individual customers in SE, NO, DK, FI
     .setInitials("SB")                 //Required for individual customers in NL 
     .setBirthDate(1923, 12, 12)        //Required for individual customers in NL and DE
     .setName("Tess", "Testson")        //Required for individual customers in NL and DE    
@@ -237,7 +236,7 @@ or company id number is required. Email and ip address are desirable.
 ####1.3.2 Options for company customers
 ```java
 .addCustomerDetails(Item.companyCustomer()
-    .setCompanyIdNumber("2345234")		//Required for company customers in SE, NO, DK, FI
+    .setNationalIdNumber("2345234")		//Required for company customers in SE, NO, DK, FI
     .setVatNumber("NL2345234")			//Required for NL and DE
     .setCompanyName("TestCompagniet")  	//Required for Eu countries like NL and DE
     )
@@ -246,7 +245,7 @@ or company id number is required. Email and ip address are desirable.
 
 ### 1.4 Other values  
 ```java
-.setCountryCode("SE")                   //Required for synchronous payments    
+.setCountryCode(COUNTRYCODE.SE)                   //Required for synchronous payments    
 .setCurrency("SEK")                     //Required for card payment, direct payment and PayPage payment.
 .setClientOrderNumber("nr26")           //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
 .setAddressSelector("7fd7768")          //Optional. Recieved from getAddresses
@@ -314,16 +313,15 @@ PaymentForm form = WebPay.createOrder()
 The values of *xmlMessageBase64*, *merchantid* and *mac* are to be sent as xml to SveaWebPay.
 Function getPaymentForm() returns object type *PaymentForm* with accessible members:
 
-| Member                            | Description                               |
-|---------------------------------- |-------------------------------------------|
-| xmlMessageBase64                  | Payment information in XML-format, Base64 encoded.| 
-| xmlMessage                        | Payment information in XML-format.        |
-| merchantid                        | Authorization                             |
-| secretWord                        | Authorization                             |
-| mac                               | Message authentication code.              |    
-| completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
-| htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. (merchantid, xmlMessageBase64, mac) |
+| Value                 | Returns    | Description                               |
+|-----------------------|----------- |-------------------------------------------|
+| getXmlMessageBase64() | String     | Payment information in XML-format, Base64 encoded.| 
+| getXmlMessage()       | String     | Payment information in XML-format.        |
+| getMerchantId()       | String     | Authorization                             |
+| getSecretWord()       | String     | Authorization                             |
+| getMacSha512()        | String     | Message authentication code.              |    
+| getCompleteForm()		| String     | A complete Html form with method= "post" with submit button to include in your code. |
+| getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
             
 ```java
 PaymentForm form = ...
@@ -361,17 +359,16 @@ PaymentForm form = WebPay.createOrder()
 ##### 1.5.2.2 Return
 Returns object type PaymentForm:
            
-| Member                            | Description                               |
-|---------------------------------- |-------------------------------------------|
-| xmlMessageBase64                  | Payment information in XML-format, Base64 encoded.| 
-| xmlMessage                        | Payment information in XML-format.        |
-| merchantid                        | Authorization                             |
-| secretWord                        | Authorization                             |
-| mac                               | Message authentication code.              |
-| completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
-| htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. (merchantid, xmlMessageBase64, mac) |
-
+| Value                 | Returns    | Description                               |
+|-----------------------|----------- |-------------------------------------------|
+| getXmlMessageBase64() | String     | Payment information in XML-format, Base64 encoded.| 
+| getXmlMessage()       | String     | Payment information in XML-format.        |
+| getMerchantId()       | String     | Authorization                             |
+| getSecretWord()       | String     | Authorization                             |
+| getMacSha512()        | String     | Message authentication code.              |    
+| getCompleteForm()		| String     | A complete Html form with method= "post" with submit button to include in your code. |
+| getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
+ 
 ```java
 PaymentForm form = ...
     .getPaymentForm();
@@ -396,14 +393,15 @@ PaymentForm form = WebPay.createOrder()
         .setVatPercent(25)
         .setDiscountPercent(0))   
 	
-	.setCountryCode("SE")
+	.setCountryCode(COUNTRYCODE.SE)
 	.setCustomerReference("33")
 	.setOrderDate("2012-12-12")
 	.setCurrency("SEK")
 	.usePayPage()
-		.setReturnUrl("http://myurl.se")                   //Required	
-		.setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional		
-		.setCancelUrl("http://myurl.se")                   //Optional
+		.setReturnUrl("http://myurl.se")                   	//Required	
+		.setMerchantIdBasedAuthorization(1200, "f78hv9")   	//Optional		
+		.setCancelUrl("http://myurl.se")                   	//Optional
+		.setPayPagePayment(LANGUAGECODE.SV)					//Optional, English is default. LANGUAGECODE see APPENDIX
 		.getPaymentForm();
 ```               
 
@@ -445,17 +443,16 @@ Optional if you want to exclude all direct bank payments methods from *PayPage*.
 ##### 1.5.3.6 Return
 Returns object type *PaymentForm*:
                 
-| Member                            | Description                               |
-|---------------------------------- |-------------------------------------------|
-| xmlMessageBase64                  | Payment information in XML-format, Base64 encoded.| 
-| xmlMessage                        | Payment information in XML-format.        |
-| merchantid                        | Authorization                             |
-| secretWord                        | Authorization                             |
-| mac                               | Message authentication code.              |
-| completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
-| htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. (merchantid, xmlMessageBase64, mac) |
-
+| Value                 | Returns    | Description                               |
+|-----------------------|----------- |-------------------------------------------|
+| getXmlMessageBase64() | String     | Payment information in XML-format, Base64 encoded.| 
+| getXmlMessage()       | String     | Payment information in XML-format.        |
+| getMerchantId()       | String     | Authorization                             |
+| getSecretWord()       | String     | Authorization                             |
+| getMacSha512()        | String     | Message authentication code.              |    
+| getCompleteForm()		| String     | A complete Html form with method= "post" with submit button to include in your code. |
+| getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
+ 
 ```java
 PaymentForm form = ...
         .getPaymentForm();
@@ -478,7 +475,7 @@ PaymentForm form = WebPay.createOrder()
 	.setVatPercent(25)
 	.setDiscountPercent(0))                  
 		
-    .setCountryCode("SE")
+    .setCountryCode(COUNTRYCODE.SE)
     .setClientOrderNumber("33")
     .setOrderDate("2012-12-12")
     .setCurrency("SEK")
@@ -493,16 +490,15 @@ PaymentForm form = WebPay.createOrder()
 The values of *xmlMessageBase64*, *merchantid* and *mac* are to be sent as xml to SveaWebPay.
 Function getPaymentForm() returns Object type PaymentForm with accessible members:
 
-| Member                            | Description                               |
-|---------------------------------- |-------------------------------------------|
-| xmlMessageBase64                  | Payment information in XML-format, Base64 encoded.| 
-| xmlMessage                        | Payment information in XML-format.        |
-| merchantid                        | Authorization                             |
-| secretWord                        | Authorization                             |
-| mac                               | Message authentication code.              |    
-| completeHtmlFormWithSubmitButton  | A complete Html form with method= "post" with submit button to include in your code. |
-| htmlFormFieldsAsArray             | Array of Html form fields to include.     |
-| rawFields                         | Array of values to send in Html form. (merchantid, xmlMessageBase64, mac) |
+| Value                 | Returns    | Description                               |
+|-----------------------|----------- |-------------------------------------------|
+| getXmlMessageBase64() | String     | Payment information in XML-format, Base64 encoded.| 
+| getXmlMessage()       | String     | Payment information in XML-format.        |
+| getMerchantId()       | String     | Authorization                             |
+| getSecretWord()       | String     | Authorization                             |
+| getMacSha512()        | String     | Message authentication code.              |    
+| getCompleteForm()		| String     | A complete Html form with method= "post" with submit button to include in your code. |
+| getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
             
 ```
 PaymentForm form = ...
@@ -598,7 +594,7 @@ or
 ```java
     .setIndividual("194605092222") //Required if this is an individual customer
 or
-    .setCompany("CompanyId")       //Required if this is a company customer
+    .setCompany("companyId")       //Required if this is a company customer
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
@@ -608,7 +604,7 @@ or
         .setTestmode()
         .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
         .setOrderTypeInvoice()                                              //See 3.1   
-        .setCountryCode("SE")                                               //Required
+        .setCountryCode(COUNTRYCODE.SE)                                               //Required
         .setIndividual(194605092222)                                        //See 3.2   
         .doRequest();
 ```
@@ -750,7 +746,7 @@ hosted solutions can also be processed through the *SveaResponse* class.
 
 The response from server will be sent to the *returnUrl* with POST or GET. The response contains the parameters: 
 *response*, *mac* and *merchantid*.
-Class *SveaResponse* will return a structured object similar to the synchronous answer instead. 
+Class *SveaResponse* will return an object structured similar to the synchronous answer. 
 Params: 
 * The POST or GET message 
 * Your *secret word*. //Optional if set in SveaConfig.php
@@ -763,31 +759,77 @@ Params:
 
 ### PaymentMethods
 Used in usePaymentMethod(paymentMethod) and in usePayPage(), 
-.includePaymentMethods(...,...,...), .excludeCardPaymentMethods(...,...,...), .excludeDirectPaymentMethods(), .excludeCardPaymentMethods().
+.includePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods), .includePaymentMethods(), .excludeCardPaymentMethods(Collection<PAYMENTMETHOD> paymentMethods), .excludeCardPaymentMethods(), .excludeDirectPaymentMethods(), .excludeCardPaymentMethods().
 
 | Payment method                    | Description                                   |
 |-----------------------------------|-----------------------------------------------|
-| PaymentMethod.DBNORDEASE         | Direct bank payment, Nordea, Sweden.          | 
-| PaymentMethod.DBSEBSE            | Direct bank payment, private, SEB, Sweden.    |
-| PaymentMethod.DBSEBFTGSE         | Direct bank payment, company, SEB, Sweden.    |
-| PaymentMethod.DBSHBSE            | Direct bank payment, Handelsbanken, Sweden.   |
-| PaymentMethod.DBSWEDBANKSE       | Direct bank payment, Swedbank, Sweden.        |
-| PaymentMethod.KORTCERT           | Card payments, Certitrade.                    |
-| PaymentMethod.PAYPAL             | Paypal                                        |
-| PaymentMethod.SKRILL             | Card payment with Dankort, Skrill.            |
-| PaymentMethod.SVEAINVOICESE      | Invoice by PayPage in SE only.                |
-| PaymentMethod.SVEASPLITSE        | PaymentPlan by PayPage in SE only.            |
-| PaymentMethod.SVEAINVOICEEU_SE   | Invoice by PayPage in SE.                     |
-| PaymentMethod.SVEAINVOICEEU_NO   | Invoice by PayPage in NO.                     |
-| PaymentMethod.SVEAINVOICEEU_DK   | Invoice by PayPage in DK.                     |
-| PaymentMethod.SVEAINVOICEEU_FI   | Invoice by PayPage in FI.                     |
-| PaymentMethod.SVEAINVOICEEU_NL   | Invoice by PayPage in NL.                     |
-| PaymentMethod.SVEAINVOICEEU_DE   | Invoice by PayPage in DE.                     |
-| PaymentMethod.SVEASPLITEU_SE     | PaymentPlan by PayPage in SE.                 |
-| PaymentMethod.SVEASPLITEU_NO     | PaymentPlan by PayPage in NO.                 |
-| PaymentMethod.SVEASPLITEU_DK     | PaymentPlan by PayPage in DK.                 |
-| PaymentMethod.SVEASPLITEU_FI     | PaymentPlan by PayPage in FI.                 |
-| PaymentMethod.SVEASPLITEU_DE     | PaymentPlan by PayPage in DE.                 |
-| PaymentMethod.SVEASPLITEU_NL     | PaymentPlan by PayPage in NL.                 |
+| PAYMENTMETHOD.DBNORDEASE         | Direct bank payment, Nordea, Sweden.          | 
+| PAYMENTMETHOD.DBSEBSE            | Direct bank payment, private, SEB, Sweden.    |
+| PAYMENTMETHOD.DBSEBFTGSE         | Direct bank payment, company, SEB, Sweden.    |
+| PAYMENTMETHOD.DBSHBSE            | Direct bank payment, Handelsbanken, Sweden.   |
+| PAYMENTMETHOD.DBSWEDBANKSE       | Direct bank payment, Swedbank, Sweden.        |
+| PAYMENTMETHOD.KORTCERT           | Card payments, Certitrade.                    |
+| PAYMENTMETHOD.PAYPAL             | Paypal                                        |
+| PAYMENTMETHOD.SKRILL             | Card payment with Dankort, Skrill.            |
+| PAYMENTMETHOD.SVEAINVOICESE      | Invoice by PayPage in SE only.                |
+| PAYMENTMETHOD.SVEASPLITSE        | PaymentPlan by PayPage in SE only.            |
+| PAYMENTMETHOD.SVEAINVOICEEU_SE   | Invoice by PayPage in SE.                     |
+| PAYMENTMETHOD.SVEAINVOICEEU_NO   | Invoice by PayPage in NO.                     |
+| PAYMENTMETHOD.SVEAINVOICEEU_DK   | Invoice by PayPage in DK.                     |
+| PAYMENTMETHOD.SVEAINVOICEEU_FI   | Invoice by PayPage in FI.                     |
+| PAYMENTMETHOD.SVEAINVOICEEU_NL   | Invoice by PayPage in NL.                     |
+| PAYMENTMETHOD.SVEAINVOICEEU_DE   | Invoice by PayPage in DE.                     |
+| PAYMENTMETHOD.SVEASPLITEU_SE     | PaymentPlan by PayPage in SE.                 |
+| PAYMENTMETHOD.SVEASPLITEU_NO     | PaymentPlan by PayPage in NO.                 |
+| PAYMENTMETHOD.SVEASPLITEU_DK     | PaymentPlan by PayPage in DK.                 |
+| PAYMENTMETHOD.SVEASPLITEU_FI     | PaymentPlan by PayPage in FI.                 |
+| PAYMENTMETHOD.SVEASPLITEU_DE     | PaymentPlan by PayPage in DE.                 |
+| PAYMENTMETHOD.SVEASPLITEU_NL     | PaymentPlan by PayPage in NL.                 |
+
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
+## CountryCode
+ISO 3166-1 standard. Used in .setCountryCode(...) method.
+| CountryCode						| Country					|
+|-----------------------------------|---------------------------|
+| COUNTRYCODE.DE					| Germany					|
+| COUNTRYCODE.DK					| Denmark 					|
+| COUNTRYCODE.FI					| Finland					|
+| COUNTRYCODE.NL					| Netherlands				|
+| COUNTRYCODE.NO					| Norway					|
+| COUNTRYCODE.SE					| Sweden					|
+
+[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+
+## LanguageCode
+ISO 639-1 standard. Used in .setPayPageLanguage(...) method.
+| LanguageCode						| Language name				|
+|-----------------------------------|---------------------------|
+| LANGUAGECODE.da					| Danish					|
+| LANGUAGECODE.de					| German					|
+| LANGUAGECODE.en					| English					|
+| LANGUAGECODE.es					| Spanish, Castilian		|
+| LANGUAGECODE.fr					| French					|
+| LANGUAGECODE.fi					| Finnish					|
+| LANGUAGECODE.it					| Italian					|
+| LANGUAGECODE.nl					| Dutch						|
+| LANGUAGECODE.no					| Norwegian					|
+| LANGUAGECODE.sv					| Swedish					|
+
+## Currency 
+ISO 4217 standard. Used in .setCurrency(...) method.
+| CurrencyCode						| Currency name				|
+|-----------------------------------|---------------------------|
+| CURRENCY.DKK						| Danish krone				|
+| CURRENCY.EUR						| Euro						|
+| CURRENCY.NOK						| Norwegian krone			|
+| CURRENCY.SEK						| Swedish krona				|
+
+## Invoice Distribution Type 
+Used in .setInvoiceDistributionType(...) method.
+| DistributionType					| Description				|
+|-----------------------------------|---------------------------|
+| Post								| Invoice is sent by mail	|
+| Email								| Invoice is sent by e-mail	|
 
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)

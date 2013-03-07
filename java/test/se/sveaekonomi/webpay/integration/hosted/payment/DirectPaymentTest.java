@@ -13,6 +13,7 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 
@@ -73,7 +74,7 @@ public class DirectPaymentTest {
          .setCountryCode(COUNTRYCODE.SE)
                 .setOrderDate("2012-12-12")
                 .setClientOrderNumber("33")
-                .setCurrency("SEK")
+                .setCurrency(CURRENCY.SEK)
                 .usePayPageDirectBankOnly()
                 .setReturnUrl("http://myurl.se")
                 .getPaymentForm();

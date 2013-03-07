@@ -34,7 +34,7 @@ public class CreateOrderResponse extends Response {
                 Element node = (Element) soapMessage.item(i);
                 // mandatory
                 this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
-                this.setResultCode(Long.parseLong(getTagValue(node, "ResultCode")));
+                this.setResultCode(getTagValue(node, "ResultCode"));
                 this.sveaWillBuyOrder = Boolean.parseBoolean(getTagValue(node, "SveaWillBuyOrder"));
                 this.amount = Double.parseDouble(getTagValue(node, "Amount"));
                 this.orderId = Long.parseLong(getTagValue(node, "SveaOrderId"));

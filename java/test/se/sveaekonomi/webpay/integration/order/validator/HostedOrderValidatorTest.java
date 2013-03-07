@@ -12,6 +12,7 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 
 public class HostedOrderValidatorTest {
     
@@ -49,12 +50,12 @@ public class HostedOrderValidatorTest {
         		.setQuantity(1)
         		.setAmountExVat(100)
         		.setVatPercent(25))
-        	.setCurrency("SEK")
+        	.setCurrency(CURRENCY.SEK)
         	.setClientOrderNumber("")
         	.addCustomerDetails(Item.companyCustomer()
                 .setVatNumber("2345234")                
                 .setCompanyName("TestCompagniet")
-                .setCompanyIdNumber("1222"))
+                .setNationalIdNumber("1222"))
                 .setValidator(new VoidValidator())
                 .build();
         orderValidator = new HostedOrderValidator();

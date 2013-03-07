@@ -12,6 +12,7 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
@@ -47,7 +48,7 @@ public class NewOrderBuilderTest {
                 
                 .addOrderRows(orderRows)		
                 .addCustomerDetails(Item.companyCustomer()
-	                .setCompanyIdNumber("666666")
+	                .setNationalIdNumber("666666")
 	                .setEmail("test@svea.com")
 	                .setPhoneNumber(999999)
 	                .setIpAddress("123.123.123.123")
@@ -59,7 +60,7 @@ public class NewOrderBuilderTest {
                 .setCountryCode(COUNTRYCODE.SE)
                 .setCustomerReference("33")
                 .setOrderDate("2012-12-12")
-                .setCurrency("SEK")                
+                .setCurrency(CURRENCY.SEK)                
                 .useInvoicePayment()
                 .prepareRequest();
 		
@@ -83,7 +84,7 @@ public class NewOrderBuilderTest {
             .setDiscountPercent(0))
         
         .addCustomerDetails(Item.companyCustomer()
-            .setCompanyIdNumber("666666")
+            .setNationalIdNumber("666666")
             .setEmail("test@svea.com")
             .setPhoneNumber(999999)
             .setIpAddress("123.123.123.123")
@@ -95,7 +96,7 @@ public class NewOrderBuilderTest {
         .setCountryCode(COUNTRYCODE.SE)
         .setCustomerReference("33")
         .setOrderDate("2012-12-12")
-        .setCurrency("SEK")                
+        .setCurrency(CURRENCY.SEK)                
         .useInvoicePayment()
         .prepareRequest();
         

@@ -13,8 +13,9 @@ import se.sveaekonomi.webpay.integration.hosted.helper.HostedXmlBuilder;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
-import se.sveaekonomi.webpay.integration.util.security.Base64Util;
+
 
 /*******************************************************************************
  * Description of HostedPayment: Parent to CardPayment, DirectPayment and PayPagePayment 
@@ -33,7 +34,7 @@ public abstract class HostedPayment {
     protected String returnUrl;
     protected String cancelUrl;
     protected ExcludePayments excluded;
-    protected String languageCode;
+    protected String languageCode = LANGUAGECODE.en.toString();
 
     public HostedPayment(CreateOrderBuilder createOrderBuilder) {
         this.createOrderBuilder = createOrderBuilder;
@@ -86,6 +87,11 @@ public abstract class HostedPayment {
         return this;
     }
 
+    public HostedPayment setPayPageLanguageCode(LANGUAGECODE languageCode) {
+    	this.languageCode = languageCode.toString();
+    	return this;
+    }
+    
     public String getPayPageLanguageCode() {
         return languageCode;
     }
@@ -117,8 +123,7 @@ public abstract class HostedPayment {
         }
         
         PaymentForm form = new PaymentForm();        
-        form.setXmlMessage(xml);       
-        form.setMessageBase64(Base64Util.encodeBase64String(xml));
+        form.setXmlMessage(xml);          
 
         form.setMerchantId(createOrderBuilder.config.getMerchantId());
         form.setSecretWord(createOrderBuilder.config.getSecretWord());
