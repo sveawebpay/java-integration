@@ -41,10 +41,10 @@ public class PaymentMethodTest {
             .setCountryCode(COUNTRYCODE.SE)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
-            .setCurrency(CURRENCY.SEK)
+            .setCurrency(CURRENCY.SEK)          
             .usePaymentMethod(PAYMENTMETHOD.KORTCERT)
-            .setReturnUrl("http://myurl.se")                 
-            .getPaymentForm();
+            	.setReturnUrl("http://myurl.se")                 
+            	.getPaymentForm();
 
         String base64Payment = form.getXmlMessageBase64();        
         String html = Base64Util.decodeBase64String(base64Payment);

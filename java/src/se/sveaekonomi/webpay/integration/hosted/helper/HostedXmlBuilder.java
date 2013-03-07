@@ -43,9 +43,10 @@ public class HostedXmlBuilder extends XMLBuilder {
         if (payment.getExcludedPaymentMethods() != null) {
             xmlw.writeStartElement("excludepaymentmethods");
             
-            for (PAYMENTMETHOD excludedPaymentMethod : payment.getExcludedPaymentMethods()) {
-                writeSimpleElement("exclude", excludedPaymentMethod.toString());
-            }
+            List<PAYMENTMETHOD> excludeList =  payment.getExcludedPaymentMethods();
+            for (int i = 0; i < excludeList.size(); i++) {
+        		writeSimpleElement("exclude", excludeList.get(i).toString());
+        	}
             
             xmlw.writeEndElement();
         }
