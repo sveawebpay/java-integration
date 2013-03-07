@@ -812,7 +812,17 @@ ISO 639-1 standard. Used in .setPayPageLanguage(...) method.
 | LANGUAGECODE.fr					| French					|
 | LANGUAGECODE.fi					| Finnish					|
 | LANGUAGECODE.it					| Italian					|
+| LANGUAGECODE.nl					| Dutch						|
 | LANGUAGECODE.no					| Norwegian					|
 | LANGUAGECODE.sv					| Swedish					|
+
+## Currency 
+ISO 4217 standard. Used in .setCurrency(...) method.
+| CurrencyCode						| Currency name				|
+|-----------------------------------|---------------------------|
+| CURRENCY.DKK						| Danish krone				|
+| CURRENCY.EUR						| Euro						|
+| CURRENCY.NOK						| Norwegian krone			|
+| CURRENCY.SEK						| Swedish krona				|
 
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)

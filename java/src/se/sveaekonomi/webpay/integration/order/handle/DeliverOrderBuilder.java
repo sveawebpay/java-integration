@@ -5,6 +5,7 @@ import javax.xml.bind.ValidationException;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 
 public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
@@ -21,9 +22,6 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         
     }
 
-    public enum DistributionType {
-        Post, Email 
-    }
     public HandleOrderValidator getValidator() {
         return validator;
     }
@@ -54,7 +52,7 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         return distributionType;
     }
     
-    public DeliverOrderBuilder setInvoiceDistributionType(DistributionType type) {
+    public DeliverOrderBuilder setInvoiceDistributionType(DISTRIBUTIONTYPE type) {
         this.distributionType = type.toString();
         return this;
     }

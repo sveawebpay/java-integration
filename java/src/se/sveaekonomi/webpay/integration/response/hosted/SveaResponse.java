@@ -2,6 +2,7 @@ package se.sveaekonomi.webpay.integration.response.hosted;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.Currency;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -17,6 +18,7 @@ import org.xml.sax.SAXException;
 
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.Response;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
@@ -168,8 +170,8 @@ public class SveaResponse extends Response {
     public String getCurrency() {
         return currency;
     }
-    public void setCurrency(String currency) {
-        this.currency = currency;
+    public void setCurrency(CURRENCY currency) {
+        this.currency = currency.toString();
     }
 
     public String getSubscriptionId() {

@@ -7,13 +7,14 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder.DistributionType;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.GetAddressesResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.getaddresses.GetAddresses;
 import se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams.GetPaymentPlanParams;
 
@@ -38,7 +39,7 @@ public class WebServicePaymentsResponseTest {
         
         DeliverOrderResponse response = orderBuilder.setOrderId(orderId)
             .setNumberOfCreditDays(1)
-            .setInvoiceDistributionType(DistributionType.Post)
+            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .deliverInvoiceOrder()
             .doRequest();
         
@@ -101,7 +102,7 @@ public class WebServicePaymentsResponseTest {
         CreateOrderResponse response = order.setCountryCode(COUNTRYCODE.SE)
                 .setClientOrderNumber("33")
                 .setOrderDate("2012-12-12")
-                .setCurrency("SEK")
+                .setCurrency(CURRENCY.SEK)
                 .useInvoicePayment()// returnerar InvoiceOrder object
                 .doRequest();
       

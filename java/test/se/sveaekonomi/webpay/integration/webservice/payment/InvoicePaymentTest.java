@@ -9,6 +9,7 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
@@ -42,7 +43,7 @@ public class InvoicePaymentTest {
              .setCountryCode(COUNTRYCODE.SE)
              .setOrderDate("2012-12-12")                
              .setClientOrderNumber("33")
-             .setCurrency("SEK")
+             .setCurrency(CURRENCY.SEK)
              .useInvoicePayment()
         //	returns an InvoicePayment object
              	.prepareRequest();
@@ -95,7 +96,7 @@ public class InvoicePaymentTest {
             .setAddressSelector("ad33")
             .setOrderDate("2012-12-12")
             .setClientOrderNumber("33")
-            .setCurrency("SEK")
+            .setCurrency(CURRENCY.SEK)
             .useInvoicePayment()// returns an InvoiceOrder object 
                 .prepareRequest();
              
@@ -132,7 +133,7 @@ public class InvoicePaymentTest {
         .setCountryCode(COUNTRYCODE.SE)
         .setOrderDate("2012-12-12")
         .setClientOrderNumber("33")
-        .setCurrency("SEK")
+        .setCurrency(CURRENCY.SEK)
         .useInvoicePayment()
         //returns an InvoicePayment object  
             .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
@@ -183,7 +184,7 @@ public class InvoicePaymentTest {
 	    .setCountryCode(COUNTRYCODE.NL)
 	    .setOrderDate("2012-12-12")
 	    .setClientOrderNumber("33")
-	    .setCurrency("SEK")
+	    .setCurrency(CURRENCY.SEK)
 	    .useInvoicePayment()// returns an InvoiceOrder object
 	        .prepareRequest();
          
@@ -248,7 +249,7 @@ public class InvoicePaymentTest {
            .setCountryCode(COUNTRYCODE.NL)
            .setOrderDate("2012-12-12")
            .setClientOrderNumber("33")
-           .setCurrency("SEK")           
+           .setCurrency(CURRENCY.SEK)           
            .useInvoicePayment()// returns an InvoiceOrder object
                .prepareRequest();
      
@@ -296,7 +297,7 @@ public class InvoicePaymentTest {
         .setCountryCode(COUNTRYCODE.SE)
         .setOrderDate("2012-12-12")
         .setClientOrderNumber("33")
-        .setCurrency("SEK")
+        .setCurrency(CURRENCY.SEK)
         .useInvoicePayment()// returns an InvoiceOrder object
         .prepareRequest();
         
@@ -353,7 +354,7 @@ public class InvoicePaymentTest {
             .setCountryCode(COUNTRYCODE.SE)
             .setOrderDate("2012-12-12")
             .setClientOrderNumber("33")
-            .setCurrency("SEK")
+            .setCurrency(CURRENCY.SEK)
             .useInvoicePayment()// returns an InvoiceOrder object
                 .prepareRequest();
         
@@ -425,7 +426,7 @@ public class InvoicePaymentTest {
         .setCountryCode(COUNTRYCODE.SE)
         .setOrderDate("2012-12-12")
         .setClientOrderNumber("33")
-        .setCurrency("SEK")
+        .setCurrency(CURRENCY.SEK)
                 
         .useInvoicePayment()
         .prepareRequest();
@@ -490,7 +491,7 @@ public class InvoicePaymentTest {
          .setCountryCode(COUNTRYCODE.SE)
          .setOrderDate("2012-12-12")
          .setClientOrderNumber("33")
-         .setCurrency("SEK")                 
+         .setCurrency(CURRENCY.SEK)                 
          .useInvoicePayment()
          .prepareRequest();
         
@@ -552,7 +553,7 @@ public class InvoicePaymentTest {
         .setAddressSelector("ad33")
         .setOrderDate("2012-12-12")
         .setClientOrderNumber("33")
-        .setCurrency("SEK")
+        .setCurrency(CURRENCY.SEK)
         .useInvoicePayment()// returns an InvoiceOrder object             
         .prepareRequest();
          
@@ -611,7 +612,7 @@ public class InvoicePaymentTest {
         .setAddressSelector("ad33")
         .setOrderDate("2012-12-12")
         .setClientOrderNumber("33")
-        .setCurrency("SEK")
+        .setCurrency(CURRENCY.SEK)
         .useInvoicePayment()// returns an InvoiceOrder object             
         .prepareRequest();
            
@@ -678,7 +679,7 @@ public class InvoicePaymentTest {
        .setTestmode()
        .setCountryCode(COUNTRYCODE.SE)
        .setOrderDate("2012-12-12")
-       .setCurrency("SEK")
+       .setCurrency(CURRENCY.SEK)
        .useInvoicePayment()// returns InvoiceOrder object
        .prepareRequest();
             
@@ -738,7 +739,7 @@ public class InvoicePaymentTest {
             .setCountryCode(COUNTRYCODE.SE)
             .setOrderDate("2012-12-12")
             .setClientOrderNumber("33")
-            .setCurrency("SEK")
+            .setCurrency(CURRENCY.SEK)
             .setCustomerReference("33")
             .useInvoicePayment()
             .getXML();

@@ -12,6 +12,7 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 
 public class OrderBuilderTest {
     
@@ -140,7 +141,7 @@ public class OrderBuilderTest {
     
     @Test
     public void testBuildOrderWithCurrency() {
-        order.setCurrency("SEK");
+        order.setCurrency(CURRENCY.SEK);
         
         assertEquals("SEK", order.getCurrency());
     }

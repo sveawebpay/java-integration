@@ -9,6 +9,7 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
@@ -38,7 +39,7 @@ public class WebServiceXmlBuilderTest {
         	.setCountryCode(COUNTRYCODE.SE)
             .setOrderDate("2012-12-12")
             .setClientOrderNumber("33")
-            .setCurrency("SEK")
+            .setCurrency(CURRENCY.SEK)
             .useInvoicePayment()
             //returns an InvoicePayment object
                 .prepareRequest();               

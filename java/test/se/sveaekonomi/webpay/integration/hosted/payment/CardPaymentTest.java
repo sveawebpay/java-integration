@@ -15,6 +15,7 @@ import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
 public class CardPaymentTest {
@@ -72,7 +73,7 @@ public class CardPaymentTest {
 			.setCountryCode(COUNTRYCODE.SE)
 			.setOrderDate("2012-12-12")
 			.setClientOrderNumber("33")
-			.setCurrency("SEK")
+			.setCurrency(CURRENCY.SEK)
 			.usePayPageCardOnly()
 			.setReturnUrl("http://myurl.se")
             .getPaymentForm();
@@ -129,7 +130,7 @@ public class CardPaymentTest {
                 .setCountryCode(COUNTRYCODE.SE)
                 .setOrderDate("2012-12-12")
                 .setClientOrderNumber("33")
-                .setCurrency("SEK")
+                .setCurrency(CURRENCY.SEK)
                 .usePayPageCardOnly()
                 .setMerchantIdBasedAuthorization(4444, "secret")
                 .setReturnUrl("http://myurl.se")

@@ -14,6 +14,7 @@ import se.sveaekonomi.webpay.integration.order.identity.CustomerIdentity;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.order.validator.OrderValidator;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.webservice.payment.InvoicePayment;
 import se.sveaekonomi.webpay.integration.webservice.payment.PaymentPlanPayment;
@@ -85,11 +86,14 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     }
     
     public String getCurrency() {
-        return currency;
+    	if(currency == null)
+    		return null;
+    	else 
+    		return currency.toString();
     }
     
-    public CreateOrderBuilder setCurrency(String currency) {
-        this.currency = currency;
+    public CreateOrderBuilder setCurrency(CURRENCY currency) {
+        this.currency = currency.toString();
         return this;
     }
     

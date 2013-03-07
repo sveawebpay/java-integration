@@ -11,9 +11,9 @@ import org.junit.rules.ExpectedException;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder.DistributionType;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 
 public class WebServiceOrderValidatorTest {
@@ -230,7 +230,7 @@ public class WebServiceOrderValidatorTest {
             .setVatPercent(25)
             .setDiscountPercent(0))        
             .setNumberOfCreditDays(1)
-            .setInvoiceDistributionType(DistributionType.Post)
+            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .deliverInvoiceOrder();            
    
         assertEquals(expectedMessage, handleOrder.validateOrder());  

@@ -87,6 +87,11 @@ public abstract class HostedPayment {
         return this;
     }
 
+    public HostedPayment setPayPageLanguageCode(LANGUAGECODE languageCode) {
+    	this.languageCode = languageCode.toString();
+    	return this;
+    }
+    
     public String getPayPageLanguageCode() {
         return languageCode;
     }

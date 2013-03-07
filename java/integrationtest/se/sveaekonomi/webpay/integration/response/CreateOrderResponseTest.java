@@ -9,6 +9,7 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 
 
 public class CreateOrderResponseTest {
@@ -36,7 +37,7 @@ private CreateOrderBuilder orderBuilder;
                 .setCountryCode(COUNTRYCODE.SE)
                 .setOrderDate("2012-12-12")
                 .setClientOrderNumber("33")
-                .setCurrency("SEK")
+                .setCurrency(CURRENCY.SEK)
                 .useInvoicePayment()
                     .doRequest();
         
@@ -61,7 +62,7 @@ private CreateOrderBuilder orderBuilder;
                 .setTestmode()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setOrderDate("2012-12-12")
-                .setCurrency("SEK");            
+                .setCurrency(CURRENCY.SEK);            
         orderBuilder.addCustomerDetails(Item.companyCustomer().setNationalIdNumber("4608142222"));               
         orderBuilder.addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
@@ -106,7 +107,7 @@ private CreateOrderBuilder orderBuilder;
            CreateOrderResponse response = orderBuilder.setCountryCode(COUNTRYCODE.NL)           
            .setClientOrderNumber("33")
            .setOrderDate("2012-12-12")
-           .setCurrency("EUR")
+           .setCurrency(CURRENCY.EUR)
            .useInvoicePayment()// returns an InvoiceOrder object
            .setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)             
                .doRequest();  
