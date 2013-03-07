@@ -22,9 +22,11 @@ public class PaymentForm {
     private Map<String, String> formHtmlFields;
     private String submitText;
     private String noScriptMessage;
+    private String htmlFormMethod;  
 
     public PaymentForm() {
         formHtmlFields = new HashMap<String, String>();
+        htmlFormMethod = "post";        
         setSubmitMessage(COUNTRYCODE.NL);
     }
     
@@ -32,7 +34,7 @@ public class PaymentForm {
         switch(countryCode) {
             case SE:
                 this.setSubmitText("Betala");
-                this.noScriptMessage = "Javascript är inaktiverat i er webbläsare, så ni får manuellt dirigera om till paypage";
+                this.noScriptMessage = "Javascript är inaktiverat i er webbläsare, så ni får dirigera om till paypage manuellt";
                 break;
             default:
                 this.setSubmitText("Submit");
@@ -142,4 +144,8 @@ public class PaymentForm {
         this.xmlMessage = xmlMessage;
         this.setMessageBase64(Base64Util.encodeBase64String(xmlMessage));
     }
+
+	public String getHtmlFormMethod() {
+		return htmlFormMethod;
+	}
 }
