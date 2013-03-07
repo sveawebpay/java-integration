@@ -788,8 +788,9 @@ Used in usePaymentMethod(paymentMethod) and in usePayPage(),
 
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
-## CountryCode
+### CountryCode
 ISO 3166-1 standard. Used in .setCountryCode(...) method.
+
 | CountryCode						| Country					|
 |-----------------------------------|---------------------------|
 | COUNTRYCODE.DE					| Germany					|
@@ -801,8 +802,9 @@ ISO 3166-1 standard. Used in .setCountryCode(...) method.
 
 [<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
 
-## LanguageCode
+### LanguageCode
 ISO 639-1 standard. Used in .setPayPageLanguage(...) method.
+
 | LanguageCode						| Language name				|
 |-----------------------------------|---------------------------|
 | LANGUAGECODE.da					| Danish					|
@@ -816,8 +818,9 @@ ISO 639-1 standard. Used in .setPayPageLanguage(...) method.
 | LANGUAGECODE.no					| Norwegian					|
 | LANGUAGECODE.sv					| Swedish					|
 
-## Currency 
+### Currency 
 ISO 4217 standard. Used in .setCurrency(...) method.
+
 | CurrencyCode						| Currency name				|
 |-----------------------------------|---------------------------|
 | CURRENCY.DKK						| Danish krone				|
@@ -825,8 +828,9 @@ ISO 4217 standard. Used in .setCurrency(...) method.
 | CURRENCY.NOK						| Norwegian krone			|
 | CURRENCY.SEK						| Swedish krona				|
 
-## Invoice Distribution Type 
+### Invoice Distribution Type 
 Used in .setInvoiceDistributionType(...) method.
+
 | DistributionType					| Description				|
 |-----------------------------------|---------------------------|
 | Post								| Invoice is sent by mail	|
