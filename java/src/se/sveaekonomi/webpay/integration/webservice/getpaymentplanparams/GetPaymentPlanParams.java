@@ -1,7 +1,10 @@
 package se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams;
 
+import java.net.URL;
+
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.config.Config;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
@@ -14,6 +17,19 @@ public class GetPaymentPlanParams {
     
     private boolean testmode;
     private final SveaConfig conf = new SveaConfig();
+    private Config configMode;
+    
+    public GetPaymentPlanParams(Config config) {
+    	this.configMode = config;
+    }
+    
+    public URL getPayPageUrl() {
+    	return this.configMode.getPayPageUrl();
+    }
+    
+    public URL getWebserviceUrl() {
+    	return this.configMode.getWebserviceUrl();
+    }
     
     public boolean getTestmode() {
         return testmode;
@@ -47,10 +63,10 @@ public class GetPaymentPlanParams {
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml = xmlBuilder.getGetPaymentPlanParamsXml(request.request);
-        String url = testmode ? SveaConfig.SWP_TEST_WS_URL : SveaConfig.SWP_PROD_WS_URL;
+        URL url = this.getWebserviceUrl();
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("GetPaymentPlanParamsEu", xml);
-        NodeList soapResponse = soapBuilder.createGetPaymentPlanParamsEuRequest(soapMessage, url);
+        NodeList soapResponse = soapBuilder.createGetPaymentPlanParamsEuRequest(soapMessage, url.toString());
         PaymentPlanParamsResponse response = new PaymentPlanParamsResponse(soapResponse);
         return response;
     }

@@ -1,7 +1,10 @@
 package se.sveaekonomi.webpay.integration.webservice.getaddresses;
 
+import java.net.URL;
+
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.config.Config;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.webservice.GetAddressesResponse;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
@@ -18,6 +21,11 @@ public class GetAddresses {
     private String orderType;
     private boolean testmode;    
     private final SveaConfig conf = new SveaConfig();
+    private Config configMode;
+    
+    public GetAddresses(Config config) {
+    	this.configMode = config;
+    }
     
     public String getIndividual() {
         return ssn;
@@ -119,10 +127,10 @@ public class GetAddresses {
             throw e;
         }
         
-        String url = testmode ? SveaConfig.SWP_TEST_WS_URL : SveaConfig.SWP_PROD_WS_URL;
+        URL url = configMode.getWebserviceUrl();
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("GetAddresses", xml);
-        NodeList soapResponse = soapBuilder.createGetAddressesEuRequest(soapMessage, url);
+        NodeList soapResponse = soapBuilder.createGetAddressesEuRequest(soapMessage, url.toString());
         GetAddressesResponse response = new GetAddressesResponse(soapResponse);
         return response;
     }

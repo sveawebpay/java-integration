@@ -15,8 +15,7 @@ public class WebPay {
     }
     
     public static CreateOrderBuilder createOrder() {
-    	return createOrder(SveaConfig.createTestConfig());
-      //  return new CreateOrderBuilder();
+    	return createOrder(SveaConfig.createTestConfig()); 
     }     
     
     public static CloseOrderBuilder closeOrder(Config config) {
@@ -25,7 +24,6 @@ public class WebPay {
     
     public static CloseOrderBuilder closeOrder() {
         return closeOrder(SveaConfig.createTestConfig());
-     	// return new CloseOrderBuilder();
     }
     
     public static DeliverOrderBuilder deliverOrder(Config config) {
@@ -34,14 +32,21 @@ public class WebPay {
     
     public static DeliverOrderBuilder deliverOrder() {
     	return deliverOrder(SveaConfig.createTestConfig());
-    	//   return new DeliverOrderBuilder();
+    }
+    
+    public static GetPaymentPlanParams getPaymentPlanParams(Config config) {
+        return new GetPaymentPlanParams(config);
     }
     
     public static GetPaymentPlanParams getPaymentPlanParams() {
-        return new GetPaymentPlanParams();
+    	return getPaymentPlanParams(SveaConfig.createTestConfig());
+    }
+    
+    public static GetAddresses getAddresses(Config config) {
+        return new GetAddresses(config);
     }
     
     public static GetAddresses getAddresses() {
-        return new GetAddresses();
+        return getAddresses(SveaConfig.createTestConfig());
     }
 }

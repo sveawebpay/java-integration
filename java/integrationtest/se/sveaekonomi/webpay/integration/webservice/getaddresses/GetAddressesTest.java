@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.response.webservice.GetAddressesResponse;
 
 public class GetAddressesTest {
@@ -11,7 +12,7 @@ public class GetAddressesTest {
     @Test
     public void testGetAddresses() throws Exception {
         try {
-            GetAddressesResponse response = new GetAddresses()
+            GetAddressesResponse response = WebPay.getAddresses()
                 .setTestmode()
                 .setCountryCode("SE")
                 .setIndividual("460509-2222")

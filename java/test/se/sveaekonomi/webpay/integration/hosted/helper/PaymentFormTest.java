@@ -5,9 +5,13 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
+import javax.xml.bind.ValidationException;
+
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
@@ -18,16 +22,19 @@ public class PaymentFormTest {
     private static final String MerchantId = "1234";
 
     @Test
-    public void testSetForm() {
-        PaymentForm form = new PaymentForm();
+    public void testSetForm() throws ValidationException, Exception {
+
         String base64Payment = Base64Util.encodeBase64String("0");
         String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
-        
-        form.setMessageBase64(base64Payment)
-            .setMerchantId(MerchantId)
-            .setSecretWord(SecretWord)
-            .setTestmode("true")
-            .setForm();
+        PaymentForm form = WebPay.createOrder()
+                .setCountryCode(COUNTRYCODE.SE)
+                .usePayPageDirectBankOnly()                
+                .getPaymentForm();
+        form
+                .setMessageBase64(base64Payment)
+                .setMerchantId(MerchantId)
+                .setSecretWord(SecretWord)
+                .setForm();
         
         final String EXPECTED = "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\""
                 + SveaConfig.SWP_TEST_URL
@@ -35,18 +42,23 @@ public class PaymentFormTest {
                 + "<input type=\"hidden\" name=\"merchantid\" value=\"" + MerchantId + "\" />"
                 + "<input type=\"hidden\" name=\"message\" value=\"" + base64Payment + "\" />"
                 + "<input type=\"hidden\" name=\"mac\" value=\"" + mac + "\" />"
-                + "<noscript><p>Javascript is inactivated in your browser, you will manually have to redirect to the paypage</p></noscript>"
-                + "<input type=\"submit\" name=\"submit\" value=\"Submit\" />"
+                + "<noscript><p>Javascript är inaktiverat i er webbläsare, så ni får dirigera om till paypage manuellt</p></noscript>"
+                + "<input type=\"submit\" name=\"submit\" value=\"Betala\" />"
                 + "</form>";
         
         assertEquals(EXPECTED, form.getCompleteForm());
     }
 
     @Test
-    public void testSetHtmlFields() {
-        PaymentForm form = new PaymentForm();
+    public void testSetHtmlFields() throws ValidationException, Exception {
+        //PaymentForm form = new PaymentForm();
         String base64Payment = Base64Util.encodeBase64String("0");
         String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
+       
+        PaymentForm form = WebPay.createOrder()
+                .setCountryCode(COUNTRYCODE.SE)
+                .usePayPageDirectBankOnly()                
+                .getPaymentForm();
         
         form.setMessageBase64(base64Payment)
             .setMerchantId(MerchantId)
@@ -60,8 +72,8 @@ public class PaymentFormTest {
         assertTrue(formHtmlFields.get("input_merchantId").equals("<input type=\"hidden\" name=\"merchantid\" value=\"" + MerchantId + "\" />"));
         assertTrue(formHtmlFields.get("input_message").equals("<input type=\"hidden\" name=\"message\" value=\"" + base64Payment + "\" />"));
         assertTrue(formHtmlFields.get("input_mac").equals("<input type=\"hidden\" name=\"mac\" value=\"" + mac + "\" />"));
-        assertTrue(formHtmlFields.get("noscript_p_tag").equals("<noscript><p>Javascript is inactivated in your browser, you will manually have to redirect to the paypage</p></noscript>"));
-        assertTrue(formHtmlFields.get("input_submit").equals("<input type=\"submit\" name=\"submit\" value=\"Submit\" />"));
+        assertTrue(formHtmlFields.get("noscript_p_tag").equals("<noscript><p>Javascript är inaktiverat i er webbläsare, så ni får dirigera om till paypage manuellt</p></noscript>"));
+        assertTrue(formHtmlFields.get("input_submit").equals("<input type=\"submit\" name=\"submit\" value=\"Betala\" />"));
         assertTrue(formHtmlFields.get("form_end_tag").equals("</form>"));
     }
 }
