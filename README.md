@@ -1,5 +1,6 @@
 # Java Integration Package API for SveaWebPay
 
+-*NOTE:* This documentation is not yet fully converted from PHP. The general flow and methods should be all the same. Let the fluent API guide you using code completion in your IDE, and you should be fairly well on the way. Sorry for any inconvenience.
 
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
@@ -62,7 +63,7 @@ Other public targets can be found in the build.xml file.
 ## 1. createOrder                                                            
 Creates an order and performs payment for all payment forms. Invoice and payment plan will perform 
 a synchronous payment and return a response. 
-Other hosted payments, like card, direct bank and payments from the *PayPage*,
+Other hosted payments, like card, direct bank and payments from the *PayPage*
 on the other hand are asynchronous. They will return an html form with formatted message to send from your store.
 For every new payment type implementation, you follow the steps from the beginning and chose your payment type preffered in the end:
 Build order -> choose payment type -> doRequest/getPaymentForm
@@ -105,7 +106,7 @@ CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
         ...
     .getPaymentForm();
     //Continue as a PayPage payment
-    .usePaymentMethod (PAYMENTMETHOD.DBSEBSE) //see APPENDIX for Constants
+    .usePaymentMethod(PAYMENTMETHOD.DBSEBSE) //see APPENDIX for Constants
         ...
     .getPaymentForm();
     //Continue as an invoice payment
@@ -119,12 +120,18 @@ CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
-### 1.1 Test mode                                                            
-Set test mode while developing to make the calls to our test server.
-Remove when you change to production mode.	
+### 1.1 Test mode                                                             
+Set test configuration while developing to make the calls to our test server when starting a request, i.e. createOrder(...), closeOrder(...),
+deliverOrder(...), getPaymentPlanParams(...), getAddresses(...). If no parameter is set, test mode is default. When moving to production server, change to production configuration. 
+
+Ex. 
 ```java
-    .setTestmode()
+	//test mode
+    WebPay.createOrder(SveaConfig.createTestConfig())...
+	//production mode
+	WebPay.createOrder(SveaConfig.createProductionConfig())...
 ```
+
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 	
 ### 1.2 Specify order                                                        
@@ -236,7 +243,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
 
 ### 1.4 Other values  
 ```java
-.setCountryCode(COUNTRYCODE.SE)                   //Required for synchronous payments    
+.setCountryCode(COUNTRYCODE.SE)         //Required for synchronous payments    
 .setCurrency("SEK")                     //Required for card payment, direct payment and PayPage payment.
 .setClientOrderNumber("nr26")           //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
 .setAddressSelector("7fd7768")          //Optional. Recieved from getAddresses
@@ -275,7 +282,7 @@ and the html form element as array.
 *PayPage* with availible card payments only.
 
 ##### 1.5.1.1 Request
-If Config/SveaConfig.php is not modified you can set your store authorization here.
+
 ```java
 PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 	.addOrderRow(Item.orderRow()
@@ -314,18 +321,12 @@ Function getPaymentForm() returns object type *PaymentForm* with accessible memb
 | getCompleteForm()		| String     | A complete Html form with method= "post" with submit button to include in your code. |
 | getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
             
-```java
-PaymentForm form = ...
-    .getPaymentForm();
-	
-	form.getCompleteForm(); 
-```
 
 #### 1.5.2 PayPage with direct bank payment options
 *PayPage* with available direct bank payments only.
                 
 ##### 1.5.2.1 Request
-If Config/SveaConfig.php is not modified you can set your store authorization here.
+
 ```java
 PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 .addOrderRow(Item.orderRow()
@@ -362,13 +363,7 @@ Returns object type PaymentForm:
 | getCompleteForm()		| String     | A complete Html form with method= "post" with submit button to include in your code. |
 | getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
  
-```java
-PaymentForm form = ...
-    .getPaymentForm();
-	
-	form.getCompleteForm();
-```
-            
+ 
 #### 1.5.3 PayPagePayment
 *PayPage* with all available payments. You can also custom the *PayPage* by using one of the methods for *PayPagePayments*:
 setPaymentMethod, includePaymentMethods, excludeCardPaymentMethods or excludeDirectPaymentMethods.
@@ -395,7 +390,7 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 	.setReturnUrl("http://myurl.se")                   	//Required	
 	.setMerchantIdBasedAuthorization(1200, "f78hv9")   	//Optional		
 	.setCancelUrl("http://myurl.se")                   	//Optional
-	.setPayPagePayment(LANGUAGECODE.sv)					//Optional, English is default. LANGUAGECODE see APPENDIX
+	.setPayPagePayment(LANGUAGECODE.sv)					//Optional, English is default. LANGUAGECODE, see APPENDIX
 	.getPaymentForm();
 ```               
 
@@ -405,7 +400,7 @@ Optional if you want to include specific payment methods for *PayPage*.
     .usePayPage()
         .setReturnUrl("http://myurl.se")                                            //Required
         .setCancelUrl("http://myurl.se")                                            //Optional
-        .excludePaymentMethods(PaymentMethod.DBSEBSE, PaymentMethod.SVEAINVOICE_SE)	//Optional
+        .excludePaymentMethods(PAYMENTMETHOD.DBSEBSE, PAYMENTMETHOD.SVEAINVOICE_SE)	//Optional
         .getPaymentForm();
 ```
 ###### 1.5.3.1.2 Include specific payment methods
@@ -413,7 +408,7 @@ Optional if you want to include specific payment methods for *PayPage*.
 ```java   
     .usePayPage()
         .setReturnUrl("http://myurl.se")                                            //Required
-        .includePaymentMethods(PaymentMethod.DBSEBSE, PaymentMethod.SVEAINVOICE_SE)	//Optional
+        .includePaymentMethods(PAYMENTMETHOD.DBSEBSE, PAYMENTMETHOD.SVEAINVOICE_SE)	//Optional
         .getPaymentForm();
 ```
 
@@ -448,18 +443,12 @@ Returns object type *PaymentForm*:
 | getCompleteForm()		| String     | A complete Html form with method= "post" with submit button to include in your code. |
 | getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
  
-```java
-PaymentForm form = ...
-        .getPaymentForm();
-		
-		form.getCompleteForm();
-```
 
 #### 1.5.4 PaymentMethod specified
 Go direct to specified payment method without the step *PayPage*.
 
 ##### 1.5.1.1 Request
-If Config/SveaConfig.php is not modified you can set your store authorization here.
+Set your store authorization here.
 ```java
 PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 .addOrderRow(Item.orderRow()
@@ -476,7 +465,7 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 .setClientOrderNumber("33")
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
-	.usePaymentMethod(PaymentMethod.KORTCERT)             //Se APPENDIX for paymentmethods
+	.usePaymentMethod(PAYMENTMETHOD.KORTCERT)             //Se APPENDIX for PaymentMethods
 		.setMerchantIdBasedAuthorization(1200, "f78hv9")  //Optional
 		.setReturnUrl("http://myurl.se")                  //Required
 		.setCancelUrl("http://myurl.se")                  //Optional
@@ -498,20 +487,12 @@ Function getPaymentForm() returns Object type PaymentForm with accessible member
 | getCompleteForm()		| String     | A complete Html form with method= "post" with submit button to include in your code. |
 | getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
             
-```
-PaymentForm form = ...
-    .getPaymentForm();
-
-	form.getCompleteForm();
-	
-```
 
 #### Synchronous solutions - Invoice and PaymentPlan
        
 #### 1.5.4 InvoicePayment
 Perform an invoice payment. This payment form will perform a synchronous payment and return a response.
-Returns *CreateOrderResponse* object.
-If Config/SveaConfig.php is not modified you can set your store authorization here.
+Returns *CreateOrderResponse* object. Set your store authorization here.
 ```java
 CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
   .addOrderRow(Item.orderRow()
@@ -535,7 +516,7 @@ CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
 #### 1.5.5 PaymentPlanPayment
 Perform *PaymentPlanPayment*. This payment form will perform a synchronous payment and return a response.
 Returns a *CreateOrderResponse* object. Preceded by WebPay.getPaymentPlanParams(...).
-If Config/SveaConfig.php is not modified you can set your store authorization here.
+Set your store authorization here.
 Param: Campaign code recieved from getPaymentPlanParams().
 ```java
 CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
@@ -562,8 +543,7 @@ CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
 
 ## 2. getPaymentPlanParams   
 Use this function to retrieve campaign codes for possible payment plan options. Use prior to create payment plan payment.
-Returns *PaymentPlanParamsResponse* object.
-If Config/SveaConfig.php is not modified you can set your store authorization here.
+Returns *PaymentPlanParamsResponse* object. Set your store authorization here.
 
 ```java
 CreateOrderResponse response = WebPay.getPaymentPlanParams(SveaConfig.createTestConfig())	
@@ -575,7 +555,7 @@ CreateOrderResponse response = WebPay.getPaymentPlanParams(SveaConfig.createTest
 ## 3. getAddresses 
 Returns *getAddressesResponse* object with an *AddressSelector* for the associated addresses for a specific security number. 
 Can be used when creating an order. Only applicable for SE, NO and DK.
-If Config/Config.php is not modified you can set your store authorization here.
+Set your store authorization here.
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
@@ -610,8 +590,7 @@ or
 Updates the status on a previous created order as delivered. Add rows that you want delivered. The rows will automatically be
 matched with the rows that was sent when creating the order.
 Only applicable for invoice and payment plan payments.
-Returns *DeliverOrderResult* object.
-If Config/SveaConfig.php is not modified you can set your store authorization here.
+Returns *DeliverOrderResult* object. Set your store authorization here.
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
@@ -712,7 +691,7 @@ DeliverOrderResponse response = WebPay.deliverOrder(SveaConfig.createTestConfig(
 
 ## 5. closeOrder                                                             
 Use when you want to cancel an undelivered order. Valid only for invoice and payment plan orders. 
-Required is the order id received when creating the order. If Config/SveaConfig.php is not modified you can set your store authorization here.
+Required is the order id received when creating the order. Set your store authorization here.
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
@@ -742,7 +721,7 @@ The response from server will be sent to the *returnUrl* with POST or GET. The r
 Class *SveaResponse* will return an object structured similar to the synchronous answer. 
 Params: 
 * The POST or GET message 
-* Your *secret word*. //Optional if set in SveaConfig.php
+* Your *secret word*. //Optional if set in SveaConfig
 ```java
   SveaRespons respObject = nSveaResponse(responseXmlBase64, mac, secretWord); 
 ```
@@ -754,8 +733,8 @@ Params:
 Enumeration, used in usePaymentMethod(paymentMethod) and in usePayPage(), 
 .includePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods), .includePaymentMethods(), .excludeCardPaymentMethods(Collection<PAYMENTMETHOD> paymentMethods), .excludeCardPaymentMethods(), .excludeDirectPaymentMethods(), .excludeCardPaymentMethods().
 
-| Payment method                    | Description                                   |
-|-----------------------------------|-----------------------------------------------|
+| Payment method                   | Description                                   |
+|----------------------------------|-----------------------------------------------|
 | PAYMENTMETHOD.DBNORDEASE         | Direct bank payment, Nordea, Sweden.          | 
 | PAYMENTMETHOD.DBSEBSE            | Direct bank payment, private, SEB, Sweden.    |
 | PAYMENTMETHOD.DBSEBFTGSE         | Direct bank payment, company, SEB, Sweden.    |
@@ -779,10 +758,10 @@ Enumeration, used in usePaymentMethod(paymentMethod) and in usePayPage(),
 | PAYMENTMETHOD.SVEASPLITEU_DE     | PaymentPlan by PayPage in DE.                 |
 | PAYMENTMETHOD.SVEASPLITEU_NL     | PaymentPlan by PayPage in NL.                 |
 
-[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+[<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
 ### CountryCode
-Enumeration, used in .setCountryCode(...). ISO 3166-1 standard. 
+Enumeration, used in .setCountryCode(...). Using ISO 3166-1 standard. 
 
 | CountryCode						| Country					|
 |-----------------------------------|---------------------------|
@@ -793,10 +772,10 @@ Enumeration, used in .setCountryCode(...). ISO 3166-1 standard.
 | COUNTRYCODE.NO					| Norway					|
 | COUNTRYCODE.SE					| Sweden					|
 
-[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+[<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
 ### LanguageCode
-Enumeration, used in .setPayPageLanguage(...). ISO 639-1 standard. 
+Enumeration, used in .setPayPageLanguage(...). Using ISO 639-1 standard. 
 
 | LanguageCode						| Language name				|
 |-----------------------------------|---------------------------|
@@ -811,10 +790,10 @@ Enumeration, used in .setPayPageLanguage(...). ISO 639-1 standard.
 | LANGUAGECODE.no					| Norwegian					|
 | LANGUAGECODE.sv					| Swedish					|
 
-[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+[<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
 ### Currency 
-Enumeration, used in .setCurrency(...). ISO 4217 standard.
+Enumeration, used in .setCurrency(...). Using ISO 4217 standard.
 
 | CurrencyCode						| Currency name				|
 |-----------------------------------|---------------------------|
@@ -823,7 +802,7 @@ Enumeration, used in .setCurrency(...). ISO 4217 standard.
 | CURRENCY.NOK						| Norwegian krone			|
 | CURRENCY.SEK						| Swedish krona				|
 
-[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+[<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
 ### Invoice Distribution Type 
 Enumeration, used in .setInvoiceDistributionType(...).
@@ -833,4 +812,4 @@ Enumeration, used in .setInvoiceDistributionType(...).
 | Post								| Invoice is sent by mail	|
 | Email								| Invoice is sent by e-mail	|
 
-[<< To top](https://github.com/sveawebpay/php-integration/tree/develop#php-integration-package-api-for-sveawebpay)
+[<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
