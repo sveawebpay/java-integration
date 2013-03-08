@@ -1,5 +1,7 @@
 package se.sveaekonomi.webpay.integration.config;
 
+import java.net.URL;
+
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
 
 public class SveaConfig {
@@ -10,6 +12,8 @@ public class SveaConfig {
     private int paymentPlanClientNumber;
     private String merchantId;
     private String secret;
+    private URL payPageUrl;
+    private URL soapUrl;
     
     public SveaConfig() {
         this.userName = "sverigetest";
@@ -18,17 +22,45 @@ public class SveaConfig {
         this.paymentPlanClientNumber = 59999;
         this.merchantId = "1175";
         this.secret = "d153477288051d6001adf0648405e0fcfaa3ee2a8dc90dd3151341a1d68b1a4388616585fe7bc15cd06882070b0d92aa92de6cde1e7a21dc7e65e81cee6af43f";
-    }     
+    } 
     
+    public SveaConfig(String userName, String password,
+			int invoiceClientNumber, int paymentPlanClientNumber,
+			String merchantId, String secret, URL payPageUrl, URL soapUrl) {
+		this.userName = userName;
+		this.password = password;
+		this.invoiceClientNumber = invoiceClientNumber;
+		this.paymentPlanClientNumber = paymentPlanClientNumber;
+		this.merchantId = merchantId;
+		this.secret = secret;
+		this.payPageUrl = payPageUrl;
+		this.soapUrl = soapUrl;
+	}
+
+/*	public static SveaConfig createCompleteProductionConfig(String userName, String password,
+			int invoiceClientNumber, int paymentPlanClientNumber,
+			String merchantId, String secret) {
+    	return new SveaConfig();
+    }
+
+	public static SveaConfig createSoapProductionConfig(String userName, String password,
+			int invoiceClientNumber, int paymentPlanClientNumber,
+			String merchantId, String secret) {
+    	return new SveaConfig();
+    }
+
+    public static SveaConfig createTestConfig() {
+    	return new SveaConfig();
+    }*/
+
     public static Config createProductionConfig() {
-    	return new ProductionConfig();
-    }
+        return new ProductionConfig();
+       }
 
-    public static Config createTestConfig() {
-    	return new TestConfig();
-    }
+       public static Config createTestConfig() {
+        return new TestConfig();
+       }
     
-
     public SveaAuth getAuthorizationForWebServicePayments(String type) {
         SveaAuth auth = new SveaAuth();
         auth.Username = this.userName;

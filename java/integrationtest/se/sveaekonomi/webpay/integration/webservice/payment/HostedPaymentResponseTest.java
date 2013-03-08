@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -37,7 +38,7 @@ public class HostedPaymentResponseTest {
     public void testDoCardPaymentRequest() throws Exception {
         HttpUnitOptions.setScriptingEnabled( false );
         
-        PaymentForm form = WebPay.createOrder()
+        PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
         .addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
                 .setQuantity(2)

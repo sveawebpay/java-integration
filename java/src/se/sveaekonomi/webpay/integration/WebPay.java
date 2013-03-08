@@ -15,6 +15,7 @@ public class WebPay {
     }
     
     public static CreateOrderBuilder createOrder() {
+    	//Logger logger = Logger.getLogger(.getName());
     	return createOrder(SveaConfig.createTestConfig()); 
     }     
     
