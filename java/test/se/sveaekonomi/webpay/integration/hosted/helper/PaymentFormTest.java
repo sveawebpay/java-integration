@@ -51,7 +51,6 @@ public class PaymentFormTest {
 
     @Test
     public void testSetHtmlFields() throws ValidationException, Exception {
-        //PaymentForm form = new PaymentForm();
         String base64Payment = Base64Util.encodeBase64String("0");
         String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
        
@@ -62,8 +61,7 @@ public class PaymentFormTest {
         
         form.setMessageBase64(base64Payment)
             .setMerchantId(MerchantId)
-            .setSecretWord(SecretWord)
-            .setTestmode("true")
+            .setSecretWord(SecretWord)         
             .setHtmlFields();
         
         Map<String, String> formHtmlFields = form.getFormHtmlFields();

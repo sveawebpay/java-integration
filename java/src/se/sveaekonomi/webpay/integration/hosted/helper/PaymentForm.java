@@ -15,10 +15,8 @@ public class PaymentForm {
     private String xmlMessage;
     private String merchantid;
     private String secretWord;
-    private String testmode;
     private String completeHtmlFormWithSubmitButton;
     private String macSha512;
- //   private String url;
     private Map<String, String> formHtmlFields;
     private String submitText;
     private String noScriptMessage;
@@ -70,16 +68,7 @@ public class PaymentForm {
         this.secretWord = secretWord;
         return this;
     }
-    
-    public String getTestmode() {
-        return testmode;
-    }
-    
-    public PaymentForm setTestmode(String testmode) {
-        this.testmode = testmode;
-        return this;
-    }
-    
+       
     public String getCompleteForm() {
         return completeHtmlFormWithSubmitButton;
     }
@@ -97,9 +86,7 @@ public class PaymentForm {
         return formHtmlFields;
     }
 
-    public PaymentForm setForm() {
-       // url = (testmode != null ? SveaConfig.SWP_TEST_URL : SveaConfig.SWP_PROD_URL);
-    	 
+    public PaymentForm setForm() {    	
         macSha512 = HashUtil.createHash(xmlMessageBase64 + secretWord, HASHALGORITHM.SHA_512);
         
         completeHtmlFormWithSubmitButton = "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\""
@@ -116,7 +103,6 @@ public class PaymentForm {
     }
     
     public PaymentForm setHtmlFields() {
-        //url = (testmode != null ? SveaConfig.SWP_TEST_URL : SveaConfig.SWP_PROD_URL);
         macSha512 = HashUtil.createHash(xmlMessageBase64 + secretWord, HASHALGORITHM.SHA_512);
         
         formHtmlFields.put("form_start_tag", "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\"" + url.toString() + "\">");
