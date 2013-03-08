@@ -10,7 +10,6 @@ import javax.xml.bind.ValidationException;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil;
@@ -35,9 +34,9 @@ public class PaymentFormTest {
                 .setMerchantId(MerchantId)
                 .setSecretWord(SecretWord)
                 .setForm();
-        
+        String url = WebPay.createOrder().getPayPageUrl().toString();
         final String EXPECTED = "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\""
-                + SveaConfig.SWP_TEST_URL
+                + url
                 + "\">"
                 + "<input type=\"hidden\" name=\"merchantid\" value=\"" + MerchantId + "\" />"
                 + "<input type=\"hidden\" name=\"message\" value=\"" + base64Payment + "\" />"
@@ -66,7 +65,9 @@ public class PaymentFormTest {
         
         Map<String, String> formHtmlFields = form.getFormHtmlFields();
         
-        assertTrue(formHtmlFields.get("form_start_tag").equals("<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\"" + SveaConfig.SWP_TEST_URL + "\">"));
+        String url = WebPay.createOrder().getPayPageUrl().toString();
+        
+        assertTrue(formHtmlFields.get("form_start_tag").equals("<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\"" + url + "\">"));
         assertTrue(formHtmlFields.get("input_merchantId").equals("<input type=\"hidden\" name=\"merchantid\" value=\"" + MerchantId + "\" />"));
         assertTrue(formHtmlFields.get("input_message").equals("<input type=\"hidden\" name=\"message\" value=\"" + base64Payment + "\" />"));
         assertTrue(formHtmlFields.get("input_mac").equals("<input type=\"hidden\" name=\"mac\" value=\"" + mac + "\" />"));

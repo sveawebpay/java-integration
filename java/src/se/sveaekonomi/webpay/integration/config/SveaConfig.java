@@ -11,11 +11,6 @@ public class SveaConfig {
     private String merchantId;
     private String secret;
     
-    public static final String SWP_TEST_URL = "https://test.sveaekonomi.se/webpay/payment";
-    public static final String SWP_PROD_URL = "https://webpay.sveaekonomi.se/webpay/payment";
-    public static final String SWP_TEST_WS_URL = "https://webservices.sveaekonomi.se/webpay_test/SveaWebPay.asmx";
-    public static final String SWP_PROD_WS_URL = "https://webservices.sveaekonomi.se/webpay/SveaWebPay.asmx";
-    
     public SveaConfig() {
         this.userName = "sverigetest";
         this.password = "sverigetest";

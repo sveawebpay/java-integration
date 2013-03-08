@@ -49,7 +49,7 @@ public class CloseOrderTest {
         try {
             String xml = xmlBuilder.getCreateOrderEuXml(request.request);
                     
-            String url = SveaConfig.SWP_TEST_WS_URL;
+            String url = WebPay.createOrder().getWebserviceUrl().toString();
             String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
             NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
             CreateOrderResponse response = new CreateOrderResponse(soapResponse);            

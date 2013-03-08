@@ -9,12 +9,12 @@ public class TestConfig implements Config {
 
 	@Override
 	public URL getWebserviceUrl() {
-		return getUrlFromString(SveaConfig.SWP_TEST_WS_URL);
+		return getUrlFromString(SWP_TEST_WS_URL);
 	}
 
 	@Override
 	public URL getPayPageUrl() {
-		return getUrlFromString(SveaConfig.SWP_TEST_URL);
+		return getUrlFromString(SWP_TEST_URL);
 	}
 
 	private URL getUrlFromString(String swpTestWsUrl) {

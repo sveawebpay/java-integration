@@ -9,12 +9,12 @@ public class ProductionConfig implements Config {
 
 	@Override
 	public URL getWebserviceUrl() {
-		return getUrlFromString(SveaConfig.SWP_PROD_WS_URL);
+		return getUrlFromString(SWP_PROD_WS_URL);
 	}
 
 	@Override
 	public URL getPayPageUrl() {
-		return getUrlFromString(SveaConfig.SWP_PROD_URL);
+		return getUrlFromString(SWP_PROD_URL);
 	}
 
 	private URL getUrlFromString(String swpProdWsUrl) {

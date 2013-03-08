@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import se.sveaekonomi.webpay.integration.WebPay;
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -58,14 +57,15 @@ public class HostedPaymentResponseTest {
             .setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtml")
             .getPaymentForm();
                         
-        WebResponse result = postRequest(SveaConfig.SWP_TEST_URL, form);        
+        WebResponse result = postRequest(form);        
         assertEquals("OK", result.getResponseMessage());        
     }
     
-    private WebResponse postRequest(String sveaUrl, PaymentForm form) throws IOException, SAXException {
+    private WebResponse postRequest(PaymentForm form) throws IOException, SAXException {
         WebConversation conversation = new WebConversation();
-        WebRequest request = new PostMethodWebRequest(sveaUrl);   
+           
         CreateOrderBuilder order = WebPay.createOrder();
+        WebRequest request = new PostMethodWebRequest(order.getPayPageUrl().toString());
         form.setMacSha512(HashUtil.createHash(form.getXmlMessageBase64() + order.config.getSecretWord(), HASHALGORITHM.SHA_512));
         request.setParameter("mac", form.getMacSha512());
         request.setParameter("message", form.getXmlMessageBase64());
