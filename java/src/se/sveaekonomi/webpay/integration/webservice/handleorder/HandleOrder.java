@@ -81,11 +81,8 @@ public class HandleOrder {
         return request;
     }
     
-    public DeliverOrderResponse doRequest() throws Exception {        
-        //String url = order.getTestmode() ? SveaConfig.SWP_TEST_WS_URL : SveaConfig.SWP_PROD_WS_URL;
+    public DeliverOrderResponse doRequest() throws Exception {           
     	URL url = order.getWebserviceUrl();
-    	//String url = SveaConfig.SWP_TEST_WS_URL;
-   // 	
     	
         SveaRequest<SveaDeliverOrder> request = this.prepareRequest();
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();

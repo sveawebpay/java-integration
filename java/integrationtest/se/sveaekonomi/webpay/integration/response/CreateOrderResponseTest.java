@@ -25,7 +25,7 @@ public class CreateOrderResponseTest {
             .setName("Prod")
             .setVatPercent(25)
             .setDiscountPercent(0))              
-        .addCustomerDetails(Item.individualCustomer().setNationalIdNumber(194605092222L))        
+        .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))        
             .setCountryCode(COUNTRYCODE.SE)
             .setOrderDate("2012-12-12")
             .setClientOrderNumber("33")

@@ -38,7 +38,7 @@ public class InvoicePaymentTest {
                 .setDiscountPercent(0))
                                 
              .addCustomerDetails(Item.individualCustomer()
-                 .setNationalIdNumber(194609052222L))          
+                 .setNationalIdNumber("194609052222"))          
              .setTestmode()
              .setCountryCode(COUNTRYCODE.SE)
              .setOrderDate("2012-12-12")                
@@ -86,7 +86,7 @@ public class InvoicePaymentTest {
                 .setStreetAddress("Gatan", 23)
                 .setBirthDate(1923, 12, 12)
                 .setCoAddress("c/o Eriksson")
-                .setNationalIdNumber(194605092222L)
+                .setNationalIdNumber("194605092222")
                 .setZipCode("2222")                
                 .setLocality("Stan"))
                         
@@ -127,7 +127,7 @@ public class InvoicePaymentTest {
                 .setVatPercent(25)
                 .setDiscountPercent(0))                
         .addCustomerDetails(Item.individualCustomer()
-    		.setNationalIdNumber(194605092222L))
+    		.setNationalIdNumber("194605092222"))
             
         .setTestmode()
         .setCountryCode(COUNTRYCODE.SE)
@@ -338,7 +338,7 @@ public class InvoicePaymentTest {
              .setDiscountPercent(0))
 
          .addCustomerDetails(Item.individualCustomer()
-            .setNationalIdNumber(194605092222L)
+            .setNationalIdNumber("194605092222")
             .setInitials("SB")
             .setBirthDate(1923, 12, 12)
             .setName("Tess", "Testson")
@@ -410,7 +410,7 @@ public class InvoicePaymentTest {
             .setDescription("RelativeDiscount"))
          
         .addCustomerDetails(Item.individualCustomer()
-            .setNationalIdNumber(194605092222L)
+            .setNationalIdNumber("194605092222")
             .setInitials("SB")
             .setBirthDate(1923, 12, 12)
             .setName("Tess", "Testson")
@@ -465,7 +465,7 @@ public class InvoicePaymentTest {
              .setDescription("FixedDiscount"))
        
         .addCustomerDetails(Item.individualCustomer()
-            .setNationalIdNumber(194605092222L)
+            .setNationalIdNumber("194605092222")
             .setInitials("SB")
             .setBirthDate(1923, 12, 12)
             .setName("Tess", "Testson")
@@ -536,7 +536,7 @@ public class InvoicePaymentTest {
                  .setDiscountPercent(0))
                  
          .addCustomerDetails(Item.individualCustomer()      
-            .setNationalIdNumber(194605092222L)
+            .setNationalIdNumber("194605092222")
             .setInitials("SB")
             .setBirthDate(1923, 12, 12)
             .setName("Tess", "Testson")
@@ -570,7 +570,7 @@ public class InvoicePaymentTest {
     public void testInvoiceRequestUsingAmountIncVatWithVatPercent() throws ValidationException {
     	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
   		.addCustomerDetails(Item.individualCustomer()               
-            .setNationalIdNumber(194605092222L)
+            .setNationalIdNumber("194605092222")
             .setInitials("SB")
             .setBirthDate(1923, 12, 12)
             .setName("Tess", "Testson")
@@ -674,7 +674,7 @@ public class InvoicePaymentTest {
                 .setDiscountPercent(0))
                 
         .addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber(194605092222L))
+                .setNationalIdNumber("194605092222"))
        
        .setTestmode()
        .setCountryCode(COUNTRYCODE.SE)
@@ -734,7 +734,7 @@ public class InvoicePaymentTest {
             .setDiscountPercent(0)) 
         
         .addCustomerDetails(Item.individualCustomer()
-            .setNationalIdNumber(194605092222L))
+            .setNationalIdNumber("194605092222"))
     
             .setCountryCode(COUNTRYCODE.SE)
             .setOrderDate("2012-12-12")

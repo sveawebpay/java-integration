@@ -2,7 +2,7 @@ package se.sveaekonomi.webpay.integration.order.identity;
 
 
 public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
-    private long ssn;
+    private String ssn;
     private long birthDate;
     private String firstName;
     private String lastName;
@@ -32,7 +32,7 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
         return this;
     }
     
-    public long getNationalIdNumber() {
+    public String getNationalIdNumber() {
         return ssn;
     }
 
@@ -44,7 +44,7 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
      * format NO:  ddmmyyxxxxx
      * @return IndividualCustomer
      */
-    public IndividualCustomer setNationalIdNumber(long nationalIdNumber) {
+    public IndividualCustomer setNationalIdNumber(String nationalIdNumber) {
         this.ssn = nationalIdNumber;
         return this;
     }

@@ -46,7 +46,7 @@ public class PaymentPlanTest {
                 .setDiscountPercent(0))
         
         .addCustomerDetails(Item.individualCustomer()
-              .setNationalIdNumber(194605092222L)
+              .setNationalIdNumber("194605092222")
               .setBirthDate(1923,  12, 12)
               .setName("Tess", "Testson")
               .setEmail("test@svea.com")

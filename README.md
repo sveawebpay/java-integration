@@ -213,17 +213,17 @@ depending on country and customer type. For SE, NO, DK and FI national id number
 ####1.3.1 Options for individual customers
 ```java
 .addCustomerDetails(Item.individualCustomer()
-    .setNationalIdNumber(194605092222) //Required for individual customers in SE, NO, DK and FI
-    .setInitials("SB")                 //Required for individual customers in NL 
-    .setBirthDate(1923, 12, 12)        //Required for individual customers in NL and DE
-    .setName("Tess", "Testson")        //Required for individual customers in NL and DE    
-    .setStreetAddress("Gatan", 23)     //Required in NL and DE    
-    .setZipCode(9999)                  //Required in NL and DE
-    .setLocality("Stan")               //Required in NL and DE    
-    .setEmail("test@svea.com")         //Optional but desirable    
-    .setIpAddress("123.123.123")       //Optional but desirable
-    .setCoAddress("c/o Eriksson")      //Optional
-    .setPhoneNumber(999999))           //Optional
+    .setNationalIdNumber("194605092222")	//Required for individual customers in SE, NO, DK and FI
+    .setInitials("SB")                 		//Required for individual customers in NL 
+    .setBirthDate(1923, 12, 12)        		//Required for individual customers in NL and DE
+    .setName("Tess", "Testson")        		//Required for individual customers in NL and DE    
+    .setStreetAddress("Gatan", 23)     		//Required in NL and DE    
+    .setZipCode(9999)                  		//Required in NL and DE
+    .setLocality("Stan")               		//Required in NL and DE    
+    .setEmail("test@svea.com")         		//Optional but desirable    
+    .setIpAddress("123.123.123")       		//Optional but desirable
+    .setCoAddress("c/o Eriksson")      		//Optional
+    .setPhoneNumber(999999))           		//Optional
    
 ```
 

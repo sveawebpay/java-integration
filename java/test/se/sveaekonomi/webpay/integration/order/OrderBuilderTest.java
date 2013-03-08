@@ -46,7 +46,7 @@ public class OrderBuilderTest {
         order = createTestCustomerIdentity(order);
 
         assertEquals(order.getIndividualCustomer().getInitials(), "SB");
-        assertEquals(order.getIndividualCustomer().getNationalIdNumber(), 194609052222L);
+        assertEquals(order.getIndividualCustomer().getNationalIdNumber(), "194609052222");
         assertEquals(order.getIndividualCustomer().getFirstName(), "Tess");
         assertEquals(order.getIndividualCustomer().getLastName(), "Testson");
         assertEquals(order.getIndividualCustomer().getBirthDate(), 19231212);
@@ -155,7 +155,7 @@ public class OrderBuilderTest {
     
     private CreateOrderBuilder createTestCustomerIdentity(CreateOrderBuilder orderBuilder) {
          return orderBuilder.addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber(194609052222L)
+                .setNationalIdNumber("194609052222")
                 .setInitials("SB")
                 .setBirthDate(1923, 12, 12)
                 .setName("Tess", "Testson")

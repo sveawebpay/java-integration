@@ -28,7 +28,7 @@ public class SveaSoapBuilderTest {
             .setVatPercent(25)
             .setDiscountPercent(0))                       
         .addCustomerDetails(Item.individualCustomer()
-        		.setNationalIdNumber(194605092222L))
+        		.setNationalIdNumber("194605092222"))
     
         .setCountryCode(COUNTRYCODE.SE)
         .setClientOrderNumber("33")
