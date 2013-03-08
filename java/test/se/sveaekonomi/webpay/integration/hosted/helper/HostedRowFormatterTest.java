@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.HostedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -105,8 +106,7 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatFixedDiscountRowsVat() {
-    	CreateOrderBuilder order = WebPay.createOrder()
-    			.setTestmode()
+    	CreateOrderBuilder order = WebPay.createOrder(SveaConfig.createTestConfig())
     			.addOrderRow(Item.orderRow()
     					.setAmountExVat(4)
     					.setVatPercent(25)
@@ -125,8 +125,7 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatRelativeDiscountRows() {
-    	CreateOrderBuilder order = WebPay.createOrder()
-    			.setTestmode()
+    	CreateOrderBuilder order = WebPay.createOrder()    			
     			.addDiscount(Item.relativeDiscount()
     					.setDiscountId("0")
     					.setName("Tess")

@@ -119,8 +119,7 @@ public class PayPagePaymentTest {
         paymentMethods.add(PAYMENTMETHOD.SVEAINVOICESE);
         paymentMethods.add(PAYMENTMETHOD.KORTCERT);
     	
-       PaymentForm form = WebPay.createOrder()
-            .setTestmode()
+       PaymentForm form = WebPay.createOrder()            
             .addOrderRow(Item.orderRow()
                     .setArticleNumber("1")
                     .setQuantity(2)
@@ -167,8 +166,7 @@ public class PayPagePaymentTest {
     
     @Test
     public void testpayPagePaymentExcludeCardPayments() throws ValidationException, Exception {        
-        PaymentForm form = WebPay.createOrder()
-            .setTestmode()
+        PaymentForm form = WebPay.createOrder()            
             .addOrderRow(Item.orderRow()
                     .setArticleNumber("1")
                     .setQuantity(2)
@@ -202,8 +200,7 @@ public class PayPagePaymentTest {
     
     @Test
     public void testExcludeDirectPaymentMethods() throws ValidationException, Exception {    
-    PaymentForm form = WebPay.createOrder()
-            .setTestmode()
+    PaymentForm form = WebPay.createOrder()            
             .addOrderRow(Item.orderRow()
                     .setArticleNumber("1")
                     .setQuantity(2)
@@ -242,8 +239,7 @@ public class PayPagePaymentTest {
      List<PAYMENTMETHOD> paymentMethods = new ArrayList<PAYMENTMETHOD>();
      paymentMethods.add(PAYMENTMETHOD.KORTCERT);
      paymentMethods.add(PAYMENTMETHOD.SKRILL);
-        PaymentForm form = WebPay.createOrder()
-            .setTestmode()
+        PaymentForm form = WebPay.createOrder()            
             .addOrderRow(Item.orderRow()
                     .setArticleNumber("")
                     .setQuantity(2)

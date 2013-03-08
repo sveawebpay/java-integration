@@ -43,9 +43,7 @@ public class NewOrderBuilderTest {
                 .setVatPercent(25)
                 .setDiscountPercent(0));
 		
-		SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-                .setTestmode()
-                
+		SveaRequest<SveaCreateOrder> request = WebPay.createOrder()                                
                 .addOrderRows(orderRows)		
                 .addCustomerDetails(Item.companyCustomer()
 	                .setNationalIdNumber("666666")
@@ -71,8 +69,7 @@ public class NewOrderBuilderTest {
 	
     @Test
     public void testBuildOrderWithCompanyCustomer() throws ValidationException {
-    	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-            .setTestmode()
+    	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()            
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)

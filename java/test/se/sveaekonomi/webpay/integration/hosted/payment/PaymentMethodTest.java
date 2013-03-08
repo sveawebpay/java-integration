@@ -18,8 +18,7 @@ public class PaymentMethodTest {
     @Test
     public void testPayPagePaymentWithSetPaymentMethod() throws Exception {
         
-    	PaymentForm form = WebPay.createOrder()
-             .setTestmode()
+    	PaymentForm form = WebPay.createOrder()            
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)

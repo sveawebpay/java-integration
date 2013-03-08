@@ -15,8 +15,7 @@ public class CreateOrderResponseTest {
             
     @Test
     public void testInvoiceRequestForCustomerIdentityIndividualFromSE() throws Exception {
-    	CreateOrderResponse response = WebPay.createOrder()
-    		.setTestmode()
+    	CreateOrderResponse response = WebPay.createOrder()    	
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
@@ -51,7 +50,6 @@ public class CreateOrderResponseTest {
     @Test
     public void testInvoiceCompanySe() throws Exception {
     	CreateOrderResponse response = WebPay.createOrder()
-                .setTestmode()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.SEK)            
@@ -76,8 +74,7 @@ public class CreateOrderResponseTest {
     
     @Test
     public void testInvoiceRequestObjectForCustomerIdentityIndividualFromNL() throws Exception {
-    	CreateOrderResponse response = WebPay.createOrder()
-    	.setTestmode()
+    	CreateOrderResponse response = WebPay.createOrder()    	
     	.addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)

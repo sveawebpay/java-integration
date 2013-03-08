@@ -25,7 +25,7 @@ public class DeliverOrderTest {
     
     @Test
     public void testBuildRequest() {
-       DeliverOrderBuilder request = order.setTestmode()
+       DeliverOrderBuilder request = order
         .setOrderId(54086L);
        assertEquals(54086L, request.getOrderId());
     }
@@ -54,8 +54,7 @@ public class DeliverOrderTest {
         
         .addDiscount(Item.fixedDiscount()
            .setAmountIncVat(10))  
-           
-        .setTestmode()
+                   
         .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
         .setOrderId(54086L)
         .setNumberOfCreditDays(1)
@@ -93,8 +92,7 @@ public class DeliverOrderTest {
     
     @Test
     public void testDeliverPaymentPlanOrder() throws ValidationException {
-        SveaRequest<SveaDeliverOrder> request = order
-        .setTestmode()
+        SveaRequest<SveaDeliverOrder> request = order        
         .setOrderId(54086L)
         .deliverPaymentPlanOrder()
         .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional

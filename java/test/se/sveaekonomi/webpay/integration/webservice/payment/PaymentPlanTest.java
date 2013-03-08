@@ -56,9 +56,7 @@ public class PaymentPlanTest {
               .setCoAddress("c/o Eriksson")
               .setZipCode("9999")
               .setLocality("Stan"))
-
-         
-              .setTestmode()
+                      
               .setCountryCode(COUNTRYCODE.SE)
               .setAddressSelector("ad33")
               .setOrderDate("2012-12-12")

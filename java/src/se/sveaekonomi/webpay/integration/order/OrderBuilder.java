@@ -22,8 +22,6 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
     protected List<FixedDiscountBuilder> fixedDiscountRows = new ArrayList<FixedDiscountBuilder>();
     protected List<RelativeDiscountBuilder> relativeDiscountRows = new ArrayList<RelativeDiscountBuilder>();
     
-    private boolean testmode;
-
     public OrderBuilder() {
         
     }
@@ -63,16 +61,7 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
     public OrderBuilder<T> setRelativeDiscountRows(ArrayList<RelativeDiscountBuilder> relativeDiscountRows) {
         this.relativeDiscountRows = relativeDiscountRows;
         return this;
-    }
-    
-    public boolean getTestmode() {
-        return testmode;
-    }
-    
-    public T setTestmode() {
-        this.testmode = true;
-        return getGenericThis();
-    }
+    }       
     
   /*  public OrderRowBuilder<T> beginOrderRow() {
         OrderRowBuilder<T> rowBuilder = new OrderRowBuilder(this);

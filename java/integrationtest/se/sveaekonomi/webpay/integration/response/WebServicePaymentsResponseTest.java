@@ -23,8 +23,7 @@ public class WebServicePaymentsResponseTest {
     @Test
     public void testDeliverInvoiceOrderResult() throws Exception {
         DeliverOrderBuilder orderBuilder = WebPay.deliverOrder();
-        long orderId = createInvoiceAndReturnOrderId();
-        orderBuilder.setTestmode();
+        long orderId = createInvoiceAndReturnOrderId();        
             orderBuilder.addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
@@ -85,9 +84,8 @@ public class WebServicePaymentsResponseTest {
 	}
     
     private long createInvoiceAndReturnOrderId() throws Exception {
-        CreateOrderBuilder order = WebPay.createOrder()
-                .setTestmode();
-        order.addOrderRow(Item.orderRow()
+        CreateOrderBuilder order = WebPay.createOrder()                
+        .addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
                 .setQuantity(2)
                 .setAmountExVat(100.00)

@@ -17,7 +17,7 @@ public class SveaSoapBuilderTest {
       //  SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
               
         CreateOrderResponse response = WebPay.createOrder()
-        .setTestmode()
+        
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)

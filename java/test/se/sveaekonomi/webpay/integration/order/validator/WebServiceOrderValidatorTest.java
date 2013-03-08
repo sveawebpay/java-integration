@@ -218,8 +218,7 @@ public class WebServiceOrderValidatorTest {
     @Test 
     public void testFailOnMissingOrderIdOnDeliverOrder() throws Exception {
         String expectedMessage = "MISSING VALUE - setOrderId is required.\n";
-        HandleOrder handleOrder = WebPay.deliverOrder()        
-        	.setTestmode()
+        HandleOrder handleOrder = WebPay.deliverOrder()                	
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
