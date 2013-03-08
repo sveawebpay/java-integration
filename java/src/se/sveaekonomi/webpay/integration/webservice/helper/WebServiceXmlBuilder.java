@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.util.xml.XMLBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCloseOrder;
@@ -92,7 +93,7 @@ public class WebServiceXmlBuilder extends XMLBuilder{
         try {
             return new String(os.toByteArray(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            throw new Exception("Unsupported encoding UTF-8", e);
+            throw new SveaWebPayException("Unsupported encoding UTF-8", e);
         }
     }
     
@@ -126,7 +127,7 @@ public class WebServiceXmlBuilder extends XMLBuilder{
         try {
             return new String(os.toByteArray(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            throw new Exception("Unsupported encoding UTF-8", e);
+            throw new SveaWebPayException("Unsupported encoding UTF-8", e);
         }
     }
     
@@ -152,7 +153,7 @@ public class WebServiceXmlBuilder extends XMLBuilder{
         try {
             return new String(os.toByteArray(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            throw new Exception("Unsupported encoding UTF-8", e);
+            throw new SveaWebPayException("Unsupported encoding UTF-8", e);
         }
     }
       
@@ -176,7 +177,7 @@ public class WebServiceXmlBuilder extends XMLBuilder{
         try {
             return new String(os.toByteArray(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            throw new Exception("Unsupported encoding UTF-8", e);
+            throw new SveaWebPayException("Unsupported encoding UTF-8", e);
         }
     }
     
@@ -195,7 +196,7 @@ public class WebServiceXmlBuilder extends XMLBuilder{
         try {
             return new String(os.toByteArray(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            throw new Exception("Unsupported encoding UTF-8", e);
+            throw new SveaWebPayException("Unsupported encoding UTF-8", e);
         }
     }
     
