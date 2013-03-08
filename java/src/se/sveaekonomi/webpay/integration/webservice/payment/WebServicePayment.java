@@ -106,7 +106,6 @@ public abstract class WebServicePayment {
             throw e;
         }
         
-       //String url = createOrderBuilder.getTestmode() ? SveaConfig.SWP_TEST_WS_URL : SveaConfig.SWP_PROD_WS_URL;
         URL url = createOrderBuilder.getWebserviceUrl();
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);

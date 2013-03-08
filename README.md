@@ -62,7 +62,7 @@ Other public targets can be found in the build.xml file.
 ## 1. createOrder                                                            
 Creates an order and performs payment for all payment forms. Invoice and payment plan will perform 
 a synchronous payment and return a response. 
-Other hosted payments, like card, direct bank and payments from the *PayPage*,
+Other hosted payments, like card, direct bank and payments from the *PayPage*
 on the other hand are asynchronous. They will return an html form with formatted message to send from your store.
 For every new payment type implementation, you follow the steps from the beginning and chose your payment type preffered in the end:
 Build order -> choose payment type -> doRequest/getPaymentForm
@@ -119,12 +119,18 @@ CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
-### 1.1 Test mode                                                            
-Set test mode while developing to make the calls to our test server.
-Remove when you change to production mode.	
+### 1.1 Test mode                                                             
+Set test configuration while developing to make the calls to our test server when starting a request, i.e. createOrder(...), closeOrder(...),
+deliverOrder(...), getPaymentPlanParams(...), getAddresses(...). If no parameter is set, test mode is default. When moving to production server, change to production configuration. 
+
+Ex. 
 ```java
-    .setTestmode()
+	//test mode
+    WebPay.createOrder(SveaConfig.createTestConfig())...
+	//production mode
+	WebPay.createOrder(SveaConfig.createProductionConfig())...
 ```
+
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 	
 ### 1.2 Specify order                                                        
