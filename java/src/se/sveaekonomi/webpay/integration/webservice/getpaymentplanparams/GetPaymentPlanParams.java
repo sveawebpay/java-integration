@@ -14,8 +14,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public class GetPaymentPlanParams {
-    
-    private boolean testmode;
+       
     private final SveaConfig conf = new SveaConfig();
     private Config configMode;
     
@@ -29,15 +28,6 @@ public class GetPaymentPlanParams {
     
     public URL getWebserviceUrl() {
     	return this.configMode.getWebserviceUrl();
-    }
-    
-    public boolean getTestmode() {
-        return testmode;
-    }
-    
-    public GetPaymentPlanParams setTestmode() {
-        this.testmode = true;
-        return this;
     }
     
     public GetPaymentPlanParams setPasswordBasedAuthorization(String userName, String password, int clientNumber) {

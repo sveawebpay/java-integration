@@ -5,6 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -47,8 +48,8 @@ public class WebServicePaymentsResponseTest {
     
     @Test
     public void testResultGetPaymentPlanParams() throws Exception {
-        GetPaymentPlanParams addressRequest = WebPay.getPaymentPlanParams();
-        PaymentPlanParamsResponse response = addressRequest.setTestmode()
+        
+        PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.createTestConfig())
             .doRequest();
         
         assertEquals(response.isOrderAccepted(), true);
