@@ -51,7 +51,7 @@ public class WebServiceOrderValidatorTest {
         	.setValidator(new VoidValidator())
         	.setClientOrderNumber("1")
         	.addCustomerDetails(Item.individualCustomer()
-        			.setNationalIdNumber(194609052222L));         
+        			.setNationalIdNumber("194609052222"));         
                 
        assertEquals(expectedMessage, orderValidator.validate(order));
     }
@@ -78,7 +78,7 @@ public class WebServiceOrderValidatorTest {
         	.setValidator(new VoidValidator())
             .setClientOrderNumber("1")
             .setCountryCode(COUNTRYCODE.SE)
-        	.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(194609052222L));            
+        	.addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194609052222"));            
 
         assertEquals(expectedMessage, orderValidator.validate(order));
     }
@@ -92,7 +92,7 @@ public class WebServiceOrderValidatorTest {
         	.setClientOrderNumber("1")
         	.addOrderRow(Item.orderRow())
         	.addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber(194605092222L))
+                .setNationalIdNumber("194605092222"))
                 .setCountryCode(COUNTRYCODE.SE)
             .setValidator(new VoidValidator());
          
@@ -208,7 +208,7 @@ public class WebServiceOrderValidatorTest {
 	            .setVatPercent(25)
 	            .setQuantity(1))            
             .addCustomerDetails(Item.individualCustomer()
-            		.setNationalIdNumber(194605092222L))
+            		.setNationalIdNumber("194605092222"))
             .setCountryCode(COUNTRYCODE.SE).setOrderDate("2012-05-01")        
             .setValidator(new VoidValidator());
         
@@ -218,8 +218,7 @@ public class WebServiceOrderValidatorTest {
     @Test 
     public void testFailOnMissingOrderIdOnDeliverOrder() throws Exception {
         String expectedMessage = "MISSING VALUE - setOrderId is required.\n";
-        HandleOrder handleOrder = WebPay.deliverOrder()        
-        	.setTestmode()
+        HandleOrder handleOrder = WebPay.deliverOrder()                	
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)

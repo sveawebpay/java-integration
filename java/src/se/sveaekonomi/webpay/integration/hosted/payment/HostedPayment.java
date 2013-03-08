@@ -131,7 +131,8 @@ public abstract class HostedPayment {
             form.setSubmitMessage(this.createOrderBuilder.getCountryCode());
         else 
             form.setSubmitMessage(COUNTRYCODE.SE);
-        form.setTestmode(new Boolean(createOrderBuilder.getTestmode()).toString());
+
+        form.setPayPageUrl(createOrderBuilder.getPayPageUrl());
         
         form.setForm();
         form.setHtmlFields();

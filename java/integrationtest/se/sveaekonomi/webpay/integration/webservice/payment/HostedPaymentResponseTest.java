@@ -9,7 +9,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
+import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -26,19 +26,19 @@ import com.meterware.httpunit.WebResponse;
 
 
 public class HostedPaymentResponseTest {
-  private CreateOrderBuilder order;
+  
     
     @Before
     public void setUp() {
-        order = new CreateOrderBuilder();
+        
     }
         
     @Test
     public void testDoCardPaymentRequest() throws Exception {
         HttpUnitOptions.setScriptingEnabled( false );
         
-        order.setTestmode();
-        order.addOrderRow(Item.orderRow()
+        PaymentForm form = WebPay.createOrder()
+        .addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
                 .setQuantity(2)
                 .setAmountExVat(100.00)
@@ -46,24 +46,26 @@ public class HostedPaymentResponseTest {
                 .setName("Prod")
                 .setUnit("st")
                 .setVatPercent(25)
-                .setDiscountPercent(0));
-        order.addCustomerDetails(Item.companyCustomer()
+                .setDiscountPercent(0))
+        .addCustomerDetails(Item.companyCustomer()
                 .setVatNumber("2345234")
-                .setCompanyName("TestCompagniet"));
-            PaymentForm form = order.setCountryCode(COUNTRYCODE.SE)
+                .setCompanyName("TestCompagniet"))
+         .setCountryCode(COUNTRYCODE.SE)
         .setClientOrderNumber(String.valueOf(Calendar.DATE) + String.valueOf(Calendar.MILLISECOND))
         .setCurrency(CURRENCY.SEK)
         .usePayPageCardOnly()
             .setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtml")
             .getPaymentForm();
                         
-        WebResponse result = postRequest(SveaConfig.SWP_TEST_URL, form);        
+        WebResponse result = postRequest(form);        
         assertEquals("OK", result.getResponseMessage());        
     }
     
-    private WebResponse postRequest(String sveaUrl, PaymentForm form) throws IOException, SAXException {
+    private WebResponse postRequest(PaymentForm form) throws IOException, SAXException {
         WebConversation conversation = new WebConversation();
-        WebRequest request = new PostMethodWebRequest(sveaUrl);       
+           
+        CreateOrderBuilder order = WebPay.createOrder();
+        WebRequest request = new PostMethodWebRequest(order.getPayPageUrl().toString());
         form.setMacSha512(HashUtil.createHash(form.getXmlMessageBase64() + order.config.getSecretWord(), HASHALGORITHM.SHA_512));
         request.setParameter("mac", form.getMacSha512());
         request.setParameter("message", form.getXmlMessageBase64());

@@ -1,9 +1,9 @@
 package se.sveaekonomi.webpay.integration.hosted.helper;
 
+import java.net.URL;
 import java.util.HashMap;
 import java.util.Map;
 
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil;
@@ -15,16 +15,17 @@ public class PaymentForm {
     private String xmlMessage;
     private String merchantid;
     private String secretWord;
-    private String testmode;
     private String completeHtmlFormWithSubmitButton;
     private String macSha512;
-    private String url;
     private Map<String, String> formHtmlFields;
     private String submitText;
     private String noScriptMessage;
+    private String htmlFormMethod;
+    private URL url;
 
     public PaymentForm() {
         formHtmlFields = new HashMap<String, String>();
+        htmlFormMethod = "post";        
         setSubmitMessage(COUNTRYCODE.NL);
     }
     
@@ -32,7 +33,7 @@ public class PaymentForm {
         switch(countryCode) {
             case SE:
                 this.setSubmitText("Betala");
-                this.noScriptMessage = "Javascript är inaktiverat i er webbläsare, så ni får manuellt dirigera om till paypage";
+                this.noScriptMessage = "Javascript är inaktiverat i er webbläsare, så ni får dirigera om till paypage manuellt";
                 break;
             default:
                 this.setSubmitText("Submit");
@@ -67,16 +68,7 @@ public class PaymentForm {
         this.secretWord = secretWord;
         return this;
     }
-    
-    public String getTestmode() {
-        return testmode;
-    }
-    
-    public PaymentForm setTestmode(String testmode) {
-        this.testmode = testmode;
-        return this;
-    }
-    
+       
     public String getCompleteForm() {
         return completeHtmlFormWithSubmitButton;
     }
@@ -94,12 +86,11 @@ public class PaymentForm {
         return formHtmlFields;
     }
 
-    public PaymentForm setForm() {
-        url = (testmode != null ? SveaConfig.SWP_TEST_URL : SveaConfig.SWP_PROD_URL);
+    public PaymentForm setForm() {    	
         macSha512 = HashUtil.createHash(xmlMessageBase64 + secretWord, HASHALGORITHM.SHA_512);
         
         completeHtmlFormWithSubmitButton = "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\""
-                + url
+                + url.toString()
                 + "\">"
                 + "<input type=\"hidden\" name=\"merchantid\" value=\"" + merchantid + "\" />"
                 + "<input type=\"hidden\" name=\"message\" value=\"" + xmlMessageBase64 + "\" />"
@@ -112,10 +103,9 @@ public class PaymentForm {
     }
     
     public PaymentForm setHtmlFields() {
-        url = (testmode != null ? SveaConfig.SWP_TEST_URL : SveaConfig.SWP_PROD_URL);
         macSha512 = HashUtil.createHash(xmlMessageBase64 + secretWord, HASHALGORITHM.SHA_512);
         
-        formHtmlFields.put("form_start_tag", "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\"" + url + "\">");
+        formHtmlFields.put("form_start_tag", "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\"" + url.toString() + "\">");
         formHtmlFields.put("input_merchantId", "<input type=\"hidden\" name=\"merchantid\" value=\"" + merchantid + "\" />");
         formHtmlFields.put("input_message", "<input type=\"hidden\" name=\"message\" value=\"" + xmlMessageBase64 + "\" />");
         formHtmlFields.put("input_mac", "<input type=\"hidden\" name=\"mac\" value=\"" + macSha512 + "\" />");
@@ -142,4 +132,16 @@ public class PaymentForm {
         this.xmlMessage = xmlMessage;
         this.setMessageBase64(Base64Util.encodeBase64String(xmlMessage));
     }
+
+	public String getHtmlFormMethod() {
+		return htmlFormMethod;
+	}
+
+	public void setPayPageUrl(URL payPageUrl) {
+		url = payPageUrl;
+	}
+	
+	public String getUrl() {
+		return url.toString();
+	}
 }

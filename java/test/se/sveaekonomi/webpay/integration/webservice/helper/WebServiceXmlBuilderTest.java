@@ -6,7 +6,6 @@ import org.junit.Before;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
-import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
@@ -17,13 +16,11 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 public class WebServiceXmlBuilderTest {
     
     WebServiceXmlBuilder xmlBuilder;
-    CreateOrderBuilder orderBuilder;
     String xml;
     
     @Before
     public void setUp() {
         xmlBuilder = new WebServiceXmlBuilder();
-        orderBuilder = new CreateOrderBuilder();
         xml = "";
     }
     
@@ -31,7 +28,7 @@ public class WebServiceXmlBuilderTest {
     public void testCreateOrderEu() throws Exception {        
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
         	.addCustomerDetails(Item.individualCustomer()
-        			.setNationalIdNumber(194605092222L))
+        			.setNationalIdNumber("194605092222"))
             .addOrderRow(Item.orderRow()
         		.setAmountExVat(100.00)
         		.setQuantity(1)

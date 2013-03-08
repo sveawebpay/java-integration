@@ -10,6 +10,7 @@ import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
+import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.hosted.SveaResponse;
@@ -27,7 +28,7 @@ public class HostedPaymentResponseTest {
     
     @Before
     public void setUp() {
-        order = new CreateOrderBuilder();
+        order = WebPay.createOrder();
     }
     
     @Test

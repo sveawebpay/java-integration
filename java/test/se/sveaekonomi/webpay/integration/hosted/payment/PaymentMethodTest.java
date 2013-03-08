@@ -18,8 +18,7 @@ public class PaymentMethodTest {
     @Test
     public void testPayPagePaymentWithSetPaymentMethod() throws Exception {
         
-    	PaymentForm form = WebPay.createOrder()
-             .setTestmode()
+    	PaymentForm form = WebPay.createOrder()            
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
@@ -36,15 +35,15 @@ public class PaymentMethodTest {
             .setName("Relative")
             .setDescription("RelativeDiscount"))
         .addCustomerDetails(Item.individualCustomer()
-             .setNationalIdNumber(194605092222L))
+             .setNationalIdNumber("194605092222"))
         
             .setCountryCode(COUNTRYCODE.SE)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
-            .setCurrency(CURRENCY.SEK)
+            .setCurrency(CURRENCY.SEK)          
             .usePaymentMethod(PAYMENTMETHOD.KORTCERT)
-            .setReturnUrl("http://myurl.se")                 
-            .getPaymentForm();
+            	.setReturnUrl("http://myurl.se")                 
+            	.getPaymentForm();
 
         String base64Payment = form.getXmlMessageBase64();        
         String html = Base64Util.decodeBase64String(base64Payment);

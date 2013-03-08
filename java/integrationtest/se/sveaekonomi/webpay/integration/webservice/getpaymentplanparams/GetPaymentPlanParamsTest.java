@@ -6,6 +6,8 @@ import java.util.List;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.webservice.CampaignCode;
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
 
@@ -14,8 +16,7 @@ public class GetPaymentPlanParamsTest {
     @Test
     public void testGetPaymentPlanParams() throws Exception {
         try {
-            PaymentPlanParamsResponse response = new GetPaymentPlanParams()
-                .setTestmode()
+            PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.createTestConfig())                
                 .setPasswordBasedAuthorization("sverigetest", "sverigetest", 59999)
                 .doRequest();
             

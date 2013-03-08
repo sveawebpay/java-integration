@@ -8,6 +8,7 @@ import java.util.List;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.HostedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.hosted.payment.HostedPayment;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
@@ -43,9 +44,10 @@ public class HostedXmlBuilder extends XMLBuilder {
         if (payment.getExcludedPaymentMethods() != null) {
             xmlw.writeStartElement("excludepaymentmethods");
             
-            for (PAYMENTMETHOD excludedPaymentMethod : payment.getExcludedPaymentMethods()) {
-                writeSimpleElement("exclude", excludedPaymentMethod.toString());
-            }
+            List<PAYMENTMETHOD> excludeList =  payment.getExcludedPaymentMethods();
+            for (int i = 0; i < excludeList.size(); i++) {
+        		writeSimpleElement("exclude", excludeList.get(i).toString());
+        	}
             
             xmlw.writeEndElement();
         }
@@ -55,7 +57,7 @@ public class HostedXmlBuilder extends XMLBuilder {
         try {
             return new String(os.toByteArray(), "UTF-8");
         } catch (UnsupportedEncodingException e) {
-            throw new Exception("Unsupported encoding UTF-8", e);
+        	throw new SveaWebPayException("Unsupported encoding UTF-8", e);
         }
     }
     

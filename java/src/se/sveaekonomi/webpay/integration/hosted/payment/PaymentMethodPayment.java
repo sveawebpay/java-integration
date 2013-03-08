@@ -19,7 +19,7 @@ public class PaymentMethodPayment extends HostedPayment {
      * Only used in CardPayment and DirectPayment
      */
     @Override
-    protected HostedPayment configureExcludedPaymentMethods() {
+    protected PaymentMethodPayment configureExcludedPaymentMethods() {
         return this;
     }
 

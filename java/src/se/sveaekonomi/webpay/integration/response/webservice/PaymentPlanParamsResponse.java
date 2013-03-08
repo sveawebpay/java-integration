@@ -37,26 +37,30 @@ public class PaymentPlanParamsResponse extends Response {
                 // mandatory
                 this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
                 
-                NodeList campaigns = node.getElementsByTagName("CampaignCodeInfo");
-                int numberOfCampaigns = campaigns.getLength();
+                this.setResultCode(getTagValue(node, "ResultCode"));
                 
-                for (int j = 0; j < numberOfCampaigns; j++) {
-                    Element campaignNode = (Element)campaigns.item(j);
-                    
-                    CampaignCode campaign = new CampaignCode();
-                    campaign.setCampaignCode(getTagValue(campaignNode, "CampaignCode"));
-                    campaign.setDescription(getTagValue(campaignNode, "Description"));
-                    campaign.setPaymentPlanType(getTagValue(campaignNode, "PaymentPlanType"));
-                    campaign.setContractLengthInMonths(getTagValue(campaignNode, "ContractLengthInMonths"));
-                    campaign.setMonthlyAnnuityFactor(getTagValue(campaignNode, "MonthlyAnnuityFactor"));
-                    campaign.setInitialFee(getTagValue(campaignNode, "InitialFee"));
-                    campaign.setNotificationFee(getTagValue(campaignNode, "NotificationFee"));
-                    campaign.setInterestRatePercent(getTagValue(campaignNode, "InterestRatePercent"));
-                    campaign.setNumberOfInterestFreeMonths(getTagValue(campaignNode, "NumberOfInterestFreeMonths"));
-                    campaign.setNumberOfPaymentFreeMonths(getTagValue(campaignNode, "NumberOfPaymentFreeMonths"));
-                    campaign.setFromAmount(getTagValue(campaignNode, "FromAmount"));
-                    campaign.setToAmount(getTagValue(campaignNode, "ToAmount"));
-                    campaignCodes.add(campaign);
+                if(this.isOrderAccepted()) {
+	                NodeList campaigns = node.getElementsByTagName("CampaignCodeInfo");
+	                int numberOfCampaigns = campaigns.getLength();
+	                
+	                for (int j = 0; j < numberOfCampaigns; j++) {
+	                    Element campaignNode = (Element)campaigns.item(j);
+	                    
+	                    CampaignCode campaign = new CampaignCode();
+	                    campaign.setCampaignCode(getTagValue(campaignNode, "CampaignCode"));
+	                    campaign.setDescription(getTagValue(campaignNode, "Description"));
+	                    campaign.setPaymentPlanType(getTagValue(campaignNode, "PaymentPlanType"));
+	                    campaign.setContractLengthInMonths(getTagValue(campaignNode, "ContractLengthInMonths"));
+	                    campaign.setMonthlyAnnuityFactor(getTagValue(campaignNode, "MonthlyAnnuityFactor"));
+	                    campaign.setInitialFee(getTagValue(campaignNode, "InitialFee"));
+	                    campaign.setNotificationFee(getTagValue(campaignNode, "NotificationFee"));
+	                    campaign.setInterestRatePercent(getTagValue(campaignNode, "InterestRatePercent"));
+	                    campaign.setNumberOfInterestFreeMonths(getTagValue(campaignNode, "NumberOfInterestFreeMonths"));
+	                    campaign.setNumberOfPaymentFreeMonths(getTagValue(campaignNode, "NumberOfPaymentFreeMonths"));
+	                    campaign.setFromAmount(getTagValue(campaignNode, "FromAmount"));
+	                    campaign.setToAmount(getTagValue(campaignNode, "ToAmount"));
+	                    campaignCodes.add(campaign);
+	                }
                 }
             }
         } catch (Exception ex) {

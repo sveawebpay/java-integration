@@ -5,8 +5,7 @@ import static org.junit.Assert.assertEquals;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
-import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
@@ -15,18 +14,16 @@ import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsRe
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
-import se.sveaekonomi.webpay.integration.webservice.getaddresses.GetAddresses;
-import se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams.GetPaymentPlanParams;
 
 
 public class WebServicePaymentsResponseTest {
     
     @Test
     public void testDeliverInvoiceOrderResult() throws Exception {
-        DeliverOrderBuilder orderBuilder = WebPay.deliverOrder();
-        long orderId = createInvoiceAndReturnOrderId();
-        orderBuilder.setTestmode();
-            orderBuilder.addOrderRow(Item.orderRow()
+    	long orderId = createInvoiceAndReturnOrderId();
+    	
+    	DeliverOrderResponse response = WebPay.deliverOrder()               
+        .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
             .setAmountExVat(100.00)
@@ -34,13 +31,12 @@ public class WebServicePaymentsResponseTest {
             .setName("Prod")
             .setUnit("st")
             .setVatPercent(25)
-            .setDiscountPercent(0));
-            
-        
-        DeliverOrderResponse response = orderBuilder.setOrderId(orderId)
-            .setNumberOfCreditDays(1)
-            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-            .deliverInvoiceOrder()
+            .setDiscountPercent(0))
+                    
+        .setOrderId(orderId)
+        .setNumberOfCreditDays(1)
+        .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+        .deliverInvoiceOrder()
             .doRequest();
         
         assertEquals(response.isOrderAccepted(), true);        
@@ -49,8 +45,8 @@ public class WebServicePaymentsResponseTest {
     
     @Test
     public void testResultGetPaymentPlanParams() throws Exception {
-        GetPaymentPlanParams addressRequest = WebPay.getPaymentPlanParams();
-        PaymentPlanParamsResponse response = addressRequest.setTestmode()
+        
+        PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.createTestConfig())
             .doRequest();
         
         assertEquals(response.isOrderAccepted(), true);
@@ -70,8 +66,8 @@ public class WebServicePaymentsResponseTest {
     
 	@Test
 	public void testResultGetAddresses() throws Exception {
-	    GetAddresses addressRequest = WebPay.getAddresses(); 
-	    GetAddressesResponse request = addressRequest.setTestmode()
+	    
+	    GetAddressesResponse request = WebPay.getAddresses()
 	        .setCountryCode("SE")
 	        .setOrderTypeInvoice()
 	        .setIndividual("194605092222")
@@ -86,24 +82,24 @@ public class WebServicePaymentsResponseTest {
 	}
     
     private long createInvoiceAndReturnOrderId() throws Exception {
-        CreateOrderBuilder order = WebPay.createOrder()
-                .setTestmode();
-        order.addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
-                .setQuantity(2)
-                .setAmountExVat(100.00)
-                .setDescription("Specification")
-                .setName("Prod")
-                .setUnit("st")
-                .setVatPercent(25)
-                .setDiscountPercent(0));
+    	CreateOrderResponse response = WebPay.createOrder()                
+        	.addOrderRow(Item.orderRow()
+	                .setArticleNumber("1")
+	                .setQuantity(2)
+	                .setAmountExVat(100.00)
+	                .setDescription("Specification")
+	                .setName("Prod")
+	                .setUnit("st")
+	                .setVatPercent(25)
+	                .setDiscountPercent(0))
                              
-        order.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(194605092222L));
-        CreateOrderResponse response = order.setCountryCode(COUNTRYCODE.SE)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK)
-                .useInvoicePayment()// returnerar InvoiceOrder object
+	         .addCustomerDetails(Item.individualCustomer()
+	           		.setNationalIdNumber("194605092222"))
+        	.setCountryCode(COUNTRYCODE.SE)
+            .setClientOrderNumber("33")
+            .setOrderDate("2012-12-12")
+            .setCurrency(CURRENCY.SEK)
+            .useInvoicePayment()// returns an InvoiceOrder object
                 .doRequest();
       
         return response.orderId;

@@ -1,7 +1,10 @@
 package se.sveaekonomi.webpay.integration.webservice.getaddresses;
 
+import java.net.URL;
+
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.config.Config;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.webservice.GetAddressesResponse;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
@@ -15,9 +18,13 @@ public class GetAddresses {
     private String ssn;
     private String companyId;
     private String countryCode;
-    private String orderType;
-    private boolean testmode;    
+    private String orderType;   
     private final SveaConfig conf = new SveaConfig();
+    private Config configMode;
+    
+    public GetAddresses(Config config) {
+    	this.configMode = config;
+    }
     
     public String getIndividual() {
         return ssn;
@@ -75,16 +82,7 @@ public class GetAddresses {
     public String getOrderType() {
         return orderType;
     }
-        
-    public boolean getTestmode() {
-        return testmode;
-    }
-    
-    public GetAddresses setTestmode() {
-        this.testmode = true;
-        return this;
-    }
-    
+          
     public GetAddresses setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
         conf.setPasswordBasedAuthorization(userName, password, clientNumber, orderType);    
         return this;
@@ -119,10 +117,10 @@ public class GetAddresses {
             throw e;
         }
         
-        String url = testmode ? SveaConfig.SWP_TEST_WS_URL : SveaConfig.SWP_PROD_WS_URL;
+        URL url = configMode.getWebserviceUrl();
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("GetAddresses", xml);
-        NodeList soapResponse = soapBuilder.createGetAddressesEuRequest(soapMessage, url);
+        NodeList soapResponse = soapBuilder.createGetAddressesEuRequest(soapMessage, url.toString());
         GetAddressesResponse response = new GetAddressesResponse(soapResponse);
         return response;
     }

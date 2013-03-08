@@ -19,18 +19,23 @@ public class HostedPaymentTest {
 
     @Test
     public void testCalculateRequestValuesNullExtraRows() throws Exception {
-    	CreateOrderBuilder order = new CreateOrderBuilder();
-    	order = WebPay.createOrder()
-    		.setTestmode()
+    	//CreateOrderBuilder order = new CreateOrderBuilder();
+    	CreateOrderBuilder order = WebPay.createOrder()    	
             .addOrderRow(Item.orderRow()
             		.setAmountExVat(4)
                     .setVatPercent(25)
-                    .setQuantity(1));            
+                    .setQuantity(1))            
             
-        order.setShippingFeeRows(null);
-        order.setFixedDiscountRows(null);
-        order.setRelativeDiscountRows(null);
+     //   .setShippingFeeRows(null)
+        .addFee(Item.shippingFee())
+        .addDiscount(Item.fixedDiscount())
+        .addDiscount(Item.relativeDiscount());
+        //.usePayPage()
+        	//.getPaymentForm();
+        //.setFixedDiscountRows(null)
+        //.setRelativeDiscountRows(null)
         HostedPayment payment = new FakeHostedPayment(order);
+        
         payment.calculateRequestValues();
         
         assertTrue(500L == payment.getAmount());
@@ -38,9 +43,8 @@ public class HostedPaymentTest {
 
     @Test
     public void testVatPercentAndAmountIncVatCalculation() {        
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        order = WebPay.createOrder()
-        		.setTestmode()
+       // CreateOrderBuilder order = new CreateOrderBuilder();
+        CreateOrderBuilder order = WebPay.createOrder()        		
                 .addOrderRow(Item.orderRow()
                 		.setAmountExVat(4)
                         .setVatPercent(25)
@@ -57,9 +61,8 @@ public class HostedPaymentTest {
     
     @Test
     public void testAmountIncVatAndAmountExVatCalculation() {
-    	CreateOrderBuilder order = new CreateOrderBuilder();
-        order = WebPay.createOrder()
-        		.setTestmode()
+    	//CreateOrderBuilder order = new CreateOrderBuilder();
+    	 CreateOrderBuilder order = WebPay.createOrder()        		
                 .addOrderRow(Item.orderRow()
                 		.setAmountExVat(4)
                         .setVatPercent(25)
@@ -81,9 +84,8 @@ public class HostedPaymentTest {
     
     @Test
     public void testCreatePaymentForm() throws Exception {
-    	CreateOrderBuilder order = new CreateOrderBuilder();
-        order = WebPay.createOrder()
-        		.setTestmode()
+    	//CreateOrderBuilder order = new CreateOrderBuilder();
+    	 CreateOrderBuilder order = WebPay.createOrder()        		
                 .addOrderRow(Item.orderRow()
                 		.setAmountExVat(4)
                         .setVatPercent(25)

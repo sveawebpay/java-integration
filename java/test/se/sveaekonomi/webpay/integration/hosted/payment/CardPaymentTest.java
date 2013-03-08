@@ -89,8 +89,7 @@ public class CardPaymentTest {
     
     @Test
     public void testSetAuthorization() throws Exception {
-    	PaymentForm form = WebPay.createOrder()
-                .setTestmode()                
+    	PaymentForm form = WebPay.createOrder()                               
        .addOrderRow(Item.orderRow()
                 .setAmountExVat(100.00)
                 .setArticleNumber("1")

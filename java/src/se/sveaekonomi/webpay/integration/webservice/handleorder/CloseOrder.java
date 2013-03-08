@@ -1,11 +1,12 @@
 package se.sveaekonomi.webpay.integration.webservice.handleorder;
 
+import java.net.URL;
+
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.handle.CloseOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
-import se.sveaekonomi.webpay.integration.webservice.getaddresses.GetAddresses;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCloseOrder;
@@ -45,14 +46,15 @@ public class CloseOrder {
     }
     
     public CloseOrderResponse doRequest() throws Exception {
-        String url = order.getTestmode() ? SveaConfig.SWP_TEST_WS_URL : SveaConfig.SWP_PROD_WS_URL; 
+       // String url = order.getTestmode() ? SveaConfig.SWP_TEST_WS_URL : SveaConfig.SWP_PROD_WS_URL;
+    	URL url = order.getWebserviceUrl();
         SveaRequest<SveaCloseOrder> request = this.prepareRequest();
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml = xmlBuilder.getCloseOrderEuXml(request.request);
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("CloseOrderEu", xml);
-        NodeList soapResponse = soapBuilder.closeOrderEuRequest(soapMessage, url);
+        NodeList soapResponse = soapBuilder.closeOrderEuRequest(soapMessage, url.toString());
         CloseOrderResponse response = new CloseOrderResponse(soapResponse);
         return response;
     }

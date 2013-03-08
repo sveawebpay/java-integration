@@ -21,10 +21,10 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
      * @param type email
      * @return CustomerIdentity
      */
-    @SuppressWarnings("unchecked")
+    
     public T setEmail(String email) {
         this.email = email;
-        return (T) this;
+        return getGenericThis();
     }
     
     public Integer getPhoneNumber() {
@@ -36,11 +36,16 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
      * @param type phoneNumber
      * @return CustomerIdentity
      */
-    @SuppressWarnings("unchecked")
+   
     public T setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
-        return (T) this;
+        return getGenericThis();
     }
+
+    @SuppressWarnings("unchecked")
+	private T getGenericThis() {
+		return (T) this;
+	}
     
     public String getZipCode() {
         return zipCode;
@@ -50,21 +55,19 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
      * Required for company and private customers in NL and DE
      * @param type zipCode
      * @return CustomerIdentity
-     */
-    @SuppressWarnings("unchecked")
+     */   
     public T setZipCode(String zipCode) {
         this.zipCode = zipCode;
-        return (T) this;
+        return getGenericThis();
     }
     
     public String getIpAddress() {
         return ipAddress;
     }
-    
-    @SuppressWarnings("unchecked")
+        
     public T setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
-        return (T) this;
+        return getGenericThis();
     }
            
     public String getStreetAddress() {
@@ -81,11 +84,10 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
      * @param type houseNumber
      * @return CustomerIdentity
      */
-    @SuppressWarnings("unchecked")
     public T setStreetAddress(String streetAddress, Integer houseNumber) {
         this.streetAddress = streetAddress;
         this.housenumber = houseNumber;
-        return (T) this;
+        return getGenericThis();
     }
         
     public String getLocality() {
@@ -96,20 +98,18 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
      * Required for company and private customers in NL and DE
      * @param type locality
      * @return CustomerIdentity
-     */
-    @SuppressWarnings("unchecked")
+     */    
     public T setLocality(String locality) {
         this.locality = locality;
-        return (T) this;
+        return getGenericThis();
     }
     
     public String getCoAddress() {
         return coAddress;
     }
-    
-    @SuppressWarnings("unchecked")
+      
     public T setCoAddress(String coAddress) {
         this.coAddress = coAddress;
-        return (T) this;
+        return getGenericThis();
     }    
 }
