@@ -14,8 +14,7 @@ public class SveaSoapBuilderTest {
     
     @Test
     public void testRequest() throws Exception {
-      //  SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
-              
+             
         CreateOrderResponse response = WebPay.createOrder()
         
         .addOrderRow(Item.orderRow()

@@ -6,8 +6,6 @@ import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
-import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
@@ -16,16 +14,16 @@ import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsRe
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
-import se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams.GetPaymentPlanParams;
 
 
 public class WebServicePaymentsResponseTest {
     
     @Test
     public void testDeliverInvoiceOrderResult() throws Exception {
-        DeliverOrderBuilder orderBuilder = WebPay.deliverOrder();
-        long orderId = createInvoiceAndReturnOrderId();        
-            orderBuilder.addOrderRow(Item.orderRow()
+    	long orderId = createInvoiceAndReturnOrderId();
+    	
+    	DeliverOrderResponse response = WebPay.deliverOrder()               
+        .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
             .setAmountExVat(100.00)
@@ -33,13 +31,12 @@ public class WebServicePaymentsResponseTest {
             .setName("Prod")
             .setUnit("st")
             .setVatPercent(25)
-            .setDiscountPercent(0));
-            
-        
-        DeliverOrderResponse response = orderBuilder.setOrderId(orderId)
-            .setNumberOfCreditDays(1)
-            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-            .deliverInvoiceOrder()
+            .setDiscountPercent(0))
+                    
+        .setOrderId(orderId)
+        .setNumberOfCreditDays(1)
+        .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+        .deliverInvoiceOrder()
             .doRequest();
         
         assertEquals(response.isOrderAccepted(), true);        
@@ -85,23 +82,24 @@ public class WebServicePaymentsResponseTest {
 	}
     
     private long createInvoiceAndReturnOrderId() throws Exception {
-        CreateOrderBuilder order = WebPay.createOrder()                
-        .addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
-                .setQuantity(2)
-                .setAmountExVat(100.00)
-                .setDescription("Specification")
-                .setName("Prod")
-                .setUnit("st")
-                .setVatPercent(25)
-                .setDiscountPercent(0));
+    	CreateOrderResponse response = WebPay.createOrder()                
+        	.addOrderRow(Item.orderRow()
+	                .setArticleNumber("1")
+	                .setQuantity(2)
+	                .setAmountExVat(100.00)
+	                .setDescription("Specification")
+	                .setName("Prod")
+	                .setUnit("st")
+	                .setVatPercent(25)
+	                .setDiscountPercent(0))
                              
-        order.addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"));
-        CreateOrderResponse response = order.setCountryCode(COUNTRYCODE.SE)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK)
-                .useInvoicePayment()// returnerar InvoiceOrder object
+	         .addCustomerDetails(Item.individualCustomer()
+	           		.setNationalIdNumber("194605092222"))
+        	.setCountryCode(COUNTRYCODE.SE)
+            .setClientOrderNumber("33")
+            .setOrderDate("2012-12-12")
+            .setCurrency(CURRENCY.SEK)
+            .useInvoicePayment()// returns an InvoiceOrder object
                 .doRequest();
       
         return response.orderId;
