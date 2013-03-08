@@ -140,4 +140,8 @@ public class PaymentForm {
 	public void setPayPageUrl(URL payPageUrl) {
 		url = payPageUrl;
 	}
+	
+	public String getUrl() {
+		return url.toString();
+	}
 }

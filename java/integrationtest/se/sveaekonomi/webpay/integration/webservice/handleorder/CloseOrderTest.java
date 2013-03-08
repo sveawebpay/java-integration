@@ -24,7 +24,7 @@ public class CloseOrderTest {
         Long orderId = 0L;
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
                    
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.createTestConfig())
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)

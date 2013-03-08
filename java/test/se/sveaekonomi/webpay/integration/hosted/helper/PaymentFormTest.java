@@ -34,9 +34,9 @@ public class PaymentFormTest {
                 .setMerchantId(MerchantId)
                 .setSecretWord(SecretWord)
                 .setForm();
-        String url = WebPay.createOrder().getPayPageUrl().toString();
+
         final String EXPECTED = "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\""
-                + url
+                + form.getUrl()
                 + "\">"
                 + "<input type=\"hidden\" name=\"merchantid\" value=\"" + MerchantId + "\" />"
                 + "<input type=\"hidden\" name=\"message\" value=\"" + base64Payment + "\" />"
@@ -64,8 +64,7 @@ public class PaymentFormTest {
             .setHtmlFields();
         
         Map<String, String> formHtmlFields = form.getFormHtmlFields();
-        
-        String url = WebPay.createOrder().getPayPageUrl().toString();
+        String url = form.getUrl();
         
         assertTrue(formHtmlFields.get("form_start_tag").equals("<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\"" + url + "\">"));
         assertTrue(formHtmlFields.get("input_merchantId").equals("<input type=\"hidden\" name=\"merchantid\" value=\"" + MerchantId + "\" />"));

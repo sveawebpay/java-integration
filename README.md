@@ -68,9 +68,7 @@ For every new payment type implementation, you follow the steps from the beginni
 Build order -> choose payment type -> doRequest/getPaymentForm
 
 ```java
-CreateOrderResponse response = WebPay.createOrder()               
-//If test mode
-.setTestmode()
+CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
 //For all products and other items
 .addOrderRow(Item.orderRow()...)
 //If shipping fee
@@ -259,12 +257,11 @@ use class *Response* with the xml response as parameter, you will receive a
 formatted object as well. 
 
 #### Asynchronous payments - Hosted solutions
-Build order and recieve a *PaymentForm* object. Send the *PaymentForm* parameters: *merchantid*, *xmlMessageBase64* and *mac* by POST to
-SveaConfig.SWP_TEST_URL or SveaConfig.SWP_PROD_URL. The *PaymentForm* object also contains a complete html form as string 
+Build order and recieve a *PaymentForm* object. Send the *PaymentForm* parameters: *merchantid*, *xmlMessageBase64* and *mac* by POST with *url*. The *PaymentForm* object also contains a complete html form as string 
 and the html form element as array.
 
 ```html
-    <form name="paymentForm" id="paymentForm" method="post" action="SveaConfig.SWP_TEST_URL">
+    <form name="paymentForm" id="paymentForm" method="post" action=" + url +">
         <input type="hidden" name="merchantid" value=" + merchantId + " />
         <input type="hidden" name="message" value=" + xmlMessageBase64 + " />
         <input type="hidden" name="mac" value=" + mac + "/>
@@ -280,7 +277,7 @@ and the html form element as array.
 ##### 1.5.1.1 Request
 If Config/SveaConfig.php is not modified you can set your store authorization here.
 ```java
-PaymentForm form = WebPay.createOrder()
+PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 	.addOrderRow(Item.orderRow()
         .setArticleNumber("1")
         .setQuantity(2)
@@ -312,7 +309,8 @@ Function getPaymentForm() returns object type *PaymentForm* with accessible memb
 | getXmlMessage()       | String     | Payment information in XML-format.        |
 | getMerchantId()       | String     | Authorization                             |
 | getSecretWord()       | String     | Authorization                             |
-| getMacSha512()        | String     | Message authentication code.              |    
+| getMacSha512()        | String     | Message authentication code.              |
+| getUrl()				| String     | Url to preselected server, test or production.|     
 | getCompleteForm()		| String     | A complete Html form with method= "post" with submit button to include in your code. |
 | getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
             
@@ -329,8 +327,7 @@ PaymentForm form = ...
 ##### 1.5.2.1 Request
 If Config/SveaConfig.php is not modified you can set your store authorization here.
 ```java
-PaymentForm form = WebPay.createOrder()
-.setTestmode()
+PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 .addOrderRow(Item.orderRow()
 	.setArticleNumber("1")
 	.setQuantity(2)
@@ -360,7 +357,8 @@ Returns object type PaymentForm:
 | getXmlMessage()       | String     | Payment information in XML-format.        |
 | getMerchantId()       | String     | Authorization                             |
 | getSecretWord()       | String     | Authorization                             |
-| getMacSha512()        | String     | Message authentication code.              |    
+| getMacSha512()        | String     | Message authentication code.              |   
+| getUrl()				| String     | Url to preselected server, test or production.|   
 | getCompleteForm()		| String     | A complete Html form with method= "post" with submit button to include in your code. |
 | getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
  
@@ -377,8 +375,7 @@ setPaymentMethod, includePaymentMethods, excludeCardPaymentMethods or excludeDir
                 
 ##### 1.5.3.1 Request
 ```java
-PaymentForm form = WebPay.createOrder()
-.setTestmode()
+PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 .addOrderRow(
     Item.orderRow()
         .setArticleNumber("1")
@@ -446,7 +443,8 @@ Returns object type *PaymentForm*:
 | getXmlMessage()       | String     | Payment information in XML-format.        |
 | getMerchantId()       | String     | Authorization                             |
 | getSecretWord()       | String     | Authorization                             |
-| getMacSha512()        | String     | Message authentication code.              |    
+| getMacSha512()        | String     | Message authentication code.              |  
+| getUrl()				| String     | Url to preselected server, test or production.|    
 | getCompleteForm()		| String     | A complete Html form with method= "post" with submit button to include in your code. |
 | getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
  
@@ -463,7 +461,7 @@ Go direct to specified payment method without the step *PayPage*.
 ##### 1.5.1.1 Request
 If Config/SveaConfig.php is not modified you can set your store authorization here.
 ```java
-PaymentForm form = WebPay.createOrder()
+PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 .addOrderRow(Item.orderRow()
 	.setArticleNumber("1")
 	.setQuantity(2)
@@ -496,6 +494,7 @@ Function getPaymentForm() returns Object type PaymentForm with accessible member
 | getMerchantId()       | String     | Authorization                             |
 | getSecretWord()       | String     | Authorization                             |
 | getMacSha512()        | String     | Message authentication code.              |    
+| getUrl()				| String     | Url to preselected server, test or production.|  
 | getCompleteForm()		| String     | A complete Html form with method= "post" with submit button to include in your code. |
 | getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
             
@@ -514,8 +513,7 @@ Perform an invoice payment. This payment form will perform a synchronous payment
 Returns *CreateOrderResponse* object.
 If Config/SveaConfig.php is not modified you can set your store authorization here.
 ```java
-CreateOrderResponse response = WebPay.createOrder()
-  .setTestmode()
+CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
   .addOrderRow(Item.orderRow()
 	.setArticleNumber("1")
 	.setQuantity(2)
@@ -536,12 +534,11 @@ CreateOrderResponse response = WebPay.createOrder()
 ```
 #### 1.5.5 PaymentPlanPayment
 Perform *PaymentPlanPayment*. This payment form will perform a synchronous payment and return a response.
-Returns a *CreateOrderResponse* object. Preceded by WebPay.getPaymentPlanParams().
+Returns a *CreateOrderResponse* object. Preceded by WebPay.getPaymentPlanParams(...).
 If Config/SveaConfig.php is not modified you can set your store authorization here.
 Param: Campaign code recieved from getPaymentPlanParams().
 ```java
-CreateOrderResponse response = WebPay.createOrder()
-.setTestmode()
+CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
 .addOrderRow(Item.orderRow()
 	.setArticleNumber(1)
 	.setQuantity(2)
@@ -569,8 +566,7 @@ Returns *PaymentPlanParamsResponse* object.
 If Config/SveaConfig.php is not modified you can set your store authorization here.
 
 ```java
-CreateOrderResponse response = WebPay.getPaymentPlanParams()
-	.setTestmode()
+CreateOrderResponse response = WebPay.getPaymentPlanParams(SveaConfig.createTestConfig())	
 	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
 	.doRequest();
 ```
@@ -601,8 +597,7 @@ or
 
 ### 3.3                                                                      	
 ```java
-    GetAddressesResponse response = WebPay.getAddresses()
-        .setTestmode()
+    GetAddressesResponse response = WebPay.getAddresses(SveaConfig.createTestConfig())        
         .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
         .setOrderTypeInvoice()                                              //See 3.1   
         .setCountryCode(COUNTRYCODE.SE)                                     //Required
@@ -620,13 +615,16 @@ If Config/SveaConfig.php is not modified you can set your store authorization he
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
-### 4.1 Testmode                                                             
-Set test mode while developing to make the calls to our test server.
-Remove when you change to production mode.
+### 4.1 Test mode                                                             
+Set test configuration while developing to make the calls to our test server when starting a request, i.e. createOrder(...), closeOrder(...),
+deliverOrder(...), getPaymentPlanParams(...), getAddresses(...). If no parameter is set, test mode is default. When moving to production server, change to production configuration. 
 
 Ex. 
 ```java
-    .setTestmode()
+	//test mode
+    WebPay.createOrder(SveaConfig.createTestConfig())...
+	//production mode
+	WebPay.createOrder(SveaConfig.createProductionConfig())...
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
@@ -693,8 +691,7 @@ If invoice order is credit invoice use setCreditInvoice(invoiceId) and setNumber
 ```
 
 ```java
-DeliverOrderResponse response = WebPay.deliverOrder()
-.setTestmode()
+DeliverOrderResponse response = WebPay.deliverOrder(SveaConfig.createTestConfig()
 .addOrderRow(Item.orderRow()
 	.setArticleNumber("1")
 	.setQuantity(2)
@@ -727,8 +724,7 @@ or
 ```
 
 ```java
-CloseOrderResponse  =  WebPay.closeOrder()
-	.setTestmode()
+CloseOrderResponse  =  WebPay.closeOrder(SveaConfig.createTestConfig()
 	.setOrderId(orderId)                                                  //Required, received when creating an order.
 	.closeInvoiceOrder()
 		.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)//Optional
