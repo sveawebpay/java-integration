@@ -19,7 +19,7 @@ public class GetAddresses {
     private String companyId;
     private String countryCode;
     private String orderType;
-    private boolean testmode;    
+    //private boolean testmode;    
     private final SveaConfig conf = new SveaConfig();
     private Config configMode;
     
@@ -84,14 +84,14 @@ public class GetAddresses {
         return orderType;
     }
         
-    public boolean getTestmode() {
+  /*  public boolean getTestmode() {
         return testmode;
     }
     
     public GetAddresses setTestmode() {
         this.testmode = true;
         return this;
-    }
+    }*/
     
     public GetAddresses setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
         conf.setPasswordBasedAuthorization(userName, password, clientNumber, orderType);    

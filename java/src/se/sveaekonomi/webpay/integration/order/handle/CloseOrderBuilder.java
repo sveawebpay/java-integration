@@ -10,7 +10,6 @@ public class CloseOrderBuilder {
     
     private Long orderId;
     private String orderType;
-    private boolean testmode;
     public final SveaConfig config = new SveaConfig();
     
     private Config configMode;
@@ -45,15 +44,6 @@ public class CloseOrderBuilder {
         return this;
     }
 
-    public boolean getTestmode() {
-        return testmode;
-    }
-
-    public CloseOrderBuilder setTestmode() {
-        this.testmode = true;
-        return this;
-    }
-    
     public CloseOrder closeInvoiceOrder() {
         orderType = "Invoice";
         return new CloseOrder(this);

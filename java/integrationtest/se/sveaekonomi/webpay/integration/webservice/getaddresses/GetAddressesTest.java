@@ -12,8 +12,7 @@ public class GetAddressesTest {
     @Test
     public void testGetAddresses() throws Exception {
         try {
-            GetAddressesResponse response = WebPay.getAddresses()
-                .setTestmode()
+            GetAddressesResponse response = WebPay.getAddresses()                
                 .setCountryCode("SE")
                 .setIndividual("460509-2222")
                 .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional

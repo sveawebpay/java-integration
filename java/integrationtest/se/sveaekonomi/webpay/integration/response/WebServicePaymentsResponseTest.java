@@ -15,7 +15,6 @@ import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsRe
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
-import se.sveaekonomi.webpay.integration.webservice.getaddresses.GetAddresses;
 import se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams.GetPaymentPlanParams;
 
 
@@ -70,8 +69,8 @@ public class WebServicePaymentsResponseTest {
     
 	@Test
 	public void testResultGetAddresses() throws Exception {
-	    GetAddresses addressRequest = WebPay.getAddresses(); 
-	    GetAddressesResponse request = addressRequest.setTestmode()
+	    
+	    GetAddressesResponse request = WebPay.getAddresses()
 	        .setCountryCode("SE")
 	        .setOrderTypeInvoice()
 	        .setIndividual("194605092222")

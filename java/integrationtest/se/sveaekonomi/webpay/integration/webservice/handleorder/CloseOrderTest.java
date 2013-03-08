@@ -62,8 +62,7 @@ public class CloseOrderTest {
        
         soapBuilder = new SveaSoapBuilder();
         
-          CloseOrderResponse closeResponse = WebPay.closeOrder()
-                .setTestmode()
+          CloseOrderResponse closeResponse = WebPay.closeOrder()              
                 .setOrderId(orderId)
                 .closeInvoiceOrder()
                 .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
