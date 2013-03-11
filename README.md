@@ -1,6 +1,6 @@
 # Java Integration Package API for SveaWebPay
 
--*NOTE:* This documentation is not yet fully converted from PHP. The general flow and methods should be all the same. Let the fluent API guide you using code completion in your IDE, and you should be fairly well on the way. Sorry for any inconvenience.
+*NOTE:* This documentation is not yet fully converted from PHP. The general flow and methods should be all the same. Let the fluent API guide you using code completion in your IDE, and you should be fairly well on the way. Sorry for any inconvenience.
 
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
@@ -300,7 +300,7 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
 .usePayPageCardOnly()
-	.setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+	.setMerchantIdBasedAuthorization(1200, "f78hv9")   //Required
 	.setReturnUrl("http://myurl.se")                   //Required
 	.setCancelUrl("http://myurl.se")                   //Optional
 	.getPaymentForm();
@@ -344,8 +344,8 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
 .usePayPageDirectBankOnly()
-	.setReturnUrl("http://myurl.se")                   //Required	
-	.setMerchantIdBasedAuthorization(1200, "f78hv9")   //Optional
+	.setMerchantIdBasedAuthorization(1200, "f78hv9")   //Required
+	.setReturnUrl("http://myurl.se")                   //Required		
 	.setCancelUrl("http://myurl.se")                   //Optional
 	.getPaymentForm();
 ```
@@ -387,8 +387,8 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
 .usePayPage()
+	.setMerchantIdBasedAuthorization(1200, "f78hv9")   	//Required	
 	.setReturnUrl("http://myurl.se")                   	//Required	
-	.setMerchantIdBasedAuthorization(1200, "f78hv9")   	//Optional		
 	.setCancelUrl("http://myurl.se")                   	//Optional
 	.setPayPagePayment(LANGUAGECODE.sv)					//Optional, English is default. LANGUAGECODE, see APPENDIX
 	.getPaymentForm();
@@ -465,11 +465,11 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 .setClientOrderNumber("33")
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
-	.usePaymentMethod(PAYMENTMETHOD.KORTCERT)             //Se APPENDIX for PaymentMethods
-		.setMerchantIdBasedAuthorization(1200, "f78hv9")  //Optional
-		.setReturnUrl("http://myurl.se")                  //Required
-		.setCancelUrl("http://myurl.se")                  //Optional
-		.getPaymentForm();
+.usePaymentMethod(PAYMENTMETHOD.KORTCERT)             	//Se APPENDIX for PaymentMethods
+	.setMerchantIdBasedAuthorization(1200, "f78hv9")	//Required
+	.setReturnUrl("http://myurl.se")                  	//Required
+	.setCancelUrl("http://myurl.se")                  	//Optional
+	.getPaymentForm();
 
 ```
 ##### 1.5.1.2 Return
@@ -509,8 +509,8 @@ CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
 .setCustomerReference("33")
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
-	.useInvoicePayment()
-	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
+.useInvoicePayment()
+	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
 	.doRequest();
 ```
 #### 1.5.5 PaymentPlanPayment
@@ -536,7 +536,7 @@ CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
 .setCurrency("SEK")
 .usePaymentPlanPayment("camp1", false)              //Parameter1: campaign code recieved from getPaymentPlanParams
 													//Paremeter2: True if Automatic autogiro form will be sent with the first notification		
-   .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
+   .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
    .doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
@@ -547,7 +547,7 @@ Returns *PaymentPlanParamsResponse* object. Set your store authorization here.
 
 ```java
 CreateOrderResponse response = WebPay.getPaymentPlanParams(SveaConfig.createTestConfig())	
-	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
+	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
 	.doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
@@ -578,7 +578,7 @@ or
 ### 3.3                                                                      	
 ```java
     GetAddressesResponse response = WebPay.getAddresses(SveaConfig.createTestConfig())        
-        .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
+        .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
         .setOrderTypeInvoice()                                              //See 3.1   
         .setCountryCode(COUNTRYCODE.SE)                                     //Required
         .setIndividual(194605092222)                                        //See 3.2   
@@ -684,8 +684,8 @@ DeliverOrderResponse response = WebPay.deliverOrder(SveaConfig.createTestConfig(
 .setOrderId(3434)
 .setInvoiceDistributionType("Post")
 .deliverInvoiceOrder()
-	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
-		.doRequest();
+	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
+	.doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
@@ -704,9 +704,9 @@ or
 
 ```java
 CloseOrderResponse  =  WebPay.closeOrder(SveaConfig.createTestConfig()
-	.setOrderId(orderId)                                                  //Required, received when creating an order.
+	.setOrderId(orderId)                                                  	//Required, received when creating an order.
 	.closeInvoiceOrder()
-		.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)//Optional
+		.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)	//Required
 		.doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
