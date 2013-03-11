@@ -57,6 +57,9 @@ Other public targets can be found in the build.xml file.
 
 ## Configuration 
 
+To configure Svea authorization you need to use *setPasswordBasedAuthorization(...)* for Invoice/Payment plan or 
+*setMerchantIdBasedAuthorization(...)* for other payments like card and direct bank payments. 
+Needs to be used everytime when creating a request, i.e. before calling *doRequest()* or *getPaymentForm()*.
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
@@ -193,21 +196,21 @@ All products and other items. It´s required to have a minimum of one order row.
 When discount or coupon is a fixed amount on total product amount.
 ```java
 .addDiscount(Item.fixedDiscount()                
-        .setAmountIncVat(100.00)               //Required
-        .setDiscountId("1")                    //Optional        
-        .setUnit("st")                         //Optional
-        .setDescription("FixedDiscount")       //Optional
-        .setName("Fixed"))                     //Optional    
+	.setAmountIncVat(100.00)               //Required
+	.setDiscountId("1")                    //Optional        
+	.setUnit("st")                         //Optional
+	.setDescription("FixedDiscount")       //Optional
+	.setName("Fixed"))                     //Optional    
 ```
 #### 1.2.5 Relative Discount
 When discount or coupon is a percentage on total product amount.
 ```java
 .addDiscount(Item.relativeDiscount()
-        .setDiscountPercent(50)                //Required
-        .setDiscountId("1")                    //Optional      
-        .setUnit("st")                         //Optional
-        .setName("Relative")                   //Optional
-        .setDescription("RelativeDiscount"))   //Optional    
+	.setDiscountPercent(50)                //Required
+	.setDiscountId("1")                    //Optional      
+	.setUnit("st")                         //Optional
+	.setName("Relative")                   //Optional
+	.setDescription("RelativeDiscount"))   //Optional    
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
@@ -285,15 +288,15 @@ and the html form element as array.
 
 ```java
 PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
-	.addOrderRow(Item.orderRow()
-        .setArticleNumber("1")
-        .setQuantity(2)
-        .setAmountExVat(100.00)
-        .setDescription("Specification")
-        .setName("Prod")
-        .setUnit("st")
-        .setVatPercent(25)
-        .setDiscountPercent(0))
+.addOrderRow(Item.orderRow()
+	.setArticleNumber("1")
+	.setQuantity(2)
+	.setAmountExVat(100.00)
+	.setDescription("Specification")
+	.setName("Prod")
+	.setUnit("st")
+	.setVatPercent(25)
+	.setDiscountPercent(0))
 		
 .setCountryCode(COUNTRYCODE.SE)
 .setClientOrderNumber("33")
@@ -371,16 +374,15 @@ setPaymentMethod, includePaymentMethods, excludeCardPaymentMethods or excludeDir
 ##### 1.5.3.1 Request
 ```java
 PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
-.addOrderRow(
-    Item.orderRow()
-        .setArticleNumber("1")
-        .setQuantity(2)
-        .setAmountExVat(100.00)
-        .setDescription("Specification")
-        .setName("Prod")
-        .setUnit("st")
-        .setVatPercent(25)
-        .setDiscountPercent(0))   
+.addOrderRow(Item.orderRow()
+	.setArticleNumber("1")
+	.setQuantity(2)
+	.setAmountExVat(100.00)
+	.setDescription("Specification")
+	.setName("Prod")
+	.setUnit("st")
+	.setVatPercent(25)
+	.setDiscountPercent(0))   
 	
 .setCountryCode(COUNTRYCODE.SE)
 .setCustomerReference("33")
@@ -397,28 +399,28 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 ###### 1.5.3.1.1 Exclude specific payment methods
 Optional if you want to include specific payment methods for *PayPage*.
 ```java   
-    .usePayPage()
-        .setReturnUrl("http://myurl.se")                                            //Required
-        .setCancelUrl("http://myurl.se")                                            //Optional
-        .excludePaymentMethods(PAYMENTMETHOD.DBSEBSE, PAYMENTMETHOD.SVEAINVOICE_SE)	//Optional
-        .getPaymentForm();
+.usePayPage()
+	.setReturnUrl("http://myurl.se")                                            //Required
+	.setCancelUrl("http://myurl.se")                                            //Optional
+	.excludePaymentMethods(PAYMENTMETHOD.DBSEBSE, PAYMENTMETHOD.SVEAINVOICE_SE)	//Optional
+	.getPaymentForm();
 ```
 ###### 1.5.3.1.2 Include specific payment methods
 Optional if you want to include specific payment methods for *PayPage*.
 ```java   
-    .usePayPage()
-        .setReturnUrl("http://myurl.se")                                            //Required
-        .includePaymentMethods(PAYMENTMETHOD.DBSEBSE, PAYMENTMETHOD.SVEAINVOICE_SE)	//Optional
-        .getPaymentForm();
+.usePayPage()
+	.setReturnUrl("http://myurl.se")                                            //Required
+	.includePaymentMethods(PAYMENTMETHOD.DBSEBSE, PAYMENTMETHOD.SVEAINVOICE_SE)	//Optional
+	.getPaymentForm();
 ```
 
 ###### 1.5.3.1.3 Exclude Card payments
 Optional if you want to exclude all card payment methods from *PayPage*.
 ```java
-   .usePayPage()
-        .setReturnUrl("http://myurl.se")                   //Required
-        .excludeCardPaymentMethods()                       //Optional
-        .getPaymentForm();
+.usePayPage()
+	.setReturnUrl("http://myurl.se")                   //Required
+	.excludeCardPaymentMethods()                       //Optional
+	.getPaymentForm();
 ```
 
 ###### 1.5.3.1.4 Exclude Direct payments
@@ -495,15 +497,15 @@ Perform an invoice payment. This payment form will perform a synchronous payment
 Returns *CreateOrderResponse* object. Set your store authorization here.
 ```java
 CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
-  .addOrderRow(Item.orderRow()
-	.setArticleNumber("1")
-	.setQuantity(2)
-	.setAmountExVat(100.00)
-	.setDescription("Specification")
-	.setName("Prod")
-	.setUnit("st")
-	.setVatPercent(25)
-	.setDiscountPercent(0))   
+.addOrderRow(Item.orderRow()
+.setArticleNumber("1")
+.setQuantity(2)
+.setAmountExVat(100.00)
+.setDescription("Specification")
+.setName("Prod")
+.setUnit("st")
+.setVatPercent(25)
+.setDiscountPercent(0))   
 
 .setCountryCode(COUNTRYCODE.SE)
 .setCustomerReference("33")
@@ -577,12 +579,12 @@ or
 
 ### 3.3                                                                      	
 ```java
-    GetAddressesResponse response = WebPay.getAddresses(SveaConfig.createTestConfig())        
-        .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
-        .setOrderTypeInvoice()                                              //See 3.1   
-        .setCountryCode(COUNTRYCODE.SE)                                     //Required
-        .setIndividual(194605092222)                                        //See 3.2   
-        .doRequest();
+GetAddressesResponse response = WebPay.getAddresses(SveaConfig.createTestConfig())        
+	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
+	.setOrderTypeInvoice()                                              //See 3.1   
+	.setCountryCode(COUNTRYCODE.SE)                                     //Required
+	.setIndividual(194605092222)                                        //See 3.2   
+	.doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
@@ -624,27 +626,27 @@ orderRows = Item.orderRow()...;
 #### 4.2.1 OrderRow
 All products and other items. It is required to have a minimum of one row.
 ```java
-  .addOrderRow(Item.orderRow()   
-       .setQuantity(2)              	    //Required
-       .setAmountExVat(100.00)  	        //Required
-       .setVatPercent(25)    	            //Required
-       .setArticleNumber("1")               //Optional
-       .setDescription("Specification")	    //Optional    
-       .setName("Prod")                 	//Optional
-       .setUnit("st")                      	//Optional
-       .setDiscountPercent(0))             	//Optional
+.addOrderRow(Item.orderRow()   
+   .setQuantity(2)              	    //Required
+   .setAmountExVat(100.00)  	        //Required
+   .setVatPercent(25)    	            //Required
+   .setArticleNumber("1")               //Optional
+   .setDescription("Specification")	    //Optional    
+   .setName("Prod")                 	//Optional
+   .setUnit("st")                      	//Optional
+   .setDiscountPercent(0))             	//Optional
 ```
 
 #### 4.2.2 ShippingFee
 ```java
 .addFee(Item.shippingFee()
-        .setAmountExVat(50)               	//Required
-        .setVatPercent(25)                 	//Required
-        .setShippingId("33")               	//Optional
-        .setName("shipping")               	//Optional
-        .setDescription("Specification")   	//Optional        
-        .setUnit("st")                     	//Optional        
-        .setDiscountPercent(0))
+	.setAmountExVat(50)               	//Required
+	.setVatPercent(25)                 	//Required
+	.setShippingId("33")               	//Optional
+	.setName("shipping")               	//Optional
+	.setDescription("Specification")   	//Optional        
+	.setUnit("st")                     	//Optional        
+	.setDiscountPercent(0))
 ```
 #### 4.2.3 InvoiceFee
 ```java
