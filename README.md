@@ -61,6 +61,8 @@ To configure Svea authorization you need to use *setPasswordBasedAuthorization(.
 *setMerchantIdBasedAuthorization(...)* for other payments like card and direct bank payments. 
 Needs to be used everytime when creating a request, i.e. before calling *doRequest()* or *getPaymentForm()*.
 
+*NOTE:* This solution may change in future updates!
+
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
 ## 1. createOrder                                                            
@@ -129,10 +131,10 @@ deliverOrder(...), getPaymentPlanParams(...), getAddresses(...). If no parameter
 
 Ex. 
 ```java
-	//test mode
-    WebPay.createOrder(SveaConfig.createTestConfig())...
-	//production mode
-	WebPay.createOrder(SveaConfig.createProductionConfig())...
+//test mode
+WebPay.createOrder(SveaConfig.createTestConfig())...
+//production mode
+WebPay.createOrder(SveaConfig.createProductionConfig())...
 ```
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
@@ -231,8 +233,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
     .setEmail("test@svea.com")         		//Optional but desirable    
     .setIpAddress("123.123.123")       		//Optional but desirable
     .setCoAddress("c/o Eriksson")      		//Optional
-    .setPhoneNumber(999999))           		//Optional
-   
+    .setPhoneNumber(999999))           		//Optional   
 ```
 
 ####1.3.2 Options for company customers
@@ -262,11 +263,11 @@ Invoice and payment plan will perform a synchronous payment and return an object
 
 Hosted payments(card, direct bank and payments from the *PayPage*)
 on the other hand are asynchronous. They will return an html form with formatted message to send from your store.
-The response is then returned to the return url you have specified in function setReturnUrl(). If you
+The response is then returned to the return url you have specified in function *setReturnUrl()*. If you
 use class *Response* with the xml response as parameter, you will receive a
 formatted object as well. 
 
-#### Asynchronous payments - Hosted solutions
+#### Asynchronous payments - Card and Direct bank
 Build order and recieve a *PaymentForm* object. Send the *PaymentForm* parameters: *merchantid*, *xmlMessageBase64* and *mac* by POST with *url*. The *PaymentForm* object also contains a complete html form as string 
 and the html form element as array.
 

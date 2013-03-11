@@ -40,6 +40,13 @@ public abstract class WebServicePayment {
         return createOrderBuilder.config.getAuthorizationForWebServicePayments(this.orderType);   
     }
     
+    /**
+     * Note! This function may change in future updates.
+     * @param userName
+     * @param password
+     * @param clientNumber
+     * @return
+     */
     public WebServicePayment setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
         createOrderBuilder.config.setPasswordBasedAuthorization(userName, password, clientNumber, orderType);    
         return this;
