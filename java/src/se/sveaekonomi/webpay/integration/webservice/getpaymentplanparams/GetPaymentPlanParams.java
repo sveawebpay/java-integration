@@ -30,6 +30,13 @@ public class GetPaymentPlanParams {
     	return this.configMode.getWebserviceUrl();
     }
     
+    /**
+     * Note! This function may change in future updates.
+     * @param userName
+     * @param password
+     * @param clientNumber
+     * @return
+     */
     public GetPaymentPlanParams setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
         conf.setPasswordBasedAuthorization(userName, password, clientNumber, "PaymentPlan"); 
         return this;

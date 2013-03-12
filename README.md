@@ -98,36 +98,36 @@ CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
 .setAddressSelector("7fd7768")
 
 //Continue by choosing one of the following paths
-    //Continue as a card payment
-    .usePayPageCardOnly() 
-        ...
-    .getPaymentForm();
-    //Continue as a direct bank payment		
-    .usePayPageDirectBankOnly()
-        ...
-    .getPaymentForm();
-    //Continue as a PayPage payment
-    .usePayPage()
-        ...
-    .getPaymentForm();
-    //Continue as a PayPage payment
-    .usePaymentMethod(PAYMENTMETHOD.DBSEBSE) //see APPENDIX for Constants
-        ...
-    .getPaymentForm();
-    //Continue as an invoice payment
-    .useInvoicePayment()
-    ...
-    .doRequest();
-    //Continue as a payment plan payment
-    .usePaymentPlanPayment("campaigncode", false)
-    ...
-    .doRequest();
+//Continue as a card payment
+.usePayPageCardOnly() 
+	...
+	.getPaymentForm();
+//Continue as a direct bank payment		
+.usePayPageDirectBankOnly()
+	...
+	.getPaymentForm();
+//Continue as a PayPage payment
+.usePayPage()
+	...
+	.getPaymentForm();
+//Continue as a PayPage payment
+.usePaymentMethod(PAYMENTMETHOD.DBSEBSE) //see APPENDIX for Constants
+	...
+	.getPaymentForm();
+//Continue as an invoice payment
+.useInvoicePayment()
+	...
+	.doRequest();
+//Continue as a payment plan payment
+.usePaymentPlanPayment("campaigncode", false)
+	...
+	.doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
-### 1.1 Test mode                                                             
-Set test configuration while developing to make the calls to our test server when starting a request, i.e. createOrder(...), closeOrder(...),
-deliverOrder(...), getPaymentPlanParams(...), getAddresses(...). If no parameter is set, test mode is default. When moving to production server, change to production configuration. 
+### 1.1 Test/Production mode                                                             
+Set test configuration mode while developing to make the calls to our test server when starting a request, i.e. createOrder(...), closeOrder(...),
+deliverOrder(...), getPaymentPlanParams(...), getAddresses(...). If no parameter is set, test mode is default. When moving to production server, change to production configuration mode. 
 
 Ex. 
 ```java
@@ -147,7 +147,8 @@ You can use the *add* functions with an Item object or a List of Item objects as
 .addOrderRow(Item.orderRow(). ...)
 
 //or
-List<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>(); //or use another preferrable List
+
+List<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>(); //or use another preferrable List object
 orderRows.add(Item.orderRow(). ...)
 ...
 createOrder.addOrderRows(orderRows);
@@ -158,41 +159,41 @@ All products and other items. It´s required to have a minimum of one order row.
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
 ```java
 .addOrderRow(Item.orderRow()     
-        .setQuantity(2)                        //Required
-        .setAmountExVat(100.00)                //Optional, see info above
-        .setAmountIncVat(125.00)               //Optional, see info above
-        .setVatPercent(25)                     //Optional, see info above
-        .setArticleNumber("1")                 //Optional
-        .setDescription("Specification")       //Optional
-        .setName("Prod")                       //Optional
-        .setUnit("st")                         //Optional              
-        .setDiscountPercent(0))                //Optional    
+	.setQuantity(2)                        //Required
+	.setAmountExVat(100.00)                //Optional, see info above
+	.setAmountIncVat(125.00)               //Optional, see info above
+	.setVatPercent(25)                     //Optional, see info above
+	.setArticleNumber("1")                 //Optional
+	.setDescription("Specification")       //Optional
+	.setName("Prod")                       //Optional
+	.setUnit("st")                         //Optional              
+	.setDiscountPercent(0))                //Optional    
 ```
 
 #### 1.2.2 ShippingFee
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat()and setVatPercent().**
 ```java
 .addFee(Item.shippingFee()
-        .setAmountExVat(50)                    //Optional, see info above
-        .setAmountIncVat(62.50)                //Optional, see info above
-        .setVatPercent(25)                     //Optional, see info above
-		.setShippingId("33")                   //Optional
-        .setName("shipping")                   //Optional
-        .setDescription("Specification")       //Optional
-        .setUnit("st")                         //Optional             
-        .setDiscountPercent(0))                //Optional
+	.setAmountExVat(50)                    //Optional, see info above
+	.setAmountIncVat(62.50)                //Optional, see info above
+	.setVatPercent(25)                     //Optional, see info above
+	.setShippingId("33")                   //Optional
+	.setName("shipping")                   //Optional
+	.setDescription("Specification")       //Optional
+	.setUnit("st")                         //Optional             
+	.setDiscountPercent(0))                //Optional
 ```
 #### 1.2.3 InvoiceFee
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
 ```java
 .addFee(Item.invoiceFee()
-        .setAmountExVat(50)                    //Optional, see info above
-        .setAmountIncVat(62.50)                //Optional, see info above
-        .setVatPercent(25)                     //Optional, see info above
-        .setName("Svea fee")                   //Optional
-        .setDescription("Fee for invoice")     //Optional		
-        .setUnit("st")                         //Optional
-        .setDiscountPercent(0))                //Optional    
+	.setAmountExVat(50)                    //Optional, see info above
+	.setAmountIncVat(62.50)                //Optional, see info above
+	.setVatPercent(25)                     //Optional, see info above
+	.setName("Svea fee")                   //Optional
+	.setDescription("Fee for invoice")     //Optional		
+	.setUnit("st")                         //Optional
+	.setDiscountPercent(0))                //Optional    
 ```
 #### 1.2.4 Fixed Discount
 When discount or coupon is a fixed amount on total product amount.
@@ -597,9 +598,9 @@ Returns *DeliverOrderResult* object. Set your store authorization here.
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
-### 4.1 Test mode                                                             
-Set test configuration while developing to make the calls to our test server when starting a request, i.e. createOrder(...), closeOrder(...),
-deliverOrder(...), getPaymentPlanParams(...), getAddresses(...). If no parameter is set, test mode is default. When moving to production server, change to production configuration. 
+### 4.1 Test/Production mode                                                             
+Set test configuration mode while developing to make the calls to our test server when starting a request, i.e. createOrder(...), closeOrder(...),
+deliverOrder(...), getPaymentPlanParams(...), getAddresses(...). If no parameter is set, test mode is default. When moving to production server, change to production configuration mode. 
 
 Ex. 
 ```java

@@ -36,6 +36,13 @@ public class HandleOrder {
         return conf.getAuthorizationForWebServicePayments(order.getOrderType());
     }
     
+    /**
+     * Note! This function may change in future updates.
+     * @param userName
+     * @param password
+     * @param clientNumber
+     * @return
+     */
     public HandleOrder setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
         conf.setPasswordBasedAuthorization(userName, password, clientNumber, order.getOrderType());    
         return this;
@@ -62,7 +69,7 @@ public class HandleOrder {
         orderInformation.setOrderId(String.valueOf(order.getOrderId()));
         orderInformation.setOrderType(order.getOrderType());
         
-        if(order.getOrderType() == "Invoice") {
+        if(order.getOrderType().equals("Invoice")) {
             SveaDeliverInvoiceDetails invoiceDetails = new SveaDeliverInvoiceDetails();
             invoiceDetails.InvoiceDistributionType = order.getInvoiceDistributionType();
             invoiceDetails.IsCreditInvoice = (order.getInvoiceIdToCredit()!=null ? true : false);

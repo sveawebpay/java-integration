@@ -4,7 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import javax.xml.bind.ValidationException;
 
-import org.junit.Before;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -14,14 +13,7 @@ import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
-public class PaymentPlanTest {
-    
-  
-    
-    @Before
-    public void setUp() {
-    
-    }
+public class PaymentPlanTest {      
     
     @Test
     public void testPaymentPlanRequestObjectSpecifics() throws ValidationException{

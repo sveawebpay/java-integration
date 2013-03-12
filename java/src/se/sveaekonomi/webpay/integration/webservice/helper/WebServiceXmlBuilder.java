@@ -75,10 +75,11 @@ public class WebServiceXmlBuilder extends XMLBuilder{
            
             writeSimpleElement(prefix+"OrderType", order.CreateOrderInformation.OrderType);                      
             
-            if(order.CreateOrderInformation.CreatePaymentPlanDetails != null && order.CreateOrderInformation.OrderType!="Invoice") {
+            if(order.CreateOrderInformation.CreatePaymentPlanDetails != null && !order.CreateOrderInformation.OrderType.equals("Invoice")) {
                xmlw.writeStartElement(prefix+"CreatePaymentPlanDetails");
-               writeSimpleElement(prefix+"CampaignCode", (String)order.CreateOrderInformation.CreatePaymentPlanDetails.get("CampaingCode"));
-          //     writeSimpleElement("SendAutomaticGiroPaymentForm", String.valueOf((boolean)order.CreateOrderInformation.CreatePaymentPlanDetails.get("SendAutomaticGiroPaymentForm")));
+               String code = (String)order.CreateOrderInformation.CreatePaymentPlanDetails.get("CampaignCode");
+               writeSimpleElement(prefix+"CampaignCode", code);              
+               writeSimpleElement("SendAutomaticGiroPaymentForm", String.valueOf((boolean)order.CreateOrderInformation.CreatePaymentPlanDetails.get("SendAutomaticGiroPaymentForm")));
     
                // ?? CoCustomerIdentity ???
                //?? writeSimpleElement("FixedMonthlyAmount", order.CreateOrderInformation.CreatePaymentPlanDetails.)                                       
@@ -100,7 +101,7 @@ public class WebServiceXmlBuilder extends XMLBuilder{
     public String getDeliverOrderEuXml(SveaDeliverOrder request) throws Exception {
         XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ArrayList<SveaOrderRow> rows = request.deliverOrderInformation.getDeliverInvoiceDetails().OrderRows;
+        //ArrayList<SveaOrderRow> rows = request.deliverOrderInformation.getDeliverInvoiceDetails().OrderRows;
         
         xmlw = xmlof.createXMLStreamWriter(os, "UTF-8");
         xmlw.writeStartElement(prefix+"request");
@@ -116,6 +117,8 @@ public class WebServiceXmlBuilder extends XMLBuilder{
                 writeSimpleElement(prefix+"InvoiceDistributionType", request.deliverOrderInformation.deliverInvoiceDetails.InvoiceDistributionType);
                 writeSimpleElement(prefix+"IsCreditInvoice", String.valueOf(request.deliverOrderInformation.deliverInvoiceDetails.IsCreditInvoice));
                 writeSimpleElement(prefix+"InvoiceIdToCredit", request.deliverOrderInformation.deliverInvoiceDetails.InvoiceIdToCredit);
+                
+                ArrayList<SveaOrderRow> rows = request.deliverOrderInformation.getDeliverInvoiceDetails().OrderRows;
                 serializeOrderRows(rows);
                 xmlw.writeEndElement();
             }

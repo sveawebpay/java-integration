@@ -2,7 +2,6 @@ package se.sveaekonomi.webpay.integration.response.hosted;
 
 import java.io.IOException;
 import java.io.StringReader;
-import java.util.Currency;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;

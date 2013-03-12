@@ -39,9 +39,34 @@ public class WebServicePaymentsResponseTest {
         .deliverInvoiceOrder()
             .doRequest();
         
-        assertEquals(response.isOrderAccepted(), true);        
+        assertEquals(response.isOrderAccepted(), true);          
     }
 
+    @Test
+    public void testDeliverPaymentPlanOrderResult() throws Exception {
+    	long orderId = createPaymentPlanAndReturnOrderId();
+    	
+    	DeliverOrderResponse response = WebPay.deliverOrder()               
+        .addOrderRow(Item.orderRow()
+            .setArticleNumber("1")
+            .setQuantity(2)
+            .setAmountExVat(100.00)
+            .setDescription("Specification")
+            .setName("Prod")
+            .setUnit("st")
+            .setVatPercent(25)
+            .setDiscountPercent(0))
+                    
+        .setOrderId(orderId)
+        .setNumberOfCreditDays(1)
+        .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+        //.deliverInvoiceOrder()
+        .deliverPaymentPlanOrder()
+            .doRequest();
+        
+        assertEquals(response.isOrderAccepted(), true);   
+       
+    }
     
     @Test
     public void testResultGetPaymentPlanParams() throws Exception {
@@ -81,20 +106,97 @@ public class WebServicePaymentsResponseTest {
 	    assertEquals(request.getPostarea(), "Stan");
 	}
     
+	@Test
+	 public void testPaymentPlanRequestReturnsAcceptedResult() throws Exception {
+		PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams().doRequest();
+		String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
+		
+		CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())                
+        .addOrderRow(Item.orderRow()
+            .setArticleNumber("1")
+            .setQuantity(2)
+            .setAmountExVat(1000.00)
+            .setDescription("Specification")
+            .setName("Prod")
+            .setUnit("st")
+            .setVatPercent(25)
+            .setDiscountPercent(0))
+        .addCustomerDetails(Item.individualCustomer()
+            .setNationalIdNumber("194605092222")
+            .setInitials("SB")
+            .setBirthDate(1923, 12, 12)
+            .setName("Tess", "Testson")
+            .setEmail("test@svea.com")
+            .setPhoneNumber(999999)
+            .setIpAddress("123.123.123")
+            .setStreetAddress("Gatan", 23)
+            .setCoAddress("c/o Eriksson")
+            .setZipCode("9999")
+            .setLocality("Stan"))            
+                
+        .setCountryCode(COUNTRYCODE.SE)
+        .setCustomerReference("33")
+        .setClientOrderNumber("nr26")
+        .setOrderDate("2012-12-12")
+        .setCurrency(CURRENCY.SEK)
+            .usePaymentPlanPayment(code)  //returns a paymentPlanOrder object                 
+            .doRequest();
+				
+		assertEquals(response.isOrderAccepted(), true);
+	}
+			
+	 private long createPaymentPlanAndReturnOrderId() throws Exception {
+		PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams().doRequest();
+		String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
+		
+		CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())                
+       .addOrderRow(Item.orderRow()
+           .setArticleNumber("1")
+           .setQuantity(2)
+           .setAmountExVat(1000.00)
+           .setDescription("Specification")
+           .setName("Prod")
+           .setUnit("st")
+           .setVatPercent(25)
+           .setDiscountPercent(0))
+       .addCustomerDetails(Item.individualCustomer()
+           .setNationalIdNumber("194605092222")
+           .setInitials("SB")
+           .setBirthDate(1923, 12, 12)
+           .setName("Tess", "Testson")
+           .setEmail("test@svea.com")
+           .setPhoneNumber(999999)
+           .setIpAddress("123.123.123")
+           .setStreetAddress("Gatan", 23)
+           .setCoAddress("c/o Eriksson")
+           .setZipCode("9999")
+           .setLocality("Stan"))            
+               
+       .setCountryCode(COUNTRYCODE.SE)
+       .setCustomerReference("33")
+       .setClientOrderNumber("nr26")
+       .setOrderDate("2012-12-12")
+       .setCurrency(CURRENCY.SEK)
+           .usePaymentPlanPayment(code)  //returns a paymentPlanOrder object                 
+           .doRequest();
+		
+		return response.orderId;		
+	}
+	
     private long createInvoiceAndReturnOrderId() throws Exception {
     	CreateOrderResponse response = WebPay.createOrder()                
         	.addOrderRow(Item.orderRow()
-	                .setArticleNumber("1")
-	                .setQuantity(2)
-	                .setAmountExVat(100.00)
-	                .setDescription("Specification")
-	                .setName("Prod")
-	                .setUnit("st")
-	                .setVatPercent(25)
-	                .setDiscountPercent(0))
+                .setArticleNumber("1")
+                .setQuantity(2)
+                .setAmountExVat(100.00)
+                .setDescription("Specification")
+                .setName("Prod")
+                .setUnit("st")
+                .setVatPercent(25)
+                .setDiscountPercent(0))
                              
-	         .addCustomerDetails(Item.individualCustomer()
-	           		.setNationalIdNumber("194605092222"))
+	        .addCustomerDetails(Item.individualCustomer()
+           		.setNationalIdNumber("194605092222"))
         	.setCountryCode(COUNTRYCODE.SE)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")

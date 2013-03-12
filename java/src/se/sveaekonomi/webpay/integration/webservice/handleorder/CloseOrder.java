@@ -27,6 +27,13 @@ public class CloseOrder {
         return order.config.getAuthorizationForWebServicePayments(this.order.getOrderType());        
     }
     
+    /**
+     * Note! This function may change in future updates.
+     * @param userName
+     * @param password
+     * @param clientNumber
+     * @return
+     */
     public CloseOrder setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
         conf.setPasswordBasedAuthorization(userName, password, clientNumber, order.getOrderType());    
         return this;
