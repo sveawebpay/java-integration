@@ -117,7 +117,6 @@ public class WebServiceXmlBuilder extends XMLBuilder{
                 writeSimpleElement(prefix+"InvoiceDistributionType", request.deliverOrderInformation.deliverInvoiceDetails.InvoiceDistributionType);
                 writeSimpleElement(prefix+"IsCreditInvoice", String.valueOf(request.deliverOrderInformation.deliverInvoiceDetails.IsCreditInvoice));
                 writeSimpleElement(prefix+"InvoiceIdToCredit", request.deliverOrderInformation.deliverInvoiceDetails.InvoiceIdToCredit);
-                
                 ArrayList<SveaOrderRow> rows = request.deliverOrderInformation.getDeliverInvoiceDetails().OrderRows;
                 serializeOrderRows(rows);
                 xmlw.writeEndElement();
@@ -204,9 +203,8 @@ public class WebServiceXmlBuilder extends XMLBuilder{
     }
     
     private void getAuth(SveaAuth auth) throws XMLStreamException {
-        if(auth == null) {
-            return;
-        }
+        if(auth == null)
+            return;        
         
         xmlw.writeStartElement(prefix+"Auth");
         writeSimpleElement(prefix+"ClientNumber", auth.ClientNumber.toString());        

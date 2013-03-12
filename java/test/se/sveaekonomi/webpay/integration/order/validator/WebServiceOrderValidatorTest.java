@@ -42,6 +42,21 @@ public class WebServiceOrderValidatorTest {
                 .setLocality("Stan")); 
         orderValidator.validate(order);
     }
+    
+    @Test
+    public void testCustomerIdentityIsNull() {
+    	 String expectedMessage = "MISSING VALUE - CustomerIdentity must be set.\n"
+    			 + "MISSING VALUE - CountryCode is required. Use function setCountryCode().\n"
+    			 + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n"
+    			 + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+    	CreateOrderBuilder order = WebPay.createOrder()
+            	.setValidator(new VoidValidator())
+            	.setClientOrderNumber("1")
+            	
+            	.addCustomerDetails(null);
+    	assertEquals(expectedMessage, orderValidator.validate(order));
+    }
+    
     @Test
     public void testFailOnMissingCountryCode() {
         String expectedMessage = "MISSING VALUE - CountryCode is required. Use function setCountryCode().\n"
@@ -178,6 +193,23 @@ public class WebServiceOrderValidatorTest {
         	.setValidator(new VoidValidator())
             .setCountryCode(COUNTRYCODE.NL).build() 
             .addCustomerDetails(Item.individualCustomer());
+        
+        assertEquals(expectedMessage, orderValidator.validate(order));
+    }
+    
+    @Test
+    public void testFailOnMissingCompanyIdentityForNeOrder() throws ValidationException {
+        String expectedMessage = "MISSING VALUE - Vat number is required for company customers when countrycode is NL. Use function setVatNumber().\n"
+        		+ "MISSING VALUE - Company name is required for individual customers when countrycode is NL. Use function setName().\n"
+                +"MISSING VALUE - Street address is required for all customers when countrycode is NL. Use function setStreetAddress().\n"
+                + "MISSING VALUE - Locality is required for all customers when countrycode is NL. Use function setLocality().\n"
+                + "MISSING VALUE - Zip code is required for all customers when countrycode is NL. Use function setZipCode().\n"
+                + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n" 
+                + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+        CreateOrderBuilder order = WebPay.createOrder()
+        	.setValidator(new VoidValidator())
+            .setCountryCode(COUNTRYCODE.NL).build() 
+            .addCustomerDetails(Item.companyCustomer());
         
         assertEquals(expectedMessage, orderValidator.validate(order));
     }
