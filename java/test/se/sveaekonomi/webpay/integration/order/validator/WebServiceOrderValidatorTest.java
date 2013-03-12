@@ -215,6 +215,21 @@ public class WebServiceOrderValidatorTest {
     }
     
     @Test
+    public void testFailOnMissingCompanyIdentityForDeOrder() throws ValidationException {
+        String expectedMessage = "MISSING VALUE - Vat number is required for company customers when countrycode is DE. Use function setVatNumber().\n"
+        		+ "MISSING VALUE - Street address is required for all customers when countrycode is DE. Use function setStreetAddress().\n"
+        		+ "MISSING VALUE - Locality is required for all customers when countrycode is DE. Use function setLocality().\n"
+        		+ "MISSING VALUE - Zip code is required for all customers when countrycode is DE. Use function setCustomerZipCode().\n"
+        		+ "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n"
+                + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+        CreateOrderBuilder order = WebPay.createOrder()
+        	.setValidator(new VoidValidator())
+            .setCountryCode(COUNTRYCODE.DE).build() 
+            .addCustomerDetails(Item.companyCustomer());
+        
+        assertEquals(expectedMessage, orderValidator.validate(order));
+    }
+    @Test
     public void testFailOnMissingInitialsForNLOrder() {
         String expectedMessage = "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use function setInitials().\n"
                 + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n"
