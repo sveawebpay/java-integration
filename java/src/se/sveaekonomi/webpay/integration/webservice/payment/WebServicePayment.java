@@ -125,8 +125,8 @@ public abstract class WebServicePayment {
         boolean isCompany = false;
         String companyId = "";
         if(this.createOrderBuilder.getIsCompanyIdentity() 
-                && (this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()!=null 
-                || this.createOrderBuilder.getCompanyCustomer().getVatNumber()!=null)) {
+            /*    && (this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()!=null 
+                || this.createOrderBuilder.getCompanyCustomer().getVatNumber()!=null)*/) {
             isCompany = true;
             companyId = (this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()!=null) 
                     ? this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()
