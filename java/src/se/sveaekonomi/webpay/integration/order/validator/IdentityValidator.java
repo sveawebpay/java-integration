@@ -3,13 +3,7 @@ package se.sveaekonomi.webpay.integration.order.validator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 
 public class IdentityValidator {
-    //private boolean isCompany = false;
-    
-    public IdentityValidator(/*boolean isCompany*/) {
-        //this.isCompany = isCompany;
-    }
- 
-    
+               
     protected String validateNordicIdentity(CreateOrderBuilder order) {
         String errors = "";
         //check Company identity
