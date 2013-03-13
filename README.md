@@ -725,7 +725,7 @@ The response from server will be sent to the *returnUrl* with POST or GET. The r
 Class *SveaResponse* will return an object structured similar to the synchronous answer.
 
 Params: 
-* The POST or GET message 
+* The POST or GET message Base64 encoded
 * Your *secret word*. 
 ```java
   SveaRespons respObject = new SveaResponse(responseXmlBase64, mac, secretWord); 
