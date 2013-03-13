@@ -19,8 +19,6 @@ import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.Response;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
-import se.sveaekonomi.webpay.integration.util.security.HashUtil;
-import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 
 /**
  * Handles the asynchronous response from the hosted payment solution 
@@ -48,29 +46,10 @@ public class SveaResponse extends Response {
     
     public SveaResponse(String responseXmlBase64,/*, String mac,*/ String secretWord) throws SAXException, IOException, ParserConfigurationException {
         super();
-        
-      //  if(validateMac(responseXmlBase64, mac, secretWord))
                 this.setValues(responseXmlBase64);
-       /* else {
-            this.setOrderAccepted(false);
-            this.setErrorMessage("Response failed authorization. MAC not valid.");
-        }*/          
+              
     }         
     
-  /*  private boolean validateMac(String responseXmlBase64, String mac, String secret) {
-        if(secret == null) {
-            secret = config.getSecretWord();
-        }
-        String macKey = HashUtil.createHash(responseXmlBase64 + secret, HASHALGORITHM.SHA_512);
-        
-        if(mac.equals(macKey)) {
-            return true;
-        }
-        return false;   
-        
-        
-    }*/
-
     private void setValues(String xmlBase64) throws SAXException, IOException, ParserConfigurationException {
         String xml = Base64Util.decodeBase64String(xmlBase64);
         this.setXml(xml);
@@ -90,8 +69,7 @@ public class SveaResponse extends Response {
                 	this.setResultCode("0 (ORDER_ACCEPTED)");
                 }
                 else {
-                    this.setOrderAccepted(false);
-                    //this.setResultCode(status);    
+                    this.setOrderAccepted(false);                   
                     setErrorParams(status);
                 }
                                 
