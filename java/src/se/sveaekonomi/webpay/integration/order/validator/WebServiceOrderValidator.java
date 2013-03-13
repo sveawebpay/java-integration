@@ -16,7 +16,7 @@ public class WebServiceOrderValidator extends OrderValidator {
                 || order.getCompanyCustomer().getCompanyName() != null))
             isCompany = true;              
         
-        IdentityValidator identityValidator = new IdentityValidator(isCompany);     
+        IdentityValidator identityValidator = new IdentityValidator();     
         
         if (order.getCountryCode()!=null) {            
             if (order.getCountryCode().equals(COUNTRYCODE.SE)

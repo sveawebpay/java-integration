@@ -40,7 +40,7 @@ public class DeliverOrderResponse extends Response {
                 else {                    
                     this.setAmount(Double.parseDouble(getTagValue(node, "Amount")));
                     this.orderType = getTagValue(node, "OrderType");
-                    if(this.orderType=="Invoice") {
+                    if(this.orderType.equals("Invoice")) {
                         // Set child nodes from InvoiceResultDetails
                         setChildNodeValue(node, "InvoiceId");
                         setChildNodeValue(node, "DueDate");

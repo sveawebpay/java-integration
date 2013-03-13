@@ -105,6 +105,12 @@ public abstract class HostedPayment {
         configureExcludedPaymentMethods();
     }
     
+    /**
+     * Note! This function may change in future updates.
+     * @param merchantId
+     * @param secret
+     * @return
+     */
     public HostedPayment setMerchantIdBasedAuthorization(int merchantId, String secret) {
         createOrderBuilder.config.setMerchantId(String.valueOf(merchantId));
         createOrderBuilder.config.setSecretWord(secret);

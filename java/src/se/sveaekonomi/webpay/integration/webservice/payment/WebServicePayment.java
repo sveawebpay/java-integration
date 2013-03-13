@@ -40,6 +40,13 @@ public abstract class WebServicePayment {
         return createOrderBuilder.config.getAuthorizationForWebServicePayments(this.orderType);   
     }
     
+    /**
+     * Note! This function may change in future updates.
+     * @param userName
+     * @param password
+     * @param clientNumber
+     * @return
+     */
     public WebServicePayment setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
         createOrderBuilder.config.setPasswordBasedAuthorization(userName, password, clientNumber, orderType);    
         return this;
@@ -118,8 +125,8 @@ public abstract class WebServicePayment {
         boolean isCompany = false;
         String companyId = "";
         if(this.createOrderBuilder.getIsCompanyIdentity() 
-                && (this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()!=null 
-                || this.createOrderBuilder.getCompanyCustomer().getVatNumber()!=null)) {
+            /*    && (this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()!=null 
+                || this.createOrderBuilder.getCompanyCustomer().getVatNumber()!=null)*/) {
             isCompany = true;
             companyId = (this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()!=null) 
                     ? this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()
@@ -145,7 +152,7 @@ public abstract class WebServicePayment {
                 euIdentity.BirthDate = Long.toString(createOrderBuilder.getIndividualCustomer().getBirthDate());
             }
             
-            type = (isCompany ? "CompanyIdentity" : "IndividualIdentity");
+            type = isCompany ? "CompanyIdentity" : "IndividualIdentity";
         }
         
         SveaCustomerIdentity customerIdentity = new SveaCustomerIdentity(euIdentity, type);

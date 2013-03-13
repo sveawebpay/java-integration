@@ -46,7 +46,7 @@ public class HostedPaymentTest {
        // CreateOrderBuilder order = new CreateOrderBuilder();
         CreateOrderBuilder order = WebPay.createOrder()        		
                 .addOrderRow(Item.orderRow()
-                		.setAmountExVat(4)
+                		.setAmountIncVat(5)
                         .setVatPercent(25)
                         .setQuantity(1));            
         
@@ -56,16 +56,36 @@ public class HostedPaymentTest {
         HostedPayment payment = new FakeHostedPayment(order);
         payment.calculateRequestValues();
         
-        assertTrue(500L == payment.getAmount());
+        assertEquals(500L,payment.getAmount(), 0);
     }
     
+    
+    @Test
+    public void testAmountIncVatAndvatPercentShippingFee() {        
+       // CreateOrderBuilder order = new CreateOrderBuilder();
+        CreateOrderBuilder order = WebPay.createOrder()        		
+                .addOrderRow(Item.orderRow()
+                		.setAmountIncVat(5)
+                        .setVatPercent(25)
+                        .setQuantity(1))            
+        
+        .addFee(Item.shippingFee()
+        		.setAmountIncVat(5)
+        		.setVatPercent(25));
+        order.setFixedDiscountRows(null);
+        order.setRelativeDiscountRows(null);
+        HostedPayment payment = new FakeHostedPayment(order);
+        payment.calculateRequestValues();
+        
+        assertEquals(1000L,payment.getAmount(), 0);
+    }
     @Test
     public void testAmountIncVatAndAmountExVatCalculation() {
     	//CreateOrderBuilder order = new CreateOrderBuilder();
     	 CreateOrderBuilder order = WebPay.createOrder()        		
                 .addOrderRow(Item.orderRow()
                 		.setAmountExVat(4)
-                        .setVatPercent(25)
+                        .setAmountIncVat(5)
                         .setQuantity(1)); 
         /*ArrayList<OrderRowBuilder> rows = new ArrayList<OrderRowBuilder>();
         

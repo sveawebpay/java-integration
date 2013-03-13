@@ -8,13 +8,13 @@ public class HostedOrderValidator extends OrderValidator {
           
     public String validate(CreateOrderBuilder order) {
         errors = "";
-        Boolean isCompany = order.getCompanyCustomer().getNationalIdNumber()!=null ||order.getCompanyCustomer().getVatNumber()!=null;
+     
         if(order.getCountryCode()!=null && order.getCountryCode()==COUNTRYCODE.NL)
-            errors += new IdentityValidator(isCompany).validateNLIdentity(order);
+            errors += new IdentityValidator().validateNLIdentity(order);
         else if(order.getCountryCode()!=null && order.getCountryCode()==COUNTRYCODE.DE)
-            errors += new IdentityValidator(isCompany).validateDEIdentity(order);
+            errors += new IdentityValidator().validateDEIdentity(order);
         else
-            errors += new IdentityValidator(isCompany).validateNordicIdentity(order);
+            errors += new IdentityValidator().validateNordicIdentity(order);
         validateClientOrderNumber(order);
         validateCurrency(order);
         validateRequiredFieldsForOrder(order);
