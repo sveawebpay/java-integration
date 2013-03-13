@@ -46,18 +46,18 @@ public class SveaResponse extends Response {
     private String authCode;
     
     
-    public SveaResponse(String responseXmlBase64, String mac, String secretWord) throws SAXException, IOException, ParserConfigurationException {
+    public SveaResponse(String responseXmlBase64,/*, String mac,*/ String secretWord) throws SAXException, IOException, ParserConfigurationException {
         super();
         
-        if(validateMac(responseXmlBase64, mac, secretWord))
+      //  if(validateMac(responseXmlBase64, mac, secretWord))
                 this.setValues(responseXmlBase64);
-        else {
+       /* else {
             this.setOrderAccepted(false);
             this.setErrorMessage("Response failed authorization. MAC not valid.");
-        }          
+        }*/          
     }         
     
-    private boolean validateMac(String responseXmlBase64, String mac, String secret) {
+  /*  private boolean validateMac(String responseXmlBase64, String mac, String secret) {
         if(secret == null) {
             secret = config.getSecretWord();
         }
@@ -69,7 +69,7 @@ public class SveaResponse extends Response {
         return false;   
         
         
-    }
+    }*/
 
     private void setValues(String xmlBase64) throws SAXException, IOException, ParserConfigurationException {
         String xml = Base64Util.decodeBase64String(xmlBase64);

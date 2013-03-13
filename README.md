@@ -585,7 +585,7 @@ GetAddressesResponse response = WebPay.getAddresses(SveaConfig.createTestConfig(
 	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
 	.setOrderTypeInvoice()                                              //See 3.1   
 	.setCountryCode(COUNTRYCODE.SE)                                     //Required
-	.setIndividual(194605092222)                                        //See 3.2   
+	.setIndividual("194605092222")                                        //See 3.2   
 	.doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
@@ -722,13 +722,16 @@ hosted solutions can also be processed through the *SveaResponse* class.
 
 The response from server will be sent to the *returnUrl* with POST or GET. The response contains the parameters: 
 *response*, *mac* and *merchantid*.
-Class *SveaResponse* will return an object structured similar to the synchronous answer. 
+Class *SveaResponse* will return an object structured similar to the synchronous answer.
+
 Params: 
 * The POST or GET message 
-* Your *secret word*. //Optional if set in SveaConfig
+* mac
+* Your *secret word*. 
 ```java
-  SveaRespons respObject = nSveaResponse(responseXmlBase64, mac, secretWord); 
+  SveaRespons respObject = new SveaResponse(responseXmlBase64, mac, secretWord); 
 ```
+
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
 ## APPENDIX 
