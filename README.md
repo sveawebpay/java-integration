@@ -717,16 +717,15 @@ CloseOrderResponse  =  WebPay.closeOrder(SveaConfig.createTestConfig()
 
 ## 6. Response handler                                                       
 All synchronous responses are handled through *SveaResponse* and structured into objects.
-Asynchronous responses recieved after sending the values *mac*, *merchantid* and *xmlMessageBase64* to
+Asynchronous responses recieved after sending the values *merchantid* and *xmlMessageBase64* to
 hosted solutions can also be processed through the *SveaResponse* class.
 
 The response from server will be sent to the *returnUrl* with POST or GET. The response contains the parameters: 
-*response*, *mac* and *merchantid*.
+*response* and *merchantid*.
 Class *SveaResponse* will return an object structured similar to the synchronous answer.
 
 Params: 
 * The POST or GET message 
-* mac
 * Your *secret word*. 
 ```java
   SveaRespons respObject = new SveaResponse(responseXmlBase64, mac, secretWord); 
