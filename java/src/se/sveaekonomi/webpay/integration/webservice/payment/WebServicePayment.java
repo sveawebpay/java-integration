@@ -152,7 +152,7 @@ public abstract class WebServicePayment {
                 euIdentity.BirthDate = Long.toString(createOrderBuilder.getIndividualCustomer().getBirthDate());
             }
             
-            type = (isCompany ? "CompanyIdentity" : "IndividualIdentity");
+            type = isCompany ? "CompanyIdentity" : "IndividualIdentity";
         }
         
         SveaCustomerIdentity customerIdentity = new SveaCustomerIdentity(euIdentity, type);

@@ -61,7 +61,7 @@ public class WebServiceXmlBuilder extends XMLBuilder{
                 
                 if(order.CreateOrderInformation.CustomerIdentity.CompanyIdentity != null) {
                     xmlw.writeStartElement(prefix+"CompanyIdentity");
-                    writeSimpleElement(prefix+"CompanyVatNumber", order.CreateOrderInformation.CustomerIdentity.CompanyIdentity.OrgNumber);
+                    writeSimpleElement(prefix+"CompanyIdentification", order.CreateOrderInformation.CustomerIdentity.CompanyIdentity.OrgNumber);
                     writeSimpleElement(prefix+"CompanyVatNumber", order.CreateOrderInformation.CustomerIdentity.CompanyIdentity.CompanyVatNumber);
                     xmlw.writeEndElement(); //CompanyIdentity
                 }

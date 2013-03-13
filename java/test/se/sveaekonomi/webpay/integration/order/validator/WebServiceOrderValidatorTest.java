@@ -184,7 +184,7 @@ public class WebServiceOrderValidatorTest {
         String expectedMessage = "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use function setInitials().\n"
                 + "MISSING VALUE - Birth date is required for individual customers when countrycode is NL. Use function setBirthDate().\n"
                 + "MISSING VALUE - Name is required for individual customers when countrycode is NL. Use function setName().\n"
-                +"MISSING VALUE - Street address is required for all customers when countrycode is NL. Use function setStreetAddress().\n"
+                +"MISSING VALUE - Street address and house number is required for all customers when countrycode is NL. Use function setStreetAddress().\n"
                 + "MISSING VALUE - Locality is required for all customers when countrycode is NL. Use function setLocality().\n"
                 + "MISSING VALUE - Zip code is required for all customers when countrycode is NL. Use function setZipCode().\n"
                 + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n" 
@@ -201,7 +201,7 @@ public class WebServiceOrderValidatorTest {
     public void testFailOnMissingCompanyIdentityForNeOrder() throws ValidationException {
         String expectedMessage = "MISSING VALUE - Vat number is required for company customers when countrycode is NL. Use function setVatNumber().\n"
         		+ "MISSING VALUE - Company name is required for individual customers when countrycode is NL. Use function setName().\n"
-                +"MISSING VALUE - Street address is required for all customers when countrycode is NL. Use function setStreetAddress().\n"
+                +"MISSING VALUE - Street address and house number is required for all customers when countrycode is NL. Use function setStreetAddress().\n"
                 + "MISSING VALUE - Locality is required for all customers when countrycode is NL. Use function setLocality().\n"
                 + "MISSING VALUE - Zip code is required for all customers when countrycode is NL. Use function setZipCode().\n"
                 + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n" 
@@ -275,11 +275,33 @@ public class WebServiceOrderValidatorTest {
             .setUnit("st")
             .setVatPercent(25)
             .setDiscountPercent(0))        
-            .setNumberOfCreditDays(1)
-            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-            .deliverInvoiceOrder();            
+        .setNumberOfCreditDays(1)
+        .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+        .deliverInvoiceOrder();            
    
         assertEquals(expectedMessage, handleOrder.validateOrder());  
     }
     
+    @Test
+    public void testFailOnMissingOrderTypeForInvoiceOrder() throws ValidationException {
+    	  String expectedMessage = "MISSING VALUE - setInvoiceDistributionType is requred for deliverInvoiceOrder.\n";
+          HandleOrder handleOrder = WebPay.deliverOrder()                	
+          .addOrderRow(Item.orderRow()
+              .setArticleNumber("1")
+              .setQuantity(2)
+              .setAmountExVat(100.00)
+              .setDescription("Specification")
+              .setName("Prod")
+              .setUnit("st")	
+              .setVatPercent(25)
+              .setDiscountPercent(0))        
+          .setNumberOfCreditDays(1)
+          .setOrderId(2345L)
+         // .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+          .deliverInvoiceOrder();            
+     
+          assertEquals(expectedMessage, handleOrder.validateOrder()); 
+    }
+    
+  
 }

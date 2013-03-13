@@ -2,6 +2,8 @@ package se.sveaekonomi.webpay.integration.response;
 
 import static org.junit.Assert.assertEquals;
 
+import javax.xml.bind.ValidationException;
+
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -14,6 +16,8 @@ import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsRe
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 
 public class WebServicePaymentsResponseTest {
@@ -42,6 +46,129 @@ public class WebServicePaymentsResponseTest {
         assertEquals(response.isOrderAccepted(), true);          
     }
 
+    @Test
+    public void testCompanyIdRequest() throws ValidationException, Exception {
+    	 SveaRequest<SveaCreateOrder> request = WebPay.createOrder()                
+            	.addOrderRow(Item.orderRow()
+                    .setArticleNumber("1")
+                    .setQuantity(2)
+                    .setAmountExVat(100.00)
+                    .setDescription("Specification")
+                    .setName("Prod")
+                    .setUnit("st")
+                    .setVatPercent(25)
+                    .setDiscountPercent(0))
+                                 
+    	        .addCustomerDetails(Item.companyCustomer()
+    	        	.setNationalIdNumber("4354kj"))
+               		
+            	.setCountryCode(COUNTRYCODE.SE)
+                .setClientOrderNumber("33")
+                .setOrderDate("2012-12-12")
+                .setCurrency(CURRENCY.SEK)
+                .useInvoicePayment()// returns an InvoiceOrder object
+                .prepareRequest();
+
+    	 assertEquals(request.request.Auth.ClientNumber.toString(), "79021"); 
+    	 assertEquals(request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber, "4354kj");
+    }
+    
+    @Test
+    public void testCompanyIdResponse() throws ValidationException, Exception {
+    	 CreateOrderResponse response = WebPay.createOrder()                
+            	.addOrderRow(Item.orderRow()
+                    .setArticleNumber("1")
+                    .setQuantity(2)
+                    .setAmountExVat(100.00)
+                    .setDescription("Specification")
+                    .setName("Prod")
+                    .setUnit("st")
+                    .setVatPercent(25)
+                    .setDiscountPercent(0))
+                                 
+    	        .addCustomerDetails(Item.companyCustomer()
+    	        	.setNationalIdNumber("4608142222"))
+               		
+            	.setCountryCode(COUNTRYCODE.SE)
+                .setClientOrderNumber("33")
+                .setOrderDate("2012-12-12")
+                .setCurrency(CURRENCY.SEK)
+                .useInvoicePayment()// returns an InvoiceOrder object
+                //.prepareRequest();
+                    .doRequest();
+    	assertEquals(response.isIndividualIdentity, false);
+    	assertEquals(response.isOrderAccepted(), true);
+    	 //assertEquals(request.request.Auth.ClientNumber.toString(), "79021"); 
+    	 //assertEquals(request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber, "4354kj");
+    }
+    
+    @Test
+    public void testDECompanyIdentity() throws ValidationException, Exception {
+    	 CreateOrderResponse response = WebPay.createOrder()                
+            	.addOrderRow(Item.orderRow()
+                    .setArticleNumber("1")
+                    .setQuantity(2)
+                    .setAmountExVat(100.00)
+                    .setDescription("Specification")
+                    .setName("Prod")
+                    .setUnit("st")
+                    .setVatPercent(25)
+                    .setDiscountPercent(0))
+                                 
+    	        .addCustomerDetails(Item.companyCustomer()
+    	        	.setNationalIdNumber("12345")
+    	        	.setVatNumber("DE123456789")
+    	        	.setStreetAddress("Adalbertsteinweg", 1)
+    	        	.setZipCode("52070")
+    	        	.setLocality("AACHEN"))
+               		
+            	.setCountryCode(COUNTRYCODE.DE)
+                .setClientOrderNumber("33")
+                .setOrderDate("2012-12-12")
+                .setCurrency(CURRENCY.EUR)
+                .useInvoicePayment()// returns an InvoiceOrder object
+                .setPasswordBasedAuthorization("germanytest", "germanytest", 14997)
+                //.prepareRequest();
+                    .doRequest();
+    	 
+    	assertEquals(response.isIndividualIdentity, false);
+    	assertEquals(response.isOrderAccepted(), true);    
+    }
+    
+    @Test
+    public void testNLCompanyIdentity() throws ValidationException, Exception {
+    		 CreateOrderResponse response = WebPay.createOrder()                
+            	.addOrderRow(Item.orderRow()
+                    .setArticleNumber("1")
+                    .setQuantity(2)
+                    .setAmountExVat(100.00)
+                    .setDescription("Specification")
+                    .setName("Prod")
+                    .setUnit("st")
+                    .setVatPercent(25)
+                    .setDiscountPercent(0))
+                
+    	        .addCustomerDetails(Item.companyCustomer()
+    	        	//.setNationalIdNumber("12345")
+    	        	.setCompanyName("Svea bakkerij 123")
+    	        	.setVatNumber("NL123456789A12")
+    	        	.setStreetAddress("broodstraat", 1)
+    	        	.setZipCode("1111 CD")
+    	        	.setLocality("BARENDRECHT"))
+               		
+            	.setCountryCode(COUNTRYCODE.NL)
+            	
+                .setClientOrderNumber("33")
+                .setOrderDate("2012-12-12")
+                .setCurrency(CURRENCY.EUR)
+                .useInvoicePayment()// returns an InvoiceOrder object
+                .setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)
+                    .doRequest();
+    	 
+    	assertEquals(false, response.isIndividualIdentity);
+    	assertEquals(true, response.isOrderAccepted());
+    }
+    
     @Test
     public void testDeliverPaymentPlanOrderResult() throws Exception {
     	long orderId = createPaymentPlanAndReturnOrderId();

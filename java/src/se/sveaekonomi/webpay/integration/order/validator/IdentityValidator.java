@@ -30,7 +30,7 @@ public class IdentityValidator {
             errors += "MISSING VALUE - Company name is required for individual customers when countrycode is NL. Use function setName().\n";
         //Individual and Company
         if (order.getCustomerIdentity().getStreetAddress()== null || order.getCustomerIdentity().getHouseNumber() <= 0)
-            errors += "MISSING VALUE - Street address is required for all customers when countrycode is NL. Use function setStreetAddress().\n";    
+            errors += "MISSING VALUE - Street address and house number is required for all customers when countrycode is NL. Use function setStreetAddress().\n";    
         if (order.getCustomerIdentity().getLocality() == null)
             errors += "MISSING VALUE - Locality is required for all customers when countrycode is NL. Use function setLocality().\n";
         if (order.getCustomerIdentity().getZipCode() == null)
