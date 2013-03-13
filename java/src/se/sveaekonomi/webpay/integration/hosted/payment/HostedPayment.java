@@ -133,7 +133,7 @@ public abstract class HostedPayment {
 
         form.setMerchantId(createOrderBuilder.config.getMerchantId());
         form.setSecretWord(createOrderBuilder.config.getSecretWord());
-        if(this.createOrderBuilder.getCampaignCode() != null)
+        if(this.createOrderBuilder.getCountryCode() != null)
             form.setSubmitMessage(this.createOrderBuilder.getCountryCode());
         else 
             form.setSubmitMessage(COUNTRYCODE.SE);

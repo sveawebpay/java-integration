@@ -56,7 +56,7 @@ public class InvoicePaymentTest {
     }
     
     @Test
-    public void testInvoiceDoRequestObjectForCustomerIdentityIndividualFromSE() throws Exception {
+    public void testInvoiceDoRequestWithIpAddressSetSE() throws Exception {
     	CreateOrderResponse response = WebPay.createOrder()
     		.addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
@@ -85,16 +85,10 @@ public class InvoicePaymentTest {
              .setClientOrderNumber("33")
              .setCurrency(CURRENCY.SEK)
              .useInvoicePayment()
-        //	returns an InvoicePayment object
-             	//.prepareRequest();
              .doRequest();
         
     	assertEquals(response.isOrderAccepted(), true);
-        //CustomerIdentity            
-    	
-      /*  assertEquals("194609052222", request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber);
-        assertEquals(COUNTRYCODE.SE, request.request.CreateOrderInformation.CustomerIdentity.CountryCode);
-        assertEquals("Individual", request.request.CreateOrderInformation.CustomerIdentity.CustomerType);*/    
+      
     }
         
     @Test

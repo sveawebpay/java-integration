@@ -302,6 +302,17 @@ public class WebServiceOrderValidatorTest {
      
           assertEquals(expectedMessage, handleOrder.validateOrder()); 
     }
-    
-  
+     
+    @Test
+    public void testFailOnMissingRows() throws ValidationException {
+    	  String expectedMessage = "MISSING VALUE - No order or fee has been included. Use addOrder(...) or addFee(...).\n";
+          HandleOrder handleOrder = WebPay.deliverOrder()                	
+               
+          .setNumberOfCreditDays(1)
+          .setOrderId(2345L)
+          .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+          .deliverInvoiceOrder();            
+     
+          assertEquals(expectedMessage, handleOrder.validateOrder()); 
+    }
 }
