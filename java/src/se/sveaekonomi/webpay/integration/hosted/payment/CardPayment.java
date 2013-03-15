@@ -3,7 +3,6 @@ package se.sveaekonomi.webpay.integration.hosted.payment;
 import javax.xml.stream.XMLStreamWriter;
 
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
 public class CardPayment extends HostedPayment {

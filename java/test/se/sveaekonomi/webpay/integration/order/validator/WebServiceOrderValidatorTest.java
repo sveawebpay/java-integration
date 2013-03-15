@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.order.validator;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import javax.xml.bind.ValidationException;
 
@@ -9,6 +10,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -23,11 +25,7 @@ public class WebServiceOrderValidatorTest {
     public WebServiceOrderValidatorTest() {
         orderValidator = new WebServiceOrderValidator();
     }
-    
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-    
-    
+           
     @Test
     public void testCheckOfIdentityClass() {
         CreateOrderBuilder order = WebPay.createOrder()
@@ -161,7 +159,7 @@ public class WebServiceOrderValidatorTest {
     }
     
     @Test
-    public void testFailOnMissingVatNumberForCompanyOrderDe() {
+    public void testFailOnMissingVatNumberForIndividualOrderDE() {
         String expectedMessage = "MISSING VALUE - Birth date is required for individual customers when countrycode is DE. Use function setBirthDate().\n"
                 + "MISSING VALUE - Name is required for individual customers when countrycode is DE. Use function setName().\n"
                 + "MISSING VALUE - Street address is required for all customers when countrycode is DE. Use function setStreetAddress().\n"
@@ -174,6 +172,28 @@ public class WebServiceOrderValidatorTest {
             .setClientOrderNumber("1")
             .setCountryCode(COUNTRYCODE.DE)
         	.addCustomerDetails(Item.individualCustomer())
+        	.setValidator(new VoidValidator());   
+        
+        assertEquals(expectedMessage, orderValidator.validate(order));
+    }
+    
+    @Test
+    public void testFailOnMissingVatNumberForCompanyOrderDE() {
+        String expectedMessage = "MISSING VALUE - Vat number is required for company customers when countrycode is DE. Use function setVatNumber().\n";
+
+        CreateOrderBuilder order = WebPay.createOrder()        
+            .setClientOrderNumber("1")
+            .setCountryCode(COUNTRYCODE.DE)
+            .addOrderRow(Item.orderRow()
+            		.setAmountExVat(4)
+            		.setVatPercent(25)
+            		.setQuantity(1))
+        	.addCustomerDetails(Item.companyCustomer()
+        			.setCompanyName("K. H. Maier gmbH")
+        			.setStreetAddress("Adalbertsteinweg", 1)
+        			.setLocality("AACHEN")
+        			.setZipCode("52070"))
+        	.setOrderDate("2012-09-09")
         	.setValidator(new VoidValidator());   
         
         assertEquals(expectedMessage, orderValidator.validate(order));
@@ -314,5 +334,42 @@ public class WebServiceOrderValidatorTest {
           .deliverInvoiceOrder();            
      
           assertEquals(expectedMessage, handleOrder.validateOrder()); 
+    }
+     
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+    @Test
+    public void testFailCompanyCustomerUsingPaymentPlan() throws ValidationException, Exception {
+    	String expectedMessage = "ERROR - CompanyCustomer is not allowed to use payment plan option.";
+    	try{
+    	WebPay.createOrder()
+        .addOrderRow(Item.orderRow()
+                .setArticleNumber("1")
+                .setQuantity(2)
+                .setAmountExVat(100.00)
+                .setDescription("Specification")
+                .setName("Prod")
+                .setUnit("st")	
+                .setVatPercent(25)
+                .setDiscountPercent(0)) 
+        .addCustomerDetails(Item.companyCustomer()
+                .setNationalIdNumber("666666")
+                .setEmail("test@svea.com")
+                .setPhoneNumber(999999)
+                .setIpAddress("123.123.123.123")
+                .setStreetAddress("Gatan", 23)
+                .setCoAddress("c/o Eriksson")
+                .setZipCode("9999")
+                .setLocality("Stan"))
+        .setCountryCode(COUNTRYCODE.SE)
+        .setOrderDate("2012-09-09")
+       	.usePaymentPlanPayment("camp1");
+    	
+    	assertTrue(false);
+    	
+    	}
+    	catch (SveaWebPayException e) {
+    		assertEquals(e.getMessage(), expectedMessage);
+    	}
     }
 }

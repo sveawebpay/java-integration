@@ -3,11 +3,7 @@ package se.sveaekonomi.webpay.integration.order.validator;
 import static org.junit.Assert.assertEquals;
 
 import javax.xml.bind.ValidationException;
-
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
-
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
@@ -21,10 +17,7 @@ public class HostedOrderValidatorTest {
     
     public HostedOrderValidatorTest() {
         orderValidator = new HostedOrderValidator();
-    }
-    
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+    }      
     
     @Test
     public void testFailOnNullClientOrderNumber() throws ValidationException {
