@@ -21,7 +21,7 @@ public class DirectPayment extends HostedPayment {
             excludedPaymentMethods.add(PAYMENTMETHOD.NORDEA_SE.getValue());
             excludedPaymentMethods.add(PAYMENTMETHOD.SEBFTG_SE.getValue());
             excludedPaymentMethods.add(PAYMENTMETHOD.SHB_SE.getValue());
-            excludedPaymentMethods.add(PAYMENTMETHOD.SWEDBANK_SE.getValue());            
+            excludedPaymentMethods.add(PAYMENTMETHOD.SWEDBANK_SE.getValue());       
         }
                      
         excludedPaymentMethods.add(PAYMENTMETHOD.PAYPAL.getValue());

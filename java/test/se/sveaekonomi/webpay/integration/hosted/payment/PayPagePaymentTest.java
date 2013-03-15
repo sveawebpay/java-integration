@@ -16,6 +16,7 @@ import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.INVOICETYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTPLANTYPE;
 
 
 public class PayPagePaymentTest {
@@ -52,9 +53,21 @@ public class PayPagePaymentTest {
         assertEquals(payPagePayment.getExcludedPaymentMethods().size(), 22);
         assertEquals(payPagePayment.getIncludedPaymentMethods().size(), 0);
     }
+ 
+    @Test
+    public void testDefaultSE() throws ValidationException {
+    	PayPagePayment payPagePayment = WebPay.createOrder()
+    	.setCountryCode(COUNTRYCODE.SE)
+    	.usePayPage();
+    	                
+        payPagePayment.configureExcludedPaymentMethods();
+
+        assertEquals(0, payPagePayment.getExcludedPaymentMethods().size());
+    }
+ 
     
     @Test
-    public void setPaymentMethodTest() throws ValidationException {
+    public void setPaymentMethodTestSE() throws ValidationException {
     	PayPagePayment payPagePayment = WebPay.createOrder()
     	.setCountryCode(COUNTRYCODE.SE)
     	.usePayPage()
@@ -66,13 +79,46 @@ public class PayPagePaymentTest {
     }
     
     @Test
+    public void setPaymentMethodTestDE() throws ValidationException {
+    	PayPagePayment payPagePayment = WebPay.createOrder()
+    	.setCountryCode(COUNTRYCODE.DE)
+    	.usePayPage()
+    	.setPaymentMethod(PAYMENTMETHOD.INVOICE);
+                
+        payPagePayment.configureExcludedPaymentMethods();
+
+        assertEquals(INVOICETYPE.INVOICE_DE.getValue(), payPagePayment.getPaymentMethod());
+    }
+    
+    @Test
+    public void setPaymentMethodPaymentPlanTestSE() throws ValidationException {
+    	PayPagePayment payPagePayment = WebPay.createOrder()
+    	.setCountryCode(COUNTRYCODE.SE)
+    	.usePayPage()
+    	.setPaymentMethod(PAYMENTMETHOD.PAYMENTPLAN);
+                
+        payPagePayment.configureExcludedPaymentMethods();
+
+        assertEquals(PAYMENTPLANTYPE.PAYMENTPLAN_SE.getValue(), payPagePayment.getPaymentMethod());
+    }
+    
+    @Test
+    public void setPaymentMethodPaymentPlanTestNL() throws ValidationException {
+    	PayPagePayment payPagePayment = WebPay.createOrder()
+    	.setCountryCode(COUNTRYCODE.NL)
+    	.usePayPage()
+    	.setPaymentMethod(PAYMENTMETHOD.PAYMENTPLAN);                
+        payPagePayment.configureExcludedPaymentMethods();
+
+        assertEquals(PAYMENTPLANTYPE.PAYMENTPLAN_NL.getValue(), payPagePayment.getPaymentMethod());
+    }
+    
+    @Test
     public void excludeCardPaymentMethodsTest() throws Exception {
     	PayPagePayment payPagePayment = WebPay.createOrder()
     			.setCountryCode(COUNTRYCODE.SE)
     			.usePayPage()
-    			.excludeCardPaymentMethods();
-    	
-    	 
+    			.excludeCardPaymentMethods();    	    
     	
         assertEquals(2, payPagePayment.getExcludedPaymentMethods().size());
         assertEquals(PAYMENTMETHOD.KORTCERT.getValue(), payPagePayment.getExcludedPaymentMethods().get(0));
@@ -80,8 +126,7 @@ public class PayPagePaymentTest {
     }      
       
     @Test
-    public void includeTCardPaymentMethodsTest() throws ValidationException {
-      //  PayPagePayment payPagePayment = new PayPagePayment(null);
+    public void includeTCardPaymentMethodsTest() throws ValidationException {     
         List<PAYMENTMETHOD> includedPaymentMethods = new ArrayList<PAYMENTMETHOD>();
         includedPaymentMethods.add(PAYMENTMETHOD.KORTCERT);
         includedPaymentMethods.add(PAYMENTMETHOD.SKRILL);
@@ -215,6 +260,7 @@ public class PayPagePaymentTest {
         String xml = form.getXmlMessage();        
 		String paymentMethod = xml.substring(xml.indexOf("KORTCERT"), xml.indexOf("KORTCERT")+8);      
 		String paymentMethod2 = xml.substring(xml.indexOf("SKRILL"), xml.indexOf("SKRILL")+6);
+		
 		assertEquals(PAYMENTMETHOD.KORTCERT.getValue(), paymentMethod);
 		assertEquals("SKRILL", paymentMethod2); 
     }

@@ -29,10 +29,11 @@ public class CardPaymentTest {
     
     @Test
     public void testConfigureExcludedPaymentMethodsSe() throws ValidationException {
-    	List<String> excluded = order.setCountryCode(COUNTRYCODE.SE)
-        .usePayPageCardOnly()
-        .configureExcludedPaymentMethods()
-        .getExcludedPaymentMethods();
+    	List<String> excluded = order
+    			.setCountryCode(COUNTRYCODE.SE)
+    			.usePayPageCardOnly()
+    			.configureExcludedPaymentMethods()
+    			.getExcludedPaymentMethods();
     	
         assertEquals(21, excluded.size());
     }

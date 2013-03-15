@@ -78,7 +78,7 @@ public class PayPagePayment extends HostedPayment {
 	}
 	
 	private void addCollectionToExcludePaymentMethodsList(
-			Collection<PAYMENTMETHOD> paymentMethods) {
+		Collection<PAYMENTMETHOD> paymentMethods) {
 		for (PAYMENTMETHOD pm : paymentMethods) {
 			
 			if (pm.equals(PAYMENTMETHOD.INVOICE)) {
@@ -124,12 +124,12 @@ public class PayPagePayment extends HostedPayment {
 	
 	private String getPaymentPlanType(Boolean isInclude) {
 		for (PAYMENTPLANTYPE ppt : PAYMENTPLANTYPE.ALL_PAYMENTPLANTYPES){
-			//never inlude old flow to include list - won´t show in paypage
+			//never include old flow to include list - won´t show in paypage
 			if(isInclude &&
 					createOrderBuilder.getCountryCode().equals(COUNTRYCODE.SE) && 
 					ppt.equals(PAYMENTPLANTYPE.PAYMENTPLANSE))
 				continue;
-			//always include old flow to exclude list - won´t show in paypage
+			//always include from old flow to exclude list - won´t show in paypage
 			else if(!isInclude &&
 					createOrderBuilder.getCountryCode().equals(COUNTRYCODE.SE) && 
 					ppt.equals(PAYMENTPLANTYPE.PAYMENTPLANSE))
