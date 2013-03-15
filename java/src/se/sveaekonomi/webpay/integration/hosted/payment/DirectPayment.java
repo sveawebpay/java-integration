@@ -17,16 +17,19 @@ public class DirectPayment extends HostedPayment {
         COUNTRYCODE countryCode = createOrderBuilder.getCountryCode();
         
         if (! countryCode.equals(COUNTRYCODE.SE)) {            
-            excludedPaymentMethods.add(PAYMENTMETHOD.DBSEBSE);
-            excludedPaymentMethods.add(PAYMENTMETHOD.DBNORDEASE);
-            excludedPaymentMethods.add(PAYMENTMETHOD.DBSEBFTGSE);
-            excludedPaymentMethods.add(PAYMENTMETHOD.DBSHBSE);
-            excludedPaymentMethods.add(PAYMENTMETHOD.DBSWEDBANKSE);            
+        	excludedPaymentMethods.add(PAYMENTMETHOD.SEB_SE.getValue());
+            excludedPaymentMethods.add(PAYMENTMETHOD.NORDEA_SE.getValue());
+            excludedPaymentMethods.add(PAYMENTMETHOD.SEBFTG_SE.getValue());
+            excludedPaymentMethods.add(PAYMENTMETHOD.SHB_SE.getValue());
+            excludedPaymentMethods.add(PAYMENTMETHOD.SWEDBANK_SE.getValue());       
+        }
+        if (! countryCode.equals(COUNTRYCODE.NO)) {
+        	excludedPaymentMethods.add(PAYMENTMETHOD.BANKAXESS.getValue());
         }
                      
-        excludedPaymentMethods.add(PAYMENTMETHOD.PAYPAL);
-        excludedPaymentMethods.add(PAYMENTMETHOD.KORTCERT);       
-        excludedPaymentMethods.add(PAYMENTMETHOD.SKRILL);
+        excludedPaymentMethods.add(PAYMENTMETHOD.PAYPAL.getValue());
+        excludedPaymentMethods.add(PAYMENTMETHOD.KORTCERT.getValue());       
+        excludedPaymentMethods.add(PAYMENTMETHOD.SKRILL.getValue());
                 
         excludedPaymentMethods.addAll(excluded.excludeInvoicesAndPaymentPlan());
         return this;

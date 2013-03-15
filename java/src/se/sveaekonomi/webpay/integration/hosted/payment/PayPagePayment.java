@@ -8,29 +8,37 @@ import javax.xml.stream.XMLStreamWriter;
 
 import se.sveaekonomi.webpay.integration.hosted.helper.ExcludePayments;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.INVOICETYPE;
 import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTPLANTYPE;
 
 public class PayPagePayment extends HostedPayment {
 
-	protected PAYMENTMETHOD paymentMethod;
-	protected List<PAYMENTMETHOD> includedPaymentMethods;
+	protected String paymentMethod;
+	protected List<String> includedPaymentMethods;
 
 	public PayPagePayment(CreateOrderBuilder orderBuilder) {
 		super(orderBuilder);
-		includedPaymentMethods = new ArrayList<PAYMENTMETHOD>();
+		includedPaymentMethods = new ArrayList<String>();
 	}
 
-	public PAYMENTMETHOD getPaymentMethod() {
+	public String getPaymentMethod() {
 		return paymentMethod;
 	}
 
 	public PayPagePayment setPaymentMethod(PAYMENTMETHOD paymentMethod) {
-		this.paymentMethod = paymentMethod;
+		if(paymentMethod.equals(PAYMENTMETHOD.INVOICE))
+			this.paymentMethod = getInvoiceType(true);
+		else if(paymentMethod.equals(PAYMENTMETHOD.PAYMENTPLAN))
+			this.paymentMethod = getPaymentPlanType(true);
+		else
+			this.paymentMethod = paymentMethod.getValue();
 		return this;
 	}
 
-	public List<PAYMENTMETHOD> getIncludedPaymentMethods() {
+	public List<String> getIncludedPaymentMethods() {
 		return includedPaymentMethods;
 	}
 
@@ -49,25 +57,42 @@ public class PayPagePayment extends HostedPayment {
 	}
 
 	public PayPagePayment excludeCardPaymentMethods() {
-		excludedPaymentMethods.add(PAYMENTMETHOD.KORTCERT);
-		excludedPaymentMethods.add(PAYMENTMETHOD.SKRILL);
+		excludedPaymentMethods.add(PAYMENTMETHOD.KORTCERT.getValue());
+		excludedPaymentMethods.add(PAYMENTMETHOD.SKRILL.getValue());	
+		
 		return this;
 	}
 
 	public PayPagePayment excludeDirectPaymentMethods() {
-		excludedPaymentMethods.add(PAYMENTMETHOD.DBNORDEASE);
-		excludedPaymentMethods.add(PAYMENTMETHOD.DBSEBSE);
-		excludedPaymentMethods.add(PAYMENTMETHOD.DBSEBFTGSE);
-		excludedPaymentMethods.add(PAYMENTMETHOD.DBSHBSE);
-		excludedPaymentMethods.add(PAYMENTMETHOD.DBSWEDBANKSE);
+		excludedPaymentMethods.add(PAYMENTMETHOD.NORDEA_SE.getValue());
+		excludedPaymentMethods.add(PAYMENTMETHOD.SEB_SE.getValue());
+		excludedPaymentMethods.add(PAYMENTMETHOD.SEBFTG_SE.getValue());
+		excludedPaymentMethods.add(PAYMENTMETHOD.SHB_SE.getValue());
+		excludedPaymentMethods.add(PAYMENTMETHOD.SWEDBANK_SE.getValue());
+		excludedPaymentMethods.add(PAYMENTMETHOD.BANKAXESS.getValue());
 		return this;
 	}
 
 	public PayPagePayment excludePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods) {
-		excludedPaymentMethods.addAll(paymentMethods);
+		addCollectionToExcludePaymentMethodsList(paymentMethods);
 		return this;
 	}
 	
+	private void addCollectionToExcludePaymentMethodsList(
+		Collection<PAYMENTMETHOD> paymentMethods) {
+		for (PAYMENTMETHOD pm : paymentMethods) {
+			
+			if (pm.equals(PAYMENTMETHOD.INVOICE)) {
+				excludedPaymentMethods.addAll(INVOICETYPE.INVOICE_SE.getAllInvoiceValues());
+			}
+			else if(pm.equals(PAYMENTMETHOD.PAYMENTPLAN)) {
+				excludedPaymentMethods.addAll(PAYMENTPLANTYPE.PAYMENTPLAN_SE.getAllPaymentPlanValues());								  				
+			}
+			else
+				excludedPaymentMethods.add(pm.getValue());
+		}
+	}
+
 	public PayPagePayment excludePaymentMethods() {
 		List<PAYMENTMETHOD> emptyList = new ArrayList<PAYMENTMETHOD>(); 
 		return excludePaymentMethods(emptyList);
@@ -79,24 +104,77 @@ public class PayPagePayment extends HostedPayment {
 	}
 	
 	public PayPagePayment includePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods) {
-		this.includedPaymentMethods.addAll(paymentMethods);
+		addCollectionToIncludedPaymentMethodsList(paymentMethods);
+	
 		// Exclude all payment methods		
 		ExcludePayments excluded = new ExcludePayments();
 		excludedPaymentMethods = excluded.excludeInvoicesAndPaymentPlan();
 
-		excludedPaymentMethods.add(PAYMENTMETHOD.KORTCERT);
-		excludedPaymentMethods.add(PAYMENTMETHOD.SKRILL);
-		excludedPaymentMethods.add(PAYMENTMETHOD.PAYPAL);
+		excludedPaymentMethods.add(PAYMENTMETHOD.KORTCERT.getValue());
+		excludedPaymentMethods.add(PAYMENTMETHOD.SKRILL.getValue());
+		excludedPaymentMethods.add(PAYMENTMETHOD.PAYPAL.getValue());
 		excludeDirectPaymentMethods();
 
 		// Remove the included methods from the excluded payment methods
-		for (PAYMENTMETHOD pm : includedPaymentMethods) {
+		for (String pm : includedPaymentMethods) {
 			excludedPaymentMethods.remove(pm);
 		}
 
 		return this;
 	}
 	
+	private String getPaymentPlanType(Boolean isInclude) {
+		for (PAYMENTPLANTYPE ppt : PAYMENTPLANTYPE.ALL_PAYMENTPLANTYPES){
+			//never include old flow to include list - won´t show in paypage
+			if(isInclude &&
+					createOrderBuilder.getCountryCode().equals(COUNTRYCODE.SE) && 
+					ppt.equals(PAYMENTPLANTYPE.PAYMENTPLANSE))
+				continue;
+			//always include from old flow to exclude list - won´t show in paypage
+			else if(!isInclude &&
+					createOrderBuilder.getCountryCode().equals(COUNTRYCODE.SE) && 
+					ppt.equals(PAYMENTPLANTYPE.PAYMENTPLANSE))
+				excludedPaymentMethods.add(ppt.getValue());	
+			//include only Payment plan for current country 
+			else if(ppt.getCountryCode().equals(createOrderBuilder.getCountryCode()))	
+				return ppt.getValue();				  	
+		}
+		return "";
+	}
+	
+	private String getInvoiceType(Boolean isInclude) {
+		for (INVOICETYPE it : INVOICETYPE.ALL_INVOICETYPES) {
+			//never include old flow to include list
+			if(isInclude &&
+					createOrderBuilder.getCountryCode().equals(COUNTRYCODE.SE) && 
+					it.equals(INVOICETYPE.INVOICESE))
+				continue;
+			//always include old flow to exclude list
+			else if(!isInclude &&
+					createOrderBuilder.getCountryCode().equals(COUNTRYCODE.SE) && 
+					it.equals(INVOICETYPE.INVOICESE))
+				excludedPaymentMethods.add(it.getValue());
+			else if(it.getCountryCode().equals(createOrderBuilder.getCountryCode()))
+				return it.getValue();
+		}
+		return "";
+	}
+	
+	private void addCollectionToIncludedPaymentMethodsList(Collection<PAYMENTMETHOD> paymentMethods) {
+		
+		for (PAYMENTMETHOD pm : paymentMethods) {
+			
+			if (pm.equals(PAYMENTMETHOD.INVOICE)) {  
+				includedPaymentMethods.add(getInvoiceType(true));			
+			}
+			else if (pm.equals(PAYMENTMETHOD.PAYMENTPLAN)) {  
+				includedPaymentMethods.add(getPaymentPlanType(true));				
+			}
+			else
+				includedPaymentMethods.add(pm.getValue());
+		}		
+	}
+
 	public PayPagePayment setPayPageLanguage(LANGUAGECODE languageCode) {
 		this.languageCode = languageCode.toString();
 		
@@ -105,8 +183,8 @@ public class PayPagePayment extends HostedPayment {
 
 	public XMLStreamWriter getPaymentSpecificXml(XMLStreamWriter xmlw)
 			throws Exception {
-		if (paymentMethod != null) {
-			writeSimpleElement(xmlw, "paymentmethod", paymentMethod.toString());
+		if (paymentMethod!=null) {
+			writeSimpleElement(xmlw, "paymentmethod", paymentMethod);
 		}
 
 		return xmlw;

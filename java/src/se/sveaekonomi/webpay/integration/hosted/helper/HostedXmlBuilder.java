@@ -12,7 +12,6 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.HostedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.hosted.payment.HostedPayment;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.xml.XMLBuilder;
 
 public class HostedXmlBuilder extends XMLBuilder {
@@ -44,9 +43,9 @@ public class HostedXmlBuilder extends XMLBuilder {
         if (payment.getExcludedPaymentMethods() != null) {
             xmlw.writeStartElement("excludepaymentmethods");
             
-            List<PAYMENTMETHOD> excludeList =  payment.getExcludedPaymentMethods();
+            List<String> excludeList =  payment.getExcludedPaymentMethods();
             for (int i = 0; i < excludeList.size(); i++) {
-        		writeSimpleElement("exclude", excludeList.get(i).toString());
+        		writeSimpleElement("exclude", excludeList.get(i));
         	}
             
             xmlw.writeEndElement();

@@ -13,29 +13,25 @@ import se.sveaekonomi.webpay.integration.hosted.helper.ExcludePayments;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
+import se.sveaekonomi.webpay.integration.util.constant.INVOICETYPE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTPLANTYPE;
 
 public class HostedPaymentTest {
 
     @Test
     public void testCalculateRequestValuesNullExtraRows() throws Exception {
-    	//CreateOrderBuilder order = new CreateOrderBuilder();
+    
     	CreateOrderBuilder order = WebPay.createOrder()    	
             .addOrderRow(Item.orderRow()
             		.setAmountExVat(4)
                     .setVatPercent(25)
                     .setQuantity(1))            
             
-     //   .setShippingFeeRows(null)
-        .addFee(Item.shippingFee())
-        .addDiscount(Item.fixedDiscount())
-        .addDiscount(Item.relativeDiscount());
-        //.usePayPage()
-        	//.getPaymentForm();
-        //.setFixedDiscountRows(null)
-        //.setRelativeDiscountRows(null)
-        HostedPayment payment = new FakeHostedPayment(order);
-        
+	        .addFee(Item.shippingFee())
+	        .addDiscount(Item.fixedDiscount())
+	        .addDiscount(Item.relativeDiscount());
+	    	
+        HostedPayment payment = new FakeHostedPayment(order);        
         payment.calculateRequestValues();
         
         assertTrue(500L == payment.getAmount());
@@ -43,12 +39,11 @@ public class HostedPaymentTest {
 
     @Test
     public void testVatPercentAndAmountIncVatCalculation() {        
-       // CreateOrderBuilder order = new CreateOrderBuilder();
         CreateOrderBuilder order = WebPay.createOrder()        		
-                .addOrderRow(Item.orderRow()
-                		.setAmountIncVat(5)
-                        .setVatPercent(25)
-                        .setQuantity(1));            
+            .addOrderRow(Item.orderRow()
+            		.setAmountIncVat(5)
+                    .setVatPercent(25)
+                    .setQuantity(1));            
         
         order.setShippingFeeRows(null);
         order.setFixedDiscountRows(null);
@@ -62,16 +57,16 @@ public class HostedPaymentTest {
     
     @Test
     public void testAmountIncVatAndvatPercentShippingFee() {        
-       // CreateOrderBuilder order = new CreateOrderBuilder();
-        CreateOrderBuilder order = WebPay.createOrder()        		
-                .addOrderRow(Item.orderRow()
-                		.setAmountIncVat(5)
-                        .setVatPercent(25)
-                        .setQuantity(1))            
+      CreateOrderBuilder order = WebPay.createOrder()        		
+            .addOrderRow(Item.orderRow()
+            		.setAmountIncVat(5)
+                    .setVatPercent(25)
+                    .setQuantity(1))            
         
-        .addFee(Item.shippingFee()
-        		.setAmountIncVat(5)
-        		.setVatPercent(25));
+            .addFee(Item.shippingFee()
+            		.setAmountIncVat(5)
+            		.setVatPercent(25));
+      
         order.setFixedDiscountRows(null);
         order.setRelativeDiscountRows(null);
         HostedPayment payment = new FakeHostedPayment(order);
@@ -79,20 +74,15 @@ public class HostedPaymentTest {
         
         assertEquals(1000L,payment.getAmount(), 0);
     }
+    
     @Test
     public void testAmountIncVatAndAmountExVatCalculation() {
-    	//CreateOrderBuilder order = new CreateOrderBuilder();
     	 CreateOrderBuilder order = WebPay.createOrder()        		
-                .addOrderRow(Item.orderRow()
+    			 .addOrderRow(Item.orderRow()
                 		.setAmountExVat(4)
                         .setAmountIncVat(5)
-                        .setQuantity(1)); 
-        /*ArrayList<OrderRowBuilder> rows = new ArrayList<OrderRowBuilder>();
-        
-        rows.add(row);
-        CreateOrderBuilder order = new CreateOrderBuilder();
-        
-        order.addOrderRow(row);*/
+                        .setQuantity(1));
+    	 
         order.setShippingFeeRows(null);
         order.setFixedDiscountRows(null);
         order.setRelativeDiscountRows(null);
@@ -104,18 +94,13 @@ public class HostedPaymentTest {
     
     @Test
     public void testCreatePaymentForm() throws Exception {
-    	//CreateOrderBuilder order = new CreateOrderBuilder();
     	 CreateOrderBuilder order = WebPay.createOrder()        		
                 .addOrderRow(Item.orderRow()
                 		.setAmountExVat(4)
                         .setVatPercent(25)
                         .setQuantity(1)); 
-      /*  ArrayList<OrderRowBuilder> rows = new ArrayList<OrderRowBuilder>();
-        rows.add(row);
-        CreateOrderBuilder order = new CreateOrderBuilder();
-
-        order.addOrderRow(row);*/
-        HostedPayment payment = new FakeHostedPayment(order);
+      
+    	HostedPayment payment = new FakeHostedPayment(order);
         PaymentForm form;
         
         try {
@@ -124,87 +109,32 @@ public class HostedPaymentTest {
             throw e;
         }
         
-        Map<String, String> formHtmlFields = form.getFormHtmlFields();
-        
+        Map<String, String> formHtmlFields = form.getFormHtmlFields();        
         assertTrue(formHtmlFields.get("form_end_tag").equals("</form>"));
     }
 
     @Test
-    public void testExcludeInvoicesAndInstallmentsSe() {
+    public void testExcludeInvoicesAndAllInstallmentsAllCountries() {
         HostedPayment payment = new FakeHostedPayment(null);
         ExcludePayments exclude = new ExcludePayments();       
-        List<PAYMENTMETHOD> excludedPaymentMethods = payment.getExcludedPaymentMethods();
+        List<String> excludedPaymentMethods = payment.getExcludedPaymentMethods();
         excludedPaymentMethods.addAll(exclude.excludeInvoicesAndPaymentPlan());
         
         assertEquals(14, excludedPaymentMethods.size());
-        assertTrue(excludedPaymentMethods.contains(PAYMENTMETHOD.SVEAINVOICESE));
-        assertTrue(excludedPaymentMethods.contains(PAYMENTMETHOD.SVEASPLITSE));
-        assertTrue(excludedPaymentMethods.contains(PAYMENTMETHOD.SVEAINVOICEEU_SE));
-        assertTrue(excludedPaymentMethods.contains(PAYMENTMETHOD.SVEASPLITEU_SE));
+        assertTrue(excludedPaymentMethods.contains(INVOICETYPE.INVOICESE.getValue()));
+        assertTrue(excludedPaymentMethods.contains(INVOICETYPE.INVOICE_SE.getValue()));
+        assertTrue(excludedPaymentMethods.contains(INVOICETYPE.INVOICE_DE.getValue()));
+        assertTrue(excludedPaymentMethods.contains(INVOICETYPE.INVOICE_DK.getValue()));
+        assertTrue(excludedPaymentMethods.contains(INVOICETYPE.INVOICE_FI.getValue()));
+        assertTrue(excludedPaymentMethods.contains(INVOICETYPE.INVOICE_NL.getValue()));
+        assertTrue(excludedPaymentMethods.contains(INVOICETYPE.INVOICE_NO.getValue()));
+        assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLANSE.getValue()));        
+        assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLAN_SE.getValue()));
+        assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLAN_DE.getValue()));
+        assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLAN_DK.getValue()));
+        assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLAN_FI.getValue()));
+        assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLAN_NL.getValue()));
+        assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLAN_NO.getValue()));
     }
-
-    @Test
-    public void testExcludeInvoicesAndInstallmentsDe() {
-        HostedPayment payment = new FakeHostedPayment(null);
-        
-        ExcludePayments exclude = new ExcludePayments();       
-        List<PAYMENTMETHOD> excludedPaymentMethods = payment.getExcludedPaymentMethods();
-        excludedPaymentMethods.addAll(exclude.excludeInvoicesAndPaymentPlan());
-        
-        assertEquals(14, excludedPaymentMethods.size());
-        assertTrue(excludedPaymentMethods.contains(PAYMENTMETHOD.SVEAINVOICEEU_DE));
-        assertTrue(excludedPaymentMethods.contains(PAYMENTMETHOD.SVEASPLITEU_DE));
-    }
-
-    @Test
-    public void testExcludeInvoicesAndInstallmentsDk() {
-        HostedPayment payment = new FakeHostedPayment(null);
-        
-        ExcludePayments exclude = new ExcludePayments();       
-        List<PAYMENTMETHOD> excludedPaymentMethods = payment.getExcludedPaymentMethods();
-        excludedPaymentMethods.addAll(exclude.excludeInvoicesAndPaymentPlan());
-        
-        assertEquals(14, excludedPaymentMethods.size());
-        assertTrue(excludedPaymentMethods.contains(PAYMENTMETHOD.SVEAINVOICEEU_DK));
-        assertTrue(excludedPaymentMethods.contains(PAYMENTMETHOD.SVEASPLITEU_DK));
-    }
-
-    @Test
-    public void testExcludeInvoicesAndInstallmentsFi() {
-        HostedPayment payment = new FakeHostedPayment(null);
-        
-        ExcludePayments exclude = new ExcludePayments();       
-        List<PAYMENTMETHOD> excludedPaymentMethods = payment.getExcludedPaymentMethods();
-        excludedPaymentMethods.addAll(exclude.excludeInvoicesAndPaymentPlan());
-        
-        assertEquals(14, excludedPaymentMethods.size());
-        assertTrue(excludedPaymentMethods.contains(PAYMENTMETHOD.SVEAINVOICEEU_FI));
-        assertTrue(excludedPaymentMethods.contains(PAYMENTMETHOD.SVEASPLITEU_FI));
-    }
-
-    @Test
-    public void testExcludeInvoicesAndInstallmentsNl() {
-        HostedPayment payment = new FakeHostedPayment(null);
-        
-        ExcludePayments exclude = new ExcludePayments();       
-        List<PAYMENTMETHOD> excludedPaymentMethods = payment.getExcludedPaymentMethods();
-        excludedPaymentMethods.addAll(exclude.excludeInvoicesAndPaymentPlan());
-        
-        assertEquals(14, excludedPaymentMethods.size());
-        assertTrue(excludedPaymentMethods.contains(PAYMENTMETHOD.SVEAINVOICEEU_NL));
-        assertTrue(excludedPaymentMethods.contains(PAYMENTMETHOD.SVEASPLITEU_NL));
-    }
-
-    @Test
-    public void testExcludeInvoicesAndInstallmentsNo() {
-        HostedPayment payment = new FakeHostedPayment(null);
-        
-        ExcludePayments exclude = new ExcludePayments();       
-        List<PAYMENTMETHOD> excludedPaymentMethods = payment.getExcludedPaymentMethods();
-        excludedPaymentMethods.addAll(exclude.excludeInvoicesAndPaymentPlan());
-        
-        assertEquals(14, excludedPaymentMethods.size());
-        assertTrue(excludedPaymentMethods.contains(PAYMENTMETHOD.SVEAINVOICEEU_NO));
-        assertTrue(excludedPaymentMethods.contains(PAYMENTMETHOD.SVEASPLITEU_NO));
-    }
+ 
 }

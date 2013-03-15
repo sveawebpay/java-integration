@@ -6,6 +6,7 @@ import javax.xml.bind.ValidationException;
 
 import se.sveaekonomi.webpay.integration.config.Config;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.payment.CardPayment;
 import se.sveaekonomi.webpay.integration.hosted.payment.DirectPayment;
 import se.sveaekonomi.webpay.integration.hosted.payment.HostedPayment;
@@ -181,6 +182,17 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     }
     
     public PaymentPlanPayment usePaymentPlanPayment(String campaignCode) throws ValidationException {
+    	try {
+    		if(campaignCode.equals(""))
+    			throw new ValidationException("MISSING VALUE - Campaign code must be set. Add parameter in .usePaymentPlanPayment(campaignCode)");
+    		else if(this.customerIdentity.getClass().equals(CompanyCustomer.class))
+    			throw new ValidationException("ERROR - CompanyCustomer is not allowed to use payment plan option.");
+    	}
+    	catch(ValidationException e) {
+    		
+    		throw new SveaWebPayException(e.getMessage(), e);
+    	}
+    	
         return this.usePaymentPlanPayment(campaignCode, false);        
     }
     

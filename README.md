@@ -585,7 +585,7 @@ GetAddressesResponse response = WebPay.getAddresses(SveaConfig.createTestConfig(
 	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
 	.setOrderTypeInvoice()                                              //See 3.1   
 	.setCountryCode(COUNTRYCODE.SE)                                     //Required
-	.setIndividual(194605092222)                                        //See 3.2   
+	.setIndividual("194605092222")                                        //See 3.2   
 	.doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
@@ -717,18 +717,20 @@ CloseOrderResponse  =  WebPay.closeOrder(SveaConfig.createTestConfig()
 
 ## 6. Response handler                                                       
 All synchronous responses are handled through *SveaResponse* and structured into objects.
-Asynchronous responses recieved after sending the values *mac*, *merchantid* and *xmlMessageBase64* to
+Asynchronous responses recieved after sending the values *merchantid* and *xmlMessageBase64* to
 hosted solutions can also be processed through the *SveaResponse* class.
 
 The response from server will be sent to the *returnUrl* with POST or GET. The response contains the parameters: 
-*response*, *mac* and *merchantid*.
-Class *SveaResponse* will return an object structured similar to the synchronous answer. 
+*response* and *merchantid*.
+Class *SveaResponse* will return an object structured similar to the synchronous answer.
+
 Params: 
-* The POST or GET message 
-* Your *secret word*. //Optional if set in SveaConfig
+* The POST or GET message Base64 encoded
+* Your *secret word*. 
 ```java
-  SveaRespons respObject = nSveaResponse(responseXmlBase64, mac, secretWord); 
+  SveaRespons respObject = new SveaResponse(responseXmlBase64, mac, secretWord); 
 ```
+
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
 ## APPENDIX 
@@ -739,28 +741,18 @@ Enumeration, used in usePaymentMethod(paymentMethod) and in usePayPage(),
 
 | Payment method                   | Description                                   |
 |----------------------------------|-----------------------------------------------|
-| PAYMENTMETHOD.DBNORDEASE         | Direct bank payment, Nordea, Sweden.          | 
-| PAYMENTMETHOD.DBSEBSE            | Direct bank payment, private, SEB, Sweden.    |
-| PAYMENTMETHOD.DBSEBFTGSE         | Direct bank payment, company, SEB, Sweden.    |
-| PAYMENTMETHOD.DBSHBSE            | Direct bank payment, Handelsbanken, Sweden.   |
-| PAYMENTMETHOD.DBSWEDBANKSE       | Direct bank payment, Swedbank, Sweden.        |
+| PAYMENTMETHOD.BANKAXESS	       | Direct bank payment, Norway.          | 
+| PAYMENTMETHOD.NORDEA_SE	       | Direct bank payment, Nordea, Sweden.          | 
+| PAYMENTMETHOD.SEB_SE	           | Direct bank payment, private, SEB, Sweden.    |
+| PAYMENTMETHOD.SEBFTG_SE 	       | Direct bank payment, company, SEB, Sweden.    |
+| PAYMENTMETHOD.SHB_SE	           | Direct bank payment, Handelsbanken, Sweden.   |
+| PAYMENTMETHOD.SWEDBANK_SE	       | Direct bank payment, Swedbank, Sweden.        |
 | PAYMENTMETHOD.KORTCERT           | Card payments, Certitrade.                    |
 | PAYMENTMETHOD.PAYPAL             | Paypal                                        |
 | PAYMENTMETHOD.SKRILL             | Card payment with Dankort, Skrill.            |
-| PAYMENTMETHOD.SVEAINVOICESE      | Invoice by PayPage in SE only.                |
-| PAYMENTMETHOD.SVEASPLITSE        | PaymentPlan by PayPage in SE only.            |
-| PAYMENTMETHOD.SVEAINVOICEEU_SE   | Invoice by PayPage in SE.                     |
-| PAYMENTMETHOD.SVEAINVOICEEU_NO   | Invoice by PayPage in NO.                     |
-| PAYMENTMETHOD.SVEAINVOICEEU_DK   | Invoice by PayPage in DK.                     |
-| PAYMENTMETHOD.SVEAINVOICEEU_FI   | Invoice by PayPage in FI.                     |
-| PAYMENTMETHOD.SVEAINVOICEEU_NL   | Invoice by PayPage in NL.                     |
-| PAYMENTMETHOD.SVEAINVOICEEU_DE   | Invoice by PayPage in DE.                     |
-| PAYMENTMETHOD.SVEASPLITEU_SE     | PaymentPlan by PayPage in SE.                 |
-| PAYMENTMETHOD.SVEASPLITEU_NO     | PaymentPlan by PayPage in NO.                 |
-| PAYMENTMETHOD.SVEASPLITEU_DK     | PaymentPlan by PayPage in DK.                 |
-| PAYMENTMETHOD.SVEASPLITEU_FI     | PaymentPlan by PayPage in FI.                 |
-| PAYMENTMETHOD.SVEASPLITEU_DE     | PaymentPlan by PayPage in DE.                 |
-| PAYMENTMETHOD.SVEASPLITEU_NL     | PaymentPlan by PayPage in NL.                 |
+| PAYMENTMETHOD.INVOICE			   | Invoice by PayPage.                		   |
+| PAYMENTMETHOD.PAYMENTPLAN        | PaymentPlan by PayPage.			           |
+
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 

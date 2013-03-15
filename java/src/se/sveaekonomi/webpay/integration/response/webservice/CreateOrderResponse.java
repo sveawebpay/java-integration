@@ -56,7 +56,7 @@ public class CreateOrderResponse extends Response {
                 setChildNodeValue(node, "NationalIdNumber");
                 setChildNodeValue(node, "Email");
                 setChildNodeValue(node, "PhoneNumber");
-                setChildNodeValue(node, "IpAddress");
+        //        setChildNodeValue(node, "IpAddress");
                 setChildNodeValue(node, "FullName");
                 setChildNodeValue(node, "Street");
                 setChildNodeValue(node, "CoAddress");

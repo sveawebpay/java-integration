@@ -102,6 +102,7 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
         return getGenericThis();
     }
 
+	@SuppressWarnings("unchecked")
 	protected T getGenericThis() {
 		return (T) this;
 	}
