@@ -69,6 +69,7 @@ public class PayPagePayment extends HostedPayment {
 		excludedPaymentMethods.add(PAYMENTMETHOD.SEBFTG_SE.getValue());
 		excludedPaymentMethods.add(PAYMENTMETHOD.SHB_SE.getValue());
 		excludedPaymentMethods.add(PAYMENTMETHOD.SWEDBANK_SE.getValue());
+		excludedPaymentMethods.add(PAYMENTMETHOD.BANKAXESS.getValue());
 		return this;
 	}
 

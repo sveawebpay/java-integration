@@ -31,7 +31,17 @@ public class DirectPaymentTest {
     			.configureExcludedPaymentMethods()
     			.getExcludedPaymentMethods();
         
-        assertEquals(17, excluded.size());
+        assertEquals(18, excluded.size());
+    }
+    @Test
+    public void testConfigureExcludedPaymentMethodsNo() throws ValidationException {
+    	List<String> excluded  = WebPay.createOrder() 
+    			.setCountryCode(COUNTRYCODE.NO)
+    			.usePayPageDirectBankOnly()
+    			.configureExcludedPaymentMethods()
+    			.getExcludedPaymentMethods();
+        
+        assertEquals(22, excluded.size());
     }
     
     @Test

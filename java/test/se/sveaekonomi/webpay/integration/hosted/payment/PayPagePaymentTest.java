@@ -50,7 +50,7 @@ public class PayPagePaymentTest {
     			.excludePaymentMethods();
     	payPagePayment.includePaymentMethods();
         
-        assertEquals(payPagePayment.getExcludedPaymentMethods().size(), 22);
+        assertEquals(payPagePayment.getExcludedPaymentMethods().size(), 23);
         assertEquals(payPagePayment.getIncludedPaymentMethods().size(), 0);
     }
  
@@ -145,7 +145,7 @@ public class PayPagePaymentTest {
     	        .usePayPage()    	    
     	        .excludeDirectPaymentMethods();
         
-        assertEquals(5, payPagePayment.getExcludedPaymentMethods().size());
+        assertEquals(6, payPagePayment.getExcludedPaymentMethods().size());
         assertEquals(0, payPagePayment.getIncludedPaymentMethods().size());       
     }
     
@@ -168,13 +168,14 @@ public class PayPagePaymentTest {
 	        .usePayPage()
 	        .includePaymentMethods(includedPaymentMethods);
                        
-        assertEquals(13, payPagePayment.getExcludedPaymentMethods().size());
+        assertEquals(14, payPagePayment.getExcludedPaymentMethods().size());
         assertEquals("SVEAINVOICESE", payPagePayment.getExcludedPaymentMethods().get(0));
         assertEquals("SVEASPLITSE", payPagePayment.getExcludedPaymentMethods().get(1));
         assertEquals("SVEAINVOICEEU_DE", payPagePayment.getExcludedPaymentMethods().get(2));
         assertEquals("SVEASPLITEU_DE", payPagePayment.getExcludedPaymentMethods().get(3));
         assertEquals("SVEAINVOICEEU_DK", payPagePayment.getExcludedPaymentMethods().get(4));
         assertEquals("PAYPAL", payPagePayment.getExcludedPaymentMethods().get(12));
+        assertEquals("BANKAXESS", payPagePayment.getExcludedPaymentMethods().get(13));
         
     }
     
