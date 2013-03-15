@@ -14,7 +14,6 @@ import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
-import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 
 public class DirectPaymentTest {      
@@ -26,7 +25,7 @@ public class DirectPaymentTest {
     
     @Test
     public void testConfigureExcludedPaymentMethodsSe() throws ValidationException {
-    	List<PAYMENTMETHOD> excluded  = WebPay.createOrder() 
+    	List<String> excluded  = WebPay.createOrder() 
     			.setCountryCode(COUNTRYCODE.SE)
     			.usePayPageDirectBankOnly()
     			.configureExcludedPaymentMethods()

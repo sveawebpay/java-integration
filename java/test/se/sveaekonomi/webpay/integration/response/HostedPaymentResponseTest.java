@@ -10,8 +10,6 @@ import org.xml.sax.SAXException;
 
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.hosted.SveaResponse;
-import se.sveaekonomi.webpay.integration.util.security.HashUtil;
-import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 
 
 public class HostedPaymentResponseTest {

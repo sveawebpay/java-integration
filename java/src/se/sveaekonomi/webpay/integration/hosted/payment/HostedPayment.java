@@ -14,7 +14,6 @@ import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
-import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
 
 /*******************************************************************************
@@ -28,7 +27,7 @@ public abstract class HostedPayment {
     
     protected CreateOrderBuilder createOrderBuilder;
     protected ArrayList<HostedOrderRowBuilder> rowBuilder;
-    protected List<PAYMENTMETHOD> excludedPaymentMethods;
+    protected List<String>  excludedPaymentMethods;
     private Long amount;
     private Long vat;
     protected String returnUrl;
@@ -40,7 +39,7 @@ public abstract class HostedPayment {
         this.createOrderBuilder = createOrderBuilder;
         rowBuilder = new ArrayList<HostedOrderRowBuilder>();
         excluded = new ExcludePayments();
-        excludedPaymentMethods = new ArrayList<PAYMENTMETHOD>();
+        excludedPaymentMethods = new ArrayList<String>();
         returnUrl = "";
     }
     
@@ -52,14 +51,14 @@ public abstract class HostedPayment {
         return rowBuilder;
     }
     
-    public List<PAYMENTMETHOD> getExcludedPaymentMethods() {
+    public List<String> getExcludedPaymentMethods() {
         return excludedPaymentMethods;
     }
     
-    public HostedPayment setExcludedPaymentMethods(List<PAYMENTMETHOD> paymentMethods) {
+   /* public HostedPayment setExcludedPaymentMethods(List<PAYMENTMETHOD> paymentMethods) {
         this.excludedPaymentMethods.addAll(paymentMethods);
         return this;
-    }
+    }*/
 
     public Long getAmount() {
         return amount;

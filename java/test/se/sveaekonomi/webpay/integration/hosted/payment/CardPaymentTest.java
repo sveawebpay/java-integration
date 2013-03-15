@@ -16,7 +16,6 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
-import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
 public class CardPaymentTest {
     
@@ -30,7 +29,7 @@ public class CardPaymentTest {
     
     @Test
     public void testConfigureExcludedPaymentMethodsSe() throws ValidationException {
-    	List<PAYMENTMETHOD> excluded = order.setCountryCode(COUNTRYCODE.SE)
+    	List<String> excluded = order.setCountryCode(COUNTRYCODE.SE)
         .usePayPageCardOnly()
         .configureExcludedPaymentMethods()
         .getExcludedPaymentMethods();

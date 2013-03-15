@@ -17,18 +17,18 @@ public class CardPayment extends HostedPayment {
         COUNTRYCODE countryCode = createOrderBuilder.getCountryCode();
         
         if (countryCode.equals(COUNTRYCODE.SE)) {
-            excludedPaymentMethods.add(PAYMENTMETHOD.SKRILL);
+            excludedPaymentMethods.add(PAYMENTMETHOD.SKRILL.getValue());
         }
         
         //Payment service providers
-        excludedPaymentMethods.add(PAYMENTMETHOD.PAYPAL);
+        excludedPaymentMethods.add(PAYMENTMETHOD.PAYPAL.getValue());
         
         //Direct bank payment methods
-        excludedPaymentMethods.add(PAYMENTMETHOD.DBNORDEASE);
-        excludedPaymentMethods.add(PAYMENTMETHOD.DBSEBSE);
-        excludedPaymentMethods.add(PAYMENTMETHOD.DBSEBFTGSE);
-        excludedPaymentMethods.add(PAYMENTMETHOD.DBSHBSE);
-        excludedPaymentMethods.add(PAYMENTMETHOD.DBSWEDBANKSE);                           
+        excludedPaymentMethods.add(PAYMENTMETHOD.NORDEA_SE.getValue());
+        excludedPaymentMethods.add(PAYMENTMETHOD.SEB_SE.getValue());
+        excludedPaymentMethods.add(PAYMENTMETHOD.SEBFTG_SE.getValue());
+        excludedPaymentMethods.add(PAYMENTMETHOD.SHB_SE.getValue());
+        excludedPaymentMethods.add(PAYMENTMETHOD.SWEDBANK_SE.getValue());                           
         
         //Invoices and payment plan      
         excludedPaymentMethods.addAll(excluded.excludeInvoicesAndPaymentPlan());        
