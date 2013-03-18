@@ -272,16 +272,19 @@ Invoice and/or payment plan payments.
 >The preferable way is to use `->useInvoicePayment()` [read more](https://github.com/sveawebpay/java-integration/tree/develop#154-invoicepayment) and
 >`->usePaymentPlanPayment()` [read more](https://github.com/sveawebpay/java-integration/tree/develop#154-paymentplanpayment).
 >These payments are synchronous and will give you an instant response.
+
 Card and/or direct bank payments
 >Go by *PayPage* by using `->usePayPageCardOnly()[read more](https://github.com/sveawebpay/java-integration/tree/develop#151-paypage-with-card-payment-options)
 >and `->usePayPageDirectBankOnly()` [read more](https://github.com/sveawebpay/java-integration/tree/develop#152-paypage-with-direct-bank-payment-options). 
 >If you only for example only have one specific bank payment, go direct to that specific bank payment by using
 >´->usePaymentMethod(PaymentMethod)´ [read more] (https://github.com/sveawebpay/java-integration/tree/develop#154-paymentmethod-specified)
+
 Using all payments.
 >The most effective way is to use ´->useInvoicePayment()´ [read more](https://github.com/sveawebpay/java-integration/tree/develop#154-invoicepayment) 
 >and ´->usePaymentPlanPayment()` [read more](https://github.com/sveawebpay/java-integration/tree/develop#154-paymentplanpayment) for the synchronous payments,
 >and use the *PayPage* for the asynchronous requests by using ´->usePayPageCardOnly()´ [read more](https://github.com/sveawebpay/java-integration/tree/develop#151-paypage-with-card-payment-options) 
 >and ´->usePayPageDirectBankOnly()` [read more](https://github.com/sveawebpay/java-integration/tree/develop#152-paypage-with-direct-bank-payment-options).
+
 Using more than one payment and want them gathered on one place.
 >Go by PayPage and choose show all your payments here, or modify to exclude or include one or more payments. Use ´->usePayPage()´
 >[read more](https://github.com/sveawebpay/java-integration/tree/develop#153-paypagepayment) where you can custom your own *PayPage*.
@@ -471,7 +474,7 @@ Returns object type *PaymentForm*:
 #### 1.5.4 PaymentMethod specified
 Go direct to specified payment method without the step *PayPage*.
 
-##### 1.5.1.1 Request
+##### 1.5.4.1 Request
 Set your store authorization here.
 ```java
 PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
@@ -496,7 +499,7 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 	.getPaymentForm();
 
 ```
-##### 1.5.1.2 Return
+##### 1.5.4.2 Return
 The values of *xmlMessageBase64*, *merchantid* and *mac* are to be sent as xml to SveaWebPay.
 Function getPaymentForm() returns Object type PaymentForm with accessible members:
 
@@ -514,7 +517,7 @@ Function getPaymentForm() returns Object type PaymentForm with accessible member
 
 #### Synchronous solutions - Invoice and PaymentPlan
        
-#### 1.5.4 InvoicePayment
+#### 1.5.5 InvoicePayment
 Perform an invoice payment. This payment form will perform a synchronous payment and return a response.
 Returns *CreateOrderResponse* object. Set your store authorization here.
 ```java
@@ -537,7 +540,7 @@ CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
 	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
 	.doRequest();
 ```
-#### 1.5.5 PaymentPlanPayment
+#### 1.5.6 PaymentPlanPayment
 Perform *PaymentPlanPayment*. This payment form will perform a synchronous payment and return a response.
 Returns a *CreateOrderResponse* object. Preceded by WebPay.getPaymentPlanParams(...).
 Set your store authorization here.
