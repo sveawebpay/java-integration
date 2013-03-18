@@ -279,13 +279,13 @@ Card and/or direct bank payments
 >[`.usePaymentMethod(PaymentMethod)`](https://github.com/sveawebpay/java-integration/tree/develop#154-paymentmethod-specified)
 
 Using all payments.
->The most effective way is to use [`.useInvoicePayment()`](https://github.com/sveawebpay/java-integration/tree/develop#154-invoicepayment) 
->and [`->usePaymentPlanPayment()`](https://github.com/sveawebpay/java-integration/tree/develop#156-paymentplanpayment) for the synchronous payments,
->and use the *PayPage* for the asynchronous requests by using [`.usePayPageCardOnly()´](https://github.com/sveawebpay/java-integration/tree/develop#151-paypage-with-card-payment-options) 
+>The most effective way is to use [`.useInvoicePayment()`](https://github.com/sveawebpay/java-integration/tree/develop#155-invoicepayment) 
+>and [`.usePaymentPlanPayment(...)`](https://github.com/sveawebpay/java-integration/tree/develop#156-paymentplanpayment) for the synchronous payments,
+>and use the *PayPage* for the asynchronous requests by using [`.usePayPageCardOnly()`](https://github.com/sveawebpay/java-integration/tree/develop#151-paypage-with-card-payment-options) 
 >and [`.usePayPageDirectBankOnly()`](https://github.com/sveawebpay/java-integration/tree/develop#152-paypage-with-direct-bank-payment-options).
 
 Using more than one payment and want them gathered on one place.
->Go by PayPage and choose show all your payments here, or modify to exclude or include one or more payments. Use [`->usePayPage()`]
+>Go by PayPage and choose show all your payments here, or modify to exclude or include one or more payments. Use [`.usePayPage()`]
 >(https://github.com/sveawebpay/java-integration/tree/develop#153-paypagepayment) where you can custom your own *PayPage*.
 Note that Invoice and Payment plan payments will return an asynchronous response from here.
 
