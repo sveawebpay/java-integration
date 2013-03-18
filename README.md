@@ -248,7 +248,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
 
 ### 1.4 Other values  
 ```java
-.setCountryCode(COUNTRYCODE.SE)         //Required for synchronous payments    
+.setCountryCode(COUNTRYCODE.SE)         //Required
 .setCurrency("SEK")                     //Required for card payment, direct payment and PayPage payment.
 .setClientOrderNumber("nr26")           //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
 .setAddressSelector("7fd7768")          //Optional. Recieved from getAddresses
@@ -262,11 +262,31 @@ End process by choosing the payment method you desire.
 
 Invoice and payment plan will perform a synchronous payment and return an object as response. 
 
-Hosted payments(card, direct bank and payments from the *PayPage*)
-on the other hand are asynchronous. They will return an html form with formatted message to send from your store.
+Other payments(card, direct bank and payments from the *PayPage*) on the other hand are asynchronous. They will return an html form with formatted message to send from your store.
 The response is then returned to the return url you have specified in function *setReturnUrl()*. If you
-use class *Response* with the xml response as parameter, you will receive a
-formatted object as well. 
+use class *Response* with the xml response as parameter, you will receive a formatted object as well. 
+
+
+#### Which payment method to choose?
+Invoice and/or payment plan payments.
+>The preferable way is to use `->useInvoicePayment()` [read more](https://github.com/sveawebpay/java-integration/tree/develop#154-invoicepayment) and
+>`->usePaymentPlanPayment()` [read more](https://github.com/sveawebpay/java-integration/tree/develop#154-paymentplanpayment).
+>These payments are synchronous and will give you an instant response.
+Card and/or direct bank payments
+>Go by *PayPage* by using `->usePayPageCardOnly()[read more](https://github.com/sveawebpay/java-integration/tree/develop#151-paypage-with-card-payment-options)
+>and `->usePayPageDirectBankOnly()` [read more](https://github.com/sveawebpay/java-integration/tree/develop#152-paypage-with-direct-bank-payment-options). 
+>If you only for example only have one specific bank payment, go direct to that specific bank payment by using
+>´->usePaymentMethod(PaymentMethod)´ [read more] (https://github.com/sveawebpay/java-integration/tree/develop#154-paymentmethod-specified)
+Using all payments.
+>The most effective way is to use ´->useInvoicePayment()´ [read more](https://github.com/sveawebpay/java-integration/tree/develop#154-invoicepayment) 
+>and ´->usePaymentPlanPayment()` [read more](https://github.com/sveawebpay/java-integration/tree/develop#154-paymentplanpayment) for the synchronous payments,
+>and use the *PayPage* for the asynchronous requests by using ´->usePayPageCardOnly()´ [read more](https://github.com/sveawebpay/java-integration/tree/develop#151-paypage-with-card-payment-options) 
+>and ´->usePayPageDirectBankOnly()` [read more](https://github.com/sveawebpay/java-integration/tree/develop#152-paypage-with-direct-bank-payment-options).
+Using more than one payment and want them gathered on one place.
+>Go by PayPage and choose show all your payments here, or modify to exclude or include one or more payments. Use ´->usePayPage()´
+>[read more](https://github.com/sveawebpay/java-integration/tree/develop#153-paypagepayment) where you can custom your own *PayPage*.
+Note that Invoice and Payment plan payments will return an asynchronous response from here.
+
 
 #### Asynchronous payments - Card and Direct bank
 Build order and recieve a *PaymentForm* object. Send the *PaymentForm* parameters: *merchantid*, *xmlMessageBase64* and *mac* by POST with *url*. The *PaymentForm* object also contains a complete html form as string 
