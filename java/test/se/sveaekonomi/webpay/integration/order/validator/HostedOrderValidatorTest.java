@@ -21,9 +21,9 @@ public class HostedOrderValidatorTest {
     
     @Test
     public void testFailOnNullClientOrderNumber() throws ValidationException {
-        String expectedMessage = "MISSING VALUE - OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use function setCompanyIdNumber().\n"
-                    + "MISSING VALUE - ClientOrderNumber is required. Use function setClientOrderNumber().\n"
-                    + "MISSING VALUE - Currency is required. Use function setCurrency().\n"
+        String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n"
+                    + "MISSING VALUE - ClientOrderNumber is required. Use function setClientOrderNumber(...).\n"
+                    + "MISSING VALUE - Currency is required. Use function setCurrency(...).\n"
                     + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n";
         
         CreateOrderBuilder order = WebPay.createOrder()
@@ -33,12 +33,13 @@ public class HostedOrderValidatorTest {
                 .setValidator(new VoidValidator())
                 .build();
         
-        assertEquals(orderValidator.validate(order), expectedMessage);      
+        assertEquals(expectedMessage, orderValidator.validate(order));      
     }
     
     @Test
     public void testFailOnEmptyClientOrderNumber() throws ValidationException {
-        String expectedMessage = "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use function setClientOrderNumber().\n";
+        String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n" 
+        		+ "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use function setClientOrderNumber(...).\n";
         CreateOrderBuilder order = WebPay.createOrder()
         	.addOrderRow(Item.orderRow()
         		.setQuantity(1)
@@ -109,7 +110,8 @@ public class HostedOrderValidatorTest {
     
     @Test
     public void testFailVatPercentIsMissing() throws ValidationException {
-    String expectedMessage = "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use function setClientOrderNumber().\n"
+    String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n"
+    		+ "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use function setClientOrderNumber(...).\n"
     		+ "MISSING VALUE - At least one of the values must be set in combination with AmountExVat: AmountIncVat or VatPercent for Orderrow. Use one of: setAmountIncVat() or setVatPercent().\n";
     CreateOrderBuilder order = WebPay.createOrder()
     	.addOrderRow(Item.orderRow()
@@ -130,7 +132,8 @@ public class HostedOrderValidatorTest {
     
     @Test
     public void testFailAmountExVatIsMissing() throws ValidationException {
-    String expectedMessage = "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use function setClientOrderNumber().\n"
+    String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n" +
+    		"MISSING VALUE - ClientOrderNumber is required (has an empty value). Use function setClientOrderNumber(...).\n"
     		+ "MISSING VALUE - At least one of the values must be set in combination with VatPercent: AmountIncVat or AmountExVat for Orderrow. Use one of: setAmountExVat() or setAmountIncVat().\n";
     CreateOrderBuilder order = WebPay.createOrder()
     	.addOrderRow(Item.orderRow()
@@ -146,11 +149,12 @@ public class HostedOrderValidatorTest {
             .setValidator(new VoidValidator())
             .build();
     orderValidator = new HostedOrderValidator();
-    assertEquals(orderValidator.validate(order), expectedMessage);
+    assertEquals(expectedMessage, orderValidator.validate(order));
     }
     @Test
     public void testFailAmountExVatAndVatPercentIsMissing() throws ValidationException {
-    String expectedMessage = "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use function setClientOrderNumber().\n"
+    String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n" +
+    		"MISSING VALUE - ClientOrderNumber is required (has an empty value). Use function setClientOrderNumber(...).\n"
     		+ "MISSING VALUE - At least one of the values must be set in combination with AmountIncVat: AmountExVat or VatPercent for Orderrow. Use one of: setAmountExVat() or setVatPercent().\n";
     CreateOrderBuilder order = WebPay.createOrder()
     	.addOrderRow(Item.orderRow()
@@ -167,11 +171,12 @@ public class HostedOrderValidatorTest {
             .setValidator(new VoidValidator())
             .build();
     orderValidator = new HostedOrderValidator();
-    assertEquals(orderValidator.validate(order), expectedMessage);
+    assertEquals(expectedMessage, orderValidator.validate(order));
     }
     @Test
     public void testValidateFailOrderisNull() throws ValidationException {
-    String expectedMessage = "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use function setClientOrderNumber().\n"
+    String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n" +
+    		"MISSING VALUE - ClientOrderNumber is required (has an empty value). Use function setClientOrderNumber(...).\n"
     		+ "MISSING VALUES - AmountExVat, Quantity and VatPercent are required for Orderrow. Use functions setAmountExVat(), setQuantity() and setVatPercent().\n";
     CreateOrderBuilder order = WebPay.createOrder()
     	.addOrderRow(null)
