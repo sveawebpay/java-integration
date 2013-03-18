@@ -248,7 +248,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
 
 ### 1.4 Other values  
 ```java
-.setCountryCode(COUNTRYCODE.SE)         //Required for synchronous payments    
+.setCountryCode(COUNTRYCODE.SE)         //Required
 .setCurrency("SEK")                     //Required for card payment, direct payment and PayPage payment.
 .setClientOrderNumber("nr26")           //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
 .setAddressSelector("7fd7768")          //Optional. Recieved from getAddresses
@@ -262,11 +262,9 @@ End process by choosing the payment method you desire.
 
 Invoice and payment plan will perform a synchronous payment and return an object as response. 
 
-Hosted payments(card, direct bank and payments from the *PayPage*)
-on the other hand are asynchronous. They will return an html form with formatted message to send from your store.
+Other payments(card, direct bank and payments from the *PayPage*) on the other hand are asynchronous. They will return an html form with formatted message to send from your store.
 The response is then returned to the return url you have specified in function *setReturnUrl()*. If you
-use class *Response* with the xml response as parameter, you will receive a
-formatted object as well. 
+use class *Response* with the xml response as parameter, you will receive a formatted object as well. 
 
 #### Asynchronous payments - Card and Direct bank
 Build order and recieve a *PaymentForm* object. Send the *PaymentForm* parameters: *merchantid*, *xmlMessageBase64* and *mac* by POST with *url*. The *PaymentForm* object also contains a complete html form as string 
