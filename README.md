@@ -266,28 +266,27 @@ Other payments(card, direct bank and payments from the *PayPage*) on the other h
 The response is then returned to the return url you have specified in function *setReturnUrl()*. If you
 use class *Response* with the xml response as parameter, you will receive a formatted object as well. 
 
-
 #### Which payment method to choose?
 Invoice and/or payment plan payments.
->The preferable way is to use `->useInvoicePayment()` [read more](https://github.com/sveawebpay/java-integration/tree/develop#154-invoicepayment) and
->`->usePaymentPlanPayment()` [read more](https://github.com/sveawebpay/java-integration/tree/develop#154-paymentplanpayment).
+>The preferable way is to use [`.useInvoicePayment()`](https://github.com/sveawebpay/java-integration/tree/develop#155-invoicepayment) and
+>[`.usePaymentPlanPayment(...)`](https://github.com/sveawebpay/java-integration/tree/develop#156-paymentplanpayment).
 >These payments are synchronous and will give you an instant response.
 
 Card and/or direct bank payments
->Go by *PayPage* by using `->usePayPageCardOnly()[read more](https://github.com/sveawebpay/java-integration/tree/develop#151-paypage-with-card-payment-options)
->and `->usePayPageDirectBankOnly()` [read more](https://github.com/sveawebpay/java-integration/tree/develop#152-paypage-with-direct-bank-payment-options). 
+>Go by *PayPage* by using [`.usePayPageCardOnly()`](https://github.com/sveawebpay/java-integration/tree/develop#151-paypage-with-card-payment-options)
+>and [`.usePayPageDirectBankOnly()`](https://github.com/sveawebpay/java-integration/tree/develop#152-paypage-with-direct-bank-payment-options). 
 >If you only for example only have one specific bank payment, go direct to that specific bank payment by using
->´->usePaymentMethod(PaymentMethod)´ [read more] (https://github.com/sveawebpay/java-integration/tree/develop#154-paymentmethod-specified)
+>[`.usePaymentMethod(PaymentMethod)`](https://github.com/sveawebpay/java-integration/tree/develop#154-paymentmethod-specified)
 
 Using all payments.
->The most effective way is to use ´->useInvoicePayment()´ [read more](https://github.com/sveawebpay/java-integration/tree/develop#154-invoicepayment) 
->and ´->usePaymentPlanPayment()` [read more](https://github.com/sveawebpay/java-integration/tree/develop#154-paymentplanpayment) for the synchronous payments,
->and use the *PayPage* for the asynchronous requests by using ´->usePayPageCardOnly()´ [read more](https://github.com/sveawebpay/java-integration/tree/develop#151-paypage-with-card-payment-options) 
->and ´->usePayPageDirectBankOnly()` [read more](https://github.com/sveawebpay/java-integration/tree/develop#152-paypage-with-direct-bank-payment-options).
+>The most effective way is to use [`.useInvoicePayment()`](https://github.com/sveawebpay/java-integration/tree/develop#154-invoicepayment) 
+>and [`->usePaymentPlanPayment()`](https://github.com/sveawebpay/java-integration/tree/develop#156-paymentplanpayment) for the synchronous payments,
+>and use the *PayPage* for the asynchronous requests by using [`.usePayPageCardOnly()´](https://github.com/sveawebpay/java-integration/tree/develop#151-paypage-with-card-payment-options) 
+>and [`.usePayPageDirectBankOnly()`](https://github.com/sveawebpay/java-integration/tree/develop#152-paypage-with-direct-bank-payment-options).
 
 Using more than one payment and want them gathered on one place.
->Go by PayPage and choose show all your payments here, or modify to exclude or include one or more payments. Use ´->usePayPage()´
->[read more](https://github.com/sveawebpay/java-integration/tree/develop#153-paypagepayment) where you can custom your own *PayPage*.
+>Go by PayPage and choose show all your payments here, or modify to exclude or include one or more payments. Use [`->usePayPage()`]
+>(https://github.com/sveawebpay/java-integration/tree/develop#153-paypagepayment) where you can custom your own *PayPage*.
 Note that Invoice and Payment plan payments will return an asynchronous response from here.
 
 
