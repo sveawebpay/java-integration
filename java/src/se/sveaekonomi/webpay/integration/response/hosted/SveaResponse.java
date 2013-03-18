@@ -44,7 +44,7 @@ public class SveaResponse extends Response {
     private String authCode;
     
     
-    public SveaResponse(String responseXmlBase64,/*, String mac,*/ String secretWord) throws SAXException, IOException, ParserConfigurationException {
+    public SveaResponse(String responseXmlBase64, String secretWord) throws SAXException, IOException, ParserConfigurationException {
         super();
                 this.setValues(responseXmlBase64);
               

@@ -1,5 +1,9 @@
 package se.sveaekonomi.webpay.integration.hosted;
 
+import java.util.ArrayList;
+
+import javax.xml.bind.ValidationException;
+
 import junit.framework.Assert;
 
 import org.junit.Test;
@@ -9,6 +13,7 @@ import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
 
 public class HostedPaymentsRequestTest {
@@ -61,4 +66,5 @@ public class HostedPaymentsRequestTest {
         
         Assert.assertNotNull(form);
        }
+    
 }
