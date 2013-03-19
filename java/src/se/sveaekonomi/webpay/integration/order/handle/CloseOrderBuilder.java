@@ -6,6 +6,11 @@ import se.sveaekonomi.webpay.integration.config.Config;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 
+/**
+ * Close an already created order  
+ * @author klar-sar
+ *
+ */
 public class CloseOrderBuilder {
     
     private Long orderId;
@@ -30,6 +35,11 @@ public class CloseOrderBuilder {
         return orderId;
     }
     
+    /**
+     * Required
+     * @param orderId
+     * @return CloseOrderBuilder
+     */
     public CloseOrderBuilder setOrderId(Long orderId) {
         this.orderId = orderId;
         return this;

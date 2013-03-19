@@ -4,6 +4,11 @@ import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 
 
+/**
+ * Use to specify types of customer, fees, discounts or row.
+ * @author klar-sar
+ *
+ */
 public class Item {
     
     public static OrderRowBuilder orderRow(){

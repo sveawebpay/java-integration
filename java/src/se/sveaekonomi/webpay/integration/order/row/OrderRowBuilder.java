@@ -25,6 +25,11 @@ public class OrderRowBuilder implements RowBuilder {
         return articleNumber;
     }
     
+    /**
+     * Optional
+     * @param articleNumber
+     * @return OrderRowBuilder
+     */
     public OrderRowBuilder setArticleNumber(String articleNumber) {
         this.articleNumber = articleNumber;
         return this;
@@ -34,6 +39,11 @@ public class OrderRowBuilder implements RowBuilder {
         return name;
     }
     
+    /**
+     * Optional
+     * @param name
+     * @return OrderRowBuilder
+     */
     public OrderRowBuilder setName(String name) {
         this.name = name;
         return this;
@@ -43,6 +53,11 @@ public class OrderRowBuilder implements RowBuilder {
         return description;
     }
     
+    /**
+     * Optional
+     * @param description
+     * @return OrderRowBuilder
+     */
     public OrderRowBuilder setDescription(String description) {
         this.description = description;
         return this;
@@ -52,6 +67,12 @@ public class OrderRowBuilder implements RowBuilder {
         return amountExVat;
     }
     
+    /**
+     * Optional
+     * Required to use at least two of the methods setAmountExVat(), setAmountIncVat() or setVatPercent()
+     * @param dExVatAmount
+     * @return OrderRowBuilder
+     */
     public OrderRowBuilder setAmountExVat(double dExVatAmount) {
         this.amountExVat = dExVatAmount;
         return this;
@@ -61,6 +82,12 @@ public class OrderRowBuilder implements RowBuilder {
         return vatPercent;
     }
     
+    /**
+     * Optional
+     * Required to use at least two of the methods setAmountExVat(), setAmountIncVat() or setVatPercent()
+     * @param vatPercent
+     * @return OrderRowBuilder
+     */
     public OrderRowBuilder setVatPercent(int vatPercent) {
         this.vatPercent = vatPercent;
         return this;
@@ -70,6 +97,11 @@ public class OrderRowBuilder implements RowBuilder {
         return quantity;
     }
     
+    /**
+     * Required
+     * @param quantity
+     * @return OrderRowBuilder
+     */
     public OrderRowBuilder setQuantity(int quantity) {
         this.quantity = quantity;
         return this;
@@ -94,6 +126,11 @@ public class OrderRowBuilder implements RowBuilder {
         return vatDiscount;
     }
     
+    /**
+     * Optional
+     * @param vatDiscount
+     * @return OrderRowBuilder
+     */
     public OrderRowBuilder setVatDiscount(int vatDiscount) {
         this.vatDiscount = vatDiscount;
         return this;
@@ -103,6 +140,11 @@ public class OrderRowBuilder implements RowBuilder {
         return discountPercent;
     }
     
+    /**
+     * Optional
+     * @param discountPercent
+     * @return OrderRowBuilder
+     */
     public OrderRowBuilder setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
         return this;
@@ -112,6 +154,12 @@ public class OrderRowBuilder implements RowBuilder {
         return amountIncVat;
     }
 
+    /**
+     * Optional
+     * Required to use at least two of the methods setAmountExVat(), setAmountIncVat() or setVatPercent()
+     * @param amountIncVat
+     * @return OrderRowBuilder
+     */
     public OrderRowBuilder setAmountIncVat(double amountIncVat) {
         this.amountIncVat = amountIncVat;
         return this;

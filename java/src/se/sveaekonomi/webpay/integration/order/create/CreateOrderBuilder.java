@@ -25,7 +25,7 @@ import se.sveaekonomi.webpay.integration.webservice.payment.InvoicePayment;
 import se.sveaekonomi.webpay.integration.webservice.payment.PaymentPlanPayment;
 
 /**
- * Build up the order in the fluent api by using create order methods.
+ * Builds the order up in the fluent api by using create order methods.
  * End by choosing payment type.
  *  
  * @author klar-sar
@@ -125,7 +125,7 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     
     /**
      * 
-     * @return received by using the WebPay.getAddresses() method
+     * @return selector received by using the WebPay.getAddresses() method
      */
     public String getAddressSelector() {
         return addressSelector;
@@ -155,24 +155,24 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     }    
     
     /**
-     * Start creating card payment via Pay Page. Returns Payment form to integrate in shop.
-     * @return HostedPayment
+     * Start creating card payment via PayPage. Returns Payment form to integrate in shop.
+     * @return CardPayment
      */
     public CardPayment usePayPageCardOnly() throws ValidationException {
         return new CardPayment(this);
     }
     
     /**
-     * Start creating direct bank payment via Pay Page. Returns Payment form to integrate in shop.
-     * @return HostedPayment
+     * Start creating direct bank payment via PayPage. Returns Payment form to integrate in shop.
+     * @return DirectPayment
      */
     public DirectPayment usePayPageDirectBankOnly() throws ValidationException {
         return new DirectPayment(this);
     }
     
     /**
-     * Start creating payment through Pay Page. You will be able to customize the Pay Page.
-     * Returns Payment form to integrate in shop.
+     * Start creating payment through PayPage. You will need to customize the PayPage.
+     * 
      * @return PayPagePayment
      */    
     public PayPagePayment usePayPage() throws ValidationException {
@@ -182,7 +182,7 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     /**
      * Start creating payment with a specific payment method. This method will directly direct to the specified payment method.
      * Payment methods are found in appendix in our documentation.
-     * Returns Payment form to integrate in shop.
+     * 
      * @param type paymentMethod
      * @return PaymentMethodPayment
      */
