@@ -13,6 +13,15 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaGetAddresses;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
+/**
+ * Applicable for SE, NO and DK.
+ * If customer has multiple addresses or just to show the address which
+ * the invoice/product is to be delivered. It returns an GetAddressesResponse object containing all associated addresses for a specific 
+ * SecurityNumber. 
+ * Each address gets an "AddressSelector" - has to signify the address. This can
+ * be used when Creating order to have the invoice be sent to the specified address. 
+ *  
+ */
 public class GetAddresses {
     
     private String ssn;

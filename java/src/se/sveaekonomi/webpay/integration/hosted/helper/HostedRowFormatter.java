@@ -67,8 +67,9 @@ public class HostedRowFormatter {
             if (row.getUnit() != null) {
                 tempRow.setUnit(row.getUnit());
             }           
-            if (row.getArticleNumber() != null) {
-                tempRow.setSku(row.getArticleNumber());
+            if (row.getArticleNumber() >= 0) {
+            	Integer articleNo = row.getArticleNumber();
+                tempRow.setSku(articleNo.toString());
             }
             
             newRows.add(tempRow);

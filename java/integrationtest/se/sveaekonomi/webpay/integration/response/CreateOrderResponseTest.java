@@ -17,7 +17,7 @@ public class CreateOrderResponseTest {
     public void testInvoiceRequestForCustomerIdentityIndividualFromSE() throws Exception {
     	CreateOrderResponse response = WebPay.createOrder()    	
         .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
+            .setArticleNumber(1)
             .setQuantity(2)
             .setAmountExVat(100.00)
             .setDescription("Specification")
@@ -56,7 +56,7 @@ public class CreateOrderResponseTest {
         .addCustomerDetails(Item.companyCustomer()
         		.setNationalIdNumber("4608142222"))               
         .addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
+                .setArticleNumber(1)
                 .setQuantity(2)
                 .setAmountExVat(100.00)
                 .setDescription("Specification")
@@ -76,7 +76,7 @@ public class CreateOrderResponseTest {
     public void testInvoiceRequestObjectForCustomerIdentityIndividualFromNL() throws Exception {
     	CreateOrderResponse response = WebPay.createOrder()    	
     	.addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
+            .setArticleNumber(1)
             .setQuantity(2)
             .setAmountExVat(100.00)
             .setDescription("Specification")

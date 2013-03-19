@@ -201,7 +201,7 @@ public class PayPagePaymentTest {
     	
        PaymentForm form = WebPay.createOrder()            
             .addOrderRow(Item.orderRow()
-                    .setArticleNumber("1")
+                    .setArticleNumber(1)
                     .setQuantity(2)
                     .setAmountExVat(100.00)
                     .setDescription("Specification")
@@ -248,7 +248,7 @@ public class PayPagePaymentTest {
     public void testPayPagePaymentExcludeCardPayments() throws ValidationException, Exception {        
         PaymentForm form = WebPay.createOrder()            
             .addOrderRow(Item.orderRow()
-                    .setArticleNumber("1")
+                    .setArticleNumber(1)
                     .setQuantity(2)
                     .setAmountExVat(100.00)
                     .setDescription("Specification")
@@ -284,7 +284,7 @@ public class PayPagePaymentTest {
     public void testExcludeDirectPaymentMethods() throws ValidationException, Exception {    
     PaymentForm form = WebPay.createOrder()            
             .addOrderRow(Item.orderRow()
-                    .setArticleNumber("1")
+                    .setArticleNumber(1)
                     .setQuantity(2)
                     .setAmountExVat(100.00)
                     .setDescription("Specification")
@@ -322,7 +322,7 @@ public class PayPagePaymentTest {
         paymentMethods.add(PAYMENTMETHOD.SKRILL);
         PaymentForm form = WebPay.createOrder()            
                 .addOrderRow(Item.orderRow()
-                        .setArticleNumber("")
+                        .setArticleNumber(1)
                         .setQuantity(2)
                         .setAmountExVat(100.00)
                         .setDescription("Specification")
@@ -360,7 +360,7 @@ public class PayPagePaymentTest {
      paymentMethods.add(PAYMENTMETHOD.SKRILL);
         PaymentForm form = WebPay.createOrder()            
             .addOrderRow(Item.orderRow()
-                    .setArticleNumber("")
+                    .setArticleNumber(1)
                     .setQuantity(2)
                     .setAmountExVat(100.00)
                     .setDescription("Specification")
@@ -395,7 +395,7 @@ public class PayPagePaymentTest {
     public void testPayPagePaymentIncludePaymentMethodsEmpty() throws ValidationException, Exception {
         PaymentForm form = WebPay.createOrder()            
             .addOrderRow(Item.orderRow()
-                    .setArticleNumber("")
+                    .setArticleNumber(1)
                     .setQuantity(2)
                     .setAmountExVat(100.00)
                     .setDescription("Specification")

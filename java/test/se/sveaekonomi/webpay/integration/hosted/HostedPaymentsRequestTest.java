@@ -18,7 +18,7 @@ public class HostedPaymentsRequestTest {
     public void testDoCardPaymentRequest() throws Exception {        
     	PaymentForm form = WebPay.createOrder()
         .addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
+                .setArticleNumber(1)
                 .setQuantity(2)
                 .setAmountExVat(100.00)
                 .setDescription("Specification")

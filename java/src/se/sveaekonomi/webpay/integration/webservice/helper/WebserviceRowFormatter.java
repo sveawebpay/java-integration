@@ -69,7 +69,8 @@ public class WebserviceRowFormatter {
         List<OrderRowBuilder> orderRows = order.getOrderRows();
         for (OrderRowBuilder existingRow : orderRows) {
             SveaOrderRow orderRow = new SveaOrderRow();
-            orderRow = serializeOrder(existingRow.getArticleNumber(), existingRow.getDescription(), existingRow.getName(), existingRow.getUnit(), orderRow);          
+            Integer articleNo = existingRow.getArticleNumber();
+            orderRow = serializeOrder(articleNo.toString(), existingRow.getDescription(), existingRow.getName(), existingRow.getUnit(), orderRow);          
                         
             orderRow.DiscountPercent = (!(existingRow.getDiscountPercent() == null) ? existingRow.getDiscountPercent() : 0);
             orderRow.NumberOfUnits = existingRow.getQuantity();

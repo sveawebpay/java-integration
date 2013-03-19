@@ -73,7 +73,7 @@ public class OrderBuilderTest {
         createTestOrderRow();
         
         assertTrue(order != null);
-        assertEquals(order.getOrderRows().get(0).getArticleNumber(), "1");
+        assertEquals(order.getOrderRows().get(0).getArticleNumber(), 1);
         assertEquals(order.getOrderRows().get(0).getQuantity(), 2);
         assertEquals(order.getOrderRows().get(0).getAmountExVat(), 100.00, 0);
         assertEquals(order.getOrderRows().get(0).getDescription(), "Specification");
@@ -176,7 +176,7 @@ public class OrderBuilderTest {
     
     private void createTestOrderRow() {
         order.addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
+                .setArticleNumber(1)
                 .setQuantity(2)
                 .setAmountExVat(100.00)
                 .setDescription("Specification")
