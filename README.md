@@ -758,8 +758,10 @@ Params:
 ## APPENDIX 
 
 ### PaymentMethods
-Enumeration, used in usePaymentMethod(paymentMethod) and in usePayPage(), 
-.includePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods), .includePaymentMethods(), .excludeCardPaymentMethods(Collection<PAYMENTMETHOD> paymentMethods), .excludeCardPaymentMethods(), .excludeDirectPaymentMethods(), .excludeCardPaymentMethods().
+Enumeration, used in *usePaymentMethod(paymentMethod)*, *.usePayPage()*, 
+*.includePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods)*, *.includePaymentMethods()*, 
+*.excludeCardPaymentMethods(Collection<PAYMENTMETHOD> paymentMethods)*, *.excludePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods)*,
+*.excludeCardPaymentMethods()*, *.excludeDirectPaymentMethods()* and *.excludeCardPaymentMethods()*.
 
 | Payment method                   | Description                                   |
 |----------------------------------|-----------------------------------------------|
