@@ -18,7 +18,7 @@ public class WebPay {
 	/**
 	 * Start build order request to create an order for all payments.
 	 * @param config
-	 * @return createOrder
+	 * @return CreateOrderBuilder
 	 */
     public static CreateOrderBuilder createOrder(Config config) {
         return new CreateOrderBuilder(config);
@@ -26,7 +26,7 @@ public class WebPay {
     
     /**
      * Start build order request to create an order for all payments.
-     * @return createOrder
+     * @return CreateOrderBuilder
      */
     public static CreateOrderBuilder createOrder() {    	
     	return createOrder(SveaConfig.createTestConfig()); 
@@ -35,7 +35,7 @@ public class WebPay {
     /**
      * Start building request to close order.
      * @param config
-     * @return closeOrder
+     * @return CloseOrderBuilder
      */
     public static CloseOrderBuilder closeOrder(Config config) {
         return new CloseOrderBuilder(config);
@@ -43,7 +43,7 @@ public class WebPay {
     
     /**
      * Start building request to close order.
-     * @return closeOrder
+     * @return CloseOrderBuilder
      */
     public static CloseOrderBuilder closeOrder() {
         return closeOrder(SveaConfig.createTestConfig());
@@ -51,7 +51,7 @@ public class WebPay {
     
     /**
      * Starts building request for deliver order.
-     * @return DeliverOrder
+     * @return DeliverOrderBuilder
      */
     public static DeliverOrderBuilder deliverOrder(Config config) {
         return new DeliverOrderBuilder(config);
@@ -59,7 +59,7 @@ public class WebPay {
     
     /**
      * Starts building request for deliver order.
-     * @return DeliverOrder
+     * @return DeliverOrderBuilder
      */
     public static DeliverOrderBuilder deliverOrder() {
     	return deliverOrder(SveaConfig.createTestConfig());
@@ -68,7 +68,7 @@ public class WebPay {
     /**
      * Get payment plan parameters to present to customer before creating a payment plan payment request
      * @param config
-     * @return GetPaymentPlanParamas
+     * @return GetPaymentPlanParams
      */
     public static GetPaymentPlanParams getPaymentPlanParams(Config config) {
         return new GetPaymentPlanParams(config);
@@ -76,7 +76,7 @@ public class WebPay {
     
     /**
      * Get payment plan parameters to present to customer before creating a payment plan payment request
-     * @return
+     * @return GetPaymentPlanParams
      */
     public static GetPaymentPlanParams getPaymentPlanParams() {
     	return getPaymentPlanParams(SveaConfig.createTestConfig());

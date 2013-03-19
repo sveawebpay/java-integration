@@ -24,6 +24,13 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.webservice.payment.InvoicePayment;
 import se.sveaekonomi.webpay.integration.webservice.payment.PaymentPlanPayment;
 
+/**
+ * Build up the order in the fluent api by using create order methods.
+ * End by choosing payment type.
+ *  
+ * @author klar-sar
+ *
+ */
 public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
         
     private OrderValidator validator;
@@ -65,6 +72,9 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
         return this;
     }    
     
+    /**
+     * @return Unique order number from client 
+     */
     public String getClientOrderNumber() {
         return clientOrderNumber;
     }
@@ -113,6 +123,10 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
         return this;
     }
     
+    /**
+     * 
+     * @return received by using the WebPay.getAddresses() method
+     */
     public String getAddressSelector() {
         return addressSelector;
     }
@@ -160,14 +174,13 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
      * Start creating payment through Pay Page. You will be able to customize the Pay Page.
      * Returns Payment form to integrate in shop.
      * @return PayPagePayment
-     */
-    
+     */    
     public PayPagePayment usePayPage() throws ValidationException {
         return new PayPagePayment(this);
     }
     
     /**
-     * Start creating payment with a specific payment method. This function will directly direct to the specified payment method.
+     * Start creating payment with a specific payment method. This method will directly direct to the specified payment method.
      * Payment methods are found in appendix in our documentation.
      * Returns Payment form to integrate in shop.
      * @param type paymentMethod
@@ -177,10 +190,21 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
         return new PaymentMethodPayment(this, paymentMethod);
     }
     
+    /**
+     * Start create invoicePayment
+     * @return PaymentPlanPayment
+     * @throws ValidationException
+     */
     public InvoicePayment useInvoicePayment() throws ValidationException {
         return new InvoicePayment((CreateOrderBuilder)this);
     }
     
+    /**
+     * Start creating payment plan payment
+     * @param campaignCode
+     * @return PaymentPlanPayment
+     * @throws ValidationException
+     */
     public PaymentPlanPayment usePaymentPlanPayment(String campaignCode) throws ValidationException {
     	try {
     		if(campaignCode.equals(""))
@@ -195,7 +219,13 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     	
         return this.usePaymentPlanPayment(campaignCode, false);        
     }
-    
+   
+    /**
+     * Start creating payment plan payment
+     * @param campaignCode
+     * @param sendAutomaticGiroPaymentForm
+     * @return PaymentPlanPayment
+     */
     public PaymentPlanPayment usePaymentPlanPayment(String campaignCode, Boolean sendAutomaticGiroPaymentForm) {
         this.campaignCode = campaignCode;
         this.sendAutomaticGiroPaymentForm = sendAutomaticGiroPaymentForm;

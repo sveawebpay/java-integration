@@ -639,7 +639,6 @@ You can use the **add** functions with an Item object or an array of Item object
 
 ```java
 .addOrderRow(Item.orderRow() ...)
-
 //or
 orderRows = Item.orderRow()...; 
 .addOrderRow(orderRows)

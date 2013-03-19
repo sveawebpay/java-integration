@@ -13,7 +13,11 @@ import se.sveaekonomi.webpay.integration.util.constant.INVOICETYPE;
 import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTPLANTYPE;
-
+/**
+ * Defines specific payment methods to be shown in PayPage
+ * @author klar-sar
+ *
+ */
 public class PayPagePayment extends HostedPayment {
 
 	protected String paymentMethod;

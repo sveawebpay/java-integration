@@ -11,6 +11,11 @@ import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 
+/**
+ * 
+ * @author klar-sar
+ *
+ */
 public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
     private HandleOrderValidator validator;
     
@@ -93,13 +98,27 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         return this;
     }
     
+    /**
+     * Updates the invoice order with additional information and prepares it for delivery.
+     * Will automatically match all order rows that are to be delivered with those which was sent
+     * when creating the invoice order.
+     * @return HandleOrder
+     * @throws ValidationException
+     */
     public HandleOrder deliverInvoiceOrder() throws ValidationException {
         orderType = "Invoice";
         return new HandleOrder(this);
     }
 
+    /**
+     * Prepares the PaymentPlan order for delivery.
+     * @return HandleOrder
+     * @throws ValidationException
+     */
     public HandleOrder deliverPaymentPlanOrder() throws ValidationException {
         orderType = "PaymentPlan";
         return new HandleOrder(this);
     }
+    
+    
 }
