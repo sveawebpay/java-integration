@@ -12,7 +12,7 @@ public class OrderRowBuilder implements RowBuilder {
     private String description;
     private double amountExVat;
     private double amountIncVat;
-    private int vatPercent;
+    private double vatPercent;
     private int quantity;
     private String unit;
     private int vatDiscount;
@@ -78,7 +78,7 @@ public class OrderRowBuilder implements RowBuilder {
         return this;
     }
     
-    public int getVatPercent() {
+    public double getVatPercent() {
         return vatPercent;
     }
     
@@ -88,7 +88,7 @@ public class OrderRowBuilder implements RowBuilder {
      * @param vatPercent
      * @return OrderRowBuilder
      */
-    public OrderRowBuilder setVatPercent(int vatPercent) {
+    public OrderRowBuilder setVatPercent(double vatPercent) {
         this.vatPercent = vatPercent;
         return this;
     }
