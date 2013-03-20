@@ -101,6 +101,20 @@ public class PayPagePaymentTest {
 
         assertEquals(PAYMENTPLANTYPE.PAYMENTPLAN_SE.getValue(), payPagePayment.getPaymentMethod());
     }
+    @Test
+    public void excludePaymentPlanTestSE() throws ValidationException {
+    	ArrayList<PAYMENTMETHOD> list = new ArrayList<PAYMENTMETHOD>();
+    	list.add(PAYMENTMETHOD.PAYMENTPLAN);
+    	PayPagePayment payPagePayment = WebPay.createOrder()
+    	.setCountryCode(COUNTRYCODE.SE)
+    	.usePayPage()
+    	.excludePaymentMethods(list);
+    	//.setPaymentMethod(PAYMENTMETHOD.PAYMENTPLAN);
+                
+        payPagePayment.configureExcludedPaymentMethods();
+
+        assertEquals(PAYMENTPLANTYPE.PAYMENTPLAN_SE.getValue(),payPagePayment.getExcludedPaymentMethods().get(0));
+    }
     
     @Test
     public void setPaymentMethodPaymentPlanTestNL() throws ValidationException {
@@ -187,7 +201,7 @@ public class PayPagePaymentTest {
     	
        PaymentForm form = WebPay.createOrder()            
             .addOrderRow(Item.orderRow()
-                    .setArticleNumber("1")
+                    .setArticleNumber(1)
                     .setQuantity(2)
                     .setAmountExVat(100.00)
                     .setDescription("Specification")
@@ -234,7 +248,7 @@ public class PayPagePaymentTest {
     public void testPayPagePaymentExcludeCardPayments() throws ValidationException, Exception {        
         PaymentForm form = WebPay.createOrder()            
             .addOrderRow(Item.orderRow()
-                    .setArticleNumber("1")
+                    .setArticleNumber(1)
                     .setQuantity(2)
                     .setAmountExVat(100.00)
                     .setDescription("Specification")
@@ -270,7 +284,7 @@ public class PayPagePaymentTest {
     public void testExcludeDirectPaymentMethods() throws ValidationException, Exception {    
     PaymentForm form = WebPay.createOrder()            
             .addOrderRow(Item.orderRow()
-                    .setArticleNumber("1")
+                    .setArticleNumber(1)
                     .setQuantity(2)
                     .setAmountExVat(100.00)
                     .setDescription("Specification")
@@ -302,13 +316,51 @@ public class PayPagePaymentTest {
     }
     
     @Test
+    public void testIncludePaymentPlan() throws ValidationException, Exception {
+    	List<PAYMENTMETHOD> paymentMethods = new ArrayList<PAYMENTMETHOD>();
+        paymentMethods.add(PAYMENTMETHOD.PAYMENTPLAN);
+        paymentMethods.add(PAYMENTMETHOD.SKRILL);
+        PaymentForm form = WebPay.createOrder()            
+                .addOrderRow(Item.orderRow()
+                        .setArticleNumber(1)
+                        .setQuantity(2)
+                        .setAmountExVat(100.00)
+                        .setDescription("Specification")
+                        .setName("Prod")
+                        .setUnit("st")
+                        .setVatPercent(25)
+                        .setDiscountPercent(0))
+               
+               .addDiscount(Item.relativeDiscount()
+                        .setDiscountId("1")
+                        .setDiscountPercent(50)
+                        .setUnit("st")
+                        .setName("Relative")
+                        .setDescription("RelativeDiscount"))
+                    .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
+                    .setCountryCode(COUNTRYCODE.SE)
+                    .setClientOrderNumber("33")
+                    .setOrderDate("2012-12-12")
+                    .setCurrency(CURRENCY.SEK)
+                    .usePayPage()                    
+                        .includePaymentMethods(paymentMethods)
+                        .setReturnUrl("http://myurl.se")
+                        .getPaymentForm();
+            
+            String xml = form.getXmlMessage();        
+            String paymentMethod = xml.substring(xml.indexOf("SVEAINVOICESE"), xml.indexOf("SVEAINVOICESE")+13);      
+            //check to see if the first value is one of the excluded ones
+            assertEquals(INVOICETYPE.INVOICESE.getValue(), paymentMethod);	
+    }
+
+    @Test
     public void testpayPagePaymentIncludePaymentMethods() throws ValidationException, Exception {
      List<PAYMENTMETHOD> paymentMethods = new ArrayList<PAYMENTMETHOD>();
      paymentMethods.add(PAYMENTMETHOD.KORTCERT);
      paymentMethods.add(PAYMENTMETHOD.SKRILL);
         PaymentForm form = WebPay.createOrder()            
             .addOrderRow(Item.orderRow()
-                    .setArticleNumber("")
+                    .setArticleNumber(1)
                     .setQuantity(2)
                     .setAmountExVat(100.00)
                     .setDescription("Specification")
@@ -343,7 +395,7 @@ public class PayPagePaymentTest {
     public void testPayPagePaymentIncludePaymentMethodsEmpty() throws ValidationException, Exception {
         PaymentForm form = WebPay.createOrder()            
             .addOrderRow(Item.orderRow()
-                    .setArticleNumber("")
+                    .setArticleNumber(1)
                     .setQuantity(2)
                     .setAmountExVat(100.00)
                     .setDescription("Specification")

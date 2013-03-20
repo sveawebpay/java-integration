@@ -16,6 +16,11 @@ public class InvoiceFeeBuilder implements RowBuilder {
         return name;
     }
     
+    /**
+     * Optional
+     * @param name
+     * @return InvoiceFeeBuilder
+     */
     public InvoiceFeeBuilder setName(String name) {
         this.name = name;
         return this;
@@ -25,6 +30,11 @@ public class InvoiceFeeBuilder implements RowBuilder {
         return description;
     }
     
+    /**
+     * Optional
+     * @param description
+     * @return InvoiceFeeBuilder
+     */
     public InvoiceFeeBuilder setDescription(String description) {
         this.description = description;
         return this;
@@ -34,6 +44,12 @@ public class InvoiceFeeBuilder implements RowBuilder {
         return amountExVat;
     }
     
+    /**
+     * Optional
+     * Required to use at least two of the methods setAmountExVat(), setAmountIncVat() or setVatPercent()
+     * @param amountExVat
+     * @return InvoiceFeeBuilder
+     */
     public InvoiceFeeBuilder setAmountExVat(int amountExVat) {
         this.amountExVat = amountExVat;
         return this;
@@ -62,6 +78,12 @@ public class InvoiceFeeBuilder implements RowBuilder {
         return vatPercent;
     }
     
+    /**
+     * Optional
+     * Required to use at least two of the methods setAmountExVat(), setAmountIncVat() or setVatPercent()
+     * @param vatPercent
+     * @return InvoiceFeeBuilder
+     */
     public InvoiceFeeBuilder setVatPercent(int vatPercent) {
         this.vatPercent = vatPercent;
         return this;
@@ -71,6 +93,11 @@ public class InvoiceFeeBuilder implements RowBuilder {
         return discountPercent;
     }
     
+    /**
+     * Optional
+     * @param discountPercent
+     * @return InvoiceFeeBuilder
+     */
     public InvoiceFeeBuilder setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
         return this;
@@ -80,6 +107,12 @@ public class InvoiceFeeBuilder implements RowBuilder {
         return amountIncVat;
     }
 
+    /**
+     * Optional
+     * Required to use at least two of the methods setAmountExVat(), setAmountIncVat() or setVatPercent()
+     * @param amountIncVat
+     * @return InvoiceFeeBuilder
+     */
     public InvoiceFeeBuilder setAmountIncVat(double amountIncVat) {
         this.amountIncVat = amountIncVat;
         return this;

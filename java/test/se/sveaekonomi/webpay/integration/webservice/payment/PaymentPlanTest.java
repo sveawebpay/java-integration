@@ -19,7 +19,7 @@ public class PaymentPlanTest {
     public void testPaymentPlanRequestObjectSpecifics() throws ValidationException{
     	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
     	.addOrderRow(Item.orderRow()
-              .setArticleNumber("1")
+              .setArticleNumber(1)
               .setQuantity(2)
               .setAmountExVat(100.00)
               .setDescription("Specification")

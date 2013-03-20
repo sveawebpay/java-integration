@@ -18,6 +18,11 @@ public class FixedDiscountBuilder implements RowBuilder {
         return discountId;
     }
     
+    /**
+     * Optional
+     * @param discountId
+     * @return FixedDiscountBuilder
+     */
     public FixedDiscountBuilder setDiscountId(String discountId) {
         this.discountId = discountId;
         return this;
@@ -27,6 +32,11 @@ public class FixedDiscountBuilder implements RowBuilder {
         return name;
     }
     
+    /**
+     * Optional
+     * @param name
+     * @return FixedDiscountBuilder
+     */
     public FixedDiscountBuilder setName(String name) {
         this.name = name;
         return this;
@@ -36,6 +46,11 @@ public class FixedDiscountBuilder implements RowBuilder {
         return description;
     }
     
+    /**
+     * Optional
+     * @param description
+     * @return FixedDiscountBuilder
+     */
     public FixedDiscountBuilder setDescription(String description) {
         this.description = description;
         return this;
@@ -53,6 +68,7 @@ public class FixedDiscountBuilder implements RowBuilder {
     }
     
     /**
+     * Optional
      * @param unit of (i.e. "pcs", "st" etc)
      */
     public FixedDiscountBuilder setUnit(String unit) {
@@ -64,6 +80,11 @@ public class FixedDiscountBuilder implements RowBuilder {
         return amount;
     }
     
+    /**
+     * Required
+     * @param amountDisountOnTotalPrice
+     * @return FixedDiscountBuilder
+     */
     public FixedDiscountBuilder setAmountIncVat(double amountDisountOnTotalPrice) {
         this.amount = amountDisountOnTotalPrice;
         return this;

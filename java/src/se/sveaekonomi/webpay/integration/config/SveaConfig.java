@@ -4,6 +4,8 @@ import java.net.URL;
 
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
 
+/**
+ */
 public class SveaConfig {
     
     private String userName;

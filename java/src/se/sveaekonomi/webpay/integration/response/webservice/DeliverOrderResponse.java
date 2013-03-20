@@ -5,13 +5,14 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.response.Response;
+import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 
 
 
 public class DeliverOrderResponse extends Response {
     
     private double amount;
-    private String orderType; //"Invoice" or "PaymentPlan"
+    private ORDERTYPE orderType;
     private int invoiceId;
     private String dueDate;
     private String invoiceDate;
@@ -25,6 +26,7 @@ public class DeliverOrderResponse extends Response {
     }
 
     public void setValues(NodeList soapResponse) {
+    	String tmpOrderType;
         try {
             int size = soapResponse.getLength();
             
@@ -39,8 +41,8 @@ public class DeliverOrderResponse extends Response {
                     this.setErrorMessage(errorMsg);
                 else {                    
                     this.setAmount(Double.parseDouble(getTagValue(node, "Amount")));
-                    this.orderType = getTagValue(node, "OrderType");
-                    if(this.orderType.equals("Invoice")) {
+                    tmpOrderType = getTagValue(node, "OrderType");
+                    if(tmpOrderType.equals(ORDERTYPE.Invoice.toString())) {
                         // Set child nodes from InvoiceResultDetails
                         setChildNodeValue(node, "InvoiceId");
                         setChildNodeValue(node, "DueDate");
@@ -101,11 +103,11 @@ public class DeliverOrderResponse extends Response {
             this.setContractNumber(Integer.valueOf(tagValue));
     }
 
-    public String getOrderType() {
+    public ORDERTYPE getOrderType() {
         return orderType;
     }
     
-    public void setOrderType(String orderType) {
+    public void setOrderType(ORDERTYPE orderType) {
         this.orderType = orderType;
     }
     

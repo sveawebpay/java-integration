@@ -5,6 +5,11 @@ import javax.xml.stream.XMLStreamWriter;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
+/**
+ * Defines all card payments viewable in PayPage
+ * @author klar-sar
+ *
+ */
 public class CardPayment extends HostedPayment {
     
     public CardPayment(CreateOrderBuilder orderBuilder) {

@@ -17,9 +17,9 @@ import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 
 
 /*******************************************************************************
- * Description of HostedPayment: Parent to CardPayment, DirectPayment and PayPagePayment 
- * class. Prepares an order and creates a payment form
- * to integrate on web page. Uses XmlBuilder to turn formatted order into xml
+ * Description of HostedPayment: Parent to CardPayment, DirectPayment, PayPagePayment 
+ * and PaymentMethodPayment classes. Prepares an order and creates a payment form
+ * to integrate on web page. Uses XmlBuilder to turn formatted order into xml format.
  * 
  * @author klar-sar
  * *****************************************************************************/

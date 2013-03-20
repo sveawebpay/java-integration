@@ -5,7 +5,11 @@ import javax.xml.stream.XMLStreamWriter;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
-
+/**
+ * Defines all direct payments to bank viewable in PayPage
+ * @author klar-sar
+ *
+ */
 public class DirectPayment extends HostedPayment {
     
     public DirectPayment(CreateOrderBuilder orderBuilder) {

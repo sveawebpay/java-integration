@@ -42,7 +42,7 @@ public class CardPaymentTest {
     public void testBuildCardPayment() throws Exception {
     	PaymentForm form = order.addOrderRow(Item.orderRow()
 			.setAmountExVat(100.00)
-			.setArticleNumber("1")
+			.setArticleNumber(1)
 			.setQuantity(2)
 			.setUnit("st")
 			.setDescription("Specification")
@@ -91,7 +91,7 @@ public class CardPaymentTest {
     public void testBuildCardPaymentDE() throws Exception {
     	PaymentForm form = order.addOrderRow(Item.orderRow()
 			.setAmountExVat(100.00)
-			.setArticleNumber("1")
+			.setArticleNumber(1)
 			.setQuantity(2)
 			.setUnit("st")
 			.setDescription("Specification")
@@ -141,7 +141,7 @@ public class CardPaymentTest {
     	PaymentForm form = WebPay.createOrder()                               
        .addOrderRow(Item.orderRow()
                 .setAmountExVat(100.00)
-                .setArticleNumber("1")
+                .setArticleNumber(1)
                 .setQuantity(2)
                 .setUnit("st")
                 .setDescription("Specification")

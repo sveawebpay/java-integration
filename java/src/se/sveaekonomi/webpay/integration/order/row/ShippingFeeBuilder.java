@@ -21,6 +21,11 @@ public class ShippingFeeBuilder implements RowBuilder {
         return shippingId;
     }
     
+    /**
+     * Optional
+     * @param id
+     * @return ShippingFeeBuilder
+     */
     public ShippingFeeBuilder setShippingId(String id) {
         this.shippingId = id;
         return this;
@@ -30,6 +35,11 @@ public class ShippingFeeBuilder implements RowBuilder {
         return name;
     }
     
+    /**
+     * Optional
+     * @param name
+     * @return ShippingFeeBuilder
+     */
     public ShippingFeeBuilder setName(String name) {
         this.name = name;
         return this;
@@ -39,6 +49,11 @@ public class ShippingFeeBuilder implements RowBuilder {
         return description;
     }
     
+    /**
+     * Optional
+     * @param description
+     * @return ShippingFeeBuilder
+     */
     public ShippingFeeBuilder setDescription(String description) {
         this.description = description;
         return this;
@@ -48,6 +63,12 @@ public class ShippingFeeBuilder implements RowBuilder {
         return amountExVat;
     }
     
+    /**
+     * Optional 
+     * Required to use at least two of the methods setAmountExVat(), setAmountIncVat() or setVatPercent()
+     * @param amountExVat
+     * @return ShippingFeeBuilder
+     */
     public ShippingFeeBuilder setAmountExVat(double amountExVat) {
         this.amountExVat = amountExVat;
         return this;
@@ -57,6 +78,12 @@ public class ShippingFeeBuilder implements RowBuilder {
         return vatPercent;
     }
     
+    /**
+     * Optional
+     * Required to use at least two of the methods setAmountExVat(), setAmountIncVat() or setVatPercent()
+     * @param vatPercent
+     * @return ShippingFeeBuilder
+     */
     public ShippingFeeBuilder setVatPercent(int vatPercent) {
         this.vatPercent = vatPercent;
         return this;
@@ -74,8 +101,7 @@ public class ShippingFeeBuilder implements RowBuilder {
     }
     
     /**
-     * @param unit
-     *            (i.e. "pcs", "st" etc)
+     * @param unit (i.e. "pcs", "st" etc)
      */
     public ShippingFeeBuilder setUnit(String unit) {
         this.unit = unit;
@@ -86,6 +112,11 @@ public class ShippingFeeBuilder implements RowBuilder {
         return discountPercent;
     }
     
+    /**
+     * Optional
+     * @param discountPercent
+     * @return ShippingFeeBuilder
+     */
     public ShippingFeeBuilder setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
         return this;
@@ -99,6 +130,12 @@ public class ShippingFeeBuilder implements RowBuilder {
         return amountIncVat;
     }
 
+    /**
+     * Optional
+     * Required to use at least two of the methods setAmountExVat(), setAmountIncVat() or setVatPercent()
+     * @param amountIncVat
+     * @return ShippingFeeBuilder
+     */
     public ShippingFeeBuilder setAmountIncVat(double amountIncVat) {
         this.amountIncVat = amountIncVat;
         return this;

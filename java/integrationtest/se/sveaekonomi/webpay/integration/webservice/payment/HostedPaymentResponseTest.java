@@ -40,7 +40,7 @@ public class HostedPaymentResponseTest {
         
         PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
         .addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
+                .setArticleNumber(1)
                 .setQuantity(2)
                 .setAmountExVat(100.00)
                 .setDescription("Specification")
