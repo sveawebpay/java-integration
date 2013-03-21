@@ -75,7 +75,7 @@ public class CreateOrderResponseTest {
     }
     
     @Test
-    public void testFormatOfDecimalsInCalculation() throws ValidationException, Exception {
+    public void testFormationOfDecimalsInCalculation() throws ValidationException, Exception {
     	                
         CreateOrderResponse response = WebPay.createOrder()    	
     	        .addOrderRow(Item.orderRow()

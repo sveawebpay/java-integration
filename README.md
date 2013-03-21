@@ -451,8 +451,8 @@ Optional if you want to exclude all card payment methods from *PayPage*.
 Optional if you want to exclude all direct bank payments methods from *PayPage*.
 ```java  
 .usePayPage()
-    .setReturnUrl("http://myurl.se")                       //Required
-    .excludeDirectPaymentMethods()                         //Optional
+    .setReturnUrl("http://myurl.se")                   //Required
+    .excludeDirectPaymentMethods()                     //Optional
     .getPaymentForm();
 ```
 ##### 1.5.3.6 Return
@@ -607,7 +607,7 @@ GetAddressesResponse response = WebPay.getAddresses(SveaConfig.createTestConfig(
 	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
 	.setOrderTypeInvoice()                                              //See 3.1   
 	.setCountryCode(COUNTRYCODE.SE)                                     //Required
-	.setIndividual("194605092222")                                        //See 3.2   
+	.setIndividual("194605092222")                                      //See 3.2   
 	.doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
@@ -635,13 +635,17 @@ Ex.
 
 ### 4.2 Specify order                                                        
 Continue by adding values for products and other. You can add OrderRow, Fee and Discount. Chose the right Item object as parameter.
-You can use the **add** functions with an Item object or an array of Item objects as parameters. 
+You can use the **add** functions with an Item object or an List of Item objects as parameters. 
 
 ```java
-.addOrderRow(Item.orderRow() ...)
+.addOrderRow(Item.orderRow(). ...)
+
 //or
-orderRows = Item.orderRow()...; 
-.addOrderRow(orderRows)
+
+List<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>(); //or use another preferrable List object
+orderRows.add(Item.orderRow(). ...)
+...
+createOrder.addOrderRows(orderRows);
 ```
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
@@ -757,10 +761,10 @@ Params:
 ## APPENDIX 
 
 ### PaymentMethods
-Enumeration, used in *usePaymentMethod(paymentMethod)*, *.usePayPage()*, 
+Enumeration, used in *usePaymentMethod(PAYMENTMETHOD paymentMethod)*, *.usePayPage()*, 
 *.includePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods)*, *.includePaymentMethods()*, 
-*.excludeCardPaymentMethods(Collection<PAYMENTMETHOD> paymentMethods)*, *.excludePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods)*,
-*.excludeCardPaymentMethods()*, *.excludeDirectPaymentMethods()* and *.excludeCardPaymentMethods()*.
+*.excludePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods)*,
+*.excludeDirectPaymentMethods()* and *.excludeCardPaymentMethods()*.
 
 | Payment method                   | Description                                   |
 |----------------------------------|-----------------------------------------------|
