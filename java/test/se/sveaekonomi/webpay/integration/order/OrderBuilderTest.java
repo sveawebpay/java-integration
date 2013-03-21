@@ -78,7 +78,7 @@ public class OrderBuilderTest {
         assertEquals(order.getOrderRows().get(0).getAmountExVat(), 100.00, 0);
         assertEquals(order.getOrderRows().get(0).getDescription(), "Specification");
         assertEquals(order.getOrderRows().get(0).getUnit(), "st");
-        assertEquals(order.getOrderRows().get(0).getVatPercent(), 25);
+        assertEquals(order.getOrderRows().get(0).getVatPercent(), 25, 0);
         assertEquals(order.getOrderRows().get(0).getVatDiscount(), 0);
     }
     
@@ -151,7 +151,7 @@ public class OrderBuilderTest {
         order.setClientOrderNumber("33");
         
         assertEquals("33", order.getClientOrderNumber());
-    }
+    }   
     
     private CreateOrderBuilder createTestCustomerIdentity(CreateOrderBuilder orderBuilder) {
          return orderBuilder.addCustomerDetails(Item.individualCustomer()

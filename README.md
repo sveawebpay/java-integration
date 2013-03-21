@@ -162,7 +162,7 @@ All products and other items. It´s required to have a minimum of one order row.
 	.setQuantity(2)                        //Required
 	.setAmountExVat(100.00)                //Optional, see info above
 	.setAmountIncVat(125.00)               //Optional, see info above
-	.setVatPercent(25)                     //Optional, see info above
+	.setVatPercent(25.00)                  //Optional, see info above
 	.setArticleNumber("1")                 //Optional
 	.setDescription("Specification")       //Optional
 	.setName("Prod")                       //Optional
@@ -176,7 +176,7 @@ All products and other items. It´s required to have a minimum of one order row.
 .addFee(Item.shippingFee()
 	.setAmountExVat(50)                    //Optional, see info above
 	.setAmountIncVat(62.50)                //Optional, see info above
-	.setVatPercent(25)                     //Optional, see info above
+	.setVatPercent(25.00)                  //Optional, see info above
 	.setShippingId("33")                   //Optional
 	.setName("shipping")                   //Optional
 	.setDescription("Specification")       //Optional
@@ -189,7 +189,7 @@ All products and other items. It´s required to have a minimum of one order row.
 .addFee(Item.invoiceFee()
 	.setAmountExVat(50)                    //Optional, see info above
 	.setAmountIncVat(62.50)                //Optional, see info above
-	.setVatPercent(25)                     //Optional, see info above
+	.setVatPercent(25.00)       	       //Optional, see info above
 	.setName("Svea fee")                   //Optional
 	.setDescription("Fee for invoice")     //Optional		
 	.setUnit("st")                         //Optional
@@ -319,7 +319,7 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 	.setDescription("Specification")
 	.setName("Prod")
 	.setUnit("st")
-	.setVatPercent(25)
+	.setVatPercent(25.00)
 	.setDiscountPercent(0))
 		
 .setCountryCode(COUNTRYCODE.SE)
@@ -363,7 +363,7 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 	.setDescription("Specification")
 	.setName("Prod")
 	.setUnit("st")
-	.setVatPercent(25)
+	.setVatPercent(25.00)
 	.setDiscountPercent(0))
 		
 .setCountryCode(COUNTRYCODE.SE)
@@ -405,7 +405,7 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 	.setDescription("Specification")
 	.setName("Prod")
 	.setUnit("st")
-	.setVatPercent(25)
+	.setVatPercent(25.00)
 	.setDiscountPercent(0))   
 	
 .setCountryCode(COUNTRYCODE.SE)
@@ -451,8 +451,8 @@ Optional if you want to exclude all card payment methods from *PayPage*.
 Optional if you want to exclude all direct bank payments methods from *PayPage*.
 ```java  
 .usePayPage()
-    .setReturnUrl("http://myurl.se")                       //Required
-    .excludeDirectPaymentMethods()                         //Optional
+    .setReturnUrl("http://myurl.se")                   //Required
+    .excludeDirectPaymentMethods()                     //Optional
     .getPaymentForm();
 ```
 ##### 1.5.3.6 Return
@@ -528,7 +528,7 @@ CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
 .setDescription("Specification")
 .setName("Prod")
 .setUnit("st")
-.setVatPercent(25)
+.setVatPercent(25.00)
 .setDiscountPercent(0))   
 
 .setCountryCode(COUNTRYCODE.SE)
@@ -553,7 +553,7 @@ CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
 	.setDescription("Specification")
 	.setName("Prod")
 	.setUnit("st")
-	.setVatPercent(25)
+	.setVatPercent(25.00)
 	.setDiscountPercent(0))   
 	
 .setCountryCode(COUNTRYCODE.SE)
@@ -607,7 +607,7 @@ GetAddressesResponse response = WebPay.getAddresses(SveaConfig.createTestConfig(
 	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
 	.setOrderTypeInvoice()                                              //See 3.1   
 	.setCountryCode(COUNTRYCODE.SE)                                     //Required
-	.setIndividual("194605092222")                                        //See 3.2   
+	.setIndividual("194605092222")                                      //See 3.2   
 	.doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
@@ -635,13 +635,17 @@ Ex.
 
 ### 4.2 Specify order                                                        
 Continue by adding values for products and other. You can add OrderRow, Fee and Discount. Chose the right Item object as parameter.
-You can use the **add** functions with an Item object or an array of Item objects as parameters. 
+You can use the **add** functions with an Item object or an List of Item objects as parameters. 
 
 ```java
-.addOrderRow(Item.orderRow() ...)
+.addOrderRow(Item.orderRow(). ...)
+
 //or
-orderRows = Item.orderRow()...; 
-.addOrderRow(orderRows)
+
+List<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>(); //or use another preferrable List object
+orderRows.add(Item.orderRow(). ...)
+...
+createOrder.addOrderRows(orderRows);
 ```
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
@@ -652,7 +656,7 @@ All products and other items. It is required to have a minimum of one row.
 .addOrderRow(Item.orderRow()   
    .setQuantity(2)              	    //Required
    .setAmountExVat(100.00)  	        //Required
-   .setVatPercent(25)    	            //Required
+   .setVatPercent(25.00)    	        //Required
    .setArticleNumber("1")               //Optional
    .setDescription("Specification")	    //Optional    
    .setName("Prod")                 	//Optional
@@ -664,7 +668,7 @@ All products and other items. It is required to have a minimum of one row.
 ```java
 .addFee(Item.shippingFee()
 	.setAmountExVat(50)               	//Required
-	.setVatPercent(25)                 	//Required
+	.setVatPercent(25.00)              	//Required
 	.setShippingId("33")               	//Optional
 	.setName("shipping")               	//Optional
 	.setDescription("Specification")   	//Optional        
@@ -675,7 +679,7 @@ All products and other items. It is required to have a minimum of one row.
 ```java
 .addFee(Item.invoiceFee()
 	.setAmountExVat(50)                		//Required
-	.setVatPercent(25)                 		//Required
+	.setVatPercent(25.00)             		//Required
 	.setName("Svea fee")               		//Optional
 	.setDescription("Fee for invoice") 		//Optional       
 	.setUnit("st")                     		//Optional
@@ -703,7 +707,7 @@ DeliverOrderResponse response = WebPay.deliverOrder(SveaConfig.createTestConfig(
 	.setDescription("Specification")
 	.setName("Prod")
 	.setUnit("st")
-	.setVatPercent(25)
+	.setVatPercent(25.00)
 	.setDiscountPercent(0))
 		
 .setOrderId(3434)
@@ -757,10 +761,10 @@ Params:
 ## APPENDIX 
 
 ### PaymentMethods
-Enumeration, used in *usePaymentMethod(paymentMethod)*, *.usePayPage()*, 
+Enumeration, used in *usePaymentMethod(PAYMENTMETHOD paymentMethod)*, *.usePayPage()*, 
 *.includePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods)*, *.includePaymentMethods()*, 
-*.excludeCardPaymentMethods(Collection<PAYMENTMETHOD> paymentMethods)*, *.excludePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods)*,
-*.excludeCardPaymentMethods()*, *.excludeDirectPaymentMethods()* and *.excludeCardPaymentMethods()*.
+*.excludePaymentMethods(Collection<PAYMENTMETHOD> paymentMethods)*,
+*.excludeDirectPaymentMethods()* and *.excludeCardPaymentMethods()*.
 
 | Payment method                   | Description                                   |
 |----------------------------------|-----------------------------------------------|

@@ -2,6 +2,8 @@ package se.sveaekonomi.webpay.integration.response;
 
 import static org.junit.Assert.assertEquals;
 
+import javax.xml.bind.ValidationException;
+
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -46,6 +48,57 @@ public class CreateOrderResponseTest {
         assertEquals("99999", response.customerIdentity.getZipCode());
         assertEquals("Stan", response.customerIdentity.getCity());
     }
+    
+    @Test
+    public void testCalculationWithDecimalsInVatPercent() throws ValidationException, Exception {
+    	                
+        CreateOrderResponse response = WebPay.createOrder()    	
+    	        .addOrderRow(Item.orderRow()
+    	            .setArticleNumber(1)
+    	            .setQuantity(1)
+    	            .setAmountExVat(22.68)    
+    	            .setDescription("Specification")
+    	            .setName("Prod")
+    	            .setVatPercent(12.5)
+    	            .setDiscountPercent(0))              
+    	        .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))        
+    	            .setCountryCode(COUNTRYCODE.SE)
+    	            .setOrderDate("2012-12-12")
+    	            .setClientOrderNumber("33")
+    	            .setCurrency(CURRENCY.SEK)
+    	            .useInvoicePayment()
+    	                .doRequest();
+    	
+    	
+    	assertEquals(true, response.isOrderAccepted());
+    	assertEquals(25.52,response.amount, 0);
+    }
+    
+    @Test
+    public void testFormationOfDecimalsInCalculation() throws ValidationException, Exception {
+    	                
+        CreateOrderResponse response = WebPay.createOrder()    	
+    	        .addOrderRow(Item.orderRow()
+    	            .setArticleNumber(1)
+    	            .setQuantity(2)
+    	            .setAmountExVat(22.68)    
+    	            .setDescription("Specification")
+    	            .setName("Prod")
+    	            .setVatPercent(12.5)
+    	            .setDiscountPercent(0))              
+    	        .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))        
+    	            .setCountryCode(COUNTRYCODE.SE)
+    	            .setOrderDate("2012-12-12")
+    	            .setClientOrderNumber("33")
+    	            .setCurrency(CURRENCY.SEK)
+    	            .useInvoicePayment()
+    	                .doRequest();
+    	
+    	
+    	assertEquals(true, response.isOrderAccepted());
+    	assertEquals(51.03,response.amount, 0);
+    }
+    
     
     @Test
     public void testInvoiceCompanySe() throws Exception {
