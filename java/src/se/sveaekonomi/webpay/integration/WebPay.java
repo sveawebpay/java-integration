@@ -1,6 +1,5 @@
 package se.sveaekonomi.webpay.integration;
 
-import se.sveaekonomi.webpay.integration.config.Config;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;

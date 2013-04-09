@@ -5,8 +5,9 @@ import java.net.URL;
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
+
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
@@ -16,7 +17,8 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public class GetPaymentPlanParams {
        
-    private final SveaConfig conf = new SveaConfig();
+   // private final SveaConfig conf = new SveaConfig();
+	private COUNTRYCODE countryCode;
     private ConfigurationProvider config;
     
     public GetPaymentPlanParams(ConfigurationProvider config) {
@@ -30,6 +32,10 @@ public class GetPaymentPlanParams {
     public URL getWebserviceUrl() {
     	return this.configMode.getWebserviceUrl();
     }*/
+    public GetPaymentPlanParams setCountryCode(COUNTRYCODE countryCode) {
+    	this.countryCode = countryCode;
+    	return this;
+    }
     
     /**
      * Note! This function may change in future updates.
@@ -44,7 +50,13 @@ public class GetPaymentPlanParams {
     }*/
     
     protected SveaAuth getStoreAuthorization() {
-        return conf.getAuthorizationForWebServicePayments("PaymentPlan");
+       // return conf.getAuthorizationForWebServicePayments("PaymentPlan");
+    	SveaAuth auth = new SveaAuth();
+        auth.Username = config.getUsername(PAYMENTTYPE.PAYMENTPLAN, countryCode);
+        auth.Password = config.getPassword(PAYMENTTYPE.PAYMENTPLAN, countryCode);        
+        auth.ClientNumber = config.getClientNumber(PAYMENTTYPE.PAYMENTPLAN, countryCode);        
+        
+        return auth;
     }
     
     private SveaRequest<SveaGetPaymentPlanParams> prepareRequest() {

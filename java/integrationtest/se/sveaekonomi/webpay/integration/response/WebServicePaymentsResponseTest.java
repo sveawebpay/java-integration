@@ -40,6 +40,7 @@ public class WebServicePaymentsResponseTest {
         .setOrderId(orderId)
         .setNumberOfCreditDays(1)
         .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+        .setCountryCode(COUNTRYCODE.SE)
         .deliverInvoiceOrder()
             .doRequest();
         
@@ -188,6 +189,7 @@ public class WebServicePaymentsResponseTest {
         .setNumberOfCreditDays(1)
         .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
         //.deliverInvoiceOrder()
+        .setCountryCode(COUNTRYCODE.SE)
         .deliverPaymentPlanOrder()
             .doRequest();
         
@@ -199,6 +201,7 @@ public class WebServicePaymentsResponseTest {
     public void testResultGetPaymentPlanParams() throws Exception {
         
         PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
+        	.setCountryCode(COUNTRYCODE.SE)	
             .doRequest();
         
         assertEquals(response.isOrderAccepted(), true);
@@ -235,7 +238,9 @@ public class WebServicePaymentsResponseTest {
     
 	@Test
 	 public void testPaymentPlanRequestReturnsAcceptedResult() throws Exception {
-		PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams().doRequest();
+		PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams()
+				.setCountryCode(COUNTRYCODE.SE)
+				.doRequest();
 		String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
 		
 		CreateOrderResponse response = WebPay.createOrder()                
@@ -266,6 +271,7 @@ public class WebServicePaymentsResponseTest {
         .setClientOrderNumber("nr26")
         .setOrderDate("2012-12-12")
         .setCurrency(CURRENCY.SEK)
+        .setCountryCode(COUNTRYCODE.SE)
             .usePaymentPlanPayment(code)  //returns a paymentPlanOrder object                 
             .doRequest();
 				
@@ -273,7 +279,9 @@ public class WebServicePaymentsResponseTest {
 	}
 			
 	 private long createPaymentPlanAndReturnOrderId() throws Exception {
-		PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams().doRequest();
+		PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams()
+				.setCountryCode(COUNTRYCODE.SE)
+				.doRequest();
 		String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
 		
 		CreateOrderResponse response = WebPay.createOrder()                

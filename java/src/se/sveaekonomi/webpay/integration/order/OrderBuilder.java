@@ -10,6 +10,7 @@ import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RelativeDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 
 /**
  * @author klar-sar
@@ -24,6 +25,7 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
     protected List<RelativeDiscountBuilder> relativeDiscountRows = new ArrayList<RelativeDiscountBuilder>();
     
     protected ConfigurationProvider config;
+    protected COUNTRYCODE countryCode;
     
     public OrderBuilder() {
         
@@ -114,6 +116,15 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
 		return (T) this;
 	}
     
+	public COUNTRYCODE getCountryCode() {
+		return this.countryCode;
+	}
+	
+    public T setCountryCode(COUNTRYCODE countryCode) {
+    	this.countryCode = countryCode;
+    	return getGenericThis();
+    }
+	
     public T addOrderRows(List<OrderRowBuilder> itemOrderRow) {
         this.orderRows.addAll(itemOrderRow);
         return getGenericThis();

@@ -64,6 +64,7 @@ public class CloseOrderTest {
         
           CloseOrderResponse closeResponse = WebPay.closeOrder()              
                 .setOrderId(orderId)
+                .setCountryCode(COUNTRYCODE.SE)
                 .closeInvoiceOrder()
          //       .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
                 .doRequest();   

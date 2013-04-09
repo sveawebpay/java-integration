@@ -4,33 +4,33 @@ import java.net.MalformedURLException;
 import java.net.URL;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
+
 
 /**
  */
 public class SveaConfig {
     
-    private String userName;
+  /*  private String userName;
     private String password;
     private int invoiceClientNumber;
     private int paymentPlanClientNumber;
     private String merchantId;
     private String secret;   
-    
+    */
     private static final String SWP_TEST_URL = "https://test.sveaekonomi.se/webpay/payment";
     private static final String SWP_PROD_URL = "https://webpay.sveaekonomi.se/webpay/payment";
     private static final String SWP_TEST_WS_URL = "https://webservices.sveaekonomi.se/webpay_test/SveaWebPay.asmx?WSDL";
     private static final String SWP_PROD_WS_URL = "https://webservices.sveaekonomi.se/webpay/SveaWebPay.asmx?WSDL";
     
     
-    public SveaConfig() {
+   /* public SveaConfig() {
         this.userName = "sverigetest";
         this.password = "sverigetest";
         this.invoiceClientNumber = 79021;
         this.paymentPlanClientNumber = 59999;
         this.merchantId = "1175";
         this.secret = "d153477288051d6001adf0648405e0fcfaa3ee2a8dc90dd3151341a1d68b1a4388616585fe7bc15cd06882070b0d92aa92de6cde1e7a21dc7e65e81cee6af43f";
-    } 
+    }*/ 
         
 	public static URL getProdWebserviceUrl() {
 		return getUrlFromString(SWP_PROD_WS_URL);
@@ -76,15 +76,15 @@ public class SveaConfig {
     	return new SveaConfig();
     }*/
 
-   public static Config createProductionConfig() {
+/*   public static Config createProductionConfig() {
         return new ProductionConfig();
        }
 
        public static Config createTestConfig() {
         return new TestConfig();
        }
-  
-    public SveaAuth getAuthorizationForWebServicePayments(String type) {
+  */
+  /*  public SveaAuth getAuthorizationForWebServicePayments(String type) {
         SveaAuth auth = new SveaAuth();
         auth.Username = this.userName;
         auth.Password = this.password;
@@ -103,7 +103,7 @@ public class SveaConfig {
             this.invoiceClientNumber = clientNumber;
         else
             this.paymentPlanClientNumber = clientNumber;        
-    }
+    }*/
     
 /*    public String getMerchantId() {
         return this.merchantId;

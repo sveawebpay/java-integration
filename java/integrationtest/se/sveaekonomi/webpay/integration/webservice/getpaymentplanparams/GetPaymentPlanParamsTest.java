@@ -10,6 +10,7 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.webservice.CampaignCode;
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 
 public class GetPaymentPlanParamsTest {
     
@@ -18,6 +19,7 @@ public class GetPaymentPlanParamsTest {
         try {
             PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())                
                 //.setPasswordBasedAuthorization("sverigetest", "sverigetest", 59999)
+            	.setCountryCode(COUNTRYCODE.SE)
                 .doRequest();
             
             List<CampaignCode> campaignCodes = response.getCampaignCodes();

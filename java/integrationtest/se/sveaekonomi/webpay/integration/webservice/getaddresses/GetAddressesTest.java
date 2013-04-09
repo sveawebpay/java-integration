@@ -16,7 +16,6 @@ public class GetAddressesTest {
             GetAddressesResponse response = WebPay.getAddresses()                
                 .setCountryCode(COUNTRYCODE.SE)
                 .setIndividual("460509-2222")
-                //.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
                 .doRequest();
             
             assertEquals(true, response.isOrderAccepted());

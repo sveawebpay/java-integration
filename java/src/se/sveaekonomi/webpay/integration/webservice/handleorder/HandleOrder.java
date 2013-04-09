@@ -34,7 +34,13 @@ public class HandleOrder {
     }    
         
     protected SveaAuth getStoreAuthorization() {
-        return conf.getAuthorizationForWebServicePayments(order.getOrderType());
+      //  return conf.getAuthorizationForWebServicePayments(order.getOrderType());
+    	 SveaAuth auth = new SveaAuth();
+    	 PAYMENTTYPE type = (order.getOrderType() == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
+         auth.Username = order.getConfig().getUsername(type, order.getCountryCode());
+         auth.Password = order.getConfig().getPassword(type, order.getCountryCode());
+         auth.ClientNumber = order.getConfig().getClientNumber(type, order.getCountryCode());
+         return auth;
     }
     
     /**
@@ -44,10 +50,10 @@ public class HandleOrder {
      * @param clientNumber
      * @return
      */
-    public HandleOrder setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
+ /*   public HandleOrder setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
         conf.setPasswordBasedAuthorization(userName, password, clientNumber, order.getOrderType());    
         return this;
-    }
+    }*/
     
     public String validateOrder() {
         try{
