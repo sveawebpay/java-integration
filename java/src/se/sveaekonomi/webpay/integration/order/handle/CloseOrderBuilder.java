@@ -1,9 +1,6 @@
 package se.sveaekonomi.webpay.integration.order.handle;
 
-import java.net.URL;
-
-import se.sveaekonomi.webpay.integration.config.Config;
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
+import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 
 /**
@@ -15,21 +12,23 @@ public class CloseOrderBuilder {
     
     private Long orderId;
     private String orderType;
-    public final SveaConfig config = new SveaConfig();
-    
-    private Config configMode;
-    
-    public CloseOrderBuilder(Config configMode) {
-    	this.configMode = configMode;
+    private final ConfigurationProvider config;
+        
+    public CloseOrderBuilder(ConfigurationProvider config) {
+    	this.config = config;
     }
     
-    public URL getPayPageUrl() {
+    public ConfigurationProvider getConfig() {
+    	return this.config;
+    }
+    
+ /*   public URL getPayPageUrl() {
     	return this.configMode.getPayPageUrl();
     }
     
     public URL getWebserviceUrl() {
     	return this.configMode.getWebserviceUrl();
-    }
+    }*/
     
     public Long getOrderId() {
         return orderId;

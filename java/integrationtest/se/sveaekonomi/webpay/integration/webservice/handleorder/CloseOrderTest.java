@@ -65,7 +65,7 @@ public class CloseOrderTest {
           CloseOrderResponse closeResponse = WebPay.closeOrder()              
                 .setOrderId(orderId)
                 .closeInvoiceOrder()
-                .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
+         //       .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
                 .doRequest();   
          
             assertEquals(true, closeResponse.isOrderAccepted());      

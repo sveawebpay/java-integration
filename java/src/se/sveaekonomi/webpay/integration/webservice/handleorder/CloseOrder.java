@@ -7,6 +7,7 @@ import org.w3c.dom.NodeList;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.handle.CloseOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCloseOrder;
@@ -24,7 +25,7 @@ public class CloseOrder {
     }
 
     protected SveaAuth getStoreAuthorization() {
-        return order.config.getAuthorizationForWebServicePayments(this.order.getOrderType());        
+        return conf.getAuthorizationForWebServicePayments(this.order.getOrderType());        
     }
     
     /**
@@ -34,10 +35,10 @@ public class CloseOrder {
      * @param clientNumber
      * @return
      */
-    public CloseOrder setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
+ /*   public CloseOrder setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
         conf.setPasswordBasedAuthorization(userName, password, clientNumber, order.getOrderType());    
         return this;
-    }
+    }*/
     
     public SveaRequest<SveaCloseOrder> prepareRequest() {
         SveaCloseOrder sveaCloseOrder = new SveaCloseOrder();
@@ -53,7 +54,7 @@ public class CloseOrder {
     }
     
     public CloseOrderResponse doRequest() throws Exception {       
-    	URL url = order.getWebserviceUrl();
+    	URL url = order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE);
         SveaRequest<SveaCloseOrder> request = this.prepareRequest();
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();

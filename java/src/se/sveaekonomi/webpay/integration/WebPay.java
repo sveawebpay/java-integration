@@ -38,7 +38,7 @@ public class WebPay {
      * @param config
      * @return CloseOrderBuilder
      */
-    public static CloseOrderBuilder closeOrder(Config config) {
+    public static CloseOrderBuilder closeOrder(ConfigurationProvider config) {
         return new CloseOrderBuilder(config);
     }
     
@@ -47,7 +47,7 @@ public class WebPay {
      * @return CloseOrderBuilder
      */
     public static CloseOrderBuilder closeOrder() {
-        return closeOrder(SveaConfig.createTestConfig());
+        return closeOrder(SveaConfig.getDefaultConfig());
     }
     
     /**
