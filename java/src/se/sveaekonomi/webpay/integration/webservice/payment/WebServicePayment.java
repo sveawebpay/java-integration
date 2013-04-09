@@ -14,6 +14,7 @@ import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.WebServiceOrderValidator;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebserviceRowFormatter;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
@@ -28,7 +29,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 public abstract class WebServicePayment {
     
     protected CreateOrderBuilder createOrderBuilder;
-    protected String orderType;
+    protected PAYMENTTYPE orderType;
     public SveaCreateOrderInformation orderInformation;   
     
     public WebServicePayment(CreateOrderBuilder orderBuilder) {
@@ -37,7 +38,12 @@ public abstract class WebServicePayment {
     }
     
     private SveaAuth getPasswordBasedAuthorization() {              
-        return createOrderBuilder.config.getAuthorizationForWebServicePayments(this.orderType);   
+      //  return createOrderBuilder.config.getAuthorizationForWebServicePayments(this.orderType);
+    	SveaAuth auth = new SveaAuth();
+    	auth.Username = this.createOrderBuilder.getConfig().getUsername(this.orderType, this.createOrderBuilder.getCountryCode());
+    	auth.Password = this.createOrderBuilder.getConfig().getPassword(this.orderType, this.createOrderBuilder.getCountryCode());
+    	auth.ClientNumber = this.createOrderBuilder.getConfig().getClientNumber(this.orderType, this.createOrderBuilder.getCountryCode());
+    	return auth;
     }
     
     /**
@@ -47,10 +53,10 @@ public abstract class WebServicePayment {
      * @param clientNumber
      * @return
      */
-    public WebServicePayment setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
-        createOrderBuilder.config.setPasswordBasedAuthorization(userName, password, clientNumber, orderType);    
+/*    public WebServicePayment setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
+        createOrderBuilder.config.setPasswordBasedAuthorization(userName, password, clientNumber, orderType.toString());    
         return this;
-    }
+    }*/
     
     public String getXML() throws Exception {
         SveaRequest<SveaCreateOrder> request = this.prepareRequest();
@@ -113,7 +119,7 @@ public abstract class WebServicePayment {
             throw e;
         }
         
-        URL url = createOrderBuilder.getWebserviceUrl();
+        URL url = this.createOrderBuilder.getConfig().getEndPoint(this.orderType);//createOrderBuilder.getWebserviceUrl();
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
         NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url.toString());

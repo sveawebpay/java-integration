@@ -14,6 +14,7 @@ import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 
 /*******************************************************************************
@@ -110,11 +111,11 @@ public abstract class HostedPayment {
      * @param secret
      * @return
      */
-    public HostedPayment setMerchantIdBasedAuthorization(int merchantId, String secret) {
+ /*  public HostedPayment setMerchantIdBasedAuthorization(int merchantId, String secret) {
         createOrderBuilder.config.setMerchantId(String.valueOf(merchantId));
         createOrderBuilder.config.setSecretWord(secret);
         return this;
-    }
+    }*/
     
     public PaymentForm getPaymentForm() throws Exception {
         calculateRequestValues();
@@ -130,14 +131,15 @@ public abstract class HostedPayment {
         PaymentForm form = new PaymentForm();        
         form.setXmlMessage(xml);          
 
-        form.setMerchantId(createOrderBuilder.config.getMerchantId());
-        form.setSecretWord(createOrderBuilder.config.getSecretWord());
+       // form.setMerchantId(createOrderBuilder.config.getMerchantId());
+        form.setMerchantId(createOrderBuilder.getConfig().getMerchantId(PAYMENTTYPE.HOSTED, createOrderBuilder.getCountryCode()));
+        form.setSecretWord(createOrderBuilder.getConfig().getSecret(PAYMENTTYPE.HOSTED, createOrderBuilder.getCountryCode()));
         if(this.createOrderBuilder.getCountryCode() != null)
             form.setSubmitMessage(this.createOrderBuilder.getCountryCode());
         else 
             form.setSubmitMessage(COUNTRYCODE.SE);
 
-        form.setPayPageUrl(createOrderBuilder.getPayPageUrl());
+        form.setPayPageUrl(createOrderBuilder.getConfig().getEndPoint(PAYMENTTYPE.HOSTED));
         
         form.setForm();
         form.setHtmlFields();

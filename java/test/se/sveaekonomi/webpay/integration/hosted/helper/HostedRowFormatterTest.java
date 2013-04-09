@@ -106,7 +106,7 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatFixedDiscountRowsVat() {
-    	CreateOrderBuilder order = WebPay.createOrder(SveaConfig.createTestConfig())
+    	CreateOrderBuilder order = WebPay.createOrder()
     			.addOrderRow(Item.orderRow()
     					.setAmountExVat(4)
     					.setVatPercent(25)

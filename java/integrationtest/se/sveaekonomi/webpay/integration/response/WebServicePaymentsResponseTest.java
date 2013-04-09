@@ -127,7 +127,7 @@ public class WebServicePaymentsResponseTest {
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.EUR)
                 .useInvoicePayment()// returns an InvoiceOrder object
-                .setPasswordBasedAuthorization("germanytest", "germanytest", 14997)
+              //  .setPasswordBasedAuthorization("germanytest", "germanytest", 14997)
                 //.prepareRequest();
                     .doRequest();
     	 
@@ -162,7 +162,7 @@ public class WebServicePaymentsResponseTest {
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.EUR)
                 .useInvoicePayment()// returns an InvoiceOrder object
-                .setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)
+               // .setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)
                     .doRequest();
     	 
     	assertEquals(false, response.isIndividualIdentity);
@@ -238,7 +238,7 @@ public class WebServicePaymentsResponseTest {
 		PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams().doRequest();
 		String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
 		
-		CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())                
+		CreateOrderResponse response = WebPay.createOrder()                
         .addOrderRow(Item.orderRow()
             .setArticleNumber(1)
             .setQuantity(2)
@@ -276,7 +276,7 @@ public class WebServicePaymentsResponseTest {
 		PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams().doRequest();
 		String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
 		
-		CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())                
+		CreateOrderResponse response = WebPay.createOrder()                
        .addOrderRow(Item.orderRow()
            .setArticleNumber(1)
            .setQuantity(2)

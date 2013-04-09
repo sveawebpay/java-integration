@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration;
 
 import se.sveaekonomi.webpay.integration.config.Config;
+import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CloseOrderBuilder;
@@ -20,7 +21,7 @@ public class WebPay {
 	 * @param config
 	 * @return CreateOrderBuilder
 	 */
-    public static CreateOrderBuilder createOrder(Config config) {
+    public static CreateOrderBuilder createOrder(ConfigurationProvider config) {
         return new CreateOrderBuilder(config);
     }
     
@@ -29,7 +30,7 @@ public class WebPay {
      * @return CreateOrderBuilder
      */
     public static CreateOrderBuilder createOrder() {    	
-    	return createOrder(SveaConfig.createTestConfig()); 
+    	return createOrder(SveaConfig.getDefaultConfig()); 
     }     
     
     /**

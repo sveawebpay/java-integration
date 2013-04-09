@@ -152,7 +152,7 @@ public class CreateOrderResponseTest {
            .setOrderDate("2012-12-12")
            .setCurrency(CURRENCY.EUR)
            .useInvoicePayment()// returns an InvoiceOrder object
-           .setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)             
+        //   .setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)             
                .doRequest();  
         
           assertEquals(true, response.isOrderAccepted());
