@@ -54,7 +54,7 @@ public class WebPay {
      * Starts building request for deliver order.
      * @return DeliverOrderBuilder
      */
-    public static DeliverOrderBuilder deliverOrder(Config config) {
+    public static DeliverOrderBuilder deliverOrder(ConfigurationProvider config) {
         return new DeliverOrderBuilder(config);
     }
     
@@ -63,7 +63,7 @@ public class WebPay {
      * @return DeliverOrderBuilder
      */
     public static DeliverOrderBuilder deliverOrder() {
-    	return deliverOrder(SveaConfig.createTestConfig());
+    	return deliverOrder(SveaConfig.getDefaultConfig());
     }
     
     /**

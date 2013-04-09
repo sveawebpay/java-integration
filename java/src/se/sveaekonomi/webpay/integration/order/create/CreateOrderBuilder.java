@@ -31,9 +31,7 @@ import se.sveaekonomi.webpay.integration.webservice.payment.PaymentPlanPayment;
 public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
         
     private OrderValidator validator;
-   
-    private ConfigurationProvider config;
-
+       
     private String clientOrderNumber;
     private String customerReference;
     private String orderDate;
@@ -61,9 +59,7 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     }
    */ 
     
-    public ConfigurationProvider getConfig() {
-    	return this.config;
-    }
+   
         
     public OrderValidator getValidator() {
         return validator;

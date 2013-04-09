@@ -3,6 +3,7 @@ package se.sveaekonomi.webpay.integration.order;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.order.row.FixedDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
@@ -22,8 +23,14 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
     protected List<FixedDiscountBuilder> fixedDiscountRows = new ArrayList<FixedDiscountBuilder>();
     protected List<RelativeDiscountBuilder> relativeDiscountRows = new ArrayList<RelativeDiscountBuilder>();
     
+    protected ConfigurationProvider config;
+    
     public OrderBuilder() {
         
+    }
+    
+    public ConfigurationProvider getConfig() {
+    	return this.config;
     }
     
     public List<OrderRowBuilder> getOrderRows() {
