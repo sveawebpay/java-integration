@@ -8,7 +8,6 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.HostedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;

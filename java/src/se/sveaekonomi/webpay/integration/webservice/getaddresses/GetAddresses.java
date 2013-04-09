@@ -93,22 +93,8 @@ public class GetAddresses {
     public String getOrderType() {
         return orderType;
     }
-    
-    
-    /**
-     * Note! This function may change in future updates.
-     * @param userName
-     * @param password
-     * @param clientNumber
-     * @return
-     */
- /*   public GetAddresses setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
-        conf.setPasswordBasedAuthorization(userName, password, clientNumber, orderType);    
-        return this;
-    }*/
-    
+           
     private SveaAuth getStoreAuthorization() {
-       // return conf.getAuthorizationForWebServicePayments("Invoice");
     	 SveaAuth auth = new SveaAuth();
     	 PAYMENTTYPE type = (orderType == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
          auth.Username = config.getUsername(type, countryCode);

@@ -21,21 +21,10 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
     private String distributionType;
     private String invoiceIdToCredit;
     private Integer numberOfCreditDays;
-   // private ConfigurationProvider config;
-    //private Config configMode;
-    
     
     public DeliverOrderBuilder(ConfigurationProvider config) {
         this.config = config;
     }
-
-  /*  public URL getPayPageUrl() {
-    	return this.configMode.getPayPageUrl();
-    }
-    
-    public URL getWebserviceUrl() {
-    	return this.configMode.getWebserviceUrl();
-    }*/
     
     public HandleOrderValidator getValidator() {
         return validator;

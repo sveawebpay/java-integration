@@ -6,7 +6,6 @@ import javax.xml.bind.ValidationException;
 
 import org.w3c.dom.NodeList;
 
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
 import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
@@ -27,14 +26,12 @@ public class HandleOrder {
     private SveaDeliverOrder sveaDeliverOrder;
     private SveaDeliverOrderInformation orderInformation;
     
-    private final SveaConfig conf = new SveaConfig();
     
     public HandleOrder(DeliverOrderBuilder orderBuilder) {
         this.order =  orderBuilder;
     }    
         
-    protected SveaAuth getStoreAuthorization() {
-      //  return conf.getAuthorizationForWebServicePayments(order.getOrderType());
+    protected SveaAuth getStoreAuthorization() {    
     	 SveaAuth auth = new SveaAuth();
     	 PAYMENTTYPE type = (order.getOrderType() == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
          auth.Username = order.getConfig().getUsername(type, order.getCountryCode());
@@ -43,18 +40,7 @@ public class HandleOrder {
          return auth;
     }
     
-    /**
-     * Note! This function may change in future updates.
-     * @param userName
-     * @param password
-     * @param clientNumber
-     * @return
-     */
- /*   public HandleOrder setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
-        conf.setPasswordBasedAuthorization(userName, password, clientNumber, order.getOrderType());    
-        return this;
-    }*/
-    
+
     public String validateOrder() {
         try{
         HandleOrderValidator validator = new HandleOrderValidator();

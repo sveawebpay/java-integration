@@ -45,7 +45,7 @@ public class InvoicePaymentTest {
              .setClientOrderNumber("33")
              .setCurrency(CURRENCY.SEK)
              .useInvoicePayment()
-        //	returns an InvoicePayment object
+             //	returns an InvoicePayment object
              	.prepareRequest();
         
         //CustomerIdentity            
@@ -169,8 +169,7 @@ public class InvoicePaymentTest {
         .setClientOrderNumber("33")
         .setCurrency(CURRENCY.SEK)
         .useInvoicePayment()
-        //returns an InvoicePayment object  
-        //    .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)
+        //returns an InvoicePayment object     
             .prepareRequest();
             
         assertEquals(79021, request.request.Auth.ClientNumber, 0);
@@ -736,7 +735,7 @@ public class InvoicePaymentTest {
    
     @Test
     public void testInvoiceRequestXML() throws Exception {
-        //String expectedXML = "<web:request><web:Auth><web:ClientNumber>79021</web:ClientNumber><web:Username>sverigetest</web:Username><web:Password>sverigetest</web:Password></web:Auth><web:CreateOrderInformation><web:ClientOrderNumber>33</web:ClientOrderNumber><web:OrderRows><web:OrderRow><web:ArticleNumber>1</web:ArticleNumber><web:Description>Prod: Specification</web:Description><web:PricePerUnit>100.0</web:PricePerUnit><web:NumberOfUnits>2</web:NumberOfUnits><web:Unit>st</web:Unit><web:VatPercent>25.0</web:VatPercent><web:DiscountPercent>0</web:DiscountPercent></web:OrderRow><web:OrderRow><web:ArticleNumber>1</web:ArticleNumber><web:Description>Prod: Specification</web:Description><web:PricePerUnit>100.0</web:PricePerUnit><web:NumberOfUnits>2</web:NumberOfUnits><web:VatPercent>25.0</web:VatPercent><web:DiscountPercent>0</web:DiscountPercent></web:OrderRow></web:OrderRows><web:CustomerIdentity><web:NationalIdNumber>194609052222</web:NationalIdNumber><web:Email>test@svea.com</web:Email><web:PhoneNumber>999999</web:PhoneNumber><web:IpAddress>123.123.123</web:IpAddress><web:FullName>Tess Testson</web:FullName><web:Street>Gatan</web:Street><web:CoAddress></web:CoAddress><web:ZipCode>9999</web:ZipCode><web:HouseNumber>23</web:HouseNumber><web:Locality>Stan</web:Locality><web:CountryCode>SE</web:CountryCode><web:CustomerType>Individual</web:CustomerType></web:CustomerIdentity><web:OrderDate>2012-12-12</web:OrderDate><web:AddressSelector></web:AddressSelector><web:CustomerReference>33</web:CustomerReference><web:OrderType>Invoice</web:OrderType></web:CreateOrderInformation></web:request>";
+    
         String expectedXML = "<web:request><web:Auth><web:ClientNumber>79021</web:ClientNumber><web:Username>sverigetest</web:Username><web:Password>sverigetest</web:Password></web:Auth><web:CreateOrderInformation><web:ClientOrderNumber>33</web:ClientOrderNumber><web:OrderRows><web:OrderRow><web:ArticleNumber>1</web:ArticleNumber><web:Description>Prod: Specification</web:Description><web:PricePerUnit>100.0</web:PricePerUnit><web:NumberOfUnits>2</web:NumberOfUnits><web:Unit></web:Unit><web:VatPercent>25.0</web:VatPercent><web:DiscountPercent>0</web:DiscountPercent></web:OrderRow><web:OrderRow><web:ArticleNumber>1</web:ArticleNumber><web:Description>Prod: Specification</web:Description><web:PricePerUnit>100.0</web:PricePerUnit><web:NumberOfUnits>2</web:NumberOfUnits><web:Unit>st</web:Unit><web:VatPercent>25.0</web:VatPercent><web:DiscountPercent>0</web:DiscountPercent></web:OrderRow></web:OrderRows><web:CustomerIdentity><web:NationalIdNumber>194605092222</web:NationalIdNumber><web:Email></web:Email><web:PhoneNumber></web:PhoneNumber><web:IpAddress></web:IpAddress><web:FullName></web:FullName><web:Street></web:Street><web:CoAddress></web:CoAddress><web:ZipCode></web:ZipCode><web:HouseNumber></web:HouseNumber><web:Locality></web:Locality><web:CountryCode>SE</web:CountryCode><web:CustomerType>Individual</web:CustomerType></web:CustomerIdentity><web:OrderDate>2012-12-12</web:OrderDate><web:AddressSelector></web:AddressSelector><web:CustomerReference>33</web:CustomerReference><web:OrderType>Invoice</web:OrderType></web:CreateOrderInformation></web:request>";
         String xml = WebPay.createOrder()        	
         .addOrderRow(Item.orderRow()

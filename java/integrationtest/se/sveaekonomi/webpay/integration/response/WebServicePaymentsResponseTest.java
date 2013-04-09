@@ -188,7 +188,6 @@ public class WebServicePaymentsResponseTest {
         .setOrderId(orderId)
         .setNumberOfCreditDays(1)
         .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-        //.deliverInvoiceOrder()
         .setCountryCode(COUNTRYCODE.SE)
         .deliverPaymentPlanOrder()
             .doRequest();
@@ -200,7 +199,7 @@ public class WebServicePaymentsResponseTest {
     @Test
     public void testResultGetPaymentPlanParams() throws Exception {
         
-        PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
+        PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultTestConfig())
         	.setCountryCode(COUNTRYCODE.SE)	
             .doRequest();
         

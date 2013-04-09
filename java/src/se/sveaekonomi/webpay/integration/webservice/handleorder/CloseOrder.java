@@ -21,29 +21,15 @@ public class CloseOrder {
     public CloseOrder(CloseOrderBuilder order) {
         this.order = order;
     }
-    
-    
+        
     protected SveaAuth getStoreAuthorization() {
-        //return conf.getAuthorizationForWebServicePayments(this.order.getOrderType());
     	 SveaAuth auth = new SveaAuth();
     	 PAYMENTTYPE type = (order.getOrderType() == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
          auth.Username = order.getConfig().getUsername(type, order.getCountryCode());
          auth.Password = order.getConfig().getPassword(type, order.getCountryCode());
          auth.ClientNumber = order.getConfig().getClientNumber(type, order.getCountryCode());
          return auth;
-    }
-    
-    /**
-     * Note! This function may change in future updates.
-     * @param userName
-     * @param password
-     * @param clientNumber
-     * @return
-     */
- /*   public CloseOrder setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
-        conf.setPasswordBasedAuthorization(userName, password, clientNumber, order.getOrderType());    
-        return this;
-    }*/
+    }    
     
     public SveaRequest<SveaCloseOrder> prepareRequest() {
         SveaCloseOrder sveaCloseOrder = new SveaCloseOrder();

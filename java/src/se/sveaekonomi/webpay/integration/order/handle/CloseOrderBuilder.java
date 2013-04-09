@@ -23,14 +23,6 @@ public class CloseOrderBuilder {
     	return this.config;
     }
     
- /*   public URL getPayPageUrl() {
-    	return this.configMode.getPayPageUrl();
-    }
-    
-    public URL getWebserviceUrl() {
-    	return this.configMode.getWebserviceUrl();
-    }*/
-    
     public Long getOrderId() {
         return orderId;
     }

@@ -56,11 +56,6 @@ public abstract class HostedPayment {
         return excludedPaymentMethods;
     }
     
-   /* public HostedPayment setExcludedPaymentMethods(List<PAYMENTMETHOD> paymentMethods) {
-        this.excludedPaymentMethods.addAll(paymentMethods);
-        return this;
-    }*/
-
     public Long getAmount() {
         return amount;
     }
@@ -105,18 +100,6 @@ public abstract class HostedPayment {
         configureExcludedPaymentMethods();
     }
     
-    /**
-     * Note! This function may change in future updates.
-     * @param merchantId
-     * @param secret
-     * @return
-     */
- /*  public HostedPayment setMerchantIdBasedAuthorization(int merchantId, String secret) {
-        createOrderBuilder.config.setMerchantId(String.valueOf(merchantId));
-        createOrderBuilder.config.setSecretWord(secret);
-        return this;
-    }*/
-    
     public PaymentForm getPaymentForm() throws Exception {
         calculateRequestValues();
         HostedXmlBuilder xmlBuilder = new HostedXmlBuilder();
@@ -131,7 +114,6 @@ public abstract class HostedPayment {
         PaymentForm form = new PaymentForm();        
         form.setXmlMessage(xml);          
 
-       // form.setMerchantId(createOrderBuilder.config.getMerchantId());
         form.setMerchantId(createOrderBuilder.getConfig().getMerchantId(PAYMENTTYPE.HOSTED, createOrderBuilder.getCountryCode()));
         form.setSecretWord(createOrderBuilder.getConfig().getSecret(PAYMENTTYPE.HOSTED, createOrderBuilder.getCountryCode()));
         if(this.createOrderBuilder.getCountryCode() != null)

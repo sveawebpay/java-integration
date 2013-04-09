@@ -43,23 +43,10 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     private Boolean sendAutomaticGiroPaymentForm;
      
     public CustomerIdentity<?> customerIdentity; 
-    
-   // private Config configMode;
-    
+        
     public CreateOrderBuilder(ConfigurationProvider config) {
     	this.config = config;
     }     
-    
- /*   public URL getPayPageUrl() {
-    	return configMode.getPayPageUrl();
-    }
-    
-    public URL getWebserviceUrl() {
-    	return configMode.getWebserviceUrl();
-    }
-   */ 
-    
-   
         
     public OrderValidator getValidator() {
         return validator;

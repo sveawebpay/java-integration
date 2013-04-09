@@ -16,8 +16,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public class GetPaymentPlanParams {
-       
-   // private final SveaConfig conf = new SveaConfig();
+        
 	private COUNTRYCODE countryCode;
     private ConfigurationProvider config;
     
@@ -25,32 +24,12 @@ public class GetPaymentPlanParams {
     	this.config = config;
     }
     
-    /*public URL getPayPageUrl() {
-    	return this.configMode.getPayPageUrl();
-    }
-    
-    public URL getWebserviceUrl() {
-    	return this.configMode.getWebserviceUrl();
-    }*/
     public GetPaymentPlanParams setCountryCode(COUNTRYCODE countryCode) {
     	this.countryCode = countryCode;
     	return this;
     }
-    
-    /**
-     * Note! This function may change in future updates.
-     * @param userName
-     * @param password
-     * @param clientNumber
-     * @return
-     */
- /*   public GetPaymentPlanParams setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
-        conf.setPasswordBasedAuthorization(userName, password, clientNumber, "PaymentPlan"); 
-        return this;
-    }*/
-    
+        
     protected SveaAuth getStoreAuthorization() {
-       // return conf.getAuthorizationForWebServicePayments("PaymentPlan");
     	SveaAuth auth = new SveaAuth();
         auth.Username = config.getUsername(PAYMENTTYPE.PAYMENTPLAN, countryCode);
         auth.Password = config.getPassword(PAYMENTTYPE.PAYMENTPLAN, countryCode);        
