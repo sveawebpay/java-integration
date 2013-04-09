@@ -4,9 +4,10 @@ import java.net.URL;
 
 import org.w3c.dom.NodeList;
 
-import se.sveaekonomi.webpay.integration.config.Config;
+import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaGetPaymentPlanParams;
@@ -16,19 +17,19 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 public class GetPaymentPlanParams {
        
     private final SveaConfig conf = new SveaConfig();
-    private Config configMode;
+    private ConfigurationProvider config;
     
-    public GetPaymentPlanParams(Config config) {
-    	this.configMode = config;
+    public GetPaymentPlanParams(ConfigurationProvider config) {
+    	this.config = config;
     }
     
-    public URL getPayPageUrl() {
+    /*public URL getPayPageUrl() {
     	return this.configMode.getPayPageUrl();
     }
     
     public URL getWebserviceUrl() {
     	return this.configMode.getWebserviceUrl();
-    }
+    }*/
     
     /**
      * Note! This function may change in future updates.
@@ -37,10 +38,10 @@ public class GetPaymentPlanParams {
      * @param clientNumber
      * @return
      */
-    public GetPaymentPlanParams setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
+ /*   public GetPaymentPlanParams setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
         conf.setPasswordBasedAuthorization(userName, password, clientNumber, "PaymentPlan"); 
         return this;
-    }
+    }*/
     
     protected SveaAuth getStoreAuthorization() {
         return conf.getAuthorizationForWebServicePayments("PaymentPlan");
@@ -60,7 +61,7 @@ public class GetPaymentPlanParams {
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml = xmlBuilder.getGetPaymentPlanParamsXml(request.request);
-        URL url = this.getWebserviceUrl();
+        URL url = this.config.getEndPoint(PAYMENTTYPE.PAYMENTPLAN);
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("GetPaymentPlanParamsEu", xml);
         NodeList soapResponse = soapBuilder.createGetPaymentPlanParamsEuRequest(soapMessage, url.toString());

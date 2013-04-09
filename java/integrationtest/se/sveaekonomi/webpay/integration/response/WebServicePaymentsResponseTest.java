@@ -198,7 +198,7 @@ public class WebServicePaymentsResponseTest {
     @Test
     public void testResultGetPaymentPlanParams() throws Exception {
         
-        PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.createTestConfig())
+        PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
             .doRequest();
         
         assertEquals(response.isOrderAccepted(), true);
@@ -220,7 +220,7 @@ public class WebServicePaymentsResponseTest {
 	public void testResultGetAddresses() throws Exception {
 	    
 	    GetAddressesResponse request = WebPay.getAddresses()
-	        .setCountryCode("SE")
+	        .setCountryCode(COUNTRYCODE.SE)
 	        .setOrderTypeInvoice()
 	        .setIndividual("194605092222")
 	        .doRequest();

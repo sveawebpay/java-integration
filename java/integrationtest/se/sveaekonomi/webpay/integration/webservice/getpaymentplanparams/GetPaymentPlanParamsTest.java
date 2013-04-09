@@ -16,8 +16,8 @@ public class GetPaymentPlanParamsTest {
     @Test
     public void testGetPaymentPlanParams() throws Exception {
         try {
-            PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.createTestConfig())                
-                .setPasswordBasedAuthorization("sverigetest", "sverigetest", 59999)
+            PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())                
+                //.setPasswordBasedAuthorization("sverigetest", "sverigetest", 59999)
                 .doRequest();
             
             List<CampaignCode> campaignCodes = response.getCampaignCodes();

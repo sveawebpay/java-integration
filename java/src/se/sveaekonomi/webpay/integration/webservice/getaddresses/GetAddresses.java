@@ -4,9 +4,10 @@ import java.net.URL;
 
 import org.w3c.dom.NodeList;
 
-import se.sveaekonomi.webpay.integration.config.Config;
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
+import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.response.webservice.GetAddressesResponse;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaGetAddresses;
@@ -26,13 +27,14 @@ public class GetAddresses {
     
     private String ssn;
     private String companyId;
-    private String countryCode;
+    private COUNTRYCODE countryCode;
     private String orderType;   
-    private final SveaConfig conf = new SveaConfig();
-    private Config configMode;
+    //private final SveaConfig conf = new SveaConfig();
+    private ConfigurationProvider config;
+    //private Config configMode;
     
-    public GetAddresses(Config config) {
-    	this.configMode = config;
+    public GetAddresses(ConfigurationProvider config) {
+    	this.config = config;
     }
     
     public String getIndividual() {
@@ -69,11 +71,11 @@ public class GetAddresses {
         return this;
     }
     
-    public String getCountryCode() {
+    public COUNTRYCODE getCountryCode() {
         return countryCode;
     }
     
-    public GetAddresses setCountryCode(String countryCode) {
+    public GetAddresses setCountryCode(COUNTRYCODE countryCode) {
         this.countryCode = countryCode;
         return this;
     }
@@ -100,20 +102,26 @@ public class GetAddresses {
      * @param clientNumber
      * @return
      */
-    public GetAddresses setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
+ /*   public GetAddresses setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
         conf.setPasswordBasedAuthorization(userName, password, clientNumber, orderType);    
         return this;
-    }
+    }*/
     
     private SveaAuth getStoreAuthorization() {
-        return conf.getAuthorizationForWebServicePayments("invoice");
+       // return conf.getAuthorizationForWebServicePayments("Invoice");
+    	 SveaAuth auth = new SveaAuth();
+    	 PAYMENTTYPE type = (orderType == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
+         auth.Username = config.getUsername(type, countryCode);
+         auth.Password = config.getPassword(type, countryCode);
+         auth.ClientNumber = config.getClientNumber(type, countryCode);
+         return auth;
     }
     
     private SveaRequest<SveaGetAddresses> prepareRequest() {
         SveaGetAddresses sveaAddress = new SveaGetAddresses();
         sveaAddress.Auth = getStoreAuthorization();
         sveaAddress.IsCompany = (companyId != null ? true : false);
-        sveaAddress.CountryCode = countryCode;
+        sveaAddress.CountryCode = countryCode.toString();
         sveaAddress.SecurityNumber = ssn;
 
         SveaRequest<SveaGetAddresses> request = new SveaRequest<SveaGetAddresses>();
@@ -134,7 +142,7 @@ public class GetAddresses {
             throw e;
         }
         
-        URL url = configMode.getWebserviceUrl();
+        URL url = config.getEndPoint(orderType == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("GetAddresses", xml);
         NodeList soapResponse = soapBuilder.createGetAddressesEuRequest(soapMessage, url.toString());

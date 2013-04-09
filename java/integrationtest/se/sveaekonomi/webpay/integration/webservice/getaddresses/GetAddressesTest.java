@@ -6,6 +6,7 @@ import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.response.webservice.GetAddressesResponse;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 
 public class GetAddressesTest {
     
@@ -13,9 +14,9 @@ public class GetAddressesTest {
     public void testGetAddresses() throws Exception {
         try {
             GetAddressesResponse response = WebPay.getAddresses()                
-                .setCountryCode("SE")
+                .setCountryCode(COUNTRYCODE.SE)
                 .setIndividual("460509-2222")
-                .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
+                //.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
                 .doRequest();
             
             assertEquals(true, response.isOrderAccepted());

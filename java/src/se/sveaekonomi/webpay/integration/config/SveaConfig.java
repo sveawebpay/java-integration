@@ -105,7 +105,7 @@ public class SveaConfig {
             this.paymentPlanClientNumber = clientNumber;        
     }
     
-    public String getMerchantId() {
+/*    public String getMerchantId() {
         return this.merchantId;
     }
     
@@ -147,5 +147,5 @@ public class SveaConfig {
     
     public void setPaymentPlanClientNumber(int paymentPlanClientNumber) {
         this.paymentPlanClientNumber = paymentPlanClientNumber;
-    }
+    }*/
 }

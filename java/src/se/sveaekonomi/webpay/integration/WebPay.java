@@ -71,7 +71,7 @@ public class WebPay {
      * @param config
      * @return GetPaymentPlanParams
      */
-    public static GetPaymentPlanParams getPaymentPlanParams(Config config) {
+    public static GetPaymentPlanParams getPaymentPlanParams(ConfigurationProvider config) {
         return new GetPaymentPlanParams(config);
     }
     
@@ -80,7 +80,7 @@ public class WebPay {
      * @return GetPaymentPlanParams
      */
     public static GetPaymentPlanParams getPaymentPlanParams() {
-    	return getPaymentPlanParams(SveaConfig.createTestConfig());
+    	return getPaymentPlanParams(SveaConfig.getDefaultConfig());
     }
     
     /**
@@ -88,7 +88,7 @@ public class WebPay {
      * @param config
      * @return GetAddresses
      */
-    public static GetAddresses getAddresses(Config config) {
+    public static GetAddresses getAddresses(ConfigurationProvider config) {
         return new GetAddresses(config);
     }
     
@@ -97,6 +97,6 @@ public class WebPay {
      * @return GetAddresses
      */
     public static GetAddresses getAddresses() {
-        return getAddresses(SveaConfig.createTestConfig());
+        return getAddresses(SveaConfig.getDefaultConfig());
     }
 }
