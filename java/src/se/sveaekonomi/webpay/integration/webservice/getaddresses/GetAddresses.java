@@ -2,6 +2,8 @@ package se.sveaekonomi.webpay.integration.webservice.getaddresses;
 
 import java.net.URL;
 
+import javax.xml.bind.ValidationException;
+
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
@@ -124,9 +126,13 @@ public class GetAddresses {
     	return errors;
     }   
     
-    private SveaRequest<SveaGetAddresses> prepareRequest() {
-        SveaGetAddresses sveaAddress = new SveaGetAddresses();
-        validateRequest();
+    private SveaRequest<SveaGetAddresses> prepareRequest() throws ValidationException {
+        String errors = "";
+        errors = validateRequest();
+        if(errors.length() > 0)
+            throw new ValidationException(errors);
+    	
+        SveaGetAddresses sveaAddress = new SveaGetAddresses();        
         sveaAddress.Auth = getStoreAuthorization();
         sveaAddress.IsCompany = (companyId != null ? true : false);
         sveaAddress.CountryCode = countryCode.toString();

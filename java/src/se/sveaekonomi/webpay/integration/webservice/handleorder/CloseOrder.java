@@ -41,11 +41,11 @@ public class CloseOrder {
     }
     
     public SveaRequest<SveaCloseOrder> prepareRequest() throws ValidationException {
-        SveaCloseOrder sveaCloseOrder = new SveaCloseOrder();
-        
         String errors = validateRequest();
         if(errors != "")
         	throw new ValidationException(errors);
+        
+        SveaCloseOrder sveaCloseOrder = new SveaCloseOrder();       
         sveaCloseOrder.Auth = getStoreAuthorization();
         SveaCloseOrderInformation orderInfo = new SveaCloseOrderInformation();
         orderInfo.SveaOrderId = order.getOrderId();

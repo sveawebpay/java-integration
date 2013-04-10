@@ -2,6 +2,8 @@ package se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams;
 
 import java.net.URL;
 
+import javax.xml.bind.ValidationException;
+
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
@@ -49,9 +51,14 @@ public class GetPaymentPlanParams {
     	return "";
     }
     
-    private SveaRequest<SveaGetPaymentPlanParams> prepareRequest() {
+    private SveaRequest<SveaGetPaymentPlanParams> prepareRequest() throws ValidationException {
+        String errors = "";
+        errors = validateRequest();
+        if(errors.length() > 0)
+            throw new ValidationException(errors);
+        
         SveaGetPaymentPlanParams params = new SveaGetPaymentPlanParams();
-        validateRequest();
+        
         params.Auth = getStoreAuthorization();
         SveaRequest<SveaGetPaymentPlanParams> request = new SveaRequest<SveaGetPaymentPlanParams>();
         request.request = params;

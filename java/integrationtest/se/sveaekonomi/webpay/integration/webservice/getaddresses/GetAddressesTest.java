@@ -16,6 +16,7 @@ public class GetAddressesTest {
             GetAddressesResponse response = WebPay.getAddresses()                
                 .setCountryCode(COUNTRYCODE.SE)
                 .setIndividual("460509-2222")
+                .setOrderTypeInvoice()
                 .doRequest();
             
             assertEquals(true, response.isOrderAccepted());
