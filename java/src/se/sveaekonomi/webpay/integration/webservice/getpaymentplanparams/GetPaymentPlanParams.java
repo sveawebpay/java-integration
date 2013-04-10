@@ -24,6 +24,11 @@ public class GetPaymentPlanParams {
     	this.config = config;
     }
     
+    /**
+     * Required
+     * @param countryCode
+     * @return GetPaymentPlanParams
+     */
     public GetPaymentPlanParams setCountryCode(COUNTRYCODE countryCode) {
     	this.countryCode = countryCode;
     	return this;
@@ -38,8 +43,15 @@ public class GetPaymentPlanParams {
         return auth;
     }
     
+    public String validateRequest() {
+    	if(this.countryCode == null)
+    		return "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+    	return "";
+    }
+    
     private SveaRequest<SveaGetPaymentPlanParams> prepareRequest() {
         SveaGetPaymentPlanParams params = new SveaGetPaymentPlanParams();
+        validateRequest();
         params.Auth = getStoreAuthorization();
         SveaRequest<SveaGetPaymentPlanParams> request = new SveaRequest<SveaGetPaymentPlanParams>();
         request.request = params;

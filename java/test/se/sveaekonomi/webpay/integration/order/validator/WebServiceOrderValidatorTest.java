@@ -94,7 +94,7 @@ public class WebServiceOrderValidatorTest {
     }
     
     @Test
-    public void testFailOnGetAddresses() throws Exception {
+    public void testFailOnMissingValuesForGetAddresses() throws Exception {
         
         String expectedMessage ="MISSING VALUE - CountryCode is required, use setCountryCode(...).\n" 
         		+"MISSING VALUE - orderType is required, use one of: setOrderTypePaymentPlan() or setOrderTypeInvoice().\n"
@@ -242,7 +242,7 @@ public class WebServiceOrderValidatorTest {
         String expectedMessage = "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use setInitials().\n"
                 + "MISSING VALUE - Birth date is required for individual customers when countrycode is NL. Use setBirthDate().\n"
                 + "MISSING VALUE - Name is required for individual customers when countrycode is NL. Use setName().\n"
-                +"MISSING VALUE - Street address and house number is required for all customers when countrycode is NL. Use setStreetAddress().\n"
+                + "MISSING VALUE - Street address and house number is required for all customers when countrycode is NL. Use setStreetAddress().\n"
                 + "MISSING VALUE - Locality is required for all customers when countrycode is NL. Use setLocality().\n"
                 + "MISSING VALUE - Zip code is required for all customers when countrycode is NL. Use setZipCode().\n"
                 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n" 
@@ -259,7 +259,7 @@ public class WebServiceOrderValidatorTest {
     public void testFailOnMissingCompanyIdentityForNeOrder() throws ValidationException {
         String expectedMessage = "MISSING VALUE - Vat number is required for company customers when countrycode is NL. Use setVatNumber().\n"
         		+ "MISSING VALUE - Company name is required for individual customers when countrycode is NL. Use setName().\n"
-                +"MISSING VALUE - Street address and house number is required for all customers when countrycode is NL. Use setStreetAddress().\n"
+                + "MISSING VALUE - Street address and house number is required for all customers when countrycode is NL. Use setStreetAddress().\n"
                 + "MISSING VALUE - Locality is required for all customers when countrycode is NL. Use setLocality().\n"
                 + "MISSING VALUE - Zip code is required for all customers when countrycode is NL. Use setZipCode().\n"
                 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n" 
@@ -407,6 +407,7 @@ public class WebServiceOrderValidatorTest {
         .setOrderDate("2012-09-09")
        	.usePaymentPlanPayment("camp1");
     	
+    	//check that exception is thrown
     	assertTrue(false);
     	
     	}
