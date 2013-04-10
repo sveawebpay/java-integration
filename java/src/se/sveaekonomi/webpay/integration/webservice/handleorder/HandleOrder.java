@@ -50,6 +50,7 @@ public class HandleOrder {
             return "NullPointer in validaton of HandleOrder";
         }
     }
+    
     public SveaRequest<SveaDeliverOrder> prepareRequest() throws ValidationException {        
         String errors = "";
         errors = validateOrder();

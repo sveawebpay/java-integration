@@ -10,7 +10,7 @@ public class IdentityValidator {
         if(order.getIsCompanyIdentity() && order.getCompanyCustomer().getNationalIdNumber()==null)
             errors += "MISSING VALUE - OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use setCompanyIdNumber().\n";
         else if(!order.getIsCompanyIdentity() && order.getIndividualCustomer().getNationalIdNumber()==null)
-            errors += "MISSING VALUE - Ssn is required for individual customers when countrycode is SE, NO, DK or FI. Use setSsn().\n";
+            errors += "MISSING VALUE - NationalNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use setSsn().\n";
         return errors;
     }
     

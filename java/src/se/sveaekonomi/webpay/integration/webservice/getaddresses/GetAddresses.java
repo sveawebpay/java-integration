@@ -20,37 +20,35 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
  * the invoice/product is to be delivered. It returns an GetAddressesResponse object containing all associated addresses for a specific 
  * SecurityNumber. 
  * Each address gets an "AddressSelector" - has to signify the address. This can
- * be used when Creating order to have the invoice be sent to the specified address. 
+ * be used when creating order to have the invoice be sent to the specified address. 
  *  
  */
 public class GetAddresses {
     
-    private String ssn;
+    private String nationalNumber;
     private String companyId;
     private COUNTRYCODE countryCode;
     private String orderType;   
-    //private final SveaConfig conf = new SveaConfig();
     private ConfigurationProvider config;
-    //private Config configMode;
     
     public GetAddresses(ConfigurationProvider config) {
     	this.config = config;
     }
     
     public String getIndividual() {
-        return ssn;
+        return nationalNumber;
     }
     
     /**
      * Required if customer is Individual
-     * @param type ssn
+     * @param type nationalNumber
      * Sweden: Personnummer,
      * Norway: Personalnumber,
      * Denmark: CPR
      * @return GetAddresses
      */
-    public GetAddresses setIndividual(String ssn) {
-        this.ssn = ssn;
+    public GetAddresses setIndividual(String nationalNumber) {
+        this.nationalNumber = nationalNumber;
         return this;
     }
     
@@ -71,6 +69,10 @@ public class GetAddresses {
         return this;
     }
     
+    /**
+     * Required
+     * @return countryCode
+     */
     public COUNTRYCODE getCountryCode() {
         return countryCode;
     }
@@ -80,11 +82,19 @@ public class GetAddresses {
         return this;
     }
     
+    /**
+     * Required for PaymentPlan type
+     * @return GetAddresses
+     */
     public GetAddresses setOrderTypePaymentPlan() {
         this.orderType = "PaymentPlan";
         return this;        
     }
     
+    /**
+     * Required for Invoice type
+     * @return GetAddresses
+     */
     public GetAddresses setOrderTypeInvoice() {
         this.orderType = "Invoice";
         return this;        
@@ -103,12 +113,24 @@ public class GetAddresses {
          return auth;
     }
     
+    public String validateRequest() {
+    	String errors ="";
+    	if(countryCode == null)
+    		errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+    	if(orderType==null)
+    		errors += "MISSING VALUE - orderType is required, use one of: setOrderTypePaymentPlan() or setOrderTypeInvoice().\n";
+    	if(this.nationalNumber==null && this.companyId==null)
+    		errors += "MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
+    	return errors;
+    }   
+    
     private SveaRequest<SveaGetAddresses> prepareRequest() {
         SveaGetAddresses sveaAddress = new SveaGetAddresses();
+        validateRequest();
         sveaAddress.Auth = getStoreAuthorization();
         sveaAddress.IsCompany = (companyId != null ? true : false);
         sveaAddress.CountryCode = countryCode.toString();
-        sveaAddress.SecurityNumber = ssn;
+        sveaAddress.SecurityNumber = nationalNumber;
 
         SveaRequest<SveaGetAddresses> request = new SveaRequest<SveaGetAddresses>();
         request.request = sveaAddress;

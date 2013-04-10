@@ -16,6 +16,7 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
+import se.sveaekonomi.webpay.integration.webservice.getaddresses.GetAddresses;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 
 public class WebServiceOrderValidatorTest {
@@ -93,8 +94,21 @@ public class WebServiceOrderValidatorTest {
     }
     
     @Test
+    public void testFailOnGetAddresses() throws Exception {
+        
+        String expectedMessage ="MISSING VALUE - CountryCode is required, use setCountryCode(...).\n" 
+        		+"MISSING VALUE - orderType is required, use one of: setOrderTypePaymentPlan() or setOrderTypeInvoice().\n"
+        		+"MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
+       
+        GetAddresses request = WebPay.getAddresses();                
+          //  .setIndividual("460509-2222");
+
+        assertEquals(expectedMessage, request.validateRequest());  
+    }
+    
+    @Test
     public void testFailOnMissingCustomerIdentity() {
-        String expectedMessage = "MISSING VALUE - Ssn is required for individual customers when countrycode is SE, NO, DK or FI. Use setSsn().\n"
+        String expectedMessage = "MISSING VALUE - NationalNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use setSsn().\n"
                 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n" 
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         CreateOrderBuilder order = WebPay.createOrder()
@@ -138,7 +152,7 @@ public class WebServiceOrderValidatorTest {
     
     @Test
     public void testFailOnMissingSsnForSeOrder() {
-        String expectedMessage = "MISSING VALUE - Ssn is required for individual customers when countrycode is SE, NO, DK or FI. Use setSsn().\n"
+        String expectedMessage = "MISSING VALUE - NationalNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use setSsn().\n"
                 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         CreateOrderBuilder order = WebPay.createOrder()
