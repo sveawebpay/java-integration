@@ -2,6 +2,8 @@ package se.sveaekonomi.webpay.integration.webservice.handleorder;
 
 import java.net.URL;
 
+import javax.xml.bind.ValidationException;
+
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.order.handle.CloseOrderBuilder;
@@ -38,9 +40,12 @@ public class CloseOrder {
     	return errors;
     }
     
-    public SveaRequest<SveaCloseOrder> prepareRequest() {
+    public SveaRequest<SveaCloseOrder> prepareRequest() throws ValidationException {
         SveaCloseOrder sveaCloseOrder = new SveaCloseOrder();
-        validateRequest();
+        
+        String errors = validateRequest();
+        if(errors != "")
+        	throw new ValidationException(errors);
         sveaCloseOrder.Auth = getStoreAuthorization();
         SveaCloseOrderInformation orderInfo = new SveaCloseOrderInformation();
         orderInfo.SveaOrderId = order.getOrderId();
@@ -53,7 +58,9 @@ public class CloseOrder {
     }
     
     public CloseOrderResponse doRequest() throws Exception {       
-    	URL url = order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE);
+    	URL url = order.getOrderType()=="Invoice" ? 
+    			order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE) 
+    			: order.getConfig().getEndPoint(PAYMENTTYPE.PAYMENTPLAN);
         SveaRequest<SveaCloseOrder> request = this.prepareRequest();
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();

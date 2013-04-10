@@ -79,11 +79,14 @@ public class WebServiceOrderValidatorTest {
        assertEquals(expectedMessage, orderValidator.validate(order));
     }
     
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
     @Test
-    public void testFailOnMissingCountryCodeOnDeliverOrder() throws ValidationException {
+    public void testFailOnMissingCountryCodeOnDeliverOrder() throws Exception {
         
         String expectedMessage ="MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-        HandleOrder handleOrder = WebPay.deliverOrder()                	
+        try{
+        WebPay.deliverOrder()                	
         .addOrderRow(Item.orderRow()
             .setArticleNumber(1)
             .setQuantity(2)
@@ -97,9 +100,16 @@ public class WebServiceOrderValidatorTest {
         .setOrderId(2345L)
      //   .setCountryCode(COUNTRYCODE.SE)
         .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-        .deliverInvoiceOrder();            
-   
-        assertEquals(expectedMessage, handleOrder.validateOrder());  
+        .deliverInvoiceOrder()
+        .doRequest();            
+    	//check that exception is thrown
+    	assertTrue(false);
+    	
+    	}
+    	catch (ValidationException e) {
+    		assertEquals(e.getMessage(), expectedMessage);
+    	}
+        //assertEquals(expectedMessage, handleOrder.validateOrder());  
     }
     
     @Test
@@ -387,8 +397,8 @@ public class WebServiceOrderValidatorTest {
           assertEquals(expectedMessage, handleOrder.validateOrder()); 
     }
      
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
+//    @Rule
+  //  thrown = ExpectedException.none();
     @Test
     public void testFailCompanyCustomerUsingPaymentPlan() throws ValidationException, Exception {
     	String expectedMessage = "ERROR - CompanyCustomer is not allowed to use payment plan option.";
@@ -470,7 +480,7 @@ public class WebServiceOrderValidatorTest {
         
           CloseOrder closeRequest = WebPay.closeOrder()              
                 .setOrderId(orderId)
-          //    .setCountryCode(COUNTRYCODE.SE)
+          //    .setCountryCode(COUNTRYCODE.SE)                
                 .closeInvoiceOrder();            
          
           String expectedMsg = "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
