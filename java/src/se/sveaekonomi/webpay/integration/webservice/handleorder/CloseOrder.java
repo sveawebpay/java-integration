@@ -31,8 +31,16 @@ public class CloseOrder {
          return auth;
     }    
     
+    public String validateRequest() {
+    	String errors = "";
+    	if(this.order.getCountryCode() == null)
+    		errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+    	return errors;
+    }
+    
     public SveaRequest<SveaCloseOrder> prepareRequest() {
         SveaCloseOrder sveaCloseOrder = new SveaCloseOrder();
+        validateRequest();
         sveaCloseOrder.Auth = getStoreAuthorization();
         SveaCloseOrderInformation orderInfo = new SveaCloseOrderInformation();
         orderInfo.SveaOrderId = order.getOrderId();

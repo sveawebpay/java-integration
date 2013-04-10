@@ -8,16 +8,25 @@ import javax.xml.bind.ValidationException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
+import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.getaddresses.GetAddresses;
+import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
+import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public class WebServiceOrderValidatorTest {
     
@@ -414,5 +423,57 @@ public class WebServiceOrderValidatorTest {
     	catch (SveaWebPayException e) {
     		assertEquals(e.getMessage(), expectedMessage);
     	}
+    }
+    
+    @Test
+    public void testFailOnMissingCountryCodeOfCloseOrder() throws Exception {
+        Long orderId = 0L;
+        SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
+                   
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        .addOrderRow(Item.orderRow()
+            .setArticleNumber(1)
+            .setQuantity(2)
+            .setAmountExVat(100.00)
+            .setDescription("Specification")
+            .setName("Prod")
+            .setUnit("st")
+            .setVatPercent(25)
+            .setDiscountPercent(0))
+        .addCustomerDetails(Item.individualCustomer()          
+            .setNationalIdNumber("194605092222"))        
+        .setCountryCode(COUNTRYCODE.SE)
+        .setClientOrderNumber("33")
+        .setOrderDate("2012-12-12")
+        .setCurrency(CURRENCY.SEK)
+        .useInvoicePayment()
+            .prepareRequest();
+    
+        
+        WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
+                       
+        try {
+            String xml = xmlBuilder.getCreateOrderEuXml(request.request);
+                    
+            String url = SveaConfig.getTestWebserviceUrl().toString();//WebPay.createOrder().get.getConfig().getWebserviceUrl().toString();
+            String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
+            NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
+            CreateOrderResponse response = new CreateOrderResponse(soapResponse);            
+            orderId = response.orderId;
+            
+            assertEquals(true, response.isOrderAccepted());
+        } catch (Exception e) {
+            throw e;
+        }
+       
+        soapBuilder = new SveaSoapBuilder();
+        
+          CloseOrder closeRequest = WebPay.closeOrder()              
+                .setOrderId(orderId)
+          //    .setCountryCode(COUNTRYCODE.SE)
+                .closeInvoiceOrder();            
+         
+          String expectedMsg = "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+          assertEquals(expectedMsg, closeRequest.validateRequest());      
     }
 }
