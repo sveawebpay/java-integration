@@ -31,12 +31,5 @@ public class GetPaymentPlanParamsTest {
             throw e;
         }
     }
-    
-    public void testMissingCountryCodeGetPaymentPlanParams() throws Exception {
-   
-    	String expectedMsg = "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-        GetPaymentPlanParams request = WebPay.getPaymentPlanParams(SveaConfig.getDefaultTestConfig());
-        
-        assertEquals(expectedMsg, request.validateRequest());       
-    }
+       
 }

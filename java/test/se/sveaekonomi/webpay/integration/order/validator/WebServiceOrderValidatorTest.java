@@ -20,7 +20,6 @@ import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
-import se.sveaekonomi.webpay.integration.webservice.getaddresses.GetAddresses;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
@@ -108,8 +107,7 @@ public class WebServiceOrderValidatorTest {
     	}
     	catch (ValidationException e) {
     		assertEquals(e.getMessage(), expectedMessage);
-    	}
-        //assertEquals(expectedMessage, handleOrder.validateOrder());  
+    	}        
     }
     
     @Test
@@ -118,11 +116,17 @@ public class WebServiceOrderValidatorTest {
         String expectedMessage ="MISSING VALUE - CountryCode is required, use setCountryCode(...).\n" 
         		+"MISSING VALUE - orderType is required, use one of: setOrderTypePaymentPlan() or setOrderTypeInvoice().\n"
         		+"MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
-       
-        GetAddresses request = WebPay.getAddresses();                
+        try {
+        	WebPay.getAddresses()
+        		.doRequest();                
           //  .setIndividual("460509-2222");
 
-        assertEquals(expectedMessage, request.validateRequest());  
+        //check that exception is thrown
+      	assertTrue(false);	      	
+	  	}
+	  	catch (ValidationException e) {
+	  		assertEquals(e.getMessage(), expectedMessage);
+	  	}
     }
     
     @Test
@@ -325,6 +329,20 @@ public class WebServiceOrderValidatorTest {
     }
     
     @Test
+    public void testMissingCountryCodeGetPaymentPlanParams() throws Exception {    	   
+    	String expectedMsg = "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+    	try {
+	        WebPay.getPaymentPlanParams(SveaConfig.getDefaultTestConfig())
+	        		.doRequest();
+	        //check that exception is thrown
+	      	assertTrue(false);	      	
+	  	}
+	  	catch (ValidationException e) {
+	  		assertEquals(e.getMessage(), expectedMsg);
+	  	}
+    }
+    
+    @Test
     public void succeedOnGoodValuesSe() {
         CreateOrderBuilder order = WebPay.createOrder()
         	.addOrderRow(Item.orderRow()
@@ -384,22 +402,26 @@ public class WebServiceOrderValidatorTest {
     }
      
     @Test
-    public void testFailOnMissingRows() throws ValidationException {
+    public void testFailOnMissingRows() throws Exception {
     	  String expectedMessage = "MISSING VALUE - No order or fee has been included. Use addOrder(...) or addFee(...).\n";
-          HandleOrder handleOrder = WebPay.deliverOrder()                	
-               
-          .setNumberOfCreditDays(1)
-          .setOrderId(2345L)
-          .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)     
-          .setCountryCode(COUNTRYCODE.SE)
-          .deliverInvoiceOrder();            
+    	  try {
+	          WebPay.deliverOrder()                	              
+	          .setNumberOfCreditDays(1)
+	          .setOrderId(2345L)
+	          .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)     
+	          .setCountryCode(COUNTRYCODE.SE)
+	          .deliverInvoiceOrder()
+	          .doRequest();            
      
-          assertEquals(expectedMessage, handleOrder.validateOrder()); 
+	        //check that exception is thrown
+	      	assertTrue(false);	      	
+      	}
+      	catch (ValidationException e) {
+      		assertEquals(e.getMessage(), expectedMessage);
+      	}        
     }
      
-//    @Rule
-  //  thrown = ExpectedException.none();
-    @Test
+   @Test
     public void testFailCompanyCustomerUsingPaymentPlan() throws ValidationException, Exception {
     	String expectedMessage = "ERROR - CompanyCustomer is not allowed to use payment plan option.";
     	try{
