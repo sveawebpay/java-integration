@@ -8,9 +8,9 @@ public class IdentityValidator {
         String errors = "";
         //check Company identity
         if(order.getIsCompanyIdentity() && order.getCompanyCustomer().getNationalIdNumber()==null)
-            errors += "MISSING VALUE - OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use function setCompanyIdNumber().\n";
+            errors += "MISSING VALUE - OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use setCompanyIdNumber().\n";
         else if(!order.getIsCompanyIdentity() && order.getIndividualCustomer().getNationalIdNumber()==null)
-            errors += "MISSING VALUE - Ssn is required for individual customers when countrycode is SE, NO, DK or FI. Use function setSsn().\n";
+            errors += "MISSING VALUE - Ssn is required for individual customers when countrycode is SE, NO, DK or FI. Use setSsn().\n";
         return errors;
     }
     
@@ -18,23 +18,23 @@ public class IdentityValidator {
         String errors = "";
         //Individual
         if (!order.getIsCompanyIdentity() && order.getIndividualCustomer().getInitials()==null )
-            errors += "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use function setInitials().\n";
+            errors += "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use setInitials().\n";
         if (!order.getIsCompanyIdentity() && order.getIndividualCustomer().getBirthDate()<=0)
-            errors += "MISSING VALUE - Birth date is required for individual customers when countrycode is NL. Use function setBirthDate().\n";        
+            errors += "MISSING VALUE - Birth date is required for individual customers when countrycode is NL. Use setBirthDate().\n";        
         if(!order.getIsCompanyIdentity() && (order.getIndividualCustomer().getFirstName() == null || order.getIndividualCustomer().getLastName() == null))            
-             errors += "MISSING VALUE - Name is required for individual customers when countrycode is NL. Use function setName().\n";
+             errors += "MISSING VALUE - Name is required for individual customers when countrycode is NL. Use setName().\n";
         //Company
         if (order.getIsCompanyIdentity() && order.getCompanyCustomer().getVatNumber() == null)
-            errors += "MISSING VALUE - Vat number is required for company customers when countrycode is NL. Use function setVatNumber().\n";
+            errors += "MISSING VALUE - Vat number is required for company customers when countrycode is NL. Use setVatNumber().\n";
         if (order.getIsCompanyIdentity() && order.getCompanyCustomer().getCompanyName()==null)
-            errors += "MISSING VALUE - Company name is required for individual customers when countrycode is NL. Use function setName().\n";
+            errors += "MISSING VALUE - Company name is required for individual customers when countrycode is NL. Use setName().\n";
         //Individual and Company
         if (order.getCustomerIdentity().getStreetAddress()== null || order.getCustomerIdentity().getHouseNumber() <= 0)
-            errors += "MISSING VALUE - Street address and house number is required for all customers when countrycode is NL. Use function setStreetAddress().\n";    
+            errors += "MISSING VALUE - Street address and house number is required for all customers when countrycode is NL. Use setStreetAddress().\n";    
         if (order.getCustomerIdentity().getLocality() == null)
-            errors += "MISSING VALUE - Locality is required for all customers when countrycode is NL. Use function setLocality().\n";
+            errors += "MISSING VALUE - Locality is required for all customers when countrycode is NL. Use setLocality().\n";
         if (order.getCustomerIdentity().getZipCode() == null)
-            errors += "MISSING VALUE - Zip code is required for all customers when countrycode is NL. Use function setZipCode().\n";
+            errors += "MISSING VALUE - Zip code is required for all customers when countrycode is NL. Use setZipCode().\n";
         
         return errors;
                  
@@ -44,19 +44,19 @@ public class IdentityValidator {
         String errors = "";
             //Individual
             if (!order.getIsCompanyIdentity() && !order.getIsCompanyIdentity() && order.getIndividualCustomer().getBirthDate()<=0)
-                errors += "MISSING VALUE - Birth date is required for individual customers when countrycode is DE. Use function setBirthDate().\n";
+                errors += "MISSING VALUE - Birth date is required for individual customers when countrycode is DE. Use setBirthDate().\n";
             if (!order.getIsCompanyIdentity() && !order.getIsCompanyIdentity() && (order.getIndividualCustomer().getFirstName()==null || order.getIndividualCustomer().getLastName()==null))
-                errors += "MISSING VALUE - Name is required for individual customers when countrycode is DE. Use function setName().\n";
+                errors += "MISSING VALUE - Name is required for individual customers when countrycode is DE. Use setName().\n";
             //Company
             if (order.getIsCompanyIdentity() && order.getIsCompanyIdentity() && order.getCompanyCustomer().getVatNumber()==null)
-                errors += "MISSING VALUE - Vat number is required for company customers when countrycode is DE. Use function setVatNumber().\n";
+                errors += "MISSING VALUE - Vat number is required for company customers when countrycode is DE. Use setVatNumber().\n";
             //Individual and Company
             if (order.getCustomerIdentity().getStreetAddress() == null || order.getCustomerIdentity().getHouseNumber() <= 0)
-                errors += "MISSING VALUE - Street address is required for all customers when countrycode is DE. Use function setStreetAddress().\n";
+                errors += "MISSING VALUE - Street address is required for all customers when countrycode is DE. Use setStreetAddress().\n";
             if (order.getCustomerIdentity().getLocality()==null)
-                errors += "MISSING VALUE - Locality is required for all customers when countrycode is DE. Use function setLocality().\n";                    
+                errors += "MISSING VALUE - Locality is required for all customers when countrycode is DE. Use setLocality().\n";                    
             if (order.getCustomerIdentity().getZipCode()==null)                
-                errors += "MISSING VALUE - Zip code is required for all customers when countrycode is DE. Use function setCustomerZipCode().\n";              
+                errors += "MISSING VALUE - Zip code is required for all customers when countrycode is DE. Use setCustomerZipCode().\n";              
         return errors;
     }
      
