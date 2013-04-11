@@ -12,7 +12,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 public class SveaTestConfigurationProvider implements ConfigurationProvider{
 	
 		
-	@Override
+	@Override	
 	public String getUsername(PAYMENTTYPE type, COUNTRYCODE country) {
 		if(type == PAYMENTTYPE.INVOICE || type == PAYMENTTYPE.PAYMENTPLAN){					
 			switch (country) {

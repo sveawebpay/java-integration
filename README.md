@@ -57,12 +57,105 @@ Other public targets can be found in the build.xml file.
 
 ## Configuration 
 
-To configure Svea authorization you need to use *setPasswordBasedAuthorization(...)* for Invoice/Payment plan or 
-*setMerchantIdBasedAuthorization(...)* for other payments like card and direct bank payments. 
-Needs to be used everytime when creating a request, i.e. before calling *doRequest()* or *getPaymentForm()*.
+The Configuration needed to be set differs of how many different paymentmethods and countries you have in the same installation. 
+The authorization values are recieved from Svea Ekonomi when creating an account. If no configuration is done, default settings and 
+testdata found in SveaConfig.getDefaultConfig() will be used.
 
-*NOTE:* This solution may change in future updates!
+To configure Svea authorization:
+Create a class (eg. one for testing values, one for production) that implements the ConfigurationProvider Interface. Let the implemented methods 
+return the authorization values asked for. 
 
+```java
+
+package se.sveaekonomi.webpay.integration.config;
+import java.net.URL;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
+
+public class MyConfigTest implements ConfigurationProvider{
+	
+	/**
+	 * Constants for the end point url found in the class SveaConfig
+	 * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
+	 * @return
+	 */
+	@Override
+	public URL getEndPoint(PAYMENTTYPE type) {
+		if(PAYMENTTYPE.HOSTED == type)
+			return SveaConfig.getTestPayPageUrl();		
+		return SveaConfig.getTestWebserviceUrl();					
+	}	
+	
+	/**
+	 * Get the return value from your database or likewise
+	 * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
+	 * @param country code
+	 * @return user name
+	 */
+	@Override
+	public String getUsername(PAYMENTTYPE type, COUNTRYCODE country) {		
+		return myUserName;
+	}
+
+	/**
+	 * Get the return value from your database or likewise
+	 * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
+	 * @param country code
+	 * @return password
+	 */
+	@Override
+	public String getPassword(PAYMENTTYPE type, COUNTRYCODE country) {		
+		return myPassword;
+	}
+
+	/**
+	 * Get the return value from your database or likewise
+	 * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
+	 * @param country code
+	 * @return client number
+	 */
+	@Override
+	public int getClientNumber(PAYMENTTYPE type, COUNTRYCODE country) {													
+		return myClientNumber;
+	}
+
+	/**
+	 * Get the return value from your database or likewise
+	 * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
+	 * @param country code
+	 * @return merchant id
+	 */
+	@Override
+	public String getMerchantId(PAYMENTTYPE type, COUNTRYCODE country) {		
+		return myMerchantId;
+	}
+
+	/**
+	 * Get the return value from your database or likewise
+	 * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
+	 * @param country code
+	 * @return secret word
+	 */
+	@Override
+	public String getSecret(PAYMENTTYPE type, COUNTRYCODE country) {
+		return mySecretWord;
+	}	
+}
+
+```
+
+Later when starting a WebPay action in your integration file, put an instance of your class as parameter to the constructor.
+If left blank, the default settings will be used.
+
+```java
+
+	MyConfigProd conf = new MyConfigProd();
+	//Create your CreateOrder object and continue building your order. Se next steps.
+	CreateOrderResponse response = WebPay.createOrder(conf)
+	.....
+	
+```
+  
 [<< To top](https://github.com/sveawebpay/java-integration/tree/develop#java-integration-package-api-for-sveawebpay)
 
 ## 1. createOrder                                                            

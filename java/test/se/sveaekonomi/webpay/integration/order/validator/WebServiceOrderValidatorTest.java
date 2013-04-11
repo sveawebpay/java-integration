@@ -332,7 +332,7 @@ public class WebServiceOrderValidatorTest {
     public void testMissingCountryCodeGetPaymentPlanParams() throws Exception {    	   
     	String expectedMsg = "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
     	try {
-	        WebPay.getPaymentPlanParams(SveaConfig.getDefaultTestConfig())
+	        WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
 	        		.doRequest();
 	        //check that exception is thrown
 	      	assertTrue(false);	      	

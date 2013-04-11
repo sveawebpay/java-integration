@@ -40,7 +40,7 @@ public class SveaConfig {
 		}
 	}
     
-    public static ConfigurationProvider getDefaultTestConfig() {
+    public static ConfigurationProvider getDefaultConfig() {
     	return new SveaTestConfigurationProvider();
     }
 

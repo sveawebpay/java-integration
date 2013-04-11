@@ -58,7 +58,7 @@ public interface ConfigurationProvider {
 	
 	
 	/**
-	 * 
+	 * Constants for the end point url found in the class SveaConfig
 	 * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
 	 * @return
 	 */

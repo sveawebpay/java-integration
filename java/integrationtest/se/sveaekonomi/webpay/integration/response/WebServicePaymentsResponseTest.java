@@ -199,7 +199,7 @@ public class WebServicePaymentsResponseTest {
     @Test
     public void testResultGetPaymentPlanParams() throws Exception {
         
-        PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultTestConfig())
+        PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
         	.setCountryCode(COUNTRYCODE.SE)	
             .doRequest();
         
