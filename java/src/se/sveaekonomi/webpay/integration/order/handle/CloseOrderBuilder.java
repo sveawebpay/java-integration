@@ -1,9 +1,7 @@
 package se.sveaekonomi.webpay.integration.order.handle;
 
-import java.net.URL;
-
-import se.sveaekonomi.webpay.integration.config.Config;
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
+import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 
 /**
@@ -12,23 +10,17 @@ import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
  *
  */
 public class CloseOrderBuilder {
-    
+    private COUNTRYCODE countryCode;
     private Long orderId;
     private String orderType;
-    public final SveaConfig config = new SveaConfig();
-    
-    private Config configMode;
-    
-    public CloseOrderBuilder(Config configMode) {
-    	this.configMode = configMode;
+    private final ConfigurationProvider config;
+        
+    public CloseOrderBuilder(ConfigurationProvider config) {
+    	this.config = config;
     }
     
-    public URL getPayPageUrl() {
-    	return this.configMode.getPayPageUrl();
-    }
-    
-    public URL getWebserviceUrl() {
-    	return this.configMode.getWebserviceUrl();
+    public ConfigurationProvider getConfig() {
+    	return this.config;
     }
     
     public Long getOrderId() {
@@ -47,6 +39,15 @@ public class CloseOrderBuilder {
     
     public String getOrderType() {
         return orderType;
+    }
+    
+    public CloseOrderBuilder setCountryCode(COUNTRYCODE countryCode){
+    	this.countryCode = countryCode;
+    	return this;
+    }
+    
+    public COUNTRYCODE getCountryCode() {
+    	return this.countryCode;
     }
     
     public CloseOrderBuilder setOrderType(String orderType) {

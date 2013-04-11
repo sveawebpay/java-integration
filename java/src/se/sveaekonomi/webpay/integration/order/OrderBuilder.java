@@ -3,12 +3,14 @@ package se.sveaekonomi.webpay.integration.order;
 import java.util.ArrayList;
 import java.util.List;
 
+import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.order.row.FixedDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RelativeDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 
 /**
  * @author klar-sar
@@ -22,8 +24,15 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
     protected List<FixedDiscountBuilder> fixedDiscountRows = new ArrayList<FixedDiscountBuilder>();
     protected List<RelativeDiscountBuilder> relativeDiscountRows = new ArrayList<RelativeDiscountBuilder>();
     
+    protected ConfigurationProvider config;
+    protected COUNTRYCODE countryCode;
+    
     public OrderBuilder() {
         
+    }
+    
+    public ConfigurationProvider getConfig() {
+    	return this.config;
     }
     
     public List<OrderRowBuilder> getOrderRows() {
@@ -107,6 +116,15 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
 		return (T) this;
 	}
     
+	public COUNTRYCODE getCountryCode() {
+		return this.countryCode;
+	}
+	
+    public T setCountryCode(COUNTRYCODE countryCode) {
+    	this.countryCode = countryCode;
+    	return getGenericThis();
+    }
+	
     public T addOrderRows(List<OrderRowBuilder> itemOrderRow) {
         this.orderRows.addAll(itemOrderRow);
         return getGenericThis();

@@ -10,12 +10,12 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import se.sveaekonomi.webpay.integration.WebPay;
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 
@@ -38,7 +38,7 @@ public class HostedPaymentResponseTest {
     public void testDoCardPaymentRequest() throws Exception {
         HttpUnitOptions.setScriptingEnabled( false );
         
-        PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
+        PaymentForm form = WebPay.createOrder()
         .addOrderRow(Item.orderRow()
                 .setArticleNumber(1)
                 .setQuantity(2)
@@ -66,8 +66,9 @@ public class HostedPaymentResponseTest {
         WebConversation conversation = new WebConversation();
            
         CreateOrderBuilder order = WebPay.createOrder();
-        WebRequest request = new PostMethodWebRequest(order.getPayPageUrl().toString());
-        form.setMacSha512(HashUtil.createHash(form.getXmlMessageBase64() + order.config.getSecretWord(), HASHALGORITHM.SHA_512));
+        //WebRequest request = new PostMethodWebRequest(order.getPayPageUrl().toString());
+        WebRequest request = new PostMethodWebRequest(order.getConfig().getEndPoint(PAYMENTTYPE.HOSTED).toString());
+        form.setMacSha512(HashUtil.createHash(form.getXmlMessageBase64() + order.getConfig().getSecret(PAYMENTTYPE.HOSTED, order.getCountryCode()), HASHALGORITHM.SHA_512));
         request.setParameter("mac", form.getMacSha512());
         request.setParameter("message", form.getXmlMessageBase64());
         request.setParameter("merchantid", form.getMerchantId());        

@@ -1,11 +1,8 @@
 package se.sveaekonomi.webpay.integration.order.create;
 
-import java.net.URL;
-
 import javax.xml.bind.ValidationException;
 
-import se.sveaekonomi.webpay.integration.config.Config;
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
+import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.payment.CardPayment;
 import se.sveaekonomi.webpay.integration.hosted.payment.DirectPayment;
@@ -34,9 +31,7 @@ import se.sveaekonomi.webpay.integration.webservice.payment.PaymentPlanPayment;
 public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
         
     private OrderValidator validator;
-   
-    public final SveaConfig config = new SveaConfig();
-
+       
     private String clientOrderNumber;
     private String customerReference;
     private String orderDate;
@@ -48,21 +43,11 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     private Boolean sendAutomaticGiroPaymentForm;
      
     public CustomerIdentity<?> customerIdentity; 
-    
-    private Config configMode;
-    
-    public CreateOrderBuilder(Config config) {
-    	this.configMode = config;
+        
+    public CreateOrderBuilder(ConfigurationProvider config) {
+    	this.config = config;
     }     
-    
-    public URL getPayPageUrl() {
-    	return configMode.getPayPageUrl();
-    }
-    
-    public URL getWebserviceUrl() {
-    	return configMode.getWebserviceUrl();
-    }
-    
+        
     public OrderValidator getValidator() {
         return validator;
     }

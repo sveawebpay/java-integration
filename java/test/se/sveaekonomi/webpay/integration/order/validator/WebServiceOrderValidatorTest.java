@@ -8,15 +8,24 @@ import javax.xml.bind.ValidationException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
+import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
+import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
+import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
+import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public class WebServiceOrderValidatorTest {
     
@@ -44,9 +53,9 @@ public class WebServiceOrderValidatorTest {
     @Test
     public void testCustomerIdentityIsNull() {
     	 String expectedMessage = "MISSING VALUE - CustomerIdentity must be set.\n"
-    			 + "MISSING VALUE - CountryCode is required. Use function setCountryCode().\n"
-    			 + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n"
-    			 + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+    			 + "MISSING VALUE - CountryCode is required. Use setCountryCode().\n"
+    			 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
+    			 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
     	CreateOrderBuilder order = WebPay.createOrder()
             	.setValidator(new VoidValidator())
             	.setClientOrderNumber("1")
@@ -56,10 +65,10 @@ public class WebServiceOrderValidatorTest {
     }
     
     @Test
-    public void testFailOnMissingCountryCode() {
-        String expectedMessage = "MISSING VALUE - CountryCode is required. Use function setCountryCode().\n"
-                + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n"
-                + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+    public void testFailOnMissingCountryCodeOnCreateOrder() {
+        String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode().\n"
+                + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
+                + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         CreateOrderBuilder order = WebPay.createOrder()
         	.setValidator(new VoidValidator())
         	.setClientOrderNumber("1")
@@ -69,11 +78,62 @@ public class WebServiceOrderValidatorTest {
        assertEquals(expectedMessage, orderValidator.validate(order));
     }
     
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
+    @Test
+    public void testFailOnMissingCountryCodeOnDeliverOrder() throws Exception {
+        
+        String expectedMessage ="MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+        try{
+        WebPay.deliverOrder()                	
+        .addOrderRow(Item.orderRow()
+            .setArticleNumber(1)
+            .setQuantity(2)
+            .setAmountExVat(100.00)
+            .setDescription("Specification")
+            .setName("Prod")
+            .setUnit("st")
+            .setVatPercent(25)
+            .setDiscountPercent(0))        
+        .setNumberOfCreditDays(1)
+        .setOrderId(2345L)
+     //   .setCountryCode(COUNTRYCODE.SE)
+        .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+        .deliverInvoiceOrder()
+        .doRequest();            
+    	//check that exception is thrown
+    	assertTrue(false);
+    	
+    	}
+    	catch (ValidationException e) {
+    		assertEquals(e.getMessage(), expectedMessage);
+    	}        
+    }
+    
+    @Test
+    public void testFailOnMissingValuesForGetAddresses() throws Exception {
+        
+        String expectedMessage ="MISSING VALUE - CountryCode is required, use setCountryCode(...).\n" 
+        		+"MISSING VALUE - orderType is required, use one of: setOrderTypePaymentPlan() or setOrderTypeInvoice().\n"
+        		+"MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
+        try {
+        	WebPay.getAddresses()
+        		.doRequest();                
+          //  .setIndividual("460509-2222");
+
+        //check that exception is thrown
+      	assertTrue(false);	      	
+	  	}
+	  	catch (ValidationException e) {
+	  		assertEquals(e.getMessage(), expectedMessage);
+	  	}
+    }
+    
     @Test
     public void testFailOnMissingCustomerIdentity() {
-        String expectedMessage = "MISSING VALUE - Ssn is required for individual customers when countrycode is SE, NO, DK or FI. Use function setSsn().\n"
-                + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n" 
-                + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+        String expectedMessage = "MISSING VALUE - NationalNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use setSsn().\n"
+                + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n" 
+                + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         CreateOrderBuilder order = WebPay.createOrder()
         	.addCustomerDetails(Item.individualCustomer())
         	.setValidator(new VoidValidator())
@@ -85,22 +145,23 @@ public class WebServiceOrderValidatorTest {
     
     @Test
     public void testFailOnMissingOrderRows() {
-        String expectedMessage = "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n"
-                + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+        String expectedMessage = "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
+                + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         CreateOrderBuilder order = WebPay.createOrder()
         	.setValidator(new VoidValidator())
             .setClientOrderNumber("1")
             .setCountryCode(COUNTRYCODE.SE)
-        	.addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194609052222"));            
+        	.addCustomerDetails(Item.individualCustomer()
+        	.setNationalIdNumber("194609052222"));            
 
         assertEquals(expectedMessage, orderValidator.validate(order));
     }
     
     @Test
     public void testFailOnMissingOrderRowValues() {
-        String expectedMessage = "MISSING VALUE - Quantity is required in Item object. Use function Item.setQuantity().\n" 
-                + "MISSING VALUE - Two of the values must be set: AmountExVat(not set), AmountIncVat(not set) or VatPercent(not set) for Orderrow. Use two functions of: setAmountExVat(), setAmountIncVat or setVatPercent().\n"
-                + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+        String expectedMessage = "MISSING VALUE - Quantity is required in Item object. Use Item.setQuantity().\n" 
+                + "MISSING VALUE - Two of the values must be set: AmountExVat(not set), AmountIncVat(not set) or VatPercent(not set) for Orderrow. Use two of: setAmountExVat(), setAmountIncVat or setVatPercent().\n"
+                + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         CreateOrderBuilder order = WebPay.createOrder()
         	.setClientOrderNumber("1")
         	.addOrderRow(Item.orderRow())
@@ -114,9 +175,9 @@ public class WebServiceOrderValidatorTest {
     
     @Test
     public void testFailOnMissingSsnForSeOrder() {
-        String expectedMessage = "MISSING VALUE - Ssn is required for individual customers when countrycode is SE, NO, DK or FI. Use function setSsn().\n"
-                + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n"
-                + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+        String expectedMessage = "MISSING VALUE - NationalNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use setSsn().\n"
+                + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
+                + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         CreateOrderBuilder order = WebPay.createOrder()
         .addCustomerDetails(Item.individualCustomer())
         	.setValidator(new VoidValidator())
@@ -127,13 +188,13 @@ public class WebServiceOrderValidatorTest {
     
     @Test
     public void testFailOnMissingIdentityDataForDeOrder() {
-       String expectedMessage = "MISSING VALUE - Birth date is required for individual customers when countrycode is DE. Use function setBirthDate().\n"
-               + "MISSING VALUE - Name is required for individual customers when countrycode is DE. Use function setName().\n"
-               + "MISSING VALUE - Street address is required for all customers when countrycode is DE. Use function setStreetAddress().\n"
-               + "MISSING VALUE - Locality is required for all customers when countrycode is DE. Use function setLocality().\n"
-               + "MISSING VALUE - Zip code is required for all customers when countrycode is DE. Use function setCustomerZipCode().\n"
-               + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n"
-               + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+       String expectedMessage = "MISSING VALUE - Birth date is required for individual customers when countrycode is DE. Use setBirthDate().\n"
+               + "MISSING VALUE - Name is required for individual customers when countrycode is DE. Use setName().\n"
+               + "MISSING VALUE - Street address is required for all customers when countrycode is DE. Use setStreetAddress().\n"
+               + "MISSING VALUE - Locality is required for all customers when countrycode is DE. Use setLocality().\n"
+               + "MISSING VALUE - Zip code is required for all customers when countrycode is DE. Use setCustomerZipCode().\n"
+               + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
+               + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
        CreateOrderBuilder order = WebPay.createOrder()
         .setValidator(new VoidValidator())
             .setCountryCode(COUNTRYCODE.DE)
@@ -144,9 +205,9 @@ public class WebServiceOrderValidatorTest {
     
     @Test
     public void testFailOnMissingBirthDateForDeOrder() {
-        String expectedMessage = "MISSING VALUE - Birth date is required for individual customers when countrycode is DE. Use function setBirthDate().\n"
-                + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n"
-                + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+        String expectedMessage = "MISSING VALUE - Birth date is required for individual customers when countrycode is DE. Use setBirthDate().\n"
+                + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
+                + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         CreateOrderBuilder order = WebPay.createOrder() 
         	.addCustomerDetails(Item.individualCustomer()
 	            .setName("Tess", "Testson")
@@ -160,13 +221,13 @@ public class WebServiceOrderValidatorTest {
     
     @Test
     public void testFailOnMissingVatNumberForIndividualOrderDE() {
-        String expectedMessage = "MISSING VALUE - Birth date is required for individual customers when countrycode is DE. Use function setBirthDate().\n"
-                + "MISSING VALUE - Name is required for individual customers when countrycode is DE. Use function setName().\n"
-                + "MISSING VALUE - Street address is required for all customers when countrycode is DE. Use function setStreetAddress().\n"
-                + "MISSING VALUE - Locality is required for all customers when countrycode is DE. Use function setLocality().\n"
-                + "MISSING VALUE - Zip code is required for all customers when countrycode is DE. Use function setCustomerZipCode().\n"
-                + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n" 
-                + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+        String expectedMessage = "MISSING VALUE - Birth date is required for individual customers when countrycode is DE. Use setBirthDate().\n"
+                + "MISSING VALUE - Name is required for individual customers when countrycode is DE. Use setName().\n"
+                + "MISSING VALUE - Street address is required for all customers when countrycode is DE. Use setStreetAddress().\n"
+                + "MISSING VALUE - Locality is required for all customers when countrycode is DE. Use setLocality().\n"
+                + "MISSING VALUE - Zip code is required for all customers when countrycode is DE. Use setCustomerZipCode().\n"
+                + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n" 
+                + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
 
         CreateOrderBuilder order = WebPay.createOrder()        
             .setClientOrderNumber("1")
@@ -179,7 +240,7 @@ public class WebServiceOrderValidatorTest {
     
     @Test
     public void testFailOnMissingVatNumberForCompanyOrderDE() {
-        String expectedMessage = "MISSING VALUE - Vat number is required for company customers when countrycode is DE. Use function setVatNumber().\n";
+        String expectedMessage = "MISSING VALUE - Vat number is required for company customers when countrycode is DE. Use setVatNumber().\n";
 
         CreateOrderBuilder order = WebPay.createOrder()        
             .setClientOrderNumber("1")
@@ -201,14 +262,14 @@ public class WebServiceOrderValidatorTest {
     
     @Test
     public void testFailOnMissingIdentityDataForNeOrder() throws ValidationException {
-        String expectedMessage = "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use function setInitials().\n"
-                + "MISSING VALUE - Birth date is required for individual customers when countrycode is NL. Use function setBirthDate().\n"
-                + "MISSING VALUE - Name is required for individual customers when countrycode is NL. Use function setName().\n"
-                +"MISSING VALUE - Street address and house number is required for all customers when countrycode is NL. Use function setStreetAddress().\n"
-                + "MISSING VALUE - Locality is required for all customers when countrycode is NL. Use function setLocality().\n"
-                + "MISSING VALUE - Zip code is required for all customers when countrycode is NL. Use function setZipCode().\n"
-                + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n" 
-                + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+        String expectedMessage = "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use setInitials().\n"
+                + "MISSING VALUE - Birth date is required for individual customers when countrycode is NL. Use setBirthDate().\n"
+                + "MISSING VALUE - Name is required for individual customers when countrycode is NL. Use setName().\n"
+                + "MISSING VALUE - Street address and house number is required for all customers when countrycode is NL. Use setStreetAddress().\n"
+                + "MISSING VALUE - Locality is required for all customers when countrycode is NL. Use setLocality().\n"
+                + "MISSING VALUE - Zip code is required for all customers when countrycode is NL. Use setZipCode().\n"
+                + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n" 
+                + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         CreateOrderBuilder order = WebPay.createOrder()
         	.setValidator(new VoidValidator())
             .setCountryCode(COUNTRYCODE.NL).build() 
@@ -219,13 +280,13 @@ public class WebServiceOrderValidatorTest {
     
     @Test
     public void testFailOnMissingCompanyIdentityForNeOrder() throws ValidationException {
-        String expectedMessage = "MISSING VALUE - Vat number is required for company customers when countrycode is NL. Use function setVatNumber().\n"
-        		+ "MISSING VALUE - Company name is required for individual customers when countrycode is NL. Use function setName().\n"
-                +"MISSING VALUE - Street address and house number is required for all customers when countrycode is NL. Use function setStreetAddress().\n"
-                + "MISSING VALUE - Locality is required for all customers when countrycode is NL. Use function setLocality().\n"
-                + "MISSING VALUE - Zip code is required for all customers when countrycode is NL. Use function setZipCode().\n"
-                + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n" 
-                + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+        String expectedMessage = "MISSING VALUE - Vat number is required for company customers when countrycode is NL. Use setVatNumber().\n"
+        		+ "MISSING VALUE - Company name is required for individual customers when countrycode is NL. Use setName().\n"
+                + "MISSING VALUE - Street address and house number is required for all customers when countrycode is NL. Use setStreetAddress().\n"
+                + "MISSING VALUE - Locality is required for all customers when countrycode is NL. Use setLocality().\n"
+                + "MISSING VALUE - Zip code is required for all customers when countrycode is NL. Use setZipCode().\n"
+                + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n" 
+                + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         CreateOrderBuilder order = WebPay.createOrder()
         	.setValidator(new VoidValidator())
             .setCountryCode(COUNTRYCODE.NL).build() 
@@ -236,12 +297,12 @@ public class WebServiceOrderValidatorTest {
     
     @Test
     public void testFailOnMissingCompanyIdentityForDeOrder() throws ValidationException {
-        String expectedMessage = "MISSING VALUE - Vat number is required for company customers when countrycode is DE. Use function setVatNumber().\n"
-        		+ "MISSING VALUE - Street address is required for all customers when countrycode is DE. Use function setStreetAddress().\n"
-        		+ "MISSING VALUE - Locality is required for all customers when countrycode is DE. Use function setLocality().\n"
-        		+ "MISSING VALUE - Zip code is required for all customers when countrycode is DE. Use function setCustomerZipCode().\n"
-        		+ "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n"
-                + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+        String expectedMessage = "MISSING VALUE - Vat number is required for company customers when countrycode is DE. Use setVatNumber().\n"
+        		+ "MISSING VALUE - Street address is required for all customers when countrycode is DE. Use setStreetAddress().\n"
+        		+ "MISSING VALUE - Locality is required for all customers when countrycode is DE. Use setLocality().\n"
+        		+ "MISSING VALUE - Zip code is required for all customers when countrycode is DE. Use setCustomerZipCode().\n"
+        		+ "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
+                + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         CreateOrderBuilder order = WebPay.createOrder()
         	.setValidator(new VoidValidator())
             .setCountryCode(COUNTRYCODE.DE).build() 
@@ -251,9 +312,9 @@ public class WebServiceOrderValidatorTest {
     }
     @Test
     public void testFailOnMissingInitialsForNLOrder() {
-        String expectedMessage = "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use function setInitials().\n"
-                + "MISSING VALUE - OrderRows are required. Use function addOrderRow(Item.orderRow) to get orderrow setters.\n"
-                + "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+        String expectedMessage = "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use setInitials().\n"
+                + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
+                + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         CreateOrderBuilder order = WebPay.createOrder()
         	.addCustomerDetails(Item.individualCustomer()         
         		.setBirthDate(1923, 12, 12)
@@ -268,6 +329,20 @@ public class WebServiceOrderValidatorTest {
     }
     
     @Test
+    public void testMissingCountryCodeGetPaymentPlanParams() throws Exception {    	   
+    	String expectedMsg = "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+    	try {
+	        WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
+	        		.doRequest();
+	        //check that exception is thrown
+	      	assertTrue(false);	      	
+	  	}
+	  	catch (ValidationException e) {
+	  		assertEquals(e.getMessage(), expectedMsg);
+	  	}
+    }
+    
+    @Test
     public void succeedOnGoodValuesSe() {
         CreateOrderBuilder order = WebPay.createOrder()
         	.addOrderRow(Item.orderRow()
@@ -276,7 +351,8 @@ public class WebServiceOrderValidatorTest {
 	            .setQuantity(1))            
             .addCustomerDetails(Item.individualCustomer()
             		.setNationalIdNumber("194605092222"))
-            .setCountryCode(COUNTRYCODE.SE).setOrderDate("2012-05-01")        
+            .setCountryCode(COUNTRYCODE.SE)
+            .setOrderDate("2012-05-01")        
             .setValidator(new VoidValidator());
         
         assertEquals("", orderValidator.validate(order));
@@ -297,6 +373,7 @@ public class WebServiceOrderValidatorTest {
             .setDiscountPercent(0))        
         .setNumberOfCreditDays(1)
         .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+        .setCountryCode(COUNTRYCODE.SE)
         .deliverInvoiceOrder();            
    
         assertEquals(expectedMessage, handleOrder.validateOrder());  
@@ -318,27 +395,33 @@ public class WebServiceOrderValidatorTest {
           .setNumberOfCreditDays(1)
           .setOrderId(2345L)
          // .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+          .setCountryCode(COUNTRYCODE.SE)
           .deliverInvoiceOrder();            
      
           assertEquals(expectedMessage, handleOrder.validateOrder()); 
     }
      
     @Test
-    public void testFailOnMissingRows() throws ValidationException {
+    public void testFailOnMissingRows() throws Exception {
     	  String expectedMessage = "MISSING VALUE - No order or fee has been included. Use addOrder(...) or addFee(...).\n";
-          HandleOrder handleOrder = WebPay.deliverOrder()                	
-               
-          .setNumberOfCreditDays(1)
-          .setOrderId(2345L)
-          .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-          .deliverInvoiceOrder();            
+    	  try {
+	          WebPay.deliverOrder()                	              
+	          .setNumberOfCreditDays(1)
+	          .setOrderId(2345L)
+	          .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)     
+	          .setCountryCode(COUNTRYCODE.SE)
+	          .deliverInvoiceOrder()
+	          .doRequest();            
      
-          assertEquals(expectedMessage, handleOrder.validateOrder()); 
+	        //check that exception is thrown
+	      	assertTrue(false);	      	
+      	}
+      	catch (ValidationException e) {
+      		assertEquals(e.getMessage(), expectedMessage);
+      	}        
     }
      
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
-    @Test
+   @Test
     public void testFailCompanyCustomerUsingPaymentPlan() throws ValidationException, Exception {
     	String expectedMessage = "ERROR - CompanyCustomer is not allowed to use payment plan option.";
     	try{
@@ -365,11 +448,64 @@ public class WebServiceOrderValidatorTest {
         .setOrderDate("2012-09-09")
        	.usePaymentPlanPayment("camp1");
     	
+    	//check that exception is thrown
     	assertTrue(false);
     	
     	}
     	catch (SveaWebPayException e) {
     		assertEquals(e.getMessage(), expectedMessage);
     	}
+    }
+    
+    @Test
+    public void testFailOnMissingCountryCodeOfCloseOrder() throws Exception {
+        Long orderId = 0L;
+        SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
+                   
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        .addOrderRow(Item.orderRow()
+            .setArticleNumber(1)
+            .setQuantity(2)
+            .setAmountExVat(100.00)
+            .setDescription("Specification")
+            .setName("Prod")
+            .setUnit("st")
+            .setVatPercent(25)
+            .setDiscountPercent(0))
+        .addCustomerDetails(Item.individualCustomer()          
+            .setNationalIdNumber("194605092222"))        
+        .setCountryCode(COUNTRYCODE.SE)
+        .setClientOrderNumber("33")
+        .setOrderDate("2012-12-12")
+        .setCurrency(CURRENCY.SEK)
+        .useInvoicePayment()
+            .prepareRequest();
+    
+        
+        WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
+                       
+        try {
+            String xml = xmlBuilder.getCreateOrderEuXml(request.request);
+                    
+            String url = SveaConfig.getTestWebserviceUrl().toString();//WebPay.createOrder().get.getConfig().getWebserviceUrl().toString();
+            String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
+            NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
+            CreateOrderResponse response = new CreateOrderResponse(soapResponse);            
+            orderId = response.orderId;
+            
+            assertEquals(true, response.isOrderAccepted());
+        } catch (Exception e) {
+            throw e;
+        }
+       
+        soapBuilder = new SveaSoapBuilder();
+        
+          CloseOrder closeRequest = WebPay.closeOrder()              
+                .setOrderId(orderId)
+          //    .setCountryCode(COUNTRYCODE.SE)                
+                .closeInvoiceOrder();            
+         
+          String expectedMsg = "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+          assertEquals(expectedMsg, closeRequest.validateRequest());      
     }
 }

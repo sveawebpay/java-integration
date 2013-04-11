@@ -8,6 +8,7 @@ public class HandleOrderValidator {
     
     public String validate(DeliverOrderBuilder order) {
         errors = "";
+        validateCountry(order);
         validateOrderType(order);
         validateOrderId(order);
         validateInvoiceDetails(order);
@@ -15,9 +16,14 @@ public class HandleOrderValidator {
         return errors;
     }
 
+    private void validateCountry(DeliverOrderBuilder order) {
+    	if(order.getCountryCode() == null)
+    		this.errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+    }
+    
     private void validateOrderType(DeliverOrderBuilder order) {
         if(order.getOrderType()==null)
-            this.errors += "MISSING VALUE - OrderType is missing for DeliverOrder, use setOrderType";
+            this.errors += "MISSING VALUE - OrderType is missing for DeliverOrder, use setOrderType().\n";
     }
     
     private void validateOrderId(DeliverOrderBuilder order) {

@@ -2,11 +2,13 @@ package se.sveaekonomi.webpay.integration.webservice.handleorder;
 
 import java.net.URL;
 
+import javax.xml.bind.ValidationException;
+
 import org.w3c.dom.NodeList;
 
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.handle.CloseOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCloseOrder;
@@ -16,31 +18,34 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public class CloseOrder {
     
-    private CloseOrderBuilder order;
-    private final SveaConfig conf = new SveaConfig();
+    private CloseOrderBuilder order;  
     
     public CloseOrder(CloseOrderBuilder order) {
         this.order = order;
     }
-
+        
     protected SveaAuth getStoreAuthorization() {
-        return order.config.getAuthorizationForWebServicePayments(this.order.getOrderType());        
+    	 SveaAuth auth = new SveaAuth();
+    	 PAYMENTTYPE type = (order.getOrderType() == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
+         auth.Username = order.getConfig().getUsername(type, order.getCountryCode());
+         auth.Password = order.getConfig().getPassword(type, order.getCountryCode());
+         auth.ClientNumber = order.getConfig().getClientNumber(type, order.getCountryCode());
+         return auth;
+    }    
+    
+    public String validateRequest() {
+    	String errors = "";
+    	if(this.order.getCountryCode() == null)
+    		errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+    	return errors;
     }
     
-    /**
-     * Note! This function may change in future updates.
-     * @param userName
-     * @param password
-     * @param clientNumber
-     * @return
-     */
-    public CloseOrder setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
-        conf.setPasswordBasedAuthorization(userName, password, clientNumber, order.getOrderType());    
-        return this;
-    }
-    
-    public SveaRequest<SveaCloseOrder> prepareRequest() {
-        SveaCloseOrder sveaCloseOrder = new SveaCloseOrder();
+    public SveaRequest<SveaCloseOrder> prepareRequest() throws ValidationException {
+        String errors = validateRequest();
+        if(errors != "")
+        	throw new ValidationException(errors);
+        
+        SveaCloseOrder sveaCloseOrder = new SveaCloseOrder();       
         sveaCloseOrder.Auth = getStoreAuthorization();
         SveaCloseOrderInformation orderInfo = new SveaCloseOrderInformation();
         orderInfo.SveaOrderId = order.getOrderId();
@@ -53,7 +58,9 @@ public class CloseOrder {
     }
     
     public CloseOrderResponse doRequest() throws Exception {       
-    	URL url = order.getWebserviceUrl();
+    	URL url = order.getOrderType()=="Invoice" ? 
+    			order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE) 
+    			: order.getConfig().getEndPoint(PAYMENTTYPE.PAYMENTPLAN);
         SveaRequest<SveaCloseOrder> request = this.prepareRequest();
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();

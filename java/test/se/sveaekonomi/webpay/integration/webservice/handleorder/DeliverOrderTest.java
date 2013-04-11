@@ -11,6 +11,7 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
@@ -20,8 +21,7 @@ public class DeliverOrderTest {
     
     @Before
     public void setUp() {
-        order = WebPay.deliverOrder();// new DeliverOrderBuilder();
-        //order.setValidator(new VoidValidator());
+        order = WebPay.deliverOrder();
     }  
     
     @Test
@@ -60,8 +60,8 @@ public class DeliverOrderTest {
         .setOrderId(54086L)
         .setNumberOfCreditDays(1)
         .setInvoiceIdToCredit("id")
-        .deliverInvoiceOrder()
-        .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
+        .setCountryCode(COUNTRYCODE.SE)
+        .deliverInvoiceOrder()        
             .prepareRequest();   
         
         //First order row is a product
@@ -95,8 +95,8 @@ public class DeliverOrderTest {
     public void testDeliverPaymentPlanOrder() throws ValidationException {
         SveaRequest<SveaDeliverOrder> request = order        
         .setOrderId(54086L)
-        .deliverPaymentPlanOrder()
-        .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
+        .setCountryCode(COUNTRYCODE.SE)
+        .deliverPaymentPlanOrder()  
         .prepareRequest();
         
         assertEquals("54086", request.request.deliverOrderInformation.sveaOrderId);
@@ -107,7 +107,6 @@ public class DeliverOrderTest {
     public void testDeliverPaymentPlanOrderDoRequest() throws Exception {
     	DeliverOrderResponse response =
     			WebPay.deliverOrder()
-    		//.setTestmode()
     		.addOrderRow(Item.orderRow()
     			.setArticleNumber(1)
     			.setQuantity(2)
@@ -119,8 +118,8 @@ public class DeliverOrderTest {
     			.setDiscountPercent(0))  
     		.setOrderId(54086L)
     		.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+    		.setCountryCode(COUNTRYCODE.SE)
     		.deliverInvoiceOrder()
-    			.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
     			.doRequest();    
 
     	 response.getErrorMessage();

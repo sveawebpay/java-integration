@@ -33,12 +33,12 @@ public class WebServiceOrderValidator extends OrderValidator {
                 this.errors += "NOT VALID - Given countrycode does not exist in our system.\n";
         }
         else
-            this.errors += "MISSING VALUE - CountryCode is required. Use function setCountryCode().\n";
+            this.errors += "MISSING VALUE - CountryCode is required. Use setCountryCode().\n";
         
         validateRequiredFieldsForOrder(order);
         validateOrderRow(order);
         if(order.getOrderDate()==null)
-            this.errors += "MISSING VALUE - OrderDate is required. Use function setOrderDate().\n";
+            this.errors += "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         }
         catch (NullPointerException e) {
             errors += "MISSING VALUE - CustomerIdentity must be set.\n";

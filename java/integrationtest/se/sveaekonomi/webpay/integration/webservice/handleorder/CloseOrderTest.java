@@ -24,7 +24,7 @@ public class CloseOrderTest {
         Long orderId = 0L;
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
                    
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.createTestConfig())
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
         .addOrderRow(Item.orderRow()
             .setArticleNumber(1)
             .setQuantity(2)
@@ -49,7 +49,7 @@ public class CloseOrderTest {
         try {
             String xml = xmlBuilder.getCreateOrderEuXml(request.request);
                     
-            String url = WebPay.createOrder().getWebserviceUrl().toString();
+            String url = SveaConfig.getTestWebserviceUrl().toString();//WebPay.createOrder().get.getConfig().getWebserviceUrl().toString();
             String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
             NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
             CreateOrderResponse response = new CreateOrderResponse(soapResponse);            
@@ -64,8 +64,8 @@ public class CloseOrderTest {
         
           CloseOrderResponse closeResponse = WebPay.closeOrder()              
                 .setOrderId(orderId)
+                .setCountryCode(COUNTRYCODE.SE)
                 .closeInvoiceOrder()
-                .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
                 .doRequest();   
          
             assertEquals(true, closeResponse.isOrderAccepted());      
