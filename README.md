@@ -149,7 +149,7 @@ If left blank, the default settings will be used.
 
 ```java
 
-	MyConfigProd conf = new MyConfigProd();
+	MyConfigTest conf = new MyConfigTest();
 	//Create your CreateOrder object and continue building your order. Se next steps.
 	CreateOrderResponse response = WebPay.createOrder(conf)
 	.....
