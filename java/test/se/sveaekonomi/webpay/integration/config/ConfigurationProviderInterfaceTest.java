@@ -1,6 +1,10 @@
 package se.sveaekonomi.webpay.integration.config;
 
+import static org.junit.Assert.assertTrue;
+
 import java.net.URL;
+
+import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
@@ -38,5 +42,9 @@ public class ConfigurationProviderInterfaceTest implements ConfigurationProvider
 			return SveaConfig.getTestPayPageUrl();		
 		return SveaConfig.getTestWebserviceUrl();
 	}
-
+	
+	@Test
+	public void testTrue() {
+		assertTrue(true);
+	}
 }
