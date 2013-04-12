@@ -55,9 +55,9 @@ Other public targets can be found in the build.xml file.
 
 ## 3. Configuration 
 
-The Configuration needed to be set differs of how many different paymentmethods and countries you have in the same installation. 
+The Configuration needed to be set differs of how many different payment methods and countries you have in the same installation. 
 The authorization values are recieved from Svea Ekonomi when creating an account. If no configuration is done, default settings and 
-testdata found in SveaConfig.getDefaultConfig() will be used.
+test data found in SveaConfig.getDefaultConfig() will be used.
 
 To configure Svea authorization:
 Create a class (eg. one for testing values, one for production) that implements the ConfigurationProvider Interface. Let the implemented methods 
@@ -226,7 +226,7 @@ CreateOrderResponse response = WebPay.createOrder(myConfig)		//See Configuration
 	
 ### 4.1 Specify order                                                        
 Continue by adding values for products and other. You can add order row, fee and discount. Chose the right Item object as parameter.
-You can use the *add* functions with an Item object or a List of Item objects as parameters. 
+You can use the *add* functions with an Item object or a List of Item objects as parameters. See types of Item objects in examples in 4.1.2 - 4.1.5 and 4.3.1 - 4.3.2.
 
 ```java
 .addOrderRow(Item.orderRow(). ...)
@@ -412,9 +412,8 @@ PaymentForm form = WebPay.createOrder()
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
 .usePayPageCardOnly()
-	.setMerchantIdBasedAuthorization(1200, "f78hv9")   //Required
-	.setReturnUrl("http://myurl.se")                   //Required
-	.setCancelUrl("http://myurl.se")                   //Optional
+	.setReturnUrl("http://myurl.se")                   	//Required
+	.setCancelUrl("http://myurl.se")                   	//Optional
 	.getPaymentForm();
 
 ```
@@ -455,8 +454,7 @@ PaymentForm form = WebPay.createOrder()
 .setCustomerReference("33")
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
-.usePayPageDirectBankOnly()
-	.setMerchantIdBasedAuthorization(1200, "f78hv9")   //Required
+.usePayPageDirectBankOnly()	
 	.setReturnUrl("http://myurl.se")                   //Required		
 	.setCancelUrl("http://myurl.se")                   //Optional
 	.getPaymentForm();
@@ -498,7 +496,6 @@ PaymentForm form = WebPay.createOrder()
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
 .usePayPage()
-	.setMerchantIdBasedAuthorization(1200, "f78hv9")   	//Required	
 	.setReturnUrl("http://myurl.se")                   	//Required	
 	.setCancelUrl("http://myurl.se")                   	//Optional
 	.setPayPagePayment(LANGUAGECODE.sv)					//Optional, English is default. LANGUAGECODE, see APPENDIX
@@ -577,7 +574,6 @@ PaymentForm form = WebPay.createOrder()
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
 .usePaymentMethod(PAYMENTMETHOD.KORTCERT)             	//PAYMENTMETHOD see APPENDIX
-	.setMerchantIdBasedAuthorization(1200, "f78hv9")	//Required
 	.setReturnUrl("http://myurl.se")                  	//Required
 	.setCancelUrl("http://myurl.se")                  	//Optional
 	.getPaymentForm();

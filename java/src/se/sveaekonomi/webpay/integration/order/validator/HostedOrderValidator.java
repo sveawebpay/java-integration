@@ -1,7 +1,6 @@
 package se.sveaekonomi.webpay.integration.order.validator;
 
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 
 
 public class HostedOrderValidator extends OrderValidator {
@@ -11,12 +10,12 @@ public class HostedOrderValidator extends OrderValidator {
         
         if(order.getCountryCode()==null)
         	errors += "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n";
-        else if(order.getCountryCode()!=null && order.getCountryCode()==COUNTRYCODE.NL)
+    /*    else if(order.getCountryCode()!=null && order.getCountryCode()==COUNTRYCODE.NL)
             errors += new IdentityValidator().validateNLIdentity(order);
         else if(order.getCountryCode()!=null && order.getCountryCode()==COUNTRYCODE.DE)
             errors += new IdentityValidator().validateDEIdentity(order);
         else
-            errors += new IdentityValidator().validateNordicIdentity(order);
+            errors += new IdentityValidator().validateNordicIdentity(order);*/
         validateClientOrderNumber(order);
         validateCurrency(order);
         validateRequiredFieldsForOrder(order);

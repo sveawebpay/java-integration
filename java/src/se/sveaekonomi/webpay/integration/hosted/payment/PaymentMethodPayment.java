@@ -10,7 +10,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
  * @author klar-sar
  *
  */
-public class PaymentMethodPayment extends HostedPayment {
+public class PaymentMethodPayment extends HostedPayment<PaymentMethodPayment> {
     
     private PAYMENTMETHOD paymentMethod;
     

@@ -1,10 +1,16 @@
 package se.sveaekonomi.webpay.integration.order.validator;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import javax.xml.bind.ValidationException;
+
+import org.junit.Rule;
 import org.junit.Test;
+import org.junit.rules.ExpectedException;
+
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.hosted.payment.FakeHostedPayment;
 import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -36,6 +42,9 @@ public class HostedOrderValidatorTest {
         assertEquals(expectedMessage, orderValidator.validate(order));      
     }
     
+    
+    @Rule
+    public ExpectedException thrown = ExpectedException.none();
     @Test
     public void testFailOnEmptyClientOrderNumber() throws ValidationException {
         String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n" 
@@ -56,6 +65,34 @@ public class HostedOrderValidatorTest {
         orderValidator = new HostedOrderValidator();
         assertEquals(orderValidator.validate(order), expectedMessage);
       
+    }
+    
+    @Test
+    public void testFailOnMissingReturnUrl() {
+    	 String expectedMessage = "MISSING VALUE - Return url is required, setReturnUrl(...).\n";
+    	try {
+    	CreateOrderBuilder order = WebPay.createOrder() 
+        		.setCountryCode(COUNTRYCODE.SE)
+       			.setClientOrderNumber("nr22")
+       			.setCurrency(CURRENCY.SEK)
+                .addOrderRow(Item.orderRow()
+                		.setAmountExVat(4)
+                        .setVatPercent(25)
+                        .setQuantity(1))            
+                
+    	        .addFee(Item.shippingFee())
+    	        .addDiscount(Item.fixedDiscount())
+    	        .addDiscount(Item.relativeDiscount());
+    	    	
+            FakeHostedPayment payment = new FakeHostedPayment(order); 
+            payment.calculateRequestValues();
+          //check that exception is thrown
+        	assertTrue(false);
+        	
+        	}
+        	catch (ValidationException e) {
+        		assertEquals(e.getMessage(), expectedMessage);
+        	}
     }
     
     @Test

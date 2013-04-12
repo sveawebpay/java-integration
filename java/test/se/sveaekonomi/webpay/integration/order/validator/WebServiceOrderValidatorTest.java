@@ -131,7 +131,7 @@ public class WebServiceOrderValidatorTest {
     
     @Test
     public void testFailOnMissingCustomerIdentity() {
-        String expectedMessage = "MISSING VALUE - NationalNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use setSsn().\n"
+        String expectedMessage = "MISSING VALUE - National number(ssn) is required for individual customers when countrycode is SE, NO, DK or FI. Use setNationalIdNumber(...).\n"
                 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n" 
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         CreateOrderBuilder order = WebPay.createOrder()
@@ -175,7 +175,7 @@ public class WebServiceOrderValidatorTest {
     
     @Test
     public void testFailOnMissingSsnForSeOrder() {
-        String expectedMessage = "MISSING VALUE - NationalNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use setSsn().\n"
+        String expectedMessage = "MISSING VALUE - National number(ssn) is required for individual customers when countrycode is SE, NO, DK or FI. Use setNationalIdNumber(...).\n"
                 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         CreateOrderBuilder order = WebPay.createOrder()

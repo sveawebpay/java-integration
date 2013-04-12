@@ -10,7 +10,9 @@ import javax.xml.bind.ValidationException;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
@@ -27,7 +29,14 @@ public class PaymentFormTest {
         String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
         PaymentForm form = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
-                .usePayPageDirectBankOnly()                
+                .setCurrency(CURRENCY.SEK)
+                .setClientOrderNumber("nr26")
+                .addOrderRow(Item.orderRow()
+                		.setQuantity(1)
+                		.setAmountExVat(4)
+                		.setAmountIncVat(5))
+                .usePayPageDirectBankOnly()  
+                .setReturnUrl("http:myurl")
                 .getPaymentForm();
         form
                 .setMessageBase64(base64Payment)
@@ -55,7 +64,14 @@ public class PaymentFormTest {
        
         PaymentForm form = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
-                .usePayPageDirectBankOnly()                
+                .setClientOrderNumber("nr26")
+                .setCurrency(CURRENCY.SEK)
+                .addOrderRow(Item.orderRow()
+                		.setQuantity(1)
+                		.setAmountExVat(4)
+                		.setAmountIncVat(5))
+                .usePayPageDirectBankOnly()
+                .setReturnUrl("http:myurl.se")
                 .getPaymentForm();
         
         form.setMessageBase64(base64Payment)

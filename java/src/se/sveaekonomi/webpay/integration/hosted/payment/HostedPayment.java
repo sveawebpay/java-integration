@@ -3,6 +3,7 @@ package se.sveaekonomi.webpay.integration.hosted.payment;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.ValidationException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
@@ -12,6 +13,7 @@ import se.sveaekonomi.webpay.integration.hosted.helper.HostedRowFormatter;
 import se.sveaekonomi.webpay.integration.hosted.helper.HostedXmlBuilder;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.validator.HostedOrderValidator;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
@@ -24,7 +26,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  * 
  * @author klar-sar
  * *****************************************************************************/
-public abstract class HostedPayment {
+public abstract class HostedPayment <T extends HostedPayment<T>> {
     
     protected CreateOrderBuilder createOrderBuilder;
     protected ArrayList<HostedOrderRowBuilder> rowBuilder;
@@ -68,30 +70,51 @@ public abstract class HostedPayment {
         return returnUrl;
     }
     
-    public HostedPayment setReturnUrl(String returnUrl) {
+    /**
+     * Required
+     * @param returnUrl
+     * @return HostedPayment
+     */
+    public T setReturnUrl(String returnUrl) {
         this.returnUrl = returnUrl;
-        return this;
+        return getGenericThis();
     }
     
     public String getCancelUrl() {
         return cancelUrl;
     }
     
-    public HostedPayment setCancelUrl(String returnUrl) {
+    public T setCancelUrl(String returnUrl) {
         this.cancelUrl = returnUrl;
-        return this;
+        return getGenericThis();
     }
 
-    public HostedPayment setPayPageLanguageCode(LANGUAGECODE languageCode) {
+    public T setPayPageLanguageCode(LANGUAGECODE languageCode) {
     	this.languageCode = languageCode.toString();
-    	return this;
+    	return getGenericThis();
     }
     
     public String getPayPageLanguageCode() {
         return languageCode;
     }
     
-    public void calculateRequestValues() {
+    public String validateOrder() {
+       
+       String errors = "";	
+       if(this.returnUrl.equals(""))
+    	   errors += "MISSING VALUE - Return url is required, setReturnUrl(...).\n";
+        HostedOrderValidator validator = new HostedOrderValidator();
+        errors += validator.validate(this.createOrderBuilder);
+        return errors;
+       
+    }
+    
+    public void calculateRequestValues() throws ValidationException {
+    	String errors = "";
+        errors = validateOrder();
+        if(!errors.equals(""))
+            throw new ValidationException(errors);
+    	
         HostedRowFormatter formatter = new HostedRowFormatter();
         
         rowBuilder = formatter.formatRows(createOrderBuilder);
@@ -129,7 +152,7 @@ public abstract class HostedPayment {
         return form;
     }
     
-    protected abstract HostedPayment configureExcludedPaymentMethods();
+    protected abstract T configureExcludedPaymentMethods();
     
     public abstract XMLStreamWriter getPaymentSpecificXml(XMLStreamWriter xmlw) throws Exception;    
     
@@ -140,4 +163,9 @@ public abstract class HostedPayment {
             xmlw.writeEndElement();
         }
     }
+    
+    @SuppressWarnings("unchecked")
+	private T getGenericThis() {
+		return (T) this;
+	}
 }
