@@ -1,7 +1,5 @@
 # Java Integration Package API for SveaWebPay
 
-*NOTE:* This documentation is not yet fully converted from PHP. The general flow and methods should be all the same. Let the fluent API guide you using code completion in your IDE, and you should be fairly well on the way. Sorry for any inconvenience.
-
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
 | master (latest release)           | [![Build Status](https://travis-ci.org/sveawebpay/java-integration.png?branch=master)](https://travis-ci.org/sveawebpay/java-integration) |
@@ -68,6 +66,7 @@ Later when starting a WebPay action in your integration file, put an instance of
 If left blank, the default settings will be used.
 
 *NOTE:* This solution may change in future updates! 
+
 Step 1:
 ```java
 
@@ -326,9 +325,9 @@ depending on country and customer type. For SE, NO, DK and FI national id number
 ####4.3.2 Options for company customers
 ```java
 .addCustomerDetails(Item.companyCustomer()
-    .setNationalIdNumber("2345234")		//Required for company customers in SE, NO, DK, FI
-    .setVatNumber("NL2345234")			//Required for NL and DE
-    .setCompanyName("TestCompagniet")) 	//Required for Eu countries like NL and DE
+    .setNationalIdNumber("2345234")			//Required for company customers in SE, NO, DK, FI
+    .setVatNumber("NL2345234")				//Required for NL and DE
+    .setCompanyName("TestCompagniet")) 		//Required for Eu countries like NL and DE
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
