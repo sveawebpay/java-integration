@@ -8,36 +8,36 @@
 | develop                           | [![Build Status](https://travis-ci.org/sveawebpay/java-integration.png?branch=develop)](https://travis-ci.org/sveawebpay/java-integration) |
 
 ## Index
-* [Introduction](https://github.com/sveawebpay/java-integration/tree/master#introduction)
-* [Build](https://github.com/sveawebpay/java-integration/tree/master#build)
-* [Configuration](https://github.com/sveawebpay/java-integration/tree/master#configuration)
-* [1. CreateOrder](https://github.com/sveawebpay/java-integration/tree/master#1-createorder)
-    * [Test mode](https://github.com/sveawebpay/java-integration/tree/master#11-test-mode)
-    * [Specify order](https://github.com/sveawebpay/java-integration/tree/master#12-specify-order)
-    * [Customer identity](https://github.com/sveawebpay/java-integration/tree/master#13-customer-identity)
-    * [Other values](https://github.com/sveawebpay/java-integration/tree/master#14-other-values)
-    * [Choose payment](https://github.com/sveawebpay/java-integration/tree/master#15-choose-payment)
-* [2. GetPaymentPlanParams](https://github.com/sveawebpay/java-integration/tree/master#2-getpaymentplanparams)
-* [3. GetAddresses](https://github.com/sveawebpay/java-integration/tree/master#2-getpaymentplanparams)
-* [4. DeliverOrder](https://github.com/sveawebpay/java-integration/tree/master#2-getpaymentplanparams)
+* [1. Introduction](https://github.com/sveawebpay/java-integration/tree/master#introduction)
+* [2. Build](https://github.com/sveawebpay/java-integration/tree/master#build)
+* [3. Configuration](https://github.com/sveawebpay/java-integration/tree/master#configuration)
+* [4. CreateOrder](https://github.com/sveawebpay/java-integration/tree/master#4-createorder)
+    * [Test mode](https://github.com/sveawebpay/java-integration/tree/master#41-test-mode)
+    * [Specify order](https://github.com/sveawebpay/java-integration/tree/master#42-specify-order)
+    * [Customer identity](https://github.com/sveawebpay/java-integration/tree/master#43-customer-identity)
+    * [Other values](https://github.com/sveawebpay/java-integration/tree/master#44-other-values)
+    * [Choose payment](https://github.com/sveawebpay/java-integration/tree/master#45-choose-payment)
+* [5. GetPaymentPlanParams](https://github.com/sveawebpay/java-integration/tree/master#5-getpaymentplanparams)
+* [6. GetAddresses](https://github.com/sveawebpay/java-integration/tree/master#6-getaddresses)
+* [7. DeliverOrder](https://github.com/sveawebpay/java-integration/tree/master#7-deliverorder)
     * [Test mode](https://github.com/sveawebpay/java-integration/tree/master#41-testmode)
     * [Specify order](https://github.com/sveawebpay/java-integration/tree/master#42-specify-order)
-    * [Other values](https://github.com/sveawebpay/java-integration/tree/master#43-other-values)
-* [5. CloseOrder](https://github.com/sveawebpay/java-integration/tree/master#5-closeorder)
-* [6. Response handler](https://github.com/sveawebpay/java-integration/tree/master#6-response-handler)
+    * [Other values](https://github.com/sveawebpay/java-integration/tree/master#44-other-values)
+* [8. CloseOrder](https://github.com/sveawebpay/java-integration/tree/master#8-closeorder)
+* [9. Response handler](https://github.com/sveawebpay/java-integration/tree/master#9-response-handler)
 * [APPENDIX](https://github.com/sveawebpay/java-integration/tree/master#appendix)
 
 
-## Introduction                                                             
+## 1. Introduction                                                             
 This integration package is built for developers to simplify the integration of Svea WebPay services. 
 Using this package will make your implementation sustainable and unaffected for changes
 in our payment system. Just make sure to update the package regularly.
 
-The API is built as a *Fluent API* so you can use *method chaining* when implementing it in your code.
+The API is built as a *Fluent API*, ie. you can use *method chaining* when implementing it in your code.
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-## Build                                                             
+## 2. Build                                                             
 
 To build a jar file, use the ant build file located at `java/build.xml`. Use the command
 ```
@@ -55,7 +55,7 @@ Other public targets can be found in the build.xml file.
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-## Configuration 
+## 3. Configuration 
 
 The Configuration needed to be set differs of how many different paymentmethods and countries you have in the same installation. 
 The authorization values are recieved from Svea Ekonomi when creating an account. If no configuration is done, default settings and 
@@ -64,9 +64,11 @@ testdata found in SveaConfig.getDefaultConfig() will be used.
 To configure Svea authorization:
 Create a class (eg. one for testing values, one for production) that implements the ConfigurationProvider Interface. Let the implemented methods 
 return the authorization values asked for. 
+Later when starting a WebPay action in your integration file, put an instance of your class as parameter to the constructor.
+If left blank, the default settings will be used.
 
 *NOTE:* This solution may change in future updates! 
-
+Step 1:
 ```java
 
 package se.sveaekonomi.webpay.integration.config;
@@ -146,21 +148,23 @@ public class MyConfigTest implements ConfigurationProvider{
 
 ```
 
-Later when starting a WebPay action in your integration file, put an instance of your class as parameter to the constructor.
-If left blank, the default settings will be used.
+Step 2: Put an instance of your configuration object as a parameter to the request.
 
 ```java
-
-	MyConfigTest conf = new MyConfigTest();
-	//Create your CreateOrder object and continue building your order. Se next steps.
-	CreateOrderResponse response = WebPay.createOrder(conf)
+	//Create a class including test authorization
+	MyConfigTest confTest = new MyConfigTest();
+	//Create a class including production authorization
+	MyConfigProd confProd = new MyConfigProd();
+	
+	//Create your CreateOrder object with selected and continue building your order. Se next steps.
+	CreateOrderResponse response = WebPay.createOrder(confTest)
 	.....
 	
 ```
   
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-## 1. createOrder                                                            
+## 4. createOrder                                                            
 Creates an order and performs payment for all payment forms. Invoice and payment plan will perform 
 a synchronous payment and return a response. 
 Other hosted payments, like card, direct bank and payments from the *PayPage*
@@ -169,7 +173,7 @@ For every new payment type implementation, you follow the steps from the beginni
 Build order -> choose payment type -> doRequest/getPaymentForm
 
 ```java
-CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
+CreateOrderResponse response = WebPay.createOrder(myConfig)		//See Configuration chapt.3
 //For all products and other items
 .addOrderRow(Item.orderRow()...)
 //If shipping fee
@@ -220,21 +224,8 @@ CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-### 1.1 Test/Production mode                                                             
-Set test configuration mode while developing to make the calls to our test server when starting a request, i.e. createOrder(...), closeOrder(...),
-deliverOrder(...), getPaymentPlanParams(...), getAddresses(...). If no parameter is set, test mode is default. When moving to production server, change to production configuration mode. 
-
-Ex. 
-```java
-//test mode
-WebPay.createOrder(SveaConfig.createTestConfig())...
-//production mode
-WebPay.createOrder(SveaConfig.createProductionConfig())...
-```
-
-[<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 	
-### 1.2 Specify order                                                        
+### 4.1 Specify order                                                        
 Continue by adding values for products and other. You can add order row, fee and discount. Chose the right Item object as parameter.
 You can use the *add* functions with an Item object or a List of Item objects as parameters. 
 
@@ -249,7 +240,7 @@ orderRows.add(Item.orderRow(). ...)
 createOrder.addOrderRows(orderRows);
 ```
 	
-#### 1.2.1 OrderRow
+#### 4.1.1 OrderRow
 All products and other items. It큦 required to have a minimum of one order row.
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
 ```java
@@ -265,7 +256,7 @@ All products and other items. It큦 required to have a minimum of one order row.
 	.setDiscountPercent(0))                //Optional    
 ```
 
-#### 1.2.2 ShippingFee
+#### 4.1.2 ShippingFee
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat()and setVatPercent().**
 ```java
 .addFee(Item.shippingFee()
@@ -278,7 +269,7 @@ All products and other items. It큦 required to have a minimum of one order row.
 	.setUnit("st")                         //Optional             
 	.setDiscountPercent(0))                //Optional
 ```
-#### 1.2.3 InvoiceFee
+#### 4.1.3 InvoiceFee
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
 ```java
 .addFee(Item.invoiceFee()
@@ -290,7 +281,7 @@ All products and other items. It큦 required to have a minimum of one order row.
 	.setUnit("st")                         //Optional
 	.setDiscountPercent(0))                //Optional    
 ```
-#### 1.2.4 Fixed Discount
+#### 4.1.4 Fixed Discount
 When discount or coupon is a fixed amount on total product amount.
 ```java
 .addDiscount(Item.fixedDiscount()                
@@ -300,7 +291,7 @@ When discount or coupon is a fixed amount on total product amount.
 	.setDescription("FixedDiscount")       //Optional
 	.setName("Fixed"))                     //Optional    
 ```
-#### 1.2.5 Relative Discount
+#### 4.1.5 Relative Discount
 When discount or coupon is a percentage on total product amount.
 ```java
 .addDiscount(Item.relativeDiscount()
@@ -312,11 +303,11 @@ When discount or coupon is a percentage on total product amount.
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-### 1.3 Customer Identity   
+### 4.3 Customer Identity   
 Customer identity is required for invoice and payment plan orders. Required values varies 
 depending on country and customer type. For SE, NO, DK and FI national id number is required. Email and ip address are desirable.
 
-####1.3.1 Options for individual customers
+####4.3.1 Options for individual customers
 ```java
 .addCustomerDetails(Item.individualCustomer()
     .setNationalIdNumber("194605092222")	//Required for individual customers in SE, NO, DK and FI
@@ -332,7 +323,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
     .setPhoneNumber(999999))           		//Optional   
 ```
 
-####1.3.2 Options for company customers
+####4.3.2 Options for company customers
 ```java
 .addCustomerDetails(Item.companyCustomer()
     .setNationalIdNumber("2345234")		//Required for company customers in SE, NO, DK, FI
@@ -341,7 +332,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-### 1.4 Other values  
+###4.4 Other values  
 ```java
 .setCountryCode(COUNTRYCODE.SE)         //Required
 .setCurrency("SEK")                     //Required for card payment, direct payment and PayPage payment.
@@ -352,7 +343,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-### 1.5 Choose payment 
+###4.5 Choose payment 
 End process by choosing the payment method you desire.
 
 Invoice and payment plan will perform a synchronous payment and return an object as response. 
@@ -400,13 +391,13 @@ and the html form element as array.
 ```
 
 
-#### 1.5.1 PayPage with card payment options
+####4.5.1 PayPage with card payment options
 *PayPage* with availible card payments only.
 
-##### 1.5.1.1 Request
+#####4.5.1.1 Request
 
 ```java
-PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
+PaymentForm form = WebPay.createOrder()
 .addOrderRow(Item.orderRow()
 	.setArticleNumber("1")
 	.setQuantity(2)
@@ -417,7 +408,7 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 	.setVatPercent(25.00)
 	.setDiscountPercent(0))
 		
-.setCountryCode(COUNTRYCODE.SE)
+.setCountryCode(COUNTRYCODE.SE)							//Required
 .setClientOrderNumber("33")
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
@@ -428,7 +419,7 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 	.getPaymentForm();
 
 ```
-##### 1.5.1.2 Return
+#####4.5.1.2 Return
 The values of *xmlMessageBase64*, *merchantid* and *mac* are to be sent as xml to SveaWebPay.
 Function getPaymentForm() returns object type *PaymentForm* with accessible members:
 
@@ -444,13 +435,13 @@ Function getPaymentForm() returns object type *PaymentForm* with accessible memb
 | getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
             
 
-#### 1.5.2 PayPage with direct bank payment options
+####4.5.2 PayPage with direct bank payment options
 *PayPage* with available direct bank payments only.
                 
-##### 1.5.2.1 Request
+#####4.5.2.1 Request
 
 ```java
-PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
+PaymentForm form = WebPay.createOrder()
 .addOrderRow(Item.orderRow()
 	.setArticleNumber("1")
 	.setQuantity(2)
@@ -461,7 +452,7 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 	.setVatPercent(25.00)
 	.setDiscountPercent(0))
 		
-.setCountryCode(COUNTRYCODE.SE)
+.setCountryCode(COUNTRYCODE.SE)						   //Required
 .setCustomerReference("33")
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
@@ -471,7 +462,7 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 	.setCancelUrl("http://myurl.se")                   //Optional
 	.getPaymentForm();
 ```
-##### 1.5.2.2 Return
+#####4.5.2.2 Return
 Returns object type PaymentForm:
            
 | Value                 | Returns    | Description                               |
@@ -486,13 +477,13 @@ Returns object type PaymentForm:
 | getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
  
  
-#### 1.5.3 PayPagePayment
+####4.5.3 PayPagePayment
 *PayPage* with all available payments. You can also custom the *PayPage* by using one of the methods for *PayPagePayments*:
 setPaymentMethod, includePaymentMethods, excludeCardPaymentMethods or excludeDirectPaymentMethods.
                 
-##### 1.5.3.1 Request
+#####4.5.3.1 Request
 ```java
-PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
+PaymentForm form = WebPay.createOrder()
 .addOrderRow(Item.orderRow()
 	.setArticleNumber("1")
 	.setQuantity(2)
@@ -503,7 +494,7 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 	.setVatPercent(25.00)
 	.setDiscountPercent(0))   
 	
-.setCountryCode(COUNTRYCODE.SE)
+.setCountryCode(COUNTRYCODE.SE)							//Required
 .setCustomerReference("33")
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
@@ -515,7 +506,7 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 	.getPaymentForm();
 ```               
 
-###### 1.5.3.1.1 Exclude specific payment methods
+######4.5.3.1.1 Exclude specific payment methods
 Optional if you want to include specific payment methods for *PayPage*.
 ```java   
 .usePayPage()
@@ -524,7 +515,7 @@ Optional if you want to include specific payment methods for *PayPage*.
 	.excludePaymentMethods(PAYMENTMETHOD.DBSEBSE, PAYMENTMETHOD.SVEAINVOICE_SE)	//Optional
 	.getPaymentForm();
 ```
-###### 1.5.3.1.2 Include specific payment methods
+######4.5.3.1.2 Include specific payment methods
 Optional if you want to include specific payment methods for *PayPage*.
 ```java   
 .usePayPage()
@@ -533,7 +524,7 @@ Optional if you want to include specific payment methods for *PayPage*.
 	.getPaymentForm();
 ```
 
-###### 1.5.3.1.3 Exclude Card payments
+######4.5.3.1.3 Exclude Card payments
 Optional if you want to exclude all card payment methods from *PayPage*.
 ```java
 .usePayPage()
@@ -542,7 +533,7 @@ Optional if you want to exclude all card payment methods from *PayPage*.
 	.getPaymentForm();
 ```
 
-###### 1.5.3.1.4 Exclude Direct payments
+######4.5.3.1.4 Exclude Direct payments
 Optional if you want to exclude all direct bank payments methods from *PayPage*.
 ```java  
 .usePayPage()
@@ -550,7 +541,7 @@ Optional if you want to exclude all direct bank payments methods from *PayPage*.
     .excludeDirectPaymentMethods()                     //Optional
     .getPaymentForm();
 ```
-##### 1.5.3.6 Return
+#####4.5.3.6 Return
 Returns object type *PaymentForm*:
                 
 | Value                 | Returns    | Description                               |
@@ -565,13 +556,13 @@ Returns object type *PaymentForm*:
 | getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
  
 
-#### 1.5.4 PaymentMethod specified
+#### 4.5.4 PaymentMethod specified
 Go direct to specified payment method without the step *PayPage*.
 
-##### 1.5.4.1 Request
+##### 4.5.4.1 Request
 Set your store authorization here.
 ```java
-PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
+PaymentForm form = WebPay.createOrder()
 .addOrderRow(Item.orderRow()
 	.setArticleNumber("1")
 	.setQuantity(2)
@@ -582,18 +573,18 @@ PaymentForm form = WebPay.createOrder(SveaConfig.createTestConfig())
 	.setVatPercent(25)
 	.setDiscountPercent(0))                  
 		
-.setCountryCode(COUNTRYCODE.SE)
+.setCountryCode(COUNTRYCODE.SE)							//Required
 .setClientOrderNumber("33")
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
-.usePaymentMethod(PAYMENTMETHOD.KORTCERT)             	//Se APPENDIX for PaymentMethods
+.usePaymentMethod(PAYMENTMETHOD.KORTCERT)             	//PAYMENTMETHOD see APPENDIX
 	.setMerchantIdBasedAuthorization(1200, "f78hv9")	//Required
 	.setReturnUrl("http://myurl.se")                  	//Required
 	.setCancelUrl("http://myurl.se")                  	//Optional
 	.getPaymentForm();
 
 ```
-##### 1.5.4.2 Return
+##### 4.5.4.2 Return
 The values of *xmlMessageBase64*, *merchantid* and *mac* are to be sent as xml to SveaWebPay.
 Function getPaymentForm() returns Object type PaymentForm with accessible members:
 
@@ -611,11 +602,11 @@ Function getPaymentForm() returns Object type PaymentForm with accessible member
 
 #### Synchronous solutions - Invoice and PaymentPlan
        
-#### 1.5.5 InvoicePayment
+#### 4.5.5 InvoicePayment
 Perform an invoice payment. This payment form will perform a synchronous payment and return a response.
 Returns *CreateOrderResponse* object. Set your store authorization here.
 ```java
-CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
+CreateOrderResponse response = WebPay.createOrder()
 .addOrderRow(Item.orderRow()
 .setArticleNumber("1")
 .setQuantity(2)
@@ -626,21 +617,20 @@ CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
 .setVatPercent(25.00)
 .setDiscountPercent(0))   
 
-.setCountryCode(COUNTRYCODE.SE)
+.setCountryCode(COUNTRYCODE.SE)											//Required
 .setCustomerReference("33")
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
 .useInvoicePayment()
-	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
 	.doRequest();
 ```
-#### 1.5.6 PaymentPlanPayment
+#### 4.5.6 PaymentPlanPayment
 Perform *PaymentPlanPayment*. This payment form will perform a synchronous payment and return a response.
 Returns a *CreateOrderResponse* object. Preceded by WebPay.getPaymentPlanParams(...).
 Set your store authorization here.
 Param: Campaign code recieved from getPaymentPlanParams().
 ```java
-CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
+CreateOrderResponse response = WebPay.createOrder()
 .addOrderRow(Item.orderRow()
 	.setArticleNumber(1)
 	.setQuantity(2)
@@ -651,36 +641,35 @@ CreateOrderResponse response = WebPay.createOrder(SveaConfig.createTestConfig())
 	.setVatPercent(25.00)
 	.setDiscountPercent(0))   
 	
-.setCountryCode(COUNTRYCODE.SE)
+.setCountryCode(COUNTRYCODE.SE)						//Required
 .setCustomerReference("33")
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
 .usePaymentPlanPayment("camp1", false)              //Parameter1: campaign code recieved from getPaymentPlanParams
-													//Paremeter2: True if Automatic autogiro form will be sent with the first notification		
-   .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
+													//Paremeter2: True if Automatic autogiro form will be sent with the first notification		   
    .doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-## 2. getPaymentPlanParams   
+## 5. getPaymentPlanParams   
 Use this function to retrieve campaign codes for possible payment plan options. Use prior to create payment plan payment.
 Returns *PaymentPlanParamsResponse* object. Set your store authorization here.
 
 ```java
-CreateOrderResponse response = WebPay.getPaymentPlanParams(SveaConfig.createTestConfig())	
-	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
+CreateOrderResponse response = WebPay.getPaymentPlanParams()	
+	.setCountryCode(COUNTRYCODE.SE)										//Required	
 	.doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-## 3. getAddresses 
+## 6. getAddresses 
 Returns *getAddressesResponse* object with an *AddressSelector* for the associated addresses for a specific security number. 
 Can be used when creating an order. Only applicable for SE, NO and DK.
 Set your store authorization here.
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-### 3.1 Order type 
+### 6.1 Order type 
 ```java
     .setOrderTypeInvoice()         //Required if this is an invoice order
 or
@@ -688,7 +677,7 @@ or
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-### 3.2 Customer type 
+### 6.2 Customer type 
 ```java
     .setIndividual("194605092222") //Required if this is an individual customer
 or
@@ -696,18 +685,17 @@ or
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-### 3.3                                                                      	
+### 6.3                                                                      	
 ```java
-GetAddressesResponse response = WebPay.getAddresses(SveaConfig.createTestConfig())        
-	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
-	.setOrderTypeInvoice()                                              //See 3.1   
+GetAddressesResponse response = WebPay.getAddresses(myConfig)			//see more about Configuration chapt.3       	
+	.setOrderTypeInvoice()                                              //See 6.1   
 	.setCountryCode(COUNTRYCODE.SE)                                     //Required
-	.setIndividual("194605092222")                                      //See 3.2   
+	.setIndividual("194605092222")                                      //See 6.2   
 	.doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-## 4. deliverOrder                                                           
+## 7. deliverOrder                                                           
 Updates the status on a previous created order as delivered. Add rows that you want delivered. The rows will automatically be
 matched with the rows that was sent when creating the order.
 Only applicable for invoice and payment plan payments.
@@ -715,20 +703,7 @@ Returns *DeliverOrderResult* object. Set your store authorization here.
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-### 4.1 Test/Production mode                                                             
-Set test configuration mode while developing to make the calls to our test server when starting a request, i.e. createOrder(...), closeOrder(...),
-deliverOrder(...), getPaymentPlanParams(...), getAddresses(...). If no parameter is set, test mode is default. When moving to production server, change to production configuration mode. 
-
-Ex. 
-```java
-	//test mode
-    WebPay.createOrder(SveaConfig.createTestConfig())...
-	//production mode
-	WebPay.createOrder(SveaConfig.createProductionConfig())...
-```
-[<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
-
-### 4.2 Specify order                                                        
+### 7.1 Specify order                                                        
 Continue by adding values for products and other. You can add OrderRow, Fee and Discount. Chose the right Item object as parameter.
 You can use the **add** functions with an Item object or an List of Item objects as parameters. 
 
@@ -745,7 +720,7 @@ createOrder.addOrderRows(orderRows);
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-#### 4.2.1 OrderRow
+#### 7.1.1 OrderRow
 All products and other items. It is required to have a minimum of one row.
 ```java
 .addOrderRow(Item.orderRow()   
@@ -759,7 +734,7 @@ All products and other items. It is required to have a minimum of one row.
    .setDiscountPercent(0))             	//Optional
 ```
 
-#### 4.2.2 ShippingFee
+#### 7.1.2 ShippingFee
 ```java
 .addFee(Item.shippingFee()
 	.setAmountExVat(50)               	//Required
@@ -770,31 +745,31 @@ All products and other items. It is required to have a minimum of one row.
 	.setUnit("st")                     	//Optional        
 	.setDiscountPercent(0))
 ```
-#### 4.2.3 InvoiceFee
+#### 7.1.3 InvoiceFee
 ```java
 .addFee(Item.invoiceFee()
-	.setAmountExVat(50)                		//Required
-	.setVatPercent(25.00)             		//Required
-	.setName("Svea fee")               		//Optional
-	.setDescription("Fee for invoice") 		//Optional       
-	.setUnit("st")                     		//Optional
-	.setDiscountPercent(0))            		//Optional
+	.setAmountExVat(50)            		//Required
+	.setVatPercent(25.00)          		//Required
+	.setName("Svea fee")           		//Optional
+	.setDescription("invoice fee") 		//Optional       
+	.setUnit("st")                 		//Optional
+	.setDiscountPercent(0))        		//Optional
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-### 4.3 Other values  
+### 7.2 Other values  
 Required is the order id received when creating the order. Required for invoice orders are *InvoiceDistributionType*. 
 If invoice order is credit invoice use setCreditInvoice(invoiceId) and setNumberOfCreditDays(creditDaysAsInt)
 ```java
-    .setOrderId(orderId)                   //Required. Received when creating order.
-    .setNumberOfCreditDays(1)              //Use for Invoice orders.
-    .setInvoiceDistributionType("Post")    //Use for Invoice orders. "Post" or "Email"
-    .setCreditInvoice                      //Use for invoice orders, if this should be a credit invoice.
-    .setNumberOfCreditDays(1)              //Use for invoice orders.
+    .setOrderId(orderId)                   				//Required. Received when creating order.
+	.setCountryCode(COUNTRYCODE.SE)		   				//Required
+    .setNumberOfCreditDays(1)              				//Use for invoice orders.
+    .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)  //Use for invoice orders. DISTRIBUTIONTYPE see APPENDIX
+    .setCreditInvoice()                    				//Use for invoice orders, if this should be a credit invoice.   
 ```
 
 ```java
-DeliverOrderResponse response = WebPay.deliverOrder(SveaConfig.createTestConfig()
+DeliverOrderResponse response = WebPay.deliverOrder(
 .addOrderRow(Item.orderRow()
 	.setArticleNumber("1")
 	.setQuantity(2)
@@ -806,20 +781,19 @@ DeliverOrderResponse response = WebPay.deliverOrder(SveaConfig.createTestConfig(
 	.setDiscountPercent(0))
 		
 .setOrderId(3434)
-.setInvoiceDistributionType("Post")
-.deliverInvoiceOrder()
-	.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Required
+.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+.deliverInvoiceOrder()	
 	.doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-## 5. closeOrder                                                             
+## 8. closeOrder                                                             
 Use when you want to cancel an undelivered order. Valid only for invoice and payment plan orders. 
 Required is the order id received when creating the order. Set your store authorization here.
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-### 5.1 Close by payment type                                                
+### 8.1 Close by payment type                                                
 ```java
     .closeInvoiceOrder()
 or
@@ -827,15 +801,15 @@ or
 ```
 
 ```java
-CloseOrderResponse  =  WebPay.closeOrder(SveaConfig.createTestConfig()
-	.setOrderId(orderId)                                                  	//Required, received when creating an order.
-	.closeInvoiceOrder()
-		.setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021)	//Required
+CloseOrderResponse  =  WebPay.closeOrder(
+	.setOrderId(orderId)						//Required, received when creating an order.
+	.closeInvoiceOrder()		
+		.setCountryCode(COUNTRYCODE.SE)			//Required		
 		.doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-## 6. Response handler                                                       
+## 9. Response handler                                                       
 All synchronous responses are handled through *SveaResponse* and structured into objects.
 Asynchronous responses recieved after sending the values *merchantid* and *xmlMessageBase64* to
 hosted solutions can also be processed through the *SveaResponse* class.
