@@ -66,9 +66,9 @@ public class HandleOrder {
         if(order.getOrderType().equals("Invoice")) {
             SveaDeliverInvoiceDetails invoiceDetails = new SveaDeliverInvoiceDetails();
             invoiceDetails.InvoiceDistributionType = order.getInvoiceDistributionType();
-            invoiceDetails.IsCreditInvoice = (order.getInvoiceIdToCredit()!=null ? true : false);
-            if(order.getInvoiceIdToCredit()!=null)
-                invoiceDetails.InvoiceIdToCredit = order.getInvoiceIdToCredit();
+            invoiceDetails.IsCreditInvoice = (order.getCreditInvoice()!=null ? true : false);
+            if(order.getCreditInvoice()!=null)
+                invoiceDetails.InvoiceIdToCredit = order.getCreditInvoice();
             invoiceDetails.NumberofCreditDays = (order.getNumberOfCreditDays()!=null 
                     ? order.getNumberOfCreditDays() : 0);
             

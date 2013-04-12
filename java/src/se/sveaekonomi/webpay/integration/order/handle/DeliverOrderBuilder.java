@@ -66,12 +66,12 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         return this;
     }*/
     
-    public String getInvoiceIdToCredit() {
+    public String getCreditInvoice() {
         return invoiceIdToCredit;
     }
     
-    public DeliverOrderBuilder setInvoiceIdToCredit(String invoiceIdToCredit) {
-        this.invoiceIdToCredit = invoiceIdToCredit;
+    public DeliverOrderBuilder setCreditInvoice(String invoiceId) {
+        this.invoiceIdToCredit = invoiceId;
         return this;
     }
 

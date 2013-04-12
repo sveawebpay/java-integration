@@ -59,7 +59,7 @@ public class DeliverOrderTest {
         .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
         .setOrderId(54086L)
         .setNumberOfCreditDays(1)
-        .setInvoiceIdToCredit("id")
+        .setCreditInvoice("id")
         .setCountryCode(COUNTRYCODE.SE)
         .deliverInvoiceOrder()        
             .prepareRequest();   

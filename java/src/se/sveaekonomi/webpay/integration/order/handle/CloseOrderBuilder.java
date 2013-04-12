@@ -50,6 +50,11 @@ public class CloseOrderBuilder {
     	return this.countryCode;
     }
     
+    /**
+     * Required
+     * @param orderType
+     * @return CloseOrderBuilder
+     */
     public CloseOrderBuilder setOrderType(String orderType) {
         this.orderType = orderType;
         return this;
