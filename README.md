@@ -687,8 +687,8 @@ or
 ### 6.3                                                                      	
 ```java
 GetAddressesResponse response = WebPay.getAddresses(myConfig)			//see more about Configuration chapt.3       	
-	.setOrderTypeInvoice()                                              //See 6.1   
 	.setCountryCode(COUNTRYCODE.SE)                                     //Required
+	.setOrderTypeInvoice()                                              //See 6.1   	
 	.setIndividual("194605092222")                                      //See 6.2   
 	.doRequest();
 ```
