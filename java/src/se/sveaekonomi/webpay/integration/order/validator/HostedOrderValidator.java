@@ -11,12 +11,12 @@ public class HostedOrderValidator extends OrderValidator {
         
         if(order.getCountryCode()==null)
         	errors += "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n";
-        else if(order.getCountryCode()!=null && order.getCountryCode()==COUNTRYCODE.NL)
+    /*    else if(order.getCountryCode()!=null && order.getCountryCode()==COUNTRYCODE.NL)
             errors += new IdentityValidator().validateNLIdentity(order);
         else if(order.getCountryCode()!=null && order.getCountryCode()==COUNTRYCODE.DE)
-            errors += new IdentityValidator().validateDEIdentity(order);
-        else
-            errors += new IdentityValidator().validateNordicIdentity(order);
+            errors += new IdentityValidator().validateDEIdentity(order);*/
+  //      else
+  //          errors += new IdentityValidator().validateNordicIdentity(order);
         validateClientOrderNumber(order);
         validateCurrency(order);
         validateRequiredFieldsForOrder(order);

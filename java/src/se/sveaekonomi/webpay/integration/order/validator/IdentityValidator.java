@@ -7,10 +7,11 @@ public class IdentityValidator {
     protected String validateNordicIdentity(CreateOrderBuilder order) {
         String errors = "";
         //check Company identity
-        if(order.getIsCompanyIdentity() && order.getCompanyCustomer().getNationalIdNumber()==null)
-            errors += "MISSING VALUE - OrgNumber is required for company customers when countrycode is SE, NO, DK or FI. Use setCompanyIdNumber().\n";
-        else if(!order.getIsCompanyIdentity() && order.getIndividualCustomer().getNationalIdNumber()==null)
-            errors += "MISSING VALUE - NationalNumber is required for individual customers when countrycode is SE, NO, DK or FI. Use setSsn().\n";
+        boolean isCompanyIdentity = order.getIsCompanyIdentity();
+        if(isCompanyIdentity && order.getCompanyCustomer().getNationalIdNumber()==null)
+            errors += "MISSING VALUE - Organisation number is required for company customers when countrycode is SE, NO, DK or FI. Use setNationalIdNumber(...).\n";
+        else if(!isCompanyIdentity && order.getIndividualCustomer().getNationalIdNumber()==null)
+            errors += "MISSING VALUE - National number(ssn) is required for individual customers when countrycode is SE, NO, DK or FI. Use setNationalIdNumber(...).\n";
         return errors;
     }
     

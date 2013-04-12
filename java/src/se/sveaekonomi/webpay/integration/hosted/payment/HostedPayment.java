@@ -3,6 +3,7 @@ package se.sveaekonomi.webpay.integration.hosted.payment;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.ValidationException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
@@ -12,6 +13,7 @@ import se.sveaekonomi.webpay.integration.hosted.helper.HostedRowFormatter;
 import se.sveaekonomi.webpay.integration.hosted.helper.HostedXmlBuilder;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.validator.HostedOrderValidator;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
@@ -68,6 +70,11 @@ public abstract class HostedPayment {
         return returnUrl;
     }
     
+    /**
+     * Required
+     * @param returnUrl
+     * @return HostedPayment
+     */
     public HostedPayment setReturnUrl(String returnUrl) {
         this.returnUrl = returnUrl;
         return this;
@@ -91,7 +98,23 @@ public abstract class HostedPayment {
         return languageCode;
     }
     
-    public void calculateRequestValues() {
+    public String validateOrder() {
+       
+    /*    String errors = "";	
+       if(this.returnUrl=="")
+    	   errors += "MISSING VALUE - Return url is required, setReturnUrl(...).\n";*/
+        HostedOrderValidator validator = new HostedOrderValidator();
+        String errors = validator.validate(this.createOrderBuilder);
+        return errors;
+       
+    }
+    
+    public void calculateRequestValues() throws ValidationException {
+    	String errors = "";
+        errors = validateOrder();
+        if(!errors.equals(""))
+            throw new ValidationException(errors);
+    	
         HostedRowFormatter formatter = new HostedRowFormatter();
         
         rowBuilder = formatter.formatRows(createOrderBuilder);
