@@ -26,7 +26,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  * 
  * @author klar-sar
  * *****************************************************************************/
-public abstract class HostedPayment {
+public abstract class HostedPayment <T extends HostedPayment<T>> {
     
     protected CreateOrderBuilder createOrderBuilder;
     protected ArrayList<HostedOrderRowBuilder> rowBuilder;
@@ -75,23 +75,23 @@ public abstract class HostedPayment {
      * @param returnUrl
      * @return HostedPayment
      */
-    public HostedPayment setReturnUrl(String returnUrl) {
+    public T setReturnUrl(String returnUrl) {
         this.returnUrl = returnUrl;
-        return this;
+        return getGenericThis();
     }
     
     public String getCancelUrl() {
         return cancelUrl;
     }
     
-    public HostedPayment setCancelUrl(String returnUrl) {
+    public T setCancelUrl(String returnUrl) {
         this.cancelUrl = returnUrl;
-        return this;
+        return getGenericThis();
     }
 
-    public HostedPayment setPayPageLanguageCode(LANGUAGECODE languageCode) {
+    public T setPayPageLanguageCode(LANGUAGECODE languageCode) {
     	this.languageCode = languageCode.toString();
-    	return this;
+    	return getGenericThis();
     }
     
     public String getPayPageLanguageCode() {
@@ -100,11 +100,11 @@ public abstract class HostedPayment {
     
     public String validateOrder() {
        
-    /*    String errors = "";	
-       if(this.returnUrl=="")
-    	   errors += "MISSING VALUE - Return url is required, setReturnUrl(...).\n";*/
+       String errors = "";	
+       if(this.returnUrl.equals(""))
+    	   errors += "MISSING VALUE - Return url is required, setReturnUrl(...).\n";
         HostedOrderValidator validator = new HostedOrderValidator();
-        String errors = validator.validate(this.createOrderBuilder);
+        errors += validator.validate(this.createOrderBuilder);
         return errors;
        
     }
@@ -152,7 +152,7 @@ public abstract class HostedPayment {
         return form;
     }
     
-    protected abstract HostedPayment configureExcludedPaymentMethods();
+    protected abstract T configureExcludedPaymentMethods();
     
     public abstract XMLStreamWriter getPaymentSpecificXml(XMLStreamWriter xmlw) throws Exception;    
     
@@ -163,4 +163,9 @@ public abstract class HostedPayment {
             xmlw.writeEndElement();
         }
     }
+    
+    @SuppressWarnings("unchecked")
+	private T getGenericThis() {
+		return (T) this;
+	}
 }

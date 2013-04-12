@@ -171,7 +171,7 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
      * @param type paymentMethod
      * @return PaymentMethodPayment
      */
-    public HostedPayment usePaymentMethod(PAYMENTMETHOD paymentMethod) {
+    public HostedPayment<?> usePaymentMethod(PAYMENTMETHOD paymentMethod) {
         return new PaymentMethodPayment(this, paymentMethod);
     }
     

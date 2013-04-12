@@ -38,8 +38,10 @@ public class HostedPaymentTest {
 	        .addDiscount(Item.fixedDiscount())
 	        .addDiscount(Item.relativeDiscount());
 	    	
-        HostedPayment payment = new FakeHostedPayment(order);        
-        payment.calculateRequestValues();
+        FakeHostedPayment payment = new FakeHostedPayment(order);        
+        payment
+	        .setReturnUrl("myurl")
+	        .calculateRequestValues();
         
         assertTrue(500L == payment.getAmount());
     }
@@ -58,8 +60,10 @@ public class HostedPaymentTest {
         order.setShippingFeeRows(null);
         order.setFixedDiscountRows(null);
         order.setRelativeDiscountRows(null);
-        HostedPayment payment = new FakeHostedPayment(order);
-        payment.calculateRequestValues();
+        FakeHostedPayment payment = new FakeHostedPayment(order);
+        payment
+        	.setReturnUrl("myUrl")
+        	.calculateRequestValues();
         
         assertEquals(500L,payment.getAmount(), 0);
     }
@@ -82,8 +86,10 @@ public class HostedPaymentTest {
       
         order.setFixedDiscountRows(null);
         order.setRelativeDiscountRows(null);
-        HostedPayment payment = new FakeHostedPayment(order);
-        payment.calculateRequestValues();
+        FakeHostedPayment payment = new FakeHostedPayment(order);
+        payment
+	        .setReturnUrl("myUrl")
+	        .calculateRequestValues();
         
         assertEquals(1000L,payment.getAmount(), 0);
     }
@@ -102,8 +108,10 @@ public class HostedPaymentTest {
         order.setShippingFeeRows(null);
         order.setFixedDiscountRows(null);
         order.setRelativeDiscountRows(null);
-        HostedPayment payment = new FakeHostedPayment(order);
-        payment.calculateRequestValues();
+        FakeHostedPayment payment = new FakeHostedPayment(order);
+        payment
+	        .setReturnUrl("myurl")
+	        .calculateRequestValues();
         
         assertTrue(500L == payment.getAmount());
     }
@@ -119,7 +127,8 @@ public class HostedPaymentTest {
                         .setVatPercent(25)
                         .setQuantity(1)); 
       
-    	HostedPayment payment = new FakeHostedPayment(order);
+    	FakeHostedPayment payment = new FakeHostedPayment(order);
+    	payment.setReturnUrl("myurl");
         PaymentForm form;
         
         try {
@@ -134,7 +143,7 @@ public class HostedPaymentTest {
 
     @Test
     public void testExcludeInvoicesAndAllInstallmentsAllCountries() {
-        HostedPayment payment = new FakeHostedPayment(null);
+        FakeHostedPayment payment = new FakeHostedPayment(null);
         ExcludePayments exclude = new ExcludePayments();       
         List<String> excludedPaymentMethods = payment.getExcludedPaymentMethods();
         excludedPaymentMethods.addAll(exclude.excludeInvoicesAndPaymentPlan());

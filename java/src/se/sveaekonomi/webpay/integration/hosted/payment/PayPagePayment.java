@@ -18,7 +18,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTPLANTYPE;
  * @author klar-sar
  *
  */
-public class PayPagePayment extends HostedPayment {
+public class PayPagePayment extends HostedPayment<PayPagePayment> {
 
 	protected String paymentMethod;
 	protected List<String> includedPaymentMethods;
@@ -49,7 +49,7 @@ public class PayPagePayment extends HostedPayment {
 	/**
 	 * Only used in CardPayment and DirectPayment
 	 */
-	protected HostedPayment configureExcludedPaymentMethods() {
+	protected PayPagePayment configureExcludedPaymentMethods() {
 		return this;
 	}
 

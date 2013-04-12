@@ -10,13 +10,13 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
  * @author klar-sar
  *
  */
-public class DirectPayment extends HostedPayment {
+public class DirectPayment extends HostedPayment<DirectPayment> {
     
     public DirectPayment(CreateOrderBuilder orderBuilder) {
         super(orderBuilder);
     }
     
-    protected HostedPayment configureExcludedPaymentMethods() {
+    protected DirectPayment configureExcludedPaymentMethods() {
         
         COUNTRYCODE countryCode = createOrderBuilder.getCountryCode();
         

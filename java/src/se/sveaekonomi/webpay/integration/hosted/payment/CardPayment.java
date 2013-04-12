@@ -10,13 +10,13 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
  * @author klar-sar
  *
  */
-public class CardPayment extends HostedPayment {
+public class CardPayment extends HostedPayment<CardPayment> {
     
     public CardPayment(CreateOrderBuilder orderBuilder) {
         super(orderBuilder);
     }
     
-    protected HostedPayment configureExcludedPaymentMethods() {      
+    protected CardPayment configureExcludedPaymentMethods() {      
                 
         //Payment service providers
         excludedPaymentMethods.add(PAYMENTMETHOD.PAYPAL.getValue());

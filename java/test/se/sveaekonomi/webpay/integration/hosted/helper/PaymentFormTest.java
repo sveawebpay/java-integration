@@ -35,7 +35,8 @@ public class PaymentFormTest {
                 		.setQuantity(1)
                 		.setAmountExVat(4)
                 		.setAmountIncVat(5))
-                .usePayPageDirectBankOnly()                
+                .usePayPageDirectBankOnly()  
+                .setReturnUrl("http:myurl")
                 .getPaymentForm();
         form
                 .setMessageBase64(base64Payment)
@@ -69,7 +70,8 @@ public class PaymentFormTest {
                 		.setQuantity(1)
                 		.setAmountExVat(4)
                 		.setAmountIncVat(5))
-                .usePayPageDirectBankOnly()                
+                .usePayPageDirectBankOnly()
+                .setReturnUrl("http:myurl.se")
                 .getPaymentForm();
         
         form.setMessageBase64(base64Payment)
