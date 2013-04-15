@@ -353,7 +353,7 @@ use class *Response* with the xml response as parameter, you will receive a form
 
 #### Which payment method to choose?
 Invoice and/or payment plan payments.
->The preferable way is to use [`.useInvoicePayment()`](https://github.com/sveawebpay/java-integration/tree/master#155-invoicepayment) and
+>The preferable way is to use [`.useInvoicePayment()`](https://github.com/sveawebpay/java-integration/tree/master#455-invoicepayment) and
 >[`.usePaymentPlanPayment(...)`](https://github.com/sveawebpay/java-integration/tree/master#456-paymentplanpayment).
 >These payments are synchronous and will give you an instant response.
 
@@ -365,7 +365,7 @@ Card and/or direct bank payments
 
 Using all payments.
 >The most effective way is to use [`.useInvoicePayment()`](https://github.com/sveawebpay/java-integration/tree/master#455-invoicepayment) 
->and [`.usePaymentPlanPayment(...)`](https://github.com/sveawebpay/java-integration/tree/master#156-paymentplanpayment) for the synchronous payments,
+>and [`.usePaymentPlanPayment(...)`](https://github.com/sveawebpay/java-integration/tree/master#456-paymentplanpayment) for the synchronous payments,
 >and use the *PayPage* for the asynchronous requests by using [`.usePayPageCardOnly()`](https://github.com/sveawebpay/java-integration/tree/master#451-paypage-with-card-payment-options) 
 >and [`.usePayPageDirectBankOnly()`](https://github.com/sveawebpay/java-integration/tree/master#452-paypage-with-direct-bank-payment-options).
 
