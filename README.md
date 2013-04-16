@@ -59,7 +59,7 @@ The Configuration needed to be set differs of how many different payment methods
 The authorization values are recieved from Svea Ekonomi when creating an account. If no configuration is done, default settings and 
 test data found in SveaConfig.getDefaultConfig() will be used.
 
-To configure Svea authorization:
+**To configure Svea authorization:**
 Create a class (eg. one for testing values, one for production) that implements the ConfigurationProvider Interface. Let the implemented methods 
 return the authorization values asked for. 
 Later when starting a WebPay action in your integration file, put an instance of your class as parameter to the constructor.
