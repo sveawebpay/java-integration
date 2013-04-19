@@ -164,7 +164,7 @@ public class CreateOrderResponseTest {
            .setBirthDate(1955, 03, 07)
            .setInitials("SB")
            .setName("Sneider", "Boasman")
-           .setStreetAddress("Gate",42)
+           .setStreetAddress("Gate","42")
            .setLocality("BARENDRECHT")               
            .setZipCode("1102 HG")           
            .setCoAddress("138"))

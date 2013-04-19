@@ -13,12 +13,17 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 public class PaymentMethodPayment extends HostedPayment<PaymentMethodPayment> {
     
     private PAYMENTMETHOD paymentMethod;
-    
+        
     public PaymentMethodPayment(CreateOrderBuilder createOrderBuilder, PAYMENTMETHOD paymentMethod) {
         super(createOrderBuilder);
         this.paymentMethod = paymentMethod;
     }
 
+    
+    public PAYMENTMETHOD getPaymentMethod() {
+    	return paymentMethod;
+    }
+    
     /**
      * Only used in CardPayment and DirectPayment
      */

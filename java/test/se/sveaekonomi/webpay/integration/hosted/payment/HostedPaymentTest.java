@@ -125,7 +125,16 @@ public class HostedPaymentTest {
                 .addOrderRow(Item.orderRow()
                 		.setAmountExVat(4)
                         .setVatPercent(25)
-                        .setQuantity(1)); 
+                        .setQuantity(1))
+                .addCustomerDetails(Item.companyCustomer()
+	                .setNationalIdNumber("666666")
+	                .setEmail("test@svea.com")
+	                .setPhoneNumber(999999)
+	                .setIpAddress("123.123.123.123")
+	                .setStreetAddress("Gatan", "23")
+	                .setCoAddress("c/o Eriksson")
+	                .setZipCode("9999")
+	                .setLocality("Stan")); 
       
     	FakeHostedPayment payment = new FakeHostedPayment(order);
     	payment.setReturnUrl("myurl");

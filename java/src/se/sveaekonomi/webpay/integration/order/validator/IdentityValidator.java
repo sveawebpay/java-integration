@@ -15,7 +15,7 @@ public class IdentityValidator {
         return errors;
     }
     
-    protected String validateNLIdentity(CreateOrderBuilder order) {
+    public String validateNLIdentity(CreateOrderBuilder order) {
         String errors = "";
         //Individual
         if (!order.getIsCompanyIdentity() && order.getIndividualCustomer().getInitials()==null )
@@ -30,7 +30,7 @@ public class IdentityValidator {
         if (order.getIsCompanyIdentity() && order.getCompanyCustomer().getCompanyName()==null)
             errors += "MISSING VALUE - Company name is required for individual customers when countrycode is NL. Use setName().\n";
         //Individual and Company
-        if (order.getCustomerIdentity().getStreetAddress()== null || order.getCustomerIdentity().getHouseNumber() <= 0)
+        if (order.getCustomerIdentity().getStreetAddress()== null || order.getCustomerIdentity().getHouseNumber() == null)
             errors += "MISSING VALUE - Street address and house number is required for all customers when countrycode is NL. Use setStreetAddress().\n";    
         if (order.getCustomerIdentity().getLocality() == null)
             errors += "MISSING VALUE - Locality is required for all customers when countrycode is NL. Use setLocality().\n";
@@ -41,7 +41,7 @@ public class IdentityValidator {
                  
     }
     
-    protected String validateDEIdentity(CreateOrderBuilder order) {
+    public String validateDEIdentity(CreateOrderBuilder order) {
         String errors = "";
             //Individual
             if (!order.getIsCompanyIdentity() && !order.getIsCompanyIdentity() && order.getIndividualCustomer().getBirthDate()<=0)
@@ -52,7 +52,7 @@ public class IdentityValidator {
             if (order.getIsCompanyIdentity() && order.getIsCompanyIdentity() && order.getCompanyCustomer().getVatNumber()==null)
                 errors += "MISSING VALUE - Vat number is required for company customers when countrycode is DE. Use setVatNumber().\n";
             //Individual and Company
-            if (order.getCustomerIdentity().getStreetAddress() == null || order.getCustomerIdentity().getHouseNumber() <= 0)
+            if (order.getCustomerIdentity().getStreetAddress() == null || order.getCustomerIdentity().getHouseNumber() == null)
                 errors += "MISSING VALUE - Street address is required for all customers when countrycode is DE. Use setStreetAddress().\n";
             if (order.getCustomerIdentity().getLocality()==null)
                 errors += "MISSING VALUE - Locality is required for all customers when countrycode is DE. Use setLocality().\n";                    
