@@ -1,14 +1,14 @@
 package se.sveaekonomi.webpay.integration.order.identity;
 
 
-public class CustomerIdentity <T extends CustomerIdentity<T>> {
+public abstract class CustomerIdentity <T extends CustomerIdentity<T>> {
        
     private String coAddress;
     private String streetAddress;   
     private Integer phoneNumber;
     private String email;
     private String ipAddress;   
-    private Integer housenumber;
+    private String housenumber;
     private String zipCode;
     private String locality;
   
@@ -74,7 +74,7 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
         return streetAddress;
     }
     
-    public Integer getHouseNumber() {
+    public String getHouseNumber() {
         return this.housenumber;
     }
     
@@ -84,7 +84,7 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
      * @param type houseNumber
      * @return CustomerIdentity
      */
-    public T setStreetAddress(String streetAddress, Integer houseNumber) {
+    public T setStreetAddress(String streetAddress, String houseNumber) {
         this.streetAddress = streetAddress;
         this.housenumber = houseNumber;
         return getGenericThis();
@@ -111,5 +111,7 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
     public T setCoAddress(String coAddress) {
         this.coAddress = coAddress;
         return getGenericThis();
-    }    
+    }  
+
+    abstract public String getNationalIdNumber();
 }

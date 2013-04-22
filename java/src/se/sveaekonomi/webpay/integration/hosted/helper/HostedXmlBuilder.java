@@ -12,11 +12,14 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.HostedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.hosted.payment.HostedPayment;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
+import se.sveaekonomi.webpay.integration.order.identity.CustomerIdentity;
+import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.util.xml.XMLBuilder;
 
 public class HostedXmlBuilder extends XMLBuilder {
     
-    public String getXml(HostedPayment payment) throws Exception {
+    public String getXml(HostedPayment<?> payment) throws Exception {
         XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         CreateOrderBuilder order = payment.getCreateOrderBuilder();
@@ -35,10 +38,21 @@ public class HostedXmlBuilder extends XMLBuilder {
         writeSimpleElement("amount", payment.getAmount().toString());
         writeSimpleElement("lang", payment.getPayPageLanguageCode());
         
+        serializeCustomer(order, payment);
+        
         if (payment.getVat() != null) {
             writeSimpleElement("vat", payment.getVat().toString());
         }
         
+        if(order.getIsCompanyIdentity()) {
+        	if(order.getCompanyCustomer().getIpAddress() != null)
+				writeSimpleElement("ipaddress", order.getCompanyCustomer().getIpAddress());
+        }
+        else {
+        	if(order.getIndividualCustomer().getIpAddress() != null)
+				writeSimpleElement("ipaddress", order.getCompanyCustomer().getIpAddress());
+
+        }
         serializeRows(rows);     
         if (payment.getExcludedPaymentMethods() != null) {
             xmlw.writeStartElement("excludepaymentmethods");
@@ -50,7 +64,7 @@ public class HostedXmlBuilder extends XMLBuilder {
             
             xmlw.writeEndElement();
         }
-        
+        writeSimpleElement("iscompany", order.getIsCompanyIdentity() ? "true" : "false");
         xmlw.writeEndDocument();
         
         try {
@@ -60,7 +74,82 @@ public class HostedXmlBuilder extends XMLBuilder {
         }
     }
     
-    private void serializeRows(List<HostedOrderRowBuilder> rows) throws XMLStreamException {
+    private void serializeCustomer(CreateOrderBuilder order,
+			HostedPayment<?> payment) {
+    	try {
+    		CustomerIdentity<?> customer;
+    		if(order.getIsCompanyIdentity())
+    			customer = order.getCompanyCustomer();
+    		else
+    			customer = order.getIndividualCustomer();
+    		
+			xmlw.writeStartElement("customer");
+			//nordic country individual customer type
+			if(customer.getNationalIdNumber()!=null)
+				writeSimpleElement("ssn", customer.getNationalIdNumber());
+			//euro country individual
+			else if(!order.getIsCompanyIdentity())
+				writeSimpleElement("ssn", ((IndividualCustomer)customer).getBirthDate().toString());
+			//euro country, Company customer and nationalId not set			
+			else if(order.getIsCompanyIdentity())
+				writeSimpleElement("ssn", ((CompanyCustomer)customer).getVatNumber());
+			
+			//set for individual customer
+			if(!order.getIsCompanyIdentity()) {
+				if(((IndividualCustomer)customer).getFirstName() != null)
+					writeSimpleElement("firstname", ((IndividualCustomer)customer).getFirstName());
+				if(((IndividualCustomer)customer).getLastName() != null)
+					writeSimpleElement("lastname", ((IndividualCustomer)customer).getLastName());
+				if(((IndividualCustomer)customer).getInitials() != null)
+					writeSimpleElement("initials", ((IndividualCustomer)customer).getInitials());
+				if(((IndividualCustomer)customer).getEmail() != null)
+					writeSimpleElement("email", ((IndividualCustomer)customer).getEmail());
+				if(((IndividualCustomer)customer).getPhoneNumber() != null)
+					writeSimpleElement("phone", ((IndividualCustomer)customer).getPhoneNumber().toString());
+				if(((IndividualCustomer)customer).getStreetAddress() != null)
+					writeSimpleElement("address", ((IndividualCustomer)customer).getStreetAddress());
+				if(((IndividualCustomer)customer).getZipCode() != null)
+					writeSimpleElement("zip", ((IndividualCustomer)customer).getZipCode());
+				if(((IndividualCustomer)customer).getHouseNumber() != null)
+					writeSimpleElement("housenumber", ((IndividualCustomer)customer).getHouseNumber());
+				if(((IndividualCustomer)customer).getCoAddress() != null)
+					writeSimpleElement("address2", ((IndividualCustomer)customer).getCoAddress());
+				if(((IndividualCustomer)customer).getLocality() != null)
+					writeSimpleElement("city", ((IndividualCustomer)customer).getLocality().toString());				
+			}
+			else {
+				if(((CompanyCustomer)customer).getHouseNumber() != null)
+					writeSimpleElement("housenumber", ((CompanyCustomer)customer).getHouseNumber());
+				if(((CompanyCustomer)customer).getZipCode() != null)
+					writeSimpleElement("zip", ((CompanyCustomer)customer).getZipCode());
+				if(((CompanyCustomer)customer).getStreetAddress() != null)
+					writeSimpleElement("address", ((CompanyCustomer)customer).getStreetAddress());
+				if(((CompanyCustomer)customer).getLocality() != null)
+					writeSimpleElement("city", ((CompanyCustomer)customer).getLocality().toString());				
+				if(((CompanyCustomer)customer).getCompanyName() != null)
+					writeSimpleElement("firstname", ((CompanyCustomer)customer).getCompanyName());
+				if(((CompanyCustomer)customer).getEmail() != null)
+					writeSimpleElement("email", ((CompanyCustomer)customer).getEmail());
+				if(((CompanyCustomer)customer).getCoAddress() != null)
+					writeSimpleElement("address2", ((CompanyCustomer)customer).getCoAddress());
+				if(((CompanyCustomer)customer).getEmail() != null)
+					writeSimpleElement("email", ((CompanyCustomer)customer).getEmail());
+				if(((CompanyCustomer)customer).getPhoneNumber() != null)
+					writeSimpleElement("phone", ((CompanyCustomer)customer).getPhoneNumber().toString());
+			}
+			
+			if(order.getCountryCode() != null)
+				writeSimpleElement("country", order.getCountryCode().toString());			
+			xmlw.writeEndElement();
+		} catch (XMLStreamException e) {
+		
+			e.printStackTrace();
+		}
+    	
+		
+	}
+
+	private void serializeRows(List<HostedOrderRowBuilder> rows) throws XMLStreamException {
         if (rows == null || rows.size() == 0) {
             return;
         }

@@ -50,6 +50,28 @@ public class CreateOrderResponseTest {
     }
     
     @Test
+    public void testInvoiceRequestFailing() throws Exception {
+    	CreateOrderResponse response = WebPay.createOrder()    	
+        .addOrderRow(Item.orderRow()
+            .setArticleNumber(1)
+            .setQuantity(2)
+            .setAmountExVat(100.00)
+            .setDescription("Specification")
+            .setName("Prod")
+            .setVatPercent(25)
+            .setDiscountPercent(0))              
+        .addCustomerDetails(Item.individualCustomer().setNationalIdNumber(""))        
+            .setCountryCode(COUNTRYCODE.SE)
+            .setOrderDate("2012-12-12")
+            .setClientOrderNumber("33")
+            .setCurrency(CURRENCY.SEK)
+            .useInvoicePayment()
+                .doRequest();
+    
+        assertEquals(false, response.isOrderAccepted());
+        }
+    
+    @Test
     public void testCalculationWithDecimalsInVatPercent() throws ValidationException, Exception {
     	                
         CreateOrderResponse response = WebPay.createOrder()    	
@@ -142,7 +164,7 @@ public class CreateOrderResponseTest {
            .setBirthDate(1955, 03, 07)
            .setInitials("SB")
            .setName("Sneider", "Boasman")
-           .setStreetAddress("Gate",42)
+           .setStreetAddress("Gate","42")
            .setLocality("BARENDRECHT")               
            .setZipCode("1102 HG")           
            .setCoAddress("138"))

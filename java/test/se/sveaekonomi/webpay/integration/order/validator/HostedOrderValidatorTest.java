@@ -16,6 +16,7 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
 public class HostedOrderValidatorTest {
     
@@ -188,6 +189,7 @@ public class HostedOrderValidatorTest {
     orderValidator = new HostedOrderValidator();
     assertEquals(expectedMessage, orderValidator.validate(order));
     }
+    
     @Test
     public void testFailAmountExVatAndVatPercentIsMissing() throws ValidationException {
     String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n" +
@@ -232,4 +234,96 @@ public class HostedOrderValidatorTest {
     orderValidator = new HostedOrderValidator();
     assertEquals(orderValidator.validate(order), expectedMessage);
     }
+    
+    @Test
+    public void testFailMissingIdentityInHostedNL() throws Exception {
+    	String expectedMsg = "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use setInitials().\n"
+    			+ "MISSING VALUE - Birth date is required for individual customers when countrycode is NL. Use setBirthDate().\n"
+    			+ "MISSING VALUE - Name is required for individual customers when countrycode is NL. Use setName().\n" 
+    			+ "MISSING VALUE - Street address and house number is required for all customers when countrycode is NL. Use setStreetAddress().\n"
+    			+ "MISSING VALUE - Locality is required for all customers when countrycode is NL. Use setLocality().\n"
+    			+ "MISSING VALUE - Zip code is required for all customers when countrycode is NL. Use setZipCode().\n";
+        try{
+    	WebPay.createOrder()            
+        .addOrderRow(Item.orderRow()
+            .setArticleNumber(1)
+            .setQuantity(2)
+            .setAmountExVat(100.00)
+            .setDescription("Specification")
+            .setName("Prod")
+            .setUnit("st")
+            .setVatPercent(25)
+            .setDiscountPercent(0))
+        .addDiscount(Item.relativeDiscount()
+            .setDiscountId("1")
+            .setDiscountPercent(50)
+            .setUnit("st")
+            .setName("Relative")
+            .setDescription("RelativeDiscount"))
+        .addCustomerDetails(Item.individualCustomer()         
+        	//.setInitials("SB")
+            //.setBirthDate(1946, 5, 9)
+            //.setName("Sneider", "Boasman")
+            //.setStreetAddress("Gate", 42)
+            //.setLocality("BARENDRECHT")
+            //.setZipCode("1102 HG")
+        	)
+        
+            .setCountryCode(COUNTRYCODE.NL)            
+            .setClientOrderNumber("33")
+            .setOrderDate("2012-12-12")
+            .setCurrency(CURRENCY.SEK)          
+            .usePaymentMethod(PAYMENTMETHOD.INVOICE)
+            	.setReturnUrl("http://myurl.se")                 
+            	.getPaymentForm();
+
+        assertTrue(false);  
+        
+        }
+        catch (ValidationException e) {
+    		assertEquals(e.getMessage(), expectedMsg);
+    	}
+    }
+    
+    @Test
+    public void testFailMissingIdentityInHostedDE() throws Exception {
+    	String expectedMsg = "MISSING VALUE - Birth date is required for individual customers when countrycode is DE. Use setBirthDate().\n"
+    			+ "MISSING VALUE - Name is required for individual customers when countrycode is DE. Use setName().\n"
+    			+ "MISSING VALUE - Street address is required for all customers when countrycode is DE. Use setStreetAddress().\n"
+    			+ "MISSING VALUE - Locality is required for all customers when countrycode is DE. Use setLocality().\n"
+    			+ "MISSING VALUE - Zip code is required for all customers when countrycode is DE. Use setCustomerZipCode().\n";
+        try{
+    	WebPay.createOrder()            
+        .addOrderRow(Item.orderRow()
+            .setArticleNumber(1)
+            .setQuantity(2)
+            .setAmountExVat(100.00)
+            .setDescription("Specification")
+            .setName("Prod")
+            .setUnit("st")
+            .setVatPercent(25)
+            .setDiscountPercent(0))
+        .addDiscount(Item.relativeDiscount()
+            .setDiscountId("1")
+            .setDiscountPercent(50)
+            .setUnit("st")
+            .setName("Relative")
+            .setDescription("RelativeDiscount"))
+        .addCustomerDetails(Item.individualCustomer())        
+            .setCountryCode(COUNTRYCODE.DE)            
+            .setClientOrderNumber("33")
+            .setOrderDate("2012-12-12")
+            .setCurrency(CURRENCY.SEK)          
+            .usePaymentMethod(PAYMENTMETHOD.INVOICE)
+            	.setReturnUrl("http://myurl.se")                 
+            	.getPaymentForm();
+
+        assertTrue(false);  
+        
+        }
+        catch (ValidationException e) {
+    		assertEquals(e.getMessage(), expectedMsg);
+    	}
+    }
+
 }

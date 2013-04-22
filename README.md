@@ -59,7 +59,7 @@ The Configuration needed to be set differs of how many different payment methods
 The authorization values are recieved from Svea Ekonomi when creating an account. If no configuration is done, default settings and 
 test data found in SveaConfig.getDefaultConfig() will be used.
 
-To configure Svea authorization:
+**To configure Svea authorization:**
 Create a class (eg. one for testing values, one for production) that implements the ConfigurationProvider Interface. Let the implemented methods 
 return the authorization values asked for. 
 Later when starting a WebPay action in your integration file, put an instance of your class as parameter to the constructor.
@@ -193,7 +193,6 @@ CreateOrderResponse response = WebPay.createOrder(myConfig)		//See Configuration
 .setCustomerReference("33")
 .setClientOrderNumber("nr26")
 .setCurrency("SEK")
-.setAddressSelector("7fd7768")
 
 //Continue by choosing one of the following paths
 //Continue as a card payment
@@ -319,7 +318,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
     .setEmail("test@svea.com")         		//Optional but desirable    
     .setIpAddress("123.123.123")       		//Optional but desirable
     .setCoAddress("c/o Eriksson")      		//Optional
-    .setPhoneNumber(999999))           		//Optional   
+    .setPhoneNumber(999999))           		//Optional  
 ```
 
 ####4.3.2 Options for company customers
@@ -328,6 +327,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
     .setNationalIdNumber("2345234")			//Required for company customers in SE, NO, DK, FI
     .setVatNumber("NL2345234")				//Required for NL and DE
     .setCompanyName("TestCompagniet")) 		//Required for Eu countries like NL and DE
+	.setAddressSelector("7fd7768")          //Optional. Recieved from getAddresses		
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
@@ -336,7 +336,6 @@ depending on country and customer type. For SE, NO, DK and FI national id number
 .setCountryCode(COUNTRYCODE.SE)         //Required
 .setCurrency("SEK")                     //Required for card payment, direct payment and PayPage payment.
 .setClientOrderNumber("nr26")           //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
-.setAddressSelector("7fd7768")          //Optional. Recieved from getAddresses
 .setOrderDate("2012-12-12")             //Required for synchronous payments
 .setCustomerReference("33")             //Optional
 ```
@@ -353,25 +352,25 @@ use class *Response* with the xml response as parameter, you will receive a form
 
 #### Which payment method to choose?
 Invoice and/or payment plan payments.
->The preferable way is to use [`.useInvoicePayment()`](https://github.com/sveawebpay/java-integration/tree/master#155-invoicepayment) and
->[`.usePaymentPlanPayment(...)`](https://github.com/sveawebpay/java-integration/tree/master#156-paymentplanpayment).
+>The preferable way is to use [`.useInvoicePayment()`](https://github.com/sveawebpay/java-integration/tree/master#455-invoicepayment) and
+>[`.usePaymentPlanPayment(...)`](https://github.com/sveawebpay/java-integration/tree/master#456-paymentplanpayment).
 >These payments are synchronous and will give you an instant response.
 
 Card and/or direct bank payments
->Go by *PayPage* by using [`.usePayPageCardOnly()`](https://github.com/sveawebpay/java-integration/tree/master#151-paypage-with-card-payment-options)
->and [`.usePayPageDirectBankOnly()`](https://github.com/sveawebpay/java-integration/tree/master#152-paypage-with-direct-bank-payment-options). 
+>Go by *PayPage* by using [`.usePayPageCardOnly()`](https://github.com/sveawebpay/java-integration/tree/master#451-paypage-with-card-payment-options)
+>and [`.usePayPageDirectBankOnly()`](https://github.com/sveawebpay/java-integration/tree/master#452-paypage-with-direct-bank-payment-options). 
 >If you only for example only have one specific bank payment, go direct to that specific bank payment by using
->[`.usePaymentMethod(PaymentMethod)`](https://github.com/sveawebpay/java-integration/tree/master#154-paymentmethod-specified)
+>[`.usePaymentMethod(PaymentMethod)`](https://github.com/sveawebpay/java-integration/tree/master#454-paymentmethod-specified)
 
 Using all payments.
->The most effective way is to use [`.useInvoicePayment()`](https://github.com/sveawebpay/java-integration/tree/master#155-invoicepayment) 
->and [`.usePaymentPlanPayment(...)`](https://github.com/sveawebpay/java-integration/tree/master#156-paymentplanpayment) for the synchronous payments,
->and use the *PayPage* for the asynchronous requests by using [`.usePayPageCardOnly()`](https://github.com/sveawebpay/java-integration/tree/master#151-paypage-with-card-payment-options) 
->and [`.usePayPageDirectBankOnly()`](https://github.com/sveawebpay/java-integration/tree/master#152-paypage-with-direct-bank-payment-options).
+>The most effective way is to use [`.useInvoicePayment()`](https://github.com/sveawebpay/java-integration/tree/master#455-invoicepayment) 
+>and [`.usePaymentPlanPayment(...)`](https://github.com/sveawebpay/java-integration/tree/master#456-paymentplanpayment) for the synchronous payments,
+>and use the *PayPage* for the asynchronous requests by using [`.usePayPageCardOnly()`](https://github.com/sveawebpay/java-integration/tree/master#451-paypage-with-card-payment-options) 
+>and [`.usePayPageDirectBankOnly()`](https://github.com/sveawebpay/java-integration/tree/master#452-paypage-with-direct-bank-payment-options).
 
 Using more than one payment and want them gathered on one place.
 >Go by PayPage and choose show all your payments here, or modify to exclude or include one or more payments. Use [`.usePayPage()`]
->(https://github.com/sveawebpay/java-integration/tree/master#153-paypagepayment) where you can custom your own *PayPage*.
+>(https://github.com/sveawebpay/java-integration/tree/master#453-paypagepayment) where you can custom your own *PayPage*.
 Note that Invoice and Payment plan payments will return an asynchronous response from here.
 
 

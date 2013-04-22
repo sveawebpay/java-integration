@@ -63,15 +63,15 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
         return this;
     }
     
-    public long getBirthDate() {
+    public Long getBirthDate() {
         return this.birthDate;
     }    
     
     /**
      * Required for private customers in NL and DE
      * @param type yyyy
-     * @param type mm
-     * @param type dd
+     * @param type (m)m
+     * @param type (d)d
      * @return IndividualCustomer
      */
     public IndividualCustomer setBirthDate(int year, int month, int day) {

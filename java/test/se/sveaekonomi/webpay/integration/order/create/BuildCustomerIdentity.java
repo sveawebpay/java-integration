@@ -14,7 +14,7 @@ public class BuildCustomerIdentity implements CreateBuilderCommand<CreateOrderBu
                 .setEmail("test@svea.com")
                 .setPhoneNumber(999999)
                 .setIpAddress("123.123.123")
-                .setStreetAddress("Gatan", 23)               
+                .setStreetAddress("Gatan", "23")               
                 .setZipCode("9999")
                 .setLocality("Stan"));  
     }

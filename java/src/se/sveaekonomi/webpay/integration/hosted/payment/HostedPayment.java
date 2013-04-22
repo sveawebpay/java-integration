@@ -14,8 +14,10 @@ import se.sveaekonomi.webpay.integration.hosted.helper.HostedXmlBuilder;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HostedOrderValidator;
+import se.sveaekonomi.webpay.integration.order.validator.IdentityValidator;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 
@@ -103,9 +105,21 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
        String errors = "";	
        if(this.returnUrl.equals(""))
     	   errors += "MISSING VALUE - Return url is required, setReturnUrl(...).\n";
-        HostedOrderValidator validator = new HostedOrderValidator();
-        errors += validator.validate(this.createOrderBuilder);
-        return errors;
+       
+       HostedOrderValidator validator = new HostedOrderValidator();
+      //Check if payment method is EU country, PaymentMethod: INVOICE or PAYMENTPLAN    
+       //if((this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.DE) || this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.NL))
+    	   if(this instanceof PaymentMethodPayment) {
+    		   if(((PaymentMethodPayment)this).getPaymentMethod() == PAYMENTMETHOD.INVOICE || ((PaymentMethodPayment)this).getPaymentMethod() == PAYMENTMETHOD.PAYMENTPLAN)
+    	   			if(this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.NL))
+    	   				errors += new IdentityValidator().validateNLIdentity(createOrderBuilder);
+    	   			else if(this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.DE))
+    	   				errors += new IdentityValidator().validateDEIdentity(createOrderBuilder);
+       }
+       
+       
+       errors += validator.validate(this.createOrderBuilder);        
+       return errors;
        
     }
     

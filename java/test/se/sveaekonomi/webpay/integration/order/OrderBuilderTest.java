@@ -49,12 +49,12 @@ public class OrderBuilderTest {
         assertEquals(order.getIndividualCustomer().getNationalIdNumber(), "194609052222");
         assertEquals(order.getIndividualCustomer().getFirstName(), "Tess");
         assertEquals(order.getIndividualCustomer().getLastName(), "Testson");
-        assertEquals(order.getIndividualCustomer().getBirthDate(), 19231212);
+        assertEquals(order.getIndividualCustomer().getBirthDate(), 19231212, 0);
         assertEquals(order.getIndividualCustomer().getEmail(), "test@svea.com");
         assertEquals(order.getIndividualCustomer().getPhoneNumber(), 999999, 0);
         assertEquals(order.getIndividualCustomer().getIpAddress(), "123.123.123");
         assertEquals(order.getIndividualCustomer().getStreetAddress(), "Gatan");
-        assertEquals(order.getIndividualCustomer().getHouseNumber(), 23, 0);
+        assertEquals(order.getIndividualCustomer().getHouseNumber(), "23");
         assertEquals(order.getIndividualCustomer().getCoAddress(), "c/o Eriksson");
         assertEquals(order.getIndividualCustomer().getZipCode(), "9999");
         assertEquals(order.getIndividualCustomer().getLocality(), "Stan");
@@ -162,7 +162,7 @@ public class OrderBuilderTest {
                 .setEmail("test@svea.com")
                 .setPhoneNumber(999999)
                 .setIpAddress("123.123.123")
-                .setStreetAddress("Gatan", 23)             
+                .setStreetAddress("Gatan", "23")             
                 .setCoAddress("c/o Eriksson")
                 .setZipCode("9999")
                 .setLocality("Stan"));                
