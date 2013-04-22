@@ -6,6 +6,7 @@ public class CompanyCustomer extends CustomerIdentity<CompanyCustomer> {
     private String companyName;
     private String orgNumber;
     private String companyVatNumber;
+    private String addressSelector;
 
     public CompanyCustomer() {
         super();
@@ -58,4 +59,18 @@ public class CompanyCustomer extends CustomerIdentity<CompanyCustomer> {
         this.companyVatNumber = vatNumber;
         return this;
     }
+
+    /**
+     * 
+     * @param addressSelector     
+     * @return CompanyCustomer
+     */
+	public CompanyCustomer setAddressSelector(String addressSelector) {
+		this.addressSelector = addressSelector;
+		return this;
+	}
+	
+	public String getAddressSelector() {
+		return this.addressSelector;
+	}
 }

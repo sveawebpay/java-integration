@@ -128,7 +128,7 @@ public class InvoicePaymentTest {
                                     
             .setClientOrderNumber("nr26")
             .setCountryCode(COUNTRYCODE.SE)
-            .setAddressSelector("ad33")
+           // .setAddressSelector("ad33")
             .setOrderDate("2012-12-12")
             .setClientOrderNumber("33")
             .setCurrency(CURRENCY.SEK)
@@ -575,8 +575,7 @@ public class InvoicePaymentTest {
             .setZipCode("2222")
             .setLocality("Stan"))
                       
-        .setCountryCode(COUNTRYCODE.SE)
-        .setAddressSelector("ad33")
+        .setCountryCode(COUNTRYCODE.SE) 
         .setOrderDate("2012-12-12")
         .setClientOrderNumber("33")
         .setCurrency(CURRENCY.SEK)
@@ -595,11 +594,9 @@ public class InvoicePaymentTest {
     @Test
     public void testInvoiceRequestUsingAmountIncVatWithVatPercent() throws ValidationException {
     	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-  		.addCustomerDetails(Item.individualCustomer()               
+  		.addCustomerDetails(Item.companyCustomer()               
             .setNationalIdNumber("194605092222")
-            .setInitials("SB")
-            .setBirthDate(1923, 12, 12)
-            .setName("Tess", "Testson")
+            .setAddressSelector("ad33")
             .setEmail("test@svea.com")
             .setPhoneNumber(999999)
             .setIpAddress("123.123.123")
@@ -634,7 +631,6 @@ public class InvoicePaymentTest {
             .setDiscountPercent(0))
                                  
         .setCountryCode(COUNTRYCODE.SE)
-        .setAddressSelector("ad33")
         .setOrderDate("2012-12-12")
         .setClientOrderNumber("33")
         .setCurrency(CURRENCY.SEK)

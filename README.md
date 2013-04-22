@@ -193,7 +193,6 @@ CreateOrderResponse response = WebPay.createOrder(myConfig)		//See Configuration
 .setCustomerReference("33")
 .setClientOrderNumber("nr26")
 .setCurrency("SEK")
-.setAddressSelector("7fd7768")
 
 //Continue by choosing one of the following paths
 //Continue as a card payment
@@ -319,7 +318,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
     .setEmail("test@svea.com")         		//Optional but desirable    
     .setIpAddress("123.123.123")       		//Optional but desirable
     .setCoAddress("c/o Eriksson")      		//Optional
-    .setPhoneNumber(999999))           		//Optional   
+    .setPhoneNumber(999999))           		//Optional  
 ```
 
 ####4.3.2 Options for company customers
@@ -328,6 +327,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
     .setNationalIdNumber("2345234")			//Required for company customers in SE, NO, DK, FI
     .setVatNumber("NL2345234")				//Required for NL and DE
     .setCompanyName("TestCompagniet")) 		//Required for Eu countries like NL and DE
+	.setAddressSelector("7fd7768")          //Optional. Recieved from getAddresses		
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
@@ -336,7 +336,6 @@ depending on country and customer type. For SE, NO, DK and FI national id number
 .setCountryCode(COUNTRYCODE.SE)         //Required
 .setCurrency("SEK")                     //Required for card payment, direct payment and PayPage payment.
 .setClientOrderNumber("nr26")           //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
-.setAddressSelector("7fd7768")          //Optional. Recieved from getAddresses
 .setOrderDate("2012-12-12")             //Required for synchronous payments
 .setCustomerReference("33")             //Optional
 ```

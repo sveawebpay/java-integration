@@ -38,7 +38,6 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     
     private COUNTRYCODE countryCode;
     private String currency;
-    private String addressSelector;
     private String campaignCode;
     private Boolean sendAutomaticGiroPaymentForm;
      
@@ -105,19 +104,6 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     
     public CreateOrderBuilder setCurrency(CURRENCY currency) {
         this.currency = currency.toString();
-        return this;
-    }
-    
-    /**
-     * 
-     * @return selector received by using the WebPay.getAddresses() method
-     */
-    public String getAddressSelector() {
-        return addressSelector;
-    }
-    
-    public CreateOrderBuilder setAddressSelector(String addressSelector) {
-        this.addressSelector = addressSelector;
         return this;
     }
     

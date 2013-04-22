@@ -49,8 +49,7 @@ public class PaymentPlanTest {
               .setZipCode("9999")
               .setLocality("Stan"))
                       
-              .setCountryCode(COUNTRYCODE.SE)
-              .setAddressSelector("ad33")
+              .setCountryCode(COUNTRYCODE.SE)   
               .setOrderDate("2012-12-12")
               .setClientOrderNumber("33")
               .setCurrency(CURRENCY.SEK)
