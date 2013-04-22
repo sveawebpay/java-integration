@@ -43,7 +43,16 @@ public class HostedXmlBuilder extends XMLBuilder {
         if (payment.getVat() != null) {
             writeSimpleElement("vat", payment.getVat().toString());
         }
-        //TODO: add ip address
+        
+        if(order.getIsCompanyIdentity()) {
+        	if(order.getCompanyCustomer().getIpAddress() != null)
+				writeSimpleElement("ipaddress", order.getCompanyCustomer().getIpAddress());
+        }
+        else {
+        	if(order.getIndividualCustomer().getIpAddress() != null)
+				writeSimpleElement("ipaddress", order.getCompanyCustomer().getIpAddress());
+
+        }
         serializeRows(rows);     
         if (payment.getExcludedPaymentMethods() != null) {
             xmlw.writeStartElement("excludepaymentmethods");
@@ -99,6 +108,8 @@ public class HostedXmlBuilder extends XMLBuilder {
 					writeSimpleElement("phone", ((IndividualCustomer)customer).getPhoneNumber().toString());
 				if(((IndividualCustomer)customer).getStreetAddress() != null)
 					writeSimpleElement("address", ((IndividualCustomer)customer).getStreetAddress());
+				if(((IndividualCustomer)customer).getZipCode() != null)
+					writeSimpleElement("zip", ((IndividualCustomer)customer).getZipCode());
 				if(((IndividualCustomer)customer).getHouseNumber() != null)
 					writeSimpleElement("housenumber", ((IndividualCustomer)customer).getHouseNumber());
 				if(((IndividualCustomer)customer).getCoAddress() != null)
@@ -106,6 +117,27 @@ public class HostedXmlBuilder extends XMLBuilder {
 				if(((IndividualCustomer)customer).getLocality() != null)
 					writeSimpleElement("city", ((IndividualCustomer)customer).getLocality().toString());				
 			}
+			else {
+				if(((CompanyCustomer)customer).getHouseNumber() != null)
+					writeSimpleElement("housenumber", ((CompanyCustomer)customer).getHouseNumber());
+				if(((CompanyCustomer)customer).getZipCode() != null)
+					writeSimpleElement("zip", ((CompanyCustomer)customer).getZipCode());
+				if(((CompanyCustomer)customer).getStreetAddress() != null)
+					writeSimpleElement("address", ((CompanyCustomer)customer).getStreetAddress());
+				if(((CompanyCustomer)customer).getLocality() != null)
+					writeSimpleElement("city", ((CompanyCustomer)customer).getLocality().toString());				
+				if(((CompanyCustomer)customer).getCompanyName() != null)
+					writeSimpleElement("firstname", ((CompanyCustomer)customer).getCompanyName());
+				if(((CompanyCustomer)customer).getEmail() != null)
+					writeSimpleElement("email", ((CompanyCustomer)customer).getEmail());
+				if(((CompanyCustomer)customer).getCoAddress() != null)
+					writeSimpleElement("address2", ((CompanyCustomer)customer).getCoAddress());
+				if(((CompanyCustomer)customer).getEmail() != null)
+					writeSimpleElement("email", ((CompanyCustomer)customer).getEmail());
+				if(((CompanyCustomer)customer).getPhoneNumber() != null)
+					writeSimpleElement("phone", ((CompanyCustomer)customer).getPhoneNumber().toString());
+			}
+			
 			if(order.getCountryCode() != null)
 				writeSimpleElement("country", order.getCountryCode().toString());			
 			xmlw.writeEndElement();
