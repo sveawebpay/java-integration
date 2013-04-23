@@ -65,7 +65,7 @@ public class PaymentPlanTest {
     @Test
     public void testPaymentPlanFailCompanyCustomer() throws ValidationException{
     	try {
-    	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+    	WebPay.createOrder()
     	.addOrderRow(Item.orderRow()
               .setArticleNumber(1)
               .setQuantity(2)
