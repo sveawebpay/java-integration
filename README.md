@@ -335,7 +335,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
 ```java
 .setCountryCode(COUNTRYCODE.SE)         //Required
 .setCurrency("SEK")                     //Required for card payment, direct payment and PayPage payment.
-.setClientOrderNumber("nr26")           //Required for card payment, direct payment, PaymentMethod payment and PayPage payments.
+.setClientOrderNumber("nr26")           //Required for card payment, direct payment, PaymentMethod payment and PayPage payments. Must be uniqe.
 .setOrderDate("2012-12-12")             //Required for synchronous payments
 .setCustomerReference("33")             //Optional
 ```
