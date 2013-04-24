@@ -17,5 +17,5 @@ public class BuildCustomerIdentity implements CreateBuilderCommand<CreateOrderBu
                 .setStreetAddress("Gatan", "23")               
                 .setZipCode("9999")
                 .setLocality("Stan"));  
-    }
+    }    
 }

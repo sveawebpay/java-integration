@@ -65,6 +65,7 @@ public class HostedXmlBuilder extends XMLBuilder {
             xmlw.writeEndElement();
         }
         writeSimpleElement("iscompany", order.getIsCompanyIdentity() ? "true" : "false");
+        writeSimpleElement("addinvoicefee", "false");
         xmlw.writeEndDocument();
         
         try {
@@ -140,6 +141,7 @@ public class HostedXmlBuilder extends XMLBuilder {
 			
 			if(order.getCountryCode() != null)
 				writeSimpleElement("country", order.getCountryCode().toString());			
+			
 			xmlw.writeEndElement();
 		} catch (XMLStreamException e) {
 		
