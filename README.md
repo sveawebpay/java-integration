@@ -611,7 +611,7 @@ CreateOrderResponse response = WebPay.createOrder()
 .setVatPercent(25.00)
 .setDiscountPercent(0))   
 
-.setCountryCode(COUNTRYCODE.SE)											//Required
+.setCountryCode(COUNTRYCODE.SE)						//Required
 .setCustomerReference("33")
 .setOrderDate("2012-12-12")
 .setCurrency("SEK")
@@ -651,7 +651,7 @@ Returns *PaymentPlanParamsResponse* object. Set your store authorization here.
 
 ```java
 CreateOrderResponse response = WebPay.getPaymentPlanParams()	
-	.setCountryCode(COUNTRYCODE.SE)										//Required	
+	.setCountryCode(COUNTRYCODE.SE)					//Required	
 	.doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
@@ -681,10 +681,10 @@ or
 
 ### 6.3                                                                      	
 ```java
-GetAddressesResponse response = WebPay.getAddresses(myConfig)			//see more about Configuration chapt.3       	
-	.setCountryCode(COUNTRYCODE.SE)                                     //Required
-	.setOrderTypeInvoice()                                              //See 6.1   	
-	.setIndividual("194605092222")                                      //See 6.2   
+GetAddressesResponse response = WebPay.getAddresses(myConfig)		//see more about Configuration chapt.3       	
+	.setCountryCode(COUNTRYCODE.SE)                                 //Required
+	.setOrderTypeInvoice()                                          //See 6.1   	
+	.setIndividual("194605092222")                                  //See 6.2   
 	.doRequest();
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
@@ -831,7 +831,7 @@ Enumeration, used in *usePaymentMethod(PAYMENTMETHOD paymentMethod)*, *.usePayPa
 
 | Payment method                   | Description                                   |
 |----------------------------------|-----------------------------------------------|
-| PAYMENTMETHOD.BANKAXESS	       | Direct bank payment, Norway.          | 
+| PAYMENTMETHOD.BANKAXESS	       | Direct bank payment, Norway.       		   | 
 | PAYMENTMETHOD.NORDEA_SE	       | Direct bank payment, Nordea, Sweden.          | 
 | PAYMENTMETHOD.SEB_SE	           | Direct bank payment, private, SEB, Sweden.    |
 | PAYMENTMETHOD.SEBFTG_SE 	       | Direct bank payment, company, SEB, Sweden.    |
