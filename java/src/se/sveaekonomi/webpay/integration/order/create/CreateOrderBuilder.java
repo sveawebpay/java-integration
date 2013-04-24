@@ -216,11 +216,17 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     }
     
     public CompanyCustomer getCompanyCustomer() {
-        return (CompanyCustomer)this.customerIdentity;
+    	if(this.customerIdentity instanceof CompanyCustomer)
+    		return (CompanyCustomer)this.customerIdentity;
+    	else 
+    		return null;
     }
     
     public IndividualCustomer getIndividualCustomer() {
-        return (IndividualCustomer)this.customerIdentity;
+    	if(this.customerIdentity instanceof IndividualCustomer)
+    		return (IndividualCustomer)this.customerIdentity;
+    	else 
+    		return null;
     }
     
     public CustomerIdentity<?> getCustomerIdentity() {
