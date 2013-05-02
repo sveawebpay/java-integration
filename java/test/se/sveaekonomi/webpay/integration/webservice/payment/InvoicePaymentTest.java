@@ -614,7 +614,8 @@ public class InvoicePaymentTest {
             .setVatPercent(25)
             .setAmountIncVat(125)
             .setDiscountPercent(0))
-         .addFee(Item.shippingFee()
+            
+        .addFee(Item.shippingFee()
             .setShippingId("33")
             .setName("shipping")
             .setDescription("Specification")
@@ -622,7 +623,7 @@ public class InvoicePaymentTest {
             .setUnit("st")
             .setVatPercent(25)
             .setDiscountPercent(0))
-         .addFee(Item.invoiceFee()
+        .addFee(Item.invoiceFee()
             .setName("Svea fee")
             .setDescription("Fee for invoice")
             .setAmountIncVat(62.50)
@@ -664,6 +665,47 @@ public class InvoicePaymentTest {
         assertEquals(0, request.request.CreateOrderInformation.OrderRows.get(2).DiscountPercent);
     }
 
+    @Test
+    public void testInvoiceRequestUsingAmountIncVatWithZeroVatPercent() throws Exception {
+    	// SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder()        	
+        .addOrderRow(Item.orderRow()
+            .setArticleNumber(1)
+            .setQuantity(2)
+            .setAmountExVat(100.00)
+            .setDescription("Specification")
+            .setName("Prod")
+            .setVatPercent(0)
+            .setDiscountPercent(0))
+        .addOrderRow(Item.orderRow()
+            .setArticleNumber(1)
+            .setQuantity(2)
+            .setAmountExVat(100.00)
+            .setDescription("Specification")
+            .setName("Prod")
+            .setUnit("st")
+            .setVatPercent(25)
+            .setDiscountPercent(0)) 
+        
+        .addCustomerDetails(Item.individualCustomer()
+            .setNationalIdNumber("194605092222"))
+    
+            .setCountryCode(COUNTRYCODE.SE)
+            .setOrderDate("2012-12-12")
+            .setClientOrderNumber("33")
+            .setCurrency(CURRENCY.SEK)
+            .setCustomerReference("33")
+            .useInvoicePayment()
+    	                        
+       // .prepareRequest();
+    	 .doRequest();
+    	
+    	// assertEquals(request.request.CreateOrderInformation.ClientOrderNumber, 22);
+    	 
+   // 	assertEquals(response.getErrorMessage(), "");
+    	assertEquals(response.isOrderAccepted(), true);
+    }
+    
     @Test
     public void testInvoiceRequestUsingAmountIncVatWithAmountExVat() throws ValidationException {        
     	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()

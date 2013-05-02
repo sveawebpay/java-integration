@@ -5,12 +5,19 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
+import javax.xml.bind.ValidationException;
+
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
+import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrderRow;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class WebserviceRowFormatterTest {
     
@@ -39,8 +46,47 @@ public class WebserviceRowFormatterTest {
     }
     
     @Test
-    public void testFormatShippingFeeRows() {
-    	CreateOrderBuilder order = WebPay.createOrder()
+    public void testFormatShippingFeeRows() throws ValidationException, Exception {
+    	CreateOrderResponse response = WebPay.createOrder()
+    	  		.addCustomerDetails(Item.companyCustomer()               
+    	            .setNationalIdNumber("194605092222")
+    	            .setAddressSelector("ad33")
+    	            .setEmail("test@svea.com")
+    	            .setPhoneNumber(999999)
+    	            .setIpAddress("123.123.123")
+    	            .setStreetAddress("Gatan", "23")
+    	            .setCoAddress("c/o Eriksson")
+    	            .setZipCode("2222")
+    	            .setLocality("Stan"))
+    	                
+    	         .addOrderRow(Item.orderRow()
+    	            .setArticleNumber(1)
+    	            .setQuantity(2)
+    	            .setDescription("Specification")
+    	            .setName("Prod")
+    	            .setUnit("st")
+    	            .setVatPercent(25)
+    	            .setAmountIncVat(125)
+    	            .setDiscountPercent(0))
+    	            
+    	         .addFee(Item.shippingFee()
+    	            .setShippingId("33")
+    	            .setName("shipping")
+    	            .setDescription("Specification")
+    	            .setAmountIncVat(62.50)
+    	            .setUnit("st")
+    	            .setVatPercent(25)
+    	            .setDiscountPercent(0))
+    	         
+    	                                 
+    	        .setCountryCode(COUNTRYCODE.SE)
+    	        .setOrderDate("2012-12-12")
+    	        .setClientOrderNumber("33")
+    	        .setCurrency(CURRENCY.SEK)
+    	        .useInvoicePayment()// returns an InvoiceOrder object             
+    	        .doRequest();
+    	           
+ /*   	CreateOrderBuilder order = WebPay.createOrder()
         .addOrderRow(Item.orderRow())
         .addFee(Item.shippingFee()  
             .setShippingId("0")
@@ -59,7 +105,7 @@ public class WebserviceRowFormatterTest {
         assertEquals(25.0,newRow.VatPercent, 0);
         assertEquals(0, newRow.DiscountPercent);
         assertEquals(1, newRow.NumberOfUnits);
-        assertEquals("st", newRow.Unit);
+        assertEquals("st", newRow.Unit);*/
     }
     
     @Test
