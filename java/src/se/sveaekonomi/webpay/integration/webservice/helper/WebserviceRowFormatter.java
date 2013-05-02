@@ -47,13 +47,10 @@ public class WebserviceRowFormatter {
         double vatPercentAsHundredth;
         for (OrderRowBuilder existingRow : orderRows) {
             vatPercentAsHundredth = existingRow.getVatPercent() != null ? existingRow.getVatPercent() * 0.01 : 0;
-  //          vatPercentAsHundredth = existingRow.getVatPercent() > 0 ? existingRow.getVatPercent() * 0.01 : 0;
-                    
-            //if (existingRow.getVatPercent() >= 0 && existingRow.getAmountExVat() >= 0) {
+ 
             if (existingRow.getVatPercent() != null && existingRow.getAmountExVat() != null) {
                 this.totalAmountExVat += existingRow.getAmountExVat();
                 this.totalVatAsAmount += vatPercentAsHundredth * existingRow.getAmountExVat();
-          //  } else if (existingRow.getVatPercent() >= 0 && existingRow.getAmountIncVat() >= 0) { 
             } else if (existingRow.getVatPercent() != null && existingRow.getAmountIncVat() != null) {
                 this.totalAmountInclVat += existingRow.getAmountIncVat();
                 this.totalVatAsAmount += (vatPercentAsHundredth / (1 + vatPercentAsHundredth)) * existingRow.getAmountIncVat();
