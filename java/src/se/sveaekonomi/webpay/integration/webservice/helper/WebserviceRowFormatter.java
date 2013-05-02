@@ -187,16 +187,6 @@ public class WebserviceRowFormatter {
             orderRow.PricePerUnit = amountExVat;
             orderRow.VatPercent = ((amountIncVat / amountExVat) - 1) * 100;
         }
-       /* if (vatPercent > 0 && amountExVat > 0) {
-            orderRow.PricePerUnit = amountExVat;
-            orderRow.VatPercent = vatPercent;
-        } else if (vatPercent > 0 && amountIncVat > 0) {
-            orderRow.PricePerUnit = amountIncVat / ((0.01 * vatPercent) + 1);
-            orderRow.VatPercent = vatPercent;
-        } else {
-            orderRow.PricePerUnit = amountExVat;
-            orderRow.VatPercent = ((amountIncVat / amountExVat) - 1) * 100;
-        }*/
         return orderRow;       
     }
 }

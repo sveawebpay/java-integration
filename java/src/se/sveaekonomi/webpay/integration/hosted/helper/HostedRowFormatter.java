@@ -96,12 +96,10 @@ public class HostedRowFormatter {
             if (row.getDescription() != null) {
                 tempRow.setDescription(row.getDescription());
             }
-        
-            //if (row.getAmountExVat() > 0 && row.getVatPercent() > 0) {
+                   
             if (row.getAmountExVat() != null && row.getVatPercent() != null) {
                 tempRow.setAmount(new Double((row.getAmountExVat() * 100) * plusVatCounter).longValue());
                 tempRow.setVat(new Double(tempRow.getAmount() - (row.getAmountExVat() * 100)).longValue());
-            //} else if (row.getAmountIncVat() > 0 && row.getVatPercent() > 0 ) {
             } else if (row.getAmountIncVat() != null && row.getVatPercent() != null ) {
                 tempRow.setAmount(new Double(row.getAmountIncVat() * 100).longValue());
                 tempRow.setVat(new Double(tempRow.getAmount() - (tempRow.getAmount() / plusVatCounter)).longValue());
