@@ -89,7 +89,7 @@ public class OrderBuilderTest {
         assertEquals(order.getShippingFeeRows().get(0).getShippingId(), "33");
         assertEquals("Specification", order.getShippingFeeRows().get(0).getDescription());
         assertEquals(50, order.getShippingFeeRows().get(0).getAmountExVat(), 0);
-        assertEquals(25, order.getShippingFeeRows().get(0).getVatPercent());
+        assertEquals(25, order.getShippingFeeRows().get(0).getVatPercent(), 0);
     }
     
     @Test
@@ -100,7 +100,7 @@ public class OrderBuilderTest {
         assertEquals(order.getInvoiceFeeRows().get(0).getDescription(), "Fee for invoice");
         assertEquals(order.getInvoiceFeeRows().get(0).getAmountExVat(), 50, 0);
         assertEquals(order.getInvoiceFeeRows().get(0).getUnit(), "st");
-        assertEquals(order.getInvoiceFeeRows().get(0).getVatPercent(), 25);
+        assertEquals(order.getInvoiceFeeRows().get(0).getVatPercent(), 25, 0);
         assertEquals(order.getInvoiceFeeRows().get(0).getDiscountPercent(), 0, 0);
     }
     

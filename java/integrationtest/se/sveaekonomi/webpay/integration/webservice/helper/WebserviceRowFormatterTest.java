@@ -5,12 +5,19 @@ import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
+import javax.xml.bind.ValidationException;
+
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
+import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrderRow;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class WebserviceRowFormatterTest {
     
@@ -39,28 +46,79 @@ public class WebserviceRowFormatterTest {
     }
     
     @Test
-    public void testFormatShippingFeeRows() {
-    	CreateOrderBuilder order = WebPay.createOrder()
-        .addOrderRow(Item.orderRow())
-        .addFee(Item.shippingFee()  
-            .setShippingId("0")
-            .setName("Tess")
-            .setDescription("Tester")
-            .setAmountExVat(4)
-            .setVatPercent(25)
-            .setUnit("st"));        
-        
-        ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
-        SveaOrderRow newRow = newRows.get(1);
-
-        assertEquals("0", newRow.ArticleNumber);
-        assertEquals("Tess: Tester", newRow.Description);
-        assertEquals(4.0, newRow.PricePerUnit, 0);
-        assertEquals(25.0,newRow.VatPercent, 0);
-        assertEquals(0, newRow.DiscountPercent);
-        assertEquals(1, newRow.NumberOfUnits);
-        assertEquals("st", newRow.Unit);
+    public void testFormatShippingFeeRows() throws ValidationException, Exception {
+    	  SveaRequest<SveaCreateOrder> request = WebPay.createOrder()        	
+    		        .addOrderRow(Item.orderRow()
+    		            .setArticleNumber(1)
+    		            .setQuantity(2)
+    		            .setAmountExVat(100.00)
+    		            .setDescription("Specification")
+    		            .setName("Prod")
+    		            .setVatPercent(0)
+    		            .setDiscountPercent(0))
+    		       
+    		       .addFee(Item.shippingFee()  
+			            .setShippingId("0")
+			            .setName("Tess")
+			            .setDescription("Tester")
+			            .setAmountExVat(4)
+			            .setVatPercent(25)
+			            .setUnit("st"))
+    		        
+    		        .addCustomerDetails(Item.individualCustomer()
+    		            .setNationalIdNumber("194605092222"))
+    		    
+    		            .setCountryCode(COUNTRYCODE.SE)
+    		            .setOrderDate("2012-12-12")
+    		            .setClientOrderNumber("33")
+    		            .setCurrency(CURRENCY.SEK)
+    		            .setCustomerReference("33")
+    		            .useInvoicePayment()    		    	                       
+    		        .prepareRequest();
+    	  
+    	assertEquals("0", request.request.CreateOrderInformation.OrderRows.get(1).ArticleNumber);
+        assertEquals("Tess: Tester", request.request.CreateOrderInformation.OrderRows.get(1).Description);
+        assertEquals(4.0, request.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit, 0);
+        assertEquals(25.0, request.request.CreateOrderInformation.OrderRows.get(1).VatPercent, 0);
+        assertEquals(0, request.request.CreateOrderInformation.OrderRows.get(1).DiscountPercent);
+        assertEquals(1, request.request.CreateOrderInformation.OrderRows.get(1).NumberOfUnits);
+        assertEquals("st", request.request.CreateOrderInformation.OrderRows.get(1).Unit);
     }
+    
+    @Test
+    public void testFormatShippingFeeRowsZero() throws ValidationException, Exception {
+    	  CreateOrderResponse response = WebPay.createOrder()        	
+    		        .addOrderRow(Item.orderRow()
+    		            .setArticleNumber(1)
+    		            .setQuantity(2)
+    		            .setAmountExVat(10)
+    		            .setDescription("Specification")
+    		            .setName("Prod")
+    		            .setVatPercent(0)
+    		            .setDiscountPercent(0))
+    		       
+    		       .addFee(Item.shippingFee()  
+			            .setShippingId("0")
+			            .setName("Tess")
+			            .setDescription("Tester")
+			            .setAmountExVat(0)
+			            .setVatPercent(0)
+			            .setUnit("st"))
+    		        
+    		        .addCustomerDetails(Item.individualCustomer()
+    		            .setNationalIdNumber("194605092222"))
+    		    
+    		            .setCountryCode(COUNTRYCODE.SE)
+    		            .setOrderDate("2012-12-12")
+    		            .setClientOrderNumber("33")
+    		            .setCurrency(CURRENCY.SEK)
+    		            .setCustomerReference("33")
+    		            .useInvoicePayment()    		    	                       
+    		        .doRequest();
+    	  
+    	  assertEquals(true, response.isOrderAccepted());
+    }
+    
     
     @Test
     public void testFormatInvoiceFeeRows() {

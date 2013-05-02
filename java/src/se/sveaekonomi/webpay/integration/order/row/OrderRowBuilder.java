@@ -10,15 +10,16 @@ public class OrderRowBuilder implements RowBuilder {
     private int articleNumber;
     private String name;
     private String description;
-    private double amountExVat;
-    private double amountIncVat;
-    private double vatPercent;
+    private Double amountExVat;
+    private Double amountIncVat;
+    private Double vatPercent;
     private int quantity;
     private String unit;
     private int vatDiscount;
     private Integer discountPercent;
     
     public OrderRowBuilder() {
+    	
     }
     
     public int getArticleNumber() {
@@ -63,7 +64,7 @@ public class OrderRowBuilder implements RowBuilder {
         return this;
     }
     
-    public double getAmountExVat() {
+    public Double getAmountExVat() {
         return amountExVat;
     }
     
@@ -78,7 +79,7 @@ public class OrderRowBuilder implements RowBuilder {
         return this;
     }
     
-    public double getVatPercent() {
+    public Double getVatPercent() {
         return vatPercent;
     }
     
@@ -150,7 +151,7 @@ public class OrderRowBuilder implements RowBuilder {
         return this;
     }
 
-    public double getAmountIncVat() {
+    public Double getAmountIncVat() {
         return amountIncVat;
     }
 

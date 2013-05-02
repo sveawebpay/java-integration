@@ -10,9 +10,9 @@ public class ShippingFeeBuilder implements RowBuilder {
     private String shippingId;
     private String name;
     private String description;
-    private double amountExVat;
-    private double amountIncVat;
-    private int vatPercent;
+    private Double amountExVat;
+    private Double amountIncVat;
+    private Double vatPercent;
     private int quantity;
     private String unit;
     private Integer discountPercent;
@@ -59,7 +59,7 @@ public class ShippingFeeBuilder implements RowBuilder {
         return this;
     }
     
-    public double getAmountExVat() {
+    public Double getAmountExVat() {
         return amountExVat;
     }
     
@@ -74,7 +74,7 @@ public class ShippingFeeBuilder implements RowBuilder {
         return this;
     }
     
-    public int getVatPercent() {
+    public Double getVatPercent() {
         return vatPercent;
     }
     
@@ -84,7 +84,7 @@ public class ShippingFeeBuilder implements RowBuilder {
      * @param vatPercent
      * @return ShippingFeeBuilder
      */
-    public ShippingFeeBuilder setVatPercent(int vatPercent) {
+    public ShippingFeeBuilder setVatPercent(double vatPercent) {
         this.vatPercent = vatPercent;
         return this;
     }
@@ -126,7 +126,7 @@ public class ShippingFeeBuilder implements RowBuilder {
         return (T)orderBuilder;
     }*/
 
-    public double getAmountIncVat() {
+    public Double getAmountIncVat() {
         return amountIncVat;
     }
 

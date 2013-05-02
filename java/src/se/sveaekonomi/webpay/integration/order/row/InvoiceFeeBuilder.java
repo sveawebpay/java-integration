@@ -5,9 +5,9 @@ public class InvoiceFeeBuilder implements RowBuilder {
 
     private String name;
     private String description;
-    private double amountExVat;
-    private double amountIncVat;
-    private int vatPercent;
+    private Double amountExVat;
+    private Double amountIncVat;
+    private Double vatPercent;
     private int quantity;
     private String unit;
     private Integer discountPercent;
@@ -40,7 +40,7 @@ public class InvoiceFeeBuilder implements RowBuilder {
         return this;
     }
     
-    public double getAmountExVat() {
+    public Double getAmountExVat() {
         return amountExVat;
     }
     
@@ -50,7 +50,7 @@ public class InvoiceFeeBuilder implements RowBuilder {
      * @param amountExVat
      * @return InvoiceFeeBuilder
      */
-    public InvoiceFeeBuilder setAmountExVat(int amountExVat) {
+    public InvoiceFeeBuilder setAmountExVat(double amountExVat) {
         this.amountExVat = amountExVat;
         return this;
     }
@@ -74,7 +74,7 @@ public class InvoiceFeeBuilder implements RowBuilder {
         return this;
     }
     
-    public int getVatPercent() {
+    public Double getVatPercent() {
         return vatPercent;
     }
     
@@ -84,7 +84,7 @@ public class InvoiceFeeBuilder implements RowBuilder {
      * @param vatPercent
      * @return InvoiceFeeBuilder
      */
-    public InvoiceFeeBuilder setVatPercent(int vatPercent) {
+    public InvoiceFeeBuilder setVatPercent(double vatPercent) {
         this.vatPercent = vatPercent;
         return this;
     }
@@ -103,7 +103,7 @@ public class InvoiceFeeBuilder implements RowBuilder {
         return this;
     }
        
-    public double getAmountIncVat() {
+    public Double getAmountIncVat() {
         return amountIncVat;
     }
 
