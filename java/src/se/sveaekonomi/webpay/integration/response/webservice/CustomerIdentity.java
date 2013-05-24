@@ -23,8 +23,8 @@ public class CustomerIdentity {
             this.setEmail(value);
         else if (name.equals("PhoneNumber"))
             this.setPhoneNumber(value);
-        else if (name.equals("IpAddress"))
-            this.setIpAddress(value);
+   //     else if (name.equals("IpAddress"))
+   //         this.setIpAddress(value);
         else if (name.equals("FullName"))
             this.setFullName(value);
         else if (name.equals("Street"))

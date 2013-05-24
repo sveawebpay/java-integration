@@ -46,12 +46,12 @@ public class WebserviceRowFormatter {
         List<OrderRowBuilder> orderRows = order.getOrderRows();
         double vatPercentAsHundredth;
         for (OrderRowBuilder existingRow : orderRows) {
-            vatPercentAsHundredth = existingRow.getVatPercent() > 0 ? existingRow.getVatPercent() * 0.01 : 0;
-                    
-            if (existingRow.getVatPercent() > 0 && existingRow.getAmountExVat() > 0) {
+            vatPercentAsHundredth = existingRow.getVatPercent() != null ? existingRow.getVatPercent() * 0.01 : 0;
+ 
+            if (existingRow.getVatPercent() != null && existingRow.getAmountExVat() != null) {
                 this.totalAmountExVat += existingRow.getAmountExVat();
                 this.totalVatAsAmount += vatPercentAsHundredth * existingRow.getAmountExVat();
-            } else if (existingRow.getVatPercent() > 0 && existingRow.getAmountIncVat() > 0) {
+            } else if (existingRow.getVatPercent() != null && existingRow.getAmountIncVat() != null) {
                 this.totalAmountInclVat += existingRow.getAmountIncVat();
                 this.totalVatAsAmount += (vatPercentAsHundredth / (1 + vatPercentAsHundredth)) * existingRow.getAmountIncVat();
             } else {
@@ -69,7 +69,8 @@ public class WebserviceRowFormatter {
         List<OrderRowBuilder> orderRows = order.getOrderRows();
         for (OrderRowBuilder existingRow : orderRows) {
             SveaOrderRow orderRow = new SveaOrderRow();
-            orderRow = serializeOrder(existingRow.getArticleNumber(), existingRow.getDescription(), existingRow.getName(), existingRow.getUnit(), orderRow);          
+            Integer articleNo = existingRow.getArticleNumber();
+            orderRow = serializeOrder(articleNo.toString(), existingRow.getDescription(), existingRow.getName(), existingRow.getUnit(), orderRow);          
                         
             orderRow.DiscountPercent = (!(existingRow.getDiscountPercent() == null) ? existingRow.getDiscountPercent() : 0);
             orderRow.NumberOfUnits = existingRow.getQuantity();
@@ -174,11 +175,12 @@ public class WebserviceRowFormatter {
         return orderRow;
     }
     
-    private SveaOrderRow serializeAmountAndVat(double amountExVat, double vatPercent, double amountIncVat, SveaOrderRow orderRow) {
-        if (vatPercent > 0 && amountExVat > 0) {
+    private SveaOrderRow serializeAmountAndVat(Double amountExVat, Double vatPercent, Double amountIncVat, SveaOrderRow orderRow) {
+    	
+    	if (vatPercent != null && amountExVat != null) {
             orderRow.PricePerUnit = amountExVat;
             orderRow.VatPercent = vatPercent;
-        } else if (vatPercent > 0 && amountIncVat > 0) {
+        } else if (vatPercent != null && amountIncVat != null) {
             orderRow.PricePerUnit = amountIncVat / ((0.01 * vatPercent) + 1);
             orderRow.VatPercent = vatPercent;
         } else {

@@ -34,8 +34,10 @@ public class CreateOrderResponse extends Response {
                 Element node = (Element) soapMessage.item(i);
                 // mandatory
                 this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
-                this.setResultCode(Long.parseLong(getTagValue(node, "ResultCode")));
+                
+                this.setResultCode(getTagValue(node, "ResultCode"));
                 this.sveaWillBuyOrder = Boolean.parseBoolean(getTagValue(node, "SveaWillBuyOrder"));
+               
                 this.amount = Double.parseDouble(getTagValue(node, "Amount"));
                 this.orderId = Long.parseLong(getTagValue(node, "SveaOrderId"));
                 this.expirationDate = getTagValue(node, "ExpirationDate");
@@ -54,7 +56,7 @@ public class CreateOrderResponse extends Response {
                 setChildNodeValue(node, "NationalIdNumber");
                 setChildNodeValue(node, "Email");
                 setChildNodeValue(node, "PhoneNumber");
-                setChildNodeValue(node, "IpAddress");
+        //        setChildNodeValue(node, "IpAddress");
                 setChildNodeValue(node, "FullName");
                 setChildNodeValue(node, "Street");
                 setChildNodeValue(node, "CoAddress");

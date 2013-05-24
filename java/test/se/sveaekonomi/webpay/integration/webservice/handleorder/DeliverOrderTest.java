@@ -9,9 +9,10 @@ import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder.DistributionType;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
@@ -20,13 +21,12 @@ public class DeliverOrderTest {
     
     @Before
     public void setUp() {
-        order = new DeliverOrderBuilder();
-        //order.setValidator(new VoidValidator());
+        order = WebPay.deliverOrder();
     }  
     
     @Test
     public void testBuildRequest() {
-       DeliverOrderBuilder request = order.setTestmode()
+       DeliverOrderBuilder request = order
         .setOrderId(54086L);
        assertEquals(54086L, request.getOrderId());
     }
@@ -34,8 +34,8 @@ public class DeliverOrderTest {
     @Test
     public void testDeliverInvoice() throws ValidationException {
          
-        order.addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
+    	SveaRequest<SveaDeliverOrder> request = order.addOrderRow(Item.orderRow()
+            .setArticleNumber(1)
             .setQuantity(2)
             .setAmountExVat(100.00)
             .setDescription("Specification")
@@ -54,15 +54,14 @@ public class DeliverOrderTest {
             .setDiscountPercent(0))
         
         .addDiscount(Item.fixedDiscount()
-           .setAmountIncVat(10));
-        
-        SveaRequest<SveaDeliverOrder> request = order
-        .setTestmode()
-        .setInvoiceDistributionType(DistributionType.Post)
+           .setAmountIncVat(10))  
+                   
+        .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
         .setOrderId(54086L)
         .setNumberOfCreditDays(1)
-        .setInvoiceIdToCredit("id")
-        .deliverInvoiceOrder()
+        .setCreditInvoice("id")
+        .setCountryCode(COUNTRYCODE.SE)
+        .deliverInvoiceOrder()        
             .prepareRequest();   
         
         //First order row is a product
@@ -94,10 +93,10 @@ public class DeliverOrderTest {
     
     @Test
     public void testDeliverPaymentPlanOrder() throws ValidationException {
-        SveaRequest<SveaDeliverOrder> request = order
-        .setTestmode()
+        SveaRequest<SveaDeliverOrder> request = order        
         .setOrderId(54086L)
-        .deliverPaymentPlanOrder()
+        .setCountryCode(COUNTRYCODE.SE)
+        .deliverPaymentPlanOrder()  
         .prepareRequest();
         
         assertEquals("54086", request.request.deliverOrderInformation.sveaOrderId);
@@ -106,22 +105,23 @@ public class DeliverOrderTest {
     
     @Test
     public void testDeliverPaymentPlanOrderDoRequest() throws Exception {
-    	DeliverOrderResponse response = WebPay.deliverOrder()
-    			.setTestmode()
-    			.addOrderRow(Item.orderRow()
-    			        .setArticleNumber("1")
-    			        .setQuantity(2)
-    			        .setAmountExVat(100.00)
-    			        .setDescription("Specification")
-    			        .setName("Prod")
-    			        .setUnit("st")
-    			        .setVatPercent(25)
-    			        .setDiscountPercent(0)
-    			    )  
-    			        .setOrderId(3434)
-    			        .setInvoiceDistributionType(DistributionType.Post)
-    			        .deliverInvoiceOrder()
-    			        //    .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
-    			            .doRequest();
+    	DeliverOrderResponse response =
+    			WebPay.deliverOrder()
+    		.addOrderRow(Item.orderRow()
+    			.setArticleNumber(1)
+    			.setQuantity(2)
+    			.setAmountExVat(100.00)
+    			.setDescription("Specification")
+    			.setName("Prod")
+    			.setUnit("st")
+    			.setVatPercent(25)
+    			.setDiscountPercent(0))  
+    		.setOrderId(54086L)
+    		.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+    		.setCountryCode(COUNTRYCODE.SE)
+    		.deliverInvoiceOrder()
+    			.doRequest();    
+
+    	 response.getErrorMessage();
     }
 }

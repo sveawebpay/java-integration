@@ -3,32 +3,31 @@ package se.sveaekonomi.webpay.integration.hosted.payment;
 import javax.xml.stream.XMLStreamWriter;
 
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
-public class CardPayment extends HostedPayment {
+/**
+ * Defines all card payments viewable in PayPage
+ * @author klar-sar
+ *
+ */
+public class CardPayment extends HostedPayment<CardPayment> {
     
     public CardPayment(CreateOrderBuilder orderBuilder) {
         super(orderBuilder);
     }
     
-    protected HostedPayment configureExcludedPaymentMethods() {      
-        
-        COUNTRYCODE countryCode = createOrderBuilder.getCountryCode();
-        
-        if (countryCode.equals(COUNTRYCODE.SE)) {
-            excludedPaymentMethods.add(PAYMENTMETHOD.SKRILL);
-        }
-        
+    protected CardPayment configureExcludedPaymentMethods() {      
+                
         //Payment service providers
-        excludedPaymentMethods.add(PAYMENTMETHOD.PAYPAL);
+        excludedPaymentMethods.add(PAYMENTMETHOD.PAYPAL.getValue());
         
         //Direct bank payment methods
-        excludedPaymentMethods.add(PAYMENTMETHOD.DBNORDEASE);
-        excludedPaymentMethods.add(PAYMENTMETHOD.DBSEBSE);
-        excludedPaymentMethods.add(PAYMENTMETHOD.DBSEBFTGSE);
-        excludedPaymentMethods.add(PAYMENTMETHOD.DBSHBSE);
-        excludedPaymentMethods.add(PAYMENTMETHOD.DBSWEDBANKSE);                           
+        excludedPaymentMethods.add(PAYMENTMETHOD.NORDEA_SE.getValue());
+        excludedPaymentMethods.add(PAYMENTMETHOD.SEB_SE.getValue());
+        excludedPaymentMethods.add(PAYMENTMETHOD.SEBFTG_SE.getValue());
+        excludedPaymentMethods.add(PAYMENTMETHOD.SHB_SE.getValue());
+        excludedPaymentMethods.add(PAYMENTMETHOD.SWEDBANK_SE.getValue());
+        excludedPaymentMethods.add(PAYMENTMETHOD.BANKAXESS.getValue());  
         
         //Invoices and payment plan      
         excludedPaymentMethods.addAll(excluded.excludeInvoicesAndPaymentPlan());        

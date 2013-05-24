@@ -3,22 +3,32 @@ package se.sveaekonomi.webpay.integration.hosted.payment;
 import javax.xml.stream.XMLStreamWriter;
 
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
-
-public class PaymentMethodPayment extends HostedPayment {
+/**
+ * Defines one payment method. Directs directly to method without going through PayPage. 
+ * @author klar-sar
+ *
+ */
+public class PaymentMethodPayment extends HostedPayment<PaymentMethodPayment> {
     
-    private String paymentMethod;
-    
-    public PaymentMethodPayment(CreateOrderBuilder createOrderBuilder, String paymentMethod) {
+    private PAYMENTMETHOD paymentMethod;
+        
+    public PaymentMethodPayment(CreateOrderBuilder createOrderBuilder, PAYMENTMETHOD paymentMethod) {
         super(createOrderBuilder);
         this.paymentMethod = paymentMethod;
     }
 
+    
+    public PAYMENTMETHOD getPaymentMethod() {
+    	return paymentMethod;
+    }
+    
     /**
      * Only used in CardPayment and DirectPayment
      */
     @Override
-    protected HostedPayment configureExcludedPaymentMethods() {
+    protected PaymentMethodPayment configureExcludedPaymentMethods() {
         return this;
     }
 

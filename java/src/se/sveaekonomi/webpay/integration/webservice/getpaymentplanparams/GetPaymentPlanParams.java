@@ -1,9 +1,16 @@
 package se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams;
 
+import java.net.URL;
+
+import javax.xml.bind.ValidationException;
+
 import org.w3c.dom.NodeList;
 
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
+import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
+
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaGetPaymentPlanParams;
@@ -11,30 +18,47 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public class GetPaymentPlanParams {
+        
+	private COUNTRYCODE countryCode;
+    private ConfigurationProvider config;
     
-    private boolean testmode;
-    private final SveaConfig conf = new SveaConfig();
-    
-    public boolean getTestmode() {
-        return testmode;
+    public GetPaymentPlanParams(ConfigurationProvider config) {
+    	this.config = config;
     }
     
-    public GetPaymentPlanParams setTestmode() {
-        this.testmode = true;
-        return this;
+    /**
+     * Required
+     * @param countryCode
+     * @return GetPaymentPlanParams
+     */
+    public GetPaymentPlanParams setCountryCode(COUNTRYCODE countryCode) {
+    	this.countryCode = countryCode;
+    	return this;
     }
-    
-    public GetPaymentPlanParams setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
-        conf.setPasswordBasedAuthorization(userName, password, clientNumber, "PaymentPlan"); 
-        return this;
-    }
-    
+        
     protected SveaAuth getStoreAuthorization() {
-        return conf.getAuthorizationForWebServicePayments("PaymentPlan");
+    	SveaAuth auth = new SveaAuth();
+        auth.Username = config.getUsername(PAYMENTTYPE.PAYMENTPLAN, countryCode);
+        auth.Password = config.getPassword(PAYMENTTYPE.PAYMENTPLAN, countryCode);        
+        auth.ClientNumber = config.getClientNumber(PAYMENTTYPE.PAYMENTPLAN, countryCode);        
+        
+        return auth;
     }
     
-    private SveaRequest<SveaGetPaymentPlanParams> prepareRequest() {
+    public String validateRequest() {
+    	if(this.countryCode == null)
+    		return "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+    	return "";
+    }
+    
+    private SveaRequest<SveaGetPaymentPlanParams> prepareRequest() throws ValidationException {
+        String errors = "";
+        errors = validateRequest();
+        if(errors.length() > 0)
+            throw new ValidationException(errors);
+        
         SveaGetPaymentPlanParams params = new SveaGetPaymentPlanParams();
+        
         params.Auth = getStoreAuthorization();
         SveaRequest<SveaGetPaymentPlanParams> request = new SveaRequest<SveaGetPaymentPlanParams>();
         request.request = params;
@@ -47,10 +71,10 @@ public class GetPaymentPlanParams {
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml = xmlBuilder.getGetPaymentPlanParamsXml(request.request);
-        String url = testmode ? SveaConfig.SWP_TEST_WS_URL : SveaConfig.SWP_PROD_WS_URL;
+        URL url = this.config.getEndPoint(PAYMENTTYPE.PAYMENTPLAN);
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("GetPaymentPlanParamsEu", xml);
-        NodeList soapResponse = soapBuilder.createGetPaymentPlanParamsEuRequest(soapMessage, url);
+        NodeList soapResponse = soapBuilder.createGetPaymentPlanParamsEuRequest(soapMessage, url.toString());
         PaymentPlanParamsResponse response = new PaymentPlanParamsResponse(soapResponse);
         return response;
     }

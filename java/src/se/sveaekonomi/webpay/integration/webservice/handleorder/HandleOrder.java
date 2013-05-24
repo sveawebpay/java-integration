@@ -1,13 +1,15 @@
 package se.sveaekonomi.webpay.integration.webservice.handleorder;
 
+import java.net.URL;
+
 import javax.xml.bind.ValidationException;
 
 import org.w3c.dom.NodeList;
 
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
 import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebserviceRowFormatter;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
@@ -24,16 +26,21 @@ public class HandleOrder {
     private SveaDeliverOrder sveaDeliverOrder;
     private SveaDeliverOrderInformation orderInformation;
     
-    private final SveaConfig conf = new SveaConfig();
     
     public HandleOrder(DeliverOrderBuilder orderBuilder) {
         this.order =  orderBuilder;
     }    
         
-    protected SveaAuth getStoreAuthorization() {
-        return conf.getAuthorizationForWebServicePayments(order.getOrderType());
+    protected SveaAuth getStoreAuthorization() {    
+    	 SveaAuth auth = new SveaAuth();
+    	 PAYMENTTYPE type = (order.getOrderType() == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
+         auth.Username = order.getConfig().getUsername(type, order.getCountryCode());
+         auth.Password = order.getConfig().getPassword(type, order.getCountryCode());
+         auth.ClientNumber = order.getConfig().getClientNumber(type, order.getCountryCode());
+         return auth;
     }
     
+
     public String validateOrder() {
         try{
         HandleOrderValidator validator = new HandleOrderValidator();
@@ -43,6 +50,7 @@ public class HandleOrder {
             return "NullPointer in validaton of HandleOrder";
         }
     }
+    
     public SveaRequest<SveaDeliverOrder> prepareRequest() throws ValidationException {        
         String errors = "";
         errors = validateOrder();
@@ -55,12 +63,12 @@ public class HandleOrder {
         orderInformation.setOrderId(String.valueOf(order.getOrderId()));
         orderInformation.setOrderType(order.getOrderType());
         
-        if(order.getOrderType() == "Invoice") {
+        if(order.getOrderType().equals("Invoice")) {
             SveaDeliverInvoiceDetails invoiceDetails = new SveaDeliverInvoiceDetails();
             invoiceDetails.InvoiceDistributionType = order.getInvoiceDistributionType();
-            invoiceDetails.IsCreditInvoice = (order.getInvoiceIdToCredit()!=null ? true : false);
-            if(order.getInvoiceIdToCredit()!=null)
-                invoiceDetails.InvoiceIdToCredit = order.getInvoiceIdToCredit();
+            invoiceDetails.IsCreditInvoice = (order.getCreditInvoice()!=null ? true : false);
+            if(order.getCreditInvoice()!=null)
+                invoiceDetails.InvoiceIdToCredit = order.getCreditInvoice();
             invoiceDetails.NumberofCreditDays = (order.getNumberOfCreditDays()!=null 
                     ? order.getNumberOfCreditDays() : 0);
             
@@ -74,9 +82,9 @@ public class HandleOrder {
         return request;
     }
     
-    public DeliverOrderResponse doRequest() throws Exception {        
-        String url = order.getTestmode() ? SveaConfig.SWP_TEST_WS_URL : SveaConfig.SWP_PROD_WS_URL;      
-        
+    public DeliverOrderResponse doRequest() throws Exception {           
+    	URL url = order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE);
+    	
         SveaRequest<SveaDeliverOrder> request = this.prepareRequest();
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml;
@@ -89,7 +97,7 @@ public class HandleOrder {
         
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("DeliverOrderEu", xml);
-        NodeList soapResponse = soapBuilder.deliverOrderEuRequest(soapMessage, url);
+        NodeList soapResponse = soapBuilder.deliverOrderEuRequest(soapMessage, url.toString());
         DeliverOrderResponse response = new DeliverOrderResponse(soapResponse);      
         return response;               
     }

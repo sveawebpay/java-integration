@@ -17,6 +17,11 @@ public class RelativeDiscountBuilder implements RowBuilder {
         return discountId;
     }
     
+    /**
+     * Optional
+     * @param discountId
+     * @return RelativeDiscountBuilder
+     */
     public RelativeDiscountBuilder setDiscountId(String discountId) {
         this.discountId = discountId;
         return this;
@@ -26,6 +31,11 @@ public class RelativeDiscountBuilder implements RowBuilder {
         return name;
     }
     
+    /**
+     * Optional
+     * @param name
+     * @return RelativeDiscountBuilder
+     */
     public RelativeDiscountBuilder setName(String name) {
         this.name = name;
         return this;
@@ -35,6 +45,11 @@ public class RelativeDiscountBuilder implements RowBuilder {
         return description;
     }
     
+    /**
+     * Optional
+     * @param description
+     * @return RelativeDiscountBuilder
+     */
     public RelativeDiscountBuilder setDescription(String description) {
         this.description = description;
         return this;
@@ -63,6 +78,11 @@ public class RelativeDiscountBuilder implements RowBuilder {
         return discountPercent;
     }
     
+    /**
+     * Required
+     * @param discountPercent
+     * @return RelativeDiscountBuilder
+     */
     public RelativeDiscountBuilder setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
         return this;

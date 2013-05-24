@@ -1,5 +1,6 @@
 package se.sveaekonomi.webpay.integration.webservice.payment;
 
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -8,12 +9,12 @@ import javax.xml.bind.ValidationException;
 
 import org.w3c.dom.NodeList;
 
-import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.WebServiceOrderValidator;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebserviceRowFormatter;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
@@ -28,7 +29,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 public abstract class WebServicePayment {
     
     protected CreateOrderBuilder createOrderBuilder;
-    protected String orderType;
+    protected PAYMENTTYPE orderType;
     public SveaCreateOrderInformation orderInformation;   
     
     public WebServicePayment(CreateOrderBuilder orderBuilder) {
@@ -37,14 +38,13 @@ public abstract class WebServicePayment {
     }
     
     private SveaAuth getPasswordBasedAuthorization() {              
-        return createOrderBuilder.config.getAuthorizationForWebServicePayments(this.orderType);   
+    	SveaAuth auth = new SveaAuth();
+    	auth.Username = this.createOrderBuilder.getConfig().getUsername(this.orderType, this.createOrderBuilder.getCountryCode());
+    	auth.Password = this.createOrderBuilder.getConfig().getPassword(this.orderType, this.createOrderBuilder.getCountryCode());
+    	auth.ClientNumber = this.createOrderBuilder.getConfig().getClientNumber(this.orderType, this.createOrderBuilder.getCountryCode());
+    	return auth;
     }
-    
-    public WebServicePayment setPasswordBasedAuthorization(String userName, String password, int clientNumber) {
-        createOrderBuilder.config.setPasswordBasedAuthorization(userName, password, clientNumber, orderType);    
-        return this;
-    }
-    
+        
     public String getXML() throws Exception {
         SveaRequest<SveaCreateOrder> request = this.prepareRequest();
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
@@ -106,10 +106,10 @@ public abstract class WebServicePayment {
             throw e;
         }
         
-        String url = createOrderBuilder.getTestmode() ? SveaConfig.SWP_TEST_WS_URL : SveaConfig.SWP_PROD_WS_URL;
+        URL url = this.createOrderBuilder.getConfig().getEndPoint(this.orderType);
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
-        NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
+        NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url.toString());
         CreateOrderResponse response = new CreateOrderResponse(soapResponse);
         return response;
     }      
@@ -117,12 +117,10 @@ public abstract class WebServicePayment {
     public SveaCustomerIdentity formatCustomerIdentity() {
         boolean isCompany = false;
         String companyId = "";
-        if(this.createOrderBuilder.getIsCompanyIdentity() 
-                && (this.createOrderBuilder.getCompanyCustomer().getCompanyIdNumber()!=null 
-                || this.createOrderBuilder.getCompanyCustomer().getVatNumber()!=null)) {
+        if(this.createOrderBuilder.getIsCompanyIdentity()) {
             isCompany = true;
-            companyId = (this.createOrderBuilder.getCompanyCustomer().getCompanyIdNumber()!=null) 
-                    ? this.createOrderBuilder.getCompanyCustomer().getCompanyIdNumber()
+            companyId = (this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()!=null) 
+                    ? this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()
                     : this.createOrderBuilder.getCompanyCustomer().getVatNumber();
         }
         // For European countries Individual/Company - identity required
@@ -145,7 +143,7 @@ public abstract class WebServicePayment {
                 euIdentity.BirthDate = Long.toString(createOrderBuilder.getIndividualCustomer().getBirthDate());
             }
             
-            type = (isCompany ? "CompanyIdentity" : "IndividualIdentity");
+            type = isCompany ? "CompanyIdentity" : "IndividualIdentity";
         }
         
         SveaCustomerIdentity customerIdentity = new SveaCustomerIdentity(euIdentity, type);
@@ -156,8 +154,8 @@ public abstract class WebServicePayment {
                 || this.createOrderBuilder.getCountryCode() == COUNTRYCODE.FI
                 || this.createOrderBuilder.getCountryCode() == COUNTRYCODE.DK) {
             // set companyVat
-            customerIdentity.NationalIdNumber = (String) (isCompany ? String.valueOf(this.createOrderBuilder.getCompanyCustomer().getCompanyIdNumber())
-                    : String.valueOf(createOrderBuilder.getIndividualCustomer().getSsn()));
+            customerIdentity.NationalIdNumber = (String) (isCompany ? String.valueOf(this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber())
+                    : String.valueOf(createOrderBuilder.getIndividualCustomer().getNationalIdNumber()));
         }
         
         if(isCompany) {

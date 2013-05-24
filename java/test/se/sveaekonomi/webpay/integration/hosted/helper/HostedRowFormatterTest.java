@@ -11,7 +11,6 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.HostedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 
 public class HostedRowFormatterTest {
     
@@ -19,7 +18,7 @@ public class HostedRowFormatterTest {
     public void testFormatOrderRows() {       
         CreateOrderBuilder order = WebPay.createOrder()
         		.addOrderRow(Item.orderRow()
-				.setArticleNumber("0")
+				.setArticleNumber(0)
 	            .setName("Tess")
 	            .setDescription("Tester")
 	            .setAmountExVat(4)
@@ -94,8 +93,9 @@ public class HostedRowFormatterTest {
     @Test
     public void testFormatFixedDiscountRowsAmount() {
     	CreateOrderBuilder order = WebPay.createOrder()
+    			
     			.addDiscount(Item.fixedDiscount()
-    					.setDiscount(4));
+    					.setAmountIncVat(4));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(0);
@@ -106,13 +106,15 @@ public class HostedRowFormatterTest {
     @Test
     public void testFormatFixedDiscountRowsVat() {
     	CreateOrderBuilder order = WebPay.createOrder()
-    			.setTestmode()
     			.addOrderRow(Item.orderRow()
     					.setAmountExVat(4)
     					.setVatPercent(25)
     					.setQuantity(1))
     					.addDiscount(Item.fixedDiscount()
-    					.setDiscount(1));
+    					.setAmountIncVat(1)
+    					.setDiscountId("0")
+    					.setName("Tess")
+    					.setDescription("Tester"));
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(1);
         
@@ -122,8 +124,7 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatRelativeDiscountRows() {
-    	CreateOrderBuilder order = WebPay.createOrder()
-    			.setTestmode()
+    	CreateOrderBuilder order = WebPay.createOrder()    			
     			.addDiscount(Item.relativeDiscount()
     					.setDiscountId("0")
     					.setName("Tess")

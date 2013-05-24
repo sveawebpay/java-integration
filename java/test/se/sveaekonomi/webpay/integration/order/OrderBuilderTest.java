@@ -12,6 +12,7 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 
 public class OrderBuilderTest {
     
@@ -45,15 +46,15 @@ public class OrderBuilderTest {
         order = createTestCustomerIdentity(order);
 
         assertEquals(order.getIndividualCustomer().getInitials(), "SB");
-        assertEquals(order.getIndividualCustomer().getSsn(), 194609052222L);
+        assertEquals(order.getIndividualCustomer().getNationalIdNumber(), "194609052222");
         assertEquals(order.getIndividualCustomer().getFirstName(), "Tess");
         assertEquals(order.getIndividualCustomer().getLastName(), "Testson");
-        assertEquals(order.getIndividualCustomer().getBirthDate(), 19231212);
+        assertEquals(order.getIndividualCustomer().getBirthDate(), 19231212, 0);
         assertEquals(order.getIndividualCustomer().getEmail(), "test@svea.com");
         assertEquals(order.getIndividualCustomer().getPhoneNumber(), 999999, 0);
         assertEquals(order.getIndividualCustomer().getIpAddress(), "123.123.123");
         assertEquals(order.getIndividualCustomer().getStreetAddress(), "Gatan");
-        assertEquals(order.getIndividualCustomer().getHouseNumber(), 23, 0);
+        assertEquals(order.getIndividualCustomer().getHouseNumber(), "23");
         assertEquals(order.getIndividualCustomer().getCoAddress(), "c/o Eriksson");
         assertEquals(order.getIndividualCustomer().getZipCode(), "9999");
         assertEquals(order.getIndividualCustomer().getLocality(), "Stan");
@@ -72,12 +73,12 @@ public class OrderBuilderTest {
         createTestOrderRow();
         
         assertTrue(order != null);
-        assertEquals(order.getOrderRows().get(0).getArticleNumber(), "1");
+        assertEquals(order.getOrderRows().get(0).getArticleNumber(), 1);
         assertEquals(order.getOrderRows().get(0).getQuantity(), 2);
         assertEquals(order.getOrderRows().get(0).getAmountExVat(), 100.00, 0);
         assertEquals(order.getOrderRows().get(0).getDescription(), "Specification");
         assertEquals(order.getOrderRows().get(0).getUnit(), "st");
-        assertEquals(order.getOrderRows().get(0).getVatPercent(), 25);
+        assertEquals(order.getOrderRows().get(0).getVatPercent(), 25, 0);
         assertEquals(order.getOrderRows().get(0).getVatDiscount(), 0);
     }
     
@@ -88,7 +89,7 @@ public class OrderBuilderTest {
         assertEquals(order.getShippingFeeRows().get(0).getShippingId(), "33");
         assertEquals("Specification", order.getShippingFeeRows().get(0).getDescription());
         assertEquals(50, order.getShippingFeeRows().get(0).getAmountExVat(), 0);
-        assertEquals(25, order.getShippingFeeRows().get(0).getVatPercent());
+        assertEquals(25, order.getShippingFeeRows().get(0).getVatPercent(), 0);
     }
     
     @Test
@@ -99,7 +100,7 @@ public class OrderBuilderTest {
         assertEquals(order.getInvoiceFeeRows().get(0).getDescription(), "Fee for invoice");
         assertEquals(order.getInvoiceFeeRows().get(0).getAmountExVat(), 50, 0);
         assertEquals(order.getInvoiceFeeRows().get(0).getUnit(), "st");
-        assertEquals(order.getInvoiceFeeRows().get(0).getVatPercent(), 25);
+        assertEquals(order.getInvoiceFeeRows().get(0).getVatPercent(), 25, 0);
         assertEquals(order.getInvoiceFeeRows().get(0).getDiscountPercent(), 0, 0);
     }
     
@@ -108,7 +109,8 @@ public class OrderBuilderTest {
         createTestFixedDiscountRow();
 
         assertEquals("1", order.getFixedDiscountRows().get(0).getDiscountId());
-        assertEquals(100.00, order.getFixedDiscountRows().get(0).getDiscount(), 0);
+        //assertEquals(100.00, order.getFixedDiscountRows().get(0).getDiscount(), 0);
+        assertEquals(100.00, order.getFixedDiscountRows().get(0).getAmount(), 0);
         assertEquals("FixedDiscount", order.getFixedDiscountRows().get(0).getDescription());
     }
     
@@ -139,7 +141,7 @@ public class OrderBuilderTest {
     
     @Test
     public void testBuildOrderWithCurrency() {
-        order.setCurrency("SEK");
+        order.setCurrency(CURRENCY.SEK);
         
         assertEquals("SEK", order.getCurrency());
     }
@@ -149,18 +151,18 @@ public class OrderBuilderTest {
         order.setClientOrderNumber("33");
         
         assertEquals("33", order.getClientOrderNumber());
-    }
+    }   
     
     private CreateOrderBuilder createTestCustomerIdentity(CreateOrderBuilder orderBuilder) {
          return orderBuilder.addCustomerDetails(Item.individualCustomer()
-                .setSsn(194609052222L)
+                .setNationalIdNumber("194609052222")
                 .setInitials("SB")
                 .setBirthDate(1923, 12, 12)
                 .setName("Tess", "Testson")
                 .setEmail("test@svea.com")
                 .setPhoneNumber(999999)
                 .setIpAddress("123.123.123")
-                .setStreetAddress("Gatan", 23)             
+                .setStreetAddress("Gatan", "23")             
                 .setCoAddress("c/o Eriksson")
                 .setZipCode("9999")
                 .setLocality("Stan"));                
@@ -174,7 +176,7 @@ public class OrderBuilderTest {
     
     private void createTestOrderRow() {
         order.addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
+                .setArticleNumber(1)
                 .setQuantity(2)
                 .setAmountExVat(100.00)
                 .setDescription("Specification")
@@ -205,7 +207,8 @@ public class OrderBuilderTest {
         order.addDiscount(Item.fixedDiscount()
                 .setDiscountId("1")
                 .setAmountIncVat((double) 100.00)
-                .setDiscount((double) 100.00)
+              //  .setDiscount((double) 100.00)
+                  .setAmountIncVat((double) 100.00)
                 .setDescription("FixedDiscount"));
     }
     

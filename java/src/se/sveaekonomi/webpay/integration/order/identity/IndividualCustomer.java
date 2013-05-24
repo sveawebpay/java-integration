@@ -2,7 +2,7 @@ package se.sveaekonomi.webpay.integration.order.identity;
 
 
 public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
-    private long ssn;
+    private String ssn;
     private long birthDate;
     private String firstName;
     private String lastName;
@@ -20,18 +20,32 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
         return lastName;
     }
     
+    /**
+     * Required for private Customers in NL and DE
+     * @param type firstName
+     * @param type lastName
+     * @return IndividualCustomer
+     */
     public IndividualCustomer setName(String firstName, String lastName) {
         this.firstName = firstName;
         this.lastName = lastName;
         return this;
     }
     
-    public long getSsn() {
+    public String getNationalIdNumber() {
         return ssn;
     }
 
-    public IndividualCustomer setSsn(long yyyymmddxxxx) {
-        this.ssn = yyyymmddxxxx;
+    /**
+     * Required for private customers in SE, NO, DK, FI
+     * @param nationalIdNumber
+     * format SE, DK:  yyyymmddxxxx
+     * format FI:  ddmmyyxxxx
+     * format NO:  ddmmyyxxxxx
+     * @return IndividualCustomer
+     */
+    public IndividualCustomer setNationalIdNumber(String nationalIdNumber) {
+        this.ssn = nationalIdNumber;
         return this;
     }
      
@@ -39,15 +53,27 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
         return this.initials;
     }
     
+    /**
+     * Required for private customers in NL 
+     * @param type initials
+     * @return IndividualCustomer
+     */
     public IndividualCustomer setInitials(String initials) {
         this.initials = initials;
         return this;
     }
     
-    public long getBirthDate() {
+    public Long getBirthDate() {
         return this.birthDate;
     }    
     
+    /**
+     * Required for private customers in NL and DE
+     * @param type yyyy
+     * @param type (m)m
+     * @param type (d)d
+     * @return IndividualCustomer
+     */
     public IndividualCustomer setBirthDate(int year, int month, int day) {
         String monthString = String.valueOf(month);        
         if(monthString.length()==1)

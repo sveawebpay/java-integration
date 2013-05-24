@@ -5,7 +5,7 @@ package se.sveaekonomi.webpay.integration.response;
 public class Response {
     
     private boolean isOrderAccepted;
-    private long resultCode;
+    private String resultCode;
     private String errorMessage;
     
     public Response() {
@@ -20,11 +20,11 @@ public class Response {
         this.isOrderAccepted = isOrderAccepted;
     }
 
-    public long getResultCode() {
+    public String getResultCode() {
         return resultCode;
     }
 
-    public void setResultCode(long resultCode) {
+    public void setResultCode(String resultCode) {
         this.resultCode = resultCode;
     }
 
@@ -34,5 +34,6 @@ public class Response {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
-    }    
+    }   
+    
 }

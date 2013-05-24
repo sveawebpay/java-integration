@@ -3,6 +3,7 @@ package se.sveaekonomi.webpay.integration.hosted.payment;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.xml.bind.ValidationException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
@@ -12,34 +13,38 @@ import se.sveaekonomi.webpay.integration.hosted.helper.HostedRowFormatter;
 import se.sveaekonomi.webpay.integration.hosted.helper.HostedXmlBuilder;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.validator.HostedOrderValidator;
+import se.sveaekonomi.webpay.integration.order.validator.IdentityValidator;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
-import se.sveaekonomi.webpay.integration.util.security.Base64Util;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
+
 
 /*******************************************************************************
- * Description of HostedPayment: Parent to CardPayment, DirectPayment and PayPagePayment 
- * class. Prepares an order and creates a payment form
- * to integrate on web page. Uses XmlBuilder to turn formatted order into xml
+ * Description of HostedPayment: Parent to CardPayment, DirectPayment, PayPagePayment 
+ * and PaymentMethodPayment classes. Prepares an order and creates a payment form
+ * to integrate on web page. Uses XmlBuilder to turn formatted order into xml format.
  * 
  * @author klar-sar
  * *****************************************************************************/
-public abstract class HostedPayment {
+public abstract class HostedPayment <T extends HostedPayment<T>> {
     
     protected CreateOrderBuilder createOrderBuilder;
     protected ArrayList<HostedOrderRowBuilder> rowBuilder;
-    protected List<PAYMENTMETHOD> excludedPaymentMethods;
+    protected List<String>  excludedPaymentMethods;
     private Long amount;
     private Long vat;
     protected String returnUrl;
     protected String cancelUrl;
     protected ExcludePayments excluded;
-    protected String languageCode;
+    protected String languageCode = LANGUAGECODE.en.toString();
 
     public HostedPayment(CreateOrderBuilder createOrderBuilder) {
         this.createOrderBuilder = createOrderBuilder;
         rowBuilder = new ArrayList<HostedOrderRowBuilder>();
         excluded = new ExcludePayments();
-        excludedPaymentMethods = new ArrayList<PAYMENTMETHOD>();
+        excludedPaymentMethods = new ArrayList<String>();
         returnUrl = "";
     }
     
@@ -51,15 +56,10 @@ public abstract class HostedPayment {
         return rowBuilder;
     }
     
-    public List<PAYMENTMETHOD> getExcludedPaymentMethods() {
+    public List<String> getExcludedPaymentMethods() {
         return excludedPaymentMethods;
     }
     
-    public HostedPayment setExcludedPaymentMethods(List<PAYMENTMETHOD> paymentMethods) {
-        this.excludedPaymentMethods.addAll(paymentMethods);
-        return this;
-    }
-
     public Long getAmount() {
         return amount;
     }
@@ -72,37 +72,69 @@ public abstract class HostedPayment {
         return returnUrl;
     }
     
-    public HostedPayment setReturnUrl(String returnUrl) {
+    /**
+     * Required
+     * @param returnUrl
+     * @return HostedPayment
+     */
+    public T setReturnUrl(String returnUrl) {
         this.returnUrl = returnUrl;
-        return this;
+        return getGenericThis();
     }
     
     public String getCancelUrl() {
         return cancelUrl;
     }
     
-    public HostedPayment setCancelUrl(String returnUrl) {
+    public T setCancelUrl(String returnUrl) {
         this.cancelUrl = returnUrl;
-        return this;
+        return getGenericThis();
     }
 
+    public T setPayPageLanguageCode(LANGUAGECODE languageCode) {
+    	this.languageCode = languageCode.toString();
+    	return getGenericThis();
+    }
+    
     public String getPayPageLanguageCode() {
         return languageCode;
     }
     
-    public void calculateRequestValues() {
+    public String validateOrder() {
+       
+       String errors = "";	
+       if(this.returnUrl.equals(""))
+    	   errors += "MISSING VALUE - Return url is required, setReturnUrl(...).\n";
+       
+       HostedOrderValidator validator = new HostedOrderValidator();
+      //Check if payment method is EU country, PaymentMethod: INVOICE or PAYMENTPLAN    
+       //if((this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.DE) || this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.NL))
+    	   if(this instanceof PaymentMethodPayment) {
+    		   if(((PaymentMethodPayment)this).getPaymentMethod() == PAYMENTMETHOD.INVOICE || ((PaymentMethodPayment)this).getPaymentMethod() == PAYMENTMETHOD.PAYMENTPLAN)
+    	   			if(this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.NL))
+    	   				errors += new IdentityValidator().validateNLIdentity(createOrderBuilder);
+    	   			else if(this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.DE))
+    	   				errors += new IdentityValidator().validateDEIdentity(createOrderBuilder);
+       }
+       
+       
+       errors += validator.validate(this.createOrderBuilder);        
+       return errors;
+       
+    }
+    
+    public void calculateRequestValues() throws ValidationException {
+    	String errors = "";
+        errors = validateOrder();
+        if(!errors.equals(""))
+            throw new ValidationException(errors);
+    	
         HostedRowFormatter formatter = new HostedRowFormatter();
         
         rowBuilder = formatter.formatRows(createOrderBuilder);
         amount = formatter.formatTotalAmount(rowBuilder);
         vat = formatter.formatTotalVat(rowBuilder);
         configureExcludedPaymentMethods();
-    }
-    
-    public HostedPayment setMerchantIdBasedAuthorization(int merchantId, String secret) {
-        createOrderBuilder.config.setMerchantId(String.valueOf(merchantId));
-        createOrderBuilder.config.setSecretWord(secret);
-        return this;
     }
     
     public PaymentForm getPaymentForm() throws Exception {
@@ -117,16 +149,16 @@ public abstract class HostedPayment {
         }
         
         PaymentForm form = new PaymentForm();        
-        form.setXmlMessage(xml);       
-        form.setMessageBase64(Base64Util.encodeBase64String(xml));
+        form.setXmlMessage(xml);          
 
-        form.setMerchantId(createOrderBuilder.config.getMerchantId());
-        form.setSecretWord(createOrderBuilder.config.getSecretWord());
-        if(this.createOrderBuilder.getCampaignCode() != null)
+        form.setMerchantId(createOrderBuilder.getConfig().getMerchantId(PAYMENTTYPE.HOSTED, createOrderBuilder.getCountryCode()));
+        form.setSecretWord(createOrderBuilder.getConfig().getSecret(PAYMENTTYPE.HOSTED, createOrderBuilder.getCountryCode()));
+        if(this.createOrderBuilder.getCountryCode() != null)
             form.setSubmitMessage(this.createOrderBuilder.getCountryCode());
         else 
             form.setSubmitMessage(COUNTRYCODE.SE);
-        form.setTestmode(new Boolean(createOrderBuilder.getTestmode()).toString());
+
+        form.setPayPageUrl(createOrderBuilder.getConfig().getEndPoint(PAYMENTTYPE.HOSTED));
         
         form.setForm();
         form.setHtmlFields();
@@ -134,7 +166,7 @@ public abstract class HostedPayment {
         return form;
     }
     
-    protected abstract HostedPayment configureExcludedPaymentMethods();
+    protected abstract T configureExcludedPaymentMethods();
     
     public abstract XMLStreamWriter getPaymentSpecificXml(XMLStreamWriter xmlw) throws Exception;    
     
@@ -145,4 +177,9 @@ public abstract class HostedPayment {
             xmlw.writeEndElement();
         }
     }
+    
+    @SuppressWarnings("unchecked")
+	private T getGenericThis() {
+		return (T) this;
+	}
 }

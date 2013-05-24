@@ -1,14 +1,14 @@
 package se.sveaekonomi.webpay.integration.order.identity;
 
 
-public class CustomerIdentity <T extends CustomerIdentity<T>> {
+public abstract class CustomerIdentity <T extends CustomerIdentity<T>> {
        
     private String coAddress;
     private String streetAddress;   
     private Integer phoneNumber;
     private String email;
     private String ipAddress;   
-    private Integer housenumber;
+    private String housenumber;
     private String zipCode;
     private String locality;
   
@@ -16,74 +16,102 @@ public class CustomerIdentity <T extends CustomerIdentity<T>> {
         return this.email;
     }
     
-    @SuppressWarnings("unchecked")
+    /**
+     * Optional but desirable
+     * @param type email
+     * @return CustomerIdentity
+     */
+    
     public T setEmail(String email) {
         this.email = email;
-        return (T) this;
+        return getGenericThis();
     }
     
     public Integer getPhoneNumber() {
         return this.phoneNumber;
     }
     
-    @SuppressWarnings("unchecked")
+    /**
+     * Optional
+     * @param type phoneNumber
+     * @return CustomerIdentity
+     */
+   
     public T setPhoneNumber(int phoneNumber) {
         this.phoneNumber = phoneNumber;
-        return (T) this;
+        return getGenericThis();
     }
+
+    @SuppressWarnings("unchecked")
+	private T getGenericThis() {
+		return (T) this;
+	}
     
     public String getZipCode() {
         return zipCode;
     }
     
-    @SuppressWarnings("unchecked")
+    /**
+     * Required for company and private customers in NL and DE
+     * @param type zipCode
+     * @return CustomerIdentity
+     */   
     public T setZipCode(String zipCode) {
         this.zipCode = zipCode;
-        return (T) this;
+        return getGenericThis();
     }
     
     public String getIpAddress() {
         return ipAddress;
     }
-    
-    @SuppressWarnings("unchecked")
+        
     public T setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
-        return (T) this;
+        return getGenericThis();
     }
            
     public String getStreetAddress() {
         return streetAddress;
     }
     
-    public Integer getHouseNumber() {
+    public String getHouseNumber() {
         return this.housenumber;
     }
     
-    @SuppressWarnings("unchecked")
-    public T setStreetAddress(String streetAddress, Integer houseNumber) {
+    /**
+     * Required for company customers in NL and DE
+     * @param type streetAddress
+     * @param type houseNumber
+     * @return CustomerIdentity
+     */
+    public T setStreetAddress(String streetAddress, String houseNumber) {
         this.streetAddress = streetAddress;
         this.housenumber = houseNumber;
-        return (T) this;
+        return getGenericThis();
     }
         
     public String getLocality() {
         return locality;
     }
     
-    @SuppressWarnings("unchecked")
+    /**
+     * Required for company and private customers in NL and DE
+     * @param type locality
+     * @return CustomerIdentity
+     */    
     public T setLocality(String locality) {
         this.locality = locality;
-        return (T) this;
+        return getGenericThis();
     }
     
     public String getCoAddress() {
         return coAddress;
     }
-    
-    @SuppressWarnings("unchecked")
+      
     public T setCoAddress(String coAddress) {
         this.coAddress = coAddress;
-        return (T) this;
-    }    
+        return getGenericThis();
+    }  
+
+    abstract public String getNationalIdNumber();
 }

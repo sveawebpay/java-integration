@@ -10,9 +10,9 @@ public class ShippingFeeBuilder implements RowBuilder {
     private String shippingId;
     private String name;
     private String description;
-    private double amountExVat;
-    private double amountIncVat;
-    private int vatPercent;
+    private Double amountExVat;
+    private Double amountIncVat;
+    private Double vatPercent;
     private int quantity;
     private String unit;
     private Integer discountPercent;
@@ -21,6 +21,11 @@ public class ShippingFeeBuilder implements RowBuilder {
         return shippingId;
     }
     
+    /**
+     * Optional
+     * @param id
+     * @return ShippingFeeBuilder
+     */
     public ShippingFeeBuilder setShippingId(String id) {
         this.shippingId = id;
         return this;
@@ -30,6 +35,11 @@ public class ShippingFeeBuilder implements RowBuilder {
         return name;
     }
     
+    /**
+     * Optional
+     * @param name
+     * @return ShippingFeeBuilder
+     */
     public ShippingFeeBuilder setName(String name) {
         this.name = name;
         return this;
@@ -39,25 +49,42 @@ public class ShippingFeeBuilder implements RowBuilder {
         return description;
     }
     
+    /**
+     * Optional
+     * @param description
+     * @return ShippingFeeBuilder
+     */
     public ShippingFeeBuilder setDescription(String description) {
         this.description = description;
         return this;
     }
     
-    public double getAmountExVat() {
+    public Double getAmountExVat() {
         return amountExVat;
     }
     
+    /**
+     * Optional 
+     * Required to use at least two of the methods setAmountExVat(), setAmountIncVat() or setVatPercent()
+     * @param amountExVat
+     * @return ShippingFeeBuilder
+     */
     public ShippingFeeBuilder setAmountExVat(double amountExVat) {
         this.amountExVat = amountExVat;
         return this;
     }
     
-    public int getVatPercent() {
+    public Double getVatPercent() {
         return vatPercent;
     }
     
-    public ShippingFeeBuilder setVatPercent(int vatPercent) {
+    /**
+     * Optional
+     * Required to use at least two of the methods setAmountExVat(), setAmountIncVat() or setVatPercent()
+     * @param vatPercent
+     * @return ShippingFeeBuilder
+     */
+    public ShippingFeeBuilder setVatPercent(double vatPercent) {
         this.vatPercent = vatPercent;
         return this;
     }
@@ -74,8 +101,7 @@ public class ShippingFeeBuilder implements RowBuilder {
     }
     
     /**
-     * @param unit
-     *            (i.e. "pcs", "st" etc)
+     * @param unit (i.e. "pcs", "st" etc)
      */
     public ShippingFeeBuilder setUnit(String unit) {
         this.unit = unit;
@@ -86,6 +112,11 @@ public class ShippingFeeBuilder implements RowBuilder {
         return discountPercent;
     }
     
+    /**
+     * Optional
+     * @param discountPercent
+     * @return ShippingFeeBuilder
+     */
     public ShippingFeeBuilder setDiscountPercent(int discountPercent) {
         this.discountPercent = discountPercent;
         return this;
@@ -95,10 +126,16 @@ public class ShippingFeeBuilder implements RowBuilder {
         return (T)orderBuilder;
     }*/
 
-    public double getAmountIncVat() {
+    public Double getAmountIncVat() {
         return amountIncVat;
     }
 
+    /**
+     * Optional
+     * Required to use at least two of the methods setAmountExVat(), setAmountIncVat() or setVatPercent()
+     * @param amountIncVat
+     * @return ShippingFeeBuilder
+     */
     public ShippingFeeBuilder setAmountIncVat(double amountIncVat) {
         this.amountIncVat = amountIncVat;
         return this;

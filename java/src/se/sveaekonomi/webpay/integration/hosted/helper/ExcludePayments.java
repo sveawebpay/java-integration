@@ -3,41 +3,63 @@ package se.sveaekonomi.webpay.integration.hosted.helper;
 import java.util.ArrayList;
 import java.util.List;
 
-import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
+import se.sveaekonomi.webpay.integration.util.constant.INVOICETYPE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTPLANTYPE;
 
 
 public class ExcludePayments {
     
-    private ArrayList<PAYMENTMETHOD> excludedPaymentMethods;
+    private ArrayList<String> excludedPaymentMethods;
     
     
     public ExcludePayments() {
-        excludedPaymentMethods = new ArrayList<PAYMENTMETHOD>();
+        excludedPaymentMethods = new ArrayList<String>();
     }
     
-    public List<PAYMENTMETHOD> excludeInvoicesAndPaymentPlan() {
-   
-            excludedPaymentMethods.add(PAYMENTMETHOD.SVEAINVOICESE);
-            excludedPaymentMethods.add(PAYMENTMETHOD.SVEASPLITSE);
-            excludedPaymentMethods.add(PAYMENTMETHOD.SVEAINVOICEEU_SE);
-            excludedPaymentMethods.add(PAYMENTMETHOD.SVEASPLITEU_SE);
-            
-            excludedPaymentMethods.add(PAYMENTMETHOD.SVEAINVOICEEU_DE);
-            excludedPaymentMethods.add(PAYMENTMETHOD.SVEASPLITEU_DE);
-
-            excludedPaymentMethods.add(PAYMENTMETHOD.SVEAINVOICEEU_DK);
-            excludedPaymentMethods.add(PAYMENTMETHOD.SVEASPLITEU_DK);
-
-            excludedPaymentMethods.add(PAYMENTMETHOD.SVEAINVOICEEU_FI);
-            excludedPaymentMethods.add(PAYMENTMETHOD.SVEASPLITEU_FI);
-
-            excludedPaymentMethods.add(PAYMENTMETHOD.SVEAINVOICEEU_NL);
-            excludedPaymentMethods.add(PAYMENTMETHOD.SVEASPLITEU_NL);
-
-            excludedPaymentMethods.add(PAYMENTMETHOD.SVEAINVOICEEU_NO);
-            excludedPaymentMethods.add(PAYMENTMETHOD.SVEASPLITEU_NO);
-
+    /**  
+     * @return List of all payment methods for invoices and payment plans 
+     */
+    public List<String> excludeInvoicesAndPaymentPlan() {
+    	setPaymentMethodsSE();
+    	setPaymentMethodsDE();
+    	setPaymentMethodsDK();
+    	setPaymentMethodsFI();
+    	setPaymentMethodsNL();
+    	setPaymentMethodsNO();
+        
         return excludedPaymentMethods;
+    }
+
+    private void setPaymentMethodsSE() {
+    	excludedPaymentMethods.add(INVOICETYPE.INVOICESE.getValue());            
+        excludedPaymentMethods.add(INVOICETYPE.INVOICE_SE.getValue());
+        excludedPaymentMethods.add(PAYMENTPLANTYPE.PAYMENTPLANSE.getValue());
+        excludedPaymentMethods.add(PAYMENTPLANTYPE.PAYMENTPLAN_SE.getValue());
+    }
+    
+    private void setPaymentMethodsDE() {
+    	excludedPaymentMethods.add(INVOICETYPE.INVOICE_DE.getValue());
+        excludedPaymentMethods.add(PAYMENTPLANTYPE.PAYMENTPLAN_DE.getValue());
+    }
+    
+    private void setPaymentMethodsDK() {
+    	 excludedPaymentMethods.add(INVOICETYPE.INVOICE_DK.getValue());
+         excludedPaymentMethods.add(PAYMENTPLANTYPE.PAYMENTPLAN_DK.getValue());
+    }
+    
+    private void setPaymentMethodsFI() {
+    	excludedPaymentMethods.add(INVOICETYPE.INVOICE_FI.getValue());
+        excludedPaymentMethods.add(PAYMENTPLANTYPE.PAYMENTPLAN_FI.getValue());
+    }
+    
+    private void setPaymentMethodsNL() {
+    	 excludedPaymentMethods.add(INVOICETYPE.INVOICE_NL.getValue());
+         excludedPaymentMethods.add(PAYMENTPLANTYPE.PAYMENTPLAN_NL.getValue());
+    }
+    
+    private void setPaymentMethodsNO() {
+    	excludedPaymentMethods.add(INVOICETYPE.INVOICE_NO.getValue());
+        excludedPaymentMethods.add(PAYMENTPLANTYPE.PAYMENTPLAN_NO.getValue());
     }
     
 }
