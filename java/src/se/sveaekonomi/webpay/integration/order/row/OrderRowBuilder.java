@@ -1,13 +1,12 @@
 package se.sveaekonomi.webpay.integration.order.row;
 
-
 /**
  * @author klar-sar
  * @since 2012-12-04
  */
 public class OrderRowBuilder implements RowBuilder {
-        
-    private int articleNumber;
+    
+    private String articleNumber;
     private String name;
     private String description;
     private Double amountExVat;
@@ -22,7 +21,7 @@ public class OrderRowBuilder implements RowBuilder {
     	
     }
     
-    public int getArticleNumber() {
+    public String getArticleNumber() {
         return articleNumber;
     }
     
@@ -31,7 +30,7 @@ public class OrderRowBuilder implements RowBuilder {
      * @param articleNumber
      * @return OrderRowBuilder
      */
-    public OrderRowBuilder setArticleNumber(int articleNumber) {
+    public OrderRowBuilder setArticleNumber(String articleNumber) {
         this.articleNumber = articleNumber;
         return this;
     }

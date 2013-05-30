@@ -35,7 +35,7 @@ public class DeliverOrderTest {
     public void testDeliverInvoice() throws ValidationException {
          
     	SveaRequest<SveaDeliverOrder> request = order.addOrderRow(Item.orderRow()
-            .setArticleNumber(1)
+            .setArticleNumber("1")
             .setQuantity(2)
             .setAmountExVat(100.00)
             .setDescription("Specification")
@@ -108,7 +108,7 @@ public class DeliverOrderTest {
     	DeliverOrderResponse response =
     			WebPay.deliverOrder()
     		.addOrderRow(Item.orderRow()
-    			.setArticleNumber(1)
+    			.setArticleNumber("1")
     			.setQuantity(2)
     			.setAmountExVat(100.00)
     			.setDescription("Specification")

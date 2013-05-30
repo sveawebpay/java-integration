@@ -18,7 +18,7 @@ public class HostedRowFormatterTest {
     public void testFormatOrderRows() {       
         CreateOrderBuilder order = WebPay.createOrder()
         		.addOrderRow(Item.orderRow()
-				.setArticleNumber(0)
+				.setArticleNumber("0")
 	            .setName("Tess")
 	            .setDescription("Tester")
 	            .setAmountExVat(4)

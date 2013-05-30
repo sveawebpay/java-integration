@@ -28,7 +28,7 @@ public class WebServicePaymentsResponseTest {
     	
     	DeliverOrderResponse response = WebPay.deliverOrder()               
         .addOrderRow(Item.orderRow()
-            .setArticleNumber(1)
+            .setArticleNumber("1")
             .setQuantity(2)
             .setAmountExVat(100.00)
             .setDescription("Specification")
@@ -51,7 +51,7 @@ public class WebServicePaymentsResponseTest {
     public void testCompanyIdRequest() throws ValidationException, Exception {
     	 SveaRequest<SveaCreateOrder> request = WebPay.createOrder()                
             	.addOrderRow(Item.orderRow()
-                    .setArticleNumber(1)
+                    .setArticleNumber("1")
                     .setQuantity(2)
                     .setAmountExVat(100.00)
                     .setDescription("Specification")
@@ -78,7 +78,7 @@ public class WebServicePaymentsResponseTest {
     public void testCompanyIdResponse() throws ValidationException, Exception {
     	 CreateOrderResponse response = WebPay.createOrder()                
             	.addOrderRow(Item.orderRow()
-                    .setArticleNumber(1)
+                    .setArticleNumber("1")
                     .setQuantity(2)
                     .setAmountExVat(100.00)
                     .setDescription("Specification")
@@ -107,7 +107,7 @@ public class WebServicePaymentsResponseTest {
     public void testDECompanyIdentity() throws ValidationException, Exception {
     	 CreateOrderResponse response = WebPay.createOrder()                
             	.addOrderRow(Item.orderRow()
-                    .setArticleNumber(1)
+                    .setArticleNumber("1")
                     .setQuantity(2)
                     .setAmountExVat(100.00)
                     .setDescription("Specification")
@@ -140,7 +140,7 @@ public class WebServicePaymentsResponseTest {
     public void testNLCompanyIdentity() throws ValidationException, Exception {
     		 CreateOrderResponse response = WebPay.createOrder()                
             	.addOrderRow(Item.orderRow()
-                    .setArticleNumber(1)
+                    .setArticleNumber("1")
                     .setQuantity(2)
                     .setAmountExVat(100.00)
                     .setDescription("Specification")
@@ -176,7 +176,7 @@ public class WebServicePaymentsResponseTest {
     	
     	DeliverOrderResponse response = WebPay.deliverOrder()               
         .addOrderRow(Item.orderRow()
-            .setArticleNumber(1)
+            .setArticleNumber("1")
             .setQuantity(2)
             .setAmountExVat(100.00)
             .setDescription("Specification")
@@ -244,7 +244,7 @@ public class WebServicePaymentsResponseTest {
 		
 		CreateOrderResponse response = WebPay.createOrder()                
         .addOrderRow(Item.orderRow()
-            .setArticleNumber(1)
+            .setArticleNumber("1")
             .setQuantity(2)
             .setAmountExVat(1000.00)
             .setDescription("Specification")
@@ -285,7 +285,7 @@ public class WebServicePaymentsResponseTest {
 		
 		CreateOrderResponse response = WebPay.createOrder()                
        .addOrderRow(Item.orderRow()
-           .setArticleNumber(1)
+           .setArticleNumber("1")
            .setQuantity(2)
            .setAmountExVat(1000.00)
            .setDescription("Specification")
@@ -320,7 +320,7 @@ public class WebServicePaymentsResponseTest {
     private long createInvoiceAndReturnOrderId() throws Exception {
     	CreateOrderResponse response = WebPay.createOrder()                
         	.addOrderRow(Item.orderRow()
-                .setArticleNumber(1)
+                .setArticleNumber("1")
                 .setQuantity(2)
                 .setAmountExVat(100.00)
                 .setDescription("Specification")

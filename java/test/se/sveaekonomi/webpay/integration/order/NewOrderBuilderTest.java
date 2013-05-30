@@ -24,7 +24,7 @@ public class NewOrderBuilderTest {
 		
 		ArrayList<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>(); 
 		orderRows.add(Item.orderRow()
-				.setArticleNumber(1)
+				.setArticleNumber("1")
                 .setQuantity(2)
                 .setAmountExVat(100.00)
                 .setDescription("Specification")
@@ -34,7 +34,7 @@ public class NewOrderBuilderTest {
                 .setDiscountPercent(0));
 		
 		orderRows.add(Item.orderRow()
-				.setArticleNumber(2)
+				.setArticleNumber("2")
                 .setQuantity(2)
                 .setAmountExVat(100.00)
                 .setDescription("Specification")
@@ -71,7 +71,7 @@ public class NewOrderBuilderTest {
     public void testBuildOrderWithCompanyCustomer() throws ValidationException {
     	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()            
         .addOrderRow(Item.orderRow()
-            .setArticleNumber(1)
+            .setArticleNumber("1")
             .setQuantity(2)
             .setAmountExVat(100.00)
             .setDescription("Specification")
