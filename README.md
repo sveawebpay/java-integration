@@ -28,7 +28,7 @@
 
 ## 1. Introduction                                                             
 This integration package is built for developers to simplify the integration of Svea WebPay services. 
-Using this package will make your implementation sustainable and unaffected for changes
+Using this package will make your implementation sustainable and unaffected by changes
 in our payment system. Just make sure to update the package regularly.
 
 The API is built as a *Fluent API*, ie. you can use *method chaining* when implementing it in your code.
@@ -75,7 +75,7 @@ import java.net.URL;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
-public class MyConfigTest implements ConfigurationProvider{
+public class MyConfigTest implements ConfigurationProvider {
 	
 	/**
 	 * Constants for the end point url found in the class SveaConfig
@@ -626,7 +626,7 @@ Param: Campaign code recieved from getPaymentPlanParams().
 ```java
 CreateOrderResponse response = WebPay.createOrder()
 .addOrderRow(Item.orderRow()
-	.setArticleNumber(1)
+	.setArticleNumber("1")
 	.setQuantity(2)
 	.setAmountExVat(100.00)
 	.setDescription("Specification")
