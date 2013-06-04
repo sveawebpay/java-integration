@@ -87,7 +87,7 @@ public class WebServiceOrderValidatorTest {
         try{
         WebPay.deliverOrder()                	
         .addOrderRow(Item.orderRow()
-            .setArticleNumber(1)
+            .setArticleNumber("1")
             .setQuantity(2)
             .setAmountExVat(100.00)
             .setDescription("Specification")
@@ -363,7 +363,7 @@ public class WebServiceOrderValidatorTest {
         String expectedMessage = "MISSING VALUE - setOrderId is required.\n";
         HandleOrder handleOrder = WebPay.deliverOrder()                	
         .addOrderRow(Item.orderRow()
-            .setArticleNumber(1)
+            .setArticleNumber("1")
             .setQuantity(2)
             .setAmountExVat(100.00)
             .setDescription("Specification")
@@ -384,7 +384,7 @@ public class WebServiceOrderValidatorTest {
     	  String expectedMessage = "MISSING VALUE - setInvoiceDistributionType is requred for deliverInvoiceOrder.\n";
           HandleOrder handleOrder = WebPay.deliverOrder()                	
           .addOrderRow(Item.orderRow()
-              .setArticleNumber(1)
+              .setArticleNumber("1")
               .setQuantity(2)
               .setAmountExVat(100.00)
               .setDescription("Specification")
@@ -427,7 +427,7 @@ public class WebServiceOrderValidatorTest {
     	try{
     	WebPay.createOrder()
         .addOrderRow(Item.orderRow()
-                .setArticleNumber(1)
+                .setArticleNumber("1")
                 .setQuantity(2)
                 .setAmountExVat(100.00)
                 .setDescription("Specification")
@@ -464,7 +464,7 @@ public class WebServiceOrderValidatorTest {
                    
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
         .addOrderRow(Item.orderRow()
-            .setArticleNumber(1)
+            .setArticleNumber("1")
             .setQuantity(2)
             .setAmountExVat(100.00)
             .setDescription("Specification")

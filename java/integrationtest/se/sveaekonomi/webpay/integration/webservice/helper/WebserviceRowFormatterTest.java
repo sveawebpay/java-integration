@@ -25,7 +25,7 @@ public class WebserviceRowFormatterTest {
     public void testFormatOrderRows() {
     	CreateOrderBuilder order = WebPay.createOrder()
     	.addOrderRow(Item.orderRow()
-            .setArticleNumber(0)
+            .setArticleNumber("0")
             .setName("Tess")
             .setDescription("Tester")
             .setAmountExVat(4)
@@ -49,7 +49,7 @@ public class WebserviceRowFormatterTest {
     public void testFormatShippingFeeRows() throws ValidationException, Exception {
     	  SveaRequest<SveaCreateOrder> request = WebPay.createOrder()        	
     		        .addOrderRow(Item.orderRow()
-    		            .setArticleNumber(1)
+    		            .setArticleNumber("1")
     		            .setQuantity(2)
     		            .setAmountExVat(100.00)
     		            .setDescription("Specification")
@@ -89,7 +89,7 @@ public class WebserviceRowFormatterTest {
     public void testFormatShippingFeeRowsZero() throws ValidationException, Exception {
     	  CreateOrderResponse response = WebPay.createOrder()        	
     		        .addOrderRow(Item.orderRow()
-    		            .setArticleNumber(1)
+    		            .setArticleNumber("1")
     		            .setQuantity(2)
     		            .setAmountExVat(10)
     		            .setDescription("Specification")

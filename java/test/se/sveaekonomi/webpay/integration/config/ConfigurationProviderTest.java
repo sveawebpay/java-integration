@@ -30,7 +30,7 @@ public class ConfigurationProviderTest {
 		ConfigurationProviderInterfaceTest conf = new ConfigurationProviderInterfaceTest();
 		CreateOrderResponse response = WebPay.createOrder(conf)
 	    		.addOrderRow(Item.orderRow()
-	                .setArticleNumber(1)
+	                .setArticleNumber("1")
 	                .setQuantity(2)
 	                .setAmountExVat(100.00)
 	                .setDescription("Specification")
@@ -40,7 +40,7 @@ public class ConfigurationProviderTest {
 	                .setDiscountPercent(0))
 	                
 	             .addOrderRow(Item.orderRow()
-	                .setArticleNumber(1)
+	                .setArticleNumber("1")
 	                .setQuantity(2)
 	                .setAmountExVat(100.00)
 	                .setDescription("Specification")
