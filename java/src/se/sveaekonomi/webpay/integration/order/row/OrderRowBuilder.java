@@ -35,6 +35,16 @@ public class OrderRowBuilder implements RowBuilder {
         return this;
     }
     
+    /**
+     * Optional
+     * @param articleNumber
+     * @return OrderRowBuilder
+     */
+    @Deprecated
+    public OrderRowBuilder setArticleNumber(int articleNumber) {
+        return setArticleNumber(Integer.toString(articleNumber));
+    }
+    
     public String getName() {
         return name;
     }

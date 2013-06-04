@@ -34,7 +34,7 @@ public class NewOrderBuilderTest {
                 .setDiscountPercent(0));
 		
 		orderRows.add(Item.orderRow()
-				.setArticleNumber("2")
+				.setArticleNumber(2)
                 .setQuantity(2)
                 .setAmountExVat(100.00)
                 .setDescription("Specification")
