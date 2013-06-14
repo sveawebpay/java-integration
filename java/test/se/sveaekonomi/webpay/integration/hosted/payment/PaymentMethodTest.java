@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.TestingTool;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -17,15 +18,7 @@ public class PaymentMethodTest {
     @Test
     public void testPayPagePaymentWithSetPaymentMethod() throws Exception {
     	PaymentForm form = WebPay.createOrder()
-        .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(2)
-            .setAmountExVat(100.00)
-            .setDescription("Specification")
-            .setName("Prod")
-            .setUnit("st")
-            .setVatPercent(25)
-            .setDiscountPercent(0))
+        .addOrderRow(TestingTool.createOrderRow())
         .addDiscount(Item.relativeDiscount()
             .setDiscountId("1")
             .setDiscountPercent(50)
@@ -57,15 +50,7 @@ public class PaymentMethodTest {
     public void testPayPagePaymentWithSetPaymentMethodNL() throws Exception {
         
     	PaymentForm form = WebPay.createOrder()
-        .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(2)
-            .setAmountExVat(100.00)
-            .setDescription("Specification")
-            .setName("Prod")
-            .setUnit("st")
-            .setVatPercent(25)
-            .setDiscountPercent(0))
+        .addOrderRow(TestingTool.createOrderRow())
         .addDiscount(Item.relativeDiscount()
             .setDiscountId("1")
             .setDiscountPercent(50)

@@ -10,6 +10,7 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.TestingTool;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
@@ -87,15 +88,7 @@ public class WebServiceOrderValidatorTest {
         String expectedMessage ="MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
         try {
         WebPay.deliverOrder()
-        .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(2)
-            .setAmountExVat(100.00)
-            .setDescription("Specification")
-            .setName("Prod")
-            .setUnit("st")
-            .setVatPercent(25)
-            .setDiscountPercent(0))
+        .addOrderRow(TestingTool.createOrderRow())
         .setNumberOfCreditDays(1)
         .setOrderId(2345L)
      //   .setCountryCode(COUNTRYCODE.SE)
@@ -361,15 +354,7 @@ public class WebServiceOrderValidatorTest {
     public void testFailOnMissingOrderIdOnDeliverOrder() throws Exception {
         String expectedMessage = "MISSING VALUE - setOrderId is required.\n";
         HandleOrder handleOrder = WebPay.deliverOrder()
-        .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(2)
-            .setAmountExVat(100.00)
-            .setDescription("Specification")
-            .setName("Prod")
-            .setUnit("st")
-            .setVatPercent(25)
-            .setDiscountPercent(0))
+        .addOrderRow(TestingTool.createOrderRow())
         .setNumberOfCreditDays(1)
         .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
         .setCountryCode(COUNTRYCODE.SE)
@@ -382,15 +367,7 @@ public class WebServiceOrderValidatorTest {
     public void testFailOnMissingOrderTypeForInvoiceOrder() throws ValidationException {
     	  String expectedMessage = "MISSING VALUE - setInvoiceDistributionType is requred for deliverInvoiceOrder.\n";
           HandleOrder handleOrder = WebPay.deliverOrder()
-          .addOrderRow(Item.orderRow()
-              .setArticleNumber("1")
-              .setQuantity(2)
-              .setAmountExVat(100.00)
-              .setDescription("Specification")
-              .setName("Prod")
-              .setUnit("st")	
-              .setVatPercent(25)
-              .setDiscountPercent(0))
+          .addOrderRow(TestingTool.createOrderRow())
           .setNumberOfCreditDays(1)
           .setOrderId(2345L)
          // .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
@@ -424,15 +401,7 @@ public class WebServiceOrderValidatorTest {
     	String expectedMessage = "ERROR - CompanyCustomer is not allowed to use payment plan option.";
     	try {
     	WebPay.createOrder()
-        .addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
-                .setQuantity(2)
-                .setAmountExVat(100.00)
-                .setDescription("Specification")
-                .setName("Prod")
-                .setUnit("st")	
-                .setVatPercent(25)
-                .setDiscountPercent(0)) 
+        .addOrderRow(TestingTool.createOrderRow()) 
         .addCustomerDetails(Item.companyCustomer()
                 .setNationalIdNumber("666666")
                 .setEmail("test@svea.com")

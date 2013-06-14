@@ -9,6 +9,7 @@ import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
 
+import se.sveaekonomi.webpay.integration.TestingTool;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.payment.FakeHostedPayment;
 import se.sveaekonomi.webpay.integration.order.VoidValidator;
@@ -253,15 +254,7 @@ public class HostedOrderValidatorTest {
         
     	try {
     	WebPay.createOrder()            
-        .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(2)
-            .setAmountExVat(100.00)
-            .setDescription("Specification")
-            .setName("Prod")
-            .setUnit("st")
-            .setVatPercent(25)
-            .setDiscountPercent(0))
+        .addOrderRow(TestingTool.createOrderRow())
         .addDiscount(Item.relativeDiscount()
             .setDiscountId("1")
             .setDiscountPercent(50)
@@ -301,15 +294,7 @@ public class HostedOrderValidatorTest {
         
     	try {
     	WebPay.createOrder()
-        .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(2)
-            .setAmountExVat(100.00)
-            .setDescription("Specification")
-            .setName("Prod")
-            .setUnit("st")
-            .setVatPercent(25)
-            .setDiscountPercent(0))
+        .addOrderRow(TestingTool.createOrderRow())
         .addDiscount(Item.relativeDiscount()
             .setDiscountId("1")
             .setDiscountPercent(50)

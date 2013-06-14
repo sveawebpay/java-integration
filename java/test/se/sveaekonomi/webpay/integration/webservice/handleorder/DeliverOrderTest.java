@@ -7,6 +7,7 @@ import javax.xml.bind.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.TestingTool;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -33,15 +34,7 @@ public class DeliverOrderTest {
     
     @Test
     public void testDeliverInvoice() throws ValidationException {
-    	SveaRequest<SveaDeliverOrder> request = order.addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(2)
-            .setAmountExVat(100.00)
-            .setDescription("Specification")
-            .setName("Prod")
-            .setUnit("st")
-            .setVatPercent(25)
-            .setDiscountPercent(0))
+    	SveaRequest<SveaDeliverOrder> request = order.addOrderRow(TestingTool.createOrderRow())
 
         .addFee(Item.shippingFee()
             .setShippingId("33")

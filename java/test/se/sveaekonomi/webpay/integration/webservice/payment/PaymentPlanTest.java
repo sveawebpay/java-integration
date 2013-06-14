@@ -7,6 +7,7 @@ import javax.xml.bind.ValidationException;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.TestingTool;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -20,15 +21,7 @@ public class PaymentPlanTest {
     @Test
     public void testPaymentPlanRequestObjectSpecifics() throws ValidationException{
     	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-    	.addOrderRow(Item.orderRow()
-              .setArticleNumber("1")
-              .setQuantity(2)
-              .setAmountExVat(100.00)
-              .setDescription("Specification")
-              .setName("Prod")
-              .setUnit("st")
-              .setVatPercent(25)
-              .setDiscountPercent(0))
+    	.addOrderRow(TestingTool.createOrderRow())
         
         .addFee(Item.shippingFee()
                 .setShippingId("33")
@@ -66,15 +59,7 @@ public class PaymentPlanTest {
     public void testPaymentPlanFailCompanyCustomer() throws ValidationException{
     	try {
     	WebPay.createOrder()
-    	.addOrderRow(Item.orderRow()
-              .setArticleNumber("1")
-              .setQuantity(2)
-              .setAmountExVat(100.00)
-              .setDescription("Specification")
-              .setName("Prod")
-              .setUnit("st")
-              .setVatPercent(25)
-              .setDiscountPercent(0))
+    	.addOrderRow(TestingTool.createOrderRow())
         
         .addFee(Item.shippingFee()
                 .setShippingId("33")

@@ -9,6 +9,7 @@ import javax.xml.bind.ValidationException;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.TestingTool;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -47,14 +48,7 @@ public class WebserviceRowFormatterTest {
     @Test
     public void testFormatShippingFeeRows() throws ValidationException, Exception {
     	  SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-    		        .addOrderRow(Item.orderRow()
-    		            .setArticleNumber("1")
-    		            .setQuantity(2)
-    		            .setAmountExVat(100.00)
-    		            .setDescription("Specification")
-    		            .setName("Prod")
-    		            .setVatPercent(0)
-    		            .setDiscountPercent(0))
+    		        .addOrderRow(TestingTool.createOrderRow())
     		       
     		       .addFee(Item.shippingFee()  
 			            .setShippingId("0")

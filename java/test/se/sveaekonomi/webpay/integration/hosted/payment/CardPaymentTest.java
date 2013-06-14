@@ -9,6 +9,7 @@ import javax.xml.bind.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.TestingTool;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.VoidValidator;
@@ -40,15 +41,7 @@ public class CardPaymentTest {
     
     @Test
     public void testBuildCardPayment() throws Exception {
-    	PaymentForm form = order.addOrderRow(Item.orderRow()
-			.setAmountExVat(100.00)
-			.setArticleNumber("1")
-			.setQuantity(2)
-			.setUnit("st")
-			.setDescription("Specification")
-			.setVatPercent(25)
-			.setDiscountPercent(0)
-			.setName("Prod"))
+    	PaymentForm form = order.addOrderRow(TestingTool.createOrderRow())
 			
 			.addCustomerDetails(Item.companyCustomer()
 			.setVatNumber("2345234")
@@ -88,15 +81,7 @@ public class CardPaymentTest {
     
     @Test
     public void testBuildCardPaymentDE() throws Exception {
-    	PaymentForm form = order.addOrderRow(Item.orderRow()
-			.setAmountExVat(100.00)
-			.setArticleNumber("1")
-			.setQuantity(2)
-			.setUnit("st")
-			.setDescription("Specification")
-			.setVatPercent(25)
-			.setDiscountPercent(0)
-			.setName("Prod"))
+    	PaymentForm form = order.addOrderRow(TestingTool.createOrderRow())
 			
 			.addCustomerDetails(Item.companyCustomer()
 			.setVatNumber("2345234")
@@ -138,15 +123,7 @@ public class CardPaymentTest {
     @Test
     public void testSetAuthorization() throws Exception {
     	PaymentForm form = WebPay.createOrder()
-       .addOrderRow(Item.orderRow()
-                .setAmountExVat(100.00)
-                .setArticleNumber("1")
-                .setQuantity(2)
-                .setUnit("st")
-                .setDescription("Specification")
-                .setVatPercent(25)
-                .setDiscountPercent(0)
-                .setName("Prod"))
+       .addOrderRow(TestingTool.createOrderRow())
           
        .addFee(Item.shippingFee()
                   .setShippingId("33")

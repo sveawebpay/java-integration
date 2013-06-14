@@ -9,6 +9,7 @@ import javax.xml.bind.ValidationException;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.TestingTool;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -197,15 +198,7 @@ public class PayPagePaymentTest {
         paymentMethods.add(PAYMENTMETHOD.KORTCERT);
     	
         PaymentForm form = WebPay.createOrder()
-            .addOrderRow(Item.orderRow()
-                    .setArticleNumber("1")
-                    .setQuantity(2)
-                    .setAmountExVat(100.00)
-                    .setDescription("Specification")
-                    .setName("Prod")
-                    .setUnit("st")
-                    .setVatPercent(25)
-                    .setDiscountPercent(0))  
+            .addOrderRow(TestingTool.createOrderRow())  
            .addFee(Item.shippingFee()
                 .setAmountExVat(50)
                 .setShippingId("33")
@@ -244,15 +237,7 @@ public class PayPagePaymentTest {
     @Test
     public void testPayPagePaymentExcludeCardPayments() throws ValidationException, Exception {
         PaymentForm form = WebPay.createOrder()
-            .addOrderRow(Item.orderRow()
-                    .setArticleNumber("1")
-                    .setQuantity(2)
-                    .setAmountExVat(100.00)
-                    .setDescription("Specification")
-                    .setName("Prod")
-                    .setUnit("st")
-                    .setVatPercent(25)
-                    .setDiscountPercent(0))
+            .addOrderRow(TestingTool.createOrderRow())
             .addDiscount(Item.relativeDiscount()
                     .setDiscountId("1")
                     .setDiscountPercent(50)
@@ -280,16 +265,7 @@ public class PayPagePaymentTest {
     @Test
     public void testExcludeDirectPaymentMethods() throws ValidationException, Exception {
     	PaymentForm form = WebPay.createOrder()
-            .addOrderRow(Item.orderRow()
-                    .setArticleNumber("1")
-                    .setQuantity(2)
-                    .setAmountExVat(100.00)
-                    .setDescription("Specification")
-                    .setName("Prod")
-                    .setUnit("st")
-                    .setVatPercent(25)
-                    .setDiscountPercent(0))
-            
+            .addOrderRow(TestingTool.createOrderRow())
             .addDiscount(Item.relativeDiscount()
                     .setDiscountId("1")
                     .setDiscountPercent(50)
@@ -317,15 +293,7 @@ public class PayPagePaymentTest {
         paymentMethods.add(PAYMENTMETHOD.PAYMENTPLAN);
         paymentMethods.add(PAYMENTMETHOD.SKRILL);
         PaymentForm form = WebPay.createOrder()
-                .addOrderRow(Item.orderRow()
-                        .setArticleNumber("1")
-                        .setQuantity(2)
-                        .setAmountExVat(100.00)
-                        .setDescription("Specification")
-                        .setName("Prod")
-                        .setUnit("st")
-                        .setVatPercent(25)
-                        .setDiscountPercent(0))
+                .addOrderRow(TestingTool.createOrderRow())
                
                .addDiscount(Item.relativeDiscount()
                         .setDiscountId("1")
@@ -355,15 +323,7 @@ public class PayPagePaymentTest {
     	paymentMethods.add(PAYMENTMETHOD.KORTCERT);
     	paymentMethods.add(PAYMENTMETHOD.SKRILL);
         PaymentForm form = WebPay.createOrder()
-            .addOrderRow(Item.orderRow()
-                    .setArticleNumber("1")
-                    .setQuantity(2)
-                    .setAmountExVat(100.00)
-                    .setDescription("Specification")
-                    .setName("Prod")
-                    .setUnit("st")
-                    .setVatPercent(25)
-                    .setDiscountPercent(0))
+            .addOrderRow(TestingTool.createOrderRow())
            
            .addDiscount(Item.relativeDiscount()
                     .setDiscountId("1")
@@ -390,15 +350,7 @@ public class PayPagePaymentTest {
     @Test
     public void testPayPagePaymentIncludePaymentMethodsEmpty() throws ValidationException, Exception {
         PaymentForm form = WebPay.createOrder()
-            .addOrderRow(Item.orderRow()
-                    .setArticleNumber("1")
-                    .setQuantity(2)
-                    .setAmountExVat(100.00)
-                    .setDescription("Specification")
-                    .setName("Prod")
-                    .setUnit("st")
-                    .setVatPercent(25)
-                    .setDiscountPercent(0))
+            .addOrderRow(TestingTool.createOrderRow())
            
            .addDiscount(Item.relativeDiscount()
                     .setDiscountId("1")
