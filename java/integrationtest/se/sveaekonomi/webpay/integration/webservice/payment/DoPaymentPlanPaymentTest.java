@@ -15,31 +15,6 @@ import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 
 public class DoPaymentPlanPaymentTest {
     
-    @Test
-    public void testDeliverPaymentPlanOrderResult() throws Exception {
-    	long orderId = createPaymentPlanAndReturnOrderId();
-    	
-    	DeliverOrderResponse response = WebPay.deliverOrder()
-        .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(2)
-            .setAmountExVat(100.00)
-            .setDescription("Specification")
-            .setName("Prod")
-            .setUnit("st")
-            .setVatPercent(25)
-            .setDiscountPercent(0))
-            
-        .setOrderId(orderId)
-        .setNumberOfCreditDays(1)
-        .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-        .setCountryCode(COUNTRYCODE.SE)
-        .deliverPaymentPlanOrder()
-        .doRequest();
-        
-        assertEquals(response.isOrderAccepted(), true);
-    }
-    
 	@Test
 	public void testPaymentPlanRequestReturnsAcceptedResult() throws Exception {
 		PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams()
@@ -76,11 +51,36 @@ public class DoPaymentPlanPaymentTest {
         .setOrderDate("2012-12-12")
         .setCurrency(CURRENCY.SEK)
         .setCountryCode(COUNTRYCODE.SE)
-        .usePaymentPlanPayment(code)  //returns a paymentPlanOrder object
+        .usePaymentPlanPayment(code) //returns a paymentPlanOrder object
         .doRequest();
 		
 		assertEquals(response.isOrderAccepted(), true);
 	}
+    
+    @Test
+    public void testDeliverPaymentPlanOrderResult() throws Exception {
+    	long orderId = createPaymentPlanAndReturnOrderId();
+    	
+    	DeliverOrderResponse response = WebPay.deliverOrder()
+        .addOrderRow(Item.orderRow()
+            .setArticleNumber("1")
+            .setQuantity(2)
+            .setAmountExVat(100.00)
+            .setDescription("Specification")
+            .setName("Prod")
+            .setUnit("st")
+            .setVatPercent(25)
+            .setDiscountPercent(0))
+            
+        .setOrderId(orderId)
+        .setNumberOfCreditDays(1)
+        .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+        .setCountryCode(COUNTRYCODE.SE)
+        .deliverPaymentPlanOrder()
+        .doRequest();
+        
+        assertEquals(response.isOrderAccepted(), true);
+    }
 			
 	private long createPaymentPlanAndReturnOrderId() throws Exception {
 		PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams()

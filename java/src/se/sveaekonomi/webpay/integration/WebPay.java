@@ -28,7 +28,7 @@ public class WebPay {
      * Start build order request to create an order for all payments.
      * @return CreateOrderBuilder
      */
-    public static CreateOrderBuilder createOrder() {    	
+    public static CreateOrderBuilder createOrder() {
     	return createOrder(SveaConfig.getDefaultConfig()); 
     }     
     

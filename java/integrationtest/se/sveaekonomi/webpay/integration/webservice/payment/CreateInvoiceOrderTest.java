@@ -12,17 +12,15 @@ import se.sveaekonomi.webpay.integration.config.ConfigurationProviderInterfaceTe
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
-import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
-import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
-public class DoInvoicePaymentTest {
+public class CreateInvoiceOrderTest {
     
     @Test
     public void testInvoiceRequestForCustomerIdentityIndividualFromSE() throws Exception {
@@ -46,6 +44,7 @@ public class DoInvoicePaymentTest {
         assertEquals(true, response.isOrderAccepted());
         assertEquals(true, response.sveaWillBuyOrder);
         assertEquals(250.00, response.amount, 0);
+        
         //CustomerIdentity
         assertEquals("194605092222", response.customerIdentity.getNationalIdNumber());
         assertEquals("SE", response.customerIdentity.getCountryCode());
@@ -179,13 +178,14 @@ public class DoInvoicePaymentTest {
            .setCurrency(CURRENCY.EUR)
            .useInvoicePayment()// returns an InvoiceOrder object
         //   .setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)
-               .doRequest();  
+           .doRequest();  
         
           assertEquals(true, response.isOrderAccepted());
           assertEquals(true, response.sveaWillBuyOrder);
           assertEquals(250.00, response.amount, 0);
           assertEquals("0", response.getResultCode());
           assertEquals("Invoice" , response.orderType);
+          
           //CustomerIdentity
           assertEquals(null, response.customerIdentity.getEmail());
           assertEquals(null, response.customerIdentity.getIpAddress());
@@ -265,7 +265,7 @@ public class DoInvoicePaymentTest {
             .setCurrency(CURRENCY.SEK)
             .setCustomerReference("33")
             .useInvoicePayment()
-    	                        
+    	
     	.doRequest();
     	 
     	assertEquals(response.isOrderAccepted(), true);
@@ -314,7 +314,7 @@ public class DoInvoicePaymentTest {
         
         CloseOrder closeRequest = WebPay.closeOrder()
                 .setOrderId(orderId)
-          //    .setCountryCode(COUNTRYCODE.SE)
+                //.setCountryCode(COUNTRYCODE.SE)
                 .closeInvoiceOrder();
         
         String expectedMsg = "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
@@ -357,28 +357,6 @@ public class DoInvoicePaymentTest {
 	        
 	    assertEquals(response.isOrderAccepted(), true);
 	}
-    
-    @Test
-    public void testDeliverInvoiceOrderDoRequest() throws Exception {
-    	DeliverOrderResponse response =
-    			WebPay.deliverOrder()
-    		.addOrderRow(Item.orderRow()
-    			.setArticleNumber("1")
-    			.setQuantity(2)
-    			.setAmountExVat(100.00)
-    			.setDescription("Specification")
-    			.setName("Prod")
-    			.setUnit("st")
-    			.setVatPercent(25)
-    			.setDiscountPercent(0))  
-    		.setOrderId(54086L)
-    		.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-    		.setCountryCode(COUNTRYCODE.SE)
-    		.deliverInvoiceOrder()
-    		.doRequest();
-
-    	response.getErrorMessage();
-    }
     
     @Test
     public void testFormatShippingFeeRowsZero() throws ValidationException, Exception {
@@ -435,7 +413,6 @@ public class DoInvoicePaymentTest {
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.SEK)
                 .useInvoicePayment()// returns an InvoiceOrder object
-                //.prepareRequest();
                 .doRequest();
     	 
     	assertEquals(response.isIndividualIdentity, false);
@@ -470,7 +447,6 @@ public class DoInvoicePaymentTest {
                 .setCurrency(CURRENCY.EUR)
                 .useInvoicePayment()// returns an InvoiceOrder object
               //  .setPasswordBasedAuthorization("germanytest", "germanytest", 14997)
-                //.prepareRequest();
                 .doRequest();
     	 
     	assertEquals(response.isIndividualIdentity, false);
@@ -509,54 +485,5 @@ public class DoInvoicePaymentTest {
     	 
     	assertEquals(false, response.isIndividualIdentity);
     	assertEquals(true, response.isOrderAccepted());
-    }
-    
-    @Test
-    public void testDeliverInvoiceOrderResult() throws Exception {
-    	long orderId = createInvoiceAndReturnOrderId();
-    	
-    	DeliverOrderResponse response = WebPay.deliverOrder()
-        .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(2)
-            .setAmountExVat(100.00)
-            .setDescription("Specification")
-            .setName("Prod")
-            .setUnit("st")
-            .setVatPercent(25)
-            .setDiscountPercent(0))
-                    
-        .setOrderId(orderId)
-        .setNumberOfCreditDays(1)
-        .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-        .setCountryCode(COUNTRYCODE.SE)
-        .deliverInvoiceOrder()
-        .doRequest();
-        
-        assertEquals(response.isOrderAccepted(), true);
-    }
-	
-    private long createInvoiceAndReturnOrderId() throws Exception {
-    	CreateOrderResponse response = WebPay.createOrder()
-        	.addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
-                .setQuantity(2)
-                .setAmountExVat(100.00)
-                .setDescription("Specification")
-                .setName("Prod")
-                .setUnit("st")
-                .setVatPercent(25)
-                .setDiscountPercent(0))
-                
-	        .addCustomerDetails(Item.individualCustomer()
-           		.setNationalIdNumber("194605092222"))
-        	.setCountryCode(COUNTRYCODE.SE)
-            .setClientOrderNumber("33")
-            .setOrderDate("2012-12-12")
-            .setCurrency(CURRENCY.SEK)
-            .useInvoicePayment()// returns an InvoiceOrder object
-            .doRequest();
-        
-        return response.orderId;
     }
 }

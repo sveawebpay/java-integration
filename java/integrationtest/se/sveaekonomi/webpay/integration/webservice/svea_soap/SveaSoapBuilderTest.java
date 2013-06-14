@@ -14,9 +14,7 @@ public class SveaSoapBuilderTest {
     
     @Test
     public void testRequest() throws Exception {
-        
         CreateOrderResponse response = WebPay.createOrder()
-        
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
@@ -36,8 +34,7 @@ public class SveaSoapBuilderTest {
         .useInvoicePayment()
            // .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
             //returns an InvoicePayment object
-            	.doRequest();
-                //.prepareRequest();
+        .doRequest();
         
         assertEquals(true, response.isOrderAccepted());
         //WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
