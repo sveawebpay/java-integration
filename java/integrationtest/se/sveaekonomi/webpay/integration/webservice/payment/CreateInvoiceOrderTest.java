@@ -7,6 +7,7 @@ import javax.xml.bind.ValidationException;
 import org.junit.Test;
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.TestingTool;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProviderInterfaceTest;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
@@ -25,14 +26,7 @@ public class CreateInvoiceOrderTest {
     @Test
     public void testInvoiceRequestForCustomerIdentityIndividualFromSE() throws Exception {
     	CreateOrderResponse response = WebPay.createOrder()
-        .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(2)
-            .setAmountExVat(100.00)
-            .setDescription("Specification")
-            .setName("Prod")
-            .setVatPercent(25)
-            .setDiscountPercent(0))
+        .addOrderRow(TestingTool.createOrderRow())
         .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
             .setCountryCode(COUNTRYCODE.SE)
             .setOrderDate("2012-12-12")
@@ -40,7 +34,7 @@ public class CreateInvoiceOrderTest {
             .setCurrency(CURRENCY.SEK)
             .useInvoicePayment()
             .doRequest();
-    
+    	
         assertEquals(true, response.isOrderAccepted());
         assertEquals(true, response.sveaWillBuyOrder);
         assertEquals(250.00, response.amount, 0);
@@ -60,14 +54,7 @@ public class CreateInvoiceOrderTest {
     @Test
     public void testInvoiceRequestFailing() throws Exception {
     	CreateOrderResponse response = WebPay.createOrder()
-        .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(2)
-            .setAmountExVat(100.00)
-            .setDescription("Specification")
-            .setName("Prod")
-            .setVatPercent(25)
-            .setDiscountPercent(0))
+        .addOrderRow(TestingTool.createOrderRow())
         .addCustomerDetails(Item.individualCustomer().setNationalIdNumber(""))
             .setCountryCode(COUNTRYCODE.SE)
             .setOrderDate("2012-12-12")
@@ -75,7 +62,7 @@ public class CreateInvoiceOrderTest {
             .setCurrency(CURRENCY.SEK)
             .useInvoicePayment()
             .doRequest();
-    
+    	
         assertEquals(false, response.isOrderAccepted());
     }
     
@@ -131,18 +118,11 @@ public class CreateInvoiceOrderTest {
                 .setCountryCode(COUNTRYCODE.SE)
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.SEK)
-        .addCustomerDetails(Item.companyCustomer()
+            .addCustomerDetails(Item.companyCustomer()
         		.setNationalIdNumber("4608142222"))
-        .addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
-                .setQuantity(2)
-                .setAmountExVat(100.00)
-                .setDescription("Specification")
-                .setName("Prod")
-                .setVatPercent(25)
-                .setDiscountPercent(0))
-       .useInvoicePayment()
-                .doRequest();
+            .addOrderRow(TestingTool.createOrderRow())
+            .useInvoicePayment()
+            .doRequest();
 
         assertEquals(true, response.isOrderAccepted());
         assertEquals(true, response.sveaWillBuyOrder);
@@ -153,84 +133,58 @@ public class CreateInvoiceOrderTest {
     @Test
     public void testInvoiceRequestObjectForCustomerIdentityIndividualFromNL() throws Exception {
     	CreateOrderResponse response = WebPay.createOrder()
-    	.addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(2)
-            .setAmountExVat(100.00)
-            .setDescription("Specification")
-            .setName("Prod")
-            .setUnit("st")
-            .setVatPercent(25)
-            .setDiscountPercent(0))
+    			.addOrderRow(TestingTool.createOrderRow())
         
-        .addCustomerDetails(Item.individualCustomer()
-           .setBirthDate(1955, 03, 07)
-           .setInitials("SB")
-           .setName("Sneider", "Boasman")
-           .setStreetAddress("Gate","42")
-           .setLocality("BARENDRECHT")
-           .setZipCode("1102 HG")
-           .setCoAddress("138"))
-           
-           .setCountryCode(COUNTRYCODE.NL)
-           .setClientOrderNumber("33")
-           .setOrderDate("2012-12-12")
-           .setCurrency(CURRENCY.EUR)
-           .useInvoicePayment()// returns an InvoiceOrder object
-        //   .setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)
-           .doRequest();  
+    			.addCustomerDetails(Item.individualCustomer()
+    					.setBirthDate(1955, 03, 07)
+    					.setInitials("SB")
+    					.setName("Sneider", "Boasman")
+    					.setStreetAddress("Gate","42")
+    					.setLocality("BARENDRECHT")
+    					.setZipCode("1102 HG")
+    					.setCoAddress("138"))
+                .setCountryCode(COUNTRYCODE.NL)
+                .setClientOrderNumber("33")
+                .setOrderDate("2012-12-12")
+                .setCurrency(CURRENCY.EUR)
+                .useInvoicePayment()// returns an InvoiceOrder object
+                //.setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)
+                .doRequest();  
         
-          assertEquals(true, response.isOrderAccepted());
-          assertEquals(true, response.sveaWillBuyOrder);
-          assertEquals(250.00, response.amount, 0);
-          assertEquals("0", response.getResultCode());
-          assertEquals("Invoice" , response.orderType);
-          
-          //CustomerIdentity
-          assertEquals(null, response.customerIdentity.getEmail());
-          assertEquals(null, response.customerIdentity.getIpAddress());
-          assertEquals("NL", response.customerIdentity.getCountryCode());
-          assertEquals("23", response.customerIdentity.getHouseNumber());
-          assertEquals("Individual", response.customerIdentity.getCustomerType());
-          assertEquals(null, response.customerIdentity.getPhoneNumber());
-          assertEquals("Sneider Boasman", response.customerIdentity.getFullName());
-          assertEquals("Gate 42", response.customerIdentity.getStreet());
-          assertEquals("138", response.customerIdentity.getCoAddress());
-          assertEquals("1102 HG", response.customerIdentity.getZipCode());
-          assertEquals("BARENDRECHT", response.customerIdentity.getCity());
+        assertEquals(true, response.isOrderAccepted());
+        assertEquals(true, response.sveaWillBuyOrder);
+        assertEquals(250.00, response.amount, 0);
+        assertEquals("0", response.getResultCode());
+        assertEquals("Invoice" , response.orderType);
+        
+        //CustomerIdentity
+        assertEquals(null, response.customerIdentity.getEmail());
+        assertEquals(null, response.customerIdentity.getIpAddress());
+        assertEquals("NL", response.customerIdentity.getCountryCode());
+        assertEquals("23", response.customerIdentity.getHouseNumber());
+        assertEquals("Individual", response.customerIdentity.getCustomerType());
+        assertEquals(null, response.customerIdentity.getPhoneNumber());
+        assertEquals("Sneider Boasman", response.customerIdentity.getFullName());
+        assertEquals("Gate 42", response.customerIdentity.getStreet());
+        assertEquals("138", response.customerIdentity.getCoAddress());
+        assertEquals("1102 HG", response.customerIdentity.getZipCode());
+        assertEquals("BARENDRECHT", response.customerIdentity.getCity());
     }
     
     @Test
     public void testInvoiceDoRequestWithIpAddressSetSE() throws Exception {
     	CreateOrderResponse response = WebPay.createOrder()
-    		.addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
-                .setQuantity(2)
-                .setAmountExVat(100.00)
-                .setDescription("Specification")
-                .setName("Prod")
-                .setUnit("st")
-                .setVatPercent(25)
-                .setDiscountPercent(0))
-                
-             .addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
-                .setQuantity(2)
-                .setAmountExVat(100.00)
-                .setDescription("Specification")
-                .setName("Prod")
-                .setVatPercent(25)
-                .setDiscountPercent(0))
-                                
-             .addCustomerDetails(Item.individualCustomer()
-                 .setNationalIdNumber("194605092222")
-                 .setIpAddress("123.123.123"))
-             .setCountryCode(COUNTRYCODE.SE)
-             .setOrderDate("2012-12-12")
-             .setClientOrderNumber("33")
-             .setCurrency(CURRENCY.SEK)
-             .useInvoicePayment()
-             .doRequest();
+    		.addOrderRow(TestingTool.createOrderRow())
+            .addOrderRow(TestingTool.createOrderRow())
+            .addCustomerDetails(Item.individualCustomer()
+                .setNationalIdNumber("194605092222")
+                .setIpAddress("123.123.123"))
+            .setCountryCode(COUNTRYCODE.SE)
+            .setOrderDate("2012-12-12")
+            .setClientOrderNumber("33")
+            .setCurrency(CURRENCY.SEK)
+            .useInvoicePayment()
+            .doRequest();
         
     	assertEquals(response.isOrderAccepted(), true);
     }
@@ -238,24 +192,8 @@ public class CreateInvoiceOrderTest {
     @Test
     public void testInvoiceRequestUsingAmountIncVatWithZeroVatPercent() throws Exception {
         CreateOrderResponse response = WebPay.createOrder()
-        .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(2)
-            .setAmountExVat(100.00)
-            .setDescription("Specification")
-            .setName("Prod")
-            .setVatPercent(0)
-            .setDiscountPercent(0))
-        .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(2)
-            .setAmountExVat(100.00)
-            .setDescription("Specification")
-            .setName("Prod")
-            .setUnit("st")
-            .setVatPercent(25)
-            .setDiscountPercent(0)) 
-        
+        .addOrderRow(TestingTool.createOrderRow())
+        .addOrderRow(TestingTool.createOrderRow()) 
         .addCustomerDetails(Item.individualCustomer()
         		.setNationalIdNumber("194605092222"))
         		
@@ -277,15 +215,7 @@ public class CreateInvoiceOrderTest {
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-        .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(2)
-            .setAmountExVat(100.00)
-            .setDescription("Specification")
-            .setName("Prod")
-            .setUnit("st")
-            .setVatPercent(25)
-            .setDiscountPercent(0))
+        .addOrderRow(TestingTool.createOrderRow())
         .addCustomerDetails(Item.individualCustomer()
             .setNationalIdNumber("194605092222"))
         .setCountryCode(COUNTRYCODE.SE)
@@ -326,34 +256,17 @@ public class CreateInvoiceOrderTest {
 	public void testConfiguration() throws ValidationException, Exception {
 		ConfigurationProviderInterfaceTest conf = new ConfigurationProviderInterfaceTest();
 		CreateOrderResponse response = WebPay.createOrder(conf)
-	    		.addOrderRow(Item.orderRow()
-	                .setArticleNumber("1")
-	                .setQuantity(2)
-	                .setAmountExVat(100.00)
-	                .setDescription("Specification")
-	                .setName("Prod")
-	                .setUnit("st")
-	                .setVatPercent(25)
-	                .setDiscountPercent(0))
-	                
-	             .addOrderRow(Item.orderRow()
-	                .setArticleNumber("1")
-	                .setQuantity(2)
-	                .setAmountExVat(100.00)
-	                .setDescription("Specification")
-	                .setName("Prod")
-	                .setVatPercent(25)
-	                .setDiscountPercent(0))
-	                    
-	             .addCustomerDetails(Item.individualCustomer()
-	                 .setNationalIdNumber("194605092222")
-	                 .setIpAddress("123.123.123"))
-	             .setCountryCode(COUNTRYCODE.SE)
-	             .setOrderDate("2012-12-12")
-	             .setClientOrderNumber("33")
-	             .setCurrency(CURRENCY.SEK)
-	             .useInvoicePayment()
-	             .doRequest();
+	    		.addOrderRow(TestingTool.createOrderRow())
+	            .addOrderRow(TestingTool.createOrderRow())
+	            .addCustomerDetails(Item.individualCustomer()
+	                .setNationalIdNumber("194605092222")
+	                .setIpAddress("123.123.123"))
+	            .setCountryCode(COUNTRYCODE.SE)
+	            .setOrderDate("2012-12-12")
+	            .setClientOrderNumber("33")
+	            .setCurrency(CURRENCY.SEK)
+	            .useInvoicePayment()
+	            .doRequest();
 	        
 	    assertEquals(response.isOrderAccepted(), true);
 	}
@@ -361,15 +274,7 @@ public class CreateInvoiceOrderTest {
     @Test
     public void testFormatShippingFeeRowsZero() throws ValidationException, Exception {
     	  CreateOrderResponse response = WebPay.createOrder()
-    		        .addOrderRow(Item.orderRow()
-    		            .setArticleNumber("1")
-    		            .setQuantity(2)
-    		            .setAmountExVat(10)
-    		            .setDescription("Specification")
-    		            .setName("Prod")
-    		            .setVatPercent(0)
-    		            .setDiscountPercent(0))
-    		       
+    		        .addOrderRow(TestingTool.createOrderRow())
     		       .addFee(Item.shippingFee()  
 			            .setShippingId("0")
 			            .setName("Tess")
@@ -377,7 +282,6 @@ public class CreateInvoiceOrderTest {
 			            .setAmountExVat(0)
 			            .setVatPercent(0)
 			            .setUnit("st"))
-    		        
     		        .addCustomerDetails(Item.individualCustomer()
     		            .setNationalIdNumber("194605092222"))
     		    
@@ -395,19 +299,9 @@ public class CreateInvoiceOrderTest {
     @Test
     public void testCompanyIdResponse() throws ValidationException, Exception {
     	 CreateOrderResponse response = WebPay.createOrder()
-            	.addOrderRow(Item.orderRow()
-                    .setArticleNumber("1")
-                    .setQuantity(2)
-                    .setAmountExVat(100.00)
-                    .setDescription("Specification")
-                    .setName("Prod")
-                    .setUnit("st")
-                    .setVatPercent(25)
-                    .setDiscountPercent(0))
-                    
+            	.addOrderRow(TestingTool.createOrderRow())
     	        .addCustomerDetails(Item.companyCustomer()
     	        	.setNationalIdNumber("4608142222"))
-               		
             	.setCountryCode(COUNTRYCODE.SE)
                 .setClientOrderNumber("33")
                 .setOrderDate("2012-12-12")
@@ -424,23 +318,13 @@ public class CreateInvoiceOrderTest {
     @Test
     public void testDECompanyIdentity() throws ValidationException, Exception {
     	 CreateOrderResponse response = WebPay.createOrder()
-            	.addOrderRow(Item.orderRow()
-                    .setArticleNumber("1")
-                    .setQuantity(2)
-                    .setAmountExVat(100.00)
-                    .setDescription("Specification")
-                    .setName("Prod")
-                    .setUnit("st")
-                    .setVatPercent(25)
-                    .setDiscountPercent(0))
-                    
+            	.addOrderRow(TestingTool.createOrderRow())
     	        .addCustomerDetails(Item.companyCustomer()
     	        	.setNationalIdNumber("12345")
     	        	.setVatNumber("DE123456789")
     	        	.setStreetAddress("Adalbertsteinweg", "1")
     	        	.setZipCode("52070")
     	        	.setLocality("AACHEN"))
-               		
             	.setCountryCode(COUNTRYCODE.DE)
                 .setClientOrderNumber("33")
                 .setOrderDate("2012-12-12")
@@ -456,16 +340,7 @@ public class CreateInvoiceOrderTest {
     @Test
     public void testNLCompanyIdentity() throws ValidationException, Exception {
     	CreateOrderResponse response = WebPay.createOrder()
-            	.addOrderRow(Item.orderRow()
-                    .setArticleNumber("1")
-                    .setQuantity(2)
-                    .setAmountExVat(100.00)
-                    .setDescription("Specification")
-                    .setName("Prod")
-                    .setUnit("st")
-                    .setVatPercent(25)
-                    .setDiscountPercent(0))
-                
+            	.addOrderRow(TestingTool.createOrderRow())
     	        .addCustomerDetails(Item.companyCustomer()
     	        	//.setNationalIdNumber("12345")
     	        	.setCompanyName("Svea bakkerij 123")
