@@ -216,22 +216,6 @@ public class WebServicePaymentsResponseTest {
     }
     
 	@Test
-	public void testResultGetAddresses() throws Exception {
-	    GetAddressesResponse request = WebPay.getAddresses()
-	        .setCountryCode(COUNTRYCODE.SE)
-	        .setOrderTypeInvoice()
-	        .setIndividual("194605092222")
-	        .doRequest();
-	    
-	    assertEquals(request.isOrderAccepted(), true);
-	    assertEquals(request.getFirstName(), "Tess T");
-	    assertEquals(request.getLastName(), "Persson");
-	    assertEquals(request.getAddressLine2(), "Testgatan 1");
-	    assertEquals(request.getPostcode(), "99999");
-	    assertEquals(request.getPostarea(), "Stan");
-	}
-    
-	@Test
 	public void testPaymentPlanRequestReturnsAcceptedResult() throws Exception {
 		PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams()
 				.setCountryCode(COUNTRYCODE.SE)
