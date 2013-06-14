@@ -90,7 +90,6 @@ public class CreateOrderResponseTest {
     	            .useInvoicePayment()
     	                .doRequest();
     	
-    	
     	assertEquals(true, response.isOrderAccepted());
     	assertEquals(25.52,response.amount, 0);
     }

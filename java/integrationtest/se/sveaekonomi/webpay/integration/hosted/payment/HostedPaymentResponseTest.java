@@ -1,4 +1,4 @@
-package se.sveaekonomi.webpay.integration.webservice.payment;
+package se.sveaekonomi.webpay.integration.hosted.payment;
 
 import static org.junit.Assert.assertEquals;
 
