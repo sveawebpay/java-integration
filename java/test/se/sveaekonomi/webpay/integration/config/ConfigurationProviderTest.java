@@ -47,12 +47,12 @@ public class ConfigurationProviderTest {
 	                .setName("Prod")
 	                .setVatPercent(25)
 	                .setDiscountPercent(0))
-	                                
+	                    
 	             .addCustomerDetails(Item.individualCustomer()
 	                 .setNationalIdNumber("194605092222")
-	                 .setIpAddress("123.123.123"))                      
+	                 .setIpAddress("123.123.123"))
 	             .setCountryCode(COUNTRYCODE.SE)
-	             .setOrderDate("2012-12-12")                
+	             .setOrderDate("2012-12-12")
 	             .setClientOrderNumber("33")
 	             .setCurrency(CURRENCY.SEK)
 	             .useInvoicePayment()

@@ -35,7 +35,7 @@ public class WebserviceRowFormatterTest {
         
         ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(0);
-
+        
         assertTrue("0".equals(newRow.ArticleNumber));
         assertTrue("Tess: Tester".equals(newRow.Description));
         assertTrue(4.0 == newRow.PricePerUnit);
@@ -47,7 +47,7 @@ public class WebserviceRowFormatterTest {
     
     @Test
     public void testFormatShippingFeeRows() throws ValidationException, Exception {
-    	  SveaRequest<SveaCreateOrder> request = WebPay.createOrder()        	
+    	  SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
     		        .addOrderRow(Item.orderRow()
     		            .setArticleNumber("1")
     		            .setQuantity(2)
@@ -73,7 +73,7 @@ public class WebserviceRowFormatterTest {
     		            .setClientOrderNumber("33")
     		            .setCurrency(CURRENCY.SEK)
     		            .setCustomerReference("33")
-    		            .useInvoicePayment()    		    	                       
+    		            .useInvoicePayment()
     		        .prepareRequest();
     	  
     	assertEquals("0", request.request.CreateOrderInformation.OrderRows.get(1).ArticleNumber);
@@ -87,7 +87,7 @@ public class WebserviceRowFormatterTest {
     
     @Test
     public void testFormatShippingFeeRowsZero() throws ValidationException, Exception {
-    	  CreateOrderResponse response = WebPay.createOrder()        	
+    	  CreateOrderResponse response = WebPay.createOrder()
     		        .addOrderRow(Item.orderRow()
     		            .setArticleNumber("1")
     		            .setQuantity(2)
@@ -113,7 +113,7 @@ public class WebserviceRowFormatterTest {
     		            .setClientOrderNumber("33")
     		            .setCurrency(CURRENCY.SEK)
     		            .setCustomerReference("33")
-    		            .useInvoicePayment()    		    	                       
+    		            .useInvoicePayment()
     		        .doRequest();
     	  
     	  assertEquals(true, response.isOrderAccepted());
@@ -122,12 +122,12 @@ public class WebserviceRowFormatterTest {
     
     @Test
     public void testFormatInvoiceFeeRows() {
-    	CreateOrderBuilder order = WebPay.createOrder()  
-    		.addFee(Item.invoiceFee()       
+    	CreateOrderBuilder order = WebPay.createOrder()
+    		.addFee(Item.invoiceFee()
     			.setDescription("Tester")
     			.setAmountExVat(4)
     			.setVatPercent(25)
-    			.setUnit("st"));        
+    			.setUnit("st"));
         
         ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(0);

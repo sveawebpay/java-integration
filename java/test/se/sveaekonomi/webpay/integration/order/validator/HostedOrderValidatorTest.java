@@ -24,7 +24,7 @@ public class HostedOrderValidatorTest {
     
     public HostedOrderValidatorTest() {
         orderValidator = new HostedOrderValidator();
-    }      
+    }
     
     @Test
     public void testFailOnNullClientOrderNumber() throws ValidationException {
@@ -40,9 +40,8 @@ public class HostedOrderValidatorTest {
                 .setValidator(new VoidValidator())
                 .build();
         
-        assertEquals(expectedMessage, orderValidator.validate(order));      
+        assertEquals(expectedMessage, orderValidator.validate(order));
     }
-    
     
     @Rule
     public ExpectedException thrown = ExpectedException.none();
@@ -58,14 +57,13 @@ public class HostedOrderValidatorTest {
         	.setCurrency(CURRENCY.SEK)
         	.setClientOrderNumber("")
         	.addCustomerDetails(Item.companyCustomer()
-                .setVatNumber("2345234")                
+                .setVatNumber("2345234")
                 .setCompanyName("TestCompagniet")
                 .setNationalIdNumber("1222"))
                 .setValidator(new VoidValidator())
                 .build();
         orderValidator = new HostedOrderValidator();
         assertEquals(orderValidator.validate(order), expectedMessage);
-      
     }
     
     @Test
@@ -79,7 +77,7 @@ public class HostedOrderValidatorTest {
                 .addOrderRow(Item.orderRow()
                 		.setAmountExVat(4)
                         .setVatPercent(25)
-                        .setQuantity(1))            
+                        .setQuantity(1))
                 
     	        .addFee(Item.shippingFee())
     	        .addDiscount(Item.fixedDiscount())
@@ -122,7 +120,7 @@ public class HostedOrderValidatorTest {
     		.setAmountExVat(5.0)
     		.setVatPercent(25)
     		.setQuantity(1))
-    	.addCustomerDetails(Item.companyCustomer()    			
+    	.addCustomerDetails(Item.companyCustomer()
     		.setVatNumber("2345234")
     		.setCompanyName("TestCompagniet"));
     orderValidator = new HostedOrderValidator();
@@ -139,7 +137,7 @@ public class HostedOrderValidatorTest {
     		.setAmountExVat(5.0)
     		.setVatPercent(25)
     		.setQuantity(1))
-    	.addCustomerDetails(Item.companyCustomer()    			
+    	.addCustomerDetails(Item.companyCustomer()
     		.setVatNumber("2345234")
     		.setCompanyName("TestCompagniet"));
     orderValidator = new HostedOrderValidator();
@@ -159,7 +157,7 @@ public class HostedOrderValidatorTest {
     	.setCurrency(CURRENCY.SEK)
     	.setClientOrderNumber("")
     	.addCustomerDetails(Item.companyCustomer()
-            .setVatNumber("2345234")                
+            .setVatNumber("2345234")
             .setCompanyName("TestCompagniet")
             .setNationalIdNumber("1222"))
             .setValidator(new VoidValidator())
@@ -181,7 +179,7 @@ public class HostedOrderValidatorTest {
     	.setCurrency(CURRENCY.SEK)
     	.setClientOrderNumber("")
     	.addCustomerDetails(Item.companyCustomer()
-            .setVatNumber("2345234")                
+            .setVatNumber("2345234")
             .setCompanyName("TestCompagniet")
             .setNationalIdNumber("1222"))
             .setValidator(new VoidValidator())
@@ -204,7 +202,7 @@ public class HostedOrderValidatorTest {
     	.setCurrency(CURRENCY.SEK)
     	.setClientOrderNumber("")
     	.addCustomerDetails(Item.companyCustomer()
-            .setVatNumber("2345234")                
+            .setVatNumber("2345234")
             .setCompanyName("TestCompagniet")
             .setNationalIdNumber("1222"))
             .setValidator(new VoidValidator())
@@ -226,7 +224,7 @@ public class HostedOrderValidatorTest {
     	.setCurrency(CURRENCY.SEK)
     	.setClientOrderNumber("")
     	.addCustomerDetails(Item.companyCustomer()
-            .setVatNumber("2345234")                
+            .setVatNumber("2345234")
             .setCompanyName("TestCompagniet")
             .setNationalIdNumber("1222"))
             .setValidator(new VoidValidator())
@@ -260,7 +258,7 @@ public class HostedOrderValidatorTest {
             .setUnit("st")
             .setName("Relative")
             .setDescription("RelativeDiscount"))
-        .addCustomerDetails(Item.individualCustomer()         
+        .addCustomerDetails(Item.individualCustomer()
         	//.setInitials("SB")
             //.setBirthDate(1946, 5, 9)
             //.setName("Sneider", "Boasman")
@@ -269,12 +267,12 @@ public class HostedOrderValidatorTest {
             //.setZipCode("1102 HG")
         	)
         
-            .setCountryCode(COUNTRYCODE.NL)            
+            .setCountryCode(COUNTRYCODE.NL)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
-            .setCurrency(CURRENCY.SEK)          
+            .setCurrency(CURRENCY.SEK)
             .usePaymentMethod(PAYMENTMETHOD.INVOICE)
-            	.setReturnUrl("http://myurl.se")                 
+            	.setReturnUrl("http://myurl.se")
             	.getPaymentForm();
 
         assertTrue(false);  
@@ -293,7 +291,7 @@ public class HostedOrderValidatorTest {
     			+ "MISSING VALUE - Locality is required for all customers when countrycode is DE. Use setLocality().\n"
     			+ "MISSING VALUE - Zip code is required for all customers when countrycode is DE. Use setCustomerZipCode().\n";
         try{
-    	WebPay.createOrder()            
+    	WebPay.createOrder()
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
@@ -309,13 +307,13 @@ public class HostedOrderValidatorTest {
             .setUnit("st")
             .setName("Relative")
             .setDescription("RelativeDiscount"))
-        .addCustomerDetails(Item.individualCustomer())        
-            .setCountryCode(COUNTRYCODE.DE)            
+        .addCustomerDetails(Item.individualCustomer())
+            .setCountryCode(COUNTRYCODE.DE)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
-            .setCurrency(CURRENCY.SEK)          
+            .setCurrency(CURRENCY.SEK)
             .usePaymentMethod(PAYMENTMETHOD.INVOICE)
-            	.setReturnUrl("http://myurl.se")                 
+            	.setReturnUrl("http://myurl.se")
             	.getPaymentForm();
 
         assertTrue(false);  
@@ -325,5 +323,4 @@ public class HostedOrderValidatorTest {
     		assertEquals(e.getMessage(), expectedMsg);
     	}
     }
-
 }

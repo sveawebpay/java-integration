@@ -19,14 +19,13 @@ import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
-
 public class WebServicePaymentsResponseTest {
     
     @Test
     public void testDeliverInvoiceOrderResult() throws Exception {
     	long orderId = createInvoiceAndReturnOrderId();
     	
-    	DeliverOrderResponse response = WebPay.deliverOrder()               
+    	DeliverOrderResponse response = WebPay.deliverOrder()
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
@@ -44,12 +43,12 @@ public class WebServicePaymentsResponseTest {
         .deliverInvoiceOrder()
             .doRequest();
         
-        assertEquals(response.isOrderAccepted(), true);          
+        assertEquals(response.isOrderAccepted(), true);
     }
 
     @Test
     public void testCompanyIdRequest() throws ValidationException, Exception {
-    	 SveaRequest<SveaCreateOrder> request = WebPay.createOrder()                
+    	 SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
             	.addOrderRow(Item.orderRow()
                     .setArticleNumber("1")
                     .setQuantity(2)
@@ -59,7 +58,7 @@ public class WebServicePaymentsResponseTest {
                     .setUnit("st")
                     .setVatPercent(25)
                     .setDiscountPercent(0))
-                                 
+                     
     	        .addCustomerDetails(Item.companyCustomer()
     	        	.setNationalIdNumber("4354kj"))
                		
@@ -76,7 +75,7 @@ public class WebServicePaymentsResponseTest {
     
     @Test
     public void testCompanyIdResponse() throws ValidationException, Exception {
-    	 CreateOrderResponse response = WebPay.createOrder()                
+    	 CreateOrderResponse response = WebPay.createOrder()
             	.addOrderRow(Item.orderRow()
                     .setArticleNumber("1")
                     .setQuantity(2)
@@ -86,7 +85,7 @@ public class WebServicePaymentsResponseTest {
                     .setUnit("st")
                     .setVatPercent(25)
                     .setDiscountPercent(0))
-                                 
+                    
     	        .addCustomerDetails(Item.companyCustomer()
     	        	.setNationalIdNumber("4608142222"))
                		
@@ -105,7 +104,7 @@ public class WebServicePaymentsResponseTest {
     
     @Test
     public void testDECompanyIdentity() throws ValidationException, Exception {
-    	 CreateOrderResponse response = WebPay.createOrder()                
+    	 CreateOrderResponse response = WebPay.createOrder()
             	.addOrderRow(Item.orderRow()
                     .setArticleNumber("1")
                     .setQuantity(2)
@@ -115,7 +114,7 @@ public class WebServicePaymentsResponseTest {
                     .setUnit("st")
                     .setVatPercent(25)
                     .setDiscountPercent(0))
-                                 
+                    
     	        .addCustomerDetails(Item.companyCustomer()
     	        	.setNationalIdNumber("12345")
     	        	.setVatNumber("DE123456789")
@@ -133,12 +132,12 @@ public class WebServicePaymentsResponseTest {
                     .doRequest();
     	 
     	assertEquals(response.isIndividualIdentity, false);
-    	assertEquals(response.isOrderAccepted(), true);    
+    	assertEquals(response.isOrderAccepted(), true);
     }
     
     @Test
     public void testNLCompanyIdentity() throws ValidationException, Exception {
-    		 CreateOrderResponse response = WebPay.createOrder()                
+    		 CreateOrderResponse response = WebPay.createOrder()
             	.addOrderRow(Item.orderRow()
                     .setArticleNumber("1")
                     .setQuantity(2)
@@ -174,7 +173,7 @@ public class WebServicePaymentsResponseTest {
     public void testDeliverPaymentPlanOrderResult() throws Exception {
     	long orderId = createPaymentPlanAndReturnOrderId();
     	
-    	DeliverOrderResponse response = WebPay.deliverOrder()               
+    	DeliverOrderResponse response = WebPay.deliverOrder()
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
@@ -184,7 +183,7 @@ public class WebServicePaymentsResponseTest {
             .setUnit("st")
             .setVatPercent(25)
             .setDiscountPercent(0))
-                    
+            
         .setOrderId(orderId)
         .setNumberOfCreditDays(1)
         .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
@@ -192,13 +191,12 @@ public class WebServicePaymentsResponseTest {
         .deliverPaymentPlanOrder()
             .doRequest();
         
-        assertEquals(response.isOrderAccepted(), true);   
+        assertEquals(response.isOrderAccepted(), true);
        
     }
     
     @Test
     public void testResultGetPaymentPlanParams() throws Exception {
-        
         PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
         	.setCountryCode(COUNTRYCODE.SE)	
             .doRequest();
@@ -216,7 +214,6 @@ public class WebServicePaymentsResponseTest {
         assertEquals(response.getCampaignCodes().get(0).getFromAmount(), "1000");
         assertEquals(response.getCampaignCodes().get(0).getToAmount(), "50000");
     }
-    
     
 	@Test
 	public void testResultGetAddresses() throws Exception {
@@ -242,7 +239,7 @@ public class WebServicePaymentsResponseTest {
 				.doRequest();
 		String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
 		
-		CreateOrderResponse response = WebPay.createOrder()                
+		CreateOrderResponse response = WebPay.createOrder()
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
@@ -263,7 +260,7 @@ public class WebServicePaymentsResponseTest {
             .setStreetAddress("Gatan", "23")
             .setCoAddress("c/o Eriksson")
             .setZipCode("9999")
-            .setLocality("Stan"))            
+            .setLocality("Stan"))
                 
         .setCountryCode(COUNTRYCODE.SE)
         .setCustomerReference("33")
@@ -271,9 +268,9 @@ public class WebServicePaymentsResponseTest {
         .setOrderDate("2012-12-12")
         .setCurrency(CURRENCY.SEK)
         .setCountryCode(COUNTRYCODE.SE)
-            .usePaymentPlanPayment(code)  //returns a paymentPlanOrder object                 
+            .usePaymentPlanPayment(code)  //returns a paymentPlanOrder object
             .doRequest();
-				
+			
 		assertEquals(response.isOrderAccepted(), true);
 	}
 			
@@ -283,7 +280,7 @@ public class WebServicePaymentsResponseTest {
 				.doRequest();
 		String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
 		
-		CreateOrderResponse response = WebPay.createOrder()                
+		CreateOrderResponse response = WebPay.createOrder()
        .addOrderRow(Item.orderRow()
            .setArticleNumber("1")
            .setQuantity(2)
@@ -304,21 +301,21 @@ public class WebServicePaymentsResponseTest {
            .setStreetAddress("Gatan", "23")
            .setCoAddress("c/o Eriksson")
            .setZipCode("9999")
-           .setLocality("Stan"))            
-               
+           .setLocality("Stan"))
+           
        .setCountryCode(COUNTRYCODE.SE)
        .setCustomerReference("33")
        .setClientOrderNumber("nr26")
        .setOrderDate("2012-12-12")
        .setCurrency(CURRENCY.SEK)
-           .usePaymentPlanPayment(code)  //returns a paymentPlanOrder object                 
+           .usePaymentPlanPayment(code)  //returns a paymentPlanOrder object
            .doRequest();
 		
-		return response.orderId;		
+		return response.orderId;
 	}
 	
     private long createInvoiceAndReturnOrderId() throws Exception {
-    	CreateOrderResponse response = WebPay.createOrder()                
+    	CreateOrderResponse response = WebPay.createOrder()
         	.addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
                 .setQuantity(2)
@@ -328,7 +325,7 @@ public class WebServicePaymentsResponseTest {
                 .setUnit("st")
                 .setVatPercent(25)
                 .setDiscountPercent(0))
-                             
+                
 	        .addCustomerDetails(Item.individualCustomer()
            		.setNationalIdNumber("194605092222"))
         	.setCountryCode(COUNTRYCODE.SE)

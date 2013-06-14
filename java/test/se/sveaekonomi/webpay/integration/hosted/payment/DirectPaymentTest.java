@@ -16,12 +16,12 @@ import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 
-public class DirectPaymentTest {      
+public class DirectPaymentTest {
     
     @Before
     public void setUp() {
      
-    }    
+    }
     
     @Test
     public void testConfigureExcludedPaymentMethodsSe() throws ValidationException {
@@ -46,7 +46,7 @@ public class DirectPaymentTest {
     
     @Test
     public void testBuildDirectBankPayment() throws Exception {
-    	PaymentForm form = WebPay.createOrder()    			
+    	PaymentForm form = WebPay.createOrder()
     	.addOrderRow(Item.orderRow()
                 .setAmountExVat(100.00)
                 .setArticleNumber("1")
@@ -75,8 +75,8 @@ public class DirectPaymentTest {
                  .setDiscountId("1")
                  .setName("Relative")
                  .setDescription("RelativeDiscount")
-                 .setUnit("st")               
-                 .setDiscountPercent(50))      
+                 .setUnit("st")
+                 .setDiscountPercent(50))
          .addCustomerDetails(Item.companyCustomer()
                 .setVatNumber("2345234")
                 .setCompanyName("TestCompagniet"))
@@ -88,7 +88,7 @@ public class DirectPaymentTest {
                 .setReturnUrl("http://myurl.se")
                 .getPaymentForm();
         
-        String base64Payment = form.getXmlMessageBase64();        
+        String base64Payment = form.getXmlMessageBase64();
         String html = Base64Util.decodeBase64String(base64Payment);
         String amount = html.substring(html.indexOf("<amount>") + 8, html.indexOf("</amount>"));
         assertEquals("18750", amount);
@@ -96,7 +96,7 @@ public class DirectPaymentTest {
     
     @Test
     public void testBuildDirectBankPaymentNotSE() throws Exception {
-    	PaymentForm form = WebPay.createOrder()    			
+    	PaymentForm form = WebPay.createOrder()
     	.addOrderRow(Item.orderRow()
                 .setAmountExVat(100.00)
                 .setArticleNumber("1")
@@ -138,7 +138,7 @@ public class DirectPaymentTest {
                 .setReturnUrl("http://myurl.se")
                 .getPaymentForm();
         
-        String base64Payment = form.getXmlMessageBase64();        
+        String base64Payment = form.getXmlMessageBase64();
         String html = Base64Util.decodeBase64String(base64Payment);
         String amount = html.substring(html.indexOf("<amount>") + 8, html.indexOf("</amount>"));
         assertEquals("18750", amount);

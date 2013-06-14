@@ -17,7 +17,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 
-public class NewOrderBuilderTest {    
+public class NewOrderBuilderTest {
     
 	@Test
 	public void testBuildOrderRowArrayList() throws ValidationException {
@@ -43,8 +43,8 @@ public class NewOrderBuilderTest {
                 .setVatPercent(25)
                 .setDiscountPercent(0));
 		
-		SveaRequest<SveaCreateOrder> request = WebPay.createOrder()                                
-                .addOrderRows(orderRows)		
+		SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+                .addOrderRows(orderRows)
                 .addCustomerDetails(Item.companyCustomer()
 	                .setNationalIdNumber("666666")
 	                .setEmail("test@svea.com")
@@ -58,7 +58,7 @@ public class NewOrderBuilderTest {
                 .setCountryCode(COUNTRYCODE.SE)
                 .setCustomerReference("33")
                 .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK)                
+                .setCurrency(CURRENCY.SEK)
                 .useInvoicePayment()
                 .prepareRequest();
 		
@@ -69,7 +69,7 @@ public class NewOrderBuilderTest {
 	
     @Test
     public void testBuildOrderWithCompanyCustomer() throws ValidationException {
-    	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()            
+    	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
@@ -93,12 +93,10 @@ public class NewOrderBuilderTest {
         .setCountryCode(COUNTRYCODE.SE)
         .setCustomerReference("33")
         .setOrderDate("2012-12-12")
-        .setCurrency(CURRENCY.SEK)                
+        .setCurrency(CURRENCY.SEK)
         .useInvoicePayment()
         .prepareRequest();
         
         assertEquals("666666", request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber); 
     }
-    
-   
 }

@@ -38,7 +38,7 @@ public class HostedPaymentTest {
 	        .addDiscount(Item.fixedDiscount())
 	        .addDiscount(Item.relativeDiscount());
 	    	
-        FakeHostedPayment payment = new FakeHostedPayment(order);        
+        FakeHostedPayment payment = new FakeHostedPayment(order);
         payment
 	        .setReturnUrl("myurl")
 	        .calculateRequestValues();
@@ -47,7 +47,7 @@ public class HostedPaymentTest {
     }
 
     @Test
-    public void testVatPercentAndAmountIncVatCalculation() throws ValidationException {        
+    public void testVatPercentAndAmountIncVatCalculation() throws ValidationException {
         CreateOrderBuilder order = WebPay.createOrder()  
 	    	.setCountryCode(COUNTRYCODE.SE)
 			.setClientOrderNumber("nr22")
@@ -55,7 +55,7 @@ public class HostedPaymentTest {
 			.addOrderRow(Item.orderRow()
             		.setAmountIncVat(5)
                     .setVatPercent(25)
-                    .setQuantity(1));            
+                    .setQuantity(1));
         
         order.setShippingFeeRows(null);
         order.setFixedDiscountRows(null);
@@ -70,7 +70,7 @@ public class HostedPaymentTest {
     
     
     @Test
-    public void testAmountIncVatAndvatPercentShippingFee() throws ValidationException {        
+    public void testAmountIncVatAndvatPercentShippingFee() throws ValidationException {
       CreateOrderBuilder order = WebPay.createOrder() 
     		.setCountryCode(COUNTRYCODE.SE)
  			.setClientOrderNumber("nr22")
@@ -78,7 +78,7 @@ public class HostedPaymentTest {
             .addOrderRow(Item.orderRow()
             		.setAmountIncVat(5)
                     .setVatPercent(25)
-                    .setQuantity(1))            
+                    .setQuantity(1))
         
             .addFee(Item.shippingFee()
             		.setAmountIncVat(5)
@@ -146,7 +146,7 @@ public class HostedPaymentTest {
             throw e;
         }
         
-        Map<String, String> formHtmlFields = form.getFormHtmlFields();        
+        Map<String, String> formHtmlFields = form.getFormHtmlFields();
         assertTrue(formHtmlFields.get("form_end_tag").equals("</form>"));
     }
 
@@ -165,7 +165,7 @@ public class HostedPaymentTest {
         assertTrue(excludedPaymentMethods.contains(INVOICETYPE.INVOICE_FI.getValue()));
         assertTrue(excludedPaymentMethods.contains(INVOICETYPE.INVOICE_NL.getValue()));
         assertTrue(excludedPaymentMethods.contains(INVOICETYPE.INVOICE_NO.getValue()));
-        assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLANSE.getValue()));        
+        assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLANSE.getValue()));
         assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLAN_SE.getValue()));
         assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLAN_DE.getValue()));
         assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLAN_DK.getValue()));
@@ -173,5 +173,4 @@ public class HostedPaymentTest {
         assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLAN_NL.getValue()));
         assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLAN_NO.getValue()));
     }
- 
 }

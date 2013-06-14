@@ -15,7 +15,7 @@ import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
-public class PaymentPlanTest {      
+public class PaymentPlanTest {
     
     @Test
     public void testPaymentPlanRequestObjectSpecifics() throws ValidationException{
@@ -51,7 +51,7 @@ public class PaymentPlanTest {
               .setZipCode("9999")
               .setLocality("Stan"))
                       
-              .setCountryCode(COUNTRYCODE.SE)   
+              .setCountryCode(COUNTRYCODE.SE)
               .setOrderDate("2012-12-12")
               .setClientOrderNumber("33")
               .setCurrency(CURRENCY.SEK)
@@ -86,7 +86,7 @@ public class PaymentPlanTest {
                 .setDiscountPercent(0))
         
         .addCustomerDetails(Item.companyCustomer()
-              .setNationalIdNumber("194605092222")              
+              .setNationalIdNumber("194605092222")
               .setCompanyName("Företaget")
               .setEmail("test@svea.com")
               .setPhoneNumber(999999)
@@ -96,7 +96,7 @@ public class PaymentPlanTest {
               .setZipCode("9999")
               .setLocality("Stan"))
                       
-              .setCountryCode(COUNTRYCODE.SE)   
+              .setCountryCode(COUNTRYCODE.SE)
               .setOrderDate("2012-12-12")
               .setClientOrderNumber("33")
               .setCurrency(CURRENCY.SEK)
@@ -106,7 +106,7 @@ public class PaymentPlanTest {
     			assertTrue(false);
     	}
     	catch(SveaWebPayException e) {
-    		assertEquals(e.getMessage(), "ERROR - CompanyCustomer is not allowed to use payment plan option.");	
-    	}       
+    		assertEquals(e.getMessage(), "ERROR - CompanyCustomer is not allowed to use payment plan option.");
+    	}
     }
 }

@@ -12,10 +12,9 @@ import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 
 
 public class HostedPaymentsRequestTest {
-          
     
     @Test
-    public void testDoCardPaymentRequest() throws Exception {        
+    public void testDoCardPaymentRequest() throws Exception {
     	PaymentForm form = WebPay.createOrder()
         .addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
@@ -46,21 +45,20 @@ public class HostedPaymentsRequestTest {
                 .setDiscountId("1")
                 .setName("Relative")
                 .setDescription("RelativeDiscount")
-                .setUnit("st")               
+                .setUnit("st")
                 .setDiscountPercent(50))
         .addCustomerDetails(Item.companyCustomer()
-            .setVatNumber("2345234")   
+            .setVatNumber("2345234")
             .setNationalIdNumber("4608142222")
             .setCompanyName("TestCompagniet"))
-        .setCountryCode(COUNTRYCODE.SE)        
+        .setCountryCode(COUNTRYCODE.SE)
         .setOrderDate("2012-12-12")
         .setClientOrderNumber("33")
         .setCurrency(CURRENCY.SEK)
         .usePayPageCardOnly()
-            .setReturnUrl("http://myurl.se")            
+            .setReturnUrl("http://myurl.se")
             .getPaymentForm();
         
         Assert.assertNotNull(form);
        }
-    
 }

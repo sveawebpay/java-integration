@@ -25,7 +25,7 @@ public class CardPaymentTest {
     public void setUp() {
         order = WebPay.createOrder()
         		.setValidator(new VoidValidator());
-    }    
+    }
     
     @Test
     public void testConfigureExcludedPaymentMethodsSe() throws ValidationException {
@@ -67,9 +67,9 @@ public class CardPaymentTest {
 			.setDiscountId("1")
 			.setName("Relative")
 			.setDescription("RelativeDiscount")
-			.setUnit("st")               
+			.setUnit("st")
 			.setDiscountPercent(50))
-			      
+			
 			.setCountryCode(COUNTRYCODE.SE)
 			.setOrderDate("2012-12-12")
 			.setClientOrderNumber("33")
@@ -85,7 +85,7 @@ public class CardPaymentTest {
         assertEquals("18750", amount);
         assertEquals("3750", vat);
         
-    }   
+    }
     
     @Test
     public void testBuildCardPaymentDE() throws Exception {
@@ -116,9 +116,9 @@ public class CardPaymentTest {
 			.setDiscountId("1")
 			.setName("Relative")
 			.setDescription("RelativeDiscount")
-			.setUnit("st")               
+			.setUnit("st")
 			.setDiscountPercent(50))
-			      
+			
 			.setCountryCode(COUNTRYCODE.DE)
 			.setOrderDate("2012-12-12")
 			.setClientOrderNumber("33")
@@ -138,7 +138,7 @@ public class CardPaymentTest {
     
     @Test
     public void testSetAuthorization() throws Exception {
-    	PaymentForm form = WebPay.createOrder()                               
+    	PaymentForm form = WebPay.createOrder()
        .addOrderRow(Item.orderRow()
                 .setAmountExVat(100.00)
                 .setArticleNumber("1")
@@ -168,7 +168,7 @@ public class CardPaymentTest {
        .addDiscount(Item.relativeDiscount()
                   .setName("Svea fee")
                   .setDescription("Fee for invoice")
-                  .setUnit("st")               
+                  .setUnit("st")
                   .setDiscountPercent(0))
               
        .addCustomerDetails(Item.companyCustomer()

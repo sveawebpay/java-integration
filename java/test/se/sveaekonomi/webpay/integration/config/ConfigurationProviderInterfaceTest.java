@@ -27,19 +27,19 @@ public class ConfigurationProviderInterfaceTest implements ConfigurationProvider
 	}
 
 	@Override
-	public String getMerchantId(PAYMENTTYPE type, COUNTRYCODE country) {		
-		return "1130";				
+	public String getMerchantId(PAYMENTTYPE type, COUNTRYCODE country) {
+		return "1130";
 	}
 
 	@Override
-	public String getSecret(PAYMENTTYPE type, COUNTRYCODE country) {		
+	public String getSecret(PAYMENTTYPE type, COUNTRYCODE country) {
 		return "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3";		
 	}
 
 	@Override
 	public URL getEndPoint(PAYMENTTYPE type) {
 		if(PAYMENTTYPE.HOSTED == type)
-			return SveaConfig.getTestPayPageUrl();		
+			return SveaConfig.getTestPayPageUrl();
 		return SveaConfig.getTestWebserviceUrl();
 	}
 	

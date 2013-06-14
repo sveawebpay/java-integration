@@ -23,7 +23,7 @@ public class CloseOrderTest {
     public void testCloseOrder() throws Exception {
         Long orderId = 0L;
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
-                   
+        
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
@@ -34,8 +34,8 @@ public class CloseOrderTest {
             .setUnit("st")
             .setVatPercent(25)
             .setDiscountPercent(0))
-        .addCustomerDetails(Item.individualCustomer()          
-            .setNationalIdNumber("194605092222"))        
+        .addCustomerDetails(Item.individualCustomer()
+            .setNationalIdNumber("194605092222"))
         .setCountryCode(COUNTRYCODE.SE)
         .setClientOrderNumber("33")
         .setOrderDate("2012-12-12")
@@ -45,29 +45,29 @@ public class CloseOrderTest {
     
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
-                       
+        
         try {
             String xml = xmlBuilder.getCreateOrderEuXml(request.request);
-                    
+            
             String url = SveaConfig.getTestWebserviceUrl().toString();//WebPay.createOrder().get.getConfig().getWebserviceUrl().toString();
             String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
             NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
-            CreateOrderResponse response = new CreateOrderResponse(soapResponse);            
+            CreateOrderResponse response = new CreateOrderResponse(soapResponse);
             orderId = response.orderId;
             
             assertEquals(true, response.isOrderAccepted());
         } catch (Exception e) {
             throw e;
         }
-       
+        
         soapBuilder = new SveaSoapBuilder();
         
-          CloseOrderResponse closeResponse = WebPay.closeOrder()              
+          CloseOrderResponse closeResponse = WebPay.closeOrder()
                 .setOrderId(orderId)
                 .setCountryCode(COUNTRYCODE.SE)
                 .closeInvoiceOrder()
                 .doRequest();   
          
-            assertEquals(true, closeResponse.isOrderAccepted());      
+            assertEquals(true, closeResponse.isOrderAccepted());
     }
 }

@@ -70,8 +70,7 @@ public class HostedPaymentResponseTest {
         form.setMacSha512(HashUtil.createHash(form.getXmlMessageBase64() + order.getConfig().getSecret(PAYMENTTYPE.HOSTED, order.getCountryCode()), HASHALGORITHM.SHA_512));
         request.setParameter("mac", form.getMacSha512());
         request.setParameter("message", form.getXmlMessageBase64());
-        request.setParameter("merchantid", form.getMerchantId());        
-        return conversation.getResponse(request);               
-    }         
+        request.setParameter("merchantid", form.getMerchantId());
+        return conversation.getResponse(request);
+    }
 }
-  

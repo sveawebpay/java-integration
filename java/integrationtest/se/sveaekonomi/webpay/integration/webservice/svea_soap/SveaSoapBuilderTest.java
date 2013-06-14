@@ -14,7 +14,7 @@ public class SveaSoapBuilderTest {
     
     @Test
     public void testRequest() throws Exception {
-             
+        
         CreateOrderResponse response = WebPay.createOrder()
         
         .addOrderRow(Item.orderRow()
@@ -25,7 +25,7 @@ public class SveaSoapBuilderTest {
             .setName("Prod")
             .setUnit("st")
             .setVatPercent(25)
-            .setDiscountPercent(0))                       
+            .setDiscountPercent(0))
         .addCustomerDetails(Item.individualCustomer()
         		.setNationalIdNumber("194605092222"))
     
