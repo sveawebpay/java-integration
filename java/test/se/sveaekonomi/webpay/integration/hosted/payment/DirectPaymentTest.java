@@ -9,13 +9,13 @@ import javax.xml.bind.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
-import se.sveaekonomi.webpay.integration.TestingTool;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
+import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class DirectPaymentTest {
     

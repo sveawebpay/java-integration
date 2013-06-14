@@ -9,7 +9,6 @@ import javax.xml.bind.ValidationException;
 
 import org.junit.Test;
 
-import se.sveaekonomi.webpay.integration.TestingTool;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -18,6 +17,7 @@ import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.INVOICETYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTPLANTYPE;
+import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class PayPagePaymentTest {
     

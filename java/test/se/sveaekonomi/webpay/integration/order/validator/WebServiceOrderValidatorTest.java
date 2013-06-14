@@ -10,7 +10,6 @@ import org.junit.Test;
 import org.junit.rules.ExpectedException;
 import org.w3c.dom.NodeList;
 
-import se.sveaekonomi.webpay.integration.TestingTool;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
@@ -21,6 +20,7 @@ import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
+import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
