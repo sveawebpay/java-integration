@@ -34,7 +34,7 @@ public class WebServiceXmlBuilder extends XMLBuilder{
             xmlw.writeStartElement(prefix+"CreateOrderInformation");
             writeSimpleElement(prefix+"ClientOrderNumber", order.CreateOrderInformation.ClientOrderNumber);
             serializeOrderRows(rows);
-                                                      
+            
             if(order.CreateOrderInformation.CustomerIdentity != null) {
                 xmlw.writeStartElement(prefix+"CustomerIdentity");
                 writeSimpleElement(prefix+"NationalIdNumber", order.CreateOrderInformation.CustomerIdentity.NationalIdNumber);
@@ -76,16 +76,15 @@ public class WebServiceXmlBuilder extends XMLBuilder{
             writeSimpleElement(prefix+"OrderType", order.CreateOrderInformation.OrderType);                      
             
             if(order.CreateOrderInformation.CreatePaymentPlanDetails != null && !order.CreateOrderInformation.OrderType.equals("Invoice")) {
-               xmlw.writeStartElement(prefix+"CreatePaymentPlanDetails");
-               String code = (String)order.CreateOrderInformation.CreatePaymentPlanDetails.get("CampaignCode");
-               writeSimpleElement(prefix+"CampaignCode", code);              
-               writeSimpleElement("SendAutomaticGiroPaymentForm", String.valueOf((boolean)order.CreateOrderInformation.CreatePaymentPlanDetails.get("SendAutomaticGiroPaymentForm")));
+                xmlw.writeStartElement(prefix+"CreatePaymentPlanDetails");
+                String code = (String)order.CreateOrderInformation.CreatePaymentPlanDetails.get("CampaignCode");
+                writeSimpleElement(prefix+"CampaignCode", code);              
+                writeSimpleElement("SendAutomaticGiroPaymentForm", String.valueOf((boolean)order.CreateOrderInformation.CreatePaymentPlanDetails.get("SendAutomaticGiroPaymentForm")));
     
-               // ?? CoCustomerIdentity ???
-               //?? writeSimpleElement("FixedMonthlyAmount", order.CreateOrderInformation.CreatePaymentPlanDetails.)                                       
+                // ?? CoCustomerIdentity ???
+                //?? writeSimpleElement("FixedMonthlyAmount", order.CreateOrderInformation.CreatePaymentPlanDetails.)                                       
             }
             xmlw.writeEndElement();
-
         }
         
         xmlw.writeEndElement();
@@ -123,7 +122,7 @@ public class WebServiceXmlBuilder extends XMLBuilder{
             }
             xmlw.writeEndElement();
         }
-        xmlw.writeEndElement();       
+        xmlw.writeEndElement();
         xmlw.writeEndDocument();
         
         try {
@@ -204,11 +203,11 @@ public class WebServiceXmlBuilder extends XMLBuilder{
     
     private void getAuth(SveaAuth auth) throws XMLStreamException {
         if(auth == null)
-            return;        
+            return;
         
         xmlw.writeStartElement(prefix+"Auth");
-        writeSimpleElement(prefix+"ClientNumber", auth.ClientNumber.toString());        
-        writeSimpleElement(prefix+"Username", auth.Username.toString());        
+        writeSimpleElement(prefix+"ClientNumber", auth.ClientNumber.toString());
+        writeSimpleElement(prefix+"Username", auth.Username.toString());
         writeSimpleElement(prefix+"Password", auth.Password.toString());
         xmlw.writeEndElement();
     }
@@ -235,5 +234,4 @@ public class WebServiceXmlBuilder extends XMLBuilder{
         writeSimpleElement(prefix+"DiscountPercent", String.valueOf(row.DiscountPercent));
         xmlw.writeEndElement();
     }
-
 }

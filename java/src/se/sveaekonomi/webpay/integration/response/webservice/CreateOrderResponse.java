@@ -64,7 +64,7 @@ public class CreateOrderResponse extends Response {
                 setChildNodeValue(node, "HouseNumber");
                 setChildNodeValue(node, "Locality");
                 setChildNodeValue(node, "CountryCode");
-                setChildNodeValue(node, "CustomerType");                           
+                setChildNodeValue(node, "CustomerType");
             }
         } catch (Exception ex) {
             ex.printStackTrace();

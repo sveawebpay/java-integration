@@ -4,10 +4,10 @@ package se.sveaekonomi.webpay.integration.order.identity;
 public abstract class CustomerIdentity <T extends CustomerIdentity<T>> {
        
     private String coAddress;
-    private String streetAddress;   
+    private String streetAddress;
     private Integer phoneNumber;
     private String email;
-    private String ipAddress;   
+    private String ipAddress;
     private String housenumber;
     private String zipCode;
     private String locality;

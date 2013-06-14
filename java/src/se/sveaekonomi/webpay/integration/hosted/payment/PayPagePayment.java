@@ -55,7 +55,7 @@ public class PayPagePayment extends HostedPayment<PayPagePayment> {
 
 	public PayPagePayment excludeCardPaymentMethods() {
 		excludedPaymentMethods.add(PAYMENTMETHOD.KORTCERT.getValue());
-		excludedPaymentMethods.add(PAYMENTMETHOD.SKRILL.getValue());	
+		excludedPaymentMethods.add(PAYMENTMETHOD.SKRILL.getValue());
 		
 		return this;
 	}
@@ -83,7 +83,7 @@ public class PayPagePayment extends HostedPayment<PayPagePayment> {
 				excludedPaymentMethods.addAll(INVOICETYPE.INVOICE_SE.getAllInvoiceValues());
 			}
 			else if(pm.equals(PAYMENTMETHOD.PAYMENTPLAN)) {
-				excludedPaymentMethods.addAll(PAYMENTPLANTYPE.PAYMENTPLAN_SE.getAllPaymentPlanValues());								  				
+				excludedPaymentMethods.addAll(PAYMENTPLANTYPE.PAYMENTPLAN_SE.getAllPaymentPlanValues());
 			}
 			else
 				excludedPaymentMethods.add(pm.getValue());
@@ -150,10 +150,10 @@ public class PayPagePayment extends HostedPayment<PayPagePayment> {
 		for (PAYMENTMETHOD pm : paymentMethods) {
 			
 			if (pm.equals(PAYMENTMETHOD.INVOICE)) {  
-				includedPaymentMethods.add(getValidInvoiceTypeForIncludedList());			
+				includedPaymentMethods.add(getValidInvoiceTypeForIncludedList());
 			}
 			else if (pm.equals(PAYMENTMETHOD.PAYMENTPLAN)) {  
-				includedPaymentMethods.add(getValidPaymentPlanTypeForIncludedList());				
+				includedPaymentMethods.add(getValidPaymentPlanTypeForIncludedList());
 			}
 			else
 				includedPaymentMethods.add(pm.getValue());

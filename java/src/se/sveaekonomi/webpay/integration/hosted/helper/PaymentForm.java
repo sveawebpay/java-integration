@@ -22,10 +22,10 @@ public class PaymentForm {
     private String noScriptMessage;
     private String htmlFormMethod;
     private URL url;
-
+    
     public PaymentForm() {
         formHtmlFields = new HashMap<String, String>();
-        htmlFormMethod = "post";        
+        htmlFormMethod = "post";
         setSubmitMessage(COUNTRYCODE.NL);
     }
     
@@ -85,8 +85,8 @@ public class PaymentForm {
     public Map<String, String> getFormHtmlFields() {
         return formHtmlFields;
     }
-
-    public PaymentForm setForm() {    	
+    
+    public PaymentForm setForm() {
         macSha512 = HashUtil.createHash(xmlMessageBase64 + secretWord, HASHALGORITHM.SHA_512);
         
         completeHtmlFormWithSubmitButton = "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\""

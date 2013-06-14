@@ -7,6 +7,7 @@ import javax.xml.bind.ValidationException;
 import org.junit.Before;
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.TestingTool;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -22,7 +23,7 @@ public class DeliverOrderTest {
     @Before
     public void setUp() {
         order = WebPay.deliverOrder();
-    }  
+    }
     
     @Test
     public void testBuildRequest() {
@@ -33,16 +34,7 @@ public class DeliverOrderTest {
     
     @Test
     public void testDeliverInvoice() throws ValidationException {
-         
-    	SveaRequest<SveaDeliverOrder> request = order.addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(2)
-            .setAmountExVat(100.00)
-            .setDescription("Specification")
-            .setName("Prod")
-            .setUnit("st")
-            .setVatPercent(25)
-            .setDiscountPercent(0))
+    	SveaRequest<SveaDeliverOrder> request = order.addOrderRow(TestingTool.createOrderRow())
 
         .addFee(Item.shippingFee()
             .setShippingId("33")
@@ -54,14 +46,14 @@ public class DeliverOrderTest {
             .setDiscountPercent(0))
         
         .addDiscount(Item.fixedDiscount()
-           .setAmountIncVat(10))  
+           .setAmountIncVat(10))
                    
         .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
         .setOrderId(54086L)
         .setNumberOfCreditDays(1)
         .setCreditInvoice("id")
         .setCountryCode(COUNTRYCODE.SE)
-        .deliverInvoiceOrder()        
+        .deliverInvoiceOrder()
             .prepareRequest();   
         
         //First order row is a product
@@ -93,7 +85,7 @@ public class DeliverOrderTest {
     
     @Test
     public void testDeliverPaymentPlanOrder() throws ValidationException {
-        SveaRequest<SveaDeliverOrder> request = order        
+        SveaRequest<SveaDeliverOrder> request = order
         .setOrderId(54086L)
         .setCountryCode(COUNTRYCODE.SE)
         .deliverPaymentPlanOrder()  
@@ -101,27 +93,5 @@ public class DeliverOrderTest {
         
         assertEquals("54086", request.request.deliverOrderInformation.sveaOrderId);
         assertEquals("PaymentPlan", request.request.deliverOrderInformation.orderType);
-    }
-    
-    @Test
-    public void testDeliverPaymentPlanOrderDoRequest() throws Exception {
-    	DeliverOrderResponse response =
-    			WebPay.deliverOrder()
-    		.addOrderRow(Item.orderRow()
-    			.setArticleNumber("1")
-    			.setQuantity(2)
-    			.setAmountExVat(100.00)
-    			.setDescription("Specification")
-    			.setName("Prod")
-    			.setUnit("st")
-    			.setVatPercent(25)
-    			.setDiscountPercent(0))  
-    		.setOrderId(54086L)
-    		.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-    		.setCountryCode(COUNTRYCODE.SE)
-    		.deliverInvoiceOrder()
-    			.doRequest();    
-
-    	 response.getErrorMessage();
     }
 }

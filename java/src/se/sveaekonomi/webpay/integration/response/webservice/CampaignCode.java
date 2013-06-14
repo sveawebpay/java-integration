@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.response.webservice;
 
 public class CampaignCode {
+	
     private String campaignCode;
     private String description;
     private String paymentPlanType;

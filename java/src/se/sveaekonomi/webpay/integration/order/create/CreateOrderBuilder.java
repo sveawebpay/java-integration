@@ -29,9 +29,9 @@ import se.sveaekonomi.webpay.integration.webservice.payment.PaymentPlanPayment;
  *
  */
 public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
-        
+    
     private OrderValidator validator;
-       
+    
     private String clientOrderNumber;
     private String customerReference;
     private String orderDate;
@@ -40,13 +40,13 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     private String currency;
     private String campaignCode;
     private Boolean sendAutomaticGiroPaymentForm;
-     
+    
     public CustomerIdentity<?> customerIdentity; 
-        
+    
     public CreateOrderBuilder(ConfigurationProvider config) {
     	this.config = config;
-    }     
-        
+    }
+    
     public OrderValidator getValidator() {
         return validator;
     }
@@ -98,7 +98,7 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     public String getCurrency() {
     	if(currency == null)
     		return null;
-    	else 
+    	else
     		return currency.toString();
     }
     
@@ -188,7 +188,7 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     		throw new SveaWebPayException(e.getMessage(), e);
     	}
     	
-        return this.usePaymentPlanPayment(campaignCode, false);        
+        return this.usePaymentPlanPayment(campaignCode, false);
     }
    
     /**
@@ -240,5 +240,5 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     
     public <T> T run(CreateBuilderCommand<T> runner) {
         return runner.run(this);
-    } 
+    }
 }

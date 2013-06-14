@@ -26,6 +26,7 @@ import se.sveaekonomi.webpay.integration.util.security.Base64Util;
  *
  */
 public class SveaResponse extends Response {
+	
     public final SveaConfig config = new SveaConfig();
     
     private String xml;
@@ -43,12 +44,10 @@ public class SveaResponse extends Response {
     private String expiryYear;
     private String authCode;
     
-    
     public SveaResponse(String responseXmlBase64, String secretWord) throws SAXException, IOException, ParserConfigurationException {
         super();
-                this.setValues(responseXmlBase64);
-              
-    }         
+        this.setValues(responseXmlBase64);
+    }
     
     private void setValues(String xmlBase64) throws SAXException, IOException, ParserConfigurationException {
         String xml = Base64Util.decodeBase64String(xmlBase64);
@@ -64,15 +63,15 @@ public class SveaResponse extends Response {
             for (int i = 0; i < size; i++) {
                 Element element = (Element)nodeList.item(i);
                 int status = Integer.parseInt(getTagValue(element, "statuscode"));
-                if(status==0) {                	
+                if(status==0) {
                     this.setOrderAccepted(true);
                 	this.setResultCode("0 (ORDER_ACCEPTED)");
                 }
                 else {
-                    this.setOrderAccepted(false);                   
+                    this.setOrderAccepted(false);
                     setErrorParams(status);
                 }
-                                
+                
                 this.transactionId = getTagAttribute(element, "transaction", "id");
                 this.paymentMethod = getTagValue(element, "paymentmethod");
                 this.merchantId = getTagValue(element, "merchantid");
@@ -90,18 +89,18 @@ public class SveaResponse extends Response {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-        }        
+        }
     }
     
     
     private String getTagAttribute(Element elementNode, String tagName, String attributeName) {
-        String[] temp;      
-        Node trans =  elementNode.getElementsByTagName(tagName).item(0);   
+        String[] temp;
+        Node trans =  elementNode.getElementsByTagName(tagName).item(0);
         NamedNodeMap attr = trans.getAttributes();
         Node nodeAttr = attr.getNamedItem("id");
         String node = nodeAttr.toString();
         temp = node.split("=");
-        return temp[1].substring(1, temp[1].length()-1);                                   
+        return temp[1].substring(1, temp[1].length()-1);
     }
     
     private String getTagValue(Element elementNode, String tagName) {
@@ -567,6 +566,5 @@ public class SveaResponse extends Response {
     		this.setErrorMessage("Unknown error.");
     		break;
     	}
-    	
     }
 }

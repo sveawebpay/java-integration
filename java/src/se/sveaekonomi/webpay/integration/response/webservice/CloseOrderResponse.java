@@ -6,7 +6,6 @@ import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.response.Response;
 
-
 public class CloseOrderResponse extends Response{
     
     public String orderType;

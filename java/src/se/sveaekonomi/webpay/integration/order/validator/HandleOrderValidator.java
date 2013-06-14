@@ -2,7 +2,6 @@ package se.sveaekonomi.webpay.integration.order.validator;
 
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 
-
 public class HandleOrderValidator {
     private String errors = "";
     
@@ -28,7 +27,7 @@ public class HandleOrderValidator {
     
     private void validateOrderId(DeliverOrderBuilder order) {
         if(order.getOrderId()<= 0)
-            this.errors += "MISSING VALUE - setOrderId is required.\n";        
+            this.errors += "MISSING VALUE - setOrderId is required.\n";
     }
 
     private void validateInvoiceDetails(DeliverOrderBuilder order) {
@@ -43,7 +42,6 @@ public class HandleOrderValidator {
                 order.getOrderRows().isEmpty() &&
                 order.getShippingFeeRows().isEmpty() &&
                 order.getInvoiceFeeRows().isEmpty())
-            this.errors += "MISSING VALUE - No order or fee has been included. Use addOrder(...) or addFee(...).\n";   
+            this.errors += "MISSING VALUE - No order or fee has been included. Use addOrder(...) or addFee(...).\n";
     }
-
 }

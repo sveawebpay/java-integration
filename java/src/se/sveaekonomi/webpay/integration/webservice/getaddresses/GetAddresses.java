@@ -90,7 +90,7 @@ public class GetAddresses {
      */
     public GetAddresses setOrderTypePaymentPlan() {
         this.orderType = "PaymentPlan";
-        return this;        
+        return this;
     }
     
     /**
@@ -99,13 +99,13 @@ public class GetAddresses {
      */
     public GetAddresses setOrderTypeInvoice() {
         this.orderType = "Invoice";
-        return this;        
+        return this;
     }
     
     public String getOrderType() {
         return orderType;
     }
-           
+    
     private SveaAuth getStoreAuthorization() {
     	 SveaAuth auth = new SveaAuth();
     	 PAYMENTTYPE type = (orderType == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
@@ -124,7 +124,7 @@ public class GetAddresses {
     	if(this.nationalNumber==null && this.companyId==null)
     		errors += "MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
     	return errors;
-    }   
+    }
     
     private SveaRequest<SveaGetAddresses> prepareRequest() throws ValidationException {
         String errors = "";
@@ -132,7 +132,7 @@ public class GetAddresses {
         if(errors.length() > 0)
             throw new ValidationException(errors);
     	
-        SveaGetAddresses sveaAddress = new SveaGetAddresses();        
+        SveaGetAddresses sveaAddress = new SveaGetAddresses();
         sveaAddress.Auth = getStoreAuthorization();
         sveaAddress.IsCompany = (companyId != null ? true : false);
         sveaAddress.CountryCode = countryCode.toString();

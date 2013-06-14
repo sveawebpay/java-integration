@@ -8,5 +8,4 @@ public class DeliverPaymentPlan extends HandleOrder {
     public DeliverPaymentPlan(DeliverOrderBuilder orderBuilder) {
         super(orderBuilder);  
     }
-    
 }

@@ -7,19 +7,19 @@ public class WebServiceOrderValidator extends OrderValidator {
     protected boolean isCompany = false;
     
     public String validate(CreateOrderBuilder order) {
-        try{ 
+        try {
             if(order.getCustomerIdentity()==null)
-                errors += "MISSING VALUE - CustomerIdentity must be set.\n";     
+                errors += "MISSING VALUE - CustomerIdentity must be set.\n";
             
-        if (order.getIsCompanyIdentity() && (order.getCompanyCustomer().getNationalIdNumber() != null 
+        if (order.getIsCompanyIdentity() && (order.getCompanyCustomer().getNationalIdNumber() != null
                 || order.getCompanyCustomer().getVatNumber() != null
                 || order.getCompanyCustomer().getCompanyName() != null))
-            isCompany = true;              
+            isCompany = true;
         
-        IdentityValidator identityValidator = new IdentityValidator();     
+        IdentityValidator identityValidator = new IdentityValidator();
       
         
-        if (order.getCountryCode()!=null) {            
+        if (order.getCountryCode()!=null) {
             if (order.getCountryCode().equals(COUNTRYCODE.SE)
                 || order.getCountryCode().equals(COUNTRYCODE.NO)
                 || order.getCountryCode().equals(COUNTRYCODE.DK)
