@@ -14,8 +14,6 @@ import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsRe
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class WebServicePaymentsResponseTest {
     
@@ -42,33 +40,6 @@ public class WebServicePaymentsResponseTest {
             .doRequest();
         
         assertEquals(response.isOrderAccepted(), true);
-    }
-
-    @Test
-    public void testCompanyIdRequest() throws ValidationException, Exception {
-    	 SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-            	.addOrderRow(Item.orderRow()
-                    .setArticleNumber("1")
-                    .setQuantity(2)
-                    .setAmountExVat(100.00)
-                    .setDescription("Specification")
-                    .setName("Prod")
-                    .setUnit("st")
-                    .setVatPercent(25)
-                    .setDiscountPercent(0))
-                     
-    	        .addCustomerDetails(Item.companyCustomer()
-    	        	.setNationalIdNumber("4354kj"))
-               		
-            	.setCountryCode(COUNTRYCODE.SE)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK)
-                .useInvoicePayment()// returns an InvoiceOrder object
-                .prepareRequest();
-
-    	 assertEquals(request.request.Auth.ClientNumber.toString(), "79021"); 
-    	 assertEquals(request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber, "4354kj");
     }
     
     @Test

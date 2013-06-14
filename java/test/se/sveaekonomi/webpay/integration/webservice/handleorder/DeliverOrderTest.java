@@ -101,26 +101,4 @@ public class DeliverOrderTest {
         assertEquals("54086", request.request.deliverOrderInformation.sveaOrderId);
         assertEquals("PaymentPlan", request.request.deliverOrderInformation.orderType);
     }
-    
-    @Test
-    public void testDeliverPaymentPlanOrderDoRequest() throws Exception {
-    	DeliverOrderResponse response =
-    			WebPay.deliverOrder()
-    		.addOrderRow(Item.orderRow()
-    			.setArticleNumber("1")
-    			.setQuantity(2)
-    			.setAmountExVat(100.00)
-    			.setDescription("Specification")
-    			.setName("Prod")
-    			.setUnit("st")
-    			.setVatPercent(25)
-    			.setDiscountPercent(0))  
-    		.setOrderId(54086L)
-    		.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-    		.setCountryCode(COUNTRYCODE.SE)
-    		.deliverInvoiceOrder()
-    			.doRequest();
-
-    	response.getErrorMessage();
-    }
 }

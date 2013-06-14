@@ -12,7 +12,6 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
@@ -84,41 +83,6 @@ public class WebserviceRowFormatterTest {
         assertEquals(1, request.request.CreateOrderInformation.OrderRows.get(1).NumberOfUnits);
         assertEquals("st", request.request.CreateOrderInformation.OrderRows.get(1).Unit);
     }
-    
-    @Test
-    public void testFormatShippingFeeRowsZero() throws ValidationException, Exception {
-    	  CreateOrderResponse response = WebPay.createOrder()
-    		        .addOrderRow(Item.orderRow()
-    		            .setArticleNumber("1")
-    		            .setQuantity(2)
-    		            .setAmountExVat(10)
-    		            .setDescription("Specification")
-    		            .setName("Prod")
-    		            .setVatPercent(0)
-    		            .setDiscountPercent(0))
-    		       
-    		       .addFee(Item.shippingFee()  
-			            .setShippingId("0")
-			            .setName("Tess")
-			            .setDescription("Tester")
-			            .setAmountExVat(0)
-			            .setVatPercent(0)
-			            .setUnit("st"))
-    		        
-    		        .addCustomerDetails(Item.individualCustomer()
-    		            .setNationalIdNumber("194605092222"))
-    		    
-    		            .setCountryCode(COUNTRYCODE.SE)
-    		            .setOrderDate("2012-12-12")
-    		            .setClientOrderNumber("33")
-    		            .setCurrency(CURRENCY.SEK)
-    		            .setCustomerReference("33")
-    		            .useInvoicePayment()
-    		        .doRequest();
-    	  
-    	  assertEquals(true, response.isOrderAccepted());
-    }
-    
     
     @Test
     public void testFormatInvoiceFeeRows() {

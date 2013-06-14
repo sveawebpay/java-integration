@@ -26,6 +26,7 @@ import se.sveaekonomi.webpay.integration.util.security.Base64Util;
  *
  */
 public class SveaResponse extends Response {
+	
     public final SveaConfig config = new SveaConfig();
     
     private String xml;
@@ -42,7 +43,6 @@ public class SveaResponse extends Response {
     private String expiryMonth;
     private String expiryYear;
     private String authCode;
-    
     
     public SveaResponse(String responseXmlBase64, String secretWord) throws SAXException, IOException, ParserConfigurationException {
         super();
@@ -89,7 +89,7 @@ public class SveaResponse extends Response {
             }
         } catch (Exception ex) {
             ex.printStackTrace();
-        }        
+        }
     }
     
     

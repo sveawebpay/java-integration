@@ -8,11 +8,14 @@ import org.junit.Test;
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.ConfigurationProviderInterfaceTest;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
+import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
@@ -317,5 +320,97 @@ public class CreateOrderResponseTest {
         String expectedMsg = "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
         
         assertEquals(expectedMsg, closeRequest.validateRequest());
+    }
+    
+	@Test
+	public void testConfiguration() throws ValidationException, Exception {
+		ConfigurationProviderInterfaceTest conf = new ConfigurationProviderInterfaceTest();
+		CreateOrderResponse response = WebPay.createOrder(conf)
+	    		.addOrderRow(Item.orderRow()
+	                .setArticleNumber("1")
+	                .setQuantity(2)
+	                .setAmountExVat(100.00)
+	                .setDescription("Specification")
+	                .setName("Prod")
+	                .setUnit("st")
+	                .setVatPercent(25)
+	                .setDiscountPercent(0))
+	                
+	             .addOrderRow(Item.orderRow()
+	                .setArticleNumber("1")
+	                .setQuantity(2)
+	                .setAmountExVat(100.00)
+	                .setDescription("Specification")
+	                .setName("Prod")
+	                .setVatPercent(25)
+	                .setDiscountPercent(0))
+	                    
+	             .addCustomerDetails(Item.individualCustomer()
+	                 .setNationalIdNumber("194605092222")
+	                 .setIpAddress("123.123.123"))
+	             .setCountryCode(COUNTRYCODE.SE)
+	             .setOrderDate("2012-12-12")
+	             .setClientOrderNumber("33")
+	             .setCurrency(CURRENCY.SEK)
+	             .useInvoicePayment()
+	             .doRequest();
+	        
+	    assertEquals(response.isOrderAccepted(), true);
+	}
+    
+    @Test
+    public void testDeliverPaymentPlanOrderDoRequest() throws Exception {
+    	DeliverOrderResponse response =
+    			WebPay.deliverOrder()
+    		.addOrderRow(Item.orderRow()
+    			.setArticleNumber("1")
+    			.setQuantity(2)
+    			.setAmountExVat(100.00)
+    			.setDescription("Specification")
+    			.setName("Prod")
+    			.setUnit("st")
+    			.setVatPercent(25)
+    			.setDiscountPercent(0))  
+    		.setOrderId(54086L)
+    		.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+    		.setCountryCode(COUNTRYCODE.SE)
+    		.deliverInvoiceOrder()
+    		.doRequest();
+
+    	response.getErrorMessage();
+    }
+    
+    @Test
+    public void testFormatShippingFeeRowsZero() throws ValidationException, Exception {
+    	  CreateOrderResponse response = WebPay.createOrder()
+    		        .addOrderRow(Item.orderRow()
+    		            .setArticleNumber("1")
+    		            .setQuantity(2)
+    		            .setAmountExVat(10)
+    		            .setDescription("Specification")
+    		            .setName("Prod")
+    		            .setVatPercent(0)
+    		            .setDiscountPercent(0))
+    		       
+    		       .addFee(Item.shippingFee()  
+			            .setShippingId("0")
+			            .setName("Tess")
+			            .setDescription("Tester")
+			            .setAmountExVat(0)
+			            .setVatPercent(0)
+			            .setUnit("st"))
+    		        
+    		        .addCustomerDetails(Item.individualCustomer()
+    		            .setNationalIdNumber("194605092222"))
+    		    
+    		            .setCountryCode(COUNTRYCODE.SE)
+    		            .setOrderDate("2012-12-12")
+    		            .setClientOrderNumber("33")
+    		            .setCurrency(CURRENCY.SEK)
+    		            .setCustomerReference("33")
+    		            .useInvoicePayment()
+    		        .doRequest();
+    	  
+    	  assertEquals(true, response.isOrderAccepted());
     }
 }
