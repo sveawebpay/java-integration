@@ -65,7 +65,7 @@ public class DoPaymentPlanPaymentTest {
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
-            .setAmountExVat(100.00)
+            .setAmountExVat(1000.00)
             .setDescription("Specification")
             .setName("Prod")
             .setUnit("st")

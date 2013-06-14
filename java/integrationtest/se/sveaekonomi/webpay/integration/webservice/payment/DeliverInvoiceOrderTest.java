@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.TestingTool;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
@@ -17,15 +18,7 @@ public class DeliverInvoiceOrderTest {
     @Test
     public void testDeliverInvoiceOrderDoRequest() throws Exception {
     	DeliverOrderResponse response = WebPay.deliverOrder()
-    		.addOrderRow(Item.orderRow()
-    			.setArticleNumber("1")
-    			.setQuantity(2)
-    			.setAmountExVat(100.00)
-    			.setDescription("Specification")
-    			.setName("Prod")
-    			.setUnit("st")
-    			.setVatPercent(25)
-    			.setDiscountPercent(0))  
+    		.addOrderRow(TestingTool.createOrderRow())  
     		.setOrderId(54086L)
     		.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
     		.setCountryCode(COUNTRYCODE.SE)
@@ -40,15 +33,7 @@ public class DeliverInvoiceOrderTest {
     	long orderId = createInvoiceAndReturnOrderId();
     	
     	DeliverOrderResponse response = WebPay.deliverOrder()
-            .addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
-                .setQuantity(2)
-                .setAmountExVat(100.00)
-                .setDescription("Specification")
-                .setName("Prod")
-                .setUnit("st")
-                .setVatPercent(25)
-                .setDiscountPercent(0))
+            .addOrderRow(TestingTool.createOrderRow())
             .setOrderId(orderId)
             .setNumberOfCreditDays(1)
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
@@ -61,15 +46,7 @@ public class DeliverInvoiceOrderTest {
 	
     private long createInvoiceAndReturnOrderId() throws Exception {
     	CreateOrderResponse response = WebPay.createOrder()
-        	.addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
-                .setQuantity(2)
-                .setAmountExVat(100.00)
-                .setDescription("Specification")
-                .setName("Prod")
-                .setUnit("st")
-                .setVatPercent(25)
-                .setDiscountPercent(0))
+        	.addOrderRow(TestingTool.createOrderRow())
 	        .addCustomerDetails(Item.individualCustomer()
            		.setNationalIdNumber("194605092222"))
         	.setCountryCode(COUNTRYCODE.SE)
