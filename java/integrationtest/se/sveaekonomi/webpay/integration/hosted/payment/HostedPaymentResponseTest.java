@@ -46,13 +46,13 @@ public class HostedPaymentResponseTest {
                 .setUnit("st")
                 .setVatPercent(25)
                 .setDiscountPercent(0))
-        .addCustomerDetails(Item.companyCustomer()
+            .addCustomerDetails(Item.companyCustomer()
                 .setVatNumber("2345234")
                 .setCompanyName("TestCompagniet"))
-                .setCountryCode(COUNTRYCODE.SE)
-                .setClientOrderNumber(Long.toString((new Date()).getTime()))
-                .setCurrency(CURRENCY.SEK)
-        .usePayPageCardOnly()
+            .setCountryCode(COUNTRYCODE.SE)
+            .setClientOrderNumber(Long.toString((new Date()).getTime()))
+            .setCurrency(CURRENCY.SEK)
+            .usePayPageCardOnly()
             .setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtml")
             .getPaymentForm();
         
@@ -63,14 +63,14 @@ public class HostedPaymentResponseTest {
     
     private WebResponse postRequest(PaymentForm form) throws IOException, SAXException {
         WebConversation conversation = new WebConversation();
-           
         CreateOrderBuilder order = WebPay.createOrder();
-        //WebRequest request = new PostMethodWebRequest(order.getPayPageUrl().toString());
         WebRequest request = new PostMethodWebRequest(order.getConfig().getEndPoint(PAYMENTTYPE.HOSTED).toString());
+        
         form.setMacSha512(HashUtil.createHash(form.getXmlMessageBase64() + order.getConfig().getSecret(PAYMENTTYPE.HOSTED, order.getCountryCode()), HASHALGORITHM.SHA_512));
         request.setParameter("mac", form.getMacSha512());
         request.setParameter("message", form.getXmlMessageBase64());
         request.setParameter("merchantid", form.getMerchantId());
+        
         return conversation.getResponse(request);
     }
 }
