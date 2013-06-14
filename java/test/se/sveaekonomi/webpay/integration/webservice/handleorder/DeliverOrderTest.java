@@ -121,6 +121,6 @@ public class DeliverOrderTest {
     		.deliverInvoiceOrder()
     			.doRequest();
 
-    	 response.getErrorMessage();
+    	response.getErrorMessage();
     }
 }

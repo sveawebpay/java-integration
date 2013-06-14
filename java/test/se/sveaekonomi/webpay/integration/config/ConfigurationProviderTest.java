@@ -58,7 +58,6 @@ public class ConfigurationProviderTest {
 	             .useInvoicePayment()
 	             .doRequest();
 	        
-	    	assertEquals(response.isOrderAccepted(), true);
-	      	
+	    assertEquals(response.isOrderAccepted(), true);
 	}
 }

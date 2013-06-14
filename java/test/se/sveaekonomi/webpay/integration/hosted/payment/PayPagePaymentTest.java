@@ -25,7 +25,7 @@ public class PayPagePaymentTest {
         List<PAYMENTMETHOD> excludePaymentMethods = new ArrayList<PAYMENTMETHOD>();
         excludePaymentMethods.add(PAYMENTMETHOD.INVOICE);
         excludePaymentMethods.add(PAYMENTMETHOD.NORDEA_SE);
-      
+        
         PayPagePayment payPagePayment = WebPay.createOrder()
         .setCountryCode(COUNTRYCODE.SE)
         .usePayPage()
@@ -60,7 +60,7 @@ public class PayPagePaymentTest {
     	.usePayPage();
     	               
         payPagePayment.configureExcludedPaymentMethods();
-
+        
         assertEquals(0, payPagePayment.getExcludedPaymentMethods().size());
     }
  
@@ -73,7 +73,7 @@ public class PayPagePaymentTest {
     	.setPaymentMethod(PAYMENTMETHOD.INVOICE);
                 
         payPagePayment.configureExcludedPaymentMethods();
-
+        
         assertEquals(INVOICETYPE.INVOICE_SE.getValue(), payPagePayment.getPaymentMethod());
     }
     
@@ -85,7 +85,7 @@ public class PayPagePaymentTest {
     	.setPaymentMethod(PAYMENTMETHOD.INVOICE);
                 
         payPagePayment.configureExcludedPaymentMethods();
-
+        
         assertEquals(INVOICETYPE.INVOICE_DE.getValue(), payPagePayment.getPaymentMethod());
     }
     
@@ -97,7 +97,7 @@ public class PayPagePaymentTest {
     	.setPaymentMethod(PAYMENTMETHOD.PAYMENTPLAN);
                 
         payPagePayment.configureExcludedPaymentMethods();
-
+        
         assertEquals(PAYMENTPLANTYPE.PAYMENTPLAN_SE.getValue(), payPagePayment.getPaymentMethod());
     }
     @Test
@@ -111,7 +111,7 @@ public class PayPagePaymentTest {
     	//.setPaymentMethod(PAYMENTMETHOD.PAYMENTPLAN);
                 
         payPagePayment.configureExcludedPaymentMethods();
-
+        
         assertEquals(PAYMENTPLANTYPE.PAYMENTPLAN_SE.getValue(),payPagePayment.getExcludedPaymentMethods().get(0));
     }
     
@@ -122,7 +122,7 @@ public class PayPagePaymentTest {
     	.usePayPage()
     	.setPaymentMethod(PAYMENTMETHOD.PAYMENTPLAN);
         payPagePayment.configureExcludedPaymentMethods();
-
+        
         assertEquals(PAYMENTPLANTYPE.PAYMENTPLAN_NL.getValue(), payPagePayment.getPaymentMethod());
     }
     
@@ -188,7 +188,6 @@ public class PayPagePaymentTest {
         assertEquals("SVEAINVOICEEU_DK", payPagePayment.getExcludedPaymentMethods().get(4));
         assertEquals("PAYPAL", payPagePayment.getExcludedPaymentMethods().get(12));
         assertEquals("BANKAXESS", payPagePayment.getExcludedPaymentMethods().get(13));
-        
     }
     
     @Test
@@ -280,7 +279,7 @@ public class PayPagePaymentTest {
     
     @Test
     public void testExcludeDirectPaymentMethods() throws ValidationException, Exception {
-    PaymentForm form = WebPay.createOrder()
+    	PaymentForm form = WebPay.createOrder()
             .addOrderRow(Item.orderRow()
                     .setArticleNumber("1")
                     .setQuantity(2)
@@ -307,7 +306,6 @@ public class PayPagePaymentTest {
                     .setReturnUrl("http://myurl.se")
                     .getPaymentForm();
 
-    
 			String xml = form.getXmlMessage();
 			String paymentMethod = xml.substring(xml.indexOf("DBNORDEASE"), xml.indexOf("DBNORDEASE")+10);
 			assertEquals(PAYMENTMETHOD.NORDEA_SE.getValue(), paymentMethod);
@@ -353,9 +351,9 @@ public class PayPagePaymentTest {
 
     @Test
     public void testpayPagePaymentIncludePaymentMethods() throws ValidationException, Exception {
-     List<PAYMENTMETHOD> paymentMethods = new ArrayList<PAYMENTMETHOD>();
-     paymentMethods.add(PAYMENTMETHOD.KORTCERT);
-     paymentMethods.add(PAYMENTMETHOD.SKRILL);
+    	List<PAYMENTMETHOD> paymentMethods = new ArrayList<PAYMENTMETHOD>();
+    	paymentMethods.add(PAYMENTMETHOD.KORTCERT);
+    	paymentMethods.add(PAYMENTMETHOD.SKRILL);
         PaymentForm form = WebPay.createOrder()
             .addOrderRow(Item.orderRow()
                     .setArticleNumber("1")

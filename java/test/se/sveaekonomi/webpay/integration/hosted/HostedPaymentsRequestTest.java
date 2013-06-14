@@ -10,7 +10,6 @@ import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 
-
 public class HostedPaymentsRequestTest {
     
     @Test
@@ -60,5 +59,5 @@ public class HostedPaymentsRequestTest {
             .getPaymentForm();
         
         Assert.assertNotNull(form);
-       }
+    }
 }

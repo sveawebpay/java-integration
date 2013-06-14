@@ -12,12 +12,10 @@ import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 
-
 public class PaymentMethodTest {
     
     @Test
     public void testPayPagePaymentWithSetPaymentMethod() throws Exception {
-        
     	PaymentForm form = WebPay.createOrder()
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")

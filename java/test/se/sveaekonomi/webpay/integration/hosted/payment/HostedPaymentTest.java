@@ -24,7 +24,6 @@ public class HostedPaymentTest {
 
     @Test
     public void testCalculateRequestValuesNullExtraRows() throws Exception {
-    
     	CreateOrderBuilder order = WebPay.createOrder() 
     		.setCountryCode(COUNTRYCODE.SE)
    			.setClientOrderNumber("nr22")
@@ -32,7 +31,7 @@ public class HostedPaymentTest {
             .addOrderRow(Item.orderRow()
             		.setAmountExVat(4)
                     .setVatPercent(25)
-                    .setQuantity(1))            
+                    .setQuantity(1))
             
 	        .addFee(Item.shippingFee())
 	        .addDiscount(Item.fixedDiscount())
@@ -67,7 +66,6 @@ public class HostedPaymentTest {
         
         assertEquals(500L,payment.getAmount(), 0);
     }
-    
     
     @Test
     public void testAmountIncVatAndvatPercentShippingFee() throws ValidationException {

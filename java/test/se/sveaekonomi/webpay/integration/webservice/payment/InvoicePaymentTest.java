@@ -89,7 +89,7 @@ public class InvoicePaymentTest {
     	assertEquals(response.isOrderAccepted(), true);
       
     }
-        
+    
     @Test
     public void testInvoiceRequestObjectWithAuth() throws ValidationException {
     	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
@@ -137,7 +137,7 @@ public class InvoicePaymentTest {
         assertEquals("sverigetest", request.request.Auth.Username);
         assertEquals("sverigetest", request.request.Auth.Password);
         assertEquals(79021, request.request.Auth.ClientNumber, 0);
-    }   
+    }
     
     @Test
     public void testSetAuth() throws ValidationException {
@@ -170,7 +170,7 @@ public class InvoicePaymentTest {
         .useInvoicePayment()
         //returns an InvoicePayment object
             .prepareRequest();
-            
+        
         assertEquals(79021, request.request.Auth.ClientNumber, 0);
         assertEquals("sverigetest", request.request.Auth.Username);
         assertEquals("sverigetest", request.request.Auth.Password);
@@ -511,7 +511,7 @@ public class InvoicePaymentTest {
             .setCoAddress("c/o Eriksson")
             .setZipCode("9999")
             .setLocality("Stan")) 
-                           
+         
          .setCountryCode(COUNTRYCODE.SE)
          .setOrderDate("2012-12-12")
          .setClientOrderNumber("33")
@@ -634,7 +634,6 @@ public class InvoicePaymentTest {
         .setCurrency(CURRENCY.SEK)
         .useInvoicePayment()// returns an InvoiceOrder object
         .prepareRequest();
-           
            
         //First order row is a product
         assertEquals("1", request.request.CreateOrderInformation.OrderRows.get(0).ArticleNumber);

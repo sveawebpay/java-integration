@@ -61,6 +61,7 @@ public class WebServiceOrderValidatorTest {
             	.setClientOrderNumber("1")
             	
             	.addCustomerDetails(null);
+    	
     	assertEquals(expectedMessage, orderValidator.validate(order));
     }
     
@@ -84,7 +85,7 @@ public class WebServiceOrderValidatorTest {
     @Test
     public void testFailOnMissingCountryCodeOnDeliverOrder() throws Exception {
         String expectedMessage ="MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-        try{
+        try {
         WebPay.deliverOrder()
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
@@ -104,8 +105,7 @@ public class WebServiceOrderValidatorTest {
     	//check that exception is thrown
     	assertTrue(false);
     	
-    	}
-    	catch (ValidationException e) {
+    	} catch (ValidationException e) {
     		assertEquals(e.getMessage(), expectedMessage);
     	}
     }
@@ -336,8 +336,7 @@ public class WebServiceOrderValidatorTest {
 	        		.doRequest();
 	        //check that exception is thrown
 	      	assertTrue(false);
-	  	}
-	  	catch (ValidationException e) {
+	  	} catch (ValidationException e) {
 	  		assertEquals(e.getMessage(), expectedMsg);
 	  	}
     }
@@ -415,8 +414,7 @@ public class WebServiceOrderValidatorTest {
      
 	        //check that exception is thrown
 	      	assertTrue(false);
-      	}
-      	catch (ValidationException e) {
+      	} catch (ValidationException e) {
       		assertEquals(e.getMessage(), expectedMessage);
       	}
     }
@@ -424,7 +422,7 @@ public class WebServiceOrderValidatorTest {
    @Test
     public void testFailCompanyCustomerUsingPaymentPlan() throws ValidationException, Exception {
     	String expectedMessage = "ERROR - CompanyCustomer is not allowed to use payment plan option.";
-    	try{
+    	try {
     	WebPay.createOrder()
         .addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
@@ -451,8 +449,7 @@ public class WebServiceOrderValidatorTest {
     	//check that exception is thrown
     	assertTrue(false);
     	
-    	}
-    	catch (SveaWebPayException e) {
+    	} catch (SveaWebPayException e) {
     		assertEquals(e.getMessage(), expectedMessage);
     	}
     }
@@ -500,12 +497,12 @@ public class WebServiceOrderValidatorTest {
        
         soapBuilder = new SveaSoapBuilder();
         
-          CloseOrder closeRequest = WebPay.closeOrder()
+        CloseOrder closeRequest = WebPay.closeOrder()
                 .setOrderId(orderId)
           //    .setCountryCode(COUNTRYCODE.SE)
                 .closeInvoiceOrder();
          
-          String expectedMsg = "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-          assertEquals(expectedMsg, closeRequest.validateRequest());
+        String expectedMsg = "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+        assertEquals(expectedMsg, closeRequest.validateRequest());
     }
 }
