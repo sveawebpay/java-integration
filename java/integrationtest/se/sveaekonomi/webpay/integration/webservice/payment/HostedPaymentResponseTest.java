@@ -3,7 +3,7 @@ package se.sveaekonomi.webpay.integration.webservice.payment;
 import static org.junit.Assert.assertEquals;
 
 import java.io.IOException;
-import java.util.Calendar;
+import java.util.Date;
 
 import org.junit.Before;
 import org.junit.Test;
@@ -50,12 +50,12 @@ public class HostedPaymentResponseTest {
                 .setVatNumber("2345234")
                 .setCompanyName("TestCompagniet"))
                 .setCountryCode(COUNTRYCODE.SE)
-                .setClientOrderNumber(String.valueOf(Calendar.DATE) + String.valueOf(Calendar.MILLISECOND))
+                .setClientOrderNumber(Long.toString((new Date()).getTime()))
                 .setCurrency(CURRENCY.SEK)
         .usePayPageCardOnly()
             .setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtml")
             .getPaymentForm();
-                
+        
         WebResponse result = postRequest(form);
         
         assertEquals("OK", result.getResponseMessage());
