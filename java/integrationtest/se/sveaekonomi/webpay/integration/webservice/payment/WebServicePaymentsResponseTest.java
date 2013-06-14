@@ -1,4 +1,4 @@
-package se.sveaekonomi.webpay.integration.response;
+package se.sveaekonomi.webpay.integration.webservice.payment;
 
 import static org.junit.Assert.assertEquals;
 
@@ -217,7 +217,6 @@ public class WebServicePaymentsResponseTest {
     
 	@Test
 	public void testResultGetAddresses() throws Exception {
-	    
 	    GetAddressesResponse request = WebPay.getAddresses()
 	        .setCountryCode(COUNTRYCODE.SE)
 	        .setOrderTypeInvoice()
@@ -233,7 +232,7 @@ public class WebServicePaymentsResponseTest {
 	}
     
 	@Test
-	 public void testPaymentPlanRequestReturnsAcceptedResult() throws Exception {
+	public void testPaymentPlanRequestReturnsAcceptedResult() throws Exception {
 		PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams()
 				.setCountryCode(COUNTRYCODE.SE)
 				.doRequest();
@@ -273,15 +272,39 @@ public class WebServicePaymentsResponseTest {
 			
 		assertEquals(response.isOrderAccepted(), true);
 	}
+	
+    private long createInvoiceAndReturnOrderId() throws Exception {
+    	CreateOrderResponse response = WebPay.createOrder()
+        	.addOrderRow(Item.orderRow()
+                .setArticleNumber("1")
+                .setQuantity(2)
+                .setAmountExVat(100.00)
+                .setDescription("Specification")
+                .setName("Prod")
+                .setUnit("st")
+                .setVatPercent(25)
+                .setDiscountPercent(0))
+                
+	        .addCustomerDetails(Item.individualCustomer()
+           		.setNationalIdNumber("194605092222"))
+        	.setCountryCode(COUNTRYCODE.SE)
+            .setClientOrderNumber("33")
+            .setOrderDate("2012-12-12")
+            .setCurrency(CURRENCY.SEK)
+            .useInvoicePayment()// returns an InvoiceOrder object
+                .doRequest();
+      
+        return response.orderId;
+    }
 			
-	 private long createPaymentPlanAndReturnOrderId() throws Exception {
+	private long createPaymentPlanAndReturnOrderId() throws Exception {
 		PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams()
 				.setCountryCode(COUNTRYCODE.SE)
 				.doRequest();
 		String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
 		
 		CreateOrderResponse response = WebPay.createOrder()
-       .addOrderRow(Item.orderRow()
+           .addOrderRow(Item.orderRow()
            .setArticleNumber("1")
            .setQuantity(2)
            .setAmountExVat(1000.00)
@@ -313,28 +336,4 @@ public class WebServicePaymentsResponseTest {
 		
 		return response.orderId;
 	}
-	
-    private long createInvoiceAndReturnOrderId() throws Exception {
-    	CreateOrderResponse response = WebPay.createOrder()
-        	.addOrderRow(Item.orderRow()
-                .setArticleNumber("1")
-                .setQuantity(2)
-                .setAmountExVat(100.00)
-                .setDescription("Specification")
-                .setName("Prod")
-                .setUnit("st")
-                .setVatPercent(25)
-                .setDiscountPercent(0))
-                
-	        .addCustomerDetails(Item.individualCustomer()
-           		.setNationalIdNumber("194605092222"))
-        	.setCountryCode(COUNTRYCODE.SE)
-            .setClientOrderNumber("33")
-            .setOrderDate("2012-12-12")
-            .setCurrency(CURRENCY.SEK)
-            .useInvoicePayment()// returns an InvoiceOrder object
-                .doRequest();
-      
-        return response.orderId;
-    }
 }

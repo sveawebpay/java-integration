@@ -1,4 +1,4 @@
-package se.sveaekonomi.webpay.integration.response;
+package se.sveaekonomi.webpay.integration.webservice.payment;
 
 import static org.junit.Assert.assertEquals;
 
@@ -72,7 +72,6 @@ public class CreateOrderResponseTest {
     
     @Test
     public void testCalculationWithDecimalsInVatPercent() throws ValidationException, Exception {
-    	
         CreateOrderResponse response = WebPay.createOrder()
     	        .addOrderRow(Item.orderRow()
     	            .setArticleNumber("1")
@@ -91,7 +90,7 @@ public class CreateOrderResponseTest {
     	                .doRequest();
     	
     	assertEquals(true, response.isOrderAccepted());
-    	assertEquals(25.52,response.amount, 0);
+    	assertEquals(25.52, response.amount, 0);
     }
     
     @Test
@@ -114,7 +113,7 @@ public class CreateOrderResponseTest {
     	                .doRequest();
     	
     	assertEquals(true, response.isOrderAccepted());
-    	assertEquals(51.03,response.amount, 0);
+    	assertEquals(51.03, response.amount, 0);
     }
     
     @Test
