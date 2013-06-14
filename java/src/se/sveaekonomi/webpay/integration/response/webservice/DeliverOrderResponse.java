@@ -19,7 +19,6 @@ public class DeliverOrderResponse extends Response {
     private String invoiceDistributionType;
     private int contractNumber;  
     
-      
     public DeliverOrderResponse(NodeList soapResponse) {
         super();
         this.setValues(soapResponse);
@@ -68,7 +67,7 @@ public class DeliverOrderResponse extends Response {
         }
         return null;
     }
-           
+    
     private void setChildNodeValue(Node n, String tagName) {
         String tagValue = "";
         

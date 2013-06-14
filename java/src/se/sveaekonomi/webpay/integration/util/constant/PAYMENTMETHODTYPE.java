@@ -9,5 +9,4 @@ public enum PAYMENTMETHODTYPE {
     PREPAID,
     PAYMENTPLAN
     
-    
 }

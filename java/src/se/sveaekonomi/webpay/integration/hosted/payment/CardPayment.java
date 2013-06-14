@@ -16,8 +16,8 @@ public class CardPayment extends HostedPayment<CardPayment> {
         super(orderBuilder);
     }
     
-    protected CardPayment configureExcludedPaymentMethods() {      
-                
+    protected CardPayment configureExcludedPaymentMethods() {
+        
         //Payment service providers
         excludedPaymentMethods.add(PAYMENTMETHOD.PAYPAL.getValue());
         
@@ -30,7 +30,7 @@ public class CardPayment extends HostedPayment<CardPayment> {
         excludedPaymentMethods.add(PAYMENTMETHOD.BANKAXESS.getValue());  
         
         //Invoices and payment plan      
-        excludedPaymentMethods.addAll(excluded.excludeInvoicesAndPaymentPlan());        
+        excludedPaymentMethods.addAll(excluded.excludeInvoicesAndPaymentPlan());
         
         return this;
     }

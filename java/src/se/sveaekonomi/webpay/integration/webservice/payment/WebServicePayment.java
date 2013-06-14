@@ -44,7 +44,7 @@ public abstract class WebServicePayment {
     	auth.ClientNumber = this.createOrderBuilder.getConfig().getClientNumber(this.orderType, this.createOrderBuilder.getCountryCode());
     	return auth;
     }
-        
+    
     public String getXML() throws Exception {
         SveaRequest<SveaCreateOrder> request = this.prepareRequest();
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
@@ -100,6 +100,7 @@ public abstract class WebServicePayment {
         SveaRequest<SveaCreateOrder> request = this.prepareRequest();
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml = "";
+        
         try {
             xml = xmlBuilder.getCreateOrderEuXml((SveaCreateOrder) request.request);
         } catch (Exception e) {
@@ -117,6 +118,7 @@ public abstract class WebServicePayment {
     public SveaCustomerIdentity formatCustomerIdentity() {
         boolean isCompany = false;
         String companyId = "";
+        
         if(this.createOrderBuilder.getIsCompanyIdentity()) {
             isCompany = true;
             companyId = (this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()!=null) 
@@ -200,7 +202,7 @@ public abstract class WebServicePayment {
         for (; iter.hasNext();)
             orderInformation.addOrderRow(iter.next());
         
-        return orderInformation;        
+        return orderInformation;
     }
     
     protected abstract SveaCreateOrderInformation setOrderType(SveaCreateOrderInformation information);

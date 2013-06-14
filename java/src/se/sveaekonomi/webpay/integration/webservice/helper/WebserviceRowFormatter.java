@@ -36,7 +36,7 @@ public class WebserviceRowFormatter {
         formatShippingFeeRows();
         formatInvoiceFeeRows();
         formatFixedDiscountRows();
-        formatRelativeDiscountRows();        
+        formatRelativeDiscountRows();
         return newRows;
     }
     
@@ -58,7 +58,7 @@ public class WebserviceRowFormatter {
                 this.totalAmountInclVat += existingRow.getAmountIncVat();
                 this.totalAmountExVat += existingRow.getAmountExVat();
                 this.totalVatAsAmount += existingRow.getAmountIncVat() - existingRow.getAmountExVat();
-            }       
+            }
         }
         totalAmountInclVat = totalAmountExVat + totalVatAsAmount;
         totalAmountExVat = totalAmountInclVat - totalVatAsAmount;
@@ -70,7 +70,7 @@ public class WebserviceRowFormatter {
         for (OrderRowBuilder existingRow : orderRows) {
             SveaOrderRow orderRow = new SveaOrderRow();
             orderRow = serializeOrder(existingRow.getArticleNumber(), existingRow.getDescription(), existingRow.getName(), existingRow.getUnit(), orderRow);          
-                        
+            
             orderRow.DiscountPercent = (!(existingRow.getDiscountPercent() == null) ? existingRow.getDiscountPercent() : 0);
             orderRow.NumberOfUnits = existingRow.getQuantity();
             
@@ -87,7 +87,7 @@ public class WebserviceRowFormatter {
         for (ShippingFeeBuilder row : shippingFeeRows) {
             SveaOrderRow orderRow = new SveaOrderRow();
             orderRow = serializeOrder(row.getShippingId(), row.getDescription(), row.getName(), row.getUnit(), orderRow);          
-                        
+            
             orderRow.DiscountPercent = (row.getDiscountPercent() != null ? row.getDiscountPercent() : 0);
             orderRow.NumberOfUnits = 1;
             orderRow = serializeAmountAndVat(row.getAmountExVat(), row.getVatPercent(), row.getAmountIncVat(), orderRow);
@@ -101,8 +101,8 @@ public class WebserviceRowFormatter {
         }
         List<InvoiceFeeBuilder> invoiceFeeRows = order.getInvoiceFeeRows();
         for (InvoiceFeeBuilder row : invoiceFeeRows) {
-            SveaOrderRow orderRow = new SveaOrderRow();     
-            orderRow = serializeOrder("", row.getDescription(), row.getName(), row.getUnit(), orderRow);     
+            SveaOrderRow orderRow = new SveaOrderRow();
+            orderRow = serializeOrder("", row.getDescription(), row.getName(), row.getUnit(), orderRow);
             
             orderRow.DiscountPercent = (row.getDiscountPercent() != null ? row.getDiscountPercent() : 0);
             orderRow.NumberOfUnits = 1;
@@ -128,8 +128,8 @@ public class WebserviceRowFormatter {
             orderRow.DiscountPercent = 0; // no discount on discount
             orderRow.NumberOfUnits = 1; // only one discount per row
             double pricePerUnitExMoms = Math.round((row.getAmount() - discountVatAsAmount) * 100.0) / 100.0;
-    
-            orderRow.PricePerUnit = - pricePerUnitExMoms;      
+            
+            orderRow.PricePerUnit = - pricePerUnitExMoms;
             orderRow.VatPercent = Math.round((discountVatAsAmount*100.0 / (row.getAmount() - discountVatAsAmount)*100.0)) / 100.0;
             
             newRows.add(orderRow);
@@ -163,7 +163,7 @@ public class WebserviceRowFormatter {
     private SveaOrderRow serializeOrder(String articleNumber, String description, String name, String unit, SveaOrderRow orderRow) {
         if (articleNumber != null)
             orderRow.ArticleNumber = articleNumber;
-                    
+            
         if (description != null)
             orderRow.Description = (name != null ? name + ": " : "") + "" + description;
         else if (name != null && description == null)
@@ -171,11 +171,11 @@ public class WebserviceRowFormatter {
         
         if (unit != null)
             orderRow.Unit = unit;
+        
         return orderRow;
     }
     
     private SveaOrderRow serializeAmountAndVat(Double amountExVat, Double vatPercent, Double amountIncVat, SveaOrderRow orderRow) {
-    	
     	if (vatPercent != null && amountExVat != null) {
             orderRow.PricePerUnit = amountExVat;
             orderRow.VatPercent = vatPercent;
@@ -186,6 +186,7 @@ public class WebserviceRowFormatter {
             orderRow.PricePerUnit = amountExVat;
             orderRow.VatPercent = ((amountIncVat / amountExVat) - 1) * 100;
         }
-        return orderRow;       
+    	
+        return orderRow;
     }
 }

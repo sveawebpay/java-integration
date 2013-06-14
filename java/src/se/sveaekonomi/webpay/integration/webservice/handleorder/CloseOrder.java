@@ -45,7 +45,7 @@ public class CloseOrder {
         if(errors != "")
         	throw new ValidationException(errors);
         
-        SveaCloseOrder sveaCloseOrder = new SveaCloseOrder();       
+        SveaCloseOrder sveaCloseOrder = new SveaCloseOrder();
         sveaCloseOrder.Auth = getStoreAuthorization();
         SveaCloseOrderInformation orderInfo = new SveaCloseOrderInformation();
         orderInfo.SveaOrderId = order.getOrderId();
@@ -57,7 +57,7 @@ public class CloseOrder {
         return object;
     }
     
-    public CloseOrderResponse doRequest() throws Exception {       
+    public CloseOrderResponse doRequest() throws Exception {
     	URL url = order.getOrderType()=="Invoice" ? 
     			order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE) 
     			: order.getConfig().getEndPoint(PAYMENTTYPE.PAYMENTPLAN);

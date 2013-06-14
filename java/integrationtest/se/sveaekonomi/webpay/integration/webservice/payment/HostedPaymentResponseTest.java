@@ -25,21 +25,19 @@ import com.meterware.httpunit.WebConversation;
 import com.meterware.httpunit.WebRequest;
 import com.meterware.httpunit.WebResponse;
 
-
 public class HostedPaymentResponseTest {
-  
     
     @Before
     public void setUp() {
         
     }
-        
+    
     @Test
     public void testDoCardPaymentRequest() throws Exception {
         HttpUnitOptions.setScriptingEnabled( false );
         
         PaymentForm form = WebPay.createOrder()
-        .addOrderRow(Item.orderRow()
+        	.addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
                 .setQuantity(2)
                 .setAmountExVat(100.00)
@@ -51,15 +49,16 @@ public class HostedPaymentResponseTest {
         .addCustomerDetails(Item.companyCustomer()
                 .setVatNumber("2345234")
                 .setCompanyName("TestCompagniet"))
-         .setCountryCode(COUNTRYCODE.SE)
-        .setClientOrderNumber(String.valueOf(Calendar.DATE) + String.valueOf(Calendar.MILLISECOND))
-        .setCurrency(CURRENCY.SEK)
+                .setCountryCode(COUNTRYCODE.SE)
+                .setClientOrderNumber(String.valueOf(Calendar.DATE) + String.valueOf(Calendar.MILLISECOND))
+                .setCurrency(CURRENCY.SEK)
         .usePayPageCardOnly()
             .setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtml")
             .getPaymentForm();
-                        
-        WebResponse result = postRequest(form);        
-        assertEquals("OK", result.getResponseMessage());        
+                
+        WebResponse result = postRequest(form);
+        
+        assertEquals("OK", result.getResponseMessage());
     }
     
     private WebResponse postRequest(PaymentForm form) throws IOException, SAXException {

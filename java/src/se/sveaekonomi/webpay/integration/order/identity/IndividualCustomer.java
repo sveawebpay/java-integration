@@ -2,6 +2,7 @@ package se.sveaekonomi.webpay.integration.order.identity;
 
 
 public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
+	
     private String ssn;
     private long birthDate;
     private String firstName;
@@ -75,7 +76,7 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
      * @return IndividualCustomer
      */
     public IndividualCustomer setBirthDate(int year, int month, int day) {
-        String monthString = String.valueOf(month);        
+        String monthString = String.valueOf(month);
         if(monthString.length()==1)
             monthString = "0" + monthString;
         String dayString = String.valueOf(day);

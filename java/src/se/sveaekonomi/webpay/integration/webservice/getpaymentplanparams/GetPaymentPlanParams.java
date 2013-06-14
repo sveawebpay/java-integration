@@ -39,8 +39,8 @@ public class GetPaymentPlanParams {
     protected SveaAuth getStoreAuthorization() {
     	SveaAuth auth = new SveaAuth();
         auth.Username = config.getUsername(PAYMENTTYPE.PAYMENTPLAN, countryCode);
-        auth.Password = config.getPassword(PAYMENTTYPE.PAYMENTPLAN, countryCode);        
-        auth.ClientNumber = config.getClientNumber(PAYMENTTYPE.PAYMENTPLAN, countryCode);        
+        auth.Password = config.getPassword(PAYMENTTYPE.PAYMENTPLAN, countryCode);
+        auth.ClientNumber = config.getClientNumber(PAYMENTTYPE.PAYMENTPLAN, countryCode);
         
         return auth;
     }

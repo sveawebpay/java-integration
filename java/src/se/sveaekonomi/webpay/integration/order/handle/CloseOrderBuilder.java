@@ -14,7 +14,7 @@ public class CloseOrderBuilder {
     private Long orderId;
     private String orderType;
     private final ConfigurationProvider config;
-        
+    
     public CloseOrderBuilder(ConfigurationProvider config) {
     	this.config = config;
     }

@@ -118,7 +118,7 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
        }
        
        
-       errors += validator.validate(this.createOrderBuilder);        
+       errors += validator.validate(this.createOrderBuilder);
        return errors;
        
     }
@@ -148,8 +148,8 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
             throw e;
         }
         
-        PaymentForm form = new PaymentForm();        
-        form.setXmlMessage(xml);          
+        PaymentForm form = new PaymentForm();
+        form.setXmlMessage(xml);
 
         form.setMerchantId(createOrderBuilder.getConfig().getMerchantId(PAYMENTTYPE.HOSTED, createOrderBuilder.getCountryCode()));
         form.setSecretWord(createOrderBuilder.getConfig().getSecret(PAYMENTTYPE.HOSTED, createOrderBuilder.getCountryCode()));
@@ -168,7 +168,7 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
     
     protected abstract T configureExcludedPaymentMethods();
     
-    public abstract XMLStreamWriter getPaymentSpecificXml(XMLStreamWriter xmlw) throws Exception;    
+    public abstract XMLStreamWriter getPaymentSpecificXml(XMLStreamWriter xmlw) throws Exception;
     
     protected void writeSimpleElement(XMLStreamWriter xmlw, String name, String value) throws XMLStreamException {
         if (value != null) {
