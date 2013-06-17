@@ -4,7 +4,7 @@ import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 
 public class TestingTool {
-
+	
 	public static OrderRowBuilder createOrderRow() {
 		return Item.orderRow()
                 .setArticleNumber("1")
