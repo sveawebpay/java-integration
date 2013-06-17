@@ -17,8 +17,8 @@ public class GetPaymentPlanParamsTest {
     @Test
     public void testGetPaymentPlanParams() throws Exception {
         PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
-        		.setCountryCode(COUNTRYCODE.SE)
-        		.doRequest();
+        	.setCountryCode(COUNTRYCODE.SE)
+        	.doRequest();
         
         List<CampaignCode> campaignCodes = response.getCampaignCodes();
         
@@ -37,7 +37,7 @@ public class GetPaymentPlanParamsTest {
         
         assertEquals(response.isOrderAccepted(), true);
         assertEquals(response.getCampaignCodes().get(0).getCampaignCode(), "213060");
-        assertEquals(response.getCampaignCodes().get(0).getDescription(), "Köp nu betala om 3 månader (räntefritt)");
+        assertEquals(response.getCampaignCodes().get(0).getDescription(), "KÃ¶p nu betala om 3 mÃ¥nader (rÃ¤ntefritt)");
         assertEquals(response.getCampaignCodes().get(0).getPaymentPlanType(), "InterestAndAmortizationFree");
         assertEquals(response.getCampaignCodes().get(0).getContractLengthInMonths(), "3");
         assertEquals(response.getCampaignCodes().get(0).getInitialFee(), "100");
