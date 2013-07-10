@@ -10,7 +10,7 @@ import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsRe
 
 public class PaymentPlanPricePerMonth {
 	
-	public List<Map<String, String>> calculate(Double price, PaymentPlanParamsResponse params) {
+	public List<Map<String, String>> calculate(Double amount, PaymentPlanParamsResponse params) {
 		if (null == params) {
 			return null;
 		}
@@ -24,9 +24,9 @@ public class PaymentPlanPricePerMonth {
         	Double monthlyAnnuityFactor = Double.parseDouble(campaignCode.getMonthlyAnnuityFactor());
         	Double notificationFee = Double.parseDouble(campaignCode.getNotificationFee());
         	
-        	if (fromAmount <= price && price <= toAmount) {
+        	if (fromAmount <= amount && amount <= toAmount) {
         		Map<String, String> pair = new HashMap<String, String>();
-        		Long pricePerMonth = Math.round(price * monthlyAnnuityFactor + notificationFee);
+        		Long pricePerMonth = Math.round(amount * monthlyAnnuityFactor + notificationFee);
         		pair.put("pricePerMonth", pricePerMonth.toString());
         		pair.put("campaignCode", campaignCode.getCampaignCode());
         		result.add(pair);

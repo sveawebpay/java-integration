@@ -105,11 +105,11 @@ public class WebPay {
     }
 
     /**
-     * @param type Double price
+     * @param type Double amount
      * @param type PaymentPlanParamsResponse params
      * @return PaymentPlanPricePerMonth
      */
-    public static List<Map<String, String>> paymentPlanPricePerMonth(Double price, PaymentPlanParamsResponse params) {
-    	return new PaymentPlanPricePerMonth().calculate(price, params);
+    public static List<Map<String, String>> paymentPlanPricePerMonth(Double amount, PaymentPlanParamsResponse params) {
+    	return new PaymentPlanPricePerMonth().calculate(amount, params);
     }
 }
