@@ -26,7 +26,7 @@ public class PaymentPlanPricePerMonth {
         	
         	if (fromAmount <= price && price <= toAmount) {
         		Map<String, String> pair = new HashMap<String, String>();
-        		Double pricePerMonth = price * monthlyAnnuityFactor + notificationFee;
+        		Long pricePerMonth = Math.round(price * monthlyAnnuityFactor + notificationFee);
         		pair.put("pricePerMonth", pricePerMonth.toString());
         		pair.put("campaignCode", campaignCode.getCampaignCode());
         		result.add(pair);
