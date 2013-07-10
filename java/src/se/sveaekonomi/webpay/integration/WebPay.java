@@ -103,11 +103,12 @@ public class WebPay {
     public static GetAddresses getAddresses() {
         return getAddresses(SveaConfig.getDefaultConfig());
     }
-
+    
     /**
+     * Calculate the prices per month for the payment plan campaigns
      * @param type Double amount
      * @param type PaymentPlanParamsResponse params
-     * @return PaymentPlanPricePerMonth
+     * @return List<Map<String, String>>
      */
     public static List<Map<String, String>> paymentPlanPricePerMonth(Double amount, PaymentPlanParamsResponse params) {
     	return new PaymentPlanPricePerMonth().calculate(amount, params);

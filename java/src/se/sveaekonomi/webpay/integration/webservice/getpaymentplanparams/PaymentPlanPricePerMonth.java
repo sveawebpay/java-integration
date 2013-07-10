@@ -10,13 +10,14 @@ import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsRe
 
 public class PaymentPlanPricePerMonth {
 	
-	public List<Map<String, String>> calculate(Double amount, PaymentPlanParamsResponse params) {
-		if (null == params) {
-			return null;
+	public List<Map<String, String>> calculate(Double amount, PaymentPlanParamsResponse paymentPlanParams) {
+		List<Map<String, String>> pricesPerMonth = new ArrayList<Map<String, String>>();
+		
+		if (null == paymentPlanParams) {
+			return pricesPerMonth;
 		}
 		
-		List<CampaignCode> campaignCodes = params.getCampaignCodes();
-		List<Map<String, String>> result = new ArrayList<Map<String, String>>();
+		List<CampaignCode> campaignCodes = paymentPlanParams.getCampaignCodes();
 		
         for (CampaignCode campaignCode : campaignCodes) {
         	Double fromAmount = Double.parseDouble(campaignCode.getFromAmount());
@@ -25,14 +26,14 @@ public class PaymentPlanPricePerMonth {
         	Double notificationFee = Double.parseDouble(campaignCode.getNotificationFee());
         	
         	if (fromAmount <= amount && amount <= toAmount) {
-        		Map<String, String> pair = new HashMap<String, String>();
+        		Map<String, String> priceMap = new HashMap<String, String>();
         		Long pricePerMonth = Math.round(amount * monthlyAnnuityFactor + notificationFee);
-        		pair.put("pricePerMonth", pricePerMonth.toString());
-        		pair.put("campaignCode", campaignCode.getCampaignCode());
-        		result.add(pair);
+        		priceMap.put("campaignCode", campaignCode.getCampaignCode());
+        		priceMap.put("pricePerMonth", pricePerMonth.toString());
+        		pricesPerMonth.add(priceMap);
         	}
         }
     	
-    	return result;
+    	return pricesPerMonth;
     }
 }

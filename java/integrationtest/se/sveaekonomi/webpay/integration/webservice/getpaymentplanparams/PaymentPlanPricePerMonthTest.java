@@ -24,8 +24,9 @@ public class PaymentPlanPricePerMonthTest {
 	
     @Test
     public void testBuildPriceCalculator() throws Exception {
-    	PaymentPlanParamsResponse params = getParamsForTesting();
-    	List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(2000.0, params);
+    	PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
+    	
+    	List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(2000.0, paymentPlanParams);
     	
         assertEquals("213060", result.get(0).get("campaignCode"));
         assertEquals("2029", result.get(0).get("pricePerMonth"));
@@ -35,8 +36,10 @@ public class PaymentPlanPricePerMonthTest {
 	
     @Test
     public void testBuildPriceCalculatorWithLowPrice() throws Exception {
-    	PaymentPlanParamsResponse params = getParamsForTesting();
-    	List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(200.0, params);
+    	PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
+    	
+    	List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(200.0, paymentPlanParams);
+    	
         assertTrue(result.isEmpty());
     }
 }

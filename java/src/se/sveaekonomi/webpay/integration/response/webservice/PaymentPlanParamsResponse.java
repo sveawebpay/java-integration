@@ -9,21 +9,20 @@ import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.response.Response;
 
-
 public class PaymentPlanParamsResponse extends Response {
     
     private List<CampaignCode> campaignCodes;
-
+    
     public PaymentPlanParamsResponse(NodeList soapMessage) {
         super();
         campaignCodes = new ArrayList<CampaignCode>();
         setValues(soapMessage);
     }
-
+    
     public List<CampaignCode> getCampaignCodes() {
         return campaignCodes;
     }
-
+    
     public void setCampaignCodes(List<CampaignCode> campaignCodes) {
         this.campaignCodes = campaignCodes;
     }
@@ -34,6 +33,7 @@ public class PaymentPlanParamsResponse extends Response {
             
             for (int i = 0; i < size; i++) {
                 Element node = (Element)soapMessage.item(i);
+                
                 // mandatory
                 this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
                 
