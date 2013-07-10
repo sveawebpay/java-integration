@@ -659,11 +659,11 @@ CreateOrderResponse response = WebPay.getPaymentPlanParams()
 
 ### 5.1 paymentPlanPricePerMonth
 Use this function to calculate the prices per month of the payment plan campaigns received from getPaymentPlanParams.
-**$paramsResonseObject** is response object from getPaymentPlanParams();
+*paymentPlanParams* is the response object from getPaymentPlanParams.
 ```java
-   List<Map<String, String>> pricePerMonth = WebPay.paymentPlanPricePerMonth(amount, params);
+   List<Map<String, String>> pricePerMonth = WebPay.paymentPlanPricePerMonth(amount, paymentPlanParams);
 ```
-[<< To top](https://github.com/sveawebpay/php-integration#php-integration-package-api-for-sveawebpay)
+[<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
 ## 6. getAddresses 
 Returns *getAddressesResponse* object with an *AddressSelector* for the associated addresses for a specific security number. 
