@@ -1,5 +1,13 @@
 package se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams;
 
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
+
+import java.util.List;
+import java.util.Map;
+
+import org.junit.Test;
+
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
@@ -13,4 +21,19 @@ public class PaymentPlanPricePerMonthTest {
 				.doRequest();
 		return response;
 	}
+	
+    @Test
+    public void testBuildPriceCalculator() throws Exception {
+    	PaymentPlanParamsResponse params = getParamsForTesting();
+    	List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(2000.0, params);
+        assertEquals("213060", result.get(0).get("campaignCode"));
+        assertEquals("2029.0", result.get(0).get("pricePerMonth"));
+    }
+	
+    @Test
+    public void testBuildPriceCalculatorWithLowPrice() throws Exception {
+    	PaymentPlanParamsResponse params = getParamsForTesting();
+    	List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(200.0, params);
+        assertTrue(result.isEmpty());
+    }
 }

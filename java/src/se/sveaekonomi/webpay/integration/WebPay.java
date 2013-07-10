@@ -1,12 +1,17 @@
 package se.sveaekonomi.webpay.integration;
 
+import java.util.List;
+import java.util.Map;
+
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CloseOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
+import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
 import se.sveaekonomi.webpay.integration.webservice.getaddresses.GetAddresses;
 import se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams.GetPaymentPlanParams;
+import se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams.PaymentPlanPricePerMonth;
 
 /**
  * Start build request object by choosing the right method.
@@ -97,5 +102,14 @@ public class WebPay {
      */
     public static GetAddresses getAddresses() {
         return getAddresses(SveaConfig.getDefaultConfig());
+    }
+
+    /**
+     * @param type Double price
+     * @param type PaymentPlanParamsResponse params
+     * @return PaymentPlanPricePerMonth
+     */
+    public static List<Map<String, String>> paymentPlanPricePerMonth(Double price, PaymentPlanParamsResponse params) {
+    	return new PaymentPlanPricePerMonth().calculate(price, params);
     }
 }
