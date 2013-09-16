@@ -16,6 +16,7 @@
     * [Other values](https://github.com/sveawebpay/java-integration/tree/master#44-other-values)
     * [Choose payment](https://github.com/sveawebpay/java-integration/tree/master#45-choose-payment)
 * [5. GetPaymentPlanParams](https://github.com/sveawebpay/java-integration/tree/master#5-getpaymentplanparams)
+    * [PaymentPlanPricePerMonth](https://github.com/sveawebpay/java-integration/tree/master#51-paymentplanpricepermonth)
 * [6. GetAddresses](https://github.com/sveawebpay/java-integration/tree/master#6-getaddresses)
 * [7. DeliverOrder](https://github.com/sveawebpay/java-integration/tree/master#7-deliverorder)
     * [Test mode](https://github.com/sveawebpay/java-integration/tree/master#41-testmode)
@@ -653,6 +654,14 @@ Returns *PaymentPlanParamsResponse* object. Set your store authorization here.
 CreateOrderResponse response = WebPay.getPaymentPlanParams()	
 	.setCountryCode(COUNTRYCODE.SE)					//Required	
 	.doRequest();
+```
+[<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
+
+### 5.1 paymentPlanPricePerMonth
+Use this function to calculate the prices per month of the payment plan campaigns received from getPaymentPlanParams.
+*paymentPlanParams* is the response object from getPaymentPlanParams.
+```java
+   List<Map<String, String>> pricePerMonth = WebPay.paymentPlanPricePerMonth(amount, paymentPlanParams);
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 

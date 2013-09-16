@@ -12,9 +12,9 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrderRow;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
@@ -35,7 +35,7 @@ public class WebserviceRowFormatterTest {
         
         ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(0);
-
+        
         assertTrue("0".equals(newRow.ArticleNumber));
         assertTrue("Tess: Tester".equals(newRow.Description));
         assertTrue(4.0 == newRow.PricePerUnit);
@@ -47,15 +47,8 @@ public class WebserviceRowFormatterTest {
     
     @Test
     public void testFormatShippingFeeRows() throws ValidationException, Exception {
-    	  SveaRequest<SveaCreateOrder> request = WebPay.createOrder()        	
-    		        .addOrderRow(Item.orderRow()
-    		            .setArticleNumber("1")
-    		            .setQuantity(2)
-    		            .setAmountExVat(100.00)
-    		            .setDescription("Specification")
-    		            .setName("Prod")
-    		            .setVatPercent(0)
-    		            .setDiscountPercent(0))
+    	  SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+    		        .addOrderRow(TestingTool.createOrderRow())
     		       
     		       .addFee(Item.shippingFee()  
 			            .setShippingId("0")
@@ -73,7 +66,7 @@ public class WebserviceRowFormatterTest {
     		            .setClientOrderNumber("33")
     		            .setCurrency(CURRENCY.SEK)
     		            .setCustomerReference("33")
-    		            .useInvoicePayment()    		    	                       
+    		            .useInvoicePayment()
     		        .prepareRequest();
     	  
     	assertEquals("0", request.request.CreateOrderInformation.OrderRows.get(1).ArticleNumber);
@@ -86,48 +79,13 @@ public class WebserviceRowFormatterTest {
     }
     
     @Test
-    public void testFormatShippingFeeRowsZero() throws ValidationException, Exception {
-    	  CreateOrderResponse response = WebPay.createOrder()        	
-    		        .addOrderRow(Item.orderRow()
-    		            .setArticleNumber("1")
-    		            .setQuantity(2)
-    		            .setAmountExVat(10)
-    		            .setDescription("Specification")
-    		            .setName("Prod")
-    		            .setVatPercent(0)
-    		            .setDiscountPercent(0))
-    		       
-    		       .addFee(Item.shippingFee()  
-			            .setShippingId("0")
-			            .setName("Tess")
-			            .setDescription("Tester")
-			            .setAmountExVat(0)
-			            .setVatPercent(0)
-			            .setUnit("st"))
-    		        
-    		        .addCustomerDetails(Item.individualCustomer()
-    		            .setNationalIdNumber("194605092222"))
-    		    
-    		            .setCountryCode(COUNTRYCODE.SE)
-    		            .setOrderDate("2012-12-12")
-    		            .setClientOrderNumber("33")
-    		            .setCurrency(CURRENCY.SEK)
-    		            .setCustomerReference("33")
-    		            .useInvoicePayment()    		    	                       
-    		        .doRequest();
-    	  
-    	  assertEquals(true, response.isOrderAccepted());
-    }
-    
-    
-    @Test
     public void testFormatInvoiceFeeRows() {
-    	CreateOrderBuilder order = WebPay.createOrder()  
-    		.addFee(Item.invoiceFee()       
+    	CreateOrderBuilder order = WebPay.createOrder()
+    		.addFee(Item.invoiceFee()
     			.setDescription("Tester")
     			.setAmountExVat(4)
     			.setVatPercent(25)
-    			.setUnit("st"));        
+    			.setUnit("st"));
         
         ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(0);

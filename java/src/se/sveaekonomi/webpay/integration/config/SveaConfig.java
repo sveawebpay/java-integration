@@ -15,7 +15,7 @@ public class SveaConfig {
     private static final String SWP_TEST_WS_URL = "https://webservices.sveaekonomi.se/webpay_test/SveaWebPay.asmx?WSDL";
     private static final String SWP_PROD_WS_URL = "https://webservices.sveaekonomi.se/webpay/SveaWebPay.asmx?WSDL";
     
-        
+    
 	public static URL getProdWebserviceUrl() {
 		return getUrlFromString(SWP_PROD_WS_URL);
 	}
@@ -43,5 +43,4 @@ public class SveaConfig {
     public static ConfigurationProvider getDefaultConfig() {
     	return new SveaTestConfigurationProvider();
     }
-
 }

@@ -4,7 +4,7 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 
 
 public class HostedOrderValidator extends OrderValidator {
-          
+    
     public String validate(CreateOrderBuilder order) {
         errors = "";
         
@@ -24,7 +24,7 @@ public class HostedOrderValidator extends OrderValidator {
         validateOrderRow(order);
         return this.errors;
     }
-     
+    
     
     private void validateCurrency(CreateOrderBuilder order) {
         if(order.getCurrency()==null)
@@ -33,8 +33,8 @@ public class HostedOrderValidator extends OrderValidator {
 
     private void validateClientOrderNumber(CreateOrderBuilder order) {
         if (order.getClientOrderNumber() == null) { 
-            this.errors += "MISSING VALUE - ClientOrderNumber is required. Use setClientOrderNumber(...).\n";            
-        }        
+            this.errors += "MISSING VALUE - ClientOrderNumber is required. Use setClientOrderNumber(...).\n";
+        }
         else if((order.getClientOrderNumber() != null && "".equals(order.getClientOrderNumber())))
             this.errors += "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n";
     }

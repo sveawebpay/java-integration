@@ -12,23 +12,16 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
-public class PaymentPlanTest {      
+public class PaymentPlanTest {
     
     @Test
     public void testPaymentPlanRequestObjectSpecifics() throws ValidationException{
     	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-    	.addOrderRow(Item.orderRow()
-              .setArticleNumber("1")
-              .setQuantity(2)
-              .setAmountExVat(100.00)
-              .setDescription("Specification")
-              .setName("Prod")
-              .setUnit("st")
-              .setVatPercent(25)
-              .setDiscountPercent(0))
+    	.addOrderRow(TestingTool.createOrderRow())
         
         .addFee(Item.shippingFee()
                 .setShippingId("33")
@@ -51,7 +44,7 @@ public class PaymentPlanTest {
               .setZipCode("9999")
               .setLocality("Stan"))
                       
-              .setCountryCode(COUNTRYCODE.SE)   
+              .setCountryCode(COUNTRYCODE.SE)
               .setOrderDate("2012-12-12")
               .setClientOrderNumber("33")
               .setCurrency(CURRENCY.SEK)
@@ -66,15 +59,7 @@ public class PaymentPlanTest {
     public void testPaymentPlanFailCompanyCustomer() throws ValidationException{
     	try {
     	WebPay.createOrder()
-    	.addOrderRow(Item.orderRow()
-              .setArticleNumber("1")
-              .setQuantity(2)
-              .setAmountExVat(100.00)
-              .setDescription("Specification")
-              .setName("Prod")
-              .setUnit("st")
-              .setVatPercent(25)
-              .setDiscountPercent(0))
+    	.addOrderRow(TestingTool.createOrderRow())
         
         .addFee(Item.shippingFee()
                 .setShippingId("33")
@@ -86,7 +71,7 @@ public class PaymentPlanTest {
                 .setDiscountPercent(0))
         
         .addCustomerDetails(Item.companyCustomer()
-              .setNationalIdNumber("194605092222")              
+              .setNationalIdNumber("194605092222")
               .setCompanyName("Företaget")
               .setEmail("test@svea.com")
               .setPhoneNumber(999999)
@@ -96,7 +81,7 @@ public class PaymentPlanTest {
               .setZipCode("9999")
               .setLocality("Stan"))
                       
-              .setCountryCode(COUNTRYCODE.SE)   
+              .setCountryCode(COUNTRYCODE.SE)
               .setOrderDate("2012-12-12")
               .setClientOrderNumber("33")
               .setCurrency(CURRENCY.SEK)
@@ -106,7 +91,7 @@ public class PaymentPlanTest {
     			assertTrue(false);
     	}
     	catch(SveaWebPayException e) {
-    		assertEquals(e.getMessage(), "ERROR - CompanyCustomer is not allowed to use payment plan option.");	
-    	}       
+    		assertEquals(e.getMessage(), "ERROR - CompanyCustomer is not allowed to use payment plan option.");
+    	}
     }
 }

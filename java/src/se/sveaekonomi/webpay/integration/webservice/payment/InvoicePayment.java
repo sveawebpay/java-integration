@@ -18,6 +18,7 @@ public class InvoicePayment extends WebServicePayment {
     		this.orderInformation.AddressSelector = "";
     	
         this.orderInformation.OrderType = "Invoice";
+        
         return this.orderInformation;
     }
 }

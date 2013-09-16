@@ -162,10 +162,10 @@ public class OrderBuilderTest {
                 .setEmail("test@svea.com")
                 .setPhoneNumber(999999)
                 .setIpAddress("123.123.123")
-                .setStreetAddress("Gatan", "23")             
+                .setStreetAddress("Gatan", "23")
                 .setCoAddress("c/o Eriksson")
                 .setZipCode("9999")
-                .setLocality("Stan"));                
+                .setLocality("Stan"));
     }
 
     private CreateOrderBuilder createCompanyDetails(CreateOrderBuilder orderBuilder) {

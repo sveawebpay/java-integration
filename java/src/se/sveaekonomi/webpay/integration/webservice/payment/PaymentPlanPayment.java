@@ -19,6 +19,7 @@ public class PaymentPlanPayment extends WebServicePayment {
     		this.orderInformation.AddressSelector = "";
     	
         this.orderInformation.OrderType = "PaymentPlan";
+        
         return this.orderInformation;
     }
 }

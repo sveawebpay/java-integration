@@ -105,6 +105,4 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         orderType = "PaymentPlan";
         return new HandleOrder(this);
     }
-    
-    
 }

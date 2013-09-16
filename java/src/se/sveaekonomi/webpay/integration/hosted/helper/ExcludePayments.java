@@ -6,17 +6,15 @@ import java.util.List;
 import se.sveaekonomi.webpay.integration.util.constant.INVOICETYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTPLANTYPE;
 
-
 public class ExcludePayments {
     
     private ArrayList<String> excludedPaymentMethods;
-    
     
     public ExcludePayments() {
         excludedPaymentMethods = new ArrayList<String>();
     }
     
-    /**  
+    /**
      * @return List of all payment methods for invoices and payment plans 
      */
     public List<String> excludeInvoicesAndPaymentPlan() {
@@ -29,9 +27,9 @@ public class ExcludePayments {
         
         return excludedPaymentMethods;
     }
-
+    
     private void setPaymentMethodsSE() {
-    	excludedPaymentMethods.add(INVOICETYPE.INVOICESE.getValue());            
+    	excludedPaymentMethods.add(INVOICETYPE.INVOICESE.getValue());
         excludedPaymentMethods.add(INVOICETYPE.INVOICE_SE.getValue());
         excludedPaymentMethods.add(PAYMENTPLANTYPE.PAYMENTPLANSE.getValue());
         excludedPaymentMethods.add(PAYMENTPLANTYPE.PAYMENTPLAN_SE.getValue());
@@ -61,5 +59,4 @@ public class ExcludePayments {
     	excludedPaymentMethods.add(INVOICETYPE.INVOICE_NO.getValue());
         excludedPaymentMethods.add(PAYMENTPLANTYPE.PAYMENTPLAN_NO.getValue());
     }
-    
 }

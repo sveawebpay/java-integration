@@ -51,9 +51,9 @@ public class HostedXmlBuilder extends XMLBuilder {
         else {
         	if(order.getIndividualCustomer().getIpAddress() != null)
 				writeSimpleElement("ipaddress", order.getCompanyCustomer().getIpAddress());
-
+        	
         }
-        serializeRows(rows);     
+        serializeRows(rows);
         if (payment.getExcludedPaymentMethods() != null) {
             xmlw.writeStartElement("excludepaymentmethods");
             
@@ -64,6 +64,7 @@ public class HostedXmlBuilder extends XMLBuilder {
             
             xmlw.writeEndElement();
         }
+        
         writeSimpleElement("iscompany", order.getIsCompanyIdentity() ? "true" : "false");
         writeSimpleElement("addinvoicefee", "false");
         xmlw.writeEndDocument();
@@ -116,7 +117,7 @@ public class HostedXmlBuilder extends XMLBuilder {
 				if(((IndividualCustomer)customer).getCoAddress() != null)
 					writeSimpleElement("address2", ((IndividualCustomer)customer).getCoAddress());
 				if(((IndividualCustomer)customer).getLocality() != null)
-					writeSimpleElement("city", ((IndividualCustomer)customer).getLocality().toString());				
+					writeSimpleElement("city", ((IndividualCustomer)customer).getLocality().toString());
 			}
 			else {
 				if(((CompanyCustomer)customer).getHouseNumber() != null)
@@ -126,7 +127,7 @@ public class HostedXmlBuilder extends XMLBuilder {
 				if(((CompanyCustomer)customer).getStreetAddress() != null)
 					writeSimpleElement("address", ((CompanyCustomer)customer).getStreetAddress());
 				if(((CompanyCustomer)customer).getLocality() != null)
-					writeSimpleElement("city", ((CompanyCustomer)customer).getLocality().toString());				
+					writeSimpleElement("city", ((CompanyCustomer)customer).getLocality().toString());
 				if(((CompanyCustomer)customer).getCompanyName() != null)
 					writeSimpleElement("firstname", ((CompanyCustomer)customer).getCompanyName());
 				if(((CompanyCustomer)customer).getEmail() != null)
@@ -140,17 +141,15 @@ public class HostedXmlBuilder extends XMLBuilder {
 			}
 			
 			if(order.getCountryCode() != null)
-				writeSimpleElement("country", order.getCountryCode().toString());			
+				writeSimpleElement("country", order.getCountryCode().toString());
 			
 			xmlw.writeEndElement();
 		} catch (XMLStreamException e) {
 		
 			e.printStackTrace();
 		}
-    	
-		
 	}
-
+    
 	private void serializeRows(List<HostedOrderRowBuilder> rows) throws XMLStreamException {
         if (rows == null || rows.size() == 0) {
             return;
@@ -183,7 +182,7 @@ public class HostedXmlBuilder extends XMLBuilder {
         if (row.getQuantity() != 0) {
             writeSimpleElement("quantity", Integer.toString(row.getQuantity()));
         }
-
+        
         writeSimpleElement("unit", row.getUnit());
         
         xmlw.writeEndElement();

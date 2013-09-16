@@ -11,15 +11,15 @@ public abstract class OrderValidator {
     
     protected void validateRequiredFieldsForOrder(CreateOrderBuilder order) {
         String errorMessage = "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n";
-        try {             
+        try {
             if (order.getOrderRows().size() == 0)
-                this.errors += errorMessage;            
+                this.errors += errorMessage;
         } catch (NullPointerException e) {
             this.errors += errorMessage;
-        }        
+        }
     }
     
-    protected void validateOrderRow(CreateOrderBuilder order) {   
+    protected void validateOrderRow(CreateOrderBuilder order) {
         try {
             for (OrderRowBuilder orderRow : order.getOrderRows()) {
             	

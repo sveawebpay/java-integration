@@ -12,17 +12,29 @@ public class GetAddressesTest {
     
     @Test
     public void testGetAddresses() throws Exception {
-        try {
-            GetAddressesResponse response = WebPay.getAddresses()                
-                .setCountryCode(COUNTRYCODE.SE)
-                .setIndividual("460509-2222")
-                .setOrderTypeInvoice()
-                .doRequest();
-            
-            assertEquals(true, response.isOrderAccepted());
-            assertEquals("Persson, Tess T", response.getLegalName());
-        } catch (Exception e) {
-            throw e;
-        }
+        GetAddressesResponse response = WebPay.getAddresses()
+            .setCountryCode(COUNTRYCODE.SE)
+            .setIndividual("460509-2222")
+            .setOrderTypeInvoice()
+            .doRequest();
+        
+        assertEquals(true, response.isOrderAccepted());
+        assertEquals("Persson, Tess T", response.getLegalName());
     }
+    
+	@Test
+	public void testResultGetAddresses() throws Exception {
+	    GetAddressesResponse response = WebPay.getAddresses()
+	        .setCountryCode(COUNTRYCODE.SE)
+	        .setIndividual("194605092222")
+	        .setOrderTypeInvoice()
+	        .doRequest();
+	    
+	    assertEquals(response.isOrderAccepted(), true);
+	    assertEquals(response.getFirstName(), "Tess T");
+	    assertEquals(response.getLastName(), "Persson");
+	    assertEquals(response.getAddressLine2(), "Testgatan 1");
+	    assertEquals(response.getPostcode(), "99999");
+	    assertEquals(response.getPostarea(), "Stan");
+	}
 }

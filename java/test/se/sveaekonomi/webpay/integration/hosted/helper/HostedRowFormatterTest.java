@@ -15,7 +15,7 @@ import se.sveaekonomi.webpay.integration.order.row.Item;
 public class HostedRowFormatterTest {
     
     @Test
-    public void testFormatOrderRows() {       
+    public void testFormatOrderRows() {
         CreateOrderBuilder order = WebPay.createOrder()
         		.addOrderRow(Item.orderRow()
 				.setArticleNumber("0")
@@ -124,7 +124,7 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatRelativeDiscountRows() {
-    	CreateOrderBuilder order = WebPay.createOrder()    			
+    	CreateOrderBuilder order = WebPay.createOrder()
     			.addDiscount(Item.relativeDiscount()
     					.setDiscountId("0")
     					.setName("Tess")

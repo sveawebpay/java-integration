@@ -35,5 +35,4 @@ public class Response {
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
     }   
-    
 }

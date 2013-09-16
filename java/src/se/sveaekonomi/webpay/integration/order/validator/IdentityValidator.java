@@ -3,7 +3,7 @@ package se.sveaekonomi.webpay.integration.order.validator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 
 public class IdentityValidator {
-               
+    
     protected String validateNordicIdentity(CreateOrderBuilder order) {
         String errors = "";
         //check Company identity
@@ -38,7 +38,7 @@ public class IdentityValidator {
             errors += "MISSING VALUE - Zip code is required for all customers when countrycode is NL. Use setZipCode().\n";
         
         return errors;
-                 
+        
     }
     
     public String validateDEIdentity(CreateOrderBuilder order) {
@@ -56,10 +56,8 @@ public class IdentityValidator {
                 errors += "MISSING VALUE - Street address is required for all customers when countrycode is DE. Use setStreetAddress().\n";
             if (order.getCustomerIdentity().getLocality()==null)
                 errors += "MISSING VALUE - Locality is required for all customers when countrycode is DE. Use setLocality().\n";                    
-            if (order.getCustomerIdentity().getZipCode()==null)                
+            if (order.getCustomerIdentity().getZipCode()==null)
                 errors += "MISSING VALUE - Zip code is required for all customers when countrycode is DE. Use setCustomerZipCode().\n";              
         return errors;
     }
-     
-
 }
