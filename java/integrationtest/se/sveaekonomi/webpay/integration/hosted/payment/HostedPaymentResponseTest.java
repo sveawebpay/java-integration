@@ -5,7 +5,6 @@ import static org.junit.Assert.assertEquals;
 import java.io.IOException;
 import java.util.Date;
 
-import org.junit.Before;
 import org.junit.Test;
 import org.xml.sax.SAXException;
 
@@ -15,6 +14,7 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
@@ -28,17 +28,12 @@ import com.meterware.httpunit.WebResponse;
 
 public class HostedPaymentResponseTest {
     
-    @Before
-    public void setUp() {
-        
-    }
-    
     @Test
     public void testDoCardPaymentRequest() throws Exception {
         HttpUnitOptions.setScriptingEnabled( false );
         
         PaymentForm form = WebPay.createOrder()
-        	.addOrderRow(TestingTool.createOrderRow())
+            .addOrderRow(TestingTool.createOrderRow())
             .addCustomerDetails(Item.companyCustomer()
                 .setVatNumber("2345234")
                 .setCompanyName("TestCompagniet"))
@@ -46,6 +41,27 @@ public class HostedPaymentResponseTest {
             .setClientOrderNumber(Long.toString((new Date()).getTime()))
             .setCurrency(CURRENCY.SEK)
             .usePayPageCardOnly()
+            .setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtml")
+            .getPaymentForm();
+        
+        WebResponse result = postRequest(form);
+        
+        assertEquals("OK", result.getResponseMessage());
+    }
+    
+    @Test
+    public void testNordeaSePaymentRequest() throws Exception {
+        HttpUnitOptions.setScriptingEnabled( false );
+        
+        PaymentForm form = WebPay.createOrder()
+            .addOrderRow(TestingTool.createOrderRow())
+            .addCustomerDetails(Item.companyCustomer()
+                .setVatNumber("2345234")
+                .setCompanyName("TestCompagniet"))
+            .setCountryCode(COUNTRYCODE.SE)
+            .setClientOrderNumber(Long.toString((new Date()).getTime()))
+            .setCurrency(CURRENCY.SEK)
+            .usePaymentMethod(PAYMENTMETHOD.NORDEA_SE)
             .setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtml")
             .getPaymentForm();
         
