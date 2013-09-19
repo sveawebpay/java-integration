@@ -5,7 +5,6 @@ import java.net.URL;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 
-
 /**
  */
 public class SveaConfig {
