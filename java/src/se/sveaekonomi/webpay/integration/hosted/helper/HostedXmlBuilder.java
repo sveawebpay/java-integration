@@ -97,7 +97,7 @@ public class HostedXmlBuilder extends XMLBuilder {
 			else if(!order.getIsCompanyIdentity()) {
 				writeSimpleElement("ssn", ((IndividualCustomer)customer).getBirthDate().toString());
 			}
-			//euro country, Company customer and nationalId not set			
+			//euro country, Company customer and nationalId not set
 			else if(order.getIsCompanyIdentity()) {
 				writeSimpleElement("ssn", ((CompanyCustomer)customer).getVatNumber());
 			}

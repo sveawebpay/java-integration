@@ -5,7 +5,7 @@ import java.net.URL;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
-public class ConfigurationProviderInterfaceTest implements ConfigurationProvider {
+public class ConfigurationProviderTestData implements ConfigurationProvider {
 
 	@Override
 	public String getUsername(PAYMENTTYPE type, COUNTRYCODE country) {
@@ -34,8 +34,10 @@ public class ConfigurationProviderInterfaceTest implements ConfigurationProvider
 
 	@Override
 	public URL getEndPoint(PAYMENTTYPE type) {
-		if(PAYMENTTYPE.HOSTED == type)
+		if(PAYMENTTYPE.HOSTED == type) {
 			return SveaConfig.getTestPayPageUrl();
+		}
+		
 		return SveaConfig.getTestWebserviceUrl();
 	}
 }

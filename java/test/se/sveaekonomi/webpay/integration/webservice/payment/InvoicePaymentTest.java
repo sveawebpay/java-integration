@@ -182,7 +182,7 @@ public class InvoicePaymentTest {
         assertEquals(COUNTRYCODE.NL, request.request.CreateOrderInformation.CustomerIdentity.CountryCode); //Check all in identity
         assertEquals("Individual", request.request.CreateOrderInformation.CustomerIdentity.CustomerType); //Check all in identity
     }
-        
+    
     @Test
     public void testInvoiceRequestObjectForCustomerIdentityCompanyFromSE() throws ValidationException {
     	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
@@ -237,7 +237,7 @@ public class InvoicePaymentTest {
             .setCoAddress("c/o Eriksson")
             .setZipCode("2222")
             .setLocality("Stan"))
-                             
+            
             .setCountryCode(COUNTRYCODE.SE)
             .setOrderDate("2012-12-12")
             .setClientOrderNumber("33")
@@ -393,7 +393,7 @@ public class InvoicePaymentTest {
     public void testInvoiceRequestObjectWithCreateOrderInformation() throws ValidationException{
     	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
     	.addOrderRow(TestingTool.createOrderRow())
-			 
+		
         .addOrderRow(TestingTool.createOrderRow())
             
         .addFee(Item.shippingFee()
@@ -437,7 +437,7 @@ public class InvoicePaymentTest {
     @Test
     public void testInvoiceRequestUsingAmountIncVatWithVatPercent() throws ValidationException {
     	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-  		.addCustomerDetails(Item.companyCustomer()
+    	.addCustomerDetails(Item.companyCustomer()
             .setNationalIdNumber("194605092222")
             .setAddressSelector("ad33")
             .setEmail("test@svea.com")
@@ -595,18 +595,18 @@ public class InvoicePaymentTest {
 
     @Test
     public void testCompanyIdRequest() throws ValidationException, Exception {
-    	 SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-            	.addOrderRow(TestingTool.createOrderRow())
-    	        .addCustomerDetails(Item.companyCustomer()
-    	        	.setNationalIdNumber("4354kj"))
-            	.setCountryCode(COUNTRYCODE.SE)
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+                .addOrderRow(TestingTool.createOrderRow())
+                .addCustomerDetails(Item.companyCustomer()
+                    .setNationalIdNumber("4354kj"))
+                .setCountryCode(COUNTRYCODE.SE)
                 .setClientOrderNumber("33")
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.SEK)
                 .useInvoicePayment()// returns an InvoiceOrder object
                 .prepareRequest();
-    	 
-    	 assertEquals(request.request.Auth.ClientNumber.toString(), "79021"); 
-    	 assertEquals(request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber, "4354kj");
+    	
+    	assertEquals(request.request.Auth.ClientNumber.toString(), "79021"); 
+    	assertEquals(request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber, "4354kj");
     }
 }
