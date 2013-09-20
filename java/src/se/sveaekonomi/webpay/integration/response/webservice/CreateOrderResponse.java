@@ -13,7 +13,7 @@ public class CreateOrderResponse extends Response {
     public String orderType;
     public boolean sveaWillBuyOrder;
     public double amount;
-    public CustomerIdentity customerIdentity;
+    public CustomerIdentityResponse customerIdentity;
     public String expirationDate;
     public String clientOrderNumber;
     public boolean isIndividualIdentity;
@@ -21,7 +21,7 @@ public class CreateOrderResponse extends Response {
     public CreateOrderResponse(NodeList soapMessage) {
         super();
         isIndividualIdentity = false;
-        customerIdentity = new CustomerIdentity();
+        customerIdentity = new CustomerIdentityResponse();
         this.setValues(soapMessage);
     }
     

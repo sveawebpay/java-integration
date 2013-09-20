@@ -1,12 +1,13 @@
 package se.sveaekonomi.webpay.integration.response.webservice;
 
-public class CustomerIdentity {
+public class CustomerIdentityResponse {
     
     private String nationalIdNumber;
     private String fullName;
     private String intitials;
     private String coAddress;
     private String street;
+    private String houseNumber;
     private String zipCode;
     private String city;
     private String countryCode;
@@ -14,7 +15,6 @@ public class CustomerIdentity {
     private String email;
     private String customerType;
     private String ipAddress;
-    private String houseNumber;
     
     public void setValue(String name, String value) {
         if (name.equals("NationalIdNumber"))
@@ -83,6 +83,14 @@ public class CustomerIdentity {
         this.street = street;
     }
 
+    public String getHouseNumber() {
+        return houseNumber;
+    }
+
+    public void setHouseNumber(String houseNumber) {
+        this.houseNumber = houseNumber;
+    }
+
     public String getZipCode() {
         return zipCode;
     }
@@ -137,13 +145,5 @@ public class CustomerIdentity {
 
     public void setIpAddress(String ipAddress) {
         this.ipAddress = ipAddress;
-    }
-
-    public String getHouseNumber() {
-        return houseNumber;
-    }
-
-    public void setHouseNumber(String houseNumber) {
-        this.houseNumber = houseNumber;
     }
 }

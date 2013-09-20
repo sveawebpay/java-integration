@@ -1,13 +1,12 @@
 package se.sveaekonomi.webpay.integration.order.identity;
 
-
 public class CompanyCustomer extends CustomerIdentity<CompanyCustomer> {
     
     private String companyName;
     private String orgNumber;
     private String companyVatNumber;
     private String addressSelector;
-
+    
     public CompanyCustomer() {
         super();
     }
@@ -29,7 +28,7 @@ public class CompanyCustomer extends CustomerIdentity<CompanyCustomer> {
     public String getNationalIdNumber() {
         return orgNumber;
     }
-
+    
     /**
      * Example: 4608142222
      * Required for company customers in SE, NO, DK, FI
@@ -59,10 +58,10 @@ public class CompanyCustomer extends CustomerIdentity<CompanyCustomer> {
         this.companyVatNumber = vatNumber;
         return this;
     }
-
+    
     /**
      * 
-     * @param addressSelector     
+     * @param addressSelector
      * @return CompanyCustomer
      */
 	public CompanyCustomer setAddressSelector(String addressSelector) {
