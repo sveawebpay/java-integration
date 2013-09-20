@@ -50,7 +50,7 @@ public class HostedXmlBuilder extends XMLBuilder {
         	}
         } else {
         	if(order.getIndividualCustomer().getIpAddress() != null) {
-				writeSimpleElement("ipaddress", order.getCompanyCustomer().getIpAddress());
+				writeSimpleElement("ipaddress", order.getIndividualCustomer().getIpAddress());
         	}
         }
         
