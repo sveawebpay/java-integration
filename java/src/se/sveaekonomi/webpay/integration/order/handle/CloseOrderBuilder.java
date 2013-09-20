@@ -41,7 +41,7 @@ public class CloseOrderBuilder {
         return orderType;
     }
     
-    public CloseOrderBuilder setCountryCode(COUNTRYCODE countryCode){
+    public CloseOrderBuilder setCountryCode(COUNTRYCODE countryCode) {
     	this.countryCode = countryCode;
     	return this;
     }

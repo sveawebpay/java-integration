@@ -103,17 +103,17 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
     public String validateOrder() {
        
        String errors = "";	
-       if(this.returnUrl.equals(""))
+       if (this.returnUrl.equals(""))
     	   errors += "MISSING VALUE - Return url is required, setReturnUrl(...).\n";
        
        HostedOrderValidator validator = new HostedOrderValidator();
       //Check if payment method is EU country, PaymentMethod: INVOICE or PAYMENTPLAN    
-       //if((this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.DE) || this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.NL))
-    	   if(this instanceof PaymentMethodPayment) {
-    		   if(((PaymentMethodPayment)this).getPaymentMethod() == PAYMENTMETHOD.INVOICE || ((PaymentMethodPayment)this).getPaymentMethod() == PAYMENTMETHOD.PAYMENTPLAN)
-    	   			if(this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.NL))
+       //if ((this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.DE) || this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.NL))
+    	   if (this instanceof PaymentMethodPayment) {
+    		   if (((PaymentMethodPayment)this).getPaymentMethod() == PAYMENTMETHOD.INVOICE || ((PaymentMethodPayment)this).getPaymentMethod() == PAYMENTMETHOD.PAYMENTPLAN)
+    	   			if (this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.NL))
     	   				errors += new IdentityValidator().validateNLIdentity(createOrderBuilder);
-    	   			else if(this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.DE))
+    	   			else if (this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.DE))
     	   				errors += new IdentityValidator().validateDEIdentity(createOrderBuilder);
        }
        
@@ -126,7 +126,7 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
     public void calculateRequestValues() throws ValidationException {
     	String errors = "";
         errors = validateOrder();
-        if(!errors.equals(""))
+        if (!errors.equals(""))
             throw new ValidationException(errors);
     	
         HostedRowFormatter formatter = new HostedRowFormatter();
@@ -153,7 +153,7 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
 
         form.setMerchantId(createOrderBuilder.getConfig().getMerchantId(PAYMENTTYPE.HOSTED, createOrderBuilder.getCountryCode()));
         form.setSecretWord(createOrderBuilder.getConfig().getSecret(PAYMENTTYPE.HOSTED, createOrderBuilder.getCountryCode()));
-        if(this.createOrderBuilder.getCountryCode() != null)
+        if (this.createOrderBuilder.getCountryCode() != null)
             form.setSubmitMessage(this.createOrderBuilder.getCountryCode());
         else 
             form.setSubmitMessage(COUNTRYCODE.SE);

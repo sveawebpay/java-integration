@@ -8,12 +8,12 @@ public class HostedOrderValidator extends OrderValidator {
     public String validate(CreateOrderBuilder order) {
         errors = "";
         
-        if(order.getCountryCode()==null)
+        if (order.getCountryCode()==null)
         	errors += "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n";
         //Check if paymentMethod is INVOICE or PAYMENTPLAN
-    /*    else if(order.getCountryCode()==COUNTRYCODE.NL)
+    /*    else if (order.getCountryCode()==COUNTRYCODE.NL)
             errors += new IdentityValidator().validateNLIdentity(order);
-        else if(order.getCountryCode()==COUNTRYCODE.DE)
+        else if (order.getCountryCode()==COUNTRYCODE.DE)
             errors += new IdentityValidator().validateDEIdentity(order);
         else
             errors += new IdentityValidator().validateNordicIdentity(order);
@@ -27,7 +27,7 @@ public class HostedOrderValidator extends OrderValidator {
     
     
     private void validateCurrency(CreateOrderBuilder order) {
-        if(order.getCurrency()==null)
+        if (order.getCurrency()==null)
             errors += "MISSING VALUE - Currency is required. Use setCurrency(...).\n";
     }
 
@@ -35,7 +35,7 @@ public class HostedOrderValidator extends OrderValidator {
         if (order.getClientOrderNumber() == null) { 
             this.errors += "MISSING VALUE - ClientOrderNumber is required. Use setClientOrderNumber(...).\n";
         }
-        else if((order.getClientOrderNumber() != null && "".equals(order.getClientOrderNumber())))
+        else if ((order.getClientOrderNumber() != null && "".equals(order.getClientOrderNumber())))
             this.errors += "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n";
     }
 }

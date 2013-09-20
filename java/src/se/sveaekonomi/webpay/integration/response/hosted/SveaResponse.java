@@ -63,7 +63,7 @@ public class SveaResponse extends Response {
             for (int i = 0; i < size; i++) {
                 Element element = (Element)nodeList.item(i);
                 int status = Integer.parseInt(getTagValue(element, "statuscode"));
-                if(status==0) {
+                if (status==0) {
                     this.setOrderAccepted(true);
                 	this.setResultCode("0 (ORDER_ACCEPTED)");
                 }

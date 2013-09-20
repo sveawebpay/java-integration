@@ -12,7 +12,7 @@ public class InvoicePayment extends WebServicePayment {
     }
     
     public SveaCreateOrderInformation setOrderType(SveaCreateOrderInformation information) {
-    	if(this.createOrderBuilder.getIsCompanyIdentity() && this.createOrderBuilder.getCompanyCustomer().getAddressSelector()!=null)
+    	if (this.createOrderBuilder.getIsCompanyIdentity() && this.createOrderBuilder.getCompanyCustomer().getAddressSelector()!=null)
     		this.orderInformation.AddressSelector = this.createOrderBuilder.getCompanyCustomer().getAddressSelector();
     	else 
     		this.orderInformation.AddressSelector = "";

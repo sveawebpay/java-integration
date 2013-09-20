@@ -34,7 +34,7 @@ public class ConfigurationProviderTestData implements ConfigurationProvider {
 
 	@Override
 	public URL getEndPoint(PAYMENTTYPE type) {
-		if(PAYMENTTYPE.HOSTED == type) {
+		if (PAYMENTTYPE.HOSTED == type) {
 			return SveaConfig.getTestPayPageUrl();
 		}
 		

@@ -9,7 +9,7 @@ public class SveaDeliverOrderInformation {
     
     public SveaDeliverOrderInformation(String orderType) {
         this.orderType = orderType;
-        if(this.orderType == "Invoice")
+        if (this.orderType == "Invoice")
         this.deliverInvoiceDetails = new SveaDeliverInvoiceDetails();
     }
     

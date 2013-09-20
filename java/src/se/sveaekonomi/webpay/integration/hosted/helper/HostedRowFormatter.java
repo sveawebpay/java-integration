@@ -54,7 +54,7 @@ public class HostedRowFormatter {
                 tempRow.setVat(new Double(tempRow.getAmount() - (row.getAmountExVat() * 100)).longValue());
             }
             
-            else if(row.getAmountIncVat() != null && row.getVatPercent() != null) {
+            else if (row.getAmountIncVat() != null && row.getVatPercent() != null) {
                 tempRow.setAmount(new Double((row.getAmountIncVat() * 100)).longValue());
                 tempRow.setVat(new Double(tempRow.getAmount() - (tempRow.getAmount() / vatFactor)).longValue());
             }
@@ -192,7 +192,7 @@ public class HostedRowFormatter {
             tempRow.setAmount(new Double(-(discountFactor * totalAmount)).longValue());
             totalAmount -= tempRow.getAmount();
             
-             if(totalVat > 0) {
+             if (totalVat > 0) {
                  tempRow.setVat(new Double(-(totalVat * discountFactor)).longValue());
              }
             

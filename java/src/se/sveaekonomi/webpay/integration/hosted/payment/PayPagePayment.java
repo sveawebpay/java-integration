@@ -33,9 +33,9 @@ public class PayPagePayment extends HostedPayment<PayPagePayment> {
 	}
 
 	public PayPagePayment setPaymentMethod(PAYMENTMETHOD paymentMethod) {
-		if(paymentMethod.equals(PAYMENTMETHOD.INVOICE))
+		if (paymentMethod.equals(PAYMENTMETHOD.INVOICE))
 			this.paymentMethod = getValidInvoiceTypeForIncludedList();
-		else if(paymentMethod.equals(PAYMENTMETHOD.PAYMENTPLAN))
+		else if (paymentMethod.equals(PAYMENTMETHOD.PAYMENTPLAN))
 			this.paymentMethod = getValidPaymentPlanTypeForIncludedList();
 		else
 			this.paymentMethod = paymentMethod.getValue();
@@ -82,7 +82,7 @@ public class PayPagePayment extends HostedPayment<PayPagePayment> {
 			if (pm.equals(PAYMENTMETHOD.INVOICE)) {
 				excludedPaymentMethods.addAll(INVOICETYPE.INVOICE_SE.getAllInvoiceValues());
 			}
-			else if(pm.equals(PAYMENTMETHOD.PAYMENTPLAN)) {
+			else if (pm.equals(PAYMENTMETHOD.PAYMENTPLAN)) {
 				excludedPaymentMethods.addAll(PAYMENTPLANTYPE.PAYMENTPLAN_SE.getAllPaymentPlanValues());
 			}
 			else
@@ -121,13 +121,13 @@ public class PayPagePayment extends HostedPayment<PayPagePayment> {
 	}
 	
 	private String getValidPaymentPlanTypeForIncludedList() {
-		for (PAYMENTPLANTYPE ppt : PAYMENTPLANTYPE.ALL_PAYMENTPLANTYPES){
+		for (PAYMENTPLANTYPE ppt : PAYMENTPLANTYPE.ALL_PAYMENTPLANTYPES) {
 			//never include from old flow to include list - won´t show in paypage
-			if(createOrderBuilder.getCountryCode().equals(COUNTRYCODE.SE) && 
+			if (createOrderBuilder.getCountryCode().equals(COUNTRYCODE.SE) && 
 					ppt.equals(PAYMENTPLANTYPE.PAYMENTPLANSE))
 				continue;
 			//include only Payment plan for current country 
-			else if(ppt.getCountryCode().equals(createOrderBuilder.getCountryCode()))	
+			else if (ppt.getCountryCode().equals(createOrderBuilder.getCountryCode()))	
 				return ppt.getValue();				  	
 		}
 		return "";
@@ -136,10 +136,10 @@ public class PayPagePayment extends HostedPayment<PayPagePayment> {
 	private String getValidInvoiceTypeForIncludedList() {
 		for (INVOICETYPE it : INVOICETYPE.ALL_INVOICETYPES) {
 			//never include old flow to include list
-			if(createOrderBuilder.getCountryCode().equals(COUNTRYCODE.SE) && 
+			if (createOrderBuilder.getCountryCode().equals(COUNTRYCODE.SE) && 
 					it.equals(INVOICETYPE.INVOICESE))
 				continue;
-			else if(it.getCountryCode().equals(createOrderBuilder.getCountryCode()))
+			else if (it.getCountryCode().equals(createOrderBuilder.getCountryCode()))
 				return it.getValue();
 		}
 		return "";
