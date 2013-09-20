@@ -2,7 +2,7 @@ package se.sveaekonomi.webpay.integration.order.identity;
 
 public abstract class CustomerIdentity <T extends CustomerIdentity<T>> {
     
-    private Integer phoneNumber;
+    private String phoneNumber;
     private String email;
     private String ipAddress;
     private String coAddress;
@@ -18,7 +18,7 @@ public abstract class CustomerIdentity <T extends CustomerIdentity<T>> {
     
     abstract public String getNationalIdNumber();
     
-    public Integer getPhoneNumber() {
+    public String getPhoneNumber() {
         return this.phoneNumber;
     }
     
@@ -27,7 +27,7 @@ public abstract class CustomerIdentity <T extends CustomerIdentity<T>> {
      * @param type phoneNumber
      * @return CustomerIdentity
      */
-    public T setPhoneNumber(int phoneNumber) {
+    public T setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
         return getGenericThis();
     }

@@ -12,7 +12,7 @@ public class BuildCustomerIdentity implements CreateBuilderCommand<CreateOrderBu
                 .setBirthDate(1923, 12, 12)
                 .setName("Tess", "Testson")
                 .setEmail("test@svea.com")
-                .setPhoneNumber(999999)
+                .setPhoneNumber("999999")
                 .setIpAddress("123.123.123")
                 .setStreetAddress("Gatan", "23")
                 .setZipCode("9999")

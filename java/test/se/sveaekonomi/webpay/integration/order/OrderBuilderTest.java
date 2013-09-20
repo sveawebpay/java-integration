@@ -28,6 +28,7 @@ public class OrderBuilderTest {
     public void testThatValidatorIsCalledOnBuild() throws ValidationException {
         order.build();
         VoidValidator v = (VoidValidator) order.getValidator();
+        
         assertEquals(1, v.noOfCalls);
     }
     
@@ -44,14 +45,14 @@ public class OrderBuilderTest {
     @Test
     public void testCustomerIdentity() {
         order = createTestCustomerIdentity(order);
-
+        
         assertEquals(order.getIndividualCustomer().getInitials(), "SB");
         assertEquals(order.getIndividualCustomer().getNationalIdNumber(), "194609052222");
         assertEquals(order.getIndividualCustomer().getFirstName(), "Tess");
         assertEquals(order.getIndividualCustomer().getLastName(), "Testson");
         assertEquals(order.getIndividualCustomer().getBirthDate(), 19231212, 0);
         assertEquals(order.getIndividualCustomer().getEmail(), "test@svea.com");
-        assertEquals(order.getIndividualCustomer().getPhoneNumber(), 999999, 0);
+        assertEquals(order.getIndividualCustomer().getPhoneNumber(), "999999");
         assertEquals(order.getIndividualCustomer().getIpAddress(), "123.123.123");
         assertEquals(order.getIndividualCustomer().getStreetAddress(), "Gatan");
         assertEquals(order.getIndividualCustomer().getHouseNumber(), "23");
@@ -85,7 +86,7 @@ public class OrderBuilderTest {
     @Test
     public void testBuildOrderWithShippingFee() {
         createShippingFeeRow();
-
+        
         assertEquals(order.getShippingFeeRows().get(0).getShippingId(), "33");
         assertEquals("Specification", order.getShippingFeeRows().get(0).getDescription());
         assertEquals(50, order.getShippingFeeRows().get(0).getAmountExVat(), 0);
@@ -95,7 +96,7 @@ public class OrderBuilderTest {
     @Test
     public void testBuildWithInvoiceFee() {
         createTestInvoiceFee();
-
+        
         assertEquals(order.getInvoiceFeeRows().get(0).getName(), "Svea fee");
         assertEquals(order.getInvoiceFeeRows().get(0).getDescription(), "Fee for invoice");
         assertEquals(order.getInvoiceFeeRows().get(0).getAmountExVat(), 50, 0);
@@ -107,7 +108,7 @@ public class OrderBuilderTest {
     @Test
     public void testBuildOrderWithFixedDiscount() {
         createTestFixedDiscountRow();
-
+        
         assertEquals("1", order.getFixedDiscountRows().get(0).getDiscountId());
         //assertEquals(100.00, order.getFixedDiscountRows().get(0).getDiscount(), 0);
         assertEquals(100.00, order.getFixedDiscountRows().get(0).getAmount(), 0);
@@ -117,7 +118,7 @@ public class OrderBuilderTest {
     @Test
     public void testBuildWithOrderWithRelativeDiscount() {
         createTestRelativeDiscountBuilder();
-
+        
         assertEquals("1", order.getRelativeDiscountRows().get(0).getDiscountId());
         assertEquals(50, order.getRelativeDiscountRows().get(0).getDiscountPercent());
         assertEquals("RelativeDiscount", order.getRelativeDiscountRows().get(0).getDescription());
@@ -135,7 +136,7 @@ public class OrderBuilderTest {
     @Test
     public void testBuildOrderWithCountryCode() {
         order.setCountryCode(COUNTRYCODE.SE);
-
+        
         assertEquals(COUNTRYCODE.SE, order.getCountryCode());
     }
     
@@ -160,14 +161,14 @@ public class OrderBuilderTest {
                 .setBirthDate(1923, 12, 12)
                 .setName("Tess", "Testson")
                 .setEmail("test@svea.com")
-                .setPhoneNumber(999999)
+                .setPhoneNumber("999999")
                 .setIpAddress("123.123.123")
                 .setStreetAddress("Gatan", "23")
                 .setCoAddress("c/o Eriksson")
                 .setZipCode("9999")
                 .setLocality("Stan"));
     }
-
+    
     private CreateOrderBuilder createCompanyDetails(CreateOrderBuilder orderBuilder) {
        return order.addCustomerDetails(Item.companyCustomer()
                 .setCompanyName("TestCompagniet")
@@ -207,8 +208,8 @@ public class OrderBuilderTest {
         order.addDiscount(Item.fixedDiscount()
                 .setDiscountId("1")
                 .setAmountIncVat((double) 100.00)
-              //  .setDiscount((double) 100.00)
-                  .setAmountIncVat((double) 100.00)
+                //.setDiscount((double) 100.00)
+                .setAmountIncVat((double) 100.00)
                 .setDescription("FixedDiscount"));
     }
     

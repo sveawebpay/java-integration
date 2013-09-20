@@ -119,7 +119,7 @@ public class HostedXmlBuilder extends XMLBuilder {
 				}
 				
 				if(individualCustomer.getPhoneNumber() != null) {
-					writeSimpleElement("phone", individualCustomer.getPhoneNumber().toString());
+					writeSimpleElement("phone", individualCustomer.getPhoneNumber());
 				}
 				
 				if(individualCustomer.getEmail() != null) {
@@ -153,7 +153,7 @@ public class HostedXmlBuilder extends XMLBuilder {
 				}
 				
 				if(companyCustomer.getPhoneNumber() != null) {
-					writeSimpleElement("phone", companyCustomer.getPhoneNumber().toString());
+					writeSimpleElement("phone", companyCustomer.getPhoneNumber());
 				}
 				
 				if(companyCustomer.getEmail() != null) {

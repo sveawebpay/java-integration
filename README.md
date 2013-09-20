@@ -319,7 +319,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
     .setEmail("test@svea.com")         		//Optional but desirable    
     .setIpAddress("123.123.123")       		//Optional but desirable
     .setCoAddress("c/o Eriksson")      		//Optional
-    .setPhoneNumber(999999))           		//Optional  
+    .setPhoneNumber("999999"))           	//Optional  
 ```
 
 ####4.3.2 Options for company customers
