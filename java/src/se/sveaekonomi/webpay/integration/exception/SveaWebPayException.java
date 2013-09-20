@@ -6,5 +6,5 @@ public class SveaWebPayException extends RuntimeException {
 		super(message, t);
 	}
 
-	private static final long serialVersionUID = -1974684452302746986L;	
+	private static final long serialVersionUID = -1974684452302746986L;
 }

@@ -20,7 +20,6 @@ import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
-
 /*******************************************************************************
  * Description of HostedPayment: Parent to CardPayment, DirectPayment, PayPagePayment 
  * and PaymentMethodPayment classes. Prepares an order and creates a payment form
@@ -39,7 +38,7 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
     protected String cancelUrl;
     protected ExcludePayments excluded;
     protected String languageCode = LANGUAGECODE.en.toString();
-
+    
     public HostedPayment(CreateOrderBuilder createOrderBuilder) {
         this.createOrderBuilder = createOrderBuilder;
         rowBuilder = new ArrayList<HostedOrderRowBuilder>();
@@ -63,7 +62,7 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
     public Long getAmount() {
         return amount;
     }
-
+    
     public Long getVat() {
         return vat;
     }
@@ -90,7 +89,7 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
         this.cancelUrl = returnUrl;
         return getGenericThis();
     }
-
+    
     public T setPayPageLanguageCode(LANGUAGECODE languageCode) {
     	this.languageCode = languageCode.toString();
     	return getGenericThis();
@@ -101,34 +100,37 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
     }
     
     public String validateOrder() {
+        String errors = "";	
+        if (this.returnUrl.equals("")) {
+            errors += "MISSING VALUE - Return url is required, setReturnUrl(...).\n";
+        }
        
-       String errors = "";	
-       if (this.returnUrl.equals(""))
-    	   errors += "MISSING VALUE - Return url is required, setReturnUrl(...).\n";
-       
-       HostedOrderValidator validator = new HostedOrderValidator();
-      //Check if payment method is EU country, PaymentMethod: INVOICE or PAYMENTPLAN    
-       //if ((this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.DE) || this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.NL))
-    	   if (this instanceof PaymentMethodPayment) {
-    		   if (((PaymentMethodPayment)this).getPaymentMethod() == PAYMENTMETHOD.INVOICE || ((PaymentMethodPayment)this).getPaymentMethod() == PAYMENTMETHOD.PAYMENTPLAN)
-    	   			if (this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.NL))
-    	   				errors += new IdentityValidator().validateNLIdentity(createOrderBuilder);
-    	   			else if (this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.DE))
-    	   				errors += new IdentityValidator().validateDEIdentity(createOrderBuilder);
-       }
-       
-       
-       errors += validator.validate(this.createOrderBuilder);
-       return errors;
-       
+        HostedOrderValidator validator = new HostedOrderValidator();
+        //Check if payment method is EU country, PaymentMethod: INVOICE or PAYMENTPLAN    
+        //if ((this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.DE) || this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.NL))
+        if (this instanceof PaymentMethodPayment) {
+            if (((PaymentMethodPayment)this).getPaymentMethod() == PAYMENTMETHOD.INVOICE || ((PaymentMethodPayment)this).getPaymentMethod() == PAYMENTMETHOD.PAYMENTPLAN) {
+       			if (this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.NL)) {
+       				errors += new IdentityValidator().validateNLIdentity(createOrderBuilder);
+       			} else if (this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.DE)) {
+       				errors += new IdentityValidator().validateDEIdentity(createOrderBuilder);
+       			}
+            }
+        }
+        
+        errors += validator.validate(this.createOrderBuilder);
+        return errors;
+    
     }
     
     public void calculateRequestValues() throws ValidationException {
     	String errors = "";
         errors = validateOrder();
-        if (!errors.equals(""))
+        
+        if (!errors.equals("")) {
             throw new ValidationException(errors);
-    	
+        }
+        
         HostedRowFormatter formatter = new HostedRowFormatter();
         
         rowBuilder = formatter.formatRows(createOrderBuilder);
@@ -150,16 +152,17 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
         
         PaymentForm form = new PaymentForm();
         form.setXmlMessage(xml);
-
+        
         form.setMerchantId(createOrderBuilder.getConfig().getMerchantId(PAYMENTTYPE.HOSTED, createOrderBuilder.getCountryCode()));
         form.setSecretWord(createOrderBuilder.getConfig().getSecretWord(PAYMENTTYPE.HOSTED, createOrderBuilder.getCountryCode()));
-        if (this.createOrderBuilder.getCountryCode() != null)
-            form.setSubmitMessage(this.createOrderBuilder.getCountryCode());
-        else 
-            form.setSubmitMessage(COUNTRYCODE.SE);
-
-        form.setPayPageUrl(createOrderBuilder.getConfig().getEndPoint(PAYMENTTYPE.HOSTED));
         
+        if (this.createOrderBuilder.getCountryCode() != null) {
+            form.setSubmitMessage(this.createOrderBuilder.getCountryCode());
+        } else {
+            form.setSubmitMessage(COUNTRYCODE.SE);
+        }
+        
+        form.setPayPageUrl(createOrderBuilder.getConfig().getEndPoint(PAYMENTTYPE.HOSTED));
         form.setForm();
         form.setHtmlFields();
         

@@ -28,7 +28,7 @@ public class HostedRowFormatterTest {
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder)newRows.get(0);
-
+        
         assertTrue("0".equals(newRow.getSku()));
         assertTrue("Tess".equals(newRow.getName()));
         assertTrue("Tester".equals(newRow.getDescription()));
@@ -49,7 +49,7 @@ public class HostedRowFormatterTest {
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder)newRows.get(0);
-
+        
         assertTrue("0".equals(newRow.getSku()));
         assertTrue("Tess".equals(newRow.getName()));
         assertTrue("Tester".equals(newRow.getDescription()));
@@ -66,7 +66,7 @@ public class HostedRowFormatterTest {
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(0);
-
+        
         assertTrue(500L == newRow.getAmount());
         assertTrue(100L == newRow.getVat());
     }
@@ -82,7 +82,7 @@ public class HostedRowFormatterTest {
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder)newRows.get(0);
-
+        
         assertTrue("0".equals(newRow.getSku()));
         assertTrue("Tess".equals(newRow.getName()));
         assertTrue("Tester".equals(newRow.getDescription()));
@@ -93,7 +93,6 @@ public class HostedRowFormatterTest {
     @Test
     public void testFormatFixedDiscountRowsAmount() {
     	CreateOrderBuilder order = WebPay.createOrder()
-    			
     			.addDiscount(Item.fixedDiscount()
     					.setAmountIncVat(4));
         
@@ -115,6 +114,7 @@ public class HostedRowFormatterTest {
     					.setDiscountId("0")
     					.setName("Tess")
     					.setDescription("Tester"));
+    	
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(1);
         
@@ -133,7 +133,7 @@ public class HostedRowFormatterTest {
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder)newRows.get(0);
-
+        
         assertTrue("0".equals(newRow.getSku()));
         assertTrue("Tess".equals(newRow.getName()));
         assertTrue("Tester".equals(newRow.getDescription()));
