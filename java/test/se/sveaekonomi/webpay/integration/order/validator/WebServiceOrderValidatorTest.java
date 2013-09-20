@@ -8,7 +8,6 @@ import javax.xml.bind.ValidationException;
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
-import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
@@ -16,17 +15,10 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
-import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
-import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public class WebServiceOrderValidatorTest {
     
@@ -42,7 +34,7 @@ public class WebServiceOrderValidatorTest {
         	.addCustomerDetails(Item.companyCustomer()
                 .setNationalIdNumber("666666")
                 .setEmail("test@svea.com")
-                .setPhoneNumber(999999)
+                .setPhoneNumber("999999")
                 .setIpAddress("123.123.123.123")
                 .setStreetAddress("Gatan", "23")
                 .setCoAddress("c/o Eriksson")
@@ -405,7 +397,7 @@ public class WebServiceOrderValidatorTest {
         .addCustomerDetails(Item.companyCustomer()
                 .setNationalIdNumber("666666")
                 .setEmail("test@svea.com")
-                .setPhoneNumber(999999)
+                .setPhoneNumber("999999")
                 .setIpAddress("123.123.123.123")
                 .setStreetAddress("Gatan", "23")
                 .setCoAddress("c/o Eriksson")

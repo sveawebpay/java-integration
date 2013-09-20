@@ -117,11 +117,11 @@ public class GetAddresses {
     
     public String validateRequest() {
     	String errors ="";
-    	if(countryCode == null)
+    	if (countryCode == null)
     		errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-    	if(orderType==null)
+    	if (orderType==null)
     		errors += "MISSING VALUE - orderType is required, use one of: setOrderTypePaymentPlan() or setOrderTypeInvoice().\n";
-    	if(this.nationalNumber==null && this.companyId==null)
+    	if (this.nationalNumber==null && this.companyId==null)
     		errors += "MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
     	return errors;
     }
@@ -129,7 +129,7 @@ public class GetAddresses {
     private SveaRequest<SveaGetAddresses> prepareRequest() throws ValidationException {
         String errors = "";
         errors = validateRequest();
-        if(errors.length() > 0)
+        if (errors.length() > 0)
             throw new ValidationException(errors);
     	
         SveaGetAddresses sveaAddress = new SveaGetAddresses();

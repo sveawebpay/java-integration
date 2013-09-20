@@ -24,8 +24,8 @@ public class SveaCustomerIdentity {
     public SveaIdentity CompanyIdentity;
     
     public SveaCustomerIdentity(SveaIdentity  identity, String key) {
-       if(identity != null)
-           if(key.equals("IndividualIdentity"))
+       if (identity != null)
+           if (key.equals("IndividualIdentity"))
                IndividualIdentity = identity;
            else
                CompanyIdentity = identity;           

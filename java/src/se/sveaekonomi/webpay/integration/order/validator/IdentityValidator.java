@@ -8,9 +8,9 @@ public class IdentityValidator {
         String errors = "";
         //check Company identity
         boolean isCompanyIdentity = order.getIsCompanyIdentity();
-        if(isCompanyIdentity && order.getCompanyCustomer().getNationalIdNumber()==null)
+        if (isCompanyIdentity && order.getCompanyCustomer().getNationalIdNumber()==null)
             errors += "MISSING VALUE - Organisation number is required for company customers when countrycode is SE, NO, DK or FI. Use setNationalIdNumber(...).\n";
-        else if(!isCompanyIdentity && order.getIndividualCustomer().getNationalIdNumber()==null)
+        else if (!isCompanyIdentity && order.getIndividualCustomer().getNationalIdNumber()==null)
             errors += "MISSING VALUE - National number(ssn) is required for individual customers when countrycode is SE, NO, DK or FI. Use setNationalIdNumber(...).\n";
         return errors;
     }
@@ -22,7 +22,7 @@ public class IdentityValidator {
             errors += "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use setInitials().\n";
         if (!order.getIsCompanyIdentity() && order.getIndividualCustomer().getBirthDate()<=0)
             errors += "MISSING VALUE - Birth date is required for individual customers when countrycode is NL. Use setBirthDate().\n";        
-        if(!order.getIsCompanyIdentity() && (order.getIndividualCustomer().getFirstName() == null || order.getIndividualCustomer().getLastName() == null))            
+        if (!order.getIsCompanyIdentity() && (order.getIndividualCustomer().getFirstName() == null || order.getIndividualCustomer().getLastName() == null))            
              errors += "MISSING VALUE - Name is required for individual customers when countrycode is NL. Use setName().\n";
         //Company
         if (order.getIsCompanyIdentity() && order.getCompanyCustomer().getVatNumber() == null)

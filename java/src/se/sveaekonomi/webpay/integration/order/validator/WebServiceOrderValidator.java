@@ -8,7 +8,7 @@ public class WebServiceOrderValidator extends OrderValidator {
     
     public String validate(CreateOrderBuilder order) {
         try {
-            if(order.getCustomerIdentity()==null)
+            if (order.getCustomerIdentity()==null)
                 errors += "MISSING VALUE - CustomerIdentity must be set.\n";
             
         if (order.getIsCompanyIdentity() && (order.getCompanyCustomer().getNationalIdNumber() != null
@@ -37,7 +37,7 @@ public class WebServiceOrderValidator extends OrderValidator {
         
         validateRequiredFieldsForOrder(order);
         validateOrderRow(order);
-        if(order.getOrderDate()==null)
+        if (order.getOrderDate()==null)
             this.errors += "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         }
         catch (NullPointerException e) {

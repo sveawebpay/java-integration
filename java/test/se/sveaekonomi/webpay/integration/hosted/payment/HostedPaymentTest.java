@@ -127,7 +127,7 @@ public class HostedPaymentTest {
                 .addCustomerDetails(Item.companyCustomer()
 	                .setNationalIdNumber("666666")
 	                .setEmail("test@svea.com")
-	                .setPhoneNumber(999999)
+	                .setPhoneNumber("999999")
 	                .setIpAddress("123.123.123.123")
 	                .setStreetAddress("Gatan", "23")
 	                .setCoAddress("c/o Eriksson")

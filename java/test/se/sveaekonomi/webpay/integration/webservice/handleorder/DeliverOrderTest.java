@@ -10,7 +10,6 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
@@ -18,7 +17,8 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class DeliverOrderTest {
- private DeliverOrderBuilder order;
+    
+    private DeliverOrderBuilder order;
     
     @Before
     public void setUp() {
@@ -27,15 +27,16 @@ public class DeliverOrderTest {
     
     @Test
     public void testBuildRequest() {
-       DeliverOrderBuilder request = order
-        .setOrderId(54086L);
-       assertEquals(54086L, request.getOrderId());
+        DeliverOrderBuilder request = order
+            .setOrderId(54086L);
+        
+        assertEquals(54086L, request.getOrderId());
     }
     
     @Test
     public void testDeliverInvoice() throws ValidationException {
-    	SveaRequest<SveaDeliverOrder> request = order.addOrderRow(TestingTool.createOrderRow())
-
+        SveaRequest<SveaDeliverOrder> request = order.addOrderRow(TestingTool.createOrderRow())
+        
         .addFee(Item.shippingFee()
             .setShippingId("33")
             .setName("shipping")
@@ -46,15 +47,15 @@ public class DeliverOrderTest {
             .setDiscountPercent(0))
         
         .addDiscount(Item.fixedDiscount()
-           .setAmountIncVat(10))
-                   
+            .setAmountIncVat(10))
+        
         .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
         .setOrderId(54086L)
         .setNumberOfCreditDays(1)
         .setCreditInvoice("id")
         .setCountryCode(COUNTRYCODE.SE)
         .deliverInvoiceOrder()
-            .prepareRequest();   
+            .prepareRequest();
         
         //First order row is a product
         assertEquals("1", request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(0).ArticleNumber);
@@ -64,6 +65,7 @@ public class DeliverOrderTest {
         assertEquals("st", request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(0).Unit);
         assertEquals(25, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(0).VatPercent, 0);
         assertEquals(0, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(0).DiscountPercent);
+        
         //Second order row is shipment
         assertEquals("33", request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(1).ArticleNumber);
         assertEquals("shipping: Specification", request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(1).Description);
@@ -72,6 +74,7 @@ public class DeliverOrderTest {
         assertEquals("st", request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(1).Unit);
         assertEquals(25, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(1).VatPercent, 0);
         assertEquals(0, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(1).DiscountPercent);
+        
         //discount
         assertEquals(-8.0, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(2).PricePerUnit, 0);
         

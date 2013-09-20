@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.WebPay;
-import se.sveaekonomi.webpay.integration.config.ConfigurationProviderInterfaceTest;
+import se.sveaekonomi.webpay.integration.config.ConfigurationProviderTestData;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
@@ -254,7 +254,7 @@ public class CreateInvoiceOrderTest {
     
 	@Test
 	public void testConfiguration() throws ValidationException, Exception {
-		ConfigurationProviderInterfaceTest conf = new ConfigurationProviderInterfaceTest();
+		ConfigurationProviderTestData conf = new ConfigurationProviderTestData();
 		CreateOrderResponse response = WebPay.createOrder(conf)
 	    		.addOrderRow(TestingTool.createOrderRow())
 	            .addOrderRow(TestingTool.createOrderRow())
@@ -267,15 +267,15 @@ public class CreateInvoiceOrderTest {
 	            .setCurrency(CURRENCY.SEK)
 	            .useInvoicePayment()
 	            .doRequest();
-	        
+	    
 	    assertEquals(response.isOrderAccepted(), true);
 	}
     
     @Test
     public void testFormatShippingFeeRowsZero() throws ValidationException, Exception {
-    	  CreateOrderResponse response = WebPay.createOrder()
+    	CreateOrderResponse response = WebPay.createOrder()
     		        .addOrderRow(TestingTool.createOrderRow())
-    		       .addFee(Item.shippingFee()  
+    		        .addFee(Item.shippingFee()  
 			            .setShippingId("0")
 			            .setName("Tess")
 			            .setDescription("Tester")
@@ -284,40 +284,39 @@ public class CreateInvoiceOrderTest {
 			            .setUnit("st"))
     		        .addCustomerDetails(Item.individualCustomer()
     		            .setNationalIdNumber("194605092222"))
-    		    
-    		            .setCountryCode(COUNTRYCODE.SE)
-    		            .setOrderDate("2012-12-12")
-    		            .setClientOrderNumber("33")
-    		            .setCurrency(CURRENCY.SEK)
-    		            .setCustomerReference("33")
-    		            .useInvoicePayment()
-    		        .doRequest();
-    	  
-    	  assertEquals(true, response.isOrderAccepted());
+    	            .setCountryCode(COUNTRYCODE.SE)
+    	            .setOrderDate("2012-12-12")
+    	            .setClientOrderNumber("33")
+    	            .setCurrency(CURRENCY.SEK)
+    	            .setCustomerReference("33")
+    	            .useInvoicePayment()
+    	            .doRequest();
+    	
+    	assertEquals(true, response.isOrderAccepted());
     }
     
     @Test
     public void testCompanyIdResponse() throws ValidationException, Exception {
-    	 CreateOrderResponse response = WebPay.createOrder()
-            	.addOrderRow(TestingTool.createOrderRow())
+    	CreateOrderResponse response = WebPay.createOrder()
+                .addOrderRow(TestingTool.createOrderRow())
     	        .addCustomerDetails(Item.companyCustomer()
-    	        	.setNationalIdNumber("4608142222"))
-            	.setCountryCode(COUNTRYCODE.SE)
+    	            .setNationalIdNumber("4608142222"))
+                .setCountryCode(COUNTRYCODE.SE)
                 .setClientOrderNumber("33")
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.SEK)
                 .useInvoicePayment()// returns an InvoiceOrder object
                 .doRequest();
-    	 
+    	
     	assertEquals(response.isIndividualIdentity, false);
     	assertEquals(response.isOrderAccepted(), true);
-    	 //assertEquals(request.request.Auth.ClientNumber.toString(), "79021"); 
-    	 //assertEquals(request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber, "4354kj");
+    	//assertEquals(request.request.Auth.ClientNumber.toString(), "79021"); 
+    	//assertEquals(request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber, "4354kj");
     }
     
     @Test
     public void testDECompanyIdentity() throws ValidationException, Exception {
-    	 CreateOrderResponse response = WebPay.createOrder()
+    	CreateOrderResponse response = WebPay.createOrder()
             	.addOrderRow(TestingTool.createOrderRow())
     	        .addCustomerDetails(Item.companyCustomer()
     	        	.setNationalIdNumber("12345")
@@ -332,7 +331,7 @@ public class CreateInvoiceOrderTest {
                 .useInvoicePayment()// returns an InvoiceOrder object
               //  .setPasswordBasedAuthorization("germanytest", "germanytest", 14997)
                 .doRequest();
-    	 
+    	
     	assertEquals(response.isIndividualIdentity, false);
     	assertEquals(response.isOrderAccepted(), true);
     }
@@ -348,7 +347,7 @@ public class CreateInvoiceOrderTest {
     	        	.setStreetAddress("broodstraat", "1")
     	        	.setZipCode("1111 CD")
     	        	.setLocality("BARENDRECHT"))
-               		
+                
             	.setCountryCode(COUNTRYCODE.NL)
             	
                 .setClientOrderNumber("33")
@@ -357,7 +356,7 @@ public class CreateInvoiceOrderTest {
                 .useInvoicePayment()// returns an InvoiceOrder object
                // .setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)
                 .doRequest();
-    	 
+    	
     	assertEquals(false, response.isIndividualIdentity);
     	assertEquals(true, response.isOrderAccepted());
     }

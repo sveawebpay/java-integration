@@ -35,12 +35,12 @@ public class DeliverOrderResponse extends Response {
                 this.setResultCode(getTagValue(node, "ResultCode"));
                 String errorMsg = getTagValue(node, "ErrorMessage");
                 
-                if(errorMsg != null)
+                if (errorMsg != null)
                     this.setErrorMessage(errorMsg);
                 else {                    
                     this.setAmount(Double.parseDouble(getTagValue(node, "Amount")));
                     tmpOrderType = getTagValue(node, "OrderType");
-                    if(tmpOrderType.equals(ORDERTYPE.Invoice.toString())) {
+                    if (tmpOrderType.equals(ORDERTYPE.Invoice.toString())) {
                         // Set child nodes from InvoiceResultDetails
                         setChildNodeValue(node, "InvoiceId");
                         setChildNodeValue(node, "DueDate");
@@ -92,19 +92,19 @@ public class DeliverOrderResponse extends Response {
     }
     
     private void setValue(String tagName, String tagValue) {
-        if(tagName.equals("InvoiceId"))
+        if (tagName.equals("InvoiceId"))
             this.setInvoiceId(Integer.valueOf(tagValue));
-        else if(tagName.equals("DueDate"))
+        else if (tagName.equals("DueDate"))
             this.setDueDate(tagValue);
-        else if(tagName.equals("InvoiceDate"))
+        else if (tagName.equals("InvoiceDate"))
             this.setInvoiceDate(tagValue);
-        else if(tagName.equals("InvoiceDistributionType"))
+        else if (tagName.equals("InvoiceDistributionType"))
             this.setInvoiceDistributionType(tagValue);
-        else if(tagName.equals("ContractNumber"))
+        else if (tagName.equals("ContractNumber"))
             this.setContractNumber(Integer.valueOf(tagValue));
-        else if(tagName.equals("Ocr"))
+        else if (tagName.equals("Ocr"))
             this.setOcr(tagValue);
-        else if(tagName.equals("LowestAmountToPay"))
+        else if (tagName.equals("LowestAmountToPay"))
             this.setLowestAmountToPay(Double.valueOf(tagValue));
     }
     

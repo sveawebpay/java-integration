@@ -39,7 +39,7 @@ public class PaymentPlanParamsResponse extends Response {
                 
                 this.setResultCode(getTagValue(node, "ResultCode"));
                 
-                if(this.isOrderAccepted()) {
+                if (this.isOrderAccepted()) {
 	                NodeList campaigns = node.getElementsByTagName("CampaignCodeInfo");
 	                int numberOfCampaigns = campaigns.getLength();
 	                

@@ -30,12 +30,12 @@ public class WebServiceXmlBuilder extends XMLBuilder{
         xmlw.writeStartElement(prefix+"request");
         getAuth(order.Auth);
         
-        if(order.CreateOrderInformation != null) {
+        if (order.CreateOrderInformation != null) {
             xmlw.writeStartElement(prefix+"CreateOrderInformation");
             writeSimpleElement(prefix+"ClientOrderNumber", order.CreateOrderInformation.ClientOrderNumber);
             serializeOrderRows(rows);
             
-            if(order.CreateOrderInformation.CustomerIdentity != null) {
+            if (order.CreateOrderInformation.CustomerIdentity != null) {
                 xmlw.writeStartElement(prefix+"CustomerIdentity");
                 writeSimpleElement(prefix+"NationalIdNumber", order.CreateOrderInformation.CustomerIdentity.NationalIdNumber);
                 writeSimpleElement(prefix+"Email", order.CreateOrderInformation.CustomerIdentity.Email);
@@ -50,7 +50,7 @@ public class WebServiceXmlBuilder extends XMLBuilder{
                 writeSimpleElement(prefix+"CountryCode", order.CreateOrderInformation.CustomerIdentity.CountryCode.toString());
                 writeSimpleElement(prefix+"CustomerType", order.CreateOrderInformation.CustomerIdentity.CustomerType);
                 
-                if(order.CreateOrderInformation.CustomerIdentity.IndividualIdentity != null) {
+                if (order.CreateOrderInformation.CustomerIdentity.IndividualIdentity != null) {
                     xmlw.writeStartElement(prefix+"IndividualIdentity");
                     writeSimpleElement(prefix+"FirstName", order.CreateOrderInformation.CustomerIdentity.IndividualIdentity.FirstName);
                     writeSimpleElement(prefix+"LastName", order.CreateOrderInformation.CustomerIdentity.IndividualIdentity.LastName);
@@ -59,7 +59,7 @@ public class WebServiceXmlBuilder extends XMLBuilder{
                     xmlw.writeEndElement(); //IndividualIdentity
                 }
                 
-                if(order.CreateOrderInformation.CustomerIdentity.CompanyIdentity != null) {
+                if (order.CreateOrderInformation.CustomerIdentity.CompanyIdentity != null) {
                     xmlw.writeStartElement(prefix+"CompanyIdentity");
                     writeSimpleElement(prefix+"CompanyIdentification", order.CreateOrderInformation.CustomerIdentity.CompanyIdentity.OrgNumber);
                     writeSimpleElement(prefix+"CompanyVatNumber", order.CreateOrderInformation.CustomerIdentity.CompanyIdentity.CompanyVatNumber);
@@ -75,7 +75,7 @@ public class WebServiceXmlBuilder extends XMLBuilder{
            
             writeSimpleElement(prefix+"OrderType", order.CreateOrderInformation.OrderType);                      
             
-            if(order.CreateOrderInformation.CreatePaymentPlanDetails != null && !order.CreateOrderInformation.OrderType.equals("Invoice")) {
+            if (order.CreateOrderInformation.CreatePaymentPlanDetails != null && !order.CreateOrderInformation.OrderType.equals("Invoice")) {
                 xmlw.writeStartElement(prefix+"CreatePaymentPlanDetails");
                 String code = (String)order.CreateOrderInformation.CreatePaymentPlanDetails.get("CampaignCode");
                 writeSimpleElement(prefix+"CampaignCode", code);              
@@ -106,11 +106,11 @@ public class WebServiceXmlBuilder extends XMLBuilder{
         xmlw.writeStartElement(prefix+"request");
         getAuth(request.auth);
         
-        if(request.deliverOrderInformation != null) {
+        if (request.deliverOrderInformation != null) {
             xmlw.writeStartElement(prefix+"DeliverOrderInformation");
             writeSimpleElement(prefix+"SveaOrderId", request.deliverOrderInformation.sveaOrderId);
             writeSimpleElement(prefix+"OrderType", request.deliverOrderInformation.orderType);
-            if(request.deliverOrderInformation.deliverInvoiceDetails!=null) {
+            if (request.deliverOrderInformation.deliverInvoiceDetails!=null) {
                 xmlw.writeStartElement(prefix+"DeliverInvoiceDetails");
                 writeSimpleElement(prefix+"NumberOfCreditDays", String.valueOf(request.deliverOrderInformation.deliverInvoiceDetails.NumberofCreditDays));
                 writeSimpleElement(prefix+"InvoiceDistributionType", request.deliverOrderInformation.deliverInvoiceDetails.InvoiceDistributionType);
@@ -140,7 +140,7 @@ public class WebServiceXmlBuilder extends XMLBuilder{
         xmlw.writeStartElement(prefix+"request");
         getAuth(order.Auth);
         
-        if(order.CloseOrderInformation != null) {
+        if (order.CloseOrderInformation != null) {
             xmlw.writeStartElement(prefix+"CloseOrderInformation");
         
             writeSimpleElement(prefix+"SveaOrderId", order.CloseOrderInformation.SveaOrderId.toString());
@@ -202,7 +202,7 @@ public class WebServiceXmlBuilder extends XMLBuilder{
     }
     
     private void getAuth(SveaAuth auth) throws XMLStreamException {
-        if(auth == null)
+        if (auth == null)
             return;
         
         xmlw.writeStartElement(prefix+"Auth");

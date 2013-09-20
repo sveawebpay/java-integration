@@ -62,7 +62,7 @@ public abstract class WebServicePayment {
         WebServiceOrderValidator validator = new WebServiceOrderValidator();
         return validator.validate(this.createOrderBuilder);
         }
-        catch (NullPointerException e){
+        catch (NullPointerException e) {
             return "NullPointer in validation WebServiceOrderValidator";
         }
     }
@@ -76,7 +76,7 @@ public abstract class WebServicePayment {
     public SveaRequest<SveaCreateOrder> prepareRequest() throws ValidationException {
         String errors = "";
         errors = validateOrder();
-        if(errors.length() > 0)
+        if (errors.length() > 0)
             throw new ValidationException(errors);
         
         SveaCreateOrder sveaOrder = new SveaCreateOrder();
@@ -119,7 +119,7 @@ public abstract class WebServicePayment {
         boolean isCompany = false;
         String companyId = "";
         
-        if(this.createOrderBuilder.getIsCompanyIdentity()) {
+        if (this.createOrderBuilder.getIsCompanyIdentity()) {
             isCompany = true;
             companyId = (this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()!=null) 
                     ? this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()
@@ -160,7 +160,7 @@ public abstract class WebServicePayment {
                     : String.valueOf(createOrderBuilder.getIndividualCustomer().getNationalIdNumber()));
         }
         
-        if(isCompany) {
+        if (isCompany) {
             customerIdentity.FullName = this.createOrderBuilder.getCompanyCustomer().getCompanyName()!=null ? this.createOrderBuilder.getCompanyCustomer().getCompanyName() : "";
         }
         else {

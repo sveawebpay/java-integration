@@ -44,7 +44,7 @@ public class HandleOrder {
         HandleOrderValidator validator = new HandleOrderValidator();
         return validator.validate(this.order);
         }
-        catch (NullPointerException e){
+        catch (NullPointerException e) {
             return "NullPointer in validaton of HandleOrder";
         }
     }
@@ -52,7 +52,7 @@ public class HandleOrder {
     public SveaRequest<SveaDeliverOrder> prepareRequest() throws ValidationException {
         String errors = "";
         errors = validateOrder();
-        if(errors.length() > 0)
+        if (errors.length() > 0)
             throw new ValidationException(errors);
         
         sveaDeliverOrder = new SveaDeliverOrder();
@@ -61,11 +61,11 @@ public class HandleOrder {
         orderInformation.setOrderId(String.valueOf(order.getOrderId()));
         orderInformation.setOrderType(order.getOrderType());
         
-        if(order.getOrderType().equals("Invoice")) {
+        if (order.getOrderType().equals("Invoice")) {
             SveaDeliverInvoiceDetails invoiceDetails = new SveaDeliverInvoiceDetails();
             invoiceDetails.InvoiceDistributionType = order.getInvoiceDistributionType();
             invoiceDetails.IsCreditInvoice = (order.getCreditInvoice()!=null ? true : false);
-            if(order.getCreditInvoice()!=null)
+            if (order.getCreditInvoice()!=null)
                 invoiceDetails.InvoiceIdToCredit = order.getCreditInvoice();
             invoiceDetails.NumberofCreditDays = (order.getNumberOfCreditDays()!=null 
                     ? order.getNumberOfCreditDays() : 0);
