@@ -24,8 +24,6 @@ public class SveaSoapBuilderTest {
         .setOrderDate("2012-12-12")
         .setCurrency(CURRENCY.SEK)
         .useInvoicePayment()
-           // .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
-            //returns an InvoicePayment object
         .doRequest();
         
         assertEquals(true, response.isOrderAccepted());

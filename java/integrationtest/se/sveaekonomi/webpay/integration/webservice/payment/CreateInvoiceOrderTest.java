@@ -24,8 +24,8 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 public class CreateInvoiceOrderTest {
     
     @Test
-    public void testInvoiceRequestForCustomerIdentityIndividualFromSE() throws Exception {
-    	CreateOrderResponse response = WebPay.createOrder()
+    public void testInvoiceForIndividualFromSE() throws Exception {
+        CreateOrderResponse response = WebPay.createOrder()
         .addOrderRow(TestingTool.createOrderRow())
         .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
             .setCountryCode(COUNTRYCODE.SE)
@@ -34,26 +34,26 @@ public class CreateInvoiceOrderTest {
             .setCurrency(CURRENCY.SEK)
             .useInvoicePayment()
             .doRequest();
-    	
+        
+        assertEquals("Invoice", response.orderType);
         assertEquals(true, response.isOrderAccepted());
         assertEquals(true, response.sveaWillBuyOrder);
         assertEquals(250.00, response.amount, 0);
         
         //CustomerIdentity
-        assertEquals("194605092222", response.customerIdentity.getNationalIdNumber());
-        assertEquals("SE", response.customerIdentity.getCountryCode());
         assertEquals("Individual", response.customerIdentity.getCustomerType());
-        assertEquals("Invoice", response.orderType);
+        assertEquals("194605092222", response.customerIdentity.getNationalIdNumber());
         assertEquals("Persson, Tess T", response.customerIdentity.getFullName());
         assertEquals("Testgatan 1", response.customerIdentity.getStreet());
         assertEquals("c/o Eriksson, Erik", response.customerIdentity.getCoAddress());
         assertEquals("99999", response.customerIdentity.getZipCode());
         assertEquals("Stan", response.customerIdentity.getCity());
+        assertEquals("SE", response.customerIdentity.getCountryCode());
     }
     
     @Test
     public void testInvoiceRequestFailing() throws Exception {
-    	CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder()
         .addOrderRow(TestingTool.createOrderRow())
         .addCustomerDetails(Item.individualCustomer().setNationalIdNumber(""))
             .setCountryCode(COUNTRYCODE.SE)
@@ -62,7 +62,7 @@ public class CreateInvoiceOrderTest {
             .setCurrency(CURRENCY.SEK)
             .useInvoicePayment()
             .doRequest();
-    	
+        
         assertEquals(false, response.isOrderAccepted());
     }
     
@@ -77,13 +77,15 @@ public class CreateInvoiceOrderTest {
     	            .setName("Prod")
     	            .setVatPercent(12.5)
     	            .setDiscountPercent(0))
-    	        .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
-    	            .setCountryCode(COUNTRYCODE.SE)
-    	            .setOrderDate("2012-12-12")
-    	            .setClientOrderNumber("33")
-    	            .setCurrency(CURRENCY.SEK)
-    	            .useInvoicePayment()
-    	            .doRequest();
+    	        .addCustomerDetails(Item.individualCustomer()
+    	        		.setNationalIdNumber("194605092222"))
+    	         
+    	        .setCountryCode(COUNTRYCODE.SE)
+    	        .setOrderDate("2012-12-12")
+    	        .setClientOrderNumber("33")
+    	        .setCurrency(CURRENCY.SEK)
+    	        .useInvoicePayment()
+    	        .doRequest();
     	
     	assertEquals(true, response.isOrderAccepted());
     	assertEquals(25.52, response.amount, 0);
@@ -95,17 +97,20 @@ public class CreateInvoiceOrderTest {
     	        .addOrderRow(Item.orderRow()
     	            .setArticleNumber("1")
     	            .setQuantity(2)
-    	            .setAmountExVat(22.68)    
+    	            .setAmountExVat(22.68)
     	            .setDescription("Specification")
     	            .setName("Prod")
     	            .setVatPercent(12.5)
     	            .setDiscountPercent(0))
-    	        .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
-    	            .setCountryCode(COUNTRYCODE.SE)
-    	            .setOrderDate("2012-12-12")
-    	            .setClientOrderNumber("33")
-    	            .setCurrency(CURRENCY.SEK)
-    	            .useInvoicePayment()
+    	        
+    	        .addCustomerDetails(Item.individualCustomer()
+    	            .setNationalIdNumber("194605092222"))
+    	        
+    	        .setCountryCode(COUNTRYCODE.SE)
+    	        .setOrderDate("2012-12-12")
+    	        .setClientOrderNumber("33")
+    	        .setCurrency(CURRENCY.SEK)
+    	        .useInvoicePayment()
     	            .doRequest();
     	
     	assertEquals(true, response.isOrderAccepted());
@@ -114,7 +119,7 @@ public class CreateInvoiceOrderTest {
     
     @Test
     public void testInvoiceCompanySe() throws Exception {
-    	CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.SEK)
@@ -123,15 +128,14 @@ public class CreateInvoiceOrderTest {
             .addOrderRow(TestingTool.createOrderRow())
             .useInvoicePayment()
             .doRequest();
-
+        
         assertEquals(true, response.isOrderAccepted());
         assertEquals(true, response.sveaWillBuyOrder);
-        //assertEquals("4608142222", response.customerIdentity.nationalIdNumber);
         assertEquals("SE", response.customerIdentity.getCountryCode());
     }
     
     @Test
-    public void testInvoiceRequestObjectForCustomerIdentityIndividualFromNL() throws Exception {
+    public void testInvoiceForIndividualFromNl() throws Exception {
     	CreateOrderResponse response = WebPay.createOrder()
     			.addOrderRow(TestingTool.createOrderRow())
         
@@ -143,13 +147,13 @@ public class CreateInvoiceOrderTest {
     					.setLocality("BARENDRECHT")
     					.setZipCode("1102 HG")
     					.setCoAddress("138"))
+    			
                 .setCountryCode(COUNTRYCODE.NL)
                 .setClientOrderNumber("33")
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.EUR)
-                .useInvoicePayment()// returns an InvoiceOrder object
-                //.setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)
-                .doRequest();  
+                .useInvoicePayment()
+                .doRequest();
         
         assertEquals(true, response.isOrderAccepted());
         assertEquals(true, response.sveaWillBuyOrder);
@@ -158,17 +162,17 @@ public class CreateInvoiceOrderTest {
         assertEquals("Invoice" , response.orderType);
         
         //CustomerIdentity
+        assertEquals("Individual", response.customerIdentity.getCustomerType());
+        assertEquals("Sneider Boasman", response.customerIdentity.getFullName());
+        assertEquals(null, response.customerIdentity.getPhoneNumber());
         assertEquals(null, response.customerIdentity.getEmail());
         assertEquals(null, response.customerIdentity.getIpAddress());
-        assertEquals("NL", response.customerIdentity.getCountryCode());
-        assertEquals("23", response.customerIdentity.getHouseNumber());
-        assertEquals("Individual", response.customerIdentity.getCustomerType());
-        assertEquals(null, response.customerIdentity.getPhoneNumber());
-        assertEquals("Sneider Boasman", response.customerIdentity.getFullName());
         assertEquals("Gate 42", response.customerIdentity.getStreet());
         assertEquals("138", response.customerIdentity.getCoAddress());
+        assertEquals("23", response.customerIdentity.getHouseNumber());
         assertEquals("1102 HG", response.customerIdentity.getZipCode());
         assertEquals("BARENDRECHT", response.customerIdentity.getCity());
+        assertEquals("NL", response.customerIdentity.getCountryCode());
     }
     
     @Test
@@ -186,9 +190,9 @@ public class CreateInvoiceOrderTest {
             .useInvoicePayment()
             .doRequest();
         
-    	assertEquals(response.isOrderAccepted(), true);
+        assertEquals(response.isOrderAccepted(), true);
     }
-
+    
     @Test
     public void testInvoiceRequestUsingAmountIncVatWithZeroVatPercent() throws Exception {
         CreateOrderResponse response = WebPay.createOrder()
@@ -244,7 +248,6 @@ public class CreateInvoiceOrderTest {
         
         CloseOrder closeRequest = WebPay.closeOrder()
                 .setOrderId(orderId)
-                //.setCountryCode(COUNTRYCODE.SE)
                 .closeInvoiceOrder();
         
         String expectedMsg = "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
@@ -275,7 +278,7 @@ public class CreateInvoiceOrderTest {
     public void testFormatShippingFeeRowsZero() throws ValidationException, Exception {
     	CreateOrderResponse response = WebPay.createOrder()
     		        .addOrderRow(TestingTool.createOrderRow())
-    		        .addFee(Item.shippingFee()  
+    		        .addFee(Item.shippingFee()
 			            .setShippingId("0")
 			            .setName("Tess")
 			            .setDescription("Tester")
@@ -297,25 +300,23 @@ public class CreateInvoiceOrderTest {
     
     @Test
     public void testCompanyIdResponse() throws ValidationException, Exception {
-    	CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder()
                 .addOrderRow(TestingTool.createOrderRow())
-    	        .addCustomerDetails(Item.companyCustomer()
-    	            .setNationalIdNumber("4608142222"))
+                .addCustomerDetails(Item.companyCustomer()
+                    .setNationalIdNumber("4608142222"))
                 .setCountryCode(COUNTRYCODE.SE)
                 .setClientOrderNumber("33")
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.SEK)
-                .useInvoicePayment()// returns an InvoiceOrder object
+                .useInvoicePayment()
                 .doRequest();
     	
     	assertEquals(response.isIndividualIdentity, false);
     	assertEquals(response.isOrderAccepted(), true);
-    	//assertEquals(request.request.Auth.ClientNumber.toString(), "79021"); 
-    	//assertEquals(request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber, "4354kj");
     }
     
     @Test
-    public void testDECompanyIdentity() throws ValidationException, Exception {
+    public void testInvoiceCompanyDe() throws ValidationException, Exception {
     	CreateOrderResponse response = WebPay.createOrder()
             	.addOrderRow(TestingTool.createOrderRow())
     	        .addCustomerDetails(Item.companyCustomer()
@@ -328,16 +329,15 @@ public class CreateInvoiceOrderTest {
                 .setClientOrderNumber("33")
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.EUR)
-                .useInvoicePayment()// returns an InvoiceOrder object
-              //  .setPasswordBasedAuthorization("germanytest", "germanytest", 14997)
+                .useInvoicePayment()
                 .doRequest();
-    	
-    	assertEquals(response.isIndividualIdentity, false);
-    	assertEquals(response.isOrderAccepted(), true);
+        
+        assertEquals(response.isIndividualIdentity, false);
+        assertEquals(response.isOrderAccepted(), true);
     }
     
     @Test
-    public void testNLCompanyIdentity() throws ValidationException, Exception {
+    public void testInvoiceCompanyNl() throws ValidationException, Exception {
     	CreateOrderResponse response = WebPay.createOrder()
             	.addOrderRow(TestingTool.createOrderRow())
     	        .addCustomerDetails(Item.companyCustomer()
@@ -353,11 +353,10 @@ public class CreateInvoiceOrderTest {
                 .setClientOrderNumber("33")
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.EUR)
-                .useInvoicePayment()// returns an InvoiceOrder object
-               // .setPasswordBasedAuthorization("hollandtest", "hollandtest", 85997)
+                .useInvoicePayment()
                 .doRequest();
-    	
-    	assertEquals(false, response.isIndividualIdentity);
-    	assertEquals(true, response.isOrderAccepted());
+        
+        assertEquals(false, response.isIndividualIdentity);
+        assertEquals(true, response.isOrderAccepted());
     }
 }

@@ -40,7 +40,7 @@ public class CloseOrderTest {
         
         try {
             String xml = xmlBuilder.getCreateOrderEuXml(request.request);
-            String url = SveaConfig.getTestWebserviceUrl().toString();//WebPay.createOrder().get.getConfig().getWebserviceUrl().toString();
+            String url = SveaConfig.getTestWebserviceUrl().toString();
             String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
             NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
             CreateOrderResponse response = new CreateOrderResponse(soapResponse);
@@ -57,8 +57,8 @@ public class CloseOrderTest {
                 .setOrderId(orderId)
                 .setCountryCode(COUNTRYCODE.SE)
                 .closeInvoiceOrder()
-                .doRequest();   
-         
+                .doRequest();
+        
         assertEquals(true, closeResponse.isOrderAccepted());
     }
 }
