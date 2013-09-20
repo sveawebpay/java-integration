@@ -148,17 +148,16 @@ public class CardPaymentTest {
                   .setDiscountPercent(0))
               
        .addCustomerDetails(Item.companyCustomer()
-                  .setVatNumber("2345234")
-                  .setCompanyName("TestCompagniet"))
+               .setVatNumber("2345234")
+               .setCompanyName("TestCompagniet"))
               
-                .setCountryCode(COUNTRYCODE.SE)
-                .setOrderDate("2012-12-12")
-                .setClientOrderNumber("33")
-                .setCurrency(CURRENCY.SEK)
-                .usePayPageCardOnly()
-              //  .setMerchantIdBasedAuthorization(4444, "secret")
-                .setReturnUrl("http://myurl.se")
-                .getPaymentForm();
+               .setCountryCode(COUNTRYCODE.SE)
+               .setOrderDate("2012-12-12")
+               .setClientOrderNumber("33")
+               .setCurrency(CURRENCY.SEK)
+               .usePayPageCardOnly()
+               .setReturnUrl("http://myurl.se")
+               .getPaymentForm();
         
         assertEquals(form.getMerchantId(), "1130");
         assertEquals(form.getSecretWord(), "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3");

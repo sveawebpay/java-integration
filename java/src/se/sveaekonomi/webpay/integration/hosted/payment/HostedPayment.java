@@ -152,7 +152,7 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
         form.setXmlMessage(xml);
 
         form.setMerchantId(createOrderBuilder.getConfig().getMerchantId(PAYMENTTYPE.HOSTED, createOrderBuilder.getCountryCode()));
-        form.setSecretWord(createOrderBuilder.getConfig().getSecret(PAYMENTTYPE.HOSTED, createOrderBuilder.getCountryCode()));
+        form.setSecretWord(createOrderBuilder.getConfig().getSecretWord(PAYMENTTYPE.HOSTED, createOrderBuilder.getCountryCode()));
         if (this.createOrderBuilder.getCountryCode() != null)
             form.setSubmitMessage(this.createOrderBuilder.getCountryCode());
         else 

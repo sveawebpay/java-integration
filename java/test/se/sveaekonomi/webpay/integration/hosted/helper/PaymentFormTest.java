@@ -21,12 +21,12 @@ public class PaymentFormTest {
     
     private static final String SecretWord = "secret";
     private static final String MerchantId = "1234";
-
+    
     @Test
     public void testSetForm() throws ValidationException, Exception {
-
         String base64Payment = Base64Util.encodeBase64String("0");
         String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
+        
         PaymentForm form = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setCurrency(CURRENCY.SEK)
@@ -47,12 +47,13 @@ public class PaymentFormTest {
                 .usePayPageDirectBankOnly()  
                 .setReturnUrl("http:myurl")
                 .getPaymentForm();
+        
         form
                 .setMessageBase64(base64Payment)
                 .setMerchantId(MerchantId)
                 .setSecretWord(SecretWord)
                 .setForm();
-
+        
         final String EXPECTED = "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\""
                 + form.getUrl()
                 + "\">"
@@ -65,7 +66,7 @@ public class PaymentFormTest {
         
         assertEquals(EXPECTED, form.getCompleteForm());
     }
-
+    
     @Test
     public void testSetHtmlFields() throws ValidationException, Exception {
         String base64Payment = Base64Util.encodeBase64String("0");
@@ -94,7 +95,7 @@ public class PaymentFormTest {
         
         form.setMessageBase64(base64Payment)
             .setMerchantId(MerchantId)
-            .setSecretWord(SecretWord)         
+            .setSecretWord(SecretWord)
             .setHtmlFields();
         
         Map<String, String> formHtmlFields = form.getFormHtmlFields();
