@@ -310,16 +310,16 @@ depending on country and customer type. For SE, NO, DK and FI national id number
 ```java
 .addCustomerDetails(Item.individualCustomer()
     .setNationalIdNumber("194605092222")	//Required for individual customers in SE, NO, DK and FI
-    .setInitials("SB")                 		//Required for individual customers in NL 
     .setBirthDate(1923, 12, 12)        		//Required for individual customers in NL and DE
-    .setName("Tess", "Testson")        		//Required for individual customers in NL and DE    
-    .setStreetAddress("Gatan", 23)     		//Required in NL and DE    
-    .setZipCode(9999)                  		//Required in NL and DE
-    .setLocality("Stan")               		//Required in NL and DE    
-    .setEmail("test@svea.com")         		//Optional but desirable    
-    .setIpAddress("123.123.123")       		//Optional but desirable
+    .setName("Tess", "Testson")        		//Required for individual customers in NL and DE
+    .setInitials("SB")                 		//Required for individual customers in NL
+    .setStreetAddress("Gatan", 23)     		//Required in NL and DE
     .setCoAddress("c/o Eriksson")      		//Optional
-    .setPhoneNumber("999999"))           	//Optional  
+    .setZipCode(9999)                  		//Required in NL and DE
+    .setLocality("Stan")               		//Required in NL and DE
+    .setPhoneNumber("999999"))           	//Optional
+    .setEmail("test@svea.com")         		//Optional but desirable
+    .setIpAddress("123.123.123")       		//Optional but desirable
 ```
 
 ####4.3.2 Options for company customers
@@ -399,11 +399,11 @@ and the html form element as array.
 PaymentForm form = WebPay.createOrder()
 .addOrderRow(Item.orderRow()
 	.setArticleNumber("1")
-	.setQuantity(2)
-	.setAmountExVat(100.00)
-	.setDescription("Specification")
 	.setName("Prod")
+	.setDescription("Specification")
+	.setQuantity(2)
 	.setUnit("st")
+	.setAmountExVat(100.00)
 	.setVatPercent(25.00)
 	.setDiscountPercent(0))
 		
@@ -442,11 +442,11 @@ Function getPaymentForm() returns object type *PaymentForm* with accessible memb
 PaymentForm form = WebPay.createOrder()
 .addOrderRow(Item.orderRow()
 	.setArticleNumber("1")
-	.setQuantity(2)
-	.setAmountExVat(100.00)
-	.setDescription("Specification")
 	.setName("Prod")
+	.setDescription("Specification")
+	.setQuantity(2)
 	.setUnit("st")
+	.setAmountExVat(100.00)
 	.setVatPercent(25.00)
 	.setDiscountPercent(0))
 		
@@ -483,11 +483,11 @@ setPaymentMethod, includePaymentMethods, excludeCardPaymentMethods or excludeDir
 PaymentForm form = WebPay.createOrder()
 .addOrderRow(Item.orderRow()
 	.setArticleNumber("1")
-	.setQuantity(2)
-	.setAmountExVat(100.00)
-	.setDescription("Specification")
 	.setName("Prod")
+	.setDescription("Specification")
+	.setQuantity(2)
 	.setUnit("st")
+	.setAmountExVat(100.00)
 	.setVatPercent(25.00)
 	.setDiscountPercent(0))   
 	
@@ -561,11 +561,11 @@ Set your store authorization here.
 PaymentForm form = WebPay.createOrder()
 .addOrderRow(Item.orderRow()
 	.setArticleNumber("1")
-	.setQuantity(2)
-	.setAmountExVat(100.00)
-	.setDescription("Specification")
 	.setName("Prod")
+	.setDescription("Specification")
+	.setQuantity(2)
 	.setUnit("st")
+	.setAmountExVat(100.00)
 	.setVatPercent(25)
 	.setDiscountPercent(0))                  
 		
@@ -604,13 +604,13 @@ Returns *CreateOrderResponse* object. Set your store authorization here.
 CreateOrderResponse response = WebPay.createOrder()
 .addOrderRow(Item.orderRow()
 .setArticleNumber("1")
-.setQuantity(2)
-.setAmountExVat(100.00)
-.setDescription("Specification")
 .setName("Prod")
+.setDescription("Specification")
+.setQuantity(2)
 .setUnit("st")
+.setAmountExVat(100.00)
 .setVatPercent(25.00)
-.setDiscountPercent(0))   
+.setDiscountPercent(0))
 
 .setCountryCode(COUNTRYCODE.SE)						//Required
 .setCustomerReference("33")
@@ -628,11 +628,11 @@ Param: Campaign code recieved from getPaymentPlanParams().
 CreateOrderResponse response = WebPay.createOrder()
 .addOrderRow(Item.orderRow()
 	.setArticleNumber("1")
-	.setQuantity(2)
-	.setAmountExVat(100.00)
-	.setDescription("Specification")
 	.setName("Prod")
+	.setDescription("Specification")
+	.setQuantity(2)
 	.setUnit("st")
+	.setAmountExVat(100.00)
 	.setVatPercent(25.00)
 	.setDiscountPercent(0))   
 	
@@ -726,14 +726,14 @@ createOrder.addOrderRows(orderRows);
 #### 7.1.1 OrderRow
 All products and other items. It is required to have a minimum of one row.
 ```java
-.addOrderRow(Item.orderRow()   
+.addOrderRow(Item.orderRow()
+   .setArticleNumber("1")               //Optional
+   .setName("Prod")                 	//Optional
+   .setDescription("Specification")	    //Optional
    .setQuantity(2)              	    //Required
+   .setUnit("st")                      	//Optional
    .setAmountExVat(100.00)  	        //Required
    .setVatPercent(25.00)    	        //Required
-   .setArticleNumber("1")               //Optional
-   .setDescription("Specification")	    //Optional    
-   .setName("Prod")                 	//Optional
-   .setUnit("st")                      	//Optional
    .setDiscountPercent(0))             	//Optional
 ```
 
@@ -775,11 +775,11 @@ If invoice order is credit invoice use setCreditInvoice(invoiceId) and setNumber
 DeliverOrderResponse response = WebPay.deliverOrder(
 .addOrderRow(Item.orderRow()
 	.setArticleNumber("1")
-	.setQuantity(2)
-	.setAmountExVat(100.00)
-	.setDescription("Specification")
 	.setName("Prod")
+	.setDescription("Specification")
+	.setQuantity(2)
 	.setUnit("st")
+	.setAmountExVat(100.00)
 	.setVatPercent(25.00)
 	.setDiscountPercent(0))
 		
