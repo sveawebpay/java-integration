@@ -36,7 +36,7 @@ public class WebServiceXmlBuilderTest {
             .setOrderDate("2012-12-12")
             .setClientOrderNumber("33")
             .setCurrency(CURRENCY.SEK)
-            .useInvoicePayment() //returns an InvoicePayment object
+            .useInvoicePayment()
             .prepareRequest();
         
         try {

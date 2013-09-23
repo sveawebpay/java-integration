@@ -204,6 +204,6 @@ public class HostedRowFormatterTest {
         ArrayList<HostedOrderRowBuilder> rows = new ArrayList<HostedOrderRowBuilder>();
         rows.add(row);
         
-        assertTrue(-200L == new HostedRowFormatter().formatTotalVat(rows)); 
+        assertTrue(-200L == new HostedRowFormatter().formatTotalVat(rows));
     }
 }

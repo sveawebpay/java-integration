@@ -16,6 +16,6 @@ public class BuildCustomerIdentity implements CreateBuilderCommand<CreateOrderBu
                 .setIpAddress("123.123.123")
                 .setStreetAddress("Gatan", "23")
                 .setZipCode("9999")
-                .setLocality("Stan"));  
+                .setLocality("Stan"));
     }
 }

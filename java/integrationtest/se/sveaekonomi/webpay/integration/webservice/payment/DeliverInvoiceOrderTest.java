@@ -49,8 +49,8 @@ public class DeliverInvoiceOrderTest {
     }
 	
     private long createInvoiceAndReturnOrderId() throws Exception {
-    	CreateOrderResponse response = WebPay.createOrder()
-        	.addOrderRow(TestingTool.createOrderRow())
+        CreateOrderResponse response = WebPay.createOrder()
+            .addOrderRow(TestingTool.createOrderRow())
             .addCustomerDetails(Item.individualCustomer()
                 .setNationalIdNumber("194605092222"))
             .setCountryCode(COUNTRYCODE.SE)

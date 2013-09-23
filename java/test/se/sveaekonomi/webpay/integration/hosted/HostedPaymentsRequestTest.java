@@ -48,8 +48,8 @@ public class HostedPaymentsRequestTest {
         .setClientOrderNumber("33")
         .setCurrency(CURRENCY.SEK)
         .usePayPageCardOnly()
-            .setReturnUrl("http://myurl.se")
-            .getPaymentForm();
+        .setReturnUrl("http://myurl.se")
+        .getPaymentForm();
         
         Assert.assertNotNull(form);
     }

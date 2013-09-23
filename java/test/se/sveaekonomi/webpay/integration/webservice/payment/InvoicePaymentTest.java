@@ -32,7 +32,7 @@ public class InvoicePaymentTest {
         
         assertEquals("194609052222", request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber);
         assertEquals(COUNTRYCODE.SE, request.request.CreateOrderInformation.CustomerIdentity.CountryCode);
-        assertEquals("Individual", request.request.CreateOrderInformation.CustomerIdentity.CustomerType);    
+        assertEquals("Individual", request.request.CreateOrderInformation.CustomerIdentity.CustomerType);
     }
     
     @Test

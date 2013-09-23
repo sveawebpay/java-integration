@@ -125,7 +125,7 @@ public class CreateInvoiceOrderTest {
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.SEK)
             .addCustomerDetails(Item.companyCustomer()
-        		.setNationalIdNumber("4608142222"))
+                    .setNationalIdNumber("4608142222"))
             .addOrderRow(TestingTool.createOrderRow())
             .useInvoicePayment()
             .doRequest();
@@ -200,8 +200,8 @@ public class CreateInvoiceOrderTest {
         .addOrderRow(TestingTool.createOrderRow())
         .addOrderRow(TestingTool.createOrderRow()) 
         .addCustomerDetails(Item.individualCustomer()
-        		.setNationalIdNumber("194605092222"))
-        		
+                .setNationalIdNumber("194605092222"))
+            
             .setCountryCode(COUNTRYCODE.SE)
             .setOrderDate("2012-12-12")
             .setClientOrderNumber("33")
@@ -221,14 +221,14 @@ public class CreateInvoiceOrderTest {
         
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
         .addOrderRow(TestingTool.createOrderRow())
-        .addCustomerDetails(Item.individualCustomer()
-            .setNationalIdNumber("194605092222"))
-        .setCountryCode(COUNTRYCODE.SE)
-        .setClientOrderNumber("33")
-        .setOrderDate("2012-12-12")
-        .setCurrency(CURRENCY.SEK)
-        .useInvoicePayment()
-        .prepareRequest();
+            .addCustomerDetails(Item.individualCustomer()
+                .setNationalIdNumber("194605092222"))
+            .setCountryCode(COUNTRYCODE.SE)
+            .setClientOrderNumber("33")
+            .setOrderDate("2012-12-12")
+            .setCurrency(CURRENCY.SEK)
+            .useInvoicePayment()
+            .prepareRequest();
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         
@@ -260,7 +260,7 @@ public class CreateInvoiceOrderTest {
 	public void testConfiguration() throws ValidationException, Exception {
 		ConfigurationProviderTestData conf = new ConfigurationProviderTestData();
 		CreateOrderResponse response = WebPay.createOrder(conf)
-	    		.addOrderRow(TestingTool.createOrderRow())
+		        .addOrderRow(TestingTool.createOrderRow())
 	            .addOrderRow(TestingTool.createOrderRow())
 	            .addCustomerDetails(Item.individualCustomer()
 	                .setNationalIdNumber("194605092222")
@@ -326,7 +326,7 @@ public class CreateInvoiceOrderTest {
     	        	.setStreetAddress("Adalbertsteinweg", "1")
     	        	.setZipCode("52070")
     	        	.setLocality("AACHEN"))
-            	.setCountryCode(COUNTRYCODE.DE)
+                .setCountryCode(COUNTRYCODE.DE)
                 .setClientOrderNumber("33")
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.EUR)
@@ -342,15 +342,14 @@ public class CreateInvoiceOrderTest {
     	CreateOrderResponse response = WebPay.createOrder()
             	.addOrderRow(TestingTool.createOrderRowNl())
     	        .addCustomerDetails(Item.companyCustomer()
-    	        	//.setNationalIdNumber("12345")
     	        	.setCompanyName("Svea bakkerij 123")
     	        	.setVatNumber("NL123456789A12")
     	        	.setStreetAddress("broodstraat", "1")
     	        	.setZipCode("1111 CD")
     	        	.setLocality("BARENDRECHT"))
                 
-            	.setCountryCode(COUNTRYCODE.NL)
-            	
+                .setCountryCode(COUNTRYCODE.NL)
+                
                 .setClientOrderNumber("33")
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.EUR)

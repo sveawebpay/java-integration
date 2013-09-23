@@ -83,7 +83,7 @@ public class DeliverOrderTest {
         assertEquals(true, request.request.deliverOrderInformation.deliverInvoiceDetails.IsCreditInvoice);
         assertEquals("id", request.request.deliverOrderInformation.deliverInvoiceDetails.InvoiceIdToCredit);
         assertEquals("54086", request.request.deliverOrderInformation.sveaOrderId);
-        assertEquals("Invoice", request.request.deliverOrderInformation.orderType);  
+        assertEquals("Invoice", request.request.deliverOrderInformation.orderType);
     }
     
     @Test

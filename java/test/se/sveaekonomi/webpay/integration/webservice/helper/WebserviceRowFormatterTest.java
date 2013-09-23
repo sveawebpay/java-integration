@@ -49,7 +49,7 @@ public class WebserviceRowFormatterTest {
     public void testFormatShippingFeeRows() throws ValidationException, Exception {
     	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
     		        .addOrderRow(TestingTool.createOrderRow())
-    		       
+    		        
     		        .addFee(Item.shippingFee()
 			            .setShippingId("0")
 			            .setName("Tess")
