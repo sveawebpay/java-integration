@@ -5,9 +5,7 @@ import java.net.URL;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**
- * 
  * @author klar-sar
- *
  */
 public class SveaTestConfigurationProvider implements ConfigurationProvider{
 	
@@ -15,20 +13,20 @@ public class SveaTestConfigurationProvider implements ConfigurationProvider{
 	public String getUsername(PAYMENTTYPE type, COUNTRYCODE country) {
 		if (type == PAYMENTTYPE.INVOICE || type == PAYMENTTYPE.PAYMENTPLAN) {
 			switch (country) {
-			case SE:
-				return "sverigetest";
-			case NO:
-				return "webpay_test_no";
-			case FI:
-				return "finlandtest";
-			case DK:
-				return "danmarktest";
-			case NL:
-				return "hollandtest";
-			case DE:
-				return "germanytest";
-			default:
-				break;
+				case SE:
+					return "sverigetest";
+				case NO:
+					return "webpay_test_no";
+				case FI:
+					return "finlandtest";
+				case DK:
+					return "danmarktest";
+				case NL:
+					return "hollandtest";
+				case DE:
+					return "germanytest";
+				default:
+					break;
 			}
 		}
 		return "";
@@ -38,22 +36,23 @@ public class SveaTestConfigurationProvider implements ConfigurationProvider{
 	public String getPassword(PAYMENTTYPE type, COUNTRYCODE country) {
 		if (type == PAYMENTTYPE.INVOICE || type == PAYMENTTYPE.PAYMENTPLAN) {
 			switch (country) {
-			case SE:
-				return "sverigetest";
-			case NO:
-				return "dvn349hvs9+29hvs";
-			case FI:
-				return "finlandtest";
-			case DK:
-				return "danmarktest";
-			case NL:
-				return "hollandtest";
-			case DE:
-				return "germanytest";
-			default:
-				break;
+				case SE:
+					return "sverigetest";
+				case NO:
+					return "dvn349hvs9+29hvs";
+				case FI:
+					return "finlandtest";
+				case DK:
+					return "danmarktest";
+				case NL:
+					return "hollandtest";
+				case DE:
+					return "germanytest";
+				default:
+					break;
 			}
 		}
+		
 		return "";
 	}
 
@@ -93,27 +92,34 @@ public class SveaTestConfigurationProvider implements ConfigurationProvider{
 			default:
 				break;
 			}
+			
 		return 0;
 	}
 
 	@Override
 	public String getMerchantId(PAYMENTTYPE type, COUNTRYCODE country) {
-		if (PAYMENTTYPE.HOSTED == type)
+		if (PAYMENTTYPE.HOSTED == type) {
 			return "1130";
+		}
+		
 		return "";
 	}
 
 	@Override
-	public String getSecret(PAYMENTTYPE type, COUNTRYCODE country) {
-		if (PAYMENTTYPE.HOSTED == type)
+	public String getSecretWord(PAYMENTTYPE type, COUNTRYCODE country) {
+		if (PAYMENTTYPE.HOSTED == type) {
 			return "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3";
+		}
+		
 		return "";
 	}
 
 	@Override
 	public URL getEndPoint(PAYMENTTYPE type) {
-		if (PAYMENTTYPE.HOSTED == type)
+		if (PAYMENTTYPE.HOSTED == type) {
 			return SveaConfig.getTestPayPageUrl();
+		}
+		
 		return SveaConfig.getTestWebserviceUrl();
 	}
 }

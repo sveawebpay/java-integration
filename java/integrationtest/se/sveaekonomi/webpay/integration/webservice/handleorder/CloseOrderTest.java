@@ -26,21 +26,21 @@ public class CloseOrderTest {
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-        .addOrderRow(TestingTool.createOrderRow())
-        .addCustomerDetails(Item.individualCustomer()
-            .setNationalIdNumber("194605092222"))
-        .setCountryCode(COUNTRYCODE.SE)
-        .setClientOrderNumber("33")
-        .setOrderDate("2012-12-12")
-        .setCurrency(CURRENCY.SEK)
-        .useInvoicePayment()
-        .prepareRequest();
+                .addOrderRow(TestingTool.createOrderRow())
+                .addCustomerDetails(Item.individualCustomer()
+                    .setNationalIdNumber("194605092222"))
+                .setCountryCode(COUNTRYCODE.SE)
+                .setClientOrderNumber("33")
+                .setOrderDate("2012-12-12")
+                .setCurrency(CURRENCY.SEK)
+                .useInvoicePayment()
+                .prepareRequest();
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         
         try {
             String xml = xmlBuilder.getCreateOrderEuXml(request.request);
-            String url = SveaConfig.getTestWebserviceUrl().toString();//WebPay.createOrder().get.getConfig().getWebserviceUrl().toString();
+            String url = SveaConfig.getTestWebserviceUrl().toString();
             String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
             NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
             CreateOrderResponse response = new CreateOrderResponse(soapResponse);
@@ -57,8 +57,8 @@ public class CloseOrderTest {
                 .setOrderId(orderId)
                 .setCountryCode(COUNTRYCODE.SE)
                 .closeInvoiceOrder()
-                .doRequest();   
-         
+                .doRequest();
+        
         assertEquals(true, closeResponse.isOrderAccepted());
     }
 }

@@ -28,10 +28,10 @@ public class PayPagePaymentTest {
         excludePaymentMethods.add(PAYMENTMETHOD.NORDEA_SE);
         
         PayPagePayment payPagePayment = WebPay.createOrder()
-        .setCountryCode(COUNTRYCODE.SE)
-        .usePayPage()
-        .excludePaymentMethods(excludePaymentMethods);
-              
+            .setCountryCode(COUNTRYCODE.SE)
+            .usePayPage()
+            .excludePaymentMethods(excludePaymentMethods);
+        
         assertEquals(8, payPagePayment.getExcludedPaymentMethods().size());
         assertEquals(INVOICETYPE.INVOICESE.getValue(), payPagePayment.getExcludedPaymentMethods().get(0));
         assertEquals(INVOICETYPE.INVOICE_SE.getValue(), payPagePayment.getExcludedPaymentMethods().get(1));
@@ -53,26 +53,23 @@ public class PayPagePaymentTest {
         assertEquals(payPagePayment.getExcludedPaymentMethods().size(), 23);
         assertEquals(payPagePayment.getIncludedPaymentMethods().size(), 0);
     }
- 
+    
     @Test
     public void testDefaultSE() throws ValidationException {
-    	PayPagePayment payPagePayment = WebPay.createOrder()
-    	.setCountryCode(COUNTRYCODE.SE)
-    	.usePayPage();
-    	               
+        PayPagePayment payPagePayment = WebPay.createOrder()
+            .setCountryCode(COUNTRYCODE.SE)
+            .usePayPage();
         payPagePayment.configureExcludedPaymentMethods();
         
         assertEquals(0, payPagePayment.getExcludedPaymentMethods().size());
     }
- 
     
     @Test
     public void setPaymentMethodTestSE() throws ValidationException {
-    	PayPagePayment payPagePayment = WebPay.createOrder()
-    	.setCountryCode(COUNTRYCODE.SE)
-    	.usePayPage()
-    	.setPaymentMethod(PAYMENTMETHOD.INVOICE);
-                
+        PayPagePayment payPagePayment = WebPay.createOrder()
+            .setCountryCode(COUNTRYCODE.SE)
+            .usePayPage()
+            .setPaymentMethod(PAYMENTMETHOD.INVOICE);
         payPagePayment.configureExcludedPaymentMethods();
         
         assertEquals(INVOICETYPE.INVOICE_SE.getValue(), payPagePayment.getPaymentMethod());
@@ -80,11 +77,10 @@ public class PayPagePaymentTest {
     
     @Test
     public void setPaymentMethodTestDE() throws ValidationException {
-    	PayPagePayment payPagePayment = WebPay.createOrder()
-    	.setCountryCode(COUNTRYCODE.DE)
-    	.usePayPage()
-    	.setPaymentMethod(PAYMENTMETHOD.INVOICE);
-                
+        PayPagePayment payPagePayment = WebPay.createOrder()
+            .setCountryCode(COUNTRYCODE.DE)
+            .usePayPage()
+            .setPaymentMethod(PAYMENTMETHOD.INVOICE);
         payPagePayment.configureExcludedPaymentMethods();
         
         assertEquals(INVOICETYPE.INVOICE_DE.getValue(), payPagePayment.getPaymentMethod());
@@ -92,25 +88,23 @@ public class PayPagePaymentTest {
     
     @Test
     public void setPaymentMethodPaymentPlanTestSE() throws ValidationException {
-    	PayPagePayment payPagePayment = WebPay.createOrder()
-    	.setCountryCode(COUNTRYCODE.SE)
-    	.usePayPage()
-    	.setPaymentMethod(PAYMENTMETHOD.PAYMENTPLAN);
-                
+        PayPagePayment payPagePayment = WebPay.createOrder()
+            .setCountryCode(COUNTRYCODE.SE)
+            .usePayPage()
+            .setPaymentMethod(PAYMENTMETHOD.PAYMENTPLAN);
         payPagePayment.configureExcludedPaymentMethods();
         
         assertEquals(PAYMENTPLANTYPE.PAYMENTPLAN_SE.getValue(), payPagePayment.getPaymentMethod());
     }
     @Test
     public void excludePaymentPlanTestSE() throws ValidationException {
-    	ArrayList<PAYMENTMETHOD> list = new ArrayList<PAYMENTMETHOD>();
-    	list.add(PAYMENTMETHOD.PAYMENTPLAN);
-    	PayPagePayment payPagePayment = WebPay.createOrder()
-    	.setCountryCode(COUNTRYCODE.SE)
-    	.usePayPage()
-    	.excludePaymentMethods(list);
-    	//.setPaymentMethod(PAYMENTMETHOD.PAYMENTPLAN);
-                
+        ArrayList<PAYMENTMETHOD> list = new ArrayList<PAYMENTMETHOD>();
+        list.add(PAYMENTMETHOD.PAYMENTPLAN);
+        PayPagePayment payPagePayment = WebPay.createOrder()
+            .setCountryCode(COUNTRYCODE.SE)
+            .usePayPage()
+            .excludePaymentMethods(list);
+        
         payPagePayment.configureExcludedPaymentMethods();
         
         assertEquals(PAYMENTPLANTYPE.PAYMENTPLAN_SE.getValue(),payPagePayment.getExcludedPaymentMethods().get(0));
@@ -118,10 +112,11 @@ public class PayPagePaymentTest {
     
     @Test
     public void setPaymentMethodPaymentPlanTestNL() throws ValidationException {
-    	PayPagePayment payPagePayment = WebPay.createOrder()
-    	.setCountryCode(COUNTRYCODE.NL)
-    	.usePayPage()
-    	.setPaymentMethod(PAYMENTMETHOD.PAYMENTPLAN);
+        PayPagePayment payPagePayment = WebPay.createOrder()
+            .setCountryCode(COUNTRYCODE.NL)
+            .usePayPage()
+            .setPaymentMethod(PAYMENTMETHOD.PAYMENTPLAN);
+        
         payPagePayment.configureExcludedPaymentMethods();
         
         assertEquals(PAYMENTPLANTYPE.PAYMENTPLAN_NL.getValue(), payPagePayment.getPaymentMethod());
@@ -144,9 +139,10 @@ public class PayPagePaymentTest {
         List<PAYMENTMETHOD> includedPaymentMethods = new ArrayList<PAYMENTMETHOD>();
         includedPaymentMethods.add(PAYMENTMETHOD.KORTCERT);
         includedPaymentMethods.add(PAYMENTMETHOD.SKRILL);
+        
         PayPagePayment payPagePayment = WebPay.createOrder()
     	        .setCountryCode(COUNTRYCODE.SE)
-    	        .usePayPage()    	   
+    	        .usePayPage()
     	        .includePaymentMethods(includedPaymentMethods);
         
         assertEquals(payPagePayment.getIncludedPaymentMethods().size(), 2);
@@ -180,7 +176,7 @@ public class PayPagePaymentTest {
 	        .setCountryCode(COUNTRYCODE.SE)
 	        .usePayPage()
 	        .includePaymentMethods(includedPaymentMethods);
-                       
+        
         assertEquals(14, payPagePayment.getExcludedPaymentMethods().size());
         assertEquals("SVEAINVOICESE", payPagePayment.getExcludedPaymentMethods().get(0));
         assertEquals("SVEASPLITSE", payPagePayment.getExcludedPaymentMethods().get(1));
@@ -193,13 +189,13 @@ public class PayPagePaymentTest {
     
     @Test
     public void testBuildPayPagePaymentWithExcludepaymentMethods() throws ValidationException, Exception{
-    	List<PAYMENTMETHOD> paymentMethods = new ArrayList<PAYMENTMETHOD>();
+        List<PAYMENTMETHOD> paymentMethods = new ArrayList<PAYMENTMETHOD>();
         paymentMethods.add(PAYMENTMETHOD.INVOICE);
         paymentMethods.add(PAYMENTMETHOD.KORTCERT);
-    	
+        
         PaymentForm form = WebPay.createOrder()
-            .addOrderRow(TestingTool.createOrderRow())  
-           .addFee(Item.shippingFee()
+            .addOrderRow(TestingTool.createOrderRow())
+            .addFee(Item.shippingFee()
                 .setAmountExVat(50)
                 .setShippingId("33")
                 .setDescription("Specification")
@@ -210,28 +206,20 @@ public class PayPagePaymentTest {
                     .setUnit("st")
                     .setName("Relative")
                    .setDescription("RelativeDiscount"))
-               .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
-               .setCountryCode(COUNTRYCODE.SE)
-               .setClientOrderNumber("33")
-               .setOrderDate("2012-12-12")
-               .setCurrency(CURRENCY.SEK)
-               .usePayPage()
-               		.excludePaymentMethods(paymentMethods)
-                    .setReturnUrl("http://myurl.se")
-                    .getPaymentForm();
-
-       String xml = form.getXmlMessage();
-       String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--Message generated by Integration package Java--><payment><customerrefno>33</customerrefno><returnurl>http://myurl.se</returnurl><currency>SEK</currency><amount>18750</amount><lang>en</lang><customer><ssn>194605092222</ssn><country>SE</country></customer><vat>3750</vat><orderrows><row><sku>1</sku><name>Prod</name><description>Specification</description><amount>12500</amount><vat>2500</vat><quantity>2</quantity><unit>st</unit></row><row><sku>33</sku><name></name><description>Specification</description><amount>6250</amount><vat>1250</vat><quantity>1</quantity></row><row><sku>1</sku><name>Relative</name><description>RelativeDiscount</description><amount>-12500</amount><vat>-2500</vat><quantity>1</quantity><unit>st</unit></row></orderrows><excludepaymentmethods><exclude>SVEAINVOICESE</exclude><exclude>SVEAINVOICEEU_SE</exclude><exclude>SVEAINVOICEEU_NO</exclude><exclude>SVEAINVOICEEU_DK</exclude><exclude>SVEAINVOICEEU_FI</exclude><exclude>SVEAINVOICEEU_NL</exclude><exclude>SVEAINVOICEEU_DE</exclude><exclude>KORTCERT</exclude></excludepaymentmethods><iscompany>false</iscompany><addinvoicefee>false</addinvoicefee></payment>";
-       assertEquals(expected, xml);
-    
-        //test values are expected as:
-        //currency = "SEK"
-        //amount = 18750
-        //vat = 3750  //may change when we recalculate in CardPvayment class
-        //Order row 1(order): amount = 12500
-        //Order row 2(shipping fee): amount = 6250
-        //Order row 3(relative discount: amount = -12500
-        //PaymentMethods included: KORTCERT, SVEAINVOICESE
+            .addCustomerDetails(Item.individualCustomer()
+                .setNationalIdNumber("194605092222"))
+            .setCountryCode(COUNTRYCODE.SE)
+            .setClientOrderNumber("33")
+            .setOrderDate("2012-12-12")
+            .setCurrency(CURRENCY.SEK)
+            .usePayPage()
+            .excludePaymentMethods(paymentMethods)
+            .setReturnUrl("http://myurl.se")
+            .getPaymentForm();
+        
+        String xml = form.getXmlMessage();
+        String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--Message generated by Integration package Java--><payment><customerrefno>33</customerrefno><returnurl>http://myurl.se</returnurl><currency>SEK</currency><amount>18750</amount><lang>en</lang><customer><ssn>194605092222</ssn><country>SE</country></customer><vat>3750</vat><orderrows><row><sku>1</sku><name>Prod</name><description>Specification</description><amount>12500</amount><vat>2500</vat><quantity>2</quantity><unit>st</unit></row><row><sku>33</sku><name></name><description>Specification</description><amount>6250</amount><vat>1250</vat><quantity>1</quantity></row><row><sku>1</sku><name>Relative</name><description>RelativeDiscount</description><amount>-12500</amount><vat>-2500</vat><quantity>1</quantity><unit>st</unit></row></orderrows><excludepaymentmethods><exclude>SVEAINVOICESE</exclude><exclude>SVEAINVOICEEU_SE</exclude><exclude>SVEAINVOICEEU_NO</exclude><exclude>SVEAINVOICEEU_DK</exclude><exclude>SVEAINVOICEEU_FI</exclude><exclude>SVEAINVOICEEU_NL</exclude><exclude>SVEAINVOICEEU_DE</exclude><exclude>KORTCERT</exclude></excludepaymentmethods><iscompany>false</iscompany><addinvoicefee>false</addinvoicefee></payment>";
+        assertEquals(expected, xml);
     }
     
     @Test
@@ -244,19 +232,20 @@ public class PayPagePaymentTest {
                     .setUnit("st")
                     .setName("Relative")
                     .setDescription("RelativeDiscount"))
-            .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
-                .setCountryCode(COUNTRYCODE.SE)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK)
-                .usePayPage()
-                	.excludeCardPaymentMethods()
-                    .setReturnUrl("http://myurl.se")
-                    .getPaymentForm();
-
+            .addCustomerDetails(Item.individualCustomer()
+                .setNationalIdNumber("194605092222"))
+            .setCountryCode(COUNTRYCODE.SE)
+            .setClientOrderNumber("33")
+            .setOrderDate("2012-12-12")
+            .setCurrency(CURRENCY.SEK)
+            .usePayPage()
+            .excludeCardPaymentMethods()
+            .setReturnUrl("http://myurl.se")
+            .getPaymentForm();
+        
         String xml = form.getXmlMessage();
-		String paymentMethod = xml.substring(xml.indexOf("KORTCERT"), xml.indexOf("KORTCERT")+8);
-		String paymentMethod2 = xml.substring(xml.indexOf("SKRILL"), xml.indexOf("SKRILL")+6);
+		String paymentMethod = xml.substring(xml.indexOf("KORTCERT"), xml.indexOf("KORTCERT") + 8);
+		String paymentMethod2 = xml.substring(xml.indexOf("SKRILL"), xml.indexOf("SKRILL") + 6);
 		
 		assertEquals(PAYMENTMETHOD.KORTCERT.getValue(), paymentMethod);
 		assertEquals("SKRILL", paymentMethod2); 
@@ -264,7 +253,7 @@ public class PayPagePaymentTest {
     
     @Test
     public void testExcludeDirectPaymentMethods() throws ValidationException, Exception {
-    	PaymentForm form = WebPay.createOrder()
+        PaymentForm form = WebPay.createOrder()
             .addOrderRow(TestingTool.createOrderRow())
             .addDiscount(Item.relativeDiscount()
                     .setDiscountId("1")
@@ -272,30 +261,31 @@ public class PayPagePaymentTest {
                     .setUnit("st")
                     .setName("Relative")
                     .setDescription("RelativeDiscount"))
-            .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
-                .setCountryCode(COUNTRYCODE.SE)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK)
-                .usePayPage()
-                	.excludeDirectPaymentMethods()
-                    .setReturnUrl("http://myurl.se")
-                    .getPaymentForm();
-
-			String xml = form.getXmlMessage();
-			String paymentMethod = xml.substring(xml.indexOf("DBNORDEASE"), xml.indexOf("DBNORDEASE")+10);
-			assertEquals(PAYMENTMETHOD.NORDEA_SE.getValue(), paymentMethod);
+            .addCustomerDetails(Item.individualCustomer()
+                .setNationalIdNumber("194605092222"))
+            .setCountryCode(COUNTRYCODE.SE)
+            .setClientOrderNumber("33")
+            .setOrderDate("2012-12-12")
+            .setCurrency(CURRENCY.SEK)
+            .usePayPage()
+            .excludeDirectPaymentMethods()
+            .setReturnUrl("http://myurl.se")
+            .getPaymentForm();
+        
+		String xml = form.getXmlMessage();
+		String paymentMethod = xml.substring(xml.indexOf("DBNORDEASE"), xml.indexOf("DBNORDEASE") + 10);
+		assertEquals(PAYMENTMETHOD.NORDEA_SE.getValue(), paymentMethod);
     }
     
     @Test
     public void testIncludePaymentPlan() throws ValidationException, Exception {
-    	List<PAYMENTMETHOD> paymentMethods = new ArrayList<PAYMENTMETHOD>();
+        List<PAYMENTMETHOD> paymentMethods = new ArrayList<PAYMENTMETHOD>();
         paymentMethods.add(PAYMENTMETHOD.PAYMENTPLAN);
         paymentMethods.add(PAYMENTMETHOD.SKRILL);
         PaymentForm form = WebPay.createOrder()
                 .addOrderRow(TestingTool.createOrderRow())
                
-               .addDiscount(Item.relativeDiscount()
+                .addDiscount(Item.relativeDiscount()
                         .setDiscountId("1")
                         .setDiscountPercent(50)
                         .setUnit("st")
@@ -307,16 +297,16 @@ public class PayPagePaymentTest {
                     .setOrderDate("2012-12-12")
                     .setCurrency(CURRENCY.SEK)
                     .usePayPage()
-                        .includePaymentMethods(paymentMethods)
-                        .setReturnUrl("http://myurl.se")
-                        .getPaymentForm();
+                    .includePaymentMethods(paymentMethods)
+                    .setReturnUrl("http://myurl.se")
+                    .getPaymentForm();
             
             String xml = form.getXmlMessage();
-            String paymentMethod = xml.substring(xml.indexOf("SVEAINVOICESE"), xml.indexOf("SVEAINVOICESE")+13);
+            String paymentMethod = xml.substring(xml.indexOf("SVEAINVOICESE"), xml.indexOf("SVEAINVOICESE") + 13);
             //check to see if the first value is one of the excluded ones
-            assertEquals(INVOICETYPE.INVOICESE.getValue(), paymentMethod);	
+            assertEquals(INVOICETYPE.INVOICESE.getValue(), paymentMethod);
     }
-
+    
     @Test
     public void testpayPagePaymentIncludePaymentMethods() throws ValidationException, Exception {
     	List<PAYMENTMETHOD> paymentMethods = new ArrayList<PAYMENTMETHOD>();
@@ -325,7 +315,7 @@ public class PayPagePaymentTest {
         PaymentForm form = WebPay.createOrder()
             .addOrderRow(TestingTool.createOrderRow())
            
-           .addDiscount(Item.relativeDiscount()
+            .addDiscount(Item.relativeDiscount()
                     .setDiscountId("1")
                     .setDiscountPercent(50)
                     .setUnit("st")
@@ -337,12 +327,12 @@ public class PayPagePaymentTest {
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.SEK)
                 .usePayPage()
-                    .includePaymentMethods(paymentMethods)
-                    .setReturnUrl("http://myurl.se")
-                    .getPaymentForm();
+                .includePaymentMethods(paymentMethods)
+                .setReturnUrl("http://myurl.se")
+                .getPaymentForm();
         
         String xml = form.getXmlMessage();
-        String paymentMethod = xml.substring(xml.indexOf("SVEAINVOICESE"), xml.indexOf("SVEAINVOICESE")+13);
+        String paymentMethod = xml.substring(xml.indexOf("SVEAINVOICESE"), xml.indexOf("SVEAINVOICESE") + 13);
         //check to see if the first value is one of the excluded ones
         assertEquals(INVOICETYPE.INVOICESE.getValue(), paymentMethod);
     }
@@ -351,8 +341,8 @@ public class PayPagePaymentTest {
     public void testPayPagePaymentIncludePaymentMethodsEmpty() throws ValidationException, Exception {
         PaymentForm form = WebPay.createOrder()
             .addOrderRow(TestingTool.createOrderRow())
-           
-           .addDiscount(Item.relativeDiscount()
+            
+            .addDiscount(Item.relativeDiscount()
                     .setDiscountId("1")
                     .setDiscountPercent(50)
                     .setUnit("st")
@@ -364,13 +354,13 @@ public class PayPagePaymentTest {
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.SEK)
                 .usePayPage()
-                    .includePaymentMethods()
-                    .setReturnUrl("http://myurl.se")
-                    .getPaymentForm();
+                .includePaymentMethods()
+                .setReturnUrl("http://myurl.se")
+                .getPaymentForm();
         
         String xml = form.getXmlMessage();
-        String paymentMethod = xml.substring(xml.indexOf("SVEAINVOICESE"), xml.indexOf("SVEAINVOICESE")+13);
-        String paymentMethod2 = xml.substring(xml.indexOf("DBSWEDBANKSE"), xml.indexOf("DBSWEDBANKSE")+12);
+        String paymentMethod = xml.substring(xml.indexOf("SVEAINVOICESE"), xml.indexOf("SVEAINVOICESE") + 13);
+        String paymentMethod2 = xml.substring(xml.indexOf("DBSWEDBANKSE"), xml.indexOf("DBSWEDBANKSE") + 12);
         
         assertEquals(INVOICETYPE.INVOICESE.getValue(), paymentMethod);
         assertEquals(PAYMENTMETHOD.SWEDBANK_SE.getValue(), paymentMethod2);

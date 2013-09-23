@@ -37,7 +37,7 @@ public class CreateOrderResponse extends Response {
                 
                 this.setResultCode(getTagValue(node, "ResultCode"));
                 this.sveaWillBuyOrder = Boolean.parseBoolean(getTagValue(node, "SveaWillBuyOrder"));
-               
+                
                 this.amount = Double.parseDouble(getTagValue(node, "Amount"));
                 this.orderId = Long.parseLong(getTagValue(node, "SveaOrderId"));
                 this.expirationDate = getTagValue(node, "ExpirationDate");

@@ -141,7 +141,7 @@ public class MyConfigTest implements ConfigurationProvider {
 	 * @return secret word
 	 */
 	@Override
-	public String getSecret(PAYMENTTYPE type, COUNTRYCODE country) {
+	public String getSecretWord(PAYMENTTYPE type, COUNTRYCODE country) {
 		return mySecretWord;
 	}	
 }

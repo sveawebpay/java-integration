@@ -25,7 +25,7 @@ public class DeliverInvoiceOrderTest {
     		.setCountryCode(COUNTRYCODE.SE)
     		.deliverInvoiceOrder()
     		.doRequest();
-
+    
     	response.getErrorMessage();
     }
     
@@ -49,15 +49,15 @@ public class DeliverInvoiceOrderTest {
     }
 	
     private long createInvoiceAndReturnOrderId() throws Exception {
-    	CreateOrderResponse response = WebPay.createOrder()
-        	.addOrderRow(TestingTool.createOrderRow())
-	        .addCustomerDetails(Item.individualCustomer()
-           		.setNationalIdNumber("194605092222"))
-        	.setCountryCode(COUNTRYCODE.SE)
+        CreateOrderResponse response = WebPay.createOrder()
+            .addOrderRow(TestingTool.createOrderRow())
+            .addCustomerDetails(Item.individualCustomer()
+                .setNationalIdNumber("194605092222"))
+            .setCountryCode(COUNTRYCODE.SE)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
             .setCurrency(CURRENCY.SEK)
-            .useInvoicePayment() // returns an InvoiceOrder object
+            .useInvoicePayment()
             .doRequest();
         
         return response.orderId;

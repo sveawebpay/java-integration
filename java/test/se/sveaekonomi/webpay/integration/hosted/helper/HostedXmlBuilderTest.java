@@ -267,7 +267,7 @@ public class HostedXmlBuilderTest {
                 		.setQuantity(1)
                 		.setAmountExVat(4)
                 		.setAmountIncVat(5))
-               .addCustomerDetails(Item.companyCustomer())
+                .addCustomerDetails(Item.companyCustomer())
     			.usePayPage()  
     			.setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtm")
     			.setPaymentMethod(PAYMENTMETHOD.INVOICE)

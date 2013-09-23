@@ -75,7 +75,7 @@ public class HostedPaymentResponseTest {
         CreateOrderBuilder order = WebPay.createOrder();
         WebRequest request = new PostMethodWebRequest(order.getConfig().getEndPoint(PAYMENTTYPE.HOSTED).toString());
         
-        form.setMacSha512(HashUtil.createHash(form.getXmlMessageBase64() + order.getConfig().getSecret(PAYMENTTYPE.HOSTED, order.getCountryCode()), HASHALGORITHM.SHA_512));
+        form.setMacSha512(HashUtil.createHash(form.getXmlMessageBase64() + order.getConfig().getSecretWord(PAYMENTTYPE.HOSTED, order.getCountryCode()), HASHALGORITHM.SHA_512));
         request.setParameter("mac", form.getMacSha512());
         request.setParameter("message", form.getXmlMessageBase64());
         request.setParameter("merchantid", form.getMerchantId());

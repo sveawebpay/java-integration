@@ -14,11 +14,10 @@ public class SveaConfig {
     private static final String SWP_TEST_WS_URL = "https://webservices.sveaekonomi.se/webpay_test/SveaWebPay.asmx?WSDL";
     private static final String SWP_PROD_WS_URL = "https://webservices.sveaekonomi.se/webpay/SveaWebPay.asmx?WSDL";
     
-    
 	public static URL getProdWebserviceUrl() {
 		return getUrlFromString(SWP_PROD_WS_URL);
 	}
-
+    
 	public static URL getProdPayPageUrl() {
 		return getUrlFromString(SWP_PROD_URL);
 	}
@@ -30,7 +29,7 @@ public class SveaConfig {
     public static URL getTestPayPageUrl() {
 		return getUrlFromString(SWP_TEST_URL);
 	}
-
+    
 	private static URL getUrlFromString(String swpTestWsUrl) {
 		try {
 			return new URL(swpTestWsUrl);

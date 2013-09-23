@@ -16,32 +16,16 @@ public class SveaSoapBuilderTest {
     @Test
     public void testRequest() throws Exception {
         CreateOrderResponse response = WebPay.createOrder()
-        .addOrderRow(TestingTool.createOrderRow())
-        .addCustomerDetails(Item.individualCustomer()
-        		.setNationalIdNumber("194605092222"))
-        .setCountryCode(COUNTRYCODE.SE)
-        .setClientOrderNumber("33")
-        .setOrderDate("2012-12-12")
-        .setCurrency(CURRENCY.SEK)
-        .useInvoicePayment()
-           // .setPasswordBasedAuthorization("sverigetest", "sverigetest", 79021) //Optional
-            //returns an InvoicePayment object
-        .doRequest();
+            .addOrderRow(TestingTool.createOrderRow())
+            .addCustomerDetails(Item.individualCustomer()
+                .setNationalIdNumber("194605092222"))
+            .setCountryCode(COUNTRYCODE.SE)
+            .setClientOrderNumber("33")
+            .setOrderDate("2012-12-12")
+            .setCurrency(CURRENCY.SEK)
+            .useInvoicePayment()
+            .doRequest();
         
         assertEquals(true, response.isOrderAccepted());
-        //WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
-     /*   CreateOrderBuilder order = WebPay.createOrder();
-       try {
-            String xml = xmlBuilder.getCreateOrderEuXml(request.request);
-            
-            String url = order.getTestmode() ? SveaConfig.SWP_TEST_WS_URL : SveaConfig.SWP_PROD_WS_URL;
-            String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
-            NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
-            CreateOrderResponse response = new CreateOrderResponse(soapResponse);            
-            
-            assertEquals(true, response.isOrderAccepted());
-        } catch (Exception e) {
-            throw e;
-        }*/
     }
 }

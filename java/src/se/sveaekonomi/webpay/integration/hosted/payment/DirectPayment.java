@@ -5,10 +5,10 @@ import javax.xml.stream.XMLStreamWriter;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
+
 /**
  * Defines all direct payments to bank viewable in PayPage
  * @author klar-sar
- *
  */
 public class DirectPayment extends HostedPayment<DirectPayment> {
     
@@ -17,7 +17,6 @@ public class DirectPayment extends HostedPayment<DirectPayment> {
     }
     
     protected DirectPayment configureExcludedPaymentMethods() {
-        
         COUNTRYCODE countryCode = createOrderBuilder.getCountryCode();
         
         if (! countryCode.equals(COUNTRYCODE.SE)) {
@@ -33,7 +32,7 @@ public class DirectPayment extends HostedPayment<DirectPayment> {
         }
         
         excludedPaymentMethods.add(PAYMENTMETHOD.PAYPAL.getValue());
-        excludedPaymentMethods.add(PAYMENTMETHOD.KORTCERT.getValue());       
+        excludedPaymentMethods.add(PAYMENTMETHOD.KORTCERT.getValue());
         excludedPaymentMethods.add(PAYMENTMETHOD.SKRILL.getValue());
         
         excludedPaymentMethods.addAll(excluded.excludeInvoicesAndPaymentPlan());

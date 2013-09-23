@@ -15,7 +15,7 @@ public class ExcludePayments {
     }
     
     /**
-     * @return List of all payment methods for invoices and payment plans 
+     * @return List of all payment methods for invoices and payment plans
      */
     public List<String> excludeInvoicesAndPaymentPlan() {
     	setPaymentMethodsSE();

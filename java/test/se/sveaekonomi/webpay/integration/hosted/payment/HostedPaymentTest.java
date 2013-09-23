@@ -77,7 +77,7 @@ public class HostedPaymentTest {
             		.setAmountIncVat(5)
                     .setVatPercent(25)
                     .setQuantity(1))
-        
+            
             .addFee(Item.shippingFee()
             		.setAmountIncVat(5)
             		.setVatPercent(25));
@@ -102,7 +102,7 @@ public class HostedPaymentTest {
                 		.setAmountExVat(4)
                         .setAmountIncVat(5)
                         .setQuantity(1));
-    	 
+        
         order.setShippingFeeRows(null);
         order.setFixedDiscountRows(null);
         order.setRelativeDiscountRows(null);
@@ -147,11 +147,11 @@ public class HostedPaymentTest {
         Map<String, String> formHtmlFields = form.getFormHtmlFields();
         assertTrue(formHtmlFields.get("form_end_tag").equals("</form>"));
     }
-
+    
     @Test
     public void testExcludeInvoicesAndAllInstallmentsAllCountries() {
         FakeHostedPayment payment = new FakeHostedPayment(null);
-        ExcludePayments exclude = new ExcludePayments();       
+        ExcludePayments exclude = new ExcludePayments();
         List<String> excludedPaymentMethods = payment.getExcludedPaymentMethods();
         excludedPaymentMethods.addAll(exclude.excludeInvoicesAndPaymentPlan());
         

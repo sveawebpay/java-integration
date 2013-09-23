@@ -253,7 +253,7 @@ public class HostedOrderValidatorTest {
     			+ "MISSING VALUE - Zip code is required for all customers when countrycode is NL. Use setZipCode().\n";
         
     	try {
-    	WebPay.createOrder()            
+    	WebPay.createOrder()
         .addOrderRow(TestingTool.createOrderRow())
         .addDiscount(Item.relativeDiscount()
             .setDiscountId("1")
@@ -261,14 +261,7 @@ public class HostedOrderValidatorTest {
             .setUnit("st")
             .setName("Relative")
             .setDescription("RelativeDiscount"))
-        .addCustomerDetails(Item.individualCustomer()
-        	//.setInitials("SB")
-            //.setBirthDate(1946, 5, 9)
-            //.setName("Sneider", "Boasman")
-            //.setStreetAddress("Gate", 42)
-            //.setLocality("BARENDRECHT")
-            //.setZipCode("1102 HG")
-        	)
+        .addCustomerDetails(Item.individualCustomer())
         
             .setCountryCode(COUNTRYCODE.NL)
             .setClientOrderNumber("33")
@@ -278,7 +271,7 @@ public class HostedOrderValidatorTest {
             	.setReturnUrl("http://myurl.se")
             	.getPaymentForm();
 
-            assertTrue(false);  
+            assertTrue(false);
         } catch (ValidationException e) {
     		assertEquals(e.getMessage(), expectedMsg);
     	}
