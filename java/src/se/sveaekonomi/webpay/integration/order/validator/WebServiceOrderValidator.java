@@ -8,16 +8,17 @@ public class WebServiceOrderValidator extends OrderValidator {
     
     public String validate(CreateOrderBuilder order) {
         try {
-            if (order.getCustomerIdentity()==null)
+            if (order.getCustomerIdentity() == null) {
                 errors += "MISSING VALUE - CustomerIdentity must be set.\n";
+            }
             
         if (order.getIsCompanyIdentity() && (order.getCompanyCustomer().getNationalIdNumber() != null
                 || order.getCompanyCustomer().getVatNumber() != null
-                || order.getCompanyCustomer().getCompanyName() != null))
+                || order.getCompanyCustomer().getCompanyName() != null)) {
             isCompany = true;
+        }
         
         IdentityValidator identityValidator = new IdentityValidator();
-      
         
         if (order.getCountryCode()!=null) {
             if (order.getCountryCode().equals(COUNTRYCODE.SE)
@@ -44,6 +45,5 @@ public class WebServiceOrderValidator extends OrderValidator {
             errors += "MISSING VALUE - CustomerIdentity must be set.\n";
         }
         return this.errors;
-        
     }
 }
