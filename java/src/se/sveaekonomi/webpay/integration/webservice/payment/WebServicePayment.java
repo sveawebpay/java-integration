@@ -49,20 +49,21 @@ public abstract class WebServicePayment {
         SveaRequest<SveaCreateOrder> request = this.prepareRequest();
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml = "";
+        
         try {
             xml = xmlBuilder.getCreateOrderEuXml((SveaCreateOrder) request.request);
         } catch (Exception e) {
             throw e;
         }
+        
         return xml;
     }
     
     public String validateOrder() {
-        try{
-        WebServiceOrderValidator validator = new WebServiceOrderValidator();
-        return validator.validate(this.createOrderBuilder);
-        }
-        catch (NullPointerException e) {
+        try {
+            WebServiceOrderValidator validator = new WebServiceOrderValidator();
+            return validator.validate(this.createOrderBuilder);
+        } catch (NullPointerException e) {
             return "NullPointer in validation WebServiceOrderValidator";
         }
     }
@@ -76,8 +77,10 @@ public abstract class WebServicePayment {
     public SveaRequest<SveaCreateOrder> prepareRequest() throws ValidationException {
         String errors = "";
         errors = validateOrder();
-        if (errors.length() > 0)
+        
+        if (errors.length() > 0) {
             throw new ValidationException(errors);
+        }
         
         SveaCreateOrder sveaOrder = new SveaCreateOrder();
         sveaOrder.Auth = this.getPasswordBasedAuthorization();
@@ -125,6 +128,7 @@ public abstract class WebServicePayment {
                     ? this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()
                     : this.createOrderBuilder.getCompanyCustomer().getVatNumber();
         }
+        
         // For European countries Individual/Company - identity required
         SveaIdentity euIdentity = null;
         String type = "";
@@ -162,8 +166,7 @@ public abstract class WebServicePayment {
         
         if (isCompany) {
             customerIdentity.FullName = this.createOrderBuilder.getCompanyCustomer().getCompanyName()!=null ? this.createOrderBuilder.getCompanyCustomer().getCompanyName() : "";
-        }
-        else {
+        } else {
             customerIdentity.FullName = this.createOrderBuilder.getIndividualCustomer().getFirstName()!=null && this.createOrderBuilder.getIndividualCustomer().getLastName()!=null 
                     ? this.createOrderBuilder.getIndividualCustomer().getFirstName() + " " + this.createOrderBuilder.getIndividualCustomer().getLastName() : "";
         }
