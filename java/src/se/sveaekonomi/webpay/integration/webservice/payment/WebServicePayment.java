@@ -2,7 +2,6 @@ package se.sveaekonomi.webpay.integration.webservice.payment;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.ValidationException;
@@ -15,8 +14,8 @@ import se.sveaekonomi.webpay.integration.order.validator.WebServiceOrderValidato
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
-import se.sveaekonomi.webpay.integration.webservice.helper.WebserviceRowFormatter;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
+import se.sveaekonomi.webpay.integration.webservice.helper.WebserviceRowFormatter;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrderInformation;
@@ -209,9 +208,8 @@ public abstract class WebServicePayment {
         WebserviceRowFormatter formatter = new WebserviceRowFormatter(this.createOrderBuilder);
         ArrayList<SveaOrderRow> formattedOrderRows = formatter.formatRows();
         
-        Iterator<SveaOrderRow> iter = formattedOrderRows.iterator();
-        for (; iter.hasNext();) {
-            orderInformation.addOrderRow(iter.next());
+        for (SveaOrderRow formattedOrderRow : formattedOrderRows) {
+            orderInformation.addOrderRow(formattedOrderRow);
         }
         
         return orderInformation;
