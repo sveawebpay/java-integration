@@ -30,14 +30,14 @@ public abstract class WebServicePayment {
     
     protected CreateOrderBuilder createOrderBuilder;
     protected PAYMENTTYPE orderType;
-    public SveaCreateOrderInformation orderInformation;   
+    public SveaCreateOrderInformation orderInformation;
     
     public WebServicePayment(CreateOrderBuilder orderBuilder) {
         this.createOrderBuilder = orderBuilder;
         orderInformation = new SveaCreateOrderInformation();
     }
     
-    private SveaAuth getPasswordBasedAuthorization() {              
+    private SveaAuth getPasswordBasedAuthorization() {
     	SveaAuth auth = new SveaAuth();
     	auth.Username = this.createOrderBuilder.getConfig().getUsername(this.orderType, this.createOrderBuilder.getCountryCode());
     	auth.Password = this.createOrderBuilder.getConfig().getPassword(this.orderType, this.createOrderBuilder.getCountryCode());
@@ -83,7 +83,7 @@ public abstract class WebServicePayment {
         sveaOrder.Auth = this.getPasswordBasedAuthorization();
         
         // make order rows and put in CreateOrderInformation
-        orderInformation = this.formatOrderInformationWithOrderRows(this.createOrderBuilder.getOrderRows());                  
+        orderInformation = this.formatOrderInformationWithOrderRows(this.createOrderBuilder.getOrderRows());
         orderInformation.CustomerIdentity = this.formatCustomerIdentity();
         orderInformation.ClientOrderNumber = this.createOrderBuilder.getClientOrderNumber();
         orderInformation.OrderDate = this.createOrderBuilder.getOrderDate();
@@ -113,8 +113,8 @@ public abstract class WebServicePayment {
         NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url.toString());
         CreateOrderResponse response = new CreateOrderResponse(soapResponse);
         return response;
-    }      
-
+    }
+    
     public SveaCustomerIdentity formatCustomerIdentity() {
         boolean isCompany = false;
         String companyId = "";
@@ -171,19 +171,19 @@ public abstract class WebServicePayment {
         customerIdentity.PhoneNumber = createOrderBuilder.getCustomerIdentity().getPhoneNumber() != null 
                 ? String.valueOf(createOrderBuilder.getCustomerIdentity().getPhoneNumber()) : "";
         customerIdentity.Street = createOrderBuilder.getCustomerIdentity().getStreetAddress() != null 
-                ? createOrderBuilder.getCustomerIdentity().getStreetAddress() : "";                
+                ? createOrderBuilder.getCustomerIdentity().getStreetAddress() : "";
         customerIdentity.HouseNumber = createOrderBuilder.getCustomerIdentity().getHouseNumber() != null 
-                ? String.valueOf(createOrderBuilder.getCustomerIdentity().getHouseNumber()) : "";                
+                ? String.valueOf(createOrderBuilder.getCustomerIdentity().getHouseNumber()) : "";
         customerIdentity.CoAddress = createOrderBuilder.getCustomerIdentity().getCoAddress() != null 
-                ? createOrderBuilder.getCustomerIdentity().getCoAddress() : "";                
+                ? createOrderBuilder.getCustomerIdentity().getCoAddress() : "";
         customerIdentity.ZipCode = createOrderBuilder.getCustomerIdentity().getZipCode() != null 
-                ? String.valueOf(createOrderBuilder.getCustomerIdentity().getZipCode()) : "";                
+                ? String.valueOf(createOrderBuilder.getCustomerIdentity().getZipCode()) : "";
         customerIdentity.Locality = createOrderBuilder.getCustomerIdentity().getLocality() != null 
-                ? createOrderBuilder.getCustomerIdentity().getLocality() : "";                
+                ? createOrderBuilder.getCustomerIdentity().getLocality() : "";
         customerIdentity.Email = createOrderBuilder.getCustomerIdentity().getEmail() != null
-                ? createOrderBuilder.getCustomerIdentity().getEmail() : "";                
+                ? createOrderBuilder.getCustomerIdentity().getEmail() : "";
         customerIdentity.IpAddress = createOrderBuilder.getCustomerIdentity().getIpAddress() != null 
-                ? createOrderBuilder.getCustomerIdentity().getIpAddress() : "";                
+                ? createOrderBuilder.getCustomerIdentity().getIpAddress() : "";
         
         customerIdentity.CustomerType = (isCompany ? "Company" : "Individual");
         customerIdentity.CountryCode = this.createOrderBuilder.getCountryCode();
@@ -199,8 +199,9 @@ public abstract class WebServicePayment {
         ArrayList<SveaOrderRow> formattedOrderRows = formatter.formatRows();
         
         Iterator<SveaOrderRow> iter = formattedOrderRows.iterator();
-        for (; iter.hasNext();)
+        for (; iter.hasNext();) {
             orderInformation.addOrderRow(iter.next());
+        }
         
         return orderInformation;
     }
