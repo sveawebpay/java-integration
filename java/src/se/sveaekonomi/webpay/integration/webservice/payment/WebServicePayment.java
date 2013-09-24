@@ -142,7 +142,7 @@ public abstract class WebServicePayment {
                 euIdentity.LastName = createOrderBuilder.getIndividualCustomer().getLastName();
                 if (this.createOrderBuilder.getCountryCode() == COUNTRYCODE.NL)
                     euIdentity.Initials = createOrderBuilder.getIndividualCustomer().getInitials();
-                euIdentity.BirthDate = Long.toString(createOrderBuilder.getIndividualCustomer().getBirthDate());
+                euIdentity.BirthDate = createOrderBuilder.getIndividualCustomer().getBirthDate();
             }
             
             type = isCompany ? "CompanyIdentity" : "IndividualIdentity";

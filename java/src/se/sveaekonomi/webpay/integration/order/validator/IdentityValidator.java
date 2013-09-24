@@ -20,7 +20,8 @@ public class IdentityValidator {
         //Individual
         if (!order.getIsCompanyIdentity() && order.getIndividualCustomer().getInitials()==null )
             errors += "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use setInitials().\n";
-        if (!order.getIsCompanyIdentity() && order.getIndividualCustomer().getBirthDate()<=0)
+        if (!order.getIsCompanyIdentity() && (order.getIndividualCustomer().getBirthDate() == null
+        		|| order.getIndividualCustomer().getBirthDate().isEmpty()))
             errors += "MISSING VALUE - Birth date is required for individual customers when countrycode is NL. Use setBirthDate().\n";        
         if (!order.getIsCompanyIdentity() && (order.getIndividualCustomer().getFirstName() == null || order.getIndividualCustomer().getLastName() == null))            
              errors += "MISSING VALUE - Name is required for individual customers when countrycode is NL. Use setName().\n";
@@ -44,7 +45,8 @@ public class IdentityValidator {
     public String validateDEIdentity(CreateOrderBuilder order) {
         String errors = "";
             //Individual
-            if (!order.getIsCompanyIdentity() && !order.getIsCompanyIdentity() && order.getIndividualCustomer().getBirthDate()<=0)
+            if (!order.getIsCompanyIdentity() && (!order.getIsCompanyIdentity() && order.getIndividualCustomer().getBirthDate() == null
+            		|| order.getIndividualCustomer().getBirthDate().isEmpty()))
                 errors += "MISSING VALUE - Birth date is required for individual customers when countrycode is DE. Use setBirthDate().\n";
             if (!order.getIsCompanyIdentity() && !order.getIsCompanyIdentity() && (order.getIndividualCustomer().getFirstName()==null || order.getIndividualCustomer().getLastName()==null))
                 errors += "MISSING VALUE - Name is required for individual customers when countrycode is DE. Use setName().\n";
