@@ -30,14 +30,14 @@ public abstract class WebServicePayment {
     
     protected CreateOrderBuilder createOrderBuilder;
     protected PAYMENTTYPE orderType;
-    public SveaCreateOrderInformation orderInformation;   
+    public SveaCreateOrderInformation orderInformation;
     
     public WebServicePayment(CreateOrderBuilder orderBuilder) {
         this.createOrderBuilder = orderBuilder;
         orderInformation = new SveaCreateOrderInformation();
     }
     
-    private SveaAuth getPasswordBasedAuthorization() {              
+    private SveaAuth getPasswordBasedAuthorization() {
     	SveaAuth auth = new SveaAuth();
     	auth.Username = this.createOrderBuilder.getConfig().getUsername(this.orderType, this.createOrderBuilder.getCountryCode());
     	auth.Password = this.createOrderBuilder.getConfig().getPassword(this.orderType, this.createOrderBuilder.getCountryCode());
@@ -49,20 +49,21 @@ public abstract class WebServicePayment {
         SveaRequest<SveaCreateOrder> request = this.prepareRequest();
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml = "";
+        
         try {
             xml = xmlBuilder.getCreateOrderEuXml((SveaCreateOrder) request.request);
         } catch (Exception e) {
             throw e;
         }
+        
         return xml;
     }
     
     public String validateOrder() {
-        try{
-        WebServiceOrderValidator validator = new WebServiceOrderValidator();
-        return validator.validate(this.createOrderBuilder);
-        }
-        catch (NullPointerException e) {
+        try {
+            WebServiceOrderValidator validator = new WebServiceOrderValidator();
+            return validator.validate(this.createOrderBuilder);
+        } catch (NullPointerException e) {
             return "NullPointer in validation WebServiceOrderValidator";
         }
     }
@@ -76,14 +77,16 @@ public abstract class WebServicePayment {
     public SveaRequest<SveaCreateOrder> prepareRequest() throws ValidationException {
         String errors = "";
         errors = validateOrder();
-        if (errors.length() > 0)
+        
+        if (errors.length() > 0) {
             throw new ValidationException(errors);
+        }
         
         SveaCreateOrder sveaOrder = new SveaCreateOrder();
         sveaOrder.Auth = this.getPasswordBasedAuthorization();
         
         // make order rows and put in CreateOrderInformation
-        orderInformation = this.formatOrderInformationWithOrderRows(this.createOrderBuilder.getOrderRows());                  
+        orderInformation = this.formatOrderInformationWithOrderRows(this.createOrderBuilder.getOrderRows());
         orderInformation.CustomerIdentity = this.formatCustomerIdentity();
         orderInformation.ClientOrderNumber = this.createOrderBuilder.getClientOrderNumber();
         orderInformation.OrderDate = this.createOrderBuilder.getOrderDate();
@@ -113,8 +116,8 @@ public abstract class WebServicePayment {
         NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url.toString());
         CreateOrderResponse response = new CreateOrderResponse(soapResponse);
         return response;
-    }      
-
+    }
+    
     public SveaCustomerIdentity formatCustomerIdentity() {
         boolean isCompany = false;
         String companyId = "";
@@ -125,6 +128,7 @@ public abstract class WebServicePayment {
                     ? this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber()
                     : this.createOrderBuilder.getCompanyCustomer().getVatNumber();
         }
+        
         // For European countries Individual/Company - identity required
         SveaIdentity euIdentity = null;
         String type = "";
@@ -142,7 +146,7 @@ public abstract class WebServicePayment {
                 euIdentity.LastName = createOrderBuilder.getIndividualCustomer().getLastName();
                 if (this.createOrderBuilder.getCountryCode() == COUNTRYCODE.NL)
                     euIdentity.Initials = createOrderBuilder.getIndividualCustomer().getInitials();
-                euIdentity.BirthDate = Long.toString(createOrderBuilder.getIndividualCustomer().getBirthDate());
+                euIdentity.BirthDate = createOrderBuilder.getIndividualCustomer().getBirthDate();
             }
             
             type = isCompany ? "CompanyIdentity" : "IndividualIdentity";
@@ -162,8 +166,7 @@ public abstract class WebServicePayment {
         
         if (isCompany) {
             customerIdentity.FullName = this.createOrderBuilder.getCompanyCustomer().getCompanyName()!=null ? this.createOrderBuilder.getCompanyCustomer().getCompanyName() : "";
-        }
-        else {
+        } else {
             customerIdentity.FullName = this.createOrderBuilder.getIndividualCustomer().getFirstName()!=null && this.createOrderBuilder.getIndividualCustomer().getLastName()!=null 
                     ? this.createOrderBuilder.getIndividualCustomer().getFirstName() + " " + this.createOrderBuilder.getIndividualCustomer().getLastName() : "";
         }
@@ -171,19 +174,19 @@ public abstract class WebServicePayment {
         customerIdentity.PhoneNumber = createOrderBuilder.getCustomerIdentity().getPhoneNumber() != null 
                 ? String.valueOf(createOrderBuilder.getCustomerIdentity().getPhoneNumber()) : "";
         customerIdentity.Street = createOrderBuilder.getCustomerIdentity().getStreetAddress() != null 
-                ? createOrderBuilder.getCustomerIdentity().getStreetAddress() : "";                
+                ? createOrderBuilder.getCustomerIdentity().getStreetAddress() : "";
         customerIdentity.HouseNumber = createOrderBuilder.getCustomerIdentity().getHouseNumber() != null 
-                ? String.valueOf(createOrderBuilder.getCustomerIdentity().getHouseNumber()) : "";                
+                ? String.valueOf(createOrderBuilder.getCustomerIdentity().getHouseNumber()) : "";
         customerIdentity.CoAddress = createOrderBuilder.getCustomerIdentity().getCoAddress() != null 
-                ? createOrderBuilder.getCustomerIdentity().getCoAddress() : "";                
+                ? createOrderBuilder.getCustomerIdentity().getCoAddress() : "";
         customerIdentity.ZipCode = createOrderBuilder.getCustomerIdentity().getZipCode() != null 
-                ? String.valueOf(createOrderBuilder.getCustomerIdentity().getZipCode()) : "";                
+                ? String.valueOf(createOrderBuilder.getCustomerIdentity().getZipCode()) : "";
         customerIdentity.Locality = createOrderBuilder.getCustomerIdentity().getLocality() != null 
-                ? createOrderBuilder.getCustomerIdentity().getLocality() : "";                
+                ? createOrderBuilder.getCustomerIdentity().getLocality() : "";
         customerIdentity.Email = createOrderBuilder.getCustomerIdentity().getEmail() != null
-                ? createOrderBuilder.getCustomerIdentity().getEmail() : "";                
+                ? createOrderBuilder.getCustomerIdentity().getEmail() : "";
         customerIdentity.IpAddress = createOrderBuilder.getCustomerIdentity().getIpAddress() != null 
-                ? createOrderBuilder.getCustomerIdentity().getIpAddress() : "";                
+                ? createOrderBuilder.getCustomerIdentity().getIpAddress() : "";
         
         customerIdentity.CustomerType = (isCompany ? "Company" : "Individual");
         customerIdentity.CountryCode = this.createOrderBuilder.getCountryCode();
@@ -199,8 +202,9 @@ public abstract class WebServicePayment {
         ArrayList<SveaOrderRow> formattedOrderRows = formatter.formatRows();
         
         Iterator<SveaOrderRow> iter = formattedOrderRows.iterator();
-        for (; iter.hasNext();)
+        for (; iter.hasNext();) {
             orderInformation.addOrderRow(iter.next());
+        }
         
         return orderInformation;
     }

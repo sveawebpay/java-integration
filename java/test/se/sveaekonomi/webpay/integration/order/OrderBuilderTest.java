@@ -50,7 +50,7 @@ public class OrderBuilderTest {
         assertEquals(order.getIndividualCustomer().getNationalIdNumber(), "194609052222");
         assertEquals(order.getIndividualCustomer().getFirstName(), "Tess");
         assertEquals(order.getIndividualCustomer().getLastName(), "Testson");
-        assertEquals(order.getIndividualCustomer().getBirthDate(), 19231212, 0);
+        assertEquals(order.getIndividualCustomer().getBirthDate(), "19231212");
         assertEquals(order.getIndividualCustomer().getEmail(), "test@svea.com");
         assertEquals(order.getIndividualCustomer().getPhoneNumber(), "999999");
         assertEquals(order.getIndividualCustomer().getIpAddress(), "123.123.123");

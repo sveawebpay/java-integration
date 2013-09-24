@@ -3,7 +3,7 @@ package se.sveaekonomi.webpay.integration.order.identity;
 public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
     
     private String ssn;
-    private long birthDate;
+    private String birthDate;
     private String firstName;
     private String lastName;
     private String initials;
@@ -29,7 +29,7 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
         return this;
     }
     
-    public Long getBirthDate() {
+    public String getBirthDate() {
         return this.birthDate;
     }
     
@@ -53,8 +53,7 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
             dayString = "0" + dayString;
         }
         
-        String s = String.valueOf(year) + monthString + dayString;
-        this.birthDate = Long.parseLong(s);
+        this.birthDate = String.valueOf(year) + monthString + dayString;
         
         return this;
     }
