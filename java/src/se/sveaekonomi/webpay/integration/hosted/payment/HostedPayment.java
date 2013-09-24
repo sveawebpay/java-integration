@@ -91,8 +91,8 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
     }
     
     public T setPayPageLanguageCode(LANGUAGECODE languageCode) {
-    	this.languageCode = languageCode.toString();
-    	return getGenericThis();
+        this.languageCode = languageCode.toString();
+        return getGenericThis();
     }
     
     public String getPayPageLanguageCode() {
@@ -100,7 +100,7 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
     }
     
     public String validateOrder() {
-        String errors = "";	
+        String errors = "";    
         if (this.returnUrl.equals("")) {
             errors += "MISSING VALUE - Return url is required, setReturnUrl(...).\n";
         }
@@ -110,11 +110,11 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
         //if ((this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.DE) || this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.NL))
         if (this instanceof PaymentMethodPayment) {
             if (((PaymentMethodPayment)this).getPaymentMethod() == PAYMENTMETHOD.INVOICE || ((PaymentMethodPayment)this).getPaymentMethod() == PAYMENTMETHOD.PAYMENTPLAN) {
-       			if (this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.NL)) {
-       				errors += new IdentityValidator().validateNLIdentity(createOrderBuilder);
-       			} else if (this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.DE)) {
-       				errors += new IdentityValidator().validateDEIdentity(createOrderBuilder);
-       			}
+                   if (this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.NL)) {
+                       errors += new IdentityValidator().validateNLIdentity(createOrderBuilder);
+                   } else if (this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.DE)) {
+                       errors += new IdentityValidator().validateDEIdentity(createOrderBuilder);
+                   }
             }
         }
         
@@ -124,7 +124,7 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
     }
     
     public void calculateRequestValues() throws ValidationException {
-    	String errors = "";
+        String errors = "";
         errors = validateOrder();
         
         if (!errors.equals("")) {
@@ -182,7 +182,7 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
     }
     
     @SuppressWarnings("unchecked")
-	private T getGenericThis() {
-		return (T) this;
-	}
+    private T getGenericThis() {
+        return (T) this;
+    }
 }

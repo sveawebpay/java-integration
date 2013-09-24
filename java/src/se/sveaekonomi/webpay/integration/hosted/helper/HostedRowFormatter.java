@@ -101,7 +101,7 @@ public class HostedRowFormatter {
                 tempRow.setAmount(new Double(row.getAmountIncVat() * 100).longValue());
                 tempRow.setVat(new Double(tempRow.getAmount() - (tempRow.getAmount() / plusVatCounter)).longValue());
             } else {
-            	Double amountIncVat = row.getAmountIncVat()!= null ? row.getAmountIncVat() : 0;
+                Double amountIncVat = row.getAmountIncVat()!= null ? row.getAmountIncVat() : 0;
                 tempRow.setAmount(new Double(amountIncVat * 100).longValue());
                 double amountExVat = row.getAmountExVat() != null ? row.getAmountExVat() : 0;
                 tempRow.setVat(new Double(amountIncVat - amountExVat).longValue());

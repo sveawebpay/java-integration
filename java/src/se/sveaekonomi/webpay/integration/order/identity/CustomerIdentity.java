@@ -12,9 +12,9 @@ public abstract class CustomerIdentity <T extends CustomerIdentity<T>> {
     private String locality;
     
     @SuppressWarnings("unchecked")
-	private T getGenericThis() {
-		return (T) this;
-	}
+    private T getGenericThis() {
+        return (T) this;
+    }
     
     abstract public String getNationalIdNumber();
     

@@ -20,7 +20,7 @@ public class DirectPayment extends HostedPayment<DirectPayment> {
         COUNTRYCODE countryCode = createOrderBuilder.getCountryCode();
         
         if (! countryCode.equals(COUNTRYCODE.SE)) {
-        	excludedPaymentMethods.add(PAYMENTMETHOD.SEB_SE.getValue());
+            excludedPaymentMethods.add(PAYMENTMETHOD.SEB_SE.getValue());
             excludedPaymentMethods.add(PAYMENTMETHOD.NORDEA_SE.getValue());
             excludedPaymentMethods.add(PAYMENTMETHOD.SEBFTG_SE.getValue());
             excludedPaymentMethods.add(PAYMENTMETHOD.SHB_SE.getValue());
@@ -28,7 +28,7 @@ public class DirectPayment extends HostedPayment<DirectPayment> {
         }
         
         if (! countryCode.equals(COUNTRYCODE.NO)) {
-        	excludedPaymentMethods.add(PAYMENTMETHOD.BANKAXESS.getValue());
+            excludedPaymentMethods.add(PAYMENTMETHOD.BANKAXESS.getValue());
         }
         
         excludedPaymentMethods.add(PAYMENTMETHOD.PAYPAL.getValue());

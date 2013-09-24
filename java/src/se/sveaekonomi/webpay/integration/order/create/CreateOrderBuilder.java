@@ -41,7 +41,7 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     public CustomerIdentity<?> customerIdentity; 
     
     public CreateOrderBuilder(ConfigurationProvider config) {
-    	this.config = config;
+        this.config = config;
     }
     
     public OrderValidator getValidator() {
@@ -93,10 +93,10 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     }
     
     public String getCurrency() {
-    	if (currency == null)
-    		return null;
-    	else
-    		return currency.toString();
+        if (currency == null)
+            return null;
+        else
+            return currency.toString();
     }
     
     public CreateOrderBuilder setCurrency(CURRENCY currency) {
@@ -174,16 +174,16 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
      * @throws ValidationException
      */
     public PaymentPlanPayment usePaymentPlanPayment(String campaignCode) throws ValidationException {
-    	try {
-    		if (campaignCode.equals("")) {
-    			throw new ValidationException("MISSING VALUE - Campaign code must be set. Add parameter in .usePaymentPlanPayment(campaignCode)");
-    		} else if (this.customerIdentity.getClass().equals(CompanyCustomer.class)) {
-    			throw new ValidationException("ERROR - CompanyCustomer is not allowed to use payment plan option.");
-    		}
-    	} catch(ValidationException e) {
-    		throw new SveaWebPayException(e.getMessage(), e);
-    	}
-    	
+        try {
+            if (campaignCode.equals("")) {
+                throw new ValidationException("MISSING VALUE - Campaign code must be set. Add parameter in .usePaymentPlanPayment(campaignCode)");
+            } else if (this.customerIdentity.getClass().equals(CompanyCustomer.class)) {
+                throw new ValidationException("ERROR - CompanyCustomer is not allowed to use payment plan option.");
+            }
+        } catch(ValidationException e) {
+            throw new SveaWebPayException(e.getMessage(), e);
+        }
+        
         return this.usePaymentPlanPayment(campaignCode, false);
     }
     
@@ -213,19 +213,19 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     }
     
     public CompanyCustomer getCompanyCustomer() {
-    	if (this.customerIdentity instanceof CompanyCustomer) {
-    		return (CompanyCustomer)this.customerIdentity;
-    	} else {
-    		return null;
-    	}
+        if (this.customerIdentity instanceof CompanyCustomer) {
+            return (CompanyCustomer)this.customerIdentity;
+        } else {
+            return null;
+        }
     }
     
     public IndividualCustomer getIndividualCustomer() {
-    	if (this.customerIdentity instanceof IndividualCustomer) {
-    		return (IndividualCustomer)this.customerIdentity;
-    	} else {
-    		return null;
-    	}
+        if (this.customerIdentity instanceof IndividualCustomer) {
+            return (IndividualCustomer)this.customerIdentity;
+        } else {
+            return null;
+        }
     }
     
     public CustomerIdentity<?> getCustomerIdentity() {

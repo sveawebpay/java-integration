@@ -58,11 +58,11 @@ public class InvoicePaymentTest {
     
     @Test
     public void testSetAuth() throws ValidationException {
-    	SveaRequest<SveaCreateOrder> request =  WebPay.createOrder()
-    	.addOrderRow(TestingTool.createOrderRow())
+        SveaRequest<SveaCreateOrder> request =  WebPay.createOrder()
+        .addOrderRow(TestingTool.createOrderRow())
         .addOrderRow(TestingTool.createOrderRow())
         .addCustomerDetails(Item.individualCustomer()
-    		.setNationalIdNumber("194605092222"))
+            .setNationalIdNumber("194605092222"))
         .setCountryCode(COUNTRYCODE.SE)
         .setOrderDate("2012-12-12")
         .setClientOrderNumber("33")
@@ -77,8 +77,8 @@ public class InvoicePaymentTest {
     
     @Test
     public void testInvoiceWithIndividualCustomerFromNl() throws ValidationException {
-    	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-    	.addOrderRow(TestingTool.createOrderRow())
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        .addOrderRow(TestingTool.createOrderRow())
         
         .addCustomerDetails(Item.individualCustomer()
             .setBirthDate(1923, 12, 12)
@@ -92,12 +92,12 @@ public class InvoicePaymentTest {
             .setZipCode("9999")
             .setLocality("Stan"))
         
-	    .setCountryCode(COUNTRYCODE.NL)
-	    .setOrderDate("2012-12-12")
-	    .setClientOrderNumber("33")
-	    .setCurrency(CURRENCY.SEK)
-	    .useInvoicePayment()
-	    .prepareRequest();
+        .setCountryCode(COUNTRYCODE.NL)
+        .setOrderDate("2012-12-12")
+        .setClientOrderNumber("33")
+        .setCurrency(CURRENCY.SEK)
+        .useInvoicePayment()
+        .prepareRequest();
          
         //CustomerIdentity
         assertEquals("Tess Testson", request.request.CreateOrderInformation.CustomerIdentity.FullName);
@@ -120,8 +120,8 @@ public class InvoicePaymentTest {
     
     @Test
     public void testInvoiceWithCompanyCustomerFromNl() throws ValidationException {
-    	 SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-    	.addOrderRow(TestingTool.createOrderRow())
+         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        .addOrderRow(TestingTool.createOrderRow())
         
         .addCustomerDetails(Item.individualCustomer()
             .setInitials("SB")
@@ -181,8 +181,8 @@ public class InvoicePaymentTest {
     
     @Test
     public void testInvoiceWithProductsRows() throws ValidationException {
-    	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-    	.addOrderRow(TestingTool.createOrderRow())
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        .addOrderRow(TestingTool.createOrderRow())
         
         .addFee(Item.shippingFee()
             .setShippingId("33")
@@ -241,8 +241,8 @@ public class InvoicePaymentTest {
     
     @Test
     public void testInvoiceWithRelativeDiscountOnDifferentProductVat() throws ValidationException {
-    	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-    	.addOrderRow(Item.orderRow()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(1)
             .setAmountExVat(240.00)
@@ -283,8 +283,8 @@ public class InvoicePaymentTest {
     
     @Test
     public void testInvoiceWithFixedDiscountOnDifferentProductVat() throws ValidationException {
-    	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-    	.addOrderRow(Item.orderRow()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(1)
             .setAmountExVat(240.00)
@@ -414,8 +414,8 @@ public class InvoicePaymentTest {
     
     @Test
     public void testInvoiceUsingAmountIncVatWithAmountExVat() throws ValidationException {
-    	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-    		.addOrderRow(Item.orderRow()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+            .addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
                 .setQuantity(2)
                 .setAmountIncVat(125)

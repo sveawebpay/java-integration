@@ -63,12 +63,12 @@ public class CompanyCustomer extends CustomerIdentity<CompanyCustomer> {
      * @param addressSelector
      * @return CompanyCustomer
      */
-	public CompanyCustomer setAddressSelector(String addressSelector) {
-		this.addressSelector = addressSelector;
-		return this;
-	}
-	
-	public String getAddressSelector() {
-		return this.addressSelector;
-	}
+    public CompanyCustomer setAddressSelector(String addressSelector) {
+        this.addressSelector = addressSelector;
+        return this;
+    }
+    
+    public String getAddressSelector() {
+        return this.addressSelector;
+    }
 }

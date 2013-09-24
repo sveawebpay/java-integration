@@ -18,7 +18,7 @@ public class OrderRowBuilder implements RowBuilder {
     private Integer discountPercent;
     
     public OrderRowBuilder() {
-    	
+        
     }
     
     public String getArticleNumber() {

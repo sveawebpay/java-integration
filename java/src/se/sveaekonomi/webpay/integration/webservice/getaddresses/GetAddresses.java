@@ -34,7 +34,7 @@ public class GetAddresses {
     private ConfigurationProvider config;
     
     public GetAddresses(ConfigurationProvider config) {
-    	this.config = config;
+        this.config = config;
     }
     
     public String getIndividual() {
@@ -107,8 +107,8 @@ public class GetAddresses {
     }
     
     private SveaAuth getStoreAuthorization() {
-    	 SveaAuth auth = new SveaAuth();
-    	 PAYMENTTYPE type = (orderType == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
+         SveaAuth auth = new SveaAuth();
+         PAYMENTTYPE type = (orderType == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
          auth.Username = config.getUsername(type, countryCode);
          auth.Password = config.getPassword(type, countryCode);
          auth.ClientNumber = config.getClientNumber(type, countryCode);
@@ -116,14 +116,14 @@ public class GetAddresses {
     }
     
     public String validateRequest() {
-    	String errors ="";
-    	if (countryCode == null)
-    		errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-    	if (orderType==null)
-    		errors += "MISSING VALUE - orderType is required, use one of: setOrderTypePaymentPlan() or setOrderTypeInvoice().\n";
-    	if (this.nationalNumber==null && this.companyId==null)
-    		errors += "MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
-    	return errors;
+        String errors ="";
+        if (countryCode == null)
+            errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+        if (orderType==null)
+            errors += "MISSING VALUE - orderType is required, use one of: setOrderTypePaymentPlan() or setOrderTypeInvoice().\n";
+        if (this.nationalNumber==null && this.companyId==null)
+            errors += "MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
+        return errors;
     }
     
     private SveaRequest<SveaGetAddresses> prepareRequest() throws ValidationException {
@@ -131,7 +131,7 @@ public class GetAddresses {
         errors = validateRequest();
         if (errors.length() > 0)
             throw new ValidationException(errors);
-    	
+        
         SveaGetAddresses sveaAddress = new SveaGetAddresses();
         sveaAddress.Auth = getStoreAuthorization();
         sveaAddress.IsCompany = (companyId != null ? true : false);

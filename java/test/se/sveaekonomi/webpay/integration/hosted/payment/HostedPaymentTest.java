@@ -24,23 +24,23 @@ public class HostedPaymentTest {
 
     @Test
     public void testCalculateRequestValuesNullExtraRows() throws Exception {
-    	CreateOrderBuilder order = WebPay.createOrder() 
-    		.setCountryCode(COUNTRYCODE.SE)
-   			.setClientOrderNumber("nr22")
-   			.setCurrency(CURRENCY.SEK)
+        CreateOrderBuilder order = WebPay.createOrder() 
+            .setCountryCode(COUNTRYCODE.SE)
+               .setClientOrderNumber("nr22")
+               .setCurrency(CURRENCY.SEK)
             .addOrderRow(Item.orderRow()
-            		.setAmountExVat(4)
+                    .setAmountExVat(4)
                     .setVatPercent(25)
                     .setQuantity(1))
             
-	        .addFee(Item.shippingFee())
-	        .addDiscount(Item.fixedDiscount())
-	        .addDiscount(Item.relativeDiscount());
-	    	
+            .addFee(Item.shippingFee())
+            .addDiscount(Item.fixedDiscount())
+            .addDiscount(Item.relativeDiscount());
+            
         FakeHostedPayment payment = new FakeHostedPayment(order);
         payment
-	        .setReturnUrl("myurl")
-	        .calculateRequestValues();
+            .setReturnUrl("myurl")
+            .calculateRequestValues();
         
         assertTrue(500L == payment.getAmount());
     }
@@ -48,11 +48,11 @@ public class HostedPaymentTest {
     @Test
     public void testVatPercentAndAmountIncVatCalculation() throws ValidationException {
         CreateOrderBuilder order = WebPay.createOrder()  
-	    	.setCountryCode(COUNTRYCODE.SE)
-			.setClientOrderNumber("nr22")
-			.setCurrency(CURRENCY.SEK)
-			.addOrderRow(Item.orderRow()
-            		.setAmountIncVat(5)
+            .setCountryCode(COUNTRYCODE.SE)
+            .setClientOrderNumber("nr22")
+            .setCurrency(CURRENCY.SEK)
+            .addOrderRow(Item.orderRow()
+                    .setAmountIncVat(5)
                     .setVatPercent(25)
                     .setQuantity(1));
         
@@ -61,8 +61,8 @@ public class HostedPaymentTest {
         order.setRelativeDiscountRows(null);
         FakeHostedPayment payment = new FakeHostedPayment(order);
         payment
-        	.setReturnUrl("myUrl")
-        	.calculateRequestValues();
+            .setReturnUrl("myUrl")
+            .calculateRequestValues();
         
         assertEquals(500L,payment.getAmount(), 0);
     }
@@ -70,36 +70,36 @@ public class HostedPaymentTest {
     @Test
     public void testAmountIncVatAndvatPercentShippingFee() throws ValidationException {
       CreateOrderBuilder order = WebPay.createOrder() 
-    		.setCountryCode(COUNTRYCODE.SE)
- 			.setClientOrderNumber("nr22")
- 			.setCurrency(CURRENCY.SEK)  
+            .setCountryCode(COUNTRYCODE.SE)
+             .setClientOrderNumber("nr22")
+             .setCurrency(CURRENCY.SEK)  
             .addOrderRow(Item.orderRow()
-            		.setAmountIncVat(5)
+                    .setAmountIncVat(5)
                     .setVatPercent(25)
                     .setQuantity(1))
             
             .addFee(Item.shippingFee()
-            		.setAmountIncVat(5)
-            		.setVatPercent(25));
+                    .setAmountIncVat(5)
+                    .setVatPercent(25));
       
         order.setFixedDiscountRows(null);
         order.setRelativeDiscountRows(null);
         FakeHostedPayment payment = new FakeHostedPayment(order);
         payment
-	        .setReturnUrl("myUrl")
-	        .calculateRequestValues();
+            .setReturnUrl("myUrl")
+            .calculateRequestValues();
         
         assertEquals(1000L,payment.getAmount(), 0);
     }
     
     @Test
     public void testAmountIncVatAndAmountExVatCalculation() throws ValidationException {
-    	 CreateOrderBuilder order = WebPay.createOrder()
-    			 .setCountryCode(COUNTRYCODE.SE)
-    			 .setClientOrderNumber("nr22")
-    			 .setCurrency(CURRENCY.SEK)
-    			 .addOrderRow(Item.orderRow()
-                		.setAmountExVat(4)
+         CreateOrderBuilder order = WebPay.createOrder()
+                 .setCountryCode(COUNTRYCODE.SE)
+                 .setClientOrderNumber("nr22")
+                 .setCurrency(CURRENCY.SEK)
+                 .addOrderRow(Item.orderRow()
+                        .setAmountExVat(4)
                         .setAmountIncVat(5)
                         .setQuantity(1));
         
@@ -108,34 +108,34 @@ public class HostedPaymentTest {
         order.setRelativeDiscountRows(null);
         FakeHostedPayment payment = new FakeHostedPayment(order);
         payment
-	        .setReturnUrl("myurl")
-	        .calculateRequestValues();
+            .setReturnUrl("myurl")
+            .calculateRequestValues();
         
         assertTrue(500L == payment.getAmount());
     }
     
     @Test
     public void testCreatePaymentForm() throws Exception {
-    	 CreateOrderBuilder order = WebPay.createOrder() 
-    			 .setCountryCode(COUNTRYCODE.SE)
-    			 .setClientOrderNumber("nr22")
-    			 .setCurrency(CURRENCY.SEK)
+         CreateOrderBuilder order = WebPay.createOrder() 
+                 .setCountryCode(COUNTRYCODE.SE)
+                 .setClientOrderNumber("nr22")
+                 .setCurrency(CURRENCY.SEK)
                 .addOrderRow(Item.orderRow()
-                		.setAmountExVat(4)
+                        .setAmountExVat(4)
                         .setVatPercent(25)
                         .setQuantity(1))
                 .addCustomerDetails(Item.companyCustomer()
-	                .setNationalIdNumber("666666")
-	                .setEmail("test@svea.com")
-	                .setPhoneNumber("999999")
-	                .setIpAddress("123.123.123.123")
-	                .setStreetAddress("Gatan", "23")
-	                .setCoAddress("c/o Eriksson")
-	                .setZipCode("9999")
-	                .setLocality("Stan")); 
+                    .setNationalIdNumber("666666")
+                    .setEmail("test@svea.com")
+                    .setPhoneNumber("999999")
+                    .setIpAddress("123.123.123.123")
+                    .setStreetAddress("Gatan", "23")
+                    .setCoAddress("c/o Eriksson")
+                    .setZipCode("9999")
+                    .setLocality("Stan")); 
       
-    	FakeHostedPayment payment = new FakeHostedPayment(order);
-    	payment.setReturnUrl("myurl");
+        FakeHostedPayment payment = new FakeHostedPayment(order);
+        payment.setReturnUrl("myurl");
         PaymentForm form;
         
         try {

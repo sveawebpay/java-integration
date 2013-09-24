@@ -38,11 +38,11 @@ public abstract class WebServicePayment {
     }
     
     private SveaAuth getPasswordBasedAuthorization() {
-    	SveaAuth auth = new SveaAuth();
-    	auth.Username = this.createOrderBuilder.getConfig().getUsername(this.orderType, this.createOrderBuilder.getCountryCode());
-    	auth.Password = this.createOrderBuilder.getConfig().getPassword(this.orderType, this.createOrderBuilder.getCountryCode());
-    	auth.ClientNumber = this.createOrderBuilder.getConfig().getClientNumber(this.orderType, this.createOrderBuilder.getCountryCode());
-    	return auth;
+        SveaAuth auth = new SveaAuth();
+        auth.Username = this.createOrderBuilder.getConfig().getUsername(this.orderType, this.createOrderBuilder.getCountryCode());
+        auth.Password = this.createOrderBuilder.getConfig().getPassword(this.orderType, this.createOrderBuilder.getCountryCode());
+        auth.ClientNumber = this.createOrderBuilder.getConfig().getClientNumber(this.orderType, this.createOrderBuilder.getCountryCode());
+        return auth;
     }
     
     public String getXML() throws Exception {

@@ -22,7 +22,7 @@ public abstract class OrderValidator {
     protected void validateOrderRow(CreateOrderBuilder order) {
         try {
             for (OrderRowBuilder orderRow : order.getOrderRows()) {
-            	
+                
                 if (orderRow.getQuantity() <= 0)
                     errors += "MISSING VALUE - Quantity is required in Item object. Use Item.setQuantity().\n";
                 if (orderRow.getAmountExVat() == null && orderRow.getVatPercent() == null && orderRow.getAmountIncVat() == null)

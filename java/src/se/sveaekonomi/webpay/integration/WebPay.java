@@ -20,11 +20,11 @@ import se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams.Payment
  */
 public class WebPay {
     
-	/**
-	 * Start build order request to create an order for all payments.
-	 * @param config
-	 * @return CreateOrderBuilder
-	 */
+    /**
+     * Start build order request to create an order for all payments.
+     * @param config
+     * @return CreateOrderBuilder
+     */
     public static CreateOrderBuilder createOrder(ConfigurationProvider config) {
         return new CreateOrderBuilder(config);
     }
@@ -34,7 +34,7 @@ public class WebPay {
      * @return CreateOrderBuilder
      */
     public static CreateOrderBuilder createOrder() {
-    	return createOrder(SveaConfig.getDefaultConfig()); 
+        return createOrder(SveaConfig.getDefaultConfig()); 
     }     
     
     /**
@@ -67,7 +67,7 @@ public class WebPay {
      * @return DeliverOrderBuilder
      */
     public static DeliverOrderBuilder deliverOrder() {
-    	return deliverOrder(SveaConfig.getDefaultConfig());
+        return deliverOrder(SveaConfig.getDefaultConfig());
     }
     
     /**
@@ -84,7 +84,7 @@ public class WebPay {
      * @return GetPaymentPlanParams
      */
     public static GetPaymentPlanParams getPaymentPlanParams() {
-    	return getPaymentPlanParams(SveaConfig.getDefaultConfig());
+        return getPaymentPlanParams(SveaConfig.getDefaultConfig());
     }
     
     /**
@@ -111,6 +111,6 @@ public class WebPay {
      * @return List<Map<String, String>>
      */
     public static List<Map<String, String>> paymentPlanPricePerMonth(Double amount, PaymentPlanParamsResponse params) {
-    	return new PaymentPlanPricePerMonth().calculate(amount, params);
+        return new PaymentPlanPricePerMonth().calculate(amount, params);
     }
 }

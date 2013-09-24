@@ -30,8 +30,8 @@ public class HandleOrder {
     }
     
     protected SveaAuth getStoreAuthorization() {
-    	 SveaAuth auth = new SveaAuth();
-    	 PAYMENTTYPE type = (order.getOrderType() == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
+         SveaAuth auth = new SveaAuth();
+         PAYMENTTYPE type = (order.getOrderType() == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
          auth.Username = order.getConfig().getUsername(type, order.getCountryCode());
          auth.Password = order.getConfig().getPassword(type, order.getCountryCode());
          auth.ClientNumber = order.getConfig().getClientNumber(type, order.getCountryCode());
@@ -80,8 +80,8 @@ public class HandleOrder {
     }
     
     public DeliverOrderResponse doRequest() throws Exception {
-    	URL url = order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE);
-    	
+        URL url = order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE);
+        
         SveaRequest<SveaDeliverOrder> request = this.prepareRequest();
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml;

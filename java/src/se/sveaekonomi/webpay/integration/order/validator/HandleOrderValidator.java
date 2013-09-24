@@ -17,9 +17,9 @@ public class HandleOrderValidator {
     }
     
     private void validateCountry(DeliverOrderBuilder order) {
-    	if (order.getCountryCode() == null) {
-    		this.errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-    	}
+        if (order.getCountryCode() == null) {
+            this.errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+        }
     }
     
     private void validateOrderType(DeliverOrderBuilder order) {

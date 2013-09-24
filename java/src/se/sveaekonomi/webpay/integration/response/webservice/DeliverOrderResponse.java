@@ -16,7 +16,7 @@ public class DeliverOrderResponse extends Response {
     private String invoiceDate;
     private String invoiceDistributionType;
     private String ocr;
-	private double lowestAmountToPay;
+    private double lowestAmountToPay;
     private int contractNumber;  
     
     public DeliverOrderResponse(NodeList soapResponse) {
@@ -25,7 +25,7 @@ public class DeliverOrderResponse extends Response {
     }
     
     public void setValues(NodeList soapResponse) {
-    	String tmpOrderType;
+        String tmpOrderType;
         try {
             int size = soapResponse.getLength();
             
@@ -159,21 +159,21 @@ public class DeliverOrderResponse extends Response {
     }
     
     public String getOcr() {
-		return ocr;
-	}
+        return ocr;
+    }
     
-	public void setOcr(String ocr) {
-		this.ocr = ocr;
-	}
-	
-	public double getLowestAmountToPay() {
-		return lowestAmountToPay;
-	}
-	
-	public void setLowestAmountToPay(double lowestAmountToPay) {
-		this.lowestAmountToPay = lowestAmountToPay;
-	}
-	
+    public void setOcr(String ocr) {
+        this.ocr = ocr;
+    }
+    
+    public double getLowestAmountToPay() {
+        return lowestAmountToPay;
+    }
+    
+    public void setLowestAmountToPay(double lowestAmountToPay) {
+        this.lowestAmountToPay = lowestAmountToPay;
+    }
+    
     public int getContractNumber() {
         return contractNumber;
     }

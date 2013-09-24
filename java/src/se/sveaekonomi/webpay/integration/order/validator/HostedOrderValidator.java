@@ -9,7 +9,7 @@ public class HostedOrderValidator extends OrderValidator {
         errors = "";
         
         if (order.getCountryCode()==null)
-        	errors += "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n";
+            errors += "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n";
         //Check if paymentMethod is INVOICE or PAYMENTPLAN
     /*    else if (order.getCountryCode()==COUNTRYCODE.NL)
             errors += new IdentityValidator().validateNLIdentity(order);

@@ -64,7 +64,7 @@ public enum PAYMENTMETHOD {
     }
     
     public String getValue() {
-    	return this.value;
+        return this.value;
     }
     
     public boolean isDirectPayment() {

@@ -18,22 +18,22 @@ public class DeliverInvoiceOrderTest {
     
     @Test
     public void testDeliverInvoiceOrderDoRequest() throws Exception {
-    	DeliverOrderResponse response = WebPay.deliverOrder()
-    		.addOrderRow(TestingTool.createOrderRow())  
-    		.setOrderId(54086L)
-    		.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-    		.setCountryCode(COUNTRYCODE.SE)
-    		.deliverInvoiceOrder()
-    		.doRequest();
+        DeliverOrderResponse response = WebPay.deliverOrder()
+            .addOrderRow(TestingTool.createOrderRow())  
+            .setOrderId(54086L)
+            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+            .setCountryCode(COUNTRYCODE.SE)
+            .deliverInvoiceOrder()
+            .doRequest();
     
-    	response.getErrorMessage();
+        response.getErrorMessage();
     }
     
     @Test
     public void testDeliverInvoiceOrderResult() throws Exception {
-    	long orderId = createInvoiceAndReturnOrderId();
-    	
-    	DeliverOrderResponse response = WebPay.deliverOrder()
+        long orderId = createInvoiceAndReturnOrderId();
+        
+        DeliverOrderResponse response = WebPay.deliverOrder()
             .addOrderRow(TestingTool.createOrderRow())
             .setOrderId(orderId)
             .setNumberOfCreditDays(1)
@@ -47,7 +47,7 @@ public class DeliverInvoiceOrderTest {
         assertTrue(null != response.getOcr() && 0 < response.getOcr().length());
         assertTrue(0.0 == response.getLowestAmountToPay());
     }
-	
+    
     private long createInvoiceAndReturnOrderId() throws Exception {
         CreateOrderResponse response = WebPay.createOrder()
             .addOrderRow(TestingTool.createOrderRow())

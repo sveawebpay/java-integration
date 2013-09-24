@@ -15,7 +15,7 @@ public class HostedPaymentsRequestTest {
     
     @Test
     public void testDoCardPaymentRequest() throws Exception {
-    	PaymentForm form = WebPay.createOrder()
+        PaymentForm form = WebPay.createOrder()
         .addOrderRow(TestingTool.createOrderRow())
         .addFee(Item.shippingFee()
                 .setShippingId("33")

@@ -32,7 +32,7 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
     }
     
     public ConfigurationProvider getConfig() {
-    	return this.config;
+        return this.config;
     }
     
     public List<OrderRowBuilder> getOrderRows() {
@@ -112,20 +112,20 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
         return getGenericThis();
     }
 
-	@SuppressWarnings("unchecked")
-	protected T getGenericThis() {
-		return (T) this;
-	}
-    
-	public COUNTRYCODE getCountryCode() {
-		return this.countryCode;
-	}
-	
-    public T setCountryCode(COUNTRYCODE countryCode) {
-    	this.countryCode = countryCode;
-    	return getGenericThis();
+    @SuppressWarnings("unchecked")
+    protected T getGenericThis() {
+        return (T) this;
     }
-	
+    
+    public COUNTRYCODE getCountryCode() {
+        return this.countryCode;
+    }
+    
+    public T setCountryCode(COUNTRYCODE countryCode) {
+        this.countryCode = countryCode;
+        return getGenericThis();
+    }
+    
     public T addOrderRows(List<OrderRowBuilder> itemOrderRow) {
         this.orderRows.addAll(itemOrderRow);
         return getGenericThis();

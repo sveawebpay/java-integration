@@ -37,22 +37,22 @@ public class PaymentPlanTest {
     
     @Test
     public void testPaymentPlanFailCompanyCustomer() throws ValidationException{
-    	try {
-	        WebPay.createOrder()
-	            .addOrderRow(TestingTool.createOrderRow())
-	        
-	            .addCustomerDetails(Item.companyCustomer()
-	                .setNationalIdNumber("194605092222"))
-	            .setCountryCode(COUNTRYCODE.SE)
-	            .setOrderDate("2012-12-12")
-	            .setClientOrderNumber("33")
-	            .setCurrency(CURRENCY.SEK)
-	            .usePaymentPlanPayment("camp1")
-	            .prepareRequest();
-	    	
-	    		assertTrue(false);
-    	} catch(SveaWebPayException e) {
-    		assertEquals(e.getMessage(), "ERROR - CompanyCustomer is not allowed to use payment plan option.");
-    	}
+        try {
+            WebPay.createOrder()
+                .addOrderRow(TestingTool.createOrderRow())
+            
+                .addCustomerDetails(Item.companyCustomer()
+                    .setNationalIdNumber("194605092222"))
+                .setCountryCode(COUNTRYCODE.SE)
+                .setOrderDate("2012-12-12")
+                .setClientOrderNumber("33")
+                .setCurrency(CURRENCY.SEK)
+                .usePaymentPlanPayment("camp1")
+                .prepareRequest();
+            
+                assertTrue(false);
+        } catch(SveaWebPayException e) {
+            assertEquals(e.getMessage(), "ERROR - CompanyCustomer is not allowed to use payment plan option.");
+        }
     }
 }

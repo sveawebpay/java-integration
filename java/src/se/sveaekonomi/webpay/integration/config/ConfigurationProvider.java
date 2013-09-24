@@ -15,50 +15,50 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  */
 public interface ConfigurationProvider {
 
-	/**
-	 * Get the return value from your database or likewise
-	 * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
-	 * @param country code
-	 * @return user name
-	 */
-	public String getUsername(PAYMENTTYPE type, COUNTRYCODE country);
-	
-	/**
-	 * Get the return value from your database or likewise
-	 * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
-	 * @param country code
-	 * @return password
-	 */
-	public String getPassword(PAYMENTTYPE type, COUNTRYCODE country);
-	
-	/**
-	 * Get the return value from your database or likewise
-	 * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
-	 * @param country code
-	 * @return client number
-	 */
-	public int getClientNumber(PAYMENTTYPE type, COUNTRYCODE country);
-	
-	/**
-	 * Get the return value from your database or likewise
-	 * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
-	 * @param country code
-	 * @return merchant id
-	 */
-	public String getMerchantId(PAYMENTTYPE type, COUNTRYCODE country);
-	
-	/**
-	 * Get the return value from your database or likewise
-	 * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
-	 * @param country code
-	 * @return secret word
-	 */
-	public String getSecretWord(PAYMENTTYPE type, COUNTRYCODE country);
-	
-	/**
-	 * Constants for the end point url found in the class SveaConfig
-	 * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
-	 * @return
-	 */
-	public URL getEndPoint(PAYMENTTYPE type);
+    /**
+     * Get the return value from your database or likewise
+     * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
+     * @param country code
+     * @return user name
+     */
+    public String getUsername(PAYMENTTYPE type, COUNTRYCODE country);
+    
+    /**
+     * Get the return value from your database or likewise
+     * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
+     * @param country code
+     * @return password
+     */
+    public String getPassword(PAYMENTTYPE type, COUNTRYCODE country);
+    
+    /**
+     * Get the return value from your database or likewise
+     * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
+     * @param country code
+     * @return client number
+     */
+    public int getClientNumber(PAYMENTTYPE type, COUNTRYCODE country);
+    
+    /**
+     * Get the return value from your database or likewise
+     * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
+     * @param country code
+     * @return merchant id
+     */
+    public String getMerchantId(PAYMENTTYPE type, COUNTRYCODE country);
+    
+    /**
+     * Get the return value from your database or likewise
+     * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
+     * @param country code
+     * @return secret word
+     */
+    public String getSecretWord(PAYMENTTYPE type, COUNTRYCODE country);
+    
+    /**
+     * Constants for the end point url found in the class SveaConfig
+     * @param type eg. HOSTED, INVOICE or PAYMENTPLAN
+     * @return
+     */
+    public URL getEndPoint(PAYMENTTYPE type);
 }
