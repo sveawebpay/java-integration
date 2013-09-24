@@ -5,7 +5,7 @@ import java.util.EnumSet;
 import java.util.List;
 
 public enum INVOICETYPE {
-    INVOICESE("SVEAINVOICESE", COUNTRYCODE.SE),    
+    INVOICESE("SVEAINVOICESE", COUNTRYCODE.SE),
     INVOICE_SE("SVEAINVOICEEU_SE", COUNTRYCODE.SE),
     INVOICE_NO("SVEAINVOICEEU_NO", COUNTRYCODE.NO),
     INVOICE_DK("SVEAINVOICEEU_DK", COUNTRYCODE.DK),
@@ -32,6 +32,7 @@ public enum INVOICETYPE {
         for (INVOICETYPE it : INVOICETYPE.ALL_INVOICETYPES) {
             allValues.add(it.getValue());
         }
+        
         return allValues;
     }
     

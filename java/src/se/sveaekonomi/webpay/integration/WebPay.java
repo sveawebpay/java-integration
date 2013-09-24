@@ -16,7 +16,6 @@ import se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams.Payment
 /**
  * Start build request object by choosing the right method.
  * @author klar-sar
- *
  */
 public class WebPay {
     
@@ -35,7 +34,7 @@ public class WebPay {
      */
     public static CreateOrderBuilder createOrder() {
         return createOrder(SveaConfig.getDefaultConfig()); 
-    }     
+    }
     
     /**
      * Start building request to close order.

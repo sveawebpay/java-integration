@@ -8,7 +8,7 @@ import se.sveaekonomi.webpay.integration.response.Response;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 
 public class DeliverOrderResponse extends Response {
-    
+
     private double amount;
     private ORDERTYPE orderType;
     private int invoiceId;
@@ -26,6 +26,7 @@ public class DeliverOrderResponse extends Response {
     
     public void setValues(NodeList soapResponse) {
         String tmpOrderType;
+        
         try {
             int size = soapResponse.getLength();
             
@@ -84,8 +85,10 @@ public class DeliverOrderResponse extends Response {
                 
                 if (nodeName.equals(tagName)) {
                     tagValue = getTagValue((Element) n, tagName);
-                    if (tagValue != null)
+                    
+                    if (tagValue != null) {
                         this.setValue(tagName, tagValue);
+                    }
                 }
                 
                 setChildNodeValue(childNode, tagName);
@@ -94,20 +97,21 @@ public class DeliverOrderResponse extends Response {
     }
     
     private void setValue(String tagName, String tagValue) {
-        if (tagName.equals("InvoiceId"))
+        if (tagName.equals("InvoiceId")) {
             this.setInvoiceId(Integer.valueOf(tagValue));
-        else if (tagName.equals("DueDate"))
+        } else if (tagName.equals("DueDate")) {
             this.setDueDate(tagValue);
-        else if (tagName.equals("InvoiceDate"))
+        } else if (tagName.equals("InvoiceDate")) {
             this.setInvoiceDate(tagValue);
-        else if (tagName.equals("InvoiceDistributionType"))
+        } else if (tagName.equals("InvoiceDistributionType")) {
             this.setInvoiceDistributionType(tagValue);
-        else if (tagName.equals("ContractNumber"))
+        } else if (tagName.equals("ContractNumber")) {
             this.setContractNumber(Integer.valueOf(tagValue));
-        else if (tagName.equals("Ocr"))
+        } else if (tagName.equals("Ocr")) {
             this.setOcr(tagValue);
-        else if (tagName.equals("LowestAmountToPay"))
+        } else if (tagName.equals("LowestAmountToPay")) {
             this.setLowestAmountToPay(Double.valueOf(tagValue));
+        }
     }
     
     public ORDERTYPE getOrderType() {

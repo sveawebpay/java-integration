@@ -80,7 +80,7 @@ public class PaymentForm {
     
     public String getMacSha512() {
         return this.macSha512;
-    }    
+    }
     
     public Map<String, String> getFormHtmlFields() {
         return formHtmlFields;

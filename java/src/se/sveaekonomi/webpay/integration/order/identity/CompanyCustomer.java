@@ -1,7 +1,7 @@
 package se.sveaekonomi.webpay.integration.order.identity;
 
 public class CompanyCustomer extends CustomerIdentity<CompanyCustomer> {
-    
+
     private String companyName;
     private String orgNumber;
     private String companyVatNumber;

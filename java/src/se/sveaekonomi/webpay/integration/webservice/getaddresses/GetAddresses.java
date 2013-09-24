@@ -23,7 +23,6 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
  * SecurityNumber. 
  * Each address gets an "AddressSelector" - has to signify the address. This can
  * be used when creating order to have the invoice be sent to the specified address. 
- *  
  */
 public class GetAddresses {
     
@@ -129,18 +128,20 @@ public class GetAddresses {
     private SveaRequest<SveaGetAddresses> prepareRequest() throws ValidationException {
         String errors = "";
         errors = validateRequest();
-        if (errors.length() > 0)
+        
+        if (errors.length() > 0) {
             throw new ValidationException(errors);
+        }
         
         SveaGetAddresses sveaAddress = new SveaGetAddresses();
         sveaAddress.Auth = getStoreAuthorization();
         sveaAddress.IsCompany = (companyId != null ? true : false);
         sveaAddress.CountryCode = countryCode.toString();
         sveaAddress.SecurityNumber = nationalNumber;
-
+        
         SveaRequest<SveaGetAddresses> request = new SveaRequest<SveaGetAddresses>();
         request.request = sveaAddress;
-
+        
         return request;
     }
     

@@ -20,7 +20,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public class HandleOrder {
-    
+
     private DeliverOrderBuilder order;
     private SveaDeliverOrder sveaDeliverOrder;
     private SveaDeliverOrderInformation orderInformation;
@@ -73,6 +73,7 @@ public class HandleOrder {
             invoiceDetails.OrderRows  = formatter.formatRows(); 
             orderInformation.deliverInvoiceDetails = invoiceDetails;
         }
+        
         sveaDeliverOrder.deliverOrderInformation = orderInformation;
         SveaRequest<SveaDeliverOrder> request = new SveaRequest<SveaDeliverOrder>();
         request.request = sveaDeliverOrder;

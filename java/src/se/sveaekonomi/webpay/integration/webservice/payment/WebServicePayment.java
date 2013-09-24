@@ -173,22 +173,30 @@ public abstract class WebServicePayment {
         
         customerIdentity.PhoneNumber = createOrderBuilder.getCustomerIdentity().getPhoneNumber() != null 
                 ? String.valueOf(createOrderBuilder.getCustomerIdentity().getPhoneNumber()) : "";
+                
         customerIdentity.Street = createOrderBuilder.getCustomerIdentity().getStreetAddress() != null 
                 ? createOrderBuilder.getCustomerIdentity().getStreetAddress() : "";
+                
         customerIdentity.HouseNumber = createOrderBuilder.getCustomerIdentity().getHouseNumber() != null 
                 ? String.valueOf(createOrderBuilder.getCustomerIdentity().getHouseNumber()) : "";
+                
         customerIdentity.CoAddress = createOrderBuilder.getCustomerIdentity().getCoAddress() != null 
                 ? createOrderBuilder.getCustomerIdentity().getCoAddress() : "";
+                
         customerIdentity.ZipCode = createOrderBuilder.getCustomerIdentity().getZipCode() != null 
                 ? String.valueOf(createOrderBuilder.getCustomerIdentity().getZipCode()) : "";
+                
         customerIdentity.Locality = createOrderBuilder.getCustomerIdentity().getLocality() != null 
                 ? createOrderBuilder.getCustomerIdentity().getLocality() : "";
+                
         customerIdentity.Email = createOrderBuilder.getCustomerIdentity().getEmail() != null
                 ? createOrderBuilder.getCustomerIdentity().getEmail() : "";
+                
         customerIdentity.IpAddress = createOrderBuilder.getCustomerIdentity().getIpAddress() != null 
                 ? createOrderBuilder.getCustomerIdentity().getIpAddress() : "";
         
         customerIdentity.CustomerType = (isCompany ? "Company" : "Individual");
+        
         customerIdentity.CountryCode = this.createOrderBuilder.getCountryCode();
         
         return customerIdentity;

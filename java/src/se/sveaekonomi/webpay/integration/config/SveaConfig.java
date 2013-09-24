@@ -5,8 +5,6 @@ import java.net.URL;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 
-/**
- */
 public class SveaConfig {
     
     private static final String SWP_TEST_URL = "https://test.sveaekonomi.se/webpay/payment";

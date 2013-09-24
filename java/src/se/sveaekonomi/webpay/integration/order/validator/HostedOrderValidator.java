@@ -8,8 +8,9 @@ public class HostedOrderValidator extends OrderValidator {
     public String validate(CreateOrderBuilder order) {
         errors = "";
         
-        if (order.getCountryCode()==null)
+        if (order.getCountryCode() == null) {
             errors += "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n";
+        }
         //Check if paymentMethod is INVOICE or PAYMENTPLAN
     /*    else if (order.getCountryCode()==COUNTRYCODE.NL)
             errors += new IdentityValidator().validateNLIdentity(order);
@@ -25,12 +26,11 @@ public class HostedOrderValidator extends OrderValidator {
         return this.errors;
     }
     
-    
     private void validateCurrency(CreateOrderBuilder order) {
         if (order.getCurrency()==null)
             errors += "MISSING VALUE - Currency is required. Use setCurrency(...).\n";
     }
-
+    
     private void validateClientOrderNumber(CreateOrderBuilder order) {
         if (order.getClientOrderNumber() == null) { 
             this.errors += "MISSING VALUE - ClientOrderNumber is required. Use setClientOrderNumber(...).\n";

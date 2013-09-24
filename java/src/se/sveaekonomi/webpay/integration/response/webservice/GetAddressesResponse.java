@@ -7,7 +7,7 @@ import org.w3c.dom.NodeList;
 import se.sveaekonomi.webpay.integration.response.Response;
 
 public class GetAddressesResponse extends Response {
-    
+
     private String legalName;
     private String securityNumber;
     private String addressLine1;

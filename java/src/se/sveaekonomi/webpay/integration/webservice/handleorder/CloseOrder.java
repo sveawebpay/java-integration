@@ -50,10 +50,10 @@ public class CloseOrder {
         SveaCloseOrderInformation orderInfo = new SveaCloseOrderInformation();
         orderInfo.SveaOrderId = order.getOrderId();
         sveaCloseOrder.CloseOrderInformation = orderInfo;
-
+        
         SveaRequest<SveaCloseOrder> object = new SveaRequest<SveaCloseOrder>();
         object.request = sveaCloseOrder;
-
+        
         return object;
     }
     

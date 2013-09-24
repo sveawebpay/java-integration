@@ -67,7 +67,7 @@ public class WebServiceXmlBuilder extends XMLBuilder{
                 }
                 xmlw.writeEndElement(); //CustomerIdentity
             }
-        
+            
             writeSimpleElement(prefix+"OrderDate", order.CreateOrderInformation.OrderDate);
             writeSimpleElement(prefix+"AddressSelector", order.CreateOrderInformation.AddressSelector);
             writeSimpleElement(prefix+"CustomerReference", order.CreateOrderInformation.CustomerReference);
@@ -80,7 +80,7 @@ public class WebServiceXmlBuilder extends XMLBuilder{
                 String code = (String)order.CreateOrderInformation.CreatePaymentPlanDetails.get("CampaignCode");
                 writeSimpleElement(prefix+"CampaignCode", code);              
                 writeSimpleElement("SendAutomaticGiroPaymentForm", String.valueOf((boolean)order.CreateOrderInformation.CreatePaymentPlanDetails.get("SendAutomaticGiroPaymentForm")));
-    
+                
                 // ?? CoCustomerIdentity ???
                 //?? writeSimpleElement("FixedMonthlyAmount", order.CreateOrderInformation.CreatePaymentPlanDetails.)                                       
             }
@@ -202,8 +202,9 @@ public class WebServiceXmlBuilder extends XMLBuilder{
     }
     
     private void getAuth(SveaAuth auth) throws XMLStreamException {
-        if (auth == null)
+        if (auth == null) {
             return;
+        }
         
         xmlw.writeStartElement(prefix+"Auth");
         writeSimpleElement(prefix+"ClientNumber", auth.ClientNumber.toString());
@@ -213,13 +214,16 @@ public class WebServiceXmlBuilder extends XMLBuilder{
     }
     
     private void serializeOrderRows(ArrayList<SveaOrderRow> rows) throws XMLStreamException {
-        if (rows == null || rows.size() == 0)
+        if (rows == null || rows.size() == 0) {
             return;
+        }
         
         xmlw.writeStartElement(prefix+"OrderRows");
+        
         for (SveaOrderRow row : rows) {
             serializeOrderRow(row);
         }
+        
         xmlw.writeEndElement();
     }
     

@@ -45,9 +45,10 @@ public class WebserviceRowFormatter {
         totalVatAsAmount = 0;
         List<OrderRowBuilder> orderRows = order.getOrderRows();
         double vatPercentAsHundredth;
+        
         for (OrderRowBuilder existingRow : orderRows) {
             vatPercentAsHundredth = existingRow.getVatPercent() != null ? existingRow.getVatPercent() * 0.01 : 0;
- 
+            
             if (existingRow.getVatPercent() != null && existingRow.getAmountExVat() != null) {
                 this.totalAmountExVat += existingRow.getAmountExVat();
                 this.totalVatAsAmount += vatPercentAsHundredth * existingRow.getAmountExVat();
@@ -60,6 +61,7 @@ public class WebserviceRowFormatter {
                 this.totalVatAsAmount += existingRow.getAmountIncVat() - existingRow.getAmountExVat();
             }
         }
+        
         totalAmountInclVat = totalAmountExVat + totalVatAsAmount;
         totalAmountExVat = totalAmountInclVat - totalVatAsAmount;
         totalVatAsPercent = totalVatAsAmount / totalAmountInclVat; // e.g. 0,20 if percentage 20
@@ -67,6 +69,7 @@ public class WebserviceRowFormatter {
     
     private void formatOrderRows() {
         List<OrderRowBuilder> orderRows = order.getOrderRows();
+        
         for (OrderRowBuilder existingRow : orderRows) {
             SveaOrderRow orderRow = new SveaOrderRow();
             orderRow = serializeOrder(existingRow.getArticleNumber(), existingRow.getDescription(), existingRow.getName(), existingRow.getUnit(), orderRow);          
@@ -83,7 +86,9 @@ public class WebserviceRowFormatter {
         if (this.order.getShippingFeeRows() == null) {
             return;
         }
+        
         List<ShippingFeeBuilder> shippingFeeRows = order.getShippingFeeRows();
+        
         for (ShippingFeeBuilder row : shippingFeeRows) {
             SveaOrderRow orderRow = new SveaOrderRow();
             orderRow = serializeOrder(row.getShippingId(), row.getDescription(), row.getName(), row.getUnit(), orderRow);
@@ -99,7 +104,9 @@ public class WebserviceRowFormatter {
         if (this.order.getInvoiceFeeRows() == null) {
             return;
         }
+        
         List<InvoiceFeeBuilder> invoiceFeeRows = order.getInvoiceFeeRows();
+        
         for (InvoiceFeeBuilder row : invoiceFeeRows) {
             SveaOrderRow orderRow = new SveaOrderRow();
             orderRow = serializeOrder("", row.getDescription(), row.getName(), row.getUnit(), orderRow);
@@ -118,6 +125,7 @@ public class WebserviceRowFormatter {
         }
         
         List<FixedDiscountBuilder> fixedDiscountRows = order.getFixedDiscountRows();
+        
         for (FixedDiscountBuilder row : fixedDiscountRows) {
             double productTotalAfterDiscount = this.totalAmountInclVat - row.getAmount();
             double totalProductVatAsAmountAfterDiscount = this.totalVatAsPercent * productTotalAfterDiscount;
@@ -141,7 +149,9 @@ public class WebserviceRowFormatter {
         if (this.order.getRelativeDiscountRows() == null) {
             return;
         }
+        
         List<RelativeDiscountBuilder> relativeDiscountRows = order.getRelativeDiscountRows();
+        
         for (RelativeDiscountBuilder row : relativeDiscountRows) {
             SveaOrderRow orderRow = new SveaOrderRow();
             
@@ -152,7 +162,7 @@ public class WebserviceRowFormatter {
             
             double pricePerUnitExMoms = Math.round((this.totalAmountExVat * (row.getDiscountPercent() * 0.01)) * 100.00) / 100.00;
             orderRow.PricePerUnit = - pricePerUnitExMoms;
-
+            
             BigDecimal bd = new BigDecimal(Math.round((this.totalVatAsAmount*100.0) * ((row.getDiscountPercent()* 0.01)* 100.0)) / pricePerUnitExMoms / 100.0);
             bd = bd.setScale(2, BigDecimal.ROUND_HALF_UP);
             orderRow.VatPercent = bd.doubleValue();
@@ -162,16 +172,19 @@ public class WebserviceRowFormatter {
     }
     
     private SveaOrderRow serializeOrder(String articleNumber, String description, String name, String unit, SveaOrderRow orderRow) {
-        if (articleNumber != null)
+        if (articleNumber != null) {
             orderRow.ArticleNumber = articleNumber;
-            
-        if (description != null)
-            orderRow.Description = (name != null ? name + ": " : "") + "" + description;
-        else if (name != null && description == null)
-            orderRow.Description = name;
+        }
         
-        if (unit != null)
+        if (description != null) {
+            orderRow.Description = (name != null ? name + ": " : "") + "" + description;
+        } else if (name != null && description == null) {
+            orderRow.Description = name;
+        }
+        
+        if (unit != null) {
             orderRow.Unit = unit;
+        }
         
         return orderRow;
     }

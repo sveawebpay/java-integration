@@ -29,6 +29,7 @@ public class SveaTestConfigurationProvider implements ConfigurationProvider{
                     break;
             }
         }
+        
         return "";
     }
 

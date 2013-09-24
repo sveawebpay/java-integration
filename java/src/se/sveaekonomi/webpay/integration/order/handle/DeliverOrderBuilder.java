@@ -12,6 +12,7 @@ import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
  * @author klar-sar
  */
 public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
+
     private HandleOrderValidator validator;
     
     private long orderId;

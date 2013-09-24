@@ -71,37 +71,7 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
     public OrderBuilder<T> setRelativeDiscountRows(ArrayList<RelativeDiscountBuilder> relativeDiscountRows) {
         this.relativeDiscountRows = relativeDiscountRows;
         return this;
-    }       
-    
-  /*  public OrderRowBuilder<T> beginOrderRow() {
-        OrderRowBuilder<T> rowBuilder = new OrderRowBuilder(this);
-        orderRows.add(rowBuilder);
-        return rowBuilder;
     }
-    
-    public InvoiceFeeBuilder<T> beginInvoiceFee() {
-        InvoiceFeeBuilder<T> invoiceFee = new InvoiceFeeBuilder(this);
-        invoiceFeeRows.add(invoiceFee);
-        return invoiceFee;
-    }
-    
-    public ShippingFeeBuilder<T> beginShippingFee() {
-        ShippingFeeBuilder<T> shipping = new ShippingFeeBuilder(this);
-        shippingFeeRows.add(shipping);
-        return shipping;
-    }
-    
-    public FixedDiscountBuilder<T> beginFixedDiscount() {
-        FixedDiscountBuilder<T> fixedDiscount = new FixedDiscountBuilder(this);
-        fixedDiscountRows.add(fixedDiscount);
-        return fixedDiscount;
-    }
-    
-    public RelativeDiscountBuilder<T> beginRelativeDiscount() {
-        RelativeDiscountBuilder<T> relativeDisc = new RelativeDiscountBuilder(this);
-        relativeDiscountRows.add(relativeDisc);
-        return relativeDisc;
-    }*/
     
     public T run(BuilderCommand<T> runner) {
         return runner.run(this);
@@ -111,7 +81,7 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
         this.orderRows.add(itemOrderRow);
         return getGenericThis();
     }
-
+    
     @SuppressWarnings("unchecked")
     protected T getGenericThis() {
         return (T) this;

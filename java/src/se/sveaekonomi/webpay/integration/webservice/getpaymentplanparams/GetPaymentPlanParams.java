@@ -46,16 +46,20 @@ public class GetPaymentPlanParams {
     }
     
     public String validateRequest() {
-        if (this.countryCode == null)
+        if (this.countryCode == null) {
             return "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+        }
+        
         return "";
     }
     
     private SveaRequest<SveaGetPaymentPlanParams> prepareRequest() throws ValidationException {
         String errors = "";
         errors = validateRequest();
-        if (errors.length() > 0)
+        
+        if (errors.length() > 0) {
             throw new ValidationException(errors);
+        }
         
         SveaGetPaymentPlanParams params = new SveaGetPaymentPlanParams();
         

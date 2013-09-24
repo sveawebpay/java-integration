@@ -5,7 +5,7 @@ package se.sveaekonomi.webpay.integration.order.row;
  * @since 2012-12-04
  */
 public class OrderRowBuilder implements RowBuilder {
-    
+
     private String articleNumber;
     private String name;
     private String description;

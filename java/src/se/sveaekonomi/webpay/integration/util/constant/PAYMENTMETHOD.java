@@ -1,6 +1,5 @@
 package se.sveaekonomi.webpay.integration.util.constant;
 
-
 public enum PAYMENTMETHOD {
     //--DIRECT BANK--
     BANKAXESS(PAYMENTMETHODTYPE.DIRECT, "BANKAXESS"), //new - not yet implemented in code
