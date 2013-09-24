@@ -1,6 +1,5 @@
 package se.sveaekonomi.webpay.integration.order.row;
 
-
 public class InvoiceFeeBuilder implements RowBuilder {
 
     private String name;
@@ -106,7 +105,7 @@ public class InvoiceFeeBuilder implements RowBuilder {
     public Double getAmountIncVat() {
         return amountIncVat;
     }
-
+    
     /**
      * Optional
      * Required to use at least two of the methods setAmountExVat(), setAmountIncVat() or setVatPercent()
@@ -117,8 +116,4 @@ public class InvoiceFeeBuilder implements RowBuilder {
         this.amountIncVat = amountIncVat;
         return this;
     }
-    
-   /* public T endRow() {
-        return (T)orderBuilder;
-    }*/
 }

@@ -41,6 +41,6 @@ public enum PAYMENTPLANTYPE {
 		for (PAYMENTPLANTYPE ppt : PAYMENTPLANTYPE.ALL_PAYMENTPLANTYPES) {
 			allValues.add(ppt.getValue());
 		}
-		return allValues;	
+		return allValues;
 	}
 }

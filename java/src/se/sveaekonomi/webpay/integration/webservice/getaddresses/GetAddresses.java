@@ -30,7 +30,7 @@ public class GetAddresses {
     private String nationalNumber;
     private String companyId;
     private COUNTRYCODE countryCode;
-    private String orderType;   
+    private String orderType;
     private ConfigurationProvider config;
     
     public GetAddresses(ConfigurationProvider config) {
@@ -57,7 +57,7 @@ public class GetAddresses {
     public String getCompanyId() {
         return companyId;
     }
-        
+    
     /**
      * Required if customer is Company
      * @param companyId
@@ -163,5 +163,4 @@ public class GetAddresses {
         GetAddressesResponse response = new GetAddressesResponse(soapResponse);
         return response;
     }
-   
 }

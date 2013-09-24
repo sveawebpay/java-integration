@@ -19,7 +19,6 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrderIn
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
-
 public class HandleOrder {
     
     private DeliverOrderBuilder order;
@@ -28,9 +27,9 @@ public class HandleOrder {
     
     public HandleOrder(DeliverOrderBuilder orderBuilder) {
         this.order =  orderBuilder;
-    }    
-        
-    protected SveaAuth getStoreAuthorization() {    
+    }
+    
+    protected SveaAuth getStoreAuthorization() {
     	 SveaAuth auth = new SveaAuth();
     	 PAYMENTTYPE type = (order.getOrderType() == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
          auth.Username = order.getConfig().getUsername(type, order.getCountryCode());
@@ -97,6 +96,6 @@ public class HandleOrder {
         String soapMessage = soapBuilder.makeSoapMessage("DeliverOrderEu", xml);
         NodeList soapResponse = soapBuilder.deliverOrderEuRequest(soapMessage, url.toString());
         DeliverOrderResponse response = new DeliverOrderResponse(soapResponse); 
-        return response;               
+        return response;
     }
 }

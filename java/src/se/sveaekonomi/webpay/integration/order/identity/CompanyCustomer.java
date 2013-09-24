@@ -60,7 +60,6 @@ public class CompanyCustomer extends CustomerIdentity<CompanyCustomer> {
     }
     
     /**
-     * 
      * @param addressSelector
      * @return CompanyCustomer
      */

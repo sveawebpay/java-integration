@@ -11,5 +11,5 @@ public enum COUNTRYCODE {
     FI,
     DK,
     DE,
-    NL    
+    NL
 }

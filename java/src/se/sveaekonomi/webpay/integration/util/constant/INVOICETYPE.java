@@ -32,7 +32,7 @@ public enum INVOICETYPE {
 		for (INVOICETYPE it : INVOICETYPE.ALL_INVOICETYPES) {
 			allValues.add(it.getValue());
 		}
-		return allValues;	
+		return allValues;
 	}
 	
 	public COUNTRYCODE getCountryCode() {

@@ -159,11 +159,11 @@ public class OrderRowBuilder implements RowBuilder {
         this.discountPercent = discountPercent;
         return this;
     }
-
+    
     public Double getAmountIncVat() {
         return amountIncVat;
     }
-
+    
     /**
      * Optional
      * Required to use at least two of the methods setAmountExVat(), setAmountIncVat() or setVatPercent()

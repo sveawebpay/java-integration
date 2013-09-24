@@ -35,10 +35,12 @@ public class CloseOrderResponse extends Response{
     private String getTagValue(Element elementNode, String tagName) {
         NodeList nodeList = elementNode.getElementsByTagName(tagName);
         Element element = (Element) nodeList.item(0);
+        
         if (element != null && element.hasChildNodes()) {
             NodeList textList = element.getChildNodes();
             return ((Node) textList.item(0)).getNodeValue().trim();
         }
+        
         return null;
     }
 }

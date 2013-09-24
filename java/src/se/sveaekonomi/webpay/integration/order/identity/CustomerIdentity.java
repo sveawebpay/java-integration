@@ -106,7 +106,7 @@ public abstract class CustomerIdentity <T extends CustomerIdentity<T>> {
      * Required for company and private customers in NL and DE
      * @param type locality
      * @return CustomerIdentity
-     */    
+     */
     public T setLocality(String locality) {
         this.locality = locality;
         return getGenericThis();

@@ -1,7 +1,5 @@
 package se.sveaekonomi.webpay.integration.response;
 
-
-
 public class Response {
     
     private boolean isOrderAccepted;
@@ -34,5 +32,5 @@ public class Response {
 
     public void setErrorMessage(String errorMessage) {
         this.errorMessage = errorMessage;
-    }   
+    }
 }

@@ -35,11 +35,12 @@ public class DeliverOrderResponse extends Response {
                 this.setResultCode(getTagValue(node, "ResultCode"));
                 String errorMsg = getTagValue(node, "ErrorMessage");
                 
-                if (errorMsg != null)
+                if (errorMsg != null) {
                     this.setErrorMessage(errorMsg);
-                else {                    
+                } else {
                     this.setAmount(Double.parseDouble(getTagValue(node, "Amount")));
                     tmpOrderType = getTagValue(node, "OrderType");
+                    
                     if (tmpOrderType.equals(ORDERTYPE.Invoice.toString())) {
                         // Set child nodes from InvoiceResultDetails
                         setChildNodeValue(node, "InvoiceId");
@@ -76,6 +77,7 @@ public class DeliverOrderResponse extends Response {
         if (n.hasChildNodes()) {
             NodeList nl = n.getChildNodes();
             int length = nl.getLength();
+            
             for (int j = 0; j < length; j++) {
                 Node childNode = nl.item(j);
                 String nodeName = childNode.getNodeName();

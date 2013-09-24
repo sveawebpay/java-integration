@@ -5,9 +5,8 @@ import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 
 /**
- * Close an already created order  
+ * Close an already created order
  * @author klar-sar
- *
  */
 public class CloseOrderBuilder {
     private COUNTRYCODE countryCode;
@@ -59,12 +58,12 @@ public class CloseOrderBuilder {
         this.orderType = orderType;
         return this;
     }
-
+    
     public CloseOrder closeInvoiceOrder() {
         orderType = "Invoice";
         return new CloseOrder(this);
     }
-
+    
     public CloseOrder closePaymentPlanOrder() {
         orderType = "PaymentPlan";
         return new CloseOrder(this);

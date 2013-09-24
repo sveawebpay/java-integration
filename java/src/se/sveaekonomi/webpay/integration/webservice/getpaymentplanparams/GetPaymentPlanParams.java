@@ -18,7 +18,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public class GetPaymentPlanParams {
-        
+    
 	private COUNTRYCODE countryCode;
     private ConfigurationProvider config;
     
@@ -35,7 +35,7 @@ public class GetPaymentPlanParams {
     	this.countryCode = countryCode;
     	return this;
     }
-        
+    
     protected SveaAuth getStoreAuthorization() {
     	SveaAuth auth = new SveaAuth();
         auth.Username = config.getUsername(PAYMENTTYPE.PAYMENTPLAN, countryCode);
@@ -62,7 +62,7 @@ public class GetPaymentPlanParams {
         params.Auth = getStoreAuthorization();
         SveaRequest<SveaGetPaymentPlanParams> request = new SveaRequest<SveaGetPaymentPlanParams>();
         request.request = params;
-
+        
         return request;
     }
     

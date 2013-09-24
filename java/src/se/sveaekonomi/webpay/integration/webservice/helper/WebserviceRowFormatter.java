@@ -13,7 +13,7 @@ import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrderRow;
 
 public class WebserviceRowFormatter {
-       
+    
     private OrderBuilder<?> order;
     
     private double totalAmountExVat;
@@ -24,7 +24,7 @@ public class WebserviceRowFormatter {
     private ArrayList<SveaOrderRow> newRows;
     
     public WebserviceRowFormatter(OrderBuilder<?>  order) {
-        this.order = order;    
+        this.order = order;
     }
     
     public ArrayList<SveaOrderRow> formatRows() {
@@ -86,7 +86,7 @@ public class WebserviceRowFormatter {
         List<ShippingFeeBuilder> shippingFeeRows = order.getShippingFeeRows();
         for (ShippingFeeBuilder row : shippingFeeRows) {
             SveaOrderRow orderRow = new SveaOrderRow();
-            orderRow = serializeOrder(row.getShippingId(), row.getDescription(), row.getName(), row.getUnit(), orderRow);          
+            orderRow = serializeOrder(row.getShippingId(), row.getDescription(), row.getName(), row.getUnit(), orderRow);
             
             orderRow.DiscountPercent = (row.getDiscountPercent() != null ? row.getDiscountPercent() : 0);
             orderRow.NumberOfUnits = 1;
@@ -116,6 +116,7 @@ public class WebserviceRowFormatter {
         if (this.order.getFixedDiscountRows() == null) {
             return;
         }
+        
         List<FixedDiscountBuilder> fixedDiscountRows = order.getFixedDiscountRows();
         for (FixedDiscountBuilder row : fixedDiscountRows) {
             double productTotalAfterDiscount = this.totalAmountInclVat - row.getAmount();
@@ -124,7 +125,7 @@ public class WebserviceRowFormatter {
             
             SveaOrderRow orderRow = new SveaOrderRow();
             orderRow = serializeOrder(row.getDiscountId(), row.getDescription(), row.getName(), row.getUnit(), orderRow);
-           
+            
             orderRow.DiscountPercent = 0; // no discount on discount
             orderRow.NumberOfUnits = 1; // only one discount per row
             double pricePerUnitExMoms = Math.round((row.getAmount() - discountVatAsAmount) * 100.0) / 100.0;
@@ -145,10 +146,10 @@ public class WebserviceRowFormatter {
             SveaOrderRow orderRow = new SveaOrderRow();
             
             orderRow = serializeOrder(row.getDiscountId(), row.getDescription(), row.getName(), row.getUnit(), orderRow);
-        
+            
             orderRow.DiscountPercent = 0; // no discount on discount
             orderRow.NumberOfUnits = 1; // only one discount per row
-          
+            
             double pricePerUnitExMoms = Math.round((this.totalAmountExVat * (row.getDiscountPercent() * 0.01)) * 100.00) / 100.00;
             orderRow.PricePerUnit = - pricePerUnitExMoms;
 
@@ -176,7 +177,7 @@ public class WebserviceRowFormatter {
     }
     
     private SveaOrderRow serializeAmountAndVat(Double amountExVat, Double vatPercent, Double amountIncVat, SveaOrderRow orderRow) {
-    	if (vatPercent != null && amountExVat != null) {
+        if (vatPercent != null && amountExVat != null) {
             orderRow.PricePerUnit = amountExVat;
             orderRow.VatPercent = vatPercent;
         } else if (vatPercent != null && amountIncVat != null) {
@@ -186,7 +187,7 @@ public class WebserviceRowFormatter {
             orderRow.PricePerUnit = amountExVat;
             orderRow.VatPercent = ((amountIncVat / amountExVat) - 1) * 100;
         }
-    	
+        
         return orderRow;
     }
 }

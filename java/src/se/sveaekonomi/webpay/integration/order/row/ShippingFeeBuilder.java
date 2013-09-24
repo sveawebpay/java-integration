@@ -1,6 +1,5 @@
 package se.sveaekonomi.webpay.integration.order.row;
 
-
 /**
  * @author klar-sar
  * @since 2012-12-05
@@ -122,14 +121,10 @@ public class ShippingFeeBuilder implements RowBuilder {
         return this;
     }
      
-  /*  public T endRow() {
-        return (T)orderBuilder;
-    }*/
-
     public Double getAmountIncVat() {
         return amountIncVat;
     }
-
+    
     /**
      * Optional
      * Required to use at least two of the methods setAmountExVat(), setAmountIncVat() or setVatPercent()
