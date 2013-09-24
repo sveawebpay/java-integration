@@ -36,6 +36,8 @@ public abstract class WebServicePayment {
         orderInformation = new SveaCreateOrderInformation();
     }
     
+    protected abstract SveaCreateOrderInformation setOrderType(SveaCreateOrderInformation information);
+    
     private SveaAuth getPasswordBasedAuthorization() {
         SveaAuth auth = new SveaAuth();
         auth.Username = this.createOrderBuilder.getConfig().getUsername(this.orderType, this.createOrderBuilder.getCountryCode());
@@ -202,8 +204,9 @@ public abstract class WebServicePayment {
     }
     
     public SveaCreateOrderInformation formatOrderInformationWithOrderRows(List<OrderRowBuilder> rows) {
-        orderInformation = new SveaCreateOrderInformation(((!(this.createOrderBuilder.getCampaignCode() == null)) ? this.createOrderBuilder.getCampaignCode() : ""),
-                (!(this.createOrderBuilder.getSendAutomaticGiroPaymentForm() == null)) ? this.createOrderBuilder.getSendAutomaticGiroPaymentForm() : false);
+        String campaignCode = (this.createOrderBuilder.getCampaignCode() != null) ? this.createOrderBuilder.getCampaignCode() : "";
+        boolean sendAutomaticGiroPaymentForm = (this.createOrderBuilder.getSendAutomaticGiroPaymentForm() != null) ? this.createOrderBuilder.getSendAutomaticGiroPaymentForm() : false;
+        orderInformation = new SveaCreateOrderInformation(campaignCode, sendAutomaticGiroPaymentForm);
         
         WebserviceRowFormatter formatter = new WebserviceRowFormatter(this.createOrderBuilder);
         ArrayList<SveaOrderRow> formattedOrderRows = formatter.formatRows();
@@ -214,6 +217,4 @@ public abstract class WebServicePayment {
         
         return orderInformation;
     }
-    
-    protected abstract SveaCreateOrderInformation setOrderType(SveaCreateOrderInformation information);
 }
