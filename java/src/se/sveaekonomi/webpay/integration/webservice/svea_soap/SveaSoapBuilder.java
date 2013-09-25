@@ -32,16 +32,16 @@ public class SveaSoapBuilder {
         }
     }
     
-    public NodeList createOrderEuRequest(String message, String urlEndpoint) {    
-            return sendSoapMessage(message, urlEndpoint, "CreateOrderEu", "CreateOrderEuResult");   
+    public NodeList createOrderEuRequest(String message, String urlEndpoint) {
+            return sendSoapMessage(message, urlEndpoint, "CreateOrderEu", "CreateOrderEuResult");
     }
     
     public NodeList closeOrderEuRequest(String message, String urlEndpoint) {
-        return sendSoapMessage(message, urlEndpoint, "CloseOrderEu", "CloseOrderEuResult");       
+        return sendSoapMessage(message, urlEndpoint, "CloseOrderEu", "CloseOrderEuResult");
     }
     
     public NodeList deliverOrderEuRequest(String message, String urlEndpoint) {
-        return sendSoapMessage(message, urlEndpoint, "DeliverOrderEu", "DeliverOrderEuResult");      
+        return sendSoapMessage(message, urlEndpoint, "DeliverOrderEu", "DeliverOrderEuResult");
     }
         
     public NodeList createGetAddressesEuRequest(String message, String urlEndpoint) {
@@ -74,8 +74,8 @@ public class SveaSoapBuilder {
             // send message
             URL endpoint = new URL(urlEndpoint);
             SOAPMessage response = connection.call(outgoingMessage, endpoint);
-
-            connection.close();            
+            
+            connection.close();
             return response.getSOAPPart().getEnvelope().getElementsByTagName(responseHeader);
             
         } catch (Exception ex) {
