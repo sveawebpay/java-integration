@@ -80,8 +80,9 @@ public class HostedXmlBuilder extends XMLBuilder {
     }
     
     private void serializeCustomer(CreateOrderBuilder order, HostedPayment<?> payment) {
+        CustomerIdentity<?> customer;
+        
         try {
-            CustomerIdentity<?> customer;
             if (order.getIsCompanyIdentity()) {
                 customer = order.getCompanyCustomer();
             } else {
@@ -90,20 +91,20 @@ public class HostedXmlBuilder extends XMLBuilder {
             
             xmlw.writeStartElement("customer");
             
-            //nordic country individual customer type
-            if (customer.getNationalIdNumber()!=null) {
+            //Nordic country individual customer type
+            if (customer.getNationalIdNumber() != null) {
                 writeSimpleElement("ssn", customer.getNationalIdNumber());
             }
-            //euro country individual
+            //Euro country individual
             else if (!order.getIsCompanyIdentity()) {
                 writeSimpleElement("ssn", ((IndividualCustomer)customer).getBirthDate().toString());
             }
-            //euro country, Company customer and nationalId not set
+            //Euro country, company customer and nationalId not set
             else if (order.getIsCompanyIdentity()) {
                 writeSimpleElement("ssn", ((CompanyCustomer)customer).getVatNumber());
             }
             
-            //set for individual customer
+            //Set for individual customer
             if (!order.getIsCompanyIdentity()) {
                 IndividualCustomer individualCustomer = (IndividualCustomer)customer;
                 
@@ -118,68 +119,40 @@ public class HostedXmlBuilder extends XMLBuilder {
                 if (individualCustomer.getInitials() != null) {
                     writeSimpleElement("initials", individualCustomer.getInitials());
                 }
-                
-                if (individualCustomer.getPhoneNumber() != null) {
-                    writeSimpleElement("phone", individualCustomer.getPhoneNumber());
-                }
-                
-                if (individualCustomer.getEmail() != null) {
-                    writeSimpleElement("email", individualCustomer.getEmail());
-                }
-                
-                if (individualCustomer.getStreetAddress() != null) {
-                    writeSimpleElement("address", individualCustomer.getStreetAddress());
-                }
-                
-                if (individualCustomer.getCoAddress() != null) {
-                    writeSimpleElement("address2", individualCustomer.getCoAddress());
-                }
-                
-                if (individualCustomer.getHouseNumber() != null) {
-                    writeSimpleElement("housenumber", individualCustomer.getHouseNumber());
-                }
-                
-                if (individualCustomer.getZipCode() != null) {
-                    writeSimpleElement("zip", individualCustomer.getZipCode());
-                }
-                
-                if (individualCustomer.getLocality() != null) {
-                    writeSimpleElement("city", individualCustomer.getLocality().toString());
-                }
-            } else {
+            } else { //Set for company customer
                 CompanyCustomer companyCustomer = (CompanyCustomer)customer;
                 
                 if (companyCustomer.getCompanyName() != null) {
                     writeSimpleElement("firstname", companyCustomer.getCompanyName());
                 }
-                
-                if (companyCustomer.getPhoneNumber() != null) {
-                    writeSimpleElement("phone", companyCustomer.getPhoneNumber());
-                }
-                
-                if (companyCustomer.getEmail() != null) {
-                    writeSimpleElement("email", companyCustomer.getEmail());
-                }
-                
-                if (companyCustomer.getStreetAddress() != null) {
-                    writeSimpleElement("address", companyCustomer.getStreetAddress());
-                }
-                
-                if (companyCustomer.getCoAddress() != null) {
-                    writeSimpleElement("address2", companyCustomer.getCoAddress());
-                }
-                
-                if (companyCustomer.getHouseNumber() != null) {
-                    writeSimpleElement("housenumber", companyCustomer.getHouseNumber());
-                }
-                
-                if (companyCustomer.getZipCode() != null) {
-                    writeSimpleElement("zip", companyCustomer.getZipCode());
-                }
-                
-                if (companyCustomer.getLocality() != null) {
-                    writeSimpleElement("city", companyCustomer.getLocality().toString());
-                }
+            }
+            
+            if (customer.getPhoneNumber() != null) {
+                writeSimpleElement("phone", customer.getPhoneNumber());
+            }
+            
+            if (customer.getEmail() != null) {
+                writeSimpleElement("email", customer.getEmail());
+            }
+            
+            if (customer.getStreetAddress() != null) {
+                writeSimpleElement("address", customer.getStreetAddress());
+            }
+            
+            if (customer.getCoAddress() != null) {
+                writeSimpleElement("address2", customer.getCoAddress());
+            }
+            
+            if (customer.getHouseNumber() != null) {
+                writeSimpleElement("housenumber", customer.getHouseNumber());
+            }
+            
+            if (customer.getZipCode() != null) {
+                writeSimpleElement("zip", customer.getZipCode());
+            }
+            
+            if (customer.getLocality() != null) {
+                writeSimpleElement("city", customer.getLocality().toString());
             }
             
             if (order.getCountryCode() != null) {
