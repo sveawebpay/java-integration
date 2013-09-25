@@ -26,7 +26,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public abstract class WebServicePayment {
-    
+
     protected CreateOrderBuilder createOrderBuilder;
     protected PAYMENTTYPE orderType;
     public SveaCreateOrderInformation orderInformation;
@@ -36,7 +36,7 @@ public abstract class WebServicePayment {
         orderInformation = new SveaCreateOrderInformation();
     }
     
-    protected abstract SveaCreateOrderInformation setOrderType(SveaCreateOrderInformation information);
+    protected abstract SveaCreateOrderInformation setOrderType();
     
     private SveaAuth getPasswordBasedAuthorization() {
         SveaAuth auth = new SveaAuth();
@@ -92,7 +92,7 @@ public abstract class WebServicePayment {
         orderInformation.ClientOrderNumber = this.createOrderBuilder.getClientOrderNumber();
         orderInformation.OrderDate = this.createOrderBuilder.getOrderDate();
         orderInformation.CustomerReference = this.createOrderBuilder.getCustomerReference();
-        sveaOrder.CreateOrderInformation = this.setOrderType(orderInformation);
+        sveaOrder.CreateOrderInformation = this.setOrderType();
         
         SveaRequest<SveaCreateOrder> object = new SveaRequest<SveaCreateOrder>();
         object.request = sveaOrder;
