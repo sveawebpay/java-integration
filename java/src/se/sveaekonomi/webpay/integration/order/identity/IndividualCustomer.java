@@ -1,7 +1,7 @@
 package se.sveaekonomi.webpay.integration.order.identity;
 
 public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
-    
+
     private String ssn;
     private String birthDate;
     private String firstName;

@@ -80,7 +80,7 @@ public class PaymentForm {
     
     public String getMacSha512() {
         return this.macSha512;
-    }    
+    }
     
     public Map<String, String> getFormHtmlFields() {
         return formHtmlFields;
@@ -133,15 +133,15 @@ public class PaymentForm {
         this.setMessageBase64(Base64Util.encodeBase64String(xmlMessage));
     }
 
-	public String getHtmlFormMethod() {
-		return htmlFormMethod;
-	}
+    public String getHtmlFormMethod() {
+        return htmlFormMethod;
+    }
 
-	public void setPayPageUrl(URL payPageUrl) {
-		url = payPageUrl;
-	}
-	
-	public String getUrl() {
-		return url.toString();
-	}
+    public void setPayPageUrl(URL payPageUrl) {
+        url = payPageUrl;
+    }
+    
+    public String getUrl() {
+        return url.toString();
+    }
 }

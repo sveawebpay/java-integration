@@ -25,30 +25,30 @@ public class IdentityValidator {
         
         //Individual
         if (!order.getIsCompanyIdentity()) {
-	        if (order.getIndividualCustomer().getInitials() == null) {
-	            errors += "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use setInitials().\n";
-	        }
-	        
-	        if (order.getIndividualCustomer().getBirthDate() == null
-	                || order.getIndividualCustomer().getBirthDate().isEmpty()) {
-	            errors += "MISSING VALUE - Birth date is required for individual customers when countrycode is NL. Use setBirthDate().\n";
-	        }
-	        
-	        if (order.getIndividualCustomer().getFirstName() == null
-	                || order.getIndividualCustomer().getLastName() == null) {
-	             errors += "MISSING VALUE - Name is required for individual customers when countrycode is NL. Use setName().\n";
-	        }
+            if (order.getIndividualCustomer().getInitials() == null) {
+                errors += "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use setInitials().\n";
+            }
+            
+            if (order.getIndividualCustomer().getBirthDate() == null
+                    || order.getIndividualCustomer().getBirthDate().isEmpty()) {
+                errors += "MISSING VALUE - Birth date is required for individual customers when countrycode is NL. Use setBirthDate().\n";
+            }
+            
+            if (order.getIndividualCustomer().getFirstName() == null
+                    || order.getIndividualCustomer().getLastName() == null) {
+                 errors += "MISSING VALUE - Name is required for individual customers when countrycode is NL. Use setName().\n";
+            }
         }
         
         //Company
         if (order.getIsCompanyIdentity()) {
-	        if (order.getCompanyCustomer().getVatNumber() == null) {
-	            errors += "MISSING VALUE - Vat number is required for company customers when countrycode is NL. Use setVatNumber().\n";
-	        }
-	        
-	        if (order.getCompanyCustomer().getCompanyName() == null) {
-	            errors += "MISSING VALUE - Company name is required for individual customers when countrycode is NL. Use setName().\n";
-	        }
+            if (order.getCompanyCustomer().getVatNumber() == null) {
+                errors += "MISSING VALUE - Vat number is required for company customers when countrycode is NL. Use setVatNumber().\n";
+            }
+            
+            if (order.getCompanyCustomer().getCompanyName() == null) {
+                errors += "MISSING VALUE - Company name is required for individual customers when countrycode is NL. Use setName().\n";
+            }
         }
         
         //Both individual and company
@@ -72,21 +72,21 @@ public class IdentityValidator {
         
         //Individual
         if (!order.getIsCompanyIdentity()) {
-	        if (order.getIndividualCustomer().getBirthDate() == null
-	        		|| order.getIndividualCustomer().getBirthDate().isEmpty()) {
-	            errors += "MISSING VALUE - Birth date is required for individual customers when countrycode is DE. Use setBirthDate().\n";
-	        }
-	        
-	        if (order.getIndividualCustomer().getFirstName() == null || order.getIndividualCustomer().getLastName() == null) {
-	            errors += "MISSING VALUE - Name is required for individual customers when countrycode is DE. Use setName().\n";
-	        }
+            if (order.getIndividualCustomer().getBirthDate() == null
+                    || order.getIndividualCustomer().getBirthDate().isEmpty()) {
+                errors += "MISSING VALUE - Birth date is required for individual customers when countrycode is DE. Use setBirthDate().\n";
+            }
+            
+            if (order.getIndividualCustomer().getFirstName() == null || order.getIndividualCustomer().getLastName() == null) {
+                errors += "MISSING VALUE - Name is required for individual customers when countrycode is DE. Use setName().\n";
+            }
         }
         
         //Company
         if (order.getIsCompanyIdentity()) {
-	        if (order.getCompanyCustomer().getVatNumber() == null) {
-	            errors += "MISSING VALUE - Vat number is required for company customers when countrycode is DE. Use setVatNumber().\n";
-	        }
+            if (order.getCompanyCustomer().getVatNumber() == null) {
+                errors += "MISSING VALUE - Vat number is required for company customers when countrycode is DE. Use setVatNumber().\n";
+            }
         }
         
         //Individual and Company

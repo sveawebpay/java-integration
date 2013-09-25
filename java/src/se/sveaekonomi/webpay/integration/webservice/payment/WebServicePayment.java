@@ -2,7 +2,6 @@ package se.sveaekonomi.webpay.integration.webservice.payment;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 import javax.xml.bind.ValidationException;
@@ -15,8 +14,8 @@ import se.sveaekonomi.webpay.integration.order.validator.WebServiceOrderValidato
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
-import se.sveaekonomi.webpay.integration.webservice.helper.WebserviceRowFormatter;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
+import se.sveaekonomi.webpay.integration.webservice.helper.WebserviceRowFormatter;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaAuth;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrderInformation;
@@ -27,7 +26,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public abstract class WebServicePayment {
-    
+
     protected CreateOrderBuilder createOrderBuilder;
     protected PAYMENTTYPE orderType;
     public SveaCreateOrderInformation orderInformation;
@@ -37,12 +36,14 @@ public abstract class WebServicePayment {
         orderInformation = new SveaCreateOrderInformation();
     }
     
+    protected abstract SveaCreateOrderInformation setOrderType();
+    
     private SveaAuth getPasswordBasedAuthorization() {
-    	SveaAuth auth = new SveaAuth();
-    	auth.Username = this.createOrderBuilder.getConfig().getUsername(this.orderType, this.createOrderBuilder.getCountryCode());
-    	auth.Password = this.createOrderBuilder.getConfig().getPassword(this.orderType, this.createOrderBuilder.getCountryCode());
-    	auth.ClientNumber = this.createOrderBuilder.getConfig().getClientNumber(this.orderType, this.createOrderBuilder.getCountryCode());
-    	return auth;
+        SveaAuth auth = new SveaAuth();
+        auth.Username = this.createOrderBuilder.getConfig().getUsername(this.orderType, this.createOrderBuilder.getCountryCode());
+        auth.Password = this.createOrderBuilder.getConfig().getPassword(this.orderType, this.createOrderBuilder.getCountryCode());
+        auth.ClientNumber = this.createOrderBuilder.getConfig().getClientNumber(this.orderType, this.createOrderBuilder.getCountryCode());
+        return auth;
     }
     
     public String getXML() throws Exception {
@@ -91,7 +92,7 @@ public abstract class WebServicePayment {
         orderInformation.ClientOrderNumber = this.createOrderBuilder.getClientOrderNumber();
         orderInformation.OrderDate = this.createOrderBuilder.getOrderDate();
         orderInformation.CustomerReference = this.createOrderBuilder.getCustomerReference();
-        sveaOrder.CreateOrderInformation = this.setOrderType(orderInformation);
+        sveaOrder.CreateOrderInformation = this.setOrderType();
         
         SveaRequest<SveaCreateOrder> object = new SveaRequest<SveaCreateOrder>();
         object.request = sveaOrder;
@@ -173,41 +174,47 @@ public abstract class WebServicePayment {
         
         customerIdentity.PhoneNumber = createOrderBuilder.getCustomerIdentity().getPhoneNumber() != null 
                 ? String.valueOf(createOrderBuilder.getCustomerIdentity().getPhoneNumber()) : "";
+                
         customerIdentity.Street = createOrderBuilder.getCustomerIdentity().getStreetAddress() != null 
                 ? createOrderBuilder.getCustomerIdentity().getStreetAddress() : "";
+                
         customerIdentity.HouseNumber = createOrderBuilder.getCustomerIdentity().getHouseNumber() != null 
                 ? String.valueOf(createOrderBuilder.getCustomerIdentity().getHouseNumber()) : "";
+                
         customerIdentity.CoAddress = createOrderBuilder.getCustomerIdentity().getCoAddress() != null 
                 ? createOrderBuilder.getCustomerIdentity().getCoAddress() : "";
+                
         customerIdentity.ZipCode = createOrderBuilder.getCustomerIdentity().getZipCode() != null 
                 ? String.valueOf(createOrderBuilder.getCustomerIdentity().getZipCode()) : "";
+                
         customerIdentity.Locality = createOrderBuilder.getCustomerIdentity().getLocality() != null 
                 ? createOrderBuilder.getCustomerIdentity().getLocality() : "";
+                
         customerIdentity.Email = createOrderBuilder.getCustomerIdentity().getEmail() != null
                 ? createOrderBuilder.getCustomerIdentity().getEmail() : "";
+                
         customerIdentity.IpAddress = createOrderBuilder.getCustomerIdentity().getIpAddress() != null 
                 ? createOrderBuilder.getCustomerIdentity().getIpAddress() : "";
         
         customerIdentity.CustomerType = (isCompany ? "Company" : "Individual");
+        
         customerIdentity.CountryCode = this.createOrderBuilder.getCountryCode();
         
         return customerIdentity;
     }
     
     public SveaCreateOrderInformation formatOrderInformationWithOrderRows(List<OrderRowBuilder> rows) {
-        orderInformation = new SveaCreateOrderInformation(((!(this.createOrderBuilder.getCampaignCode() == null)) ? this.createOrderBuilder.getCampaignCode() : ""),
-                (!(this.createOrderBuilder.getSendAutomaticGiroPaymentForm() == null)) ? this.createOrderBuilder.getSendAutomaticGiroPaymentForm() : false);
+        String campaignCode = (this.createOrderBuilder.getCampaignCode() != null) ? this.createOrderBuilder.getCampaignCode() : "";
+        boolean sendAutomaticGiroPaymentForm = (this.createOrderBuilder.getSendAutomaticGiroPaymentForm() != null) ? this.createOrderBuilder.getSendAutomaticGiroPaymentForm() : false;
+        orderInformation = new SveaCreateOrderInformation(campaignCode, sendAutomaticGiroPaymentForm);
         
         WebserviceRowFormatter formatter = new WebserviceRowFormatter(this.createOrderBuilder);
         ArrayList<SveaOrderRow> formattedOrderRows = formatter.formatRows();
         
-        Iterator<SveaOrderRow> iter = formattedOrderRows.iterator();
-        for (; iter.hasNext();) {
-            orderInformation.addOrderRow(iter.next());
+        for (SveaOrderRow formattedOrderRow : formattedOrderRows) {
+            orderInformation.addOrderRow(formattedOrderRow);
         }
         
         return orderInformation;
     }
-    
-    protected abstract SveaCreateOrderInformation setOrderType(SveaCreateOrderInformation information);
 }

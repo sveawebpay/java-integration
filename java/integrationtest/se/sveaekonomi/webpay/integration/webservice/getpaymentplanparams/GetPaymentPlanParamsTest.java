@@ -17,8 +17,8 @@ public class GetPaymentPlanParamsTest {
     @Test
     public void testGetPaymentPlanParams() throws Exception {
         PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
-        	.setCountryCode(COUNTRYCODE.SE)
-        	.doRequest();
+            .setCountryCode(COUNTRYCODE.SE)
+            .doRequest();
         
         List<CampaignCode> campaignCodes = response.getCampaignCodes();
         
@@ -32,7 +32,7 @@ public class GetPaymentPlanParamsTest {
     @Test
     public void testResultGetPaymentPlanParams() throws Exception {
         PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
-        	.setCountryCode(COUNTRYCODE.SE)	
+            .setCountryCode(COUNTRYCODE.SE)    
             .doRequest();
         
         assertEquals(response.isOrderAccepted(), true);

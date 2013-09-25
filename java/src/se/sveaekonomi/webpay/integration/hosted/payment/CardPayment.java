@@ -27,7 +27,7 @@ public class CardPayment extends HostedPayment<CardPayment> {
         excludedPaymentMethods.add(PAYMENTMETHOD.SWEDBANK_SE.getValue());
         excludedPaymentMethods.add(PAYMENTMETHOD.BANKAXESS.getValue());  
         
-        //Invoices and payment plan      
+        //Invoices and payment plan
         excludedPaymentMethods.addAll(excluded.excludeInvoicesAndPaymentPlan());
         
         return this;

@@ -25,8 +25,8 @@ public class CloseOrder {
     }
         
     protected SveaAuth getStoreAuthorization() {
-    	 SveaAuth auth = new SveaAuth();
-    	 PAYMENTTYPE type = (order.getOrderType() == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
+         SveaAuth auth = new SveaAuth();
+         PAYMENTTYPE type = (order.getOrderType() == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
          auth.Username = order.getConfig().getUsername(type, order.getCountryCode());
          auth.Password = order.getConfig().getPassword(type, order.getCountryCode());
          auth.ClientNumber = order.getConfig().getClientNumber(type, order.getCountryCode());
@@ -34,33 +34,33 @@ public class CloseOrder {
     }    
     
     public String validateRequest() {
-    	String errors = "";
-    	if (this.order.getCountryCode() == null)
-    		errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-    	return errors;
+        String errors = "";
+        if (this.order.getCountryCode() == null)
+            errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+        return errors;
     }
     
     public SveaRequest<SveaCloseOrder> prepareRequest() throws ValidationException {
         String errors = validateRequest();
         if (errors != "")
-        	throw new ValidationException(errors);
+            throw new ValidationException(errors);
         
         SveaCloseOrder sveaCloseOrder = new SveaCloseOrder();
         sveaCloseOrder.Auth = getStoreAuthorization();
         SveaCloseOrderInformation orderInfo = new SveaCloseOrderInformation();
         orderInfo.SveaOrderId = order.getOrderId();
         sveaCloseOrder.CloseOrderInformation = orderInfo;
-
+        
         SveaRequest<SveaCloseOrder> object = new SveaRequest<SveaCloseOrder>();
         object.request = sveaCloseOrder;
-
+        
         return object;
     }
     
     public CloseOrderResponse doRequest() throws Exception {
-    	URL url = order.getOrderType()=="Invoice" ? 
-    			order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE) 
-    			: order.getConfig().getEndPoint(PAYMENTTYPE.PAYMENTPLAN);
+        URL url = order.getOrderType()=="Invoice" ? 
+                order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE) 
+                : order.getConfig().getEndPoint(PAYMENTTYPE.PAYMENTPLAN);
         SveaRequest<SveaCloseOrder> request = this.prepareRequest();
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();

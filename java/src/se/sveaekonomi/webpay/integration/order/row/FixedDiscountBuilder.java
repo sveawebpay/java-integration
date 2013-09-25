@@ -1,6 +1,5 @@
 package se.sveaekonomi.webpay.integration.order.row;
 
-
 /**
  * @author klar-sar
  * @since 2012-12-06
@@ -89,8 +88,4 @@ public class FixedDiscountBuilder implements RowBuilder {
         this.amount = amountDisountOnTotalPrice;
         return this;
     }
-    
-  /*  public T endRow() {
-        return (T)orderBuilder;
-    }*/
 }

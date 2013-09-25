@@ -4,6 +4,4 @@ public class SveaCreateOrder implements SveaOrder<SveaCreateOrder> {
     
     public SveaCreateOrderInformation CreateOrderInformation;
     public SveaAuth Auth;
-    
-  
 }

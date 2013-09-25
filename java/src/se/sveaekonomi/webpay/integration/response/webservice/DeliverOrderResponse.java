@@ -8,7 +8,7 @@ import se.sveaekonomi.webpay.integration.response.Response;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 
 public class DeliverOrderResponse extends Response {
-    
+
     private double amount;
     private ORDERTYPE orderType;
     private int invoiceId;
@@ -16,7 +16,7 @@ public class DeliverOrderResponse extends Response {
     private String invoiceDate;
     private String invoiceDistributionType;
     private String ocr;
-	private double lowestAmountToPay;
+    private double lowestAmountToPay;
     private int contractNumber;  
     
     public DeliverOrderResponse(NodeList soapResponse) {
@@ -25,7 +25,8 @@ public class DeliverOrderResponse extends Response {
     }
     
     public void setValues(NodeList soapResponse) {
-    	String tmpOrderType;
+        String tmpOrderType;
+        
         try {
             int size = soapResponse.getLength();
             
@@ -35,11 +36,12 @@ public class DeliverOrderResponse extends Response {
                 this.setResultCode(getTagValue(node, "ResultCode"));
                 String errorMsg = getTagValue(node, "ErrorMessage");
                 
-                if (errorMsg != null)
+                if (errorMsg != null) {
                     this.setErrorMessage(errorMsg);
-                else {                    
+                } else {
                     this.setAmount(Double.parseDouble(getTagValue(node, "Amount")));
                     tmpOrderType = getTagValue(node, "OrderType");
+                    
                     if (tmpOrderType.equals(ORDERTYPE.Invoice.toString())) {
                         // Set child nodes from InvoiceResultDetails
                         setChildNodeValue(node, "InvoiceId");
@@ -76,14 +78,17 @@ public class DeliverOrderResponse extends Response {
         if (n.hasChildNodes()) {
             NodeList nl = n.getChildNodes();
             int length = nl.getLength();
+            
             for (int j = 0; j < length; j++) {
                 Node childNode = nl.item(j);
                 String nodeName = childNode.getNodeName();
                 
                 if (nodeName.equals(tagName)) {
                     tagValue = getTagValue((Element) n, tagName);
-                    if (tagValue != null)
+                    
+                    if (tagValue != null) {
                         this.setValue(tagName, tagValue);
+                    }
                 }
                 
                 setChildNodeValue(childNode, tagName);
@@ -92,20 +97,21 @@ public class DeliverOrderResponse extends Response {
     }
     
     private void setValue(String tagName, String tagValue) {
-        if (tagName.equals("InvoiceId"))
+        if (tagName.equals("InvoiceId")) {
             this.setInvoiceId(Integer.valueOf(tagValue));
-        else if (tagName.equals("DueDate"))
+        } else if (tagName.equals("DueDate")) {
             this.setDueDate(tagValue);
-        else if (tagName.equals("InvoiceDate"))
+        } else if (tagName.equals("InvoiceDate")) {
             this.setInvoiceDate(tagValue);
-        else if (tagName.equals("InvoiceDistributionType"))
+        } else if (tagName.equals("InvoiceDistributionType")) {
             this.setInvoiceDistributionType(tagValue);
-        else if (tagName.equals("ContractNumber"))
+        } else if (tagName.equals("ContractNumber")) {
             this.setContractNumber(Integer.valueOf(tagValue));
-        else if (tagName.equals("Ocr"))
+        } else if (tagName.equals("Ocr")) {
             this.setOcr(tagValue);
-        else if (tagName.equals("LowestAmountToPay"))
+        } else if (tagName.equals("LowestAmountToPay")) {
             this.setLowestAmountToPay(Double.valueOf(tagValue));
+        }
     }
     
     public ORDERTYPE getOrderType() {
@@ -157,21 +163,21 @@ public class DeliverOrderResponse extends Response {
     }
     
     public String getOcr() {
-		return ocr;
-	}
+        return ocr;
+    }
     
-	public void setOcr(String ocr) {
-		this.ocr = ocr;
-	}
-	
-	public double getLowestAmountToPay() {
-		return lowestAmountToPay;
-	}
-	
-	public void setLowestAmountToPay(double lowestAmountToPay) {
-		this.lowestAmountToPay = lowestAmountToPay;
-	}
-	
+    public void setOcr(String ocr) {
+        this.ocr = ocr;
+    }
+    
+    public double getLowestAmountToPay() {
+        return lowestAmountToPay;
+    }
+    
+    public void setLowestAmountToPay(double lowestAmountToPay) {
+        this.lowestAmountToPay = lowestAmountToPay;
+    }
+    
     public int getContractNumber() {
         return contractNumber;
     }

@@ -15,14 +15,14 @@ import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 
 public class DoPaymentPlanPaymentTest {
     
-	@Test
-	public void testPaymentPlanRequestReturnsAcceptedResult() throws Exception {
-		PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams()
-				.setCountryCode(COUNTRYCODE.SE)
-				.doRequest();
-		String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
-		
-		CreateOrderResponse response = WebPay.createOrder()
+    @Test
+    public void testPaymentPlanRequestReturnsAcceptedResult() throws Exception {
+        PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams()
+                .setCountryCode(COUNTRYCODE.SE)
+                .doRequest();
+        String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
+        
+        CreateOrderResponse response = WebPay.createOrder()
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
@@ -53,15 +53,15 @@ public class DoPaymentPlanPaymentTest {
         .setCountryCode(COUNTRYCODE.SE)
         .usePaymentPlanPayment(code)
         .doRequest();
-		
-		assertEquals(response.isOrderAccepted(), true);
-	}
+        
+        assertEquals(response.isOrderAccepted(), true);
+    }
     
     @Test
     public void testDeliverPaymentPlanOrderResult() throws Exception {
-    	long orderId = createPaymentPlanAndReturnOrderId();
-    	
-    	DeliverOrderResponse response = WebPay.deliverOrder()
+        long orderId = createPaymentPlanAndReturnOrderId();
+        
+        DeliverOrderResponse response = WebPay.deliverOrder()
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
@@ -81,14 +81,14 @@ public class DoPaymentPlanPaymentTest {
         
         assertEquals(response.isOrderAccepted(), true);
     }
-	
-	private long createPaymentPlanAndReturnOrderId() throws Exception {
-		PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams()
-				.setCountryCode(COUNTRYCODE.SE)
-				.doRequest();
-		String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
-		
-		CreateOrderResponse response = WebPay.createOrder()
+    
+    private long createPaymentPlanAndReturnOrderId() throws Exception {
+        PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams()
+                .setCountryCode(COUNTRYCODE.SE)
+                .doRequest();
+        String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
+        
+        CreateOrderResponse response = WebPay.createOrder()
             .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(2)
@@ -118,7 +118,7 @@ public class DoPaymentPlanPaymentTest {
         .setCurrency(CURRENCY.SEK)
         .usePaymentPlanPayment(code)
         .doRequest();
-		
-		return response.orderId;
-	}
+        
+        return response.orderId;
+    }
 }

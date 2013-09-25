@@ -5,7 +5,7 @@ package se.sveaekonomi.webpay.integration.order.row;
  * @since 2012-12-04
  */
 public class OrderRowBuilder implements RowBuilder {
-    
+
     private String articleNumber;
     private String name;
     private String description;
@@ -18,7 +18,7 @@ public class OrderRowBuilder implements RowBuilder {
     private Integer discountPercent;
     
     public OrderRowBuilder() {
-    	
+        
     }
     
     public String getArticleNumber() {
@@ -159,11 +159,11 @@ public class OrderRowBuilder implements RowBuilder {
         this.discountPercent = discountPercent;
         return this;
     }
-
+    
     public Double getAmountIncVat() {
         return amountIncVat;
     }
-
+    
     /**
      * Optional
      * Required to use at least two of the methods setAmountExVat(), setAmountIncVat() or setVatPercent()

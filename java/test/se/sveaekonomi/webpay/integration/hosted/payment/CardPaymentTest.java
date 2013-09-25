@@ -25,50 +25,50 @@ public class CardPaymentTest {
     @Before
     public void setUp() {
         order = WebPay.createOrder()
-        		.setValidator(new VoidValidator());
+                .setValidator(new VoidValidator());
     }
     
     @Test
     public void testConfigureExcludedPaymentMethodsSe() throws ValidationException {
-    	List<String> excluded = order
-    			.setCountryCode(COUNTRYCODE.SE)
-    			.usePayPageCardOnly()
-    			.configureExcludedPaymentMethods()
-    			.getExcludedPaymentMethods();
-    	
+        List<String> excluded = order
+                .setCountryCode(COUNTRYCODE.SE)
+                .usePayPageCardOnly()
+                .configureExcludedPaymentMethods()
+                .getExcludedPaymentMethods();
+        
         assertEquals(21, excluded.size());
     }
     
     @Test
     public void testBuildCardPayment() throws Exception {
-    	PaymentForm form = order.addOrderRow(TestingTool.createOrderRow())
-			
-			.addCustomerDetails(Item.companyCustomer()
-			.setVatNumber("2345234")
-			.setCompanyName("TestCompagniet"))
-			
-			.addFee(Item.shippingFee()
-			.setShippingId("33")
-			.setName("shipping")
-			.setDescription("Specification")
-			.setAmountExVat(50)
-			.setUnit("st")
-			.setVatPercent(25)
-			.setDiscountPercent(0))
-			   
-			.addDiscount(Item.relativeDiscount()
-			.setDiscountId("1")
-			.setName("Relative")
-			.setDescription("RelativeDiscount")
-			.setUnit("st")
-			.setDiscountPercent(50))
-			
-			.setCountryCode(COUNTRYCODE.SE)
-			.setOrderDate("2012-12-12")
-			.setClientOrderNumber("33")
-			.setCurrency(CURRENCY.SEK)
-			.usePayPageCardOnly()
-			.setReturnUrl("http://myurl.se")
+        PaymentForm form = order.addOrderRow(TestingTool.createOrderRow())
+            
+            .addCustomerDetails(Item.companyCustomer()
+            .setVatNumber("2345234")
+            .setCompanyName("TestCompagniet"))
+            
+            .addFee(Item.shippingFee()
+            .setShippingId("33")
+            .setName("shipping")
+            .setDescription("Specification")
+            .setAmountExVat(50)
+            .setUnit("st")
+            .setVatPercent(25)
+            .setDiscountPercent(0))
+               
+            .addDiscount(Item.relativeDiscount()
+            .setDiscountId("1")
+            .setName("Relative")
+            .setDescription("RelativeDiscount")
+            .setUnit("st")
+            .setDiscountPercent(50))
+            
+            .setCountryCode(COUNTRYCODE.SE)
+            .setOrderDate("2012-12-12")
+            .setClientOrderNumber("33")
+            .setCurrency(CURRENCY.SEK)
+            .usePayPageCardOnly()
+            .setReturnUrl("http://myurl.se")
             .getPaymentForm();
                      
         String xml = form.getXmlMessage();
@@ -80,34 +80,34 @@ public class CardPaymentTest {
     
     @Test
     public void testBuildCardPaymentDE() throws Exception {
-    	PaymentForm form = order.addOrderRow(TestingTool.createOrderRow())
-			
-			.addCustomerDetails(Item.companyCustomer()
-			.setVatNumber("2345234")
-			.setCompanyName("TestCompagniet"))
-			
-			.addFee(Item.shippingFee()
-			.setShippingId("33")
-			.setName("shipping")
-			.setDescription("Specification")
-			.setAmountExVat(50)
-			.setUnit("st")
-			.setVatPercent(25)
-			.setDiscountPercent(0))
-			   
-			.addDiscount(Item.relativeDiscount()
-			.setDiscountId("1")
-			.setName("Relative")
-			.setDescription("RelativeDiscount")
-			.setUnit("st")
-			.setDiscountPercent(50))
-			
-			.setCountryCode(COUNTRYCODE.DE)
-			.setOrderDate("2012-12-12")
-			.setClientOrderNumber("33")
-			.setCurrency(CURRENCY.SEK)
-			.usePayPageCardOnly()
-			.setReturnUrl("http://myurl.se")
+        PaymentForm form = order.addOrderRow(TestingTool.createOrderRow())
+            
+            .addCustomerDetails(Item.companyCustomer()
+            .setVatNumber("2345234")
+            .setCompanyName("TestCompagniet"))
+            
+            .addFee(Item.shippingFee()
+            .setShippingId("33")
+            .setName("shipping")
+            .setDescription("Specification")
+            .setAmountExVat(50)
+            .setUnit("st")
+            .setVatPercent(25)
+            .setDiscountPercent(0))
+               
+            .addDiscount(Item.relativeDiscount()
+            .setDiscountId("1")
+            .setName("Relative")
+            .setDescription("RelativeDiscount")
+            .setUnit("st")
+            .setDiscountPercent(50))
+            
+            .setCountryCode(COUNTRYCODE.DE)
+            .setOrderDate("2012-12-12")
+            .setClientOrderNumber("33")
+            .setCurrency(CURRENCY.SEK)
+            .usePayPageCardOnly()
+            .setReturnUrl("http://myurl.se")
             .getPaymentForm();
                      
         String xml = form.getXmlMessage();
@@ -120,7 +120,7 @@ public class CardPaymentTest {
     
     @Test
     public void testSetAuthorization() throws Exception {
-    	PaymentForm form = WebPay.createOrder()
+        PaymentForm form = WebPay.createOrder()
        .addOrderRow(TestingTool.createOrderRow())
           
        .addFee(Item.shippingFee()

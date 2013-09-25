@@ -1,8 +1,7 @@
 package se.sveaekonomi.webpay.integration.webservice.svea_soap;
 
-
 public class SveaDeliverOrderInformation {
-    
+
     public String sveaOrderId;
     public String orderType;
     public SveaDeliverInvoiceDetails deliverInvoiceDetails;

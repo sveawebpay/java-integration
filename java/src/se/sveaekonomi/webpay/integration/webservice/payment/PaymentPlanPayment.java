@@ -11,13 +11,13 @@ public class PaymentPlanPayment extends WebServicePayment {
         this.orderType = PAYMENTTYPE.PAYMENTPLAN;
     }
     
-    public SveaCreateOrderInformation setOrderType(SveaCreateOrderInformation information) {
-       // this.orderInformation.AddressSelector = (!(this.createOrderBuilder.getAddressSelector() == null) ? this.createOrderBuilder.getAddressSelector() : "");
-    	if (this.createOrderBuilder.getIsCompanyIdentity() && this.createOrderBuilder.getCompanyCustomer().getAddressSelector()!=null)
-    		this.orderInformation.AddressSelector = this.createOrderBuilder.getCompanyCustomer().getAddressSelector();
-    	else 
-    		this.orderInformation.AddressSelector = "";
-    	
+    public SveaCreateOrderInformation setOrderType() {
+        if (this.createOrderBuilder.getIsCompanyIdentity() && this.createOrderBuilder.getCompanyCustomer().getAddressSelector() != null) {
+            this.orderInformation.AddressSelector = this.createOrderBuilder.getCompanyCustomer().getAddressSelector();
+        } else {
+            this.orderInformation.AddressSelector = "";
+        }
+        
         this.orderInformation.OrderType = "PaymentPlan";
         
         return this.orderInformation;

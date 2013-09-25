@@ -1,11 +1,10 @@
 package se.sveaekonomi.webpay.integration.order.row;
 
-
 /**
  * @author klar-sar
  */
 public class RelativeDiscountBuilder implements RowBuilder {
-    
+
     private String discountId;
     private String name;
     private String description;
@@ -87,8 +86,4 @@ public class RelativeDiscountBuilder implements RowBuilder {
         this.discountPercent = discountPercent;
         return this;
     }
-    
-  /*  public T endRow() {
-        return (T)orderBuilder;
-    }*/
 }

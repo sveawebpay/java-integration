@@ -18,12 +18,12 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public class GetPaymentPlanParams {
-        
-	private COUNTRYCODE countryCode;
+    
+    private COUNTRYCODE countryCode;
     private ConfigurationProvider config;
     
     public GetPaymentPlanParams(ConfigurationProvider config) {
-    	this.config = config;
+        this.config = config;
     }
     
     /**
@@ -32,12 +32,12 @@ public class GetPaymentPlanParams {
      * @return GetPaymentPlanParams
      */
     public GetPaymentPlanParams setCountryCode(COUNTRYCODE countryCode) {
-    	this.countryCode = countryCode;
-    	return this;
+        this.countryCode = countryCode;
+        return this;
     }
-        
+    
     protected SveaAuth getStoreAuthorization() {
-    	SveaAuth auth = new SveaAuth();
+        SveaAuth auth = new SveaAuth();
         auth.Username = config.getUsername(PAYMENTTYPE.PAYMENTPLAN, countryCode);
         auth.Password = config.getPassword(PAYMENTTYPE.PAYMENTPLAN, countryCode);
         auth.ClientNumber = config.getClientNumber(PAYMENTTYPE.PAYMENTPLAN, countryCode);
@@ -46,23 +46,27 @@ public class GetPaymentPlanParams {
     }
     
     public String validateRequest() {
-    	if (this.countryCode == null)
-    		return "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-    	return "";
+        if (this.countryCode == null) {
+            return "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+        }
+        
+        return "";
     }
     
     private SveaRequest<SveaGetPaymentPlanParams> prepareRequest() throws ValidationException {
         String errors = "";
         errors = validateRequest();
-        if (errors.length() > 0)
+        
+        if (errors.length() > 0) {
             throw new ValidationException(errors);
+        }
         
         SveaGetPaymentPlanParams params = new SveaGetPaymentPlanParams();
         
         params.Auth = getStoreAuthorization();
         SveaRequest<SveaGetPaymentPlanParams> request = new SveaRequest<SveaGetPaymentPlanParams>();
         request.request = params;
-
+        
         return request;
     }
     

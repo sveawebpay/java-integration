@@ -23,18 +23,17 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
  * SecurityNumber. 
  * Each address gets an "AddressSelector" - has to signify the address. This can
  * be used when creating order to have the invoice be sent to the specified address. 
- *  
  */
 public class GetAddresses {
     
     private String nationalNumber;
     private String companyId;
     private COUNTRYCODE countryCode;
-    private String orderType;   
+    private String orderType;
     private ConfigurationProvider config;
     
     public GetAddresses(ConfigurationProvider config) {
-    	this.config = config;
+        this.config = config;
     }
     
     public String getIndividual() {
@@ -57,7 +56,7 @@ public class GetAddresses {
     public String getCompanyId() {
         return companyId;
     }
-        
+    
     /**
      * Required if customer is Company
      * @param companyId
@@ -107,8 +106,8 @@ public class GetAddresses {
     }
     
     private SveaAuth getStoreAuthorization() {
-    	 SveaAuth auth = new SveaAuth();
-    	 PAYMENTTYPE type = (orderType == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
+         SveaAuth auth = new SveaAuth();
+         PAYMENTTYPE type = (orderType == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
          auth.Username = config.getUsername(type, countryCode);
          auth.Password = config.getPassword(type, countryCode);
          auth.ClientNumber = config.getClientNumber(type, countryCode);
@@ -116,31 +115,33 @@ public class GetAddresses {
     }
     
     public String validateRequest() {
-    	String errors ="";
-    	if (countryCode == null)
-    		errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-    	if (orderType==null)
-    		errors += "MISSING VALUE - orderType is required, use one of: setOrderTypePaymentPlan() or setOrderTypeInvoice().\n";
-    	if (this.nationalNumber==null && this.companyId==null)
-    		errors += "MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
-    	return errors;
+        String errors ="";
+        if (countryCode == null)
+            errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+        if (orderType==null)
+            errors += "MISSING VALUE - orderType is required, use one of: setOrderTypePaymentPlan() or setOrderTypeInvoice().\n";
+        if (this.nationalNumber==null && this.companyId==null)
+            errors += "MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
+        return errors;
     }
     
     private SveaRequest<SveaGetAddresses> prepareRequest() throws ValidationException {
         String errors = "";
         errors = validateRequest();
-        if (errors.length() > 0)
+        
+        if (errors.length() > 0) {
             throw new ValidationException(errors);
-    	
+        }
+        
         SveaGetAddresses sveaAddress = new SveaGetAddresses();
         sveaAddress.Auth = getStoreAuthorization();
         sveaAddress.IsCompany = (companyId != null ? true : false);
         sveaAddress.CountryCode = countryCode.toString();
         sveaAddress.SecurityNumber = nationalNumber;
-
+        
         SveaRequest<SveaGetAddresses> request = new SveaRequest<SveaGetAddresses>();
         request.request = sveaAddress;
-
+        
         return request;
     }
     
@@ -163,5 +164,4 @@ public class GetAddresses {
         GetAddressesResponse response = new GetAddressesResponse(soapResponse);
         return response;
     }
-   
 }

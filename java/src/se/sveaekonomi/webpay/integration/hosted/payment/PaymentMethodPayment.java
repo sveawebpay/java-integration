@@ -6,7 +6,7 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
 /**
- * Defines one payment method. Directs directly to method without going through PayPage. 
+ * Defines one payment method. Directs directly to method without going through PayPage.
  * @author klar-sar
  */
 public class PaymentMethodPayment extends HostedPayment<PaymentMethodPayment> {

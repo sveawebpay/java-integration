@@ -6,7 +6,6 @@ import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.response.Response;
 
-
 public class CreateOrderResponse extends Response {
     
     public long orderId;
@@ -29,8 +28,7 @@ public class CreateOrderResponse extends Response {
         try {
             int size = soapMessage.getLength();
             
-            for (int i = 0; i < size; i++)
-            {
+            for (int i = 0; i < size; i++) {
                 Element node = (Element) soapMessage.item(i);
                 // mandatory
                 this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
@@ -41,11 +39,13 @@ public class CreateOrderResponse extends Response {
                 this.amount = Double.parseDouble(getTagValue(node, "Amount"));
                 this.orderId = Long.parseLong(getTagValue(node, "SveaOrderId"));
                 this.expirationDate = getTagValue(node, "ExpirationDate");
+                
                 // Optional values
-                String value;
-                value = getTagValue(node, "OrderType");
-                if (value != null)
+                String value = getTagValue(node, "OrderType");
+                if (value != null) {
                     this.orderType = value;
+                }
+                
                 value = getTagValue(node, "ClientOrderNumber");
                 if (value != null)
                     this.clientOrderNumber = value;
@@ -56,7 +56,7 @@ public class CreateOrderResponse extends Response {
                 setChildNodeValue(node, "NationalIdNumber");
                 setChildNodeValue(node, "Email");
                 setChildNodeValue(node, "PhoneNumber");
-        //        setChildNodeValue(node, "IpAddress");
+                //setChildNodeValue(node, "IpAddress");
                 setChildNodeValue(node, "FullName");
                 setChildNodeValue(node, "Street");
                 setChildNodeValue(node, "CoAddress");
@@ -106,7 +106,6 @@ public class CreateOrderResponse extends Response {
             NodeList nl = n.getChildNodes();
             int length = nl.getLength();
             for (int j = 0; j < length; j++) {
-                
                 Node childNode = nl.item(j);
                 String nodeName = childNode.getNodeName();
                 
@@ -115,6 +114,7 @@ public class CreateOrderResponse extends Response {
                     if (tagValue != null)
                         this.customerIdentity.setValue(tagName, tagValue);
                 }
+                
                 setChildNodeValue(childNode, tagName);
             }
         }

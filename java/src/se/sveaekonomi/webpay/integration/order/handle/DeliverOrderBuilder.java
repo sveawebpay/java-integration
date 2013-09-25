@@ -9,11 +9,10 @@ import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 
 /**
- * 
  * @author klar-sar
- *
  */
 public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
+
     private HandleOrderValidator validator;
     
     private long orderId;
@@ -61,11 +60,6 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         return this;
     }
     
-/*    public DeliverOrderBuilder setInvoiceDistributionTypeAsEmail() {
-        this.distributionType = "Email";
-        return this;
-    }*/
-    
     public String getCreditInvoice() {
         return invoiceIdToCredit;
     }
@@ -74,7 +68,7 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         this.invoiceIdToCredit = invoiceId;
         return this;
     }
-
+    
     public Integer getNumberOfCreditDays() {
         return numberOfCreditDays;
     }
@@ -95,7 +89,7 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         orderType = "Invoice";
         return new HandleOrder(this);
     }
-
+    
     /**
      * Prepares the PaymentPlan order for delivery.
      * @return HandleOrder
