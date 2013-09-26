@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.webservice.payment;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -44,7 +45,8 @@ public class DeliverInvoiceOrderTest {
         
         assertEquals(response.isOrderAccepted(), true);
         assertEquals(response.getInvoiceDistributionType(), "Post");
-        assertTrue(null != response.getOcr() && 0 < response.getOcr().length());
+        assertNotNull(response.getOcr());
+        assertTrue(0 < response.getOcr().length());
         assertTrue(0.0 == response.getLowestAmountToPay());
     }
     

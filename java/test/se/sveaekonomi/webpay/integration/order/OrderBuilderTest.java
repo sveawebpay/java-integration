@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.order;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import javax.xml.bind.ValidationException;
@@ -73,7 +74,7 @@ public class OrderBuilderTest {
     public void testBuildOrderWithOneOrderRow() {
         createTestOrderRow();
         
-        assertTrue(order != null);
+        assertNotNull(order);
         assertEquals(order.getOrderRows().get(0).getArticleNumber(), "1");
         assertEquals(order.getOrderRows().get(0).getQuantity(), 2);
         assertEquals(order.getOrderRows().get(0).getAmountExVat(), 100.00, 0);
