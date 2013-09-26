@@ -4,6 +4,7 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 
 public abstract class OrderValidator {
+
     protected String errors = "";
     
     public abstract String validate(CreateOrderBuilder order);

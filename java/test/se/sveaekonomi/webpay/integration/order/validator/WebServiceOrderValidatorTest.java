@@ -29,22 +29,7 @@ public class WebServiceOrderValidatorTest {
     }
     
     @Test
-    public void testCheckOfIdentityClass() {
-        CreateOrderBuilder order = WebPay.createOrder()
-            .addCustomerDetails(Item.companyCustomer()
-                .setNationalIdNumber("666666")
-                .setEmail("test@svea.com")
-                .setPhoneNumber("999999")
-                .setIpAddress("123.123.123.123")
-                .setStreetAddress("Gatan", "23")
-                .setCoAddress("c/o Eriksson")
-                .setZipCode("9999")
-                .setLocality("Stan")); 
-        orderValidator.validate(order);
-    }
-    
-    @Test
-    public void testCustomerIdentityIsNull() {
+    public void testFailOnCustomerIdentityIsNull() {
          String expectedMessage = "MISSING VALUE - CustomerIdentity must be set.\n"
                  + "MISSING VALUE - CountryCode is required. Use setCountryCode().\n"
                  + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
@@ -224,7 +209,7 @@ public class WebServiceOrderValidatorTest {
     @Test
     public void testFailOnMissingVatNumberForCompanyOrderDE() {
         String expectedMessage = "MISSING VALUE - Vat number is required for company customers when countrycode is DE. Use setVatNumber().\n";
-
+        
         CreateOrderBuilder order = WebPay.createOrder()
             .setClientOrderNumber("1")
             .setCountryCode(COUNTRYCODE.DE)
@@ -320,10 +305,10 @@ public class WebServiceOrderValidatorTest {
                     .doRequest();
             
             //check that exception is thrown
-              assertTrue(false);
-          } catch (ValidationException e) {
-              assertEquals(e.getMessage(), expectedMsg);
-          }
+            assertTrue(false);
+        } catch (ValidationException e) {
+            assertEquals(e.getMessage(), expectedMsg);
+        }
     }
     
     @Test

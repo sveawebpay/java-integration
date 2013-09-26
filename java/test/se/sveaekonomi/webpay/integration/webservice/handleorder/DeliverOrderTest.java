@@ -89,10 +89,10 @@ public class DeliverOrderTest {
     @Test
     public void testDeliverPaymentPlanOrder() throws ValidationException {
         SveaRequest<SveaDeliverOrder> request = order
-        .setOrderId(54086L)
-        .setCountryCode(COUNTRYCODE.SE)
-        .deliverPaymentPlanOrder()  
-        .prepareRequest();
+                .setOrderId(54086L)
+                .setCountryCode(COUNTRYCODE.SE)
+                .deliverPaymentPlanOrder()
+                .prepareRequest();
         
         assertEquals("54086", request.request.deliverOrderInformation.sveaOrderId);
         assertEquals("PaymentPlan", request.request.deliverOrderInformation.orderType);
