@@ -323,25 +323,22 @@ public class InvoicePaymentTest {
         assertEquals(0, request.request.CreateOrderInformation.OrderRows.get(2).DiscountPercent);
     }
     
+    @Test
     public void testInvoiceWithCreateOrderInformation() throws ValidationException{
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-        .addOrderRow(TestingTool.createOrderRow())
-        
-        .addCustomerDetails(Item.individualCustomer()
-            .setNationalIdNumber("194605092222"))
-        
-        .setCountryCode(COUNTRYCODE.SE) 
-        .setOrderDate("2012-12-12")
         .setClientOrderNumber("33")
         .setCurrency(CURRENCY.SEK)
+        .addOrderRow(TestingTool.createOrderRow())
+        .addCustomerDetails(Item.individualCustomer()
+            .setNationalIdNumber("194605092222"))
+        .setCountryCode(COUNTRYCODE.SE)
+        .setOrderDate("2012-12-12")
         .useInvoicePayment()
         .prepareRequest();
         
         assertEquals("2012-12-12", request.request.CreateOrderInformation.OrderDate);
-        assertEquals("33", request.request.CreateOrderInformation.CustomerReference);
+        assertEquals("33", request.request.CreateOrderInformation.ClientOrderNumber);
         assertEquals("Invoice", request.request.CreateOrderInformation.OrderType);
-        assertEquals("nr26", request.request.CreateOrderInformation.ClientOrderNumber);
-        assertEquals("ad33", request.request.CreateOrderInformation.AddressSelector);
     }
     
     @Test

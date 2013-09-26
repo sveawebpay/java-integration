@@ -32,27 +32,19 @@ public class HostedXmlBuilder extends XMLBuilder {
         xmlw = payment.getPaymentSpecificXml(xmlw);
         
         writeSimpleElement("customerrefno", order.getClientOrderNumber());
-        writeSimpleElement("returnurl", payment.getReturnUrl());
-        writeSimpleElement("cancelurl", payment.getCancelUrl());
         writeSimpleElement("currency", order.getCurrency());
         writeSimpleElement("amount", payment.getAmount().toString());
-        writeSimpleElement("lang", payment.getPayPageLanguageCode());
-        
-        serializeCustomer(order, payment);
         
         if (payment.getVat() != null) {
             writeSimpleElement("vat", payment.getVat().toString());
         }
         
-        if (order.getIsCompanyIdentity()) {
-            if (order.getCompanyCustomer().getIpAddress() != null) {
-                writeSimpleElement("ipaddress", order.getCompanyCustomer().getIpAddress());
-            }
-        } else {
-            if (order.getIndividualCustomer().getIpAddress() != null) {
-                writeSimpleElement("ipaddress", order.getIndividualCustomer().getIpAddress());
-            }
-        }
+        writeSimpleElement("lang", payment.getPayPageLanguageCode());
+        writeSimpleElement("returnurl", payment.getReturnUrl());
+        writeSimpleElement("cancelurl", payment.getCancelUrl());
+        writeSimpleElement("iscompany", order.getIsCompanyIdentity() ? "true" : "false");
+        
+        serializeCustomer(order, payment);
         
         serializeRows(rows);
         
@@ -68,7 +60,6 @@ public class HostedXmlBuilder extends XMLBuilder {
             xmlw.writeEndElement();
         }
         
-        writeSimpleElement("iscompany", order.getIsCompanyIdentity() ? "true" : "false");
         writeSimpleElement("addinvoicefee", "false");
         xmlw.writeEndDocument();
         
@@ -160,6 +151,16 @@ public class HostedXmlBuilder extends XMLBuilder {
             }
             
             xmlw.writeEndElement();
+            
+            if (order.getIsCompanyIdentity()) {
+                if (order.getCompanyCustomer().getIpAddress() != null) {
+                    writeSimpleElement("ipaddress", order.getCompanyCustomer().getIpAddress());
+                }
+            } else {
+                if (order.getIndividualCustomer().getIpAddress() != null) {
+                    writeSimpleElement("ipaddress", order.getIndividualCustomer().getIpAddress());
+                }
+            }
         } catch (XMLStreamException e) {
             e.printStackTrace();
         }
