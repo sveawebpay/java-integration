@@ -37,7 +37,7 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
     protected String returnUrl;
     protected String cancelUrl;
     protected ExcludePayments excluded;
-    protected String languageCode = LANGUAGECODE.en.toString();
+    protected String languageCode;
     
     public HostedPayment(CreateOrderBuilder createOrderBuilder) {
         this.createOrderBuilder = createOrderBuilder;

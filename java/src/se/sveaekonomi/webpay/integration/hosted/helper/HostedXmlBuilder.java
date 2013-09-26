@@ -39,7 +39,10 @@ public class HostedXmlBuilder extends XMLBuilder {
             writeSimpleElement("vat", payment.getVat().toString());
         }
         
-        writeSimpleElement("lang", payment.getPayPageLanguageCode());
+        if (payment.getPayPageLanguageCode() != null) {
+            writeSimpleElement("lang", payment.getPayPageLanguageCode());
+        }
+        
         writeSimpleElement("returnurl", payment.getReturnUrl());
         writeSimpleElement("cancelurl", payment.getCancelUrl());
         writeSimpleElement("iscompany", order.getIsCompanyIdentity() ? "true" : "false");
@@ -192,8 +195,8 @@ public class HostedXmlBuilder extends XMLBuilder {
         xmlw.writeEndElement();
     }
     
-    private void serializeExcludedPaymentMethods( List<String> excludedPaymentMethods) throws XMLStreamException {
-        if (excludedPaymentMethods != null) {
+    private void serializeExcludedPaymentMethods(List<String> excludedPaymentMethods) throws XMLStreamException {
+        if (excludedPaymentMethods != null && !excludedPaymentMethods.isEmpty()) {
             xmlw.writeStartElement("excludepaymentmethods");
             
             List<String> excludeList =  excludedPaymentMethods;
