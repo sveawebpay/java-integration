@@ -18,7 +18,7 @@ import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.util.xml.XMLBuilder;
 
 public class HostedXmlBuilder extends XMLBuilder {
-    
+
     public String getXml(HostedPayment<?> payment) throws Exception {
         XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
@@ -45,20 +45,8 @@ public class HostedXmlBuilder extends XMLBuilder {
         writeSimpleElement("iscompany", order.getIsCompanyIdentity() ? "true" : "false");
         
         serializeCustomer(order, payment);
-        
         serializeRows(rows);
-        
-        if (payment.getExcludedPaymentMethods() != null) {
-            xmlw.writeStartElement("excludepaymentmethods");
-            
-            List<String> excludeList =  payment.getExcludedPaymentMethods();
-            
-            for (int i = 0; i < excludeList.size(); i++) {
-                writeSimpleElement("exclude", excludeList.get(i));
-            }
-            
-            xmlw.writeEndElement();
-        }
+        serializeExcludedPaymentMethods(payment.getExcludedPaymentMethods());
         
         writeSimpleElement("addinvoicefee", "false");
         xmlw.writeEndDocument();
@@ -130,12 +118,12 @@ public class HostedXmlBuilder extends XMLBuilder {
                 writeSimpleElement("address", customer.getStreetAddress());
             }
             
-            if (customer.getCoAddress() != null) {
-                writeSimpleElement("address2", customer.getCoAddress());
-            }
-            
             if (customer.getHouseNumber() != null) {
                 writeSimpleElement("housenumber", customer.getHouseNumber());
+            }
+            
+            if (customer.getCoAddress() != null) {
+                writeSimpleElement("address2", customer.getCoAddress());
             }
             
             if (customer.getZipCode() != null) {
@@ -202,5 +190,19 @@ public class HostedXmlBuilder extends XMLBuilder {
         writeSimpleElement("unit", row.getUnit());
         
         xmlw.writeEndElement();
+    }
+    
+    private void serializeExcludedPaymentMethods( List<String> excludedPaymentMethods) throws XMLStreamException {
+        if (excludedPaymentMethods != null) {
+            xmlw.writeStartElement("excludepaymentmethods");
+            
+            List<String> excludeList =  excludedPaymentMethods;
+            
+            for (int i = 0; i < excludeList.size(); i++) {
+                writeSimpleElement("exclude", excludeList.get(i));
+            }
+            
+            xmlw.writeEndElement();
+        }
     }
 }
