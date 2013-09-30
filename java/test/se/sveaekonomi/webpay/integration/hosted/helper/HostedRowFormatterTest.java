@@ -33,7 +33,7 @@ public class HostedRowFormatterTest {
         assertEquals("Tess", newRow.getName());
         assertEquals("Tester", newRow.getDescription());
         assertTrue(500L == newRow.getAmount());
-        assertTrue(100 == newRow.getVat());
+        assertTrue(100L == newRow.getVat());
         assertEquals(1, newRow.getQuantity());
         assertEquals("st", newRow.getUnit());
     }
@@ -53,7 +53,7 @@ public class HostedRowFormatterTest {
         assertEquals("0", newRow.getSku());
         assertEquals("Tess", newRow.getName());
         assertEquals("Tester", newRow.getDescription());
-        assertTrue(1 == newRow.getQuantity());
+        assertEquals(1, newRow.getQuantity());
         assertEquals("st", newRow.getUnit());
     }
     

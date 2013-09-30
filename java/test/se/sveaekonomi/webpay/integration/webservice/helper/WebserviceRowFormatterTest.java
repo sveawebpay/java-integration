@@ -38,8 +38,8 @@ public class WebserviceRowFormatterTest {
         
         assertEquals("0", newRow.ArticleNumber);
         assertEquals("Tess: Tester", newRow.Description);
-        assertTrue(4.0 == newRow.PricePerUnit);
-        assertTrue(25.0 == newRow.VatPercent);
+        assertEquals(4.0, newRow.PricePerUnit, 0);
+        assertEquals(25.0, newRow.VatPercent, 0);
         assertEquals(0, newRow.DiscountPercent);
         assertEquals(1, newRow.NumberOfUnits);
         assertEquals("st", newRow.Unit);
@@ -120,7 +120,7 @@ public class WebserviceRowFormatterTest {
         assertEquals("0", newRow.ArticleNumber);
         assertEquals("Tess: Tester", newRow.Description);
         assertEquals(-0.8,newRow.PricePerUnit, 0);
-        assertTrue(25.0 == newRow.VatPercent);
+        assertEquals(25.0, newRow.VatPercent, 0);
         assertEquals(0, newRow.DiscountPercent);
         assertEquals(1, newRow.NumberOfUnits);
         assertEquals("st", newRow.Unit);
@@ -145,8 +145,8 @@ public class WebserviceRowFormatterTest {
         
         assertEquals("0", newRow.ArticleNumber);
         assertEquals("Tess: Tester", newRow.Description);
-        assertTrue(-0.4 == newRow.PricePerUnit);
-        assertTrue(25 == newRow.VatPercent); //?
+        assertEquals(-0.4, newRow.PricePerUnit, 0);
+        assertEquals(25.0, newRow.VatPercent, 0);
         assertEquals(0, newRow.DiscountPercent);
         assertEquals(1, newRow.NumberOfUnits);
         assertEquals("st", newRow.Unit);
