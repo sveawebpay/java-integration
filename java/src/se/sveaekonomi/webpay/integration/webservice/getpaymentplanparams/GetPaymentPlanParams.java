@@ -80,6 +80,7 @@ public class GetPaymentPlanParams {
         String soapMessage = soapBuilder.makeSoapMessage("GetPaymentPlanParamsEu", xml);
         NodeList soapResponse = soapBuilder.createGetPaymentPlanParamsEuRequest(soapMessage, url.toString());
         PaymentPlanParamsResponse response = new PaymentPlanParamsResponse(soapResponse);
+        
         return response;
     }
 }

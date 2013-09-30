@@ -1,5 +1,6 @@
 package se.sveaekonomi.webpay.integration.hosted.payment;
 
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
@@ -31,7 +32,7 @@ public class PaymentMethodPayment extends HostedPayment<PaymentMethodPayment> {
     }
     
     @Override
-    public XMLStreamWriter getPaymentSpecificXml(XMLStreamWriter xmlw) throws Exception {
+    public XMLStreamWriter getPaymentSpecificXml(XMLStreamWriter xmlw) throws XMLStreamException {
         if (paymentMethod != null) {
             writeSimpleElement(xmlw, "paymentmethod", paymentMethod.getValue());
         }

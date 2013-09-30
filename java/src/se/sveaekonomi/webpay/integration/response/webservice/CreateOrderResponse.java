@@ -74,10 +74,12 @@ public class CreateOrderResponse extends Response {
     private String getTagValue(Element elementNode, String tagName) {
         NodeList nodeList = elementNode.getElementsByTagName(tagName);
         Element element = (Element) nodeList.item(0);
+        
         if (element != null && element.hasChildNodes()) {
             NodeList textList = element.getChildNodes();
             return ((Node) textList.item(0)).getNodeValue().trim();
         }
+        
         return null;
     }
     
@@ -85,8 +87,8 @@ public class CreateOrderResponse extends Response {
         if (n.hasChildNodes()) {
             NodeList nl = n.getChildNodes();
             int length = nl.getLength();
+            
             for (int j = 0; j < length; j++) {
-                
                 Node childNode = nl.item(j);
                 String nodeName = childNode.getNodeName();
                 
@@ -94,6 +96,7 @@ public class CreateOrderResponse extends Response {
                     this.isIndividualIdentity = getTagValue((Element) n, "CustomerType").equals("Individual") ? true : false;
                     return;
                 }
+                
                 setCustomerIdentityType(childNode);
             }
         }
@@ -105,14 +108,17 @@ public class CreateOrderResponse extends Response {
         if (n.hasChildNodes()) {
             NodeList nl = n.getChildNodes();
             int length = nl.getLength();
+            
             for (int j = 0; j < length; j++) {
                 Node childNode = nl.item(j);
                 String nodeName = childNode.getNodeName();
                 
                 if (nodeName.equals(tagName)) {
                     tagValue = getTagValue((Element) n, tagName);
-                    if (tagValue != null)
+                    
+                    if (tagValue != null) {
                         this.customerIdentity.setValue(tagName, tagValue);
+                    }
                 }
                 
                 setChildNodeValue(childNode, tagName);

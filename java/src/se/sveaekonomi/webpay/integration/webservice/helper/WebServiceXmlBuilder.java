@@ -18,10 +18,10 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaGetPaymentPlan
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrderRow;
 
 public class WebServiceXmlBuilder extends XMLBuilder{
-    
+
     public static String prefix = "web:";
     
-    public String getCreateOrderEuXml(SveaCreateOrder order) throws Exception {
+    public String getCreateOrderEuXml(SveaCreateOrder order) throws XMLStreamException {
         XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ArrayList<SveaOrderRow> rows = order.CreateOrderInformation.OrderRows;
@@ -56,33 +56,32 @@ public class WebServiceXmlBuilder extends XMLBuilder{
                     writeSimpleElement(prefix+"LastName", order.CreateOrderInformation.CustomerIdentity.IndividualIdentity.LastName);
                     writeSimpleElement(prefix+"Initials", order.CreateOrderInformation.CustomerIdentity.IndividualIdentity.Initials);
                     writeSimpleElement(prefix+"BirthDate", order.CreateOrderInformation.CustomerIdentity.IndividualIdentity.BirthDate);            
-                    xmlw.writeEndElement(); //IndividualIdentity
+                    xmlw.writeEndElement();
                 }
                 
                 if (order.CreateOrderInformation.CustomerIdentity.CompanyIdentity != null) {
                     xmlw.writeStartElement(prefix+"CompanyIdentity");
                     writeSimpleElement(prefix+"CompanyIdentification", order.CreateOrderInformation.CustomerIdentity.CompanyIdentity.OrgNumber);
                     writeSimpleElement(prefix+"CompanyVatNumber", order.CreateOrderInformation.CustomerIdentity.CompanyIdentity.CompanyVatNumber);
-                    xmlw.writeEndElement(); //CompanyIdentity
+                    xmlw.writeEndElement();
                 }
-                xmlw.writeEndElement(); //CustomerIdentity
+                xmlw.writeEndElement();
             }
             
             writeSimpleElement(prefix+"OrderDate", order.CreateOrderInformation.OrderDate);
             writeSimpleElement(prefix+"AddressSelector", order.CreateOrderInformation.AddressSelector);
             writeSimpleElement(prefix+"CustomerReference", order.CreateOrderInformation.CustomerReference);
             
-           
-            writeSimpleElement(prefix+"OrderType", order.CreateOrderInformation.OrderType);                      
+            writeSimpleElement(prefix+"OrderType", order.CreateOrderInformation.OrderType);
             
             if (order.CreateOrderInformation.CreatePaymentPlanDetails != null && !order.CreateOrderInformation.OrderType.equals("Invoice")) {
                 xmlw.writeStartElement(prefix+"CreatePaymentPlanDetails");
                 String code = (String)order.CreateOrderInformation.CreatePaymentPlanDetails.get("CampaignCode");
-                writeSimpleElement(prefix+"CampaignCode", code);              
+                writeSimpleElement(prefix+"CampaignCode", code);
                 writeSimpleElement("SendAutomaticGiroPaymentForm", String.valueOf((boolean)order.CreateOrderInformation.CreatePaymentPlanDetails.get("SendAutomaticGiroPaymentForm")));
                 
                 // ?? CoCustomerIdentity ???
-                //?? writeSimpleElement("FixedMonthlyAmount", order.CreateOrderInformation.CreatePaymentPlanDetails.)                                       
+                //?? writeSimpleElement("FixedMonthlyAmount", order.CreateOrderInformation.CreatePaymentPlanDetails.)
             }
             xmlw.writeEndElement();
         }
