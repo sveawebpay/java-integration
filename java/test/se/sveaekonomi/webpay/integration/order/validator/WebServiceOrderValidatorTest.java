@@ -2,6 +2,7 @@ package se.sveaekonomi.webpay.integration.order.validator;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import javax.xml.bind.ValidationException;
 
@@ -72,8 +73,9 @@ public class WebServiceOrderValidatorTest {
         .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
         .deliverInvoiceOrder()
         .doRequest();
-        //check that exception is thrown
-        assertTrue(false);
+        
+        //Fail on no exception
+        fail();
         
         } catch (ValidationException e) {
             assertEquals(e.getMessage(), expectedMessage);
@@ -90,9 +92,9 @@ public class WebServiceOrderValidatorTest {
             WebPay.getAddresses()
                 .doRequest();
             
-            //check that exception is thrown
-            assertTrue(false);
-          } catch (ValidationException e) {
+            //Fail on no exception
+            fail();
+        } catch (ValidationException e) {
             assertEquals(e.getMessage(), expectedMessage);
         }
     }
@@ -304,8 +306,8 @@ public class WebServiceOrderValidatorTest {
             WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
                     .doRequest();
             
-            //check that exception is thrown
-            assertTrue(false);
+            //Fail on no exception
+            fail();
         } catch (ValidationException e) {
             assertEquals(e.getMessage(), expectedMsg);
         }
@@ -355,18 +357,19 @@ public class WebServiceOrderValidatorTest {
      
     @Test
     public void testFailOnMissingRows() throws Exception {
-          String expectedMessage = "MISSING VALUE - No order or fee has been included. Use addOrder(...) or addFee(...).\n";
-          try {
-              WebPay.deliverOrder()
-              .setNumberOfCreditDays(1)
-              .setOrderId(2345L)
-              .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-              .setCountryCode(COUNTRYCODE.SE)
-              .deliverInvoiceOrder()
-              .doRequest();
-     
-            //check that exception is thrown
-            assertTrue(false);
+        String expectedMessage = "MISSING VALUE - No order or fee has been included. Use addOrder(...) or addFee(...).\n";
+        
+        try {
+            WebPay.deliverOrder()
+                .setNumberOfCreditDays(1)
+                .setOrderId(2345L)
+                .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+                .setCountryCode(COUNTRYCODE.SE)
+                .deliverInvoiceOrder()
+                .doRequest();
+            
+            //Fail on no exception
+            fail();
         } catch (ValidationException e) {
             assertEquals(e.getMessage(), expectedMessage);
         }
@@ -391,8 +394,8 @@ public class WebServiceOrderValidatorTest {
             .setOrderDate("2012-09-09")
             .usePaymentPlanPayment("camp1");
         
-            //check that exception is thrown
-            assertTrue(false);
+        //Fail on no exception
+        fail();
         } catch (SveaWebPayException e) {
             assertEquals(e.getMessage(), expectedMessage);
         }
