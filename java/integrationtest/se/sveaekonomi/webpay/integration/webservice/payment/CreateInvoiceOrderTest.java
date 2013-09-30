@@ -2,6 +2,7 @@ package se.sveaekonomi.webpay.integration.webservice.payment;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
 import javax.xml.bind.ValidationException;
@@ -167,9 +168,9 @@ public class CreateInvoiceOrderTest {
         //CustomerIdentity
         assertEquals("Individual", response.customerIdentity.getCustomerType());
         assertEquals("Sneider Boasman", response.customerIdentity.getFullName());
-        assertEquals(null, response.customerIdentity.getPhoneNumber());
-        assertEquals(null, response.customerIdentity.getEmail());
-        assertEquals(null, response.customerIdentity.getIpAddress());
+        assertNull(response.customerIdentity.getPhoneNumber());
+        assertNull(response.customerIdentity.getEmail());
+        assertNull(response.customerIdentity.getIpAddress());
         assertEquals("Gate 42", response.customerIdentity.getStreet());
         assertEquals("138", response.customerIdentity.getCoAddress());
         assertEquals("23", response.customerIdentity.getHouseNumber());
