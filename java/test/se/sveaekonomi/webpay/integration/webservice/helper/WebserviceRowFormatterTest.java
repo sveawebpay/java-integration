@@ -36,13 +36,13 @@ public class WebserviceRowFormatterTest {
         ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(0);
         
-        assertTrue("0".equals(newRow.ArticleNumber));
-        assertTrue("Tess: Tester".equals(newRow.Description));
+        assertEquals("0", newRow.ArticleNumber);
+        assertEquals("Tess: Tester", newRow.Description);
         assertTrue(4.0 == newRow.PricePerUnit);
         assertTrue(25.0 == newRow.VatPercent);
-        assertTrue(0 == newRow.DiscountPercent);
-        assertTrue(1 == newRow.NumberOfUnits);
-        assertTrue("st".equals(newRow.Unit));
+        assertEquals(0, newRow.DiscountPercent);
+        assertEquals(1, newRow.NumberOfUnits);
+        assertEquals("st", newRow.Unit);
     }
     
     @Test
@@ -90,7 +90,7 @@ public class WebserviceRowFormatterTest {
         ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(0);
         
-        assertTrue("".equals(newRow.ArticleNumber));
+        assertEquals("", newRow.ArticleNumber);
         assertEquals("Tester",newRow.Description);
         assertEquals(4.0, newRow.PricePerUnit, 0);
         assertEquals(25.0, newRow.VatPercent, 0);
@@ -117,13 +117,13 @@ public class WebserviceRowFormatterTest {
         ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(1);
         
-        assertTrue("0".equals(newRow.ArticleNumber));
-        assertTrue("Tess: Tester".equals(newRow.Description));
+        assertEquals("0", newRow.ArticleNumber);
+        assertEquals("Tess: Tester", newRow.Description);
         assertEquals(-0.8,newRow.PricePerUnit, 0);
         assertTrue(25.0 == newRow.VatPercent);
-        assertTrue(0 == newRow.DiscountPercent);
-        assertTrue(1 == newRow.NumberOfUnits);
-        assertTrue("st".equals(newRow.Unit));
+        assertEquals(0, newRow.DiscountPercent);
+        assertEquals(1, newRow.NumberOfUnits);
+        assertEquals("st", newRow.Unit);
     }
     
     @Test
@@ -143,12 +143,12 @@ public class WebserviceRowFormatterTest {
         ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(1);
         
-        assertTrue("0".equals(newRow.ArticleNumber));
-        assertTrue("Tess: Tester".equals(newRow.Description));
+        assertEquals("0", newRow.ArticleNumber);
+        assertEquals("Tess: Tester", newRow.Description);
         assertTrue(-0.4 == newRow.PricePerUnit);
         assertTrue(25 == newRow.VatPercent); //?
-        assertTrue(0 == newRow.DiscountPercent);
-        assertTrue(1 == newRow.NumberOfUnits);
-        assertTrue("st".equals(newRow.Unit));
+        assertEquals(0, newRow.DiscountPercent);
+        assertEquals(1, newRow.NumberOfUnits);
+        assertEquals("st", newRow.Unit);
     }
 }
