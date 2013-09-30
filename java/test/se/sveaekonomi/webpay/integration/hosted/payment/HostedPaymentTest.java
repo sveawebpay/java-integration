@@ -138,11 +138,7 @@ public class HostedPaymentTest {
         payment.setReturnUrl("myurl");
         PaymentForm form;
         
-        try {
-            form = payment.getPaymentForm();
-        } catch (Exception e) {
-            throw e;
-        }
+        form = payment.getPaymentForm();
         
         Map<String, String> formHtmlFields = form.getFormHtmlFields();
         assertEquals("</form>", formHtmlFields.get("form_end_tag"));

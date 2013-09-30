@@ -235,19 +235,15 @@ public class CreateInvoiceOrderTest {
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         
-        try {
-            String xml = xmlBuilder.getCreateOrderEuXml(request.request);
-            String url = SveaConfig.getTestWebserviceUrl().toString();
-            String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
-            NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
-            CreateOrderResponse response = new CreateOrderResponse(soapResponse);
-            orderId = response.orderId;
-            
-            assertTrue(response.isOrderAccepted());
-        } catch (Exception e) {
-            throw e;
-        }
-       
+        String xml = xmlBuilder.getCreateOrderEuXml(request.request);
+        String url = SveaConfig.getTestWebserviceUrl().toString();
+        String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
+        NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
+        CreateOrderResponse response = new CreateOrderResponse(soapResponse);
+        orderId = response.orderId;
+        
+        assertTrue(response.isOrderAccepted());
+        
         soapBuilder = new SveaSoapBuilder();
         
         CloseOrder closeRequest = WebPay.closeOrder()

@@ -19,6 +19,7 @@ public class PaymentPlanPricePerMonthTest {
         PaymentPlanParamsResponse response = request
                 .setCountryCode(COUNTRYCODE.SE)
                 .doRequest();
+        
         return response;
     }
     
