@@ -1,7 +1,7 @@
 package se.sveaekonomi.webpay.integration.order.validator;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import javax.xml.bind.ValidationException;
 
@@ -72,11 +72,12 @@ public class WebServiceOrderValidatorTest {
         .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
         .deliverInvoiceOrder()
         .doRequest();
-        //check that exception is thrown
-        assertTrue(false);
+        
+        //Fail on no exception
+        fail();
         
         } catch (ValidationException e) {
-            assertEquals(e.getMessage(), expectedMessage);
+            assertEquals(expectedMessage, e.getMessage());
         }
     }
     
@@ -90,10 +91,10 @@ public class WebServiceOrderValidatorTest {
             WebPay.getAddresses()
                 .doRequest();
             
-            //check that exception is thrown
-            assertTrue(false);
-          } catch (ValidationException e) {
-            assertEquals(e.getMessage(), expectedMessage);
+            //Fail on no exception
+            fail();
+        } catch (ValidationException e) {
+            assertEquals(expectedMessage, e.getMessage());
         }
     }
     
@@ -184,7 +185,7 @@ public class WebServiceOrderValidatorTest {
                 .setLocality("Stan"))
             .setCountryCode(COUNTRYCODE.DE)
             .setValidator(new VoidValidator());
-        assertEquals(orderValidator.validate(order), expectedMessage);
+        assertEquals(expectedMessage, orderValidator.validate(order));
     }
     
     @Test
@@ -304,10 +305,10 @@ public class WebServiceOrderValidatorTest {
             WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
                     .doRequest();
             
-            //check that exception is thrown
-            assertTrue(false);
+            //Fail on no exception
+            fail();
         } catch (ValidationException e) {
-            assertEquals(e.getMessage(), expectedMsg);
+            assertEquals(expectedMsg, e.getMessage());
         }
     }
     
@@ -355,20 +356,21 @@ public class WebServiceOrderValidatorTest {
      
     @Test
     public void testFailOnMissingRows() throws Exception {
-          String expectedMessage = "MISSING VALUE - No order or fee has been included. Use addOrder(...) or addFee(...).\n";
-          try {
-              WebPay.deliverOrder()
-              .setNumberOfCreditDays(1)
-              .setOrderId(2345L)
-              .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-              .setCountryCode(COUNTRYCODE.SE)
-              .deliverInvoiceOrder()
-              .doRequest();
-     
-            //check that exception is thrown
-            assertTrue(false);
+        String expectedMessage = "MISSING VALUE - No order or fee has been included. Use addOrder(...) or addFee(...).\n";
+        
+        try {
+            WebPay.deliverOrder()
+                .setNumberOfCreditDays(1)
+                .setOrderId(2345L)
+                .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+                .setCountryCode(COUNTRYCODE.SE)
+                .deliverInvoiceOrder()
+                .doRequest();
+            
+            //Fail on no exception
+            fail();
         } catch (ValidationException e) {
-            assertEquals(e.getMessage(), expectedMessage);
+            assertEquals(expectedMessage, e.getMessage());
         }
     }
     
@@ -391,10 +393,10 @@ public class WebServiceOrderValidatorTest {
             .setOrderDate("2012-09-09")
             .usePaymentPlanPayment("camp1");
         
-            //check that exception is thrown
-            assertTrue(false);
+        //Fail on no exception
+        fail();
         } catch (SveaWebPayException e) {
-            assertEquals(e.getMessage(), expectedMessage);
+            assertEquals(expectedMessage, e.getMessage());
         }
     }
 }

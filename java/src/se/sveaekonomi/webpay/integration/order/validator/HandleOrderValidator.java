@@ -43,7 +43,7 @@ public class HandleOrderValidator {
     }
     
     private void validateOrderRows(DeliverOrderBuilder order) {
-        if (order.getOrderType() == "Invoice" &&
+        if (order.getOrderType().equals("Invoice") &&
                 order.getOrderRows().isEmpty() &&
                 order.getShippingFeeRows().isEmpty() &&
                 order.getInvoiceFeeRows().isEmpty()) {

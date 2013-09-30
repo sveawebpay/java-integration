@@ -31,7 +31,7 @@ public class HandleOrder {
     
     protected SveaAuth getStoreAuthorization() {
          SveaAuth auth = new SveaAuth();
-         PAYMENTTYPE type = (order.getOrderType() == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
+         PAYMENTTYPE type = (order.getOrderType().equals("Invoice") ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
          auth.Username = order.getConfig().getUsername(type, order.getCountryCode());
          auth.Password = order.getConfig().getPassword(type, order.getCountryCode());
          auth.ClientNumber = order.getConfig().getClientNumber(type, order.getCountryCode());

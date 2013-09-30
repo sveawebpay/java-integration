@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.webservice.handleorder;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import javax.xml.bind.ValidationException;
 
@@ -80,7 +81,7 @@ public class DeliverOrderTest {
         
         assertEquals(1, request.request.deliverOrderInformation.deliverInvoiceDetails.NumberofCreditDays);
         assertEquals("Post", request.request.deliverOrderInformation.deliverInvoiceDetails.InvoiceDistributionType);
-        assertEquals(true, request.request.deliverOrderInformation.deliverInvoiceDetails.IsCreditInvoice);
+        assertTrue(request.request.deliverOrderInformation.deliverInvoiceDetails.IsCreditInvoice);
         assertEquals("id", request.request.deliverOrderInformation.deliverInvoiceDetails.InvoiceIdToCredit);
         assertEquals("54086", request.request.deliverOrderInformation.sveaOrderId);
         assertEquals("Invoice", request.request.deliverOrderInformation.orderType);

@@ -1,7 +1,7 @@
 package se.sveaekonomi.webpay.integration.webservice.payment;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import javax.xml.bind.ValidationException;
 
@@ -40,7 +40,6 @@ public class PaymentPlanTest {
         try {
             WebPay.createOrder()
                 .addOrderRow(TestingTool.createOrderRow())
-            
                 .addCustomerDetails(Item.companyCustomer()
                     .setNationalIdNumber("194605092222"))
                 .setCountryCode(COUNTRYCODE.SE)
@@ -50,9 +49,10 @@ public class PaymentPlanTest {
                 .usePaymentPlanPayment("camp1")
                 .prepareRequest();
             
-                assertTrue(false);
+            //Fail on no exception
+            fail();
         } catch(SveaWebPayException e) {
-            assertEquals(e.getMessage(), "ERROR - CompanyCustomer is not allowed to use payment plan option.");
+            assertEquals("ERROR - CompanyCustomer is not allowed to use payment plan option.", e.getMessage());
         }
     }
 }

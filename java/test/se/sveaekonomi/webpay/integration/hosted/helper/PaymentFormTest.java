@@ -1,7 +1,6 @@
 package se.sveaekonomi.webpay.integration.hosted.helper;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
 
@@ -101,12 +100,12 @@ public class PaymentFormTest {
         Map<String, String> formHtmlFields = form.getFormHtmlFields();
         String url = form.getUrl();
         
-        assertTrue(formHtmlFields.get("form_start_tag").equals("<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\"" + url + "\">"));
-        assertTrue(formHtmlFields.get("input_merchantId").equals("<input type=\"hidden\" name=\"merchantid\" value=\"" + MerchantId + "\" />"));
-        assertTrue(formHtmlFields.get("input_message").equals("<input type=\"hidden\" name=\"message\" value=\"" + base64Payment + "\" />"));
-        assertTrue(formHtmlFields.get("input_mac").equals("<input type=\"hidden\" name=\"mac\" value=\"" + mac + "\" />"));
-        assertTrue(formHtmlFields.get("noscript_p_tag").equals("<noscript><p>Javascript är inaktiverat i er webbläsare, ni får dirigera om till paypage manuellt</p></noscript>"));
-        assertTrue(formHtmlFields.get("input_submit").equals("<input type=\"submit\" name=\"submit\" value=\"Betala\" />"));
-        assertTrue(formHtmlFields.get("form_end_tag").equals("</form>"));
+        assertEquals("<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\"" + url + "\">", formHtmlFields.get("form_start_tag"));
+        assertEquals("<input type=\"hidden\" name=\"merchantid\" value=\"" + MerchantId + "\" />", formHtmlFields.get("input_merchantId"));
+        assertEquals("<input type=\"hidden\" name=\"message\" value=\"" + base64Payment + "\" />", formHtmlFields.get("input_message"));
+        assertEquals("<input type=\"hidden\" name=\"mac\" value=\"" + mac + "\" />", formHtmlFields.get("input_mac"));
+        assertEquals("<noscript><p>Javascript är inaktiverat i er webbläsare, ni får dirigera om till paypage manuellt</p></noscript>", formHtmlFields.get("noscript_p_tag"));
+        assertEquals("<input type=\"submit\" name=\"submit\" value=\"Betala\" />", formHtmlFields.get("input_submit"));
+        assertEquals("</form>", formHtmlFields.get("form_end_tag"));
     }
 }

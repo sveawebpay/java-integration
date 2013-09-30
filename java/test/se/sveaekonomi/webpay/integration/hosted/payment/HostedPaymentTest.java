@@ -145,7 +145,7 @@ public class HostedPaymentTest {
         }
         
         Map<String, String> formHtmlFields = form.getFormHtmlFields();
-        assertTrue(formHtmlFields.get("form_end_tag").equals("</form>"));
+        assertEquals("</form>", formHtmlFields.get("form_end_tag"));
     }
     
     @Test

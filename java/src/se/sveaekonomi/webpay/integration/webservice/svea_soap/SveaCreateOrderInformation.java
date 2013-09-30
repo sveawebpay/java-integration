@@ -34,7 +34,7 @@ public class SveaCreateOrderInformation {
     }
     
     public Object getPaymentPlanDetails(String key) {
-        if (key == "CampaignCode") {
+        if (key.equals("CampaignCode")) {
             return (String)this.CreatePaymentPlanDetails.get(key);
         } else {
             return (Boolean)this.CreatePaymentPlanDetails.get(key);

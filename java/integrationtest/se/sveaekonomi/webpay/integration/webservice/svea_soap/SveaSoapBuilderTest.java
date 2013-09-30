@@ -1,6 +1,6 @@
 package se.sveaekonomi.webpay.integration.webservice.svea_soap;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -26,6 +26,6 @@ public class SveaSoapBuilderTest {
             .useInvoicePayment()
             .doRequest();
         
-        assertEquals(true, response.isOrderAccepted());
+        assertTrue(response.isOrderAccepted());
     }
 }
