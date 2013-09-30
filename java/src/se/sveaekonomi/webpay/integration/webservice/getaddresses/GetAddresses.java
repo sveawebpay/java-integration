@@ -107,7 +107,7 @@ public class GetAddresses {
     
     private SveaAuth getStoreAuthorization() {
          SveaAuth auth = new SveaAuth();
-         PAYMENTTYPE type = (orderType == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
+         PAYMENTTYPE type = (orderType.equals("Invoice") ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
          auth.Username = config.getUsername(type, countryCode);
          auth.Password = config.getPassword(type, countryCode);
          auth.ClientNumber = config.getClientNumber(type, countryCode);
@@ -157,7 +157,7 @@ public class GetAddresses {
             throw e;
         }
         
-        URL url = config.getEndPoint(orderType == "Invoice" ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
+        URL url = config.getEndPoint(orderType.equals("Invoice") ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("GetAddresses", xml);
         NodeList soapResponse = soapBuilder.createGetAddressesEuRequest(soapMessage, url.toString());
