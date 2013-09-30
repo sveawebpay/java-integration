@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.webservice.payment;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -54,7 +55,7 @@ public class DoPaymentPlanPaymentTest {
         .usePaymentPlanPayment(code)
         .doRequest();
         
-        assertEquals(response.isOrderAccepted(), true);
+        assertTrue(response.isOrderAccepted());
     }
     
     @Test
@@ -79,7 +80,7 @@ public class DoPaymentPlanPaymentTest {
         .deliverPaymentPlanOrder()
         .doRequest();
         
-        assertEquals(response.isOrderAccepted(), true);
+        assertTrue(response.isOrderAccepted());
     }
     
     private long createPaymentPlanAndReturnOrderId() throws Exception {

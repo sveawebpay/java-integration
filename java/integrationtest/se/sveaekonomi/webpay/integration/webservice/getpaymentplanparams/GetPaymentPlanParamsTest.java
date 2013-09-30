@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -22,7 +23,7 @@ public class GetPaymentPlanParamsTest {
         
         List<CampaignCode> campaignCodes = response.getCampaignCodes();
         
-        assertEquals(true, response.isOrderAccepted());
+        assertTrue(response.isOrderAccepted());
         assertEquals(3, campaignCodes.size());
         assertEquals("213060", campaignCodes.get(0).getCampaignCode());
         assertEquals("310012", campaignCodes.get(1).getCampaignCode());
@@ -35,7 +36,7 @@ public class GetPaymentPlanParamsTest {
             .setCountryCode(COUNTRYCODE.SE)    
             .doRequest();
         
-        assertEquals(response.isOrderAccepted(), true);
+        assertTrue(response.isOrderAccepted());
         assertEquals(response.getCampaignCodes().get(0).getCampaignCode(), "213060");
         assertEquals(response.getCampaignCodes().get(0).getDescription(), "Köp nu betala om 3 månader (räntefritt)");
         assertEquals(response.getCampaignCodes().get(0).getPaymentPlanType(), "InterestAndAmortizationFree");

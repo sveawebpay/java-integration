@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.webservice.getaddresses;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
@@ -18,7 +19,7 @@ public class GetAddressesTest {
             .setOrderTypeInvoice()
             .doRequest();
         
-        assertEquals(true, response.isOrderAccepted());
+        assertTrue(response.isOrderAccepted());
         assertEquals("Persson, Tess T", response.getLegalName());
     }
     
@@ -30,7 +31,7 @@ public class GetAddressesTest {
             .setOrderTypeInvoice()
             .doRequest();
         
-        assertEquals(response.isOrderAccepted(), true);
+        assertTrue(response.isOrderAccepted());
         assertEquals(response.getFirstName(), "Tess T");
         assertEquals(response.getLastName(), "Persson");
         assertEquals(response.getAddressLine2(), "Testgatan 1");

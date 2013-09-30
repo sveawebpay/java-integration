@@ -1,6 +1,6 @@
 package se.sveaekonomi.webpay.integration.webservice.handleorder;
 
-import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 import org.w3c.dom.NodeList;
@@ -46,7 +46,7 @@ public class CloseOrderTest {
             CreateOrderResponse response = new CreateOrderResponse(soapResponse);
             orderId = response.orderId;
             
-            assertEquals(true, response.isOrderAccepted());
+            assertTrue(response.isOrderAccepted());
         } catch (Exception e) {
             throw e;
         }
@@ -59,6 +59,6 @@ public class CloseOrderTest {
                 .closeInvoiceOrder()
                 .doRequest();
         
-        assertEquals(true, closeResponse.isOrderAccepted());
+        assertTrue(closeResponse.isOrderAccepted());
     }
 }

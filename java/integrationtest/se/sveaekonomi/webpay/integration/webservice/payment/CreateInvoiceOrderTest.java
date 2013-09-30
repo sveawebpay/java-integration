@@ -1,6 +1,8 @@
 package se.sveaekonomi.webpay.integration.webservice.payment;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
+import static org.junit.Assert.assertTrue;
 
 import javax.xml.bind.ValidationException;
 
@@ -37,8 +39,8 @@ public class CreateInvoiceOrderTest {
             .doRequest();
         
         assertEquals("Invoice", response.orderType);
-        assertEquals(true, response.isOrderAccepted());
-        assertEquals(true, response.sveaWillBuyOrder);
+        assertTrue(response.isOrderAccepted());
+        assertTrue(response.sveaWillBuyOrder);
         assertEquals(250.00, response.amount, 0);
         
         //CustomerIdentity
@@ -64,7 +66,7 @@ public class CreateInvoiceOrderTest {
             .useInvoicePayment()
             .doRequest();
         
-        assertEquals(false, response.isOrderAccepted());
+        assertFalse(response.isOrderAccepted());
     }
     
     @Test @Ignore
@@ -88,7 +90,7 @@ public class CreateInvoiceOrderTest {
                 .useInvoicePayment()
                 .doRequest();
         
-        assertEquals(true, response.isOrderAccepted());
+        assertTrue(response.isOrderAccepted());
         assertEquals(25.52, response.amount, 0);
     }
     
@@ -114,7 +116,7 @@ public class CreateInvoiceOrderTest {
                 .useInvoicePayment()
                     .doRequest();
         
-        assertEquals(true, response.isOrderAccepted());
+        assertTrue(response.isOrderAccepted());
         assertEquals(51.03, response.amount, 0);
     }
     
@@ -130,8 +132,8 @@ public class CreateInvoiceOrderTest {
             .useInvoicePayment()
             .doRequest();
         
-        assertEquals(true, response.isOrderAccepted());
-        assertEquals(true, response.sveaWillBuyOrder);
+        assertTrue(response.isOrderAccepted());
+        assertTrue(response.sveaWillBuyOrder);
         assertEquals("SE", response.customerIdentity.getCountryCode());
     }
     
@@ -156,8 +158,8 @@ public class CreateInvoiceOrderTest {
                 .useInvoicePayment()
                 .doRequest();
         
-        assertEquals(true, response.isOrderAccepted());
-        assertEquals(true, response.sveaWillBuyOrder);
+        assertTrue(response.isOrderAccepted());
+        assertTrue(response.sveaWillBuyOrder);
         assertEquals(212.00, response.amount, 0);
         assertEquals("0", response.getResultCode());
         assertEquals("Invoice" , response.orderType);
@@ -191,7 +193,7 @@ public class CreateInvoiceOrderTest {
             .useInvoicePayment()
             .doRequest();
         
-        assertEquals(response.isOrderAccepted(), true);
+        assertTrue(response.isOrderAccepted());
     }
     
     @Test
@@ -211,7 +213,7 @@ public class CreateInvoiceOrderTest {
         
         .doRequest();
          
-        assertEquals(response.isOrderAccepted(), true);
+        assertTrue(response.isOrderAccepted());
     }
     
     @Test
@@ -240,7 +242,7 @@ public class CreateInvoiceOrderTest {
             CreateOrderResponse response = new CreateOrderResponse(soapResponse);
             orderId = response.orderId;
             
-            assertEquals(true, response.isOrderAccepted());
+            assertTrue(response.isOrderAccepted());
         } catch (Exception e) {
             throw e;
         }
@@ -272,7 +274,7 @@ public class CreateInvoiceOrderTest {
                 .useInvoicePayment()
                 .doRequest();
         
-        assertEquals(response.isOrderAccepted(), true);
+        assertTrue(response.isOrderAccepted());
     }
     
     @Test
@@ -296,7 +298,7 @@ public class CreateInvoiceOrderTest {
                     .useInvoicePayment()
                     .doRequest();
         
-        assertEquals(true, response.isOrderAccepted());
+        assertTrue(response.isOrderAccepted());
     }
     
     @Test
@@ -312,8 +314,8 @@ public class CreateInvoiceOrderTest {
                 .useInvoicePayment()
                 .doRequest();
         
-        assertEquals(response.isIndividualIdentity, false);
-        assertEquals(response.isOrderAccepted(), true);
+        assertFalse(response.isIndividualIdentity);
+        assertTrue(response.isOrderAccepted());
     }
     
     @Test
@@ -333,8 +335,8 @@ public class CreateInvoiceOrderTest {
                 .useInvoicePayment()
                 .doRequest();
         
-        assertEquals(response.isIndividualIdentity, false);
-        assertEquals(response.isOrderAccepted(), true);
+        assertFalse(response.isIndividualIdentity);
+        assertTrue(response.isOrderAccepted());
     }
     
     @Test
@@ -356,7 +358,7 @@ public class CreateInvoiceOrderTest {
                 .useInvoicePayment()
                 .doRequest();
         
-        assertEquals(false, response.isIndividualIdentity);
-        assertEquals(true, response.isOrderAccepted());
+        assertFalse(response.isIndividualIdentity);
+        assertTrue(response.isOrderAccepted());
     }
 }
