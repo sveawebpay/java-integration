@@ -44,7 +44,7 @@ public class DeliverInvoiceOrderTest {
             .doRequest();
         
         assertTrue(response.isOrderAccepted());
-        assertEquals(response.getInvoiceDistributionType(), "Post");
+        assertEquals("Post", response.getInvoiceDistributionType());
         assertNotNull(response.getOcr());
         assertTrue(0 < response.getOcr().length());
         assertTrue(0.0 == response.getLowestAmountToPay());

@@ -78,7 +78,7 @@ public class WebServiceOrderValidatorTest {
         fail();
         
         } catch (ValidationException e) {
-            assertEquals(e.getMessage(), expectedMessage);
+            assertEquals(expectedMessage, e.getMessage());
         }
     }
     
@@ -95,7 +95,7 @@ public class WebServiceOrderValidatorTest {
             //Fail on no exception
             fail();
         } catch (ValidationException e) {
-            assertEquals(e.getMessage(), expectedMessage);
+            assertEquals(expectedMessage, e.getMessage());
         }
     }
     
@@ -186,7 +186,7 @@ public class WebServiceOrderValidatorTest {
                 .setLocality("Stan"))
             .setCountryCode(COUNTRYCODE.DE)
             .setValidator(new VoidValidator());
-        assertEquals(orderValidator.validate(order), expectedMessage);
+        assertEquals(expectedMessage, orderValidator.validate(order));
     }
     
     @Test
@@ -309,7 +309,7 @@ public class WebServiceOrderValidatorTest {
             //Fail on no exception
             fail();
         } catch (ValidationException e) {
-            assertEquals(e.getMessage(), expectedMsg);
+            assertEquals(expectedMsg, e.getMessage());
         }
     }
     
@@ -371,7 +371,7 @@ public class WebServiceOrderValidatorTest {
             //Fail on no exception
             fail();
         } catch (ValidationException e) {
-            assertEquals(e.getMessage(), expectedMessage);
+            assertEquals(expectedMessage, e.getMessage());
         }
     }
     
@@ -397,7 +397,7 @@ public class WebServiceOrderValidatorTest {
         //Fail on no exception
         fail();
         } catch (SveaWebPayException e) {
-            assertEquals(e.getMessage(), expectedMessage);
+            assertEquals(expectedMessage, e.getMessage());
         }
     }
 }

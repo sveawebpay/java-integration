@@ -8,16 +8,16 @@ public class Base64UtilTest {
     
     @Test
     public void decodeString() throws Exception {
-        String s = "JAs dkjhas djha sdjha jsdh ajhsd jash";
+        String expected = "JAs dkjhas djha sdjha jsdh ajhsd jash";
         String encoded = "SkFzIGRramhhcyBkamhhIHNkamhhIGpzZGggYWpoc2QgamFzaA==";
-        assertEquals(s, Base64Util.decodeBase64String(encoded));
+        assertEquals(expected, Base64Util.decodeBase64String(encoded));
     }
     
     @Test
     public void decodeByteArray() throws Exception {
-        String msg = "JAs dkjhas djha sdjha jsdh ajhsd jash";
+        String expected = "JAs dkjhas djha sdjha jsdh ajhsd jash";
         String encoded = "SkFzIGRramhhcyBkamhhIHNkamhhIGpzZGggYWpoc2QgamFzaA==";
-        assertEquals(msg, new String(Base64Util.decodeBase64(encoded), "UTF-8"));
+        assertEquals(expected, new String(Base64Util.decodeBase64(encoded), "UTF-8"));
     }
     
     @Test

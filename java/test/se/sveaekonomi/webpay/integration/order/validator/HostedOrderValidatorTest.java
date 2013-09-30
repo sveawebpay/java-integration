@@ -66,7 +66,7 @@ public class HostedOrderValidatorTest {
                 .setValidator(new VoidValidator())
                 .build();
         orderValidator = new HostedOrderValidator();
-        assertEquals(orderValidator.validate(order), expectedMessage);
+        assertEquals(expectedMessage, orderValidator.validate(order));
     }
     
     @Test
@@ -92,7 +92,7 @@ public class HostedOrderValidatorTest {
             //Fail on no exception
             fail();
         } catch (ValidationException e) {
-            assertEquals(e.getMessage(), expectedMessage);
+            assertEquals(expectedMessage, e.getMessage());
         }
     }
     
@@ -164,7 +164,7 @@ public class HostedOrderValidatorTest {
                 .build();
         orderValidator = new HostedOrderValidator();
         
-        assertEquals(orderValidator.validate(order), expectedMessage);
+        assertEquals(expectedMessage, orderValidator.validate(order));
     }
     
     @Test
@@ -234,7 +234,7 @@ public class HostedOrderValidatorTest {
         
         orderValidator = new HostedOrderValidator();
         
-        assertEquals(orderValidator.validate(order), expectedMessage);
+        assertEquals(expectedMessage, orderValidator.validate(order));
     }
     
     @Test
@@ -267,7 +267,7 @@ public class HostedOrderValidatorTest {
             //Fail on no exception
             fail();
         } catch (ValidationException e) {
-            assertEquals(e.getMessage(), expectedMsg);
+            assertEquals(expectedMsg, e.getMessage());
         }
     }
     
@@ -300,7 +300,7 @@ public class HostedOrderValidatorTest {
             //Fail on no exception
             fail();
         } catch (ValidationException e) {
-            assertEquals(e.getMessage(), expectedMsg);
+            assertEquals(expectedMsg, e.getMessage());
         }
     }
 }

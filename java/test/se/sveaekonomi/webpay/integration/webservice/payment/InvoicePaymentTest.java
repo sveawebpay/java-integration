@@ -15,7 +15,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class InvoicePaymentTest {
-    
+
     @Test
     public void testInvoiceWithIndividualCustomerFromSe() throws ValidationException {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
@@ -143,7 +143,7 @@ public class InvoicePaymentTest {
         .setOrderDate("2012-12-12")
         .setClientOrderNumber("33")
         .setCurrency(CURRENCY.SEK)
-        .useInvoicePayment()// returns an InvoiceOrder object
+        .useInvoicePayment()
         .prepareRequest();
         
         //CustomerIdentity
@@ -510,7 +510,7 @@ public class InvoicePaymentTest {
                 .useInvoicePayment()
                 .prepareRequest();
         
-        assertEquals(request.request.Auth.ClientNumber.toString(), "79021"); 
-        assertEquals(request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber, "4354kj");
+        assertEquals("79021", request.request.Auth.ClientNumber.toString()); 
+        assertEquals("4354kj", request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber);
     }
 }

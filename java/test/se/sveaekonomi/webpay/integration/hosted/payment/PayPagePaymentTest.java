@@ -50,8 +50,8 @@ public class PayPagePaymentTest {
                 .excludePaymentMethods();
         payPagePayment.includePaymentMethods();
         
-        assertEquals(payPagePayment.getExcludedPaymentMethods().size(), 23);
-        assertEquals(payPagePayment.getIncludedPaymentMethods().size(), 0);
+        assertEquals(23, payPagePayment.getExcludedPaymentMethods().size());
+        assertEquals(0, payPagePayment.getIncludedPaymentMethods().size());
     }
     
     @Test
@@ -145,7 +145,7 @@ public class PayPagePaymentTest {
                 .usePayPage()
                 .includePaymentMethods(includedPaymentMethods);
         
-        assertEquals(payPagePayment.getIncludedPaymentMethods().size(), 2);
+        assertEquals(2, payPagePayment.getIncludedPaymentMethods().size());
     }
     
     @Test

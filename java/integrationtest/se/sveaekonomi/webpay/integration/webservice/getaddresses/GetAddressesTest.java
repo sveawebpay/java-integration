@@ -32,10 +32,10 @@ public class GetAddressesTest {
             .doRequest();
         
         assertTrue(response.isOrderAccepted());
-        assertEquals(response.getFirstName(), "Tess T");
-        assertEquals(response.getLastName(), "Persson");
-        assertEquals(response.getAddressLine2(), "Testgatan 1");
-        assertEquals(response.getPostcode(), "99999");
-        assertEquals(response.getPostarea(), "Stan");
+        assertEquals("Tess T", response.getFirstName());
+        assertEquals("Persson", response.getLastName());
+        assertEquals("Testgatan 1", response.getAddressLine2());
+        assertEquals("99999", response.getPostcode());
+        assertEquals("Stan", response.getPostarea());
     }
 }

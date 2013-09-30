@@ -1,7 +1,6 @@
 package se.sveaekonomi.webpay.integration.webservice.payment;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import javax.xml.bind.ValidationException;
@@ -53,7 +52,7 @@ public class PaymentPlanTest {
             //Fail on no exception
             fail();
         } catch(SveaWebPayException e) {
-            assertEquals(e.getMessage(), "ERROR - CompanyCustomer is not allowed to use payment plan option.");
+            assertEquals("ERROR - CompanyCustomer is not allowed to use payment plan option.", e.getMessage());
         }
     }
 }
