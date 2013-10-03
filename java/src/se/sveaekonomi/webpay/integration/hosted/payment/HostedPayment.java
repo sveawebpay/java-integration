@@ -144,11 +144,7 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
         HostedXmlBuilder xmlBuilder = new HostedXmlBuilder();
         String xml = "";
         
-        try {
-            xml = xmlBuilder.getXml(this);
-        } catch (Exception e) {
-            throw e;
-        }
+        xml = xmlBuilder.getXml(this);
         
         PaymentForm form = new PaymentForm();
         form.setXmlMessage(xml);
