@@ -12,7 +12,7 @@ import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class SveaSoapBuilderTest {
-    
+
     @Test
     public void testRequest() throws Exception {
         CreateOrderResponse response = WebPay.createOrder()

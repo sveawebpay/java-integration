@@ -20,7 +20,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTPLANTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class PayPagePaymentTest {
-    
+
     @Test
     public void setExcludePaymentMethodsTest() throws ValidationException {
         List<PAYMENTMETHOD> excludePaymentMethods = new ArrayList<PAYMENTMETHOD>();
@@ -133,7 +133,7 @@ public class PayPagePaymentTest {
         assertEquals(PAYMENTMETHOD.KORTCERT.getValue(), payPagePayment.getExcludedPaymentMethods().get(0));
         assertEquals(PAYMENTMETHOD.SKRILL.getValue(), payPagePayment.getExcludedPaymentMethods().get(1));
     }
-      
+    
     @Test
     public void includeTCardPaymentMethodsTest() throws ValidationException {
         List<PAYMENTMETHOD> includedPaymentMethods = new ArrayList<PAYMENTMETHOD>();
@@ -284,27 +284,28 @@ public class PayPagePaymentTest {
         paymentMethods.add(PAYMENTMETHOD.SKRILL);
         PaymentForm form = WebPay.createOrder()
                 .addOrderRow(TestingTool.createOrderRow())
-               
+                
                 .addDiscount(Item.relativeDiscount()
                         .setDiscountId("1")
                         .setDiscountPercent(50)
                         .setUnit("st")
                         .setName("Relative")
                         .setDescription("RelativeDiscount"))
-                    .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
-                    .setCountryCode(COUNTRYCODE.SE)
-                    .setClientOrderNumber("33")
-                    .setOrderDate("2012-12-12")
-                    .setCurrency(CURRENCY.SEK)
-                    .usePayPage()
-                    .includePaymentMethods(paymentMethods)
-                    .setReturnUrl("http://myurl.se")
-                    .getPaymentForm();
-            
-            String xml = form.getXmlMessage();
-            String paymentMethod = xml.substring(xml.indexOf("SVEAINVOICESE"), xml.indexOf("SVEAINVOICESE") + 13);
-            //check to see if the first value is one of the excluded ones
-            assertEquals(INVOICETYPE.INVOICESE.getValue(), paymentMethod);
+                .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
+                .setCountryCode(COUNTRYCODE.SE)
+                .setClientOrderNumber("33")
+                .setOrderDate("2012-12-12")
+                .setCurrency(CURRENCY.SEK)
+                .usePayPage()
+                .includePaymentMethods(paymentMethods)
+                .setReturnUrl("http://myurl.se")
+                .getPaymentForm();
+        
+        String xml = form.getXmlMessage();
+        String paymentMethod = xml.substring(xml.indexOf("SVEAINVOICESE"), xml.indexOf("SVEAINVOICESE") + 13);
+        
+        //check to see if the first value is one of the excluded ones
+        assertEquals(INVOICETYPE.INVOICESE.getValue(), paymentMethod);
     }
     
     @Test
@@ -321,15 +322,15 @@ public class PayPagePaymentTest {
                     .setUnit("st")
                     .setName("Relative")
                     .setDescription("RelativeDiscount"))
-                .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
-                .setCountryCode(COUNTRYCODE.SE)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK)
-                .usePayPage()
-                .includePaymentMethods(paymentMethods)
-                .setReturnUrl("http://myurl.se")
-                .getPaymentForm();
+            .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
+            .setCountryCode(COUNTRYCODE.SE)
+            .setClientOrderNumber("33")
+            .setOrderDate("2012-12-12")
+            .setCurrency(CURRENCY.SEK)
+            .usePayPage()
+            .includePaymentMethods(paymentMethods)
+            .setReturnUrl("http://myurl.se")
+            .getPaymentForm();
         
         String xml = form.getXmlMessage();
         String paymentMethod = xml.substring(xml.indexOf("SVEAINVOICESE"), xml.indexOf("SVEAINVOICESE") + 13);
@@ -348,15 +349,15 @@ public class PayPagePaymentTest {
                     .setUnit("st")
                     .setName("Relative")
                     .setDescription("RelativeDiscount"))
-                .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
-                .setCountryCode(COUNTRYCODE.SE)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK)
-                .usePayPage()
-                .includePaymentMethods()
-                .setReturnUrl("http://myurl.se")
-                .getPaymentForm();
+            .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
+            .setCountryCode(COUNTRYCODE.SE)
+            .setClientOrderNumber("33")
+            .setOrderDate("2012-12-12")
+            .setCurrency(CURRENCY.SEK)
+            .usePayPage()
+            .includePaymentMethods()
+            .setReturnUrl("http://myurl.se")
+            .getPaymentForm();
         
         String xml = form.getXmlMessage();
         String paymentMethod = xml.substring(xml.indexOf("SVEAINVOICESE"), xml.indexOf("SVEAINVOICESE") + 13);

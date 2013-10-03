@@ -213,7 +213,7 @@ public class HostedXmlBuilderTest {
                 .setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtm")
                 .getPaymentForm()
                 .getXmlMessage();
-
+        
         assertFalse(xml.contains("<paymentmethod>"));
         assertFalse(xml.contains("<excludepaymentmethods>"));
     }

@@ -10,6 +10,7 @@ public class Base64UtilTest {
     public void decodeString() throws Exception {
         String expected = "JAs dkjhas djha sdjha jsdh ajhsd jash";
         String encoded = "SkFzIGRramhhcyBkamhhIHNkamhhIGpzZGggYWpoc2QgamFzaA==";
+        
         assertEquals(expected, Base64Util.decodeBase64String(encoded));
     }
     
@@ -17,6 +18,7 @@ public class Base64UtilTest {
     public void decodeByteArray() throws Exception {
         String expected = "JAs dkjhas djha sdjha jsdh ajhsd jash";
         String encoded = "SkFzIGRramhhcyBkamhhIHNkamhhIGpzZGggYWpoc2QgamFzaA==";
+        
         assertEquals(expected, new String(Base64Util.decodeBase64(encoded), "UTF-8"));
     }
     
@@ -24,6 +26,7 @@ public class Base64UtilTest {
     public void encodeString() throws Exception {
         String s = "JAs dkjhas djha sdjha jsdh ajhsd jash";
         String encoded = "SkFzIGRramhhcyBkamhhIHNkamhhIGpzZGggYWpoc2QgamFzaA==";
+        
         assertEquals(encoded, Base64Util.encodeBase64String(s));
     }
     
@@ -31,6 +34,7 @@ public class Base64UtilTest {
     public void encodeByteArray() throws Exception {
         String msg = "JAs dkjhas djha sdjha jsdh ajhsd jash";
         String encoded = "SkFzIGRramhhcyBkamhhIHNkamhhIGpzZGggYWpoc2QgamFzaA==";
+        
         assertEquals(encoded, Base64Util.encodeBase64Bytes(msg.getBytes("UTF-8")));
     }
 }

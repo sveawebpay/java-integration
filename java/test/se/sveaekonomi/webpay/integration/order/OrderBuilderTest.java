@@ -15,7 +15,7 @@ import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 
 public class OrderBuilderTest {
-    
+
     private CreateOrderBuilder order;
     
     @Before

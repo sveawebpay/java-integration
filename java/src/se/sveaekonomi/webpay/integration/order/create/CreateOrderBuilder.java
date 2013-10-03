@@ -173,7 +173,7 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
      * @return PaymentPlanPayment
      * @throws ValidationException
      */
-    public PaymentPlanPayment usePaymentPlanPayment(String campaignCode) throws ValidationException {
+    public PaymentPlanPayment usePaymentPlanPayment(String campaignCode) {
         try {
             if (campaignCode.equals("")) {
                 throw new ValidationException("MISSING VALUE - Campaign code must be set. Add parameter in .usePaymentPlanPayment(campaignCode)");

@@ -66,6 +66,7 @@ public class HostedOrderValidatorTest {
                 .setValidator(new VoidValidator())
                 .build();
         orderValidator = new HostedOrderValidator();
+        
         assertEquals(expectedMessage, orderValidator.validate(order));
     }
     
@@ -108,6 +109,7 @@ public class HostedOrderValidatorTest {
             .addCustomerDetails(Item.companyCustomer()
                 .setVatNumber("2345234")
                 .setCompanyName("TestCompagniet"));
+        
         orderValidator = new HostedOrderValidator();
         orderValidator.validate(order);
     }
@@ -124,6 +126,7 @@ public class HostedOrderValidatorTest {
                 .addCustomerDetails(Item.companyCustomer()
                         .setVatNumber("2345234")
                         .setCompanyName("TestCompagniet"));
+        
         orderValidator = new HostedOrderValidator();
         orderValidator.validate(order);
     }

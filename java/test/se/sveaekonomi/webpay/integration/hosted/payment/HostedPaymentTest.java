@@ -81,7 +81,7 @@ public class HostedPaymentTest {
             .addFee(Item.shippingFee()
                     .setAmountIncVat(5)
                     .setVatPercent(25));
-      
+        
         order.setFixedDiscountRows(null);
         order.setRelativeDiscountRows(null);
         FakeHostedPayment payment = new FakeHostedPayment(order);
@@ -133,7 +133,7 @@ public class HostedPaymentTest {
                     .setCoAddress("c/o Eriksson")
                     .setZipCode("9999")
                     .setLocality("Stan")); 
-      
+        
         FakeHostedPayment payment = new FakeHostedPayment(order);
         payment.setReturnUrl("myurl");
         PaymentForm form;

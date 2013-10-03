@@ -17,9 +17,8 @@ import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
-
 public class NewOrderBuilderTest {
-    
+
     @Test
     public void testBuildOrderRowArrayList() throws ValidationException {
         
@@ -35,7 +34,7 @@ public class NewOrderBuilderTest {
                 .setDiscountPercent(0));
         
         orderRows.add(Item.orderRow()
-                .setArticleNumber(2)
+                .setArticleNumber("2")
                 .setQuantity(2)
                 .setAmountExVat(100.00)
                 .setDescription("Specification")

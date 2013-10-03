@@ -17,7 +17,7 @@ import se.sveaekonomi.webpay.integration.util.security.HashUtil;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 
 public class PaymentFormTest {
-    
+
     private static final String SecretWord = "secret";
     private static final String MerchantId = "1234";
     
@@ -70,7 +70,7 @@ public class PaymentFormTest {
     public void testSetHtmlFields() throws ValidationException, Exception {
         String base64Payment = Base64Util.encodeBase64String("0");
         String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
-       
+        
         PaymentForm form = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setClientOrderNumber("nr26")

@@ -110,7 +110,6 @@ public class DoPaymentPlanPaymentTest {
             .setCoAddress("c/o Eriksson")
             .setZipCode("9999")
             .setLocality("Stan"))
-            
         .setCountryCode(COUNTRYCODE.SE)
         .setCustomerReference("33")
         .setClientOrderNumber("nr26")

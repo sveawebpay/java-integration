@@ -1,7 +1,6 @@
 package se.sveaekonomi.webpay.integration.webservice.helper;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.ArrayList;
 
@@ -20,7 +19,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrderRow;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class WebserviceRowFormatterTest {
-    
+
     @Test
     public void testFormatOrderRows() {
         CreateOrderBuilder order = WebPay.createOrder()
@@ -110,7 +109,7 @@ public class WebserviceRowFormatterTest {
                 .setDiscountId("0")
                 .setName("Tess")
                 .setDescription("Tester")
-           //     .setDiscount(1)
+                //.setDiscount(1)
                 .setAmountIncVat(1)
                 .setUnit("st"));
          

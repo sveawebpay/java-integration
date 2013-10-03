@@ -17,7 +17,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class PaymentPlanTest {
-    
+
     @Test
     public void testPaymentPlanRequestObjectSpecifics() throws ValidationException{
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
