@@ -27,36 +27,32 @@ public class DeliverOrderResponse extends Response {
     public void setValues(NodeList soapResponse) {
         String tmpOrderType;
         
-        try {
-            int size = soapResponse.getLength();
+        int size = soapResponse.getLength();
+        
+        for (int i = 0; i < size; i++) {
+            Element node = (Element) soapResponse.item(i);
+            this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
+            this.setResultCode(getTagValue(node, "ResultCode"));
+            String errorMsg = getTagValue(node, "ErrorMessage");
             
-            for (int i = 0; i < size; i++) {
-                Element node = (Element) soapResponse.item(i);
-                this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
-                this.setResultCode(getTagValue(node, "ResultCode"));
-                String errorMsg = getTagValue(node, "ErrorMessage");
+            if (errorMsg != null) {
+                this.setErrorMessage(errorMsg);
+            } else {
+                this.setAmount(Double.parseDouble(getTagValue(node, "Amount")));
+                tmpOrderType = getTagValue(node, "OrderType");
                 
-                if (errorMsg != null) {
-                    this.setErrorMessage(errorMsg);
+                if (tmpOrderType.equals(ORDERTYPE.Invoice.toString())) {
+                    // Set child nodes from InvoiceResultDetails
+                    setChildNodeValue(node, "InvoiceId");
+                    setChildNodeValue(node, "DueDate");
+                    setChildNodeValue(node, "InvoiceDate");
+                    setChildNodeValue(node, "InvoiceDistributionType");
+                    setChildNodeValue(node, "Ocr");
+                    setChildNodeValue(node, "LowestAmountToPay");
                 } else {
-                    this.setAmount(Double.parseDouble(getTagValue(node, "Amount")));
-                    tmpOrderType = getTagValue(node, "OrderType");
-                    
-                    if (tmpOrderType.equals(ORDERTYPE.Invoice.toString())) {
-                        // Set child nodes from InvoiceResultDetails
-                        setChildNodeValue(node, "InvoiceId");
-                        setChildNodeValue(node, "DueDate");
-                        setChildNodeValue(node, "InvoiceDate");
-                        setChildNodeValue(node, "InvoiceDistributionType");
-                        setChildNodeValue(node, "Ocr");
-                        setChildNodeValue(node, "LowestAmountToPay");
-                    } else {
-                        setChildNodeValue(node, "ContractNumber");
-                    }
+                    setChildNodeValue(node, "ContractNumber");
                 }
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
         }
     }
     

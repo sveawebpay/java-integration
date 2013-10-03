@@ -153,7 +153,7 @@ public class HostedXmlBuilder extends XMLBuilder {
                 }
             }
         } catch (XMLStreamException e) {
-            e.printStackTrace();
+            throw new SveaWebPayException("Error while building XML", e);
         }
     }
     

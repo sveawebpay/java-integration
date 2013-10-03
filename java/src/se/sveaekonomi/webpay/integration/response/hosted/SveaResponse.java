@@ -56,38 +56,34 @@ public class SveaResponse extends Response {
         Document d1 = builder.parse(new InputSource(new StringReader(xml)));
         NodeList nodeList = d1.getElementsByTagName("response");
         
-        try {
-            int size = nodeList.getLength();
+        int size = nodeList.getLength();
+        
+        for (int i = 0; i < size; i++) {
+            Element element = (Element)nodeList.item(i);
+            int status = Integer.parseInt(getTagValue(element, "statuscode"));
             
-            for (int i = 0; i < size; i++) {
-                Element element = (Element)nodeList.item(i);
-                int status = Integer.parseInt(getTagValue(element, "statuscode"));
-                
-                if (status == 0) {
-                    this.setOrderAccepted(true);
-                    this.setResultCode("0 (ORDER_ACCEPTED)");
-                } else {
-                    this.setOrderAccepted(false);
-                    setErrorParams(status);
-                }
-                
-                this.transactionId = getTagAttribute(element, "transaction", "id");
-                this.paymentMethod = getTagValue(element, "paymentmethod");
-                this.merchantId = getTagValue(element, "merchantid");
-                this.clientOrderNumber = getTagValue(element, "customerrefno");
-                int minorAmount = Integer.parseInt(getTagValue(element, "amount"));
-                this.amount = minorAmount * 0.01;
-                this.currency = getTagValue(element, "currency");
-                this.setSubscriptionId(getTagValue(element, "subscriptionid"));
-                this.setSubscriptionType(getTagValue(element, "subscriptiontype"));
-                this.setCardType(getTagValue(element, "cardtype"));
-                this.setMaskedCardNumber(getTagValue(element, "maskedcardno"));
-                this.setExpiryMonth(getTagValue(element, "expirymonth"));
-                this.setExpiryYear(getTagValue(element, "expiryyear"));
-                this.setAuthCode(getTagValue(element, "authcode"));
+            if (status == 0) {
+                this.setOrderAccepted(true);
+                this.setResultCode("0 (ORDER_ACCEPTED)");
+            } else {
+                this.setOrderAccepted(false);
+                setErrorParams(status);
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            
+            this.transactionId = getTagAttribute(element, "transaction", "id");
+            this.paymentMethod = getTagValue(element, "paymentmethod");
+            this.merchantId = getTagValue(element, "merchantid");
+            this.clientOrderNumber = getTagValue(element, "customerrefno");
+            int minorAmount = Integer.parseInt(getTagValue(element, "amount"));
+            this.amount = minorAmount * 0.01;
+            this.currency = getTagValue(element, "currency");
+            this.setSubscriptionId(getTagValue(element, "subscriptionid"));
+            this.setSubscriptionType(getTagValue(element, "subscriptiontype"));
+            this.setCardType(getTagValue(element, "cardtype"));
+            this.setMaskedCardNumber(getTagValue(element, "maskedcardno"));
+            this.setExpiryMonth(getTagValue(element, "expirymonth"));
+            this.setExpiryYear(getTagValue(element, "expiryyear"));
+            this.setAuthCode(getTagValue(element, "authcode"));
         }
     }
     
