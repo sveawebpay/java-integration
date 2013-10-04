@@ -6,8 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.ValidationException;
-
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -23,7 +21,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTPLANTYPE;
 public class HostedPaymentTest {
 
     @Test
-    public void testCalculateRequestValuesNullExtraRows() throws Exception {
+    public void testCalculateRequestValuesNullExtraRows() {
         CreateOrderBuilder order = WebPay.createOrder() 
             .setCountryCode(COUNTRYCODE.SE)
                .setClientOrderNumber("nr22")
@@ -46,7 +44,7 @@ public class HostedPaymentTest {
     }
 
     @Test
-    public void testVatPercentAndAmountIncVatCalculation() throws ValidationException {
+    public void testVatPercentAndAmountIncVatCalculation() {
         CreateOrderBuilder order = WebPay.createOrder()  
             .setCountryCode(COUNTRYCODE.SE)
             .setClientOrderNumber("nr22")
@@ -68,7 +66,7 @@ public class HostedPaymentTest {
     }
     
     @Test
-    public void testAmountIncVatAndvatPercentShippingFee() throws ValidationException {
+    public void testAmountIncVatAndvatPercentShippingFee() {
       CreateOrderBuilder order = WebPay.createOrder() 
             .setCountryCode(COUNTRYCODE.SE)
              .setClientOrderNumber("nr22")
@@ -93,7 +91,7 @@ public class HostedPaymentTest {
     }
     
     @Test
-    public void testAmountIncVatAndAmountExVatCalculation() throws ValidationException {
+    public void testAmountIncVatAndAmountExVatCalculation() {
          CreateOrderBuilder order = WebPay.createOrder()
                  .setCountryCode(COUNTRYCODE.SE)
                  .setClientOrderNumber("nr22")

@@ -3,8 +3,6 @@ package se.sveaekonomi.webpay.integration.order.validator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import javax.xml.bind.ValidationException;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -86,14 +84,14 @@ public class HostedOrderValidatorTest {
                 .addFee(Item.shippingFee())
                 .addDiscount(Item.fixedDiscount())
                 .addDiscount(Item.relativeDiscount());
-                
+            
             FakeHostedPayment payment = new FakeHostedPayment(order);
             payment.calculateRequestValues();
             
             //Fail on no exception
             fail();
-        } catch (ValidationException e) {
-            assertEquals(expectedMessage, e.getMessage());
+        } catch (Exception e) {
+            assertEquals(expectedMessage, e.getCause().getMessage());
         }
     }
     
@@ -269,8 +267,8 @@ public class HostedOrderValidatorTest {
             
             //Fail on no exception
             fail();
-        } catch (ValidationException e) {
-            assertEquals(expectedMsg, e.getMessage());
+        } catch (Exception e) {
+            assertEquals(expectedMsg, e.getCause().getMessage());
         }
     }
     
@@ -302,8 +300,8 @@ public class HostedOrderValidatorTest {
             
             //Fail on no exception
             fail();
-        } catch (ValidationException e) {
-            assertEquals(expectedMsg, e.getMessage());
+        } catch (Exception e) {
+            assertEquals(expectedMsg, e.getCause().getMessage());
         }
     }
 }

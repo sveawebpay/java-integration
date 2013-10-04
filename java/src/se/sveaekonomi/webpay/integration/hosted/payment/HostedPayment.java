@@ -7,6 +7,7 @@ import javax.xml.bind.ValidationException;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.HostedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.hosted.helper.ExcludePayments;
 import se.sveaekonomi.webpay.integration.hosted.helper.HostedRowFormatter;
@@ -123,12 +124,12 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
     
     }
     
-    public void calculateRequestValues() throws ValidationException {
+    public void calculateRequestValues() {
         String errors = "";
         errors = validateOrder();
         
         if (!errors.equals("")) {
-            throw new ValidationException(errors);
+            throw new SveaWebPayException("Validation failed", new ValidationException(errors));
         }
         
         HostedRowFormatter formatter = new HostedRowFormatter();
@@ -139,12 +140,10 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
         configureExcludedPaymentMethods();
     }
     
-    public PaymentForm getPaymentForm() throws Exception {
+    public PaymentForm getPaymentForm() {
         calculateRequestValues();
         HostedXmlBuilder xmlBuilder = new HostedXmlBuilder();
-        String xml = "";
-        
-        xml = xmlBuilder.getXml(this);
+        String xml = xmlBuilder.getXml(this);
         
         PaymentForm form = new PaymentForm();
         form.setXmlMessage(xml);

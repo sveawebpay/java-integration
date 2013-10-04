@@ -29,7 +29,7 @@ public class HostedXmlBuilderTest {
     }
     
     @Test
-    public void testBasicXml() throws Exception {
+    public void testBasicXml() {
         order = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setCurrency(CURRENCY.SEK)
@@ -52,7 +52,7 @@ public class HostedXmlBuilderTest {
     }
     
     @Test
-    public void testXmlWithIndividualCustomer() throws Exception {
+    public void testXmlWithIndividualCustomer() {
         order = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setCurrency(CURRENCY.SEK)
@@ -83,7 +83,7 @@ public class HostedXmlBuilderTest {
     }
     
     @Test
-    public void testXmlWithCompanyCustomer() throws Exception {
+    public void testXmlWithCompanyCustomer() {
         order = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setCurrency(CURRENCY.SEK)
@@ -113,7 +113,7 @@ public class HostedXmlBuilderTest {
     }
     
     @Test
-    public void testXmlCancelUrl() throws Exception {
+    public void testXmlCancelUrl() {
         order = WebPay.createOrder() 
                 .setCountryCode(COUNTRYCODE.SE)
                 .setCurrency(CURRENCY.SEK)
@@ -135,7 +135,7 @@ public class HostedXmlBuilderTest {
     }
     
     @Test
-    public void testOrderRowXml() throws Exception {
+    public void testOrderRowXml() {
         order = WebPay.createOrder() 
             .addOrderRow(Item.orderRow()
                     .setArticleNumber("0")
