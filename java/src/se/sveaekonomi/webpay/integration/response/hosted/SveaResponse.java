@@ -16,6 +16,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.response.Response;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
@@ -25,7 +26,7 @@ import se.sveaekonomi.webpay.integration.util.security.Base64Util;
  * @author klar-sar
  */
 public class SveaResponse extends Response {
-    
+
     public final SveaConfig config = new SveaConfig();
     
     private String xml;
@@ -43,20 +44,20 @@ public class SveaResponse extends Response {
     private String expiryYear;
     private String authCode;
     
-    public SveaResponse(String responseXmlBase64, String secretWord) throws SAXException, IOException, ParserConfigurationException {
+    public SveaResponse(String responseXmlBase64, String secretWord) {
         super();
         this.setValues(responseXmlBase64);
     }
     
-    private void setValues(String xmlBase64) throws SAXException, IOException, ParserConfigurationException {
+    private void setValues(String xmlBase64) {
         String xml = Base64Util.decodeBase64String(xmlBase64);
         this.setXml(xml);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document d1 = builder.parse(new InputSource(new StringReader(xml)));
-        NodeList nodeList = d1.getElementsByTagName("response");
         
         try {
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document d1 = builder.parse(new InputSource(new StringReader(xml)));
+            NodeList nodeList = d1.getElementsByTagName("response");
             int size = nodeList.getLength();
             
             for (int i = 0; i < size; i++) {
@@ -86,8 +87,12 @@ public class SveaResponse extends Response {
                 this.setExpiryYear(getTagValue(element, "expiryyear"));
                 this.setAuthCode(getTagValue(element, "authcode"));
             }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (ParserConfigurationException e) {
+            throw new SveaWebPayException("ParserConfigurationException", e);
+        } catch (SAXException e) {
+            throw new SveaWebPayException("SAXException", e);
+        } catch (IOException e) {
+            throw new SveaWebPayException("IOException", e);
         }
     }
     

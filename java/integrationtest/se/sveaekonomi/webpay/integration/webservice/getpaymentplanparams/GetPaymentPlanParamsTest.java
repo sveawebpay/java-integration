@@ -14,9 +14,9 @@ import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsRe
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 
 public class GetPaymentPlanParamsTest {
-    
+
     @Test
-    public void testGetPaymentPlanParams() throws Exception {
+    public void testGetPaymentPlanParams() {
         PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
             .setCountryCode(COUNTRYCODE.SE)
             .doRequest();
@@ -31,9 +31,9 @@ public class GetPaymentPlanParamsTest {
     }
     
     @Test
-    public void testResultGetPaymentPlanParams() throws Exception {
+    public void testResultGetPaymentPlanParams() {
         PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
-            .setCountryCode(COUNTRYCODE.SE)    
+            .setCountryCode(COUNTRYCODE.SE)
             .doRequest();
         
         assertTrue(response.isOrderAccepted());

@@ -17,185 +17,193 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaGetAddresses;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaGetPaymentPlanParams;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrderRow;
 
-public class WebServiceXmlBuilder extends XMLBuilder{
-    
+public class WebServiceXmlBuilder extends XMLBuilder {
+
     public static String prefix = "web:";
     
-    public String getCreateOrderEuXml(SveaCreateOrder order) throws Exception {
+    public String getCreateOrderEuXml(SveaCreateOrder order) {
         XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         ArrayList<SveaOrderRow> rows = order.CreateOrderInformation.OrderRows;
         
-        xmlw = xmlof.createXMLStreamWriter(os, "UTF-8");
-        xmlw.writeStartElement(prefix+"request");
-        getAuth(order.Auth);
-        
-        if (order.CreateOrderInformation != null) {
-            xmlw.writeStartElement(prefix+"CreateOrderInformation");
-            writeSimpleElement(prefix+"ClientOrderNumber", order.CreateOrderInformation.ClientOrderNumber);
-            serializeOrderRows(rows);
-            
-            if (order.CreateOrderInformation.CustomerIdentity != null) {
-                xmlw.writeStartElement(prefix+"CustomerIdentity");
-                writeSimpleElement(prefix+"NationalIdNumber", order.CreateOrderInformation.CustomerIdentity.NationalIdNumber);
-                writeSimpleElement(prefix+"Email", order.CreateOrderInformation.CustomerIdentity.Email);
-                writeSimpleElement(prefix+"PhoneNumber", order.CreateOrderInformation.CustomerIdentity.PhoneNumber);
-                writeSimpleElement(prefix+"IpAddress", order.CreateOrderInformation.CustomerIdentity.IpAddress);
-                writeSimpleElement(prefix+"FullName", order.CreateOrderInformation.CustomerIdentity.FullName);
-                writeSimpleElement(prefix+"Street", order.CreateOrderInformation.CustomerIdentity.Street);
-                writeSimpleElement(prefix+"CoAddress", order.CreateOrderInformation.CustomerIdentity.CoAddress);
-                writeSimpleElement(prefix+"ZipCode", order.CreateOrderInformation.CustomerIdentity.ZipCode);
-                writeSimpleElement(prefix+"HouseNumber", order.CreateOrderInformation.CustomerIdentity.HouseNumber);
-                writeSimpleElement(prefix+"Locality", order.CreateOrderInformation.CustomerIdentity.Locality);
-                writeSimpleElement(prefix+"CountryCode", order.CreateOrderInformation.CustomerIdentity.CountryCode.toString());
-                writeSimpleElement(prefix+"CustomerType", order.CreateOrderInformation.CustomerIdentity.CustomerType);
-                
-                if (order.CreateOrderInformation.CustomerIdentity.IndividualIdentity != null) {
-                    xmlw.writeStartElement(prefix+"IndividualIdentity");
-                    writeSimpleElement(prefix+"FirstName", order.CreateOrderInformation.CustomerIdentity.IndividualIdentity.FirstName);
-                    writeSimpleElement(prefix+"LastName", order.CreateOrderInformation.CustomerIdentity.IndividualIdentity.LastName);
-                    writeSimpleElement(prefix+"Initials", order.CreateOrderInformation.CustomerIdentity.IndividualIdentity.Initials);
-                    writeSimpleElement(prefix+"BirthDate", order.CreateOrderInformation.CustomerIdentity.IndividualIdentity.BirthDate);            
-                    xmlw.writeEndElement(); //IndividualIdentity
-                }
-                
-                if (order.CreateOrderInformation.CustomerIdentity.CompanyIdentity != null) {
-                    xmlw.writeStartElement(prefix+"CompanyIdentity");
-                    writeSimpleElement(prefix+"CompanyIdentification", order.CreateOrderInformation.CustomerIdentity.CompanyIdentity.OrgNumber);
-                    writeSimpleElement(prefix+"CompanyVatNumber", order.CreateOrderInformation.CustomerIdentity.CompanyIdentity.CompanyVatNumber);
-                    xmlw.writeEndElement(); //CompanyIdentity
-                }
-                xmlw.writeEndElement(); //CustomerIdentity
-            }
-            
-            writeSimpleElement(prefix+"OrderDate", order.CreateOrderInformation.OrderDate);
-            writeSimpleElement(prefix+"AddressSelector", order.CreateOrderInformation.AddressSelector);
-            writeSimpleElement(prefix+"CustomerReference", order.CreateOrderInformation.CustomerReference);
-            
-           
-            writeSimpleElement(prefix+"OrderType", order.CreateOrderInformation.OrderType);                      
-            
-            if (order.CreateOrderInformation.CreatePaymentPlanDetails != null && !order.CreateOrderInformation.OrderType.equals("Invoice")) {
-                xmlw.writeStartElement(prefix+"CreatePaymentPlanDetails");
-                String code = (String)order.CreateOrderInformation.CreatePaymentPlanDetails.get("CampaignCode");
-                writeSimpleElement(prefix+"CampaignCode", code);              
-                writeSimpleElement("SendAutomaticGiroPaymentForm", String.valueOf((boolean)order.CreateOrderInformation.CreatePaymentPlanDetails.get("SendAutomaticGiroPaymentForm")));
-                
-                // ?? CoCustomerIdentity ???
-                //?? writeSimpleElement("FixedMonthlyAmount", order.CreateOrderInformation.CreatePaymentPlanDetails.)                                       
-            }
-            xmlw.writeEndElement();
-        }
-        
-        xmlw.writeEndElement();
-        xmlw.writeEndDocument();
-        
         try {
+            xmlw = xmlof.createXMLStreamWriter(os, "UTF-8");
+            xmlw.writeStartElement(prefix+"request");
+            getAuth(order.Auth);
+            
+            if (order.CreateOrderInformation != null) {
+                xmlw.writeStartElement(prefix+"CreateOrderInformation");
+                writeSimpleElement(prefix+"ClientOrderNumber", order.CreateOrderInformation.ClientOrderNumber);
+                serializeOrderRows(rows);
+                
+                if (order.CreateOrderInformation.CustomerIdentity != null) {
+                    xmlw.writeStartElement(prefix+"CustomerIdentity");
+                    writeSimpleElement(prefix+"NationalIdNumber", order.CreateOrderInformation.CustomerIdentity.NationalIdNumber);
+                    writeSimpleElement(prefix+"Email", order.CreateOrderInformation.CustomerIdentity.Email);
+                    writeSimpleElement(prefix+"PhoneNumber", order.CreateOrderInformation.CustomerIdentity.PhoneNumber);
+                    writeSimpleElement(prefix+"IpAddress", order.CreateOrderInformation.CustomerIdentity.IpAddress);
+                    writeSimpleElement(prefix+"FullName", order.CreateOrderInformation.CustomerIdentity.FullName);
+                    writeSimpleElement(prefix+"Street", order.CreateOrderInformation.CustomerIdentity.Street);
+                    writeSimpleElement(prefix+"CoAddress", order.CreateOrderInformation.CustomerIdentity.CoAddress);
+                    writeSimpleElement(prefix+"ZipCode", order.CreateOrderInformation.CustomerIdentity.ZipCode);
+                    writeSimpleElement(prefix+"HouseNumber", order.CreateOrderInformation.CustomerIdentity.HouseNumber);
+                    writeSimpleElement(prefix+"Locality", order.CreateOrderInformation.CustomerIdentity.Locality);
+                    writeSimpleElement(prefix+"CountryCode", order.CreateOrderInformation.CustomerIdentity.CountryCode.toString());
+                    writeSimpleElement(prefix+"CustomerType", order.CreateOrderInformation.CustomerIdentity.CustomerType);
+                    
+                    if (order.CreateOrderInformation.CustomerIdentity.IndividualIdentity != null) {
+                        xmlw.writeStartElement(prefix+"IndividualIdentity");
+                        writeSimpleElement(prefix+"FirstName", order.CreateOrderInformation.CustomerIdentity.IndividualIdentity.FirstName);
+                        writeSimpleElement(prefix+"LastName", order.CreateOrderInformation.CustomerIdentity.IndividualIdentity.LastName);
+                        writeSimpleElement(prefix+"Initials", order.CreateOrderInformation.CustomerIdentity.IndividualIdentity.Initials);
+                        writeSimpleElement(prefix+"BirthDate", order.CreateOrderInformation.CustomerIdentity.IndividualIdentity.BirthDate);            
+                        xmlw.writeEndElement();
+                    }
+                    
+                    if (order.CreateOrderInformation.CustomerIdentity.CompanyIdentity != null) {
+                        xmlw.writeStartElement(prefix+"CompanyIdentity");
+                        writeSimpleElement(prefix+"CompanyIdentification", order.CreateOrderInformation.CustomerIdentity.CompanyIdentity.OrgNumber);
+                        writeSimpleElement(prefix+"CompanyVatNumber", order.CreateOrderInformation.CustomerIdentity.CompanyIdentity.CompanyVatNumber);
+                        xmlw.writeEndElement();
+                    }
+                    
+                    xmlw.writeEndElement();
+                }
+                
+                writeSimpleElement(prefix+"OrderDate", order.CreateOrderInformation.OrderDate);
+                writeSimpleElement(prefix+"AddressSelector", order.CreateOrderInformation.AddressSelector);
+                writeSimpleElement(prefix+"CustomerReference", order.CreateOrderInformation.CustomerReference);
+                
+                writeSimpleElement(prefix+"OrderType", order.CreateOrderInformation.OrderType);
+                
+                if (order.CreateOrderInformation.CreatePaymentPlanDetails != null && !order.CreateOrderInformation.OrderType.equals("Invoice")) {
+                    xmlw.writeStartElement(prefix+"CreatePaymentPlanDetails");
+                    String code = (String)order.CreateOrderInformation.CreatePaymentPlanDetails.get("CampaignCode");
+                    writeSimpleElement(prefix+"CampaignCode", code);
+                    writeSimpleElement("SendAutomaticGiroPaymentForm", String.valueOf((boolean)order.CreateOrderInformation.CreatePaymentPlanDetails.get("SendAutomaticGiroPaymentForm")));
+                    
+                    // ?? CoCustomerIdentity ???
+                    //?? writeSimpleElement("FixedMonthlyAmount", order.CreateOrderInformation.CreatePaymentPlanDetails.)
+                }
+                
+                xmlw.writeEndElement();
+            }
+            
+            xmlw.writeEndElement();
+            xmlw.writeEndDocument();
+            
             return new String(os.toByteArray(), "UTF-8");
+        } catch (XMLStreamException e) {
+            throw new SveaWebPayException("Error while building XML", e);
         } catch (UnsupportedEncodingException e) {
             throw new SveaWebPayException("Unsupported encoding UTF-8", e);
         }
     }
     
-    public String getDeliverOrderEuXml(SveaDeliverOrder request) throws Exception {
+    public String getDeliverOrderEuXml(SveaDeliverOrder request) {
         XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        //ArrayList<SveaOrderRow> rows = request.deliverOrderInformation.getDeliverInvoiceDetails().OrderRows;
         
-        xmlw = xmlof.createXMLStreamWriter(os, "UTF-8");
-        xmlw.writeStartElement(prefix+"request");
-        getAuth(request.auth);
-        
-        if (request.deliverOrderInformation != null) {
-            xmlw.writeStartElement(prefix+"DeliverOrderInformation");
-            writeSimpleElement(prefix+"SveaOrderId", request.deliverOrderInformation.sveaOrderId);
-            writeSimpleElement(prefix+"OrderType", request.deliverOrderInformation.orderType);
-            if (request.deliverOrderInformation.deliverInvoiceDetails!=null) {
-                xmlw.writeStartElement(prefix+"DeliverInvoiceDetails");
-                writeSimpleElement(prefix+"NumberOfCreditDays", String.valueOf(request.deliverOrderInformation.deliverInvoiceDetails.NumberofCreditDays));
-                writeSimpleElement(prefix+"InvoiceDistributionType", request.deliverOrderInformation.deliverInvoiceDetails.InvoiceDistributionType);
-                writeSimpleElement(prefix+"IsCreditInvoice", String.valueOf(request.deliverOrderInformation.deliverInvoiceDetails.IsCreditInvoice));
-                writeSimpleElement(prefix+"InvoiceIdToCredit", request.deliverOrderInformation.deliverInvoiceDetails.InvoiceIdToCredit);
-                ArrayList<SveaOrderRow> rows = request.deliverOrderInformation.getDeliverInvoiceDetails().OrderRows;
-                serializeOrderRows(rows);
+        try {
+            xmlw = xmlof.createXMLStreamWriter(os, "UTF-8");
+            xmlw.writeStartElement(prefix+"request");
+            getAuth(request.auth);
+            
+            if (request.deliverOrderInformation != null) {
+                xmlw.writeStartElement(prefix+"DeliverOrderInformation");
+                writeSimpleElement(prefix+"SveaOrderId", request.deliverOrderInformation.sveaOrderId);
+                writeSimpleElement(prefix+"OrderType", request.deliverOrderInformation.orderType);
+                
+                if (request.deliverOrderInformation.deliverInvoiceDetails != null) {
+                    xmlw.writeStartElement(prefix+"DeliverInvoiceDetails");
+                    writeSimpleElement(prefix+"NumberOfCreditDays", String.valueOf(request.deliverOrderInformation.deliverInvoiceDetails.NumberofCreditDays));
+                    writeSimpleElement(prefix+"InvoiceDistributionType", request.deliverOrderInformation.deliverInvoiceDetails.InvoiceDistributionType);
+                    writeSimpleElement(prefix+"IsCreditInvoice", String.valueOf(request.deliverOrderInformation.deliverInvoiceDetails.IsCreditInvoice));
+                    writeSimpleElement(prefix+"InvoiceIdToCredit", request.deliverOrderInformation.deliverInvoiceDetails.InvoiceIdToCredit);
+                    ArrayList<SveaOrderRow> rows = request.deliverOrderInformation.getDeliverInvoiceDetails().OrderRows;
+                    serializeOrderRows(rows);
+                    xmlw.writeEndElement();
+                }
                 xmlw.writeEndElement();
             }
             xmlw.writeEndElement();
-        }
-        xmlw.writeEndElement();
-        xmlw.writeEndDocument();
-        
-        try {
+            xmlw.writeEndDocument();
+            
             return new String(os.toByteArray(), "UTF-8");
+        } catch (XMLStreamException e) {
+            throw new SveaWebPayException("Error while building XML", e);
         } catch (UnsupportedEncodingException e) {
             throw new SveaWebPayException("Unsupported encoding UTF-8", e);
         }
     }
     
-    public String getCloseOrderEuXml(SveaCloseOrder order) throws Exception {
+    public String getCloseOrderEuXml(SveaCloseOrder order) {
         XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         
-        xmlw = xmlof.createXMLStreamWriter(os, "UTF-8");
-        xmlw.writeStartElement(prefix+"request");
-        getAuth(order.Auth);
-        
-        if (order.CloseOrderInformation != null) {
-            xmlw.writeStartElement(prefix+"CloseOrderInformation");
-        
-            writeSimpleElement(prefix+"SveaOrderId", order.CloseOrderInformation.SveaOrderId.toString());
+        try {
+            xmlw = xmlof.createXMLStreamWriter(os, "UTF-8");
+            xmlw.writeStartElement(prefix+"request");
+            getAuth(order.Auth);
+            
+            if (order.CloseOrderInformation != null) {
+                xmlw.writeStartElement(prefix+"CloseOrderInformation");
+                writeSimpleElement(prefix+"SveaOrderId", order.CloseOrderInformation.SveaOrderId.toString());
+                xmlw.writeEndElement();
+            }
             
             xmlw.writeEndElement();
-        }
-        
-        xmlw.writeEndElement();
-        xmlw.writeEndDocument();
-        
-        try {
+            xmlw.writeEndDocument();
+            
             return new String(os.toByteArray(), "UTF-8");
-        } catch (UnsupportedEncodingException e) {
-            throw new SveaWebPayException("Unsupported encoding UTF-8", e);
-        }
-    }
-      
-    
-    public String getGetAddressesXml(SveaGetAddresses order) throws Exception {
-        XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
-        ByteArrayOutputStream os = new ByteArrayOutputStream();
-        
-        xmlw = xmlof.createXMLStreamWriter(os, "UTF-8");
-        xmlw.writeStartElement(prefix+"request");
-        
-        getAuth(order.Auth);
-        
-        writeSimpleElement(prefix + "IsCompany", String.valueOf(order.IsCompany));
-        writeSimpleElement(prefix + "CountryCode", order.CountryCode);
-        writeSimpleElement(prefix + "SecurityNumber", order.SecurityNumber);
-        
-        xmlw.writeEndElement();
-        xmlw.writeEndDocument();
-        
-        try {
-            return new String(os.toByteArray(), "UTF-8");
+        } catch (XMLStreamException e) {
+            throw new SveaWebPayException("Error while building XML", e);
         } catch (UnsupportedEncodingException e) {
             throw new SveaWebPayException("Unsupported encoding UTF-8", e);
         }
     }
     
-    public String getGetPaymentPlanParamsXml(SveaGetPaymentPlanParams order) throws Exception {
+    public String getGetAddressesXml(SveaGetAddresses order) {
         XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
         
-        xmlw = xmlof.createXMLStreamWriter(os, "UTF-8");
-        xmlw.writeStartElement(prefix+"request");
-        
-        getAuth(order.Auth);
-        
-        xmlw.writeEndElement();
-        xmlw.writeEndDocument();
+        try {
+            xmlw = xmlof.createXMLStreamWriter(os, "UTF-8");
+            xmlw.writeStartElement(prefix+"request");
+            
+            getAuth(order.Auth);
+            
+            writeSimpleElement(prefix + "IsCompany", String.valueOf(order.IsCompany));
+            writeSimpleElement(prefix + "CountryCode", order.CountryCode);
+            writeSimpleElement(prefix + "SecurityNumber", order.SecurityNumber);
+            
+            xmlw.writeEndElement();
+            xmlw.writeEndDocument();
+            
+            return new String(os.toByteArray(), "UTF-8");
+        } catch (XMLStreamException e) {
+            throw new SveaWebPayException("Error while building XML", e);
+        } catch (UnsupportedEncodingException e) {
+            throw new SveaWebPayException("Unsupported encoding UTF-8", e);
+        }
+    }
+    
+    public String getGetPaymentPlanParamsXml(SveaGetPaymentPlanParams order) {
+        XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
+        ByteArrayOutputStream os = new ByteArrayOutputStream();
         
         try {
+            xmlw = xmlof.createXMLStreamWriter(os, "UTF-8");
+            xmlw.writeStartElement(prefix+"request");
+            
+            getAuth(order.Auth);
+            
+            xmlw.writeEndElement();
+            xmlw.writeEndDocument();
+            
             return new String(os.toByteArray(), "UTF-8");
+        } catch (XMLStreamException e) {
+            throw new SveaWebPayException("Error while building XML", e);
         } catch (UnsupportedEncodingException e) {
             throw new SveaWebPayException("Unsupported encoding UTF-8", e);
         }

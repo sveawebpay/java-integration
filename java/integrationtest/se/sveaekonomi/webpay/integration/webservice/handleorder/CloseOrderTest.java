@@ -21,7 +21,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 public class CloseOrderTest {
     
     @Test
-    public void testCloseOrder() throws Exception {
+    public void testCloseOrder() {
         Long orderId = 0L;
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         
@@ -38,18 +38,14 @@ public class CloseOrderTest {
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         
-        try {
-            String xml = xmlBuilder.getCreateOrderEuXml(request.request);
-            String url = SveaConfig.getTestWebserviceUrl().toString();
-            String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
-            NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
-            CreateOrderResponse response = new CreateOrderResponse(soapResponse);
-            orderId = response.orderId;
-            
-            assertTrue(response.isOrderAccepted());
-        } catch (Exception e) {
-            throw e;
-        }
+        String xml = xmlBuilder.getCreateOrderEuXml(request.request);
+        String url = SveaConfig.getTestWebserviceUrl().toString();
+        String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
+        NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
+        CreateOrderResponse response = new CreateOrderResponse(soapResponse);
+        orderId = response.orderId;
+        
+        assertTrue(response.isOrderAccepted());
         
         soapBuilder = new SveaSoapBuilder();
         

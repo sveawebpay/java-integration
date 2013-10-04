@@ -14,7 +14,7 @@ public class FakeHostedPayment extends HostedPayment<FakeHostedPayment> {
         return this;
     }
     
-    public XMLStreamWriter getPaymentSpecificXml(XMLStreamWriter xmlw) throws Exception {
+    public XMLStreamWriter getPaymentSpecificXml(XMLStreamWriter xmlw) {
         return xmlw;
     }
 }

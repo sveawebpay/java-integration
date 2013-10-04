@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.webservice.svea_soap;
 
 import java.io.ByteArrayInputStream;
+import java.net.MalformedURLException;
 import java.net.URL;
 
 import javax.xml.soap.MessageFactory;
@@ -8,14 +9,17 @@ import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPConnection;
 import javax.xml.soap.SOAPConnectionFactory;
 import javax.xml.soap.SOAPEnvelope;
+import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 import javax.xml.transform.stream.StreamSource;
 
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+
 public class SveaSoapBuilder {
-    
+
     private static String prefix = "web";
     private static String namespace_soapSchema = "http://schemas.xmlsoap.org/soap/envelope/";
     private static String namespace_soapAction = "https://webservices.sveaekonomi.se/webpay";
@@ -27,13 +31,13 @@ public class SveaSoapBuilder {
         try {
             soapConnectionFactory = SOAPConnectionFactory.newInstance();
             connection = soapConnectionFactory.createConnection();
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (SOAPException ex) {
+            throw new SveaWebPayException("SOAP exception", ex);
         }
     }
     
     public NodeList createOrderEuRequest(String message, String urlEndpoint) {
-            return sendSoapMessage(message, urlEndpoint, "CreateOrderEu", "CreateOrderEuResult");
+        return sendSoapMessage(message, urlEndpoint, "CreateOrderEu", "CreateOrderEuResult");
     }
     
     public NodeList closeOrderEuRequest(String message, String urlEndpoint) {
@@ -77,12 +81,11 @@ public class SveaSoapBuilder {
             
             connection.close();
             return response.getSOAPPart().getEnvelope().getElementsByTagName(responseHeader);
-            
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        } catch (SOAPException ex) {
+            throw new SveaWebPayException("SOAP exception", ex);
+        } catch (MalformedURLException ex) {
+            throw new SveaWebPayException("Malformed URL", ex);
         }
-        
-        return null;
     }
     
     public String makeSoapMessage(String soapMethod, String xmlDocument) {

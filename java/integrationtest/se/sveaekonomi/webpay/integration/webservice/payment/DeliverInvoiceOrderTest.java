@@ -18,20 +18,20 @@ import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 public class DeliverInvoiceOrderTest {
     
     @Test
-    public void testDeliverInvoiceOrderDoRequest() throws Exception {
+    public void testDeliverInvoiceOrderDoRequest() {
         DeliverOrderResponse response = WebPay.deliverOrder()
-            .addOrderRow(TestingTool.createOrderRow())  
+            .addOrderRow(TestingTool.createOrderRow())
             .setOrderId(54086L)
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setCountryCode(COUNTRYCODE.SE)
             .deliverInvoiceOrder()
             .doRequest();
-    
+        
         response.getErrorMessage();
     }
     
     @Test
-    public void testDeliverInvoiceOrderResult() throws Exception {
+    public void testDeliverInvoiceOrderResult() {
         long orderId = createInvoiceAndReturnOrderId();
         
         DeliverOrderResponse response = WebPay.deliverOrder()
@@ -50,7 +50,7 @@ public class DeliverInvoiceOrderTest {
         assertEquals(0.0, response.getLowestAmountToPay(), 0);
     }
     
-    private long createInvoiceAndReturnOrderId() throws Exception {
+    private long createInvoiceAndReturnOrderId() {
         CreateOrderResponse response = WebPay.createOrder()
             .addOrderRow(TestingTool.createOrderRow())
             .addCustomerDetails(Item.individualCustomer()

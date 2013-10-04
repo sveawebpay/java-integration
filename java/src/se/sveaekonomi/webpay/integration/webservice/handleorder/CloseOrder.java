@@ -6,6 +6,7 @@ import javax.xml.bind.ValidationException;
 
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.CloseOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
@@ -17,13 +18,13 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public class CloseOrder {
-    
-    private CloseOrderBuilder order;  
+
+    private CloseOrderBuilder order;
     
     public CloseOrder(CloseOrderBuilder order) {
         this.order = order;
     }
-        
+    
     protected SveaAuth getStoreAuthorization() {
          SveaAuth auth = new SveaAuth();
          PAYMENTTYPE type = (order.getOrderType().equals("Invoice") ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
@@ -40,10 +41,12 @@ public class CloseOrder {
         return errors;
     }
     
-    public SveaRequest<SveaCloseOrder> prepareRequest() throws ValidationException {
+    public SveaRequest<SveaCloseOrder> prepareRequest() {
         String errors = validateRequest();
-        if (errors != "")
-            throw new ValidationException(errors);
+        
+        if (errors != "") {
+            throw new SveaWebPayException("Validation failed", new ValidationException(errors));
+        }
         
         SveaCloseOrder sveaCloseOrder = new SveaCloseOrder();
         sveaCloseOrder.Auth = getStoreAuthorization();
@@ -57,7 +60,7 @@ public class CloseOrder {
         return object;
     }
     
-    public CloseOrderResponse doRequest() throws Exception {
+    public CloseOrderResponse doRequest() {
         URL url = order.getOrderType().equals("Invoice") ? 
                 order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE) 
                 : order.getConfig().getEndPoint(PAYMENTTYPE.PAYMENTPLAN);

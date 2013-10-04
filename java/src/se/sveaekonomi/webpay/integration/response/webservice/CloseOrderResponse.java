@@ -16,19 +16,15 @@ public class CloseOrderResponse extends Response{
     }
     
     private void setValues(NodeList soapMessage) {
-        try {
-            int size = soapMessage.getLength();
-            
-            for (int i = 0; i < size; i++) {
-                Element node = (Element) soapMessage.item(i);
-                // mandatory
-                this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
-                this.setResultCode(getTagValue(node, "ResultCode"));
-                this.setErrorMessage(getTagValue(node, "ErrorMessage"));
-                //this.orderId = Long.parseLong(getTagValue(node, "SveaOrderId"));
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+        int size = soapMessage.getLength();
+        
+        for (int i = 0; i < size; i++) {
+            Element node = (Element) soapMessage.item(i);
+            // mandatory
+            this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
+            this.setResultCode(getTagValue(node, "ResultCode"));
+            this.setErrorMessage(getTagValue(node, "ErrorMessage"));
+            //this.orderId = Long.parseLong(getTagValue(node, "SveaOrderId"));
         }
     }
     

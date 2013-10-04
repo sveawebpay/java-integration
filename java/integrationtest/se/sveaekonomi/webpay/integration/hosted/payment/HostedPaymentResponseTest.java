@@ -9,6 +9,7 @@ import org.junit.Test;
 import org.xml.sax.SAXException;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -29,7 +30,7 @@ import com.meterware.httpunit.WebResponse;
 public class HostedPaymentResponseTest {
     
     @Test
-    public void testDoCardPaymentRequest() throws Exception {
+    public void testDoCardPaymentRequest() {
         HttpUnitOptions.setScriptingEnabled( false );
         
         PaymentForm form = WebPay.createOrder()
@@ -50,7 +51,7 @@ public class HostedPaymentResponseTest {
     }
     
     @Test
-    public void testNordeaSePaymentRequest() throws Exception {
+    public void testNordeaSePaymentRequest() {
         HttpUnitOptions.setScriptingEnabled( false );
         
         PaymentForm form = WebPay.createOrder()
@@ -70,7 +71,7 @@ public class HostedPaymentResponseTest {
         assertEquals("OK", result.getResponseMessage());
     }
     
-    private WebResponse postRequest(PaymentForm form) throws IOException, SAXException {
+    private WebResponse postRequest(PaymentForm form) {
         WebConversation conversation = new WebConversation();
         CreateOrderBuilder order = WebPay.createOrder();
         WebRequest request = new PostMethodWebRequest(order.getConfig().getEndPoint(PAYMENTTYPE.HOSTED).toString());
@@ -80,6 +81,16 @@ public class HostedPaymentResponseTest {
         request.setParameter("message", form.getXmlMessageBase64());
         request.setParameter("merchantid", form.getMerchantId());
         
-        return conversation.getResponse(request);
+        WebResponse response = null;
+        
+        try {
+            response = conversation.getResponse(request);
+        } catch (IOException e) {
+            throw new SveaWebPayException("Faild to post request", e);
+        } catch (SAXException e) {
+            throw new SveaWebPayException("Faild to post request", e);
+        }
+        
+        return response;
     }
 }

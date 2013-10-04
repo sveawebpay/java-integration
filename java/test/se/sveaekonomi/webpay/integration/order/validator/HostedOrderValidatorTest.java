@@ -3,8 +3,6 @@ package se.sveaekonomi.webpay.integration.order.validator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import javax.xml.bind.ValidationException;
-
 import org.junit.Rule;
 import org.junit.Test;
 import org.junit.rules.ExpectedException;
@@ -28,7 +26,7 @@ public class HostedOrderValidatorTest {
     }
     
     @Test
-    public void testFailOnNullClientOrderNumber() throws ValidationException {
+    public void testFailOnNullClientOrderNumber() {
         String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n"
                     + "MISSING VALUE - ClientOrderNumber is required. Use setClientOrderNumber(...).\n"
                     + "MISSING VALUE - Currency is required. Use setCurrency(...).\n"
@@ -48,7 +46,7 @@ public class HostedOrderValidatorTest {
     public ExpectedException thrown = ExpectedException.none();
     
     @Test
-    public void testFailOnEmptyClientOrderNumber() throws ValidationException {
+    public void testFailOnEmptyClientOrderNumber() {
         String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n" 
                 + "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n";
         
@@ -66,6 +64,7 @@ public class HostedOrderValidatorTest {
                 .setValidator(new VoidValidator())
                 .build();
         orderValidator = new HostedOrderValidator();
+        
         assertEquals(expectedMessage, orderValidator.validate(order));
     }
     
@@ -85,19 +84,19 @@ public class HostedOrderValidatorTest {
                 .addFee(Item.shippingFee())
                 .addDiscount(Item.fixedDiscount())
                 .addDiscount(Item.relativeDiscount());
-                
+            
             FakeHostedPayment payment = new FakeHostedPayment(order);
             payment.calculateRequestValues();
             
             //Fail on no exception
             fail();
-        } catch (ValidationException e) {
-            assertEquals(expectedMessage, e.getMessage());
+        } catch (Exception e) {
+            assertEquals(expectedMessage, e.getCause().getMessage());
         }
     }
     
     @Test
-    public void succeedOnGoodValuesSe() throws ValidationException {
+    public void succeedOnGoodValuesSe() {
         CreateOrderBuilder order = WebPay.createOrder()
             .setValidator(new VoidValidator())
             .setClientOrderNumber("1")
@@ -108,6 +107,7 @@ public class HostedOrderValidatorTest {
             .addCustomerDetails(Item.companyCustomer()
                 .setVatNumber("2345234")
                 .setCompanyName("TestCompagniet"));
+        
         orderValidator = new HostedOrderValidator();
         orderValidator.validate(order);
     }
@@ -124,6 +124,7 @@ public class HostedOrderValidatorTest {
                 .addCustomerDetails(Item.companyCustomer()
                         .setVatNumber("2345234")
                         .setCompanyName("TestCompagniet"));
+        
         orderValidator = new HostedOrderValidator();
         orderValidator.validate(order);
     }
@@ -145,7 +146,7 @@ public class HostedOrderValidatorTest {
     }
     
     @Test
-    public void testFailVatPercentIsMissing() throws ValidationException {
+    public void testFailVatPercentIsMissing() {
         String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n"
             + "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n"
             + "MISSING VALUE - At least one of the values must be set in combination with AmountExVat: AmountIncVat or VatPercent for Orderrow. Use one of: setAmountIncVat() or setVatPercent().\n";
@@ -168,7 +169,7 @@ public class HostedOrderValidatorTest {
     }
     
     @Test
-    public void testFailAmountExVatIsMissing() throws ValidationException {
+    public void testFailAmountExVatIsMissing() {
         String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n" +
             "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n"
             + "MISSING VALUE - At least one of the values must be set in combination with VatPercent: AmountIncVat or AmountExVat for Orderrow. Use one of: setAmountExVat() or setAmountIncVat().\n";
@@ -192,7 +193,7 @@ public class HostedOrderValidatorTest {
     }
     
     @Test
-    public void testFailAmountExVatAndVatPercentIsMissing() throws ValidationException {
+    public void testFailAmountExVatAndVatPercentIsMissing() {
         String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n" +
             "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n"
             + "MISSING VALUE - At least one of the values must be set in combination with AmountIncVat: AmountExVat or VatPercent for Orderrow. Use one of: setAmountExVat() or setVatPercent().\n";
@@ -216,7 +217,7 @@ public class HostedOrderValidatorTest {
     }
     
     @Test
-    public void testValidateFailOrderIsNull() throws ValidationException {
+    public void testValidateFailOrderIsNull() {
         String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n" +
             "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n"
             + "MISSING VALUES - AmountExVat, Quantity and VatPercent are required for Orderrow. Use setAmountExVat(), setQuantity() and setVatPercent().\n";
@@ -238,7 +239,7 @@ public class HostedOrderValidatorTest {
     }
     
     @Test
-    public void testFailMissingIdentityInHostedNL() throws Exception {
+    public void testFailMissingIdentityInHostedNL() {
         String expectedMsg = "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use setInitials().\n"
                 + "MISSING VALUE - Birth date is required for individual customers when countrycode is NL. Use setBirthDate().\n"
                 + "MISSING VALUE - Name is required for individual customers when countrycode is NL. Use setName().\n" 
@@ -266,13 +267,13 @@ public class HostedOrderValidatorTest {
             
             //Fail on no exception
             fail();
-        } catch (ValidationException e) {
-            assertEquals(expectedMsg, e.getMessage());
+        } catch (Exception e) {
+            assertEquals(expectedMsg, e.getCause().getMessage());
         }
     }
     
     @Test
-    public void testFailMissingIdentityInHostedDE() throws Exception {
+    public void testFailMissingIdentityInHostedDE() {
         String expectedMsg = "MISSING VALUE - Birth date is required for individual customers when countrycode is DE. Use setBirthDate().\n"
                 + "MISSING VALUE - Name is required for individual customers when countrycode is DE. Use setName().\n"
                 + "MISSING VALUE - Street address is required for all customers when countrycode is DE. Use setStreetAddress().\n"
@@ -299,8 +300,8 @@ public class HostedOrderValidatorTest {
             
             //Fail on no exception
             fail();
-        } catch (ValidationException e) {
-            assertEquals(expectedMsg, e.getMessage());
+        } catch (Exception e) {
+            assertEquals(expectedMsg, e.getCause().getMessage());
         }
     }
 }

@@ -3,8 +3,6 @@ package se.sveaekonomi.webpay.integration.webservice.handleorder;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 
-import javax.xml.bind.ValidationException;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -35,7 +33,7 @@ public class DeliverOrderTest {
     }
     
     @Test
-    public void testDeliverInvoice() throws ValidationException {
+    public void testDeliverInvoice() {
         SveaRequest<SveaDeliverOrder> request = order.addOrderRow(TestingTool.createOrderRow())
         
         .addFee(Item.shippingFee()
@@ -56,7 +54,7 @@ public class DeliverOrderTest {
         .setCreditInvoice("id")
         .setCountryCode(COUNTRYCODE.SE)
         .deliverInvoiceOrder()
-            .prepareRequest();
+        .prepareRequest();
         
         //First order row is a product
         assertEquals("1", request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(0).ArticleNumber);
@@ -88,7 +86,7 @@ public class DeliverOrderTest {
     }
     
     @Test
-    public void testDeliverPaymentPlanOrder() throws ValidationException {
+    public void testDeliverPaymentPlanOrder() {
         SveaRequest<SveaDeliverOrder> request = order
                 .setOrderId(54086L)
                 .setCountryCode(COUNTRYCODE.SE)

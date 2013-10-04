@@ -32,7 +32,7 @@ public class SveaConfig {
         try {
             return new URL(swpTestWsUrl);
         } catch (MalformedURLException e) {
-            throw new SveaWebPayException("Should not happen unless someone modified the test URL", e);
+            throw new SveaWebPayException("Bad URL", e);
         }
     }
     

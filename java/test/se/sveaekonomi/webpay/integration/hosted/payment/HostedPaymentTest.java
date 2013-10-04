@@ -6,8 +6,6 @@ import static org.junit.Assert.assertTrue;
 import java.util.List;
 import java.util.Map;
 
-import javax.xml.bind.ValidationException;
-
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -23,7 +21,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTPLANTYPE;
 public class HostedPaymentTest {
 
     @Test
-    public void testCalculateRequestValuesNullExtraRows() throws Exception {
+    public void testCalculateRequestValuesNullExtraRows() {
         CreateOrderBuilder order = WebPay.createOrder() 
             .setCountryCode(COUNTRYCODE.SE)
                .setClientOrderNumber("nr22")
@@ -46,7 +44,7 @@ public class HostedPaymentTest {
     }
 
     @Test
-    public void testVatPercentAndAmountIncVatCalculation() throws ValidationException {
+    public void testVatPercentAndAmountIncVatCalculation() {
         CreateOrderBuilder order = WebPay.createOrder()  
             .setCountryCode(COUNTRYCODE.SE)
             .setClientOrderNumber("nr22")
@@ -68,7 +66,7 @@ public class HostedPaymentTest {
     }
     
     @Test
-    public void testAmountIncVatAndvatPercentShippingFee() throws ValidationException {
+    public void testAmountIncVatAndvatPercentShippingFee() {
       CreateOrderBuilder order = WebPay.createOrder() 
             .setCountryCode(COUNTRYCODE.SE)
              .setClientOrderNumber("nr22")
@@ -81,7 +79,7 @@ public class HostedPaymentTest {
             .addFee(Item.shippingFee()
                     .setAmountIncVat(5)
                     .setVatPercent(25));
-      
+        
         order.setFixedDiscountRows(null);
         order.setRelativeDiscountRows(null);
         FakeHostedPayment payment = new FakeHostedPayment(order);
@@ -93,7 +91,7 @@ public class HostedPaymentTest {
     }
     
     @Test
-    public void testAmountIncVatAndAmountExVatCalculation() throws ValidationException {
+    public void testAmountIncVatAndAmountExVatCalculation() {
          CreateOrderBuilder order = WebPay.createOrder()
                  .setCountryCode(COUNTRYCODE.SE)
                  .setClientOrderNumber("nr22")
@@ -115,7 +113,7 @@ public class HostedPaymentTest {
     }
     
     @Test
-    public void testCreatePaymentForm() throws Exception {
+    public void testCreatePaymentForm() {
          CreateOrderBuilder order = WebPay.createOrder() 
                  .setCountryCode(COUNTRYCODE.SE)
                  .setClientOrderNumber("nr22")
@@ -132,17 +130,13 @@ public class HostedPaymentTest {
                     .setStreetAddress("Gatan", "23")
                     .setCoAddress("c/o Eriksson")
                     .setZipCode("9999")
-                    .setLocality("Stan")); 
-      
+                    .setLocality("Stan"));
+        
         FakeHostedPayment payment = new FakeHostedPayment(order);
         payment.setReturnUrl("myurl");
         PaymentForm form;
         
-        try {
-            form = payment.getPaymentForm();
-        } catch (Exception e) {
-            throw e;
-        }
+        form = payment.getPaymentForm();
         
         Map<String, String> formHtmlFields = form.getFormHtmlFields();
         assertEquals("</form>", formHtmlFields.get("form_end_tag"));

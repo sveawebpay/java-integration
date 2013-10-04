@@ -1,7 +1,5 @@
 package se.sveaekonomi.webpay.integration.order.handle;
 
-import javax.xml.bind.ValidationException;
-
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
@@ -83,9 +81,8 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
      * Will automatically match all order rows that are to be delivered with those which was sent
      * when creating the invoice order.
      * @return HandleOrder
-     * @throws ValidationException
      */
-    public HandleOrder deliverInvoiceOrder() throws ValidationException {
+    public HandleOrder deliverInvoiceOrder() {
         orderType = "Invoice";
         return new HandleOrder(this);
     }
@@ -93,9 +90,8 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
     /**
      * Prepares the PaymentPlan order for delivery.
      * @return HandleOrder
-     * @throws ValidationException
      */
-    public HandleOrder deliverPaymentPlanOrder() throws ValidationException {
+    public HandleOrder deliverPaymentPlanOrder() {
         orderType = "PaymentPlan";
         return new HandleOrder(this);
     }

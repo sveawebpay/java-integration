@@ -2,8 +2,6 @@ package se.sveaekonomi.webpay.integration.webservice.payment;
 
 import static org.junit.Assert.assertEquals;
 
-import javax.xml.bind.ValidationException;
-
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -17,7 +15,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 public class InvoicePaymentTest {
 
     @Test
-    public void testInvoiceWithIndividualCustomerFromSe() throws ValidationException {
+    public void testInvoiceWithIndividualCustomerFromSe() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
             .addOrderRow(TestingTool.createOrderRow())
             .addOrderRow(TestingTool.createOrderRow())
@@ -36,7 +34,7 @@ public class InvoicePaymentTest {
     }
     
     @Test
-    public void testInvoiceWithAuth() throws ValidationException {
+    public void testInvoiceWithAuth() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
             .addOrderRow(TestingTool.createOrderRow())
             
@@ -57,7 +55,7 @@ public class InvoicePaymentTest {
     }
     
     @Test
-    public void testSetAuth() throws ValidationException {
+    public void testSetAuth() {
         SveaRequest<SveaCreateOrder> request =  WebPay.createOrder()
         .addOrderRow(TestingTool.createOrderRow())
         .addOrderRow(TestingTool.createOrderRow())
@@ -76,7 +74,7 @@ public class InvoicePaymentTest {
     }
     
     @Test
-    public void testInvoiceWithIndividualCustomerFromNl() throws ValidationException {
+    public void testInvoiceWithIndividualCustomerFromNl() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
         .addOrderRow(TestingTool.createOrderRow())
         
@@ -119,7 +117,7 @@ public class InvoicePaymentTest {
     }
     
     @Test
-    public void testInvoiceWithCompanyCustomerFromNl() throws ValidationException {
+    public void testInvoiceWithCompanyCustomerFromNl() {
          SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
         .addOrderRow(TestingTool.createOrderRow())
         
@@ -161,7 +159,7 @@ public class InvoicePaymentTest {
     }
     
     @Test
-    public void testInvoiceWithCompanyCustomerFromSe() throws ValidationException {
+    public void testInvoiceWithCompanyCustomerFromSe() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
             .addOrderRow(TestingTool.createOrderRow())
             .addOrderRow(TestingTool.createOrderRow())
@@ -180,7 +178,7 @@ public class InvoicePaymentTest {
     }
     
     @Test
-    public void testInvoiceWithProductsRows() throws ValidationException {
+    public void testInvoiceWithProductsRows() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
         .addOrderRow(TestingTool.createOrderRow())
         
@@ -240,7 +238,7 @@ public class InvoicePaymentTest {
     }
     
     @Test
-    public void testInvoiceWithRelativeDiscountOnDifferentProductVat() throws ValidationException {
+    public void testInvoiceWithRelativeDiscountOnDifferentProductVat() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
@@ -282,7 +280,7 @@ public class InvoicePaymentTest {
     }
     
     @Test
-    public void testInvoiceWithFixedDiscountOnDifferentProductVat() throws ValidationException {
+    public void testInvoiceWithFixedDiscountOnDifferentProductVat() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
@@ -324,7 +322,7 @@ public class InvoicePaymentTest {
     }
     
     @Test
-    public void testInvoiceWithCreateOrderInformation() throws ValidationException{
+    public void testInvoiceWithCreateOrderInformation() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
         .setClientOrderNumber("33")
         .setCurrency(CURRENCY.SEK)
@@ -342,7 +340,7 @@ public class InvoicePaymentTest {
     }
     
     @Test
-    public void testInvoiceUsingAmountIncVatWithVatPercent() throws ValidationException {
+    public void testInvoiceUsingAmountIncVatWithVatPercent() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
         .addCustomerDetails(Item.companyCustomer()
             .setNationalIdNumber("194605092222"))
@@ -410,7 +408,7 @@ public class InvoicePaymentTest {
     }
     
     @Test
-    public void testInvoiceUsingAmountIncVatWithAmountExVat() throws ValidationException {
+    public void testInvoiceUsingAmountIncVatWithAmountExVat() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
             .addOrderRow(Item.orderRow()
                 .setArticleNumber("1")
@@ -477,7 +475,7 @@ public class InvoicePaymentTest {
     }
    
     @Test
-    public void testInvoiceRequestXML() throws Exception {
+    public void testInvoiceRequestXML() {
         String xml = WebPay.createOrder()
         .addOrderRow(TestingTool.createOrderRow())
         .addOrderRow(TestingTool.createOrderRow()) 
@@ -498,7 +496,7 @@ public class InvoicePaymentTest {
     }
     
     @Test
-    public void testCompanyIdRequest() throws ValidationException, Exception {
+    public void testCompanyIdRequest() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
                 .addOrderRow(TestingTool.createOrderRow())
                 .addCustomerDetails(Item.companyCustomer()

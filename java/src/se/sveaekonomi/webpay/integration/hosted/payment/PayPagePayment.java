@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.Collection;
 import java.util.List;
 
+import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
 import se.sveaekonomi.webpay.integration.hosted.helper.ExcludePayments;
@@ -169,7 +170,7 @@ public class PayPagePayment extends HostedPayment<PayPagePayment> {
         return this;
     }
     
-    public XMLStreamWriter getPaymentSpecificXml(XMLStreamWriter xmlw) throws Exception {
+    public XMLStreamWriter getPaymentSpecificXml(XMLStreamWriter xmlw) throws XMLStreamException {
         if (paymentMethod!=null) {
             writeSimpleElement(xmlw, "paymentmethod", paymentMethod);
         }
