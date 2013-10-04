@@ -218,7 +218,7 @@ public class CreateInvoiceOrderTest {
     }
     
     @Test
-    public void testFailOnMissingCountryCodeOfCloseOrder() throws Exception {
+    public void testFailOnMissingCountryCodeOfCloseOrder() {
         Long orderId = 0L;
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         

@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
-import javax.xml.bind.ValidationException;
-
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -20,7 +18,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 public class NewOrderBuilderTest {
 
     @Test
-    public void testBuildOrderRowArrayList() throws ValidationException {
+    public void testBuildOrderRowArrayList() {
         
         ArrayList<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>(); 
         orderRows.add(Item.orderRow()
@@ -68,7 +66,7 @@ public class NewOrderBuilderTest {
     }
     
     @Test
-    public void testBuildOrderWithCompanyCustomer() throws ValidationException {
+    public void testBuildOrderWithCompanyCustomer() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
         .addOrderRow(TestingTool.createOrderRow())
         

@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
-import javax.xml.bind.ValidationException;
-
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -45,7 +43,7 @@ public class WebserviceRowFormatterTest {
     }
     
     @Test
-    public void testFormatShippingFeeRows() throws ValidationException, Exception {
+    public void testFormatShippingFeeRows() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
                     .addOrderRow(TestingTool.createOrderRow())
                     

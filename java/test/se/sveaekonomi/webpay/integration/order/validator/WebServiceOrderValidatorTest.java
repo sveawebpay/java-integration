@@ -231,7 +231,7 @@ public class WebServiceOrderValidatorTest {
     }
     
     @Test
-    public void testFailOnMissingIdentityDataForNeOrder() throws ValidationException {
+    public void testFailOnMissingIdentityDataForNeOrder() {
         String expectedMessage = "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use setInitials().\n"
                 + "MISSING VALUE - Birth date is required for individual customers when countrycode is NL. Use setBirthDate().\n"
                 + "MISSING VALUE - Name is required for individual customers when countrycode is NL. Use setName().\n"
@@ -250,7 +250,7 @@ public class WebServiceOrderValidatorTest {
     }
     
     @Test
-    public void testFailOnMissingCompanyIdentityForNeOrder() throws ValidationException {
+    public void testFailOnMissingCompanyIdentityForNeOrder() {
         String expectedMessage = "MISSING VALUE - Vat number is required for company customers when countrycode is NL. Use setVatNumber().\n"
                 + "MISSING VALUE - Company name is required for individual customers when countrycode is NL. Use setName().\n"
                 + "MISSING VALUE - Street address and house number is required for all customers when countrycode is NL. Use setStreetAddress().\n"
@@ -268,7 +268,7 @@ public class WebServiceOrderValidatorTest {
     }
     
     @Test
-    public void testFailOnMissingCompanyIdentityForDeOrder() throws ValidationException {
+    public void testFailOnMissingCompanyIdentityForDeOrder() {
         String expectedMessage = "MISSING VALUE - Vat number is required for company customers when countrycode is DE. Use setVatNumber().\n"
                 + "MISSING VALUE - Street address is required for all customers when countrycode is DE. Use setStreetAddress().\n"
                 + "MISSING VALUE - Locality is required for all customers when countrycode is DE. Use setLocality().\n"
@@ -382,7 +382,7 @@ public class WebServiceOrderValidatorTest {
     }
     
     @Test
-    public void testFailCompanyCustomerUsingPaymentPlan() throws ValidationException, Exception {
+    public void testFailCompanyCustomerUsingPaymentPlan() {
         String expectedMessage = "ERROR - CompanyCustomer is not allowed to use payment plan option.";
         
         try {

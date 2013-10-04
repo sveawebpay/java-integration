@@ -24,7 +24,7 @@ public class WebServiceXmlBuilderTest {
     }
     
     @Test
-    public void testCreateOrderEu() throws Exception {
+    public void testCreateOrderEu() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
             .addCustomerDetails(Item.individualCustomer()
                 .setNationalIdNumber("194605092222"))

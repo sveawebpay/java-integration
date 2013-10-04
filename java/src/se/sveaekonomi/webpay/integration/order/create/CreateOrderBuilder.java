@@ -126,7 +126,7 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
      * Start creating card payment via PayPage. Returns Payment form to integrate in shop.
      * @return CardPayment
      */
-    public CardPayment usePayPageCardOnly() throws ValidationException {
+    public CardPayment usePayPageCardOnly() {
         return new CardPayment(this);
     }
     
@@ -134,7 +134,7 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
      * Start creating direct bank payment via PayPage. Returns Payment form to integrate in shop.
      * @return DirectPayment
      */
-    public DirectPayment usePayPageDirectBankOnly() throws ValidationException {
+    public DirectPayment usePayPageDirectBankOnly() {
         return new DirectPayment(this);
     }
     
@@ -143,7 +143,7 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
      * 
      * @return PayPagePayment
      */
-    public PayPagePayment usePayPage() throws ValidationException {
+    public PayPagePayment usePayPage() {
         return new PayPagePayment(this);
     }
     
@@ -161,9 +161,8 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     /**
      * Start create invoicePayment
      * @return PaymentPlanPayment
-     * @throws ValidationException
      */
-    public InvoicePayment useInvoicePayment() throws ValidationException {
+    public InvoicePayment useInvoicePayment() {
         return new InvoicePayment((CreateOrderBuilder)this);
     }
     
@@ -171,7 +170,6 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
      * Start creating payment plan payment
      * @param campaignCode
      * @return PaymentPlanPayment
-     * @throws ValidationException
      */
     public PaymentPlanPayment usePaymentPlanPayment(String campaignCode) {
         try {
@@ -232,7 +230,7 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
         return this.customerIdentity;
     }
     
-    public CreateOrderBuilder build() throws ValidationException {
+    public CreateOrderBuilder build() {
         validator.validate(this);
         return this;
     }

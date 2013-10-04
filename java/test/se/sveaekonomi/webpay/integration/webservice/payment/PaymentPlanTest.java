@@ -3,8 +3,6 @@ package se.sveaekonomi.webpay.integration.webservice.payment;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import javax.xml.bind.ValidationException;
-
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -19,7 +17,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 public class PaymentPlanTest {
 
     @Test
-    public void testPaymentPlanRequestObjectSpecifics() throws ValidationException {
+    public void testPaymentPlanRequestObjectSpecifics() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
                 .addOrderRow(TestingTool.createOrderRow())
                 .addCustomerDetails(Item.individualCustomer()
@@ -36,7 +34,7 @@ public class PaymentPlanTest {
     }
     
     @Test
-    public void testPaymentPlanFailCompanyCustomer() throws ValidationException{
+    public void testPaymentPlanFailCompanyCustomer() {
         try {
             WebPay.createOrder()
                 .addOrderRow(TestingTool.createOrderRow())

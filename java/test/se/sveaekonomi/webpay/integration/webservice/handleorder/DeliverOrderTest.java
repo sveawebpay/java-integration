@@ -56,7 +56,7 @@ public class DeliverOrderTest {
         .setCreditInvoice("id")
         .setCountryCode(COUNTRYCODE.SE)
         .deliverInvoiceOrder()
-            .prepareRequest();
+        .prepareRequest();
         
         //First order row is a product
         assertEquals("1", request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(0).ArticleNumber);

@@ -3,8 +3,6 @@ package se.sveaekonomi.webpay.integration.order;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
-import javax.xml.bind.ValidationException;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -25,7 +23,7 @@ public class OrderBuilderTest {
     }
     
     @Test
-    public void testThatValidatorIsCalledOnBuild() throws ValidationException {
+    public void testThatValidatorIsCalledOnBuild() {
         order.build();
         VoidValidator v = (VoidValidator) order.getValidator();
         
@@ -33,7 +31,7 @@ public class OrderBuilderTest {
     }
     
     @Test
-    public void testBuildEmptyOrder() throws ValidationException {
+    public void testBuildEmptyOrder() {
         CreateOrderBuilder sveaRequest = order
                 .setCountryCode(COUNTRYCODE.NL)
                 .build();

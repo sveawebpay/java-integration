@@ -28,7 +28,7 @@ public class HostedOrderValidatorTest {
     }
     
     @Test
-    public void testFailOnNullClientOrderNumber() throws ValidationException {
+    public void testFailOnNullClientOrderNumber() {
         String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n"
                     + "MISSING VALUE - ClientOrderNumber is required. Use setClientOrderNumber(...).\n"
                     + "MISSING VALUE - Currency is required. Use setCurrency(...).\n"
@@ -48,7 +48,7 @@ public class HostedOrderValidatorTest {
     public ExpectedException thrown = ExpectedException.none();
     
     @Test
-    public void testFailOnEmptyClientOrderNumber() throws ValidationException {
+    public void testFailOnEmptyClientOrderNumber() {
         String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n" 
                 + "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n";
         
@@ -98,7 +98,7 @@ public class HostedOrderValidatorTest {
     }
     
     @Test
-    public void succeedOnGoodValuesSe() throws ValidationException {
+    public void succeedOnGoodValuesSe() {
         CreateOrderBuilder order = WebPay.createOrder()
             .setValidator(new VoidValidator())
             .setClientOrderNumber("1")
@@ -148,7 +148,7 @@ public class HostedOrderValidatorTest {
     }
     
     @Test
-    public void testFailVatPercentIsMissing() throws ValidationException {
+    public void testFailVatPercentIsMissing() {
         String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n"
             + "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n"
             + "MISSING VALUE - At least one of the values must be set in combination with AmountExVat: AmountIncVat or VatPercent for Orderrow. Use one of: setAmountIncVat() or setVatPercent().\n";
@@ -171,7 +171,7 @@ public class HostedOrderValidatorTest {
     }
     
     @Test
-    public void testFailAmountExVatIsMissing() throws ValidationException {
+    public void testFailAmountExVatIsMissing() {
         String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n" +
             "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n"
             + "MISSING VALUE - At least one of the values must be set in combination with VatPercent: AmountIncVat or AmountExVat for Orderrow. Use one of: setAmountExVat() or setAmountIncVat().\n";
@@ -195,7 +195,7 @@ public class HostedOrderValidatorTest {
     }
     
     @Test
-    public void testFailAmountExVatAndVatPercentIsMissing() throws ValidationException {
+    public void testFailAmountExVatAndVatPercentIsMissing() {
         String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n" +
             "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n"
             + "MISSING VALUE - At least one of the values must be set in combination with AmountIncVat: AmountExVat or VatPercent for Orderrow. Use one of: setAmountExVat() or setVatPercent().\n";
@@ -219,7 +219,7 @@ public class HostedOrderValidatorTest {
     }
     
     @Test
-    public void testValidateFailOrderIsNull() throws ValidationException {
+    public void testValidateFailOrderIsNull() {
         String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n" +
             "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n"
             + "MISSING VALUES - AmountExVat, Quantity and VatPercent are required for Orderrow. Use setAmountExVat(), setQuantity() and setVatPercent().\n";
