@@ -113,7 +113,7 @@ public class HostedPaymentTest {
     }
     
     @Test
-    public void testCreatePaymentForm() throws Exception {
+    public void testCreatePaymentForm() {
          CreateOrderBuilder order = WebPay.createOrder() 
                  .setCountryCode(COUNTRYCODE.SE)
                  .setClientOrderNumber("nr22")
@@ -130,7 +130,7 @@ public class HostedPaymentTest {
                     .setStreetAddress("Gatan", "23")
                     .setCoAddress("c/o Eriksson")
                     .setZipCode("9999")
-                    .setLocality("Stan")); 
+                    .setLocality("Stan"));
         
         FakeHostedPayment payment = new FakeHostedPayment(order);
         payment.setReturnUrl("myurl");

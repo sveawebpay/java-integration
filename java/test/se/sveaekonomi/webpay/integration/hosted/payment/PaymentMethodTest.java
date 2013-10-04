@@ -17,7 +17,7 @@ import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 public class PaymentMethodTest {
 
     @Test
-    public void testPayPagePaymentWithSetPaymentMethod() throws Exception {
+    public void testPayPagePaymentWithSetPaymentMethod() {
         PaymentForm form = WebPay.createOrder()
             .addOrderRow(TestingTool.createOrderRow())
             .addDiscount(Item.relativeDiscount()
@@ -46,7 +46,7 @@ public class PaymentMethodTest {
     }
     
     @Test
-    public void testPayPagePaymentWithSetPaymentMethodNL() throws Exception {
+    public void testPayPagePaymentWithSetPaymentMethodNL() {
         PaymentForm form = WebPay.createOrder()
             .addOrderRow(TestingTool.createOrderRow())
             .addDiscount(Item.relativeDiscount()

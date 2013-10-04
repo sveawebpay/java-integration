@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 
-import javax.xml.bind.ValidationException;
-
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -22,7 +20,7 @@ public class PaymentFormTest {
     private static final String MerchantId = "1234";
     
     @Test
-    public void testSetForm() throws ValidationException, Exception {
+    public void testSetForm() {
         String base64Payment = Base64Util.encodeBase64String("0");
         String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
         
@@ -67,7 +65,7 @@ public class PaymentFormTest {
     }
     
     @Test
-    public void testSetHtmlFields() throws ValidationException, Exception {
+    public void testSetHtmlFields() {
         String base64Payment = Base64Util.encodeBase64String("0");
         String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
         

@@ -14,7 +14,7 @@ import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 public class HostedPaymentsRequestTest {
 
     @Test
-    public void testDoCardPaymentRequest() throws Exception {
+    public void testDoCardPaymentRequest() {
         PaymentForm form = WebPay.createOrder()
         .addOrderRow(TestingTool.createOrderRow())
         .addFee(Item.shippingFee()

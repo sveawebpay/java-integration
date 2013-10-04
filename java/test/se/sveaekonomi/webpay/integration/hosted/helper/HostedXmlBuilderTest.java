@@ -161,7 +161,7 @@ public class HostedXmlBuilderTest {
     }
     
     @Test
-    public void testDirectPaymentSpecificXml() throws Exception {
+    public void testDirectPaymentSpecificXml() {
         xml = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setCurrency(CURRENCY.SEK)
@@ -180,7 +180,7 @@ public class HostedXmlBuilderTest {
     }
     
     @Test
-    public void testCardPaymentSpecificXml() throws Exception {
+    public void testCardPaymentSpecificXml() {
         xml = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setCurrency(CURRENCY.SEK)
@@ -199,7 +199,7 @@ public class HostedXmlBuilderTest {
     }
     
     @Test
-    public void testPayPagePaymentSpecificXmlNullPaymentMethod() throws Exception {
+    public void testPayPagePaymentSpecificXmlNullPaymentMethod() {
         xml = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setCurrency(CURRENCY.SEK)
@@ -219,7 +219,7 @@ public class HostedXmlBuilderTest {
     }
     
     @Test
-    public void testPayPagePaymentSetLanguageCode() throws Exception {
+    public void testPayPagePaymentSetLanguageCode() {
         xml = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setCurrency(CURRENCY.SEK)
@@ -239,7 +239,7 @@ public class HostedXmlBuilderTest {
     }
     
     @Test
-    public void testPayPagePaymentPayPal() throws Exception {
+    public void testPayPagePaymentPayPal() {
         xml = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setCurrency(CURRENCY.SEK)
@@ -259,7 +259,7 @@ public class HostedXmlBuilderTest {
     }
     
     @Test
-    public void testPayPagePaymentSpecificXml() throws Exception {
+    public void testPayPagePaymentSpecificXml() {
         xml = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setCurrency(CURRENCY.SEK)

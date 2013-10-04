@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import javax.xml.bind.ValidationException;
-
 import org.junit.Before;
 import org.junit.Test;
 
@@ -29,7 +27,7 @@ public class CardPaymentTest {
     }
     
     @Test
-    public void testConfigureExcludedPaymentMethodsSe() throws ValidationException {
+    public void testConfigureExcludedPaymentMethodsSe() {
         List<String> excluded = order
                 .setCountryCode(COUNTRYCODE.SE)
                 .usePayPageCardOnly()
@@ -40,7 +38,7 @@ public class CardPaymentTest {
     }
     
     @Test
-    public void testBuildCardPayment() throws Exception {
+    public void testBuildCardPayment() {
         PaymentForm form = order.addOrderRow(TestingTool.createOrderRow())
             .addCustomerDetails(Item.companyCustomer()
             .setVatNumber("2345234")
@@ -79,7 +77,7 @@ public class CardPaymentTest {
     }
     
     @Test
-    public void testBuildCardPaymentDE() throws Exception {
+    public void testBuildCardPaymentDE() {
         PaymentForm form = order.addOrderRow(TestingTool.createOrderRow())
             .addCustomerDetails(Item.companyCustomer()
             .setVatNumber("2345234")
@@ -118,10 +116,10 @@ public class CardPaymentTest {
     }
     
     @Test
-    public void testSetAuthorization() throws Exception {
+    public void testSetAuthorization() {
         PaymentForm form = WebPay.createOrder()
             .addOrderRow(TestingTool.createOrderRow())
-        
+            
             .addFee(Item.shippingFee()
                 .setShippingId("33")
                 .setName("shipping")

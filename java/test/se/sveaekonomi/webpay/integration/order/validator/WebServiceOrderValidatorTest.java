@@ -303,7 +303,7 @@ public class WebServiceOrderValidatorTest {
     }
     
     @Test
-    public void testMissingCountryCodeGetPaymentPlanParams() throws Exception {
+    public void testMissingCountryCodeGetPaymentPlanParams() {
         String expectedMsg = "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
         
         try {

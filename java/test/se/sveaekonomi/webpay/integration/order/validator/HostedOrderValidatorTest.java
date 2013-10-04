@@ -239,7 +239,7 @@ public class HostedOrderValidatorTest {
     }
     
     @Test
-    public void testFailMissingIdentityInHostedNL() throws Exception {
+    public void testFailMissingIdentityInHostedNL() {
         String expectedMsg = "MISSING VALUE - Initials is required for individual customers when countrycode is NL. Use setInitials().\n"
                 + "MISSING VALUE - Birth date is required for individual customers when countrycode is NL. Use setBirthDate().\n"
                 + "MISSING VALUE - Name is required for individual customers when countrycode is NL. Use setName().\n" 
@@ -273,7 +273,7 @@ public class HostedOrderValidatorTest {
     }
     
     @Test
-    public void testFailMissingIdentityInHostedDE() throws Exception {
+    public void testFailMissingIdentityInHostedDE() {
         String expectedMsg = "MISSING VALUE - Birth date is required for individual customers when countrycode is DE. Use setBirthDate().\n"
                 + "MISSING VALUE - Name is required for individual customers when countrycode is DE. Use setName().\n"
                 + "MISSING VALUE - Street address is required for all customers when countrycode is DE. Use setStreetAddress().\n"

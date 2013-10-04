@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.List;
 
-import javax.xml.bind.ValidationException;
-
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -19,7 +17,7 @@ import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 public class DirectPaymentTest {
 
     @Test
-    public void testConfigureExcludedPaymentMethodsSe() throws ValidationException {
+    public void testConfigureExcludedPaymentMethodsSe() {
         List<String> excluded  = WebPay.createOrder() 
                 .setCountryCode(COUNTRYCODE.SE)
                 .usePayPageDirectBankOnly()
@@ -30,7 +28,7 @@ public class DirectPaymentTest {
     }
     
     @Test
-    public void testConfigureExcludedPaymentMethodsNo() throws ValidationException {
+    public void testConfigureExcludedPaymentMethodsNo() {
         List<String> excluded  = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.NO)
                 .usePayPageDirectBankOnly()
@@ -41,7 +39,7 @@ public class DirectPaymentTest {
     }
     
     @Test
-    public void testBuildDirectBankPayment() throws Exception {
+    public void testBuildDirectBankPayment() {
         PaymentForm form = WebPay.createOrder()
             .addOrderRow(TestingTool.createOrderRow())
             .addFee(Item.shippingFee()
@@ -84,7 +82,7 @@ public class DirectPaymentTest {
     }
     
     @Test
-    public void testBuildDirectBankPaymentNotSE() throws Exception {
+    public void testBuildDirectBankPaymentNotSE() {
         PaymentForm form = WebPay.createOrder()
             .addOrderRow(TestingTool.createOrderRow())
             .addFee(Item.shippingFee()
