@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.List;
 
@@ -13,16 +14,16 @@ import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsRe
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 
 public class GetPaymentPlanParamsTest {
-    
+
     @Test
-    public void testGetPaymentPlanParams() throws Exception {
+    public void testGetPaymentPlanParams() {
         PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
-        	.setCountryCode(COUNTRYCODE.SE)
-        	.doRequest();
+            .setCountryCode(COUNTRYCODE.SE)
+            .doRequest();
         
         List<CampaignCode> campaignCodes = response.getCampaignCodes();
         
-        assertEquals(true, response.isOrderAccepted());
+        assertTrue(response.isOrderAccepted());
         assertEquals(3, campaignCodes.size());
         assertEquals("213060", campaignCodes.get(0).getCampaignCode());
         assertEquals("310012", campaignCodes.get(1).getCampaignCode());
@@ -30,22 +31,22 @@ public class GetPaymentPlanParamsTest {
     }
     
     @Test
-    public void testResultGetPaymentPlanParams() throws Exception {
+    public void testResultGetPaymentPlanParams() {
         PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
-        	.setCountryCode(COUNTRYCODE.SE)	
+            .setCountryCode(COUNTRYCODE.SE)
             .doRequest();
         
-        assertEquals(response.isOrderAccepted(), true);
-        assertEquals(response.getCampaignCodes().get(0).getCampaignCode(), "213060");
-        assertEquals(response.getCampaignCodes().get(0).getDescription(), "Köp nu betala om 3 månader (räntefritt)");
-        assertEquals(response.getCampaignCodes().get(0).getPaymentPlanType(), "InterestAndAmortizationFree");
-        assertEquals(response.getCampaignCodes().get(0).getContractLengthInMonths(), "3");
-        assertEquals(response.getCampaignCodes().get(0).getInitialFee(), "100");
-        assertEquals(response.getCampaignCodes().get(0).getNotificationFee(), "29");
-        assertEquals(response.getCampaignCodes().get(0).getInterestRatePercent(), "0");
-        assertEquals(response.getCampaignCodes().get(0).getNumberOfInterestFreeMonths(), "3");
-        assertEquals(response.getCampaignCodes().get(0).getNumberOfPaymentFreeMonths(), "3");
-        assertEquals(response.getCampaignCodes().get(0).getFromAmount(), "1000");
-        assertEquals(response.getCampaignCodes().get(0).getToAmount(), "50000");
+        assertTrue(response.isOrderAccepted());
+        assertEquals("213060", response.getCampaignCodes().get(0).getCampaignCode());
+        assertEquals("Köp nu betala om 3 månader (räntefritt)", response.getCampaignCodes().get(0).getDescription());
+        assertEquals("InterestAndAmortizationFree", response.getCampaignCodes().get(0).getPaymentPlanType());
+        assertEquals("3", response.getCampaignCodes().get(0).getContractLengthInMonths());
+        assertEquals("100", response.getCampaignCodes().get(0).getInitialFee());
+        assertEquals("29", response.getCampaignCodes().get(0).getNotificationFee());
+        assertEquals("0", response.getCampaignCodes().get(0).getInterestRatePercent());
+        assertEquals("3", response.getCampaignCodes().get(0).getNumberOfInterestFreeMonths());
+        assertEquals("3", response.getCampaignCodes().get(0).getNumberOfPaymentFreeMonths());
+        assertEquals("1000", response.getCampaignCodes().get(0).getFromAmount());
+        assertEquals("50000", response.getCampaignCodes().get(0).getToAmount());
     }
 }

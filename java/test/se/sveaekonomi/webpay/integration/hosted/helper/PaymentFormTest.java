@@ -1,11 +1,8 @@
 package se.sveaekonomi.webpay.integration.hosted.helper;
 
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertTrue;
 
 import java.util.Map;
-
-import javax.xml.bind.ValidationException;
 
 import org.junit.Test;
 
@@ -18,41 +15,42 @@ import se.sveaekonomi.webpay.integration.util.security.HashUtil;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 
 public class PaymentFormTest {
-    
+
     private static final String SecretWord = "secret";
     private static final String MerchantId = "1234";
-
+    
     @Test
-    public void testSetForm() throws ValidationException, Exception {
-
+    public void testSetForm() {
         String base64Payment = Base64Util.encodeBase64String("0");
         String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
+        
         PaymentForm form = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setCurrency(CURRENCY.SEK)
                 .setClientOrderNumber("nr26")
                 .addOrderRow(Item.orderRow()
-                		.setQuantity(1)
-                		.setAmountExVat(4)
-                		.setAmountIncVat(5))
+                        .setQuantity(1)
+                        .setAmountExVat(4)
+                        .setAmountIncVat(5))
                 .addCustomerDetails(Item.companyCustomer()
-	                .setNationalIdNumber("666666")
-	                .setEmail("test@svea.com")
-	                .setPhoneNumber(999999)
-	                .setIpAddress("123.123.123.123")
-	                .setStreetAddress("Gatan", "23")
-	                .setCoAddress("c/o Eriksson")
-	                .setZipCode("9999")
-	                .setLocality("Stan"))
+                    .setNationalIdNumber("666666")
+                    .setEmail("test@svea.com")
+                    .setPhoneNumber("999999")
+                    .setIpAddress("123.123.123.123")
+                    .setStreetAddress("Gatan", "23")
+                    .setCoAddress("c/o Eriksson")
+                    .setZipCode("9999")
+                    .setLocality("Stan"))
                 .usePayPageDirectBankOnly()  
                 .setReturnUrl("http:myurl")
                 .getPaymentForm();
+        
         form
                 .setMessageBase64(base64Payment)
                 .setMerchantId(MerchantId)
                 .setSecretWord(SecretWord)
                 .setForm();
-
+        
         final String EXPECTED = "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\""
                 + form.getUrl()
                 + "\">"
@@ -65,47 +63,47 @@ public class PaymentFormTest {
         
         assertEquals(EXPECTED, form.getCompleteForm());
     }
-
+    
     @Test
-    public void testSetHtmlFields() throws ValidationException, Exception {
+    public void testSetHtmlFields() {
         String base64Payment = Base64Util.encodeBase64String("0");
         String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
-       
+        
         PaymentForm form = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setClientOrderNumber("nr26")
                 .setCurrency(CURRENCY.SEK)
                 .addOrderRow(Item.orderRow()
-                		.setQuantity(1)
-                		.setAmountExVat(4)
-                		.setAmountIncVat(5))
+                        .setQuantity(1)
+                        .setAmountExVat(4)
+                        .setAmountIncVat(5))
                 .addCustomerDetails(Item.companyCustomer()
-	                .setNationalIdNumber("666666")
-	                .setEmail("test@svea.com")
-	                .setPhoneNumber(999999)
-	                .setIpAddress("123.123.123.123")
-	                .setStreetAddress("Gatan", "23")
-	                .setCoAddress("c/o Eriksson")
-	                .setZipCode("9999")
-	                .setLocality("Stan"))
+                    .setNationalIdNumber("666666")
+                    .setEmail("test@svea.com")
+                    .setPhoneNumber("999999")
+                    .setIpAddress("123.123.123.123")
+                    .setStreetAddress("Gatan", "23")
+                    .setCoAddress("c/o Eriksson")
+                    .setZipCode("9999")
+                    .setLocality("Stan"))
                 .usePayPageDirectBankOnly()
                 .setReturnUrl("http:myurl.se")
                 .getPaymentForm();
         
         form.setMessageBase64(base64Payment)
             .setMerchantId(MerchantId)
-            .setSecretWord(SecretWord)         
+            .setSecretWord(SecretWord)
             .setHtmlFields();
         
         Map<String, String> formHtmlFields = form.getFormHtmlFields();
         String url = form.getUrl();
         
-        assertTrue(formHtmlFields.get("form_start_tag").equals("<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\"" + url + "\">"));
-        assertTrue(formHtmlFields.get("input_merchantId").equals("<input type=\"hidden\" name=\"merchantid\" value=\"" + MerchantId + "\" />"));
-        assertTrue(formHtmlFields.get("input_message").equals("<input type=\"hidden\" name=\"message\" value=\"" + base64Payment + "\" />"));
-        assertTrue(formHtmlFields.get("input_mac").equals("<input type=\"hidden\" name=\"mac\" value=\"" + mac + "\" />"));
-        assertTrue(formHtmlFields.get("noscript_p_tag").equals("<noscript><p>Javascript är inaktiverat i er webbläsare, ni får dirigera om till paypage manuellt</p></noscript>"));
-        assertTrue(formHtmlFields.get("input_submit").equals("<input type=\"submit\" name=\"submit\" value=\"Betala\" />"));
-        assertTrue(formHtmlFields.get("form_end_tag").equals("</form>"));
+        assertEquals("<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\"" + url + "\">", formHtmlFields.get("form_start_tag"));
+        assertEquals("<input type=\"hidden\" name=\"merchantid\" value=\"" + MerchantId + "\" />", formHtmlFields.get("input_merchantId"));
+        assertEquals("<input type=\"hidden\" name=\"message\" value=\"" + base64Payment + "\" />", formHtmlFields.get("input_message"));
+        assertEquals("<input type=\"hidden\" name=\"mac\" value=\"" + mac + "\" />", formHtmlFields.get("input_mac"));
+        assertEquals("<noscript><p>Javascript är inaktiverat i er webbläsare, ni får dirigera om till paypage manuellt</p></noscript>", formHtmlFields.get("noscript_p_tag"));
+        assertEquals("<input type=\"submit\" name=\"submit\" value=\"Betala\" />", formHtmlFields.get("input_submit"));
+        assertEquals("</form>", formHtmlFields.get("form_end_tag"));
     }
 }

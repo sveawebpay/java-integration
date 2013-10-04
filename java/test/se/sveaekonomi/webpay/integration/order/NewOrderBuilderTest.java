@@ -4,8 +4,6 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.ArrayList;
 
-import javax.xml.bind.ValidationException;
-
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -17,15 +15,14 @@ import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
-
 public class NewOrderBuilderTest {
-    
-	@Test
-	public void testBuildOrderRowArrayList() throws ValidationException {
-		
-		ArrayList<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>(); 
-		orderRows.add(Item.orderRow()
-				.setArticleNumber("1")
+
+    @Test
+    public void testBuildOrderRowArrayList() {
+        
+        ArrayList<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>(); 
+        orderRows.add(Item.orderRow()
+                .setArticleNumber("1")
                 .setQuantity(2)
                 .setAmountExVat(100.00)
                 .setDescription("Specification")
@@ -33,9 +30,9 @@ public class NewOrderBuilderTest {
                 .setUnit("st")
                 .setVatPercent(25)
                 .setDiscountPercent(0));
-		
-		orderRows.add(Item.orderRow()
-				.setArticleNumber(2)
+        
+        orderRows.add(Item.orderRow()
+                .setArticleNumber("2")
                 .setQuantity(2)
                 .setAmountExVat(100.00)
                 .setDescription("Specification")
@@ -43,40 +40,40 @@ public class NewOrderBuilderTest {
                 .setUnit("st")
                 .setVatPercent(25)
                 .setDiscountPercent(0));
-		
-		SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
                 .addOrderRows(orderRows)
                 .addCustomerDetails(Item.companyCustomer()
-	                .setNationalIdNumber("666666")
-	                .setEmail("test@svea.com")
-	                .setPhoneNumber(999999)
-	                .setIpAddress("123.123.123.123")
-	                .setStreetAddress("Gatan", "23")
-	                .setCoAddress("c/o Eriksson")
-	                .setZipCode("9999")
-	                .setLocality("Stan"))
-		
+                    .setNationalIdNumber("666666")
+                    .setEmail("test@svea.com")
+                    .setPhoneNumber("999999")
+                    .setIpAddress("123.123.123.123")
+                    .setStreetAddress("Gatan", "23")
+                    .setCoAddress("c/o Eriksson")
+                    .setZipCode("9999")
+                    .setLocality("Stan"))
+        
                 .setCountryCode(COUNTRYCODE.SE)
                 .setCustomerReference("33")
                 .setOrderDate("2012-12-12")
                 .setCurrency(CURRENCY.SEK)
                 .useInvoicePayment()
                 .prepareRequest();
-		
-		 assertEquals("666666", request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber);
-		 assertEquals("1", request.request.CreateOrderInformation.OrderRows.get(0).ArticleNumber);
-		 assertEquals("2", request.request.CreateOrderInformation.OrderRows.get(1).ArticleNumber);
-	}
-	
+        
+         assertEquals("666666", request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber);
+         assertEquals("1", request.request.CreateOrderInformation.OrderRows.get(0).ArticleNumber);
+         assertEquals("2", request.request.CreateOrderInformation.OrderRows.get(1).ArticleNumber);
+    }
+    
     @Test
-    public void testBuildOrderWithCompanyCustomer() throws ValidationException {
-    	SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+    public void testBuildOrderWithCompanyCustomer() {
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
         .addOrderRow(TestingTool.createOrderRow())
         
         .addCustomerDetails(Item.companyCustomer()
             .setNationalIdNumber("666666")
             .setEmail("test@svea.com")
-            .setPhoneNumber(999999)
+            .setPhoneNumber("999999")
             .setIpAddress("123.123.123.123")
             .setStreetAddress("Gatan", "23")
             .setCoAddress("c/o Eriksson")

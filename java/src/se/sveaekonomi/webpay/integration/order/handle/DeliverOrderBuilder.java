@@ -1,7 +1,5 @@
 package se.sveaekonomi.webpay.integration.order.handle;
 
-import javax.xml.bind.ValidationException;
-
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
@@ -9,11 +7,10 @@ import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 
 /**
- * 
  * @author klar-sar
- *
  */
 public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
+
     private HandleOrderValidator validator;
     
     private long orderId;
@@ -61,11 +58,6 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         return this;
     }
     
-/*    public DeliverOrderBuilder setInvoiceDistributionTypeAsEmail() {
-        this.distributionType = "Email";
-        return this;
-    }*/
-    
     public String getCreditInvoice() {
         return invoiceIdToCredit;
     }
@@ -74,7 +66,7 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         this.invoiceIdToCredit = invoiceId;
         return this;
     }
-
+    
     public Integer getNumberOfCreditDays() {
         return numberOfCreditDays;
     }
@@ -89,19 +81,17 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
      * Will automatically match all order rows that are to be delivered with those which was sent
      * when creating the invoice order.
      * @return HandleOrder
-     * @throws ValidationException
      */
-    public HandleOrder deliverInvoiceOrder() throws ValidationException {
+    public HandleOrder deliverInvoiceOrder() {
         orderType = "Invoice";
         return new HandleOrder(this);
     }
-
+    
     /**
      * Prepares the PaymentPlan order for delivery.
      * @return HandleOrder
-     * @throws ValidationException
      */
-    public HandleOrder deliverPaymentPlanOrder() throws ValidationException {
+    public HandleOrder deliverPaymentPlanOrder() {
         orderType = "PaymentPlan";
         return new HandleOrder(this);
     }

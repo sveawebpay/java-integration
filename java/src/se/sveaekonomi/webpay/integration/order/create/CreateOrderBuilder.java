@@ -26,7 +26,6 @@ import se.sveaekonomi.webpay.integration.webservice.payment.PaymentPlanPayment;
  * End by choosing payment type.
  *  
  * @author klar-sar
- *
  */
 public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     
@@ -35,16 +34,14 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     private String clientOrderNumber;
     private String customerReference;
     private String orderDate;
-    
     private COUNTRYCODE countryCode;
     private String currency;
     private String campaignCode;
     private Boolean sendAutomaticGiroPaymentForm;
-    
     public CustomerIdentity<?> customerIdentity; 
     
     public CreateOrderBuilder(ConfigurationProvider config) {
-    	this.config = config;
+        this.config = config;
     }
     
     public OrderValidator getValidator() {
@@ -54,7 +51,7 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     public CreateOrderBuilder setValidator(OrderValidator validator) {
         this.validator = validator;
         return this;
-    }    
+    }
     
     /**
      * @return Unique order number from client 
@@ -96,10 +93,10 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     }
     
     public String getCurrency() {
-    	if(currency == null)
-    		return null;
-    	else
-    		return currency.toString();
+        if (currency == null)
+            return null;
+        else
+            return currency.toString();
     }
     
     public CreateOrderBuilder setCurrency(CURRENCY currency) {
@@ -123,13 +120,13 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     public CreateOrderBuilder setSendAutomaticGiroPaymentForm(Boolean sendAutomaticGiroPaymentForm) {
         this.sendAutomaticGiroPaymentForm = sendAutomaticGiroPaymentForm;
         return this;
-    }    
+    }
     
     /**
      * Start creating card payment via PayPage. Returns Payment form to integrate in shop.
      * @return CardPayment
      */
-    public CardPayment usePayPageCardOnly() throws ValidationException {
+    public CardPayment usePayPageCardOnly() {
         return new CardPayment(this);
     }
     
@@ -137,7 +134,7 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
      * Start creating direct bank payment via PayPage. Returns Payment form to integrate in shop.
      * @return DirectPayment
      */
-    public DirectPayment usePayPageDirectBankOnly() throws ValidationException {
+    public DirectPayment usePayPageDirectBankOnly() {
         return new DirectPayment(this);
     }
     
@@ -145,8 +142,8 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
      * Start creating payment through PayPage. You will need to customize the PayPage.
      * 
      * @return PayPagePayment
-     */    
-    public PayPagePayment usePayPage() throws ValidationException {
+     */
+    public PayPagePayment usePayPage() {
         return new PayPagePayment(this);
     }
     
@@ -164,9 +161,8 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     /**
      * Start create invoicePayment
      * @return PaymentPlanPayment
-     * @throws ValidationException
      */
-    public InvoicePayment useInvoicePayment() throws ValidationException {
+    public InvoicePayment useInvoicePayment() {
         return new InvoicePayment((CreateOrderBuilder)this);
     }
     
@@ -174,23 +170,21 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
      * Start creating payment plan payment
      * @param campaignCode
      * @return PaymentPlanPayment
-     * @throws ValidationException
      */
-    public PaymentPlanPayment usePaymentPlanPayment(String campaignCode) throws ValidationException {
-    	try {
-    		if(campaignCode.equals(""))
-    			throw new ValidationException("MISSING VALUE - Campaign code must be set. Add parameter in .usePaymentPlanPayment(campaignCode)");
-    		else if(this.customerIdentity.getClass().equals(CompanyCustomer.class))
-    			throw new ValidationException("ERROR - CompanyCustomer is not allowed to use payment plan option.");
-    	}
-    	catch(ValidationException e) {
-    		
-    		throw new SveaWebPayException(e.getMessage(), e);
-    	}
-    	
+    public PaymentPlanPayment usePaymentPlanPayment(String campaignCode) {
+        try {
+            if (campaignCode.equals("")) {
+                throw new ValidationException("MISSING VALUE - Campaign code must be set. Add parameter in .usePaymentPlanPayment(campaignCode)");
+            } else if (this.customerIdentity.getClass().equals(CompanyCustomer.class)) {
+                throw new ValidationException("ERROR - CompanyCustomer is not allowed to use payment plan option.");
+            }
+        } catch(ValidationException e) {
+            throw new SveaWebPayException(e.getMessage(), e);
+        }
+        
         return this.usePaymentPlanPayment(campaignCode, false);
     }
-   
+    
     /**
      * Start creating payment plan payment
      * @param campaignCode
@@ -203,37 +197,40 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
         return new PaymentPlanPayment(this);
     }
     
-    public CreateOrderBuilder addCustomerDetails(CustomerIdentity<?> customerIdentity){
+    public CreateOrderBuilder addCustomerDetails(CustomerIdentity<?> customerIdentity) {
         this.customerIdentity = customerIdentity;
         return this;
     }
     
     public boolean getIsCompanyIdentity() {
-        if(customerIdentity instanceof CompanyCustomer)
+        if (customerIdentity instanceof CompanyCustomer) {
             return true;
-        else
+        } else {
             return false;
+        }
     }
     
     public CompanyCustomer getCompanyCustomer() {
-    	if(this.customerIdentity instanceof CompanyCustomer)
-    		return (CompanyCustomer)this.customerIdentity;
-    	else 
-    		return null;
+        if (this.customerIdentity instanceof CompanyCustomer) {
+            return (CompanyCustomer)this.customerIdentity;
+        } else {
+            return null;
+        }
     }
     
     public IndividualCustomer getIndividualCustomer() {
-    	if(this.customerIdentity instanceof IndividualCustomer)
-    		return (IndividualCustomer)this.customerIdentity;
-    	else 
-    		return null;
+        if (this.customerIdentity instanceof IndividualCustomer) {
+            return (IndividualCustomer)this.customerIdentity;
+        } else {
+            return null;
+        }
     }
     
     public CustomerIdentity<?> getCustomerIdentity() {
         return this.customerIdentity;
     }
     
-    public CreateOrderBuilder build() throws ValidationException {
+    public CreateOrderBuilder build() {
         validator.validate(this);
         return this;
     }

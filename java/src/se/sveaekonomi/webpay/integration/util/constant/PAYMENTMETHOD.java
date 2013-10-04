@@ -1,6 +1,5 @@
 package se.sveaekonomi.webpay.integration.util.constant;
 
-
 public enum PAYMENTMETHOD {
     //--DIRECT BANK--
     BANKAXESS(PAYMENTMETHODTYPE.DIRECT, "BANKAXESS"), //new - not yet implemented in code
@@ -32,7 +31,7 @@ public enum PAYMENTMETHOD {
     
     //--PSP-- 
     //PAYGROUND(PAYMENTMETHODTYPE.PSP, "PAYGROUND"),
-    PAYPAL(PAYMENTMETHODTYPE.PSP, "PAYPAL"),    
+    PAYPAL(PAYMENTMETHODTYPE.PSP, "PAYPAL"),
     
     //--INVOICE--
     INVOICE(PAYMENTMETHODTYPE.INVOICE, "INVOICE"),
@@ -64,7 +63,7 @@ public enum PAYMENTMETHOD {
     }
     
     public String getValue() {
-    	return this.value;
+        return this.value;
     }
     
     public boolean isDirectPayment() {

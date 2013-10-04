@@ -12,10 +12,10 @@ import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class HostedPaymentsRequestTest {
-    
+
     @Test
-    public void testDoCardPaymentRequest() throws Exception {
-    	PaymentForm form = WebPay.createOrder()
+    public void testDoCardPaymentRequest() {
+        PaymentForm form = WebPay.createOrder()
         .addOrderRow(TestingTool.createOrderRow())
         .addFee(Item.shippingFee()
                 .setShippingId("33")
@@ -48,8 +48,8 @@ public class HostedPaymentsRequestTest {
         .setClientOrderNumber("33")
         .setCurrency(CURRENCY.SEK)
         .usePayPageCardOnly()
-            .setReturnUrl("http://myurl.se")
-            .getPaymentForm();
+        .setReturnUrl("http://myurl.se")
+        .getPaymentForm();
         
         Assert.assertNotNull(form);
     }

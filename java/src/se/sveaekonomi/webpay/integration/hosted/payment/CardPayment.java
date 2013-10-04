@@ -8,7 +8,6 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 /**
  * Defines all card payments viewable in PayPage
  * @author klar-sar
- *
  */
 public class CardPayment extends HostedPayment<CardPayment> {
     
@@ -17,7 +16,6 @@ public class CardPayment extends HostedPayment<CardPayment> {
     }
     
     protected CardPayment configureExcludedPaymentMethods() {
-        
         //Payment service providers
         excludedPaymentMethods.add(PAYMENTMETHOD.PAYPAL.getValue());
         
@@ -29,7 +27,7 @@ public class CardPayment extends HostedPayment<CardPayment> {
         excludedPaymentMethods.add(PAYMENTMETHOD.SWEDBANK_SE.getValue());
         excludedPaymentMethods.add(PAYMENTMETHOD.BANKAXESS.getValue());  
         
-        //Invoices and payment plan      
+        //Invoices and payment plan
         excludedPaymentMethods.addAll(excluded.excludeInvoicesAndPaymentPlan());
         
         return this;

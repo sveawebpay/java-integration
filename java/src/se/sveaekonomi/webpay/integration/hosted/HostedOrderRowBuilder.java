@@ -42,7 +42,7 @@ public class HostedOrderRowBuilder {
         this.description = description;
         return this;
     }
-
+    
     public Long getAmount() {
         return amount;
     }
@@ -64,7 +64,7 @@ public class HostedOrderRowBuilder {
     public int getQuantity() {
         return quantity;
     }
-
+    
     public HostedOrderRowBuilder setQuantity(int quantity) {
         this.quantity = quantity;
         return this;

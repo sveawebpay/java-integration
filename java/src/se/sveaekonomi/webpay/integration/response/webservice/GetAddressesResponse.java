@@ -6,9 +6,8 @@ import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.response.Response;
 
-
 public class GetAddressesResponse extends Response {
-    
+
     private String legalName;
     private String securityNumber;
     private String addressLine1;
@@ -19,7 +18,7 @@ public class GetAddressesResponse extends Response {
     private String addressSelector;
     private String firstName;
     private String lastName;
-
+    
     public GetAddressesResponse(NodeList soapMessage) {
         super();
         setValues(soapMessage);
@@ -66,27 +65,23 @@ public class GetAddressesResponse extends Response {
     }
     
     private void setValues(NodeList soapMessage) {
-        try {
-            int size = soapMessage.getLength();
+        int size = soapMessage.getLength();
+        
+        for (int i = 0; i < size; i++) {
+            Element node = (Element) soapMessage.item(i);
+            // mandatory
+            this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
             
-            for (int i = 0; i < size; i++) {
-                Element node = (Element) soapMessage.item(i);
-                // mandatory
-                this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
-                
-                legalName = getTagValue(node, "LegalName");
-                securityNumber = getTagValue(node, "SecurityNumber");
-                addressLine1 = getTagValue(node, "AddressLine1");
-                addressLine2 = getTagValue(node, "AddressLine2");
-                postcode = getTagValue(node, "Postcode");
-                postarea = getTagValue(node, "Postarea");
-                businessType = getTagValue(node, "BusinessType");
-                addressSelector = getTagValue(node, "AddressSelector");
-                firstName = getTagValue(node, "FirstName");
-                lastName = getTagValue(node, "LastName");
-            }
-        } catch (Exception ex) {
-            ex.printStackTrace();
+            legalName = getTagValue(node, "LegalName");
+            securityNumber = getTagValue(node, "SecurityNumber");
+            addressLine1 = getTagValue(node, "AddressLine1");
+            addressLine2 = getTagValue(node, "AddressLine2");
+            postcode = getTagValue(node, "Postcode");
+            postarea = getTagValue(node, "Postarea");
+            businessType = getTagValue(node, "BusinessType");
+            addressSelector = getTagValue(node, "AddressSelector");
+            firstName = getTagValue(node, "FirstName");
+            lastName = getTagValue(node, "LastName");
         }
     }
     

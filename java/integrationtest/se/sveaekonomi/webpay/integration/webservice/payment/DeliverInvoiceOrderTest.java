@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.webservice.payment;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
@@ -17,23 +18,23 @@ import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 public class DeliverInvoiceOrderTest {
     
     @Test
-    public void testDeliverInvoiceOrderDoRequest() throws Exception {
-    	DeliverOrderResponse response = WebPay.deliverOrder()
-    		.addOrderRow(TestingTool.createOrderRow())  
-    		.setOrderId(54086L)
-    		.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-    		.setCountryCode(COUNTRYCODE.SE)
-    		.deliverInvoiceOrder()
-    		.doRequest();
-
-    	response.getErrorMessage();
+    public void testDeliverInvoiceOrderDoRequest() {
+        DeliverOrderResponse response = WebPay.deliverOrder()
+            .addOrderRow(TestingTool.createOrderRow())
+            .setOrderId(54086L)
+            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+            .setCountryCode(COUNTRYCODE.SE)
+            .deliverInvoiceOrder()
+            .doRequest();
+        
+        response.getErrorMessage();
     }
     
     @Test
-    public void testDeliverInvoiceOrderResult() throws Exception {
-    	long orderId = createInvoiceAndReturnOrderId();
-    	
-    	DeliverOrderResponse response = WebPay.deliverOrder()
+    public void testDeliverInvoiceOrderResult() {
+        long orderId = createInvoiceAndReturnOrderId();
+        
+        DeliverOrderResponse response = WebPay.deliverOrder()
             .addOrderRow(TestingTool.createOrderRow())
             .setOrderId(orderId)
             .setNumberOfCreditDays(1)
@@ -42,22 +43,23 @@ public class DeliverInvoiceOrderTest {
             .deliverInvoiceOrder()
             .doRequest();
         
-        assertEquals(response.isOrderAccepted(), true);
-        assertEquals(response.getInvoiceDistributionType(), "Post");
-        assertTrue(null != response.getOcr() && 0 < response.getOcr().length());
-        assertTrue(0.0 == response.getLowestAmountToPay());
+        assertTrue(response.isOrderAccepted());
+        assertEquals("Post", response.getInvoiceDistributionType());
+        assertNotNull(response.getOcr());
+        assertTrue(0 < response.getOcr().length());
+        assertEquals(0.0, response.getLowestAmountToPay(), 0);
     }
-	
-    private long createInvoiceAndReturnOrderId() throws Exception {
-    	CreateOrderResponse response = WebPay.createOrder()
-        	.addOrderRow(TestingTool.createOrderRow())
-	        .addCustomerDetails(Item.individualCustomer()
-           		.setNationalIdNumber("194605092222"))
-        	.setCountryCode(COUNTRYCODE.SE)
+    
+    private long createInvoiceAndReturnOrderId() {
+        CreateOrderResponse response = WebPay.createOrder()
+            .addOrderRow(TestingTool.createOrderRow())
+            .addCustomerDetails(Item.individualCustomer()
+                .setNationalIdNumber("194605092222"))
+            .setCountryCode(COUNTRYCODE.SE)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
             .setCurrency(CURRENCY.SEK)
-            .useInvoicePayment() // returns an InvoiceOrder object
+            .useInvoicePayment()
             .doRequest();
         
         return response.orderId;

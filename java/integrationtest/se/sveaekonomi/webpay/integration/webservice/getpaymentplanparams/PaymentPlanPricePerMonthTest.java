@@ -13,33 +13,34 @@ import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsRe
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 
 public class PaymentPlanPricePerMonthTest {
-	
-	private PaymentPlanParamsResponse getParamsForTesting() throws Exception {
-		GetPaymentPlanParams request = WebPay.getPaymentPlanParams();
-		PaymentPlanParamsResponse response = request
-				.setCountryCode(COUNTRYCODE.SE)
-				.doRequest();
-		return response;
-	}
-	
+    
+    private PaymentPlanParamsResponse getParamsForTesting() {
+        GetPaymentPlanParams request = WebPay.getPaymentPlanParams();
+        PaymentPlanParamsResponse response = request
+                .setCountryCode(COUNTRYCODE.SE)
+                .doRequest();
+        
+        return response;
+    }
+    
     @Test
-    public void testBuildPriceCalculator() throws Exception {
-    	PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
-    	
-    	List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(2000.0, paymentPlanParams);
-    	
+    public void testBuildPriceCalculator() {
+        PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
+        
+        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(2000.0, paymentPlanParams);
+        
         assertEquals("213060", result.get(0).get("campaignCode"));
         assertEquals("2029", result.get(0).get("pricePerMonth"));
-    	
+        
         assertEquals("202", result.get(1).get("pricePerMonth"));
     }
-	
+    
     @Test
-    public void testBuildPriceCalculatorWithLowPrice() throws Exception {
-    	PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
-    	
-    	List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(200.0, paymentPlanParams);
-    	
+    public void testBuildPriceCalculatorWithLowPrice() {
+        PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
+        
+        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(200.0, paymentPlanParams);
+        
         assertTrue(result.isEmpty());
     }
 }

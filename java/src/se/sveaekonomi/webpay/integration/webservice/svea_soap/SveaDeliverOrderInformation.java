@@ -1,15 +1,14 @@
 package se.sveaekonomi.webpay.integration.webservice.svea_soap;
 
-
 public class SveaDeliverOrderInformation {
-    
+
     public String sveaOrderId;
     public String orderType;
     public SveaDeliverInvoiceDetails deliverInvoiceDetails;
     
     public SveaDeliverOrderInformation(String orderType) {
         this.orderType = orderType;
-        if(this.orderType == "Invoice")
+        if (this.orderType.equals("Invoice"))
         this.deliverInvoiceDetails = new SveaDeliverInvoiceDetails();
     }
     

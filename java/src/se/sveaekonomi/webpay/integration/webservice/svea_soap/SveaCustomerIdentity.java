@@ -2,8 +2,8 @@ package se.sveaekonomi.webpay.integration.webservice.svea_soap;
 
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 
-
 public class SveaCustomerIdentity {
+
     /**
      * Include NationalIdNumber only in the Nordic countries
      */
@@ -24,10 +24,12 @@ public class SveaCustomerIdentity {
     public SveaIdentity CompanyIdentity;
     
     public SveaCustomerIdentity(SveaIdentity  identity, String key) {
-       if(identity != null)
-           if(key.equals("IndividualIdentity"))
+       if (identity != null) {
+           if (key.equals("IndividualIdentity")) {
                IndividualIdentity = identity;
-           else
-               CompanyIdentity = identity;           
+           } else {
+               CompanyIdentity = identity;
+           }
+       }
     }
 }

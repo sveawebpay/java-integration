@@ -7,6 +7,7 @@ import javax.xml.bind.ValidationException;
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
@@ -18,12 +19,12 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public class GetPaymentPlanParams {
-        
-	private COUNTRYCODE countryCode;
+    
+    private COUNTRYCODE countryCode;
     private ConfigurationProvider config;
     
     public GetPaymentPlanParams(ConfigurationProvider config) {
-    	this.config = config;
+        this.config = config;
     }
     
     /**
@@ -32,12 +33,12 @@ public class GetPaymentPlanParams {
      * @return GetPaymentPlanParams
      */
     public GetPaymentPlanParams setCountryCode(COUNTRYCODE countryCode) {
-    	this.countryCode = countryCode;
-    	return this;
+        this.countryCode = countryCode;
+        return this;
     }
-        
+    
     protected SveaAuth getStoreAuthorization() {
-    	SveaAuth auth = new SveaAuth();
+        SveaAuth auth = new SveaAuth();
         auth.Username = config.getUsername(PAYMENTTYPE.PAYMENTPLAN, countryCode);
         auth.Password = config.getPassword(PAYMENTTYPE.PAYMENTPLAN, countryCode);
         auth.ClientNumber = config.getClientNumber(PAYMENTTYPE.PAYMENTPLAN, countryCode);
@@ -46,27 +47,31 @@ public class GetPaymentPlanParams {
     }
     
     public String validateRequest() {
-    	if(this.countryCode == null)
-    		return "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-    	return "";
+        if (this.countryCode == null) {
+            return "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+        }
+        
+        return "";
     }
     
-    private SveaRequest<SveaGetPaymentPlanParams> prepareRequest() throws ValidationException {
+    private SveaRequest<SveaGetPaymentPlanParams> prepareRequest() {
         String errors = "";
         errors = validateRequest();
-        if(errors.length() > 0)
-            throw new ValidationException(errors);
+        
+        if (errors.length() > 0) {
+            throw new SveaWebPayException("Validation failed", new ValidationException(errors));
+        }
         
         SveaGetPaymentPlanParams params = new SveaGetPaymentPlanParams();
         
         params.Auth = getStoreAuthorization();
         SveaRequest<SveaGetPaymentPlanParams> request = new SveaRequest<SveaGetPaymentPlanParams>();
         request.request = params;
-
+        
         return request;
     }
     
-    public PaymentPlanParamsResponse doRequest() throws Exception {
+    public PaymentPlanParamsResponse doRequest() {
         SveaRequest<SveaGetPaymentPlanParams> request = prepareRequest();
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
@@ -76,6 +81,7 @@ public class GetPaymentPlanParams {
         String soapMessage = soapBuilder.makeSoapMessage("GetPaymentPlanParamsEu", xml);
         NodeList soapResponse = soapBuilder.createGetPaymentPlanParamsEuRequest(soapMessage, url.toString());
         PaymentPlanParamsResponse response = new PaymentPlanParamsResponse(soapResponse);
+        
         return response;
     }
 }

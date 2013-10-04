@@ -1,16 +1,61 @@
 package se.sveaekonomi.webpay.integration.order.identity;
 
-
 public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
-	
+
     private String ssn;
-    private long birthDate;
+    private String birthDate;
     private String firstName;
     private String lastName;
     private String initials;
     
     public IndividualCustomer() {
         super();
+    }
+    
+    public String getNationalIdNumber() {
+        return ssn;
+    }
+    
+    /**
+     * Required for private customers in SE, NO, DK, FI
+     * @param nationalIdNumber
+     * format SE, DK:  yyyymmddxxxx
+     * format FI:  ddmmyyxxxx
+     * format NO:  ddmmyyxxxxx
+     * @return IndividualCustomer
+     */
+    public IndividualCustomer setNationalIdNumber(String nationalIdNumber) {
+        this.ssn = nationalIdNumber;
+        return this;
+    }
+    
+    public String getBirthDate() {
+        return this.birthDate;
+    }
+    
+    /**
+     * Required for private customers in NL and DE
+     * @param type yyyy
+     * @param type (m)m
+     * @param type (d)d
+     * @return IndividualCustomer
+     */
+    public IndividualCustomer setBirthDate(int year, int month, int day) {
+        String monthString = String.valueOf(month);
+        
+        if (monthString.length() == 1) {
+            monthString = "0" + monthString;
+        }
+        
+        String dayString = String.valueOf(day);
+        
+        if (dayString.length() == 1) {
+            dayString = "0" + dayString;
+        }
+        
+        this.birthDate = String.valueOf(year) + monthString + dayString;
+        
+        return this;
     }
     
     public String getFirstName() {
@@ -32,23 +77,6 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
         this.lastName = lastName;
         return this;
     }
-    
-    public String getNationalIdNumber() {
-        return ssn;
-    }
-
-    /**
-     * Required for private customers in SE, NO, DK, FI
-     * @param nationalIdNumber
-     * format SE, DK:  yyyymmddxxxx
-     * format FI:  ddmmyyxxxx
-     * format NO:  ddmmyyxxxxx
-     * @return IndividualCustomer
-     */
-    public IndividualCustomer setNationalIdNumber(String nationalIdNumber) {
-        this.ssn = nationalIdNumber;
-        return this;
-    }
      
     public String getInitials() {
         return this.initials;
@@ -61,29 +89,6 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
      */
     public IndividualCustomer setInitials(String initials) {
         this.initials = initials;
-        return this;
-    }
-    
-    public Long getBirthDate() {
-        return this.birthDate;
-    }    
-    
-    /**
-     * Required for private customers in NL and DE
-     * @param type yyyy
-     * @param type (m)m
-     * @param type (d)d
-     * @return IndividualCustomer
-     */
-    public IndividualCustomer setBirthDate(int year, int month, int day) {
-        String monthString = String.valueOf(month);
-        if(monthString.length()==1)
-            monthString = "0" + monthString;
-        String dayString = String.valueOf(day);
-        if(dayString.length()==1)
-            dayString = "0" + dayString;
-        String s = String.valueOf(year) + monthString + dayString;
-        this.birthDate = Long.parseLong(s);
         return this;
     }
 }

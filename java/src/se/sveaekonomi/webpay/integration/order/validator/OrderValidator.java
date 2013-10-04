@@ -1,10 +1,10 @@
 package se.sveaekonomi.webpay.integration.order.validator;
 
-
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 
 public abstract class OrderValidator {
+
     protected String errors = "";
     
     public abstract String validate(CreateOrderBuilder order);
@@ -22,10 +22,10 @@ public abstract class OrderValidator {
     protected void validateOrderRow(CreateOrderBuilder order) {
         try {
             for (OrderRowBuilder orderRow : order.getOrderRows()) {
-            	
-                if(orderRow.getQuantity() <= 0)
+                
+                if (orderRow.getQuantity() <= 0)
                     errors += "MISSING VALUE - Quantity is required in Item object. Use Item.setQuantity().\n";
-                if(orderRow.getAmountExVat() == null && orderRow.getVatPercent() == null && orderRow.getAmountIncVat() == null)
+                if (orderRow.getAmountExVat() == null && orderRow.getVatPercent() == null && orderRow.getAmountIncVat() == null)
                     errors += "MISSING VALUE - Two of the values must be set: AmountExVat(not set), AmountIncVat(not set) or VatPercent(not set) for Orderrow. Use two of: setAmountExVat(), setAmountIncVat or setVatPercent().\n";
                 else if (orderRow.getAmountExVat() != null && orderRow.getVatPercent() == null && orderRow.getAmountIncVat() == null)
                     errors += "MISSING VALUE - At least one of the values must be set in combination with AmountExVat: AmountIncVat or VatPercent for Orderrow. Use one of: setAmountIncVat() or setVatPercent().\n";

@@ -6,11 +6,10 @@ import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 /**
  * Use to specify types of customer, fees, discounts or row.
  * @author klar-sar
- *
  */
 public class Item {
     
-    public static OrderRowBuilder orderRow(){
+    public static OrderRowBuilder orderRow() {
         return new OrderRowBuilder();
    }
     
@@ -22,19 +21,19 @@ public class Item {
        return new CompanyCustomer();
    }
    
-   public static ShippingFeeBuilder shippingFee(){
+   public static ShippingFeeBuilder shippingFee() {
        return new ShippingFeeBuilder();
    }
    
-   public static InvoiceFeeBuilder invoiceFee(){
+   public static InvoiceFeeBuilder invoiceFee() {
        return new InvoiceFeeBuilder();
    }
    
-   public static FixedDiscountBuilder fixedDiscount(){
+   public static FixedDiscountBuilder fixedDiscount() {
        return new FixedDiscountBuilder();
    }
    
-   public static RelativeDiscountBuilder relativeDiscount(){
+   public static RelativeDiscountBuilder relativeDiscount() {
        return new RelativeDiscountBuilder();
    }
 }
