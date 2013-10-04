@@ -39,11 +39,10 @@ public class HandleOrder {
     }
     
     public String validateOrder() {
-        try{
-        HandleOrderValidator validator = new HandleOrderValidator();
-        return validator.validate(this.order);
-        }
-        catch (NullPointerException e) {
+        try {
+            HandleOrderValidator validator = new HandleOrderValidator();
+            return validator.validate(this.order);
+        } catch (NullPointerException e) {
             return "NullPointer in validaton of HandleOrder";
         }
     }

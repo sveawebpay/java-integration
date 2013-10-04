@@ -16,6 +16,7 @@ import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.response.Response;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
@@ -25,7 +26,7 @@ import se.sveaekonomi.webpay.integration.util.security.Base64Util;
  * @author klar-sar
  */
 public class SveaResponse extends Response {
-    
+
     public final SveaConfig config = new SveaConfig();
     
     private String xml;
@@ -43,47 +44,55 @@ public class SveaResponse extends Response {
     private String expiryYear;
     private String authCode;
     
-    public SveaResponse(String responseXmlBase64, String secretWord) throws SAXException, IOException, ParserConfigurationException {
+    public SveaResponse(String responseXmlBase64, String secretWord) {
         super();
         this.setValues(responseXmlBase64);
     }
     
-    private void setValues(String xmlBase64) throws SAXException, IOException, ParserConfigurationException {
+    private void setValues(String xmlBase64) {
         String xml = Base64Util.decodeBase64String(xmlBase64);
         this.setXml(xml);
         DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
-        DocumentBuilder builder = factory.newDocumentBuilder();
-        Document d1 = builder.parse(new InputSource(new StringReader(xml)));
-        NodeList nodeList = d1.getElementsByTagName("response");
         
-        int size = nodeList.getLength();
-        
-        for (int i = 0; i < size; i++) {
-            Element element = (Element)nodeList.item(i);
-            int status = Integer.parseInt(getTagValue(element, "statuscode"));
+        try {
+            DocumentBuilder builder = factory.newDocumentBuilder();
+            Document d1 = builder.parse(new InputSource(new StringReader(xml)));
+            NodeList nodeList = d1.getElementsByTagName("response");
+            int size = nodeList.getLength();
             
-            if (status == 0) {
-                this.setOrderAccepted(true);
-                this.setResultCode("0 (ORDER_ACCEPTED)");
-            } else {
-                this.setOrderAccepted(false);
-                setErrorParams(status);
+            for (int i = 0; i < size; i++) {
+                Element element = (Element)nodeList.item(i);
+                int status = Integer.parseInt(getTagValue(element, "statuscode"));
+                
+                if (status == 0) {
+                    this.setOrderAccepted(true);
+                    this.setResultCode("0 (ORDER_ACCEPTED)");
+                } else {
+                    this.setOrderAccepted(false);
+                    setErrorParams(status);
+                }
+                
+                this.transactionId = getTagAttribute(element, "transaction", "id");
+                this.paymentMethod = getTagValue(element, "paymentmethod");
+                this.merchantId = getTagValue(element, "merchantid");
+                this.clientOrderNumber = getTagValue(element, "customerrefno");
+                int minorAmount = Integer.parseInt(getTagValue(element, "amount"));
+                this.amount = minorAmount * 0.01;
+                this.currency = getTagValue(element, "currency");
+                this.setSubscriptionId(getTagValue(element, "subscriptionid"));
+                this.setSubscriptionType(getTagValue(element, "subscriptiontype"));
+                this.setCardType(getTagValue(element, "cardtype"));
+                this.setMaskedCardNumber(getTagValue(element, "maskedcardno"));
+                this.setExpiryMonth(getTagValue(element, "expirymonth"));
+                this.setExpiryYear(getTagValue(element, "expiryyear"));
+                this.setAuthCode(getTagValue(element, "authcode"));
             }
-            
-            this.transactionId = getTagAttribute(element, "transaction", "id");
-            this.paymentMethod = getTagValue(element, "paymentmethod");
-            this.merchantId = getTagValue(element, "merchantid");
-            this.clientOrderNumber = getTagValue(element, "customerrefno");
-            int minorAmount = Integer.parseInt(getTagValue(element, "amount"));
-            this.amount = minorAmount * 0.01;
-            this.currency = getTagValue(element, "currency");
-            this.setSubscriptionId(getTagValue(element, "subscriptionid"));
-            this.setSubscriptionType(getTagValue(element, "subscriptiontype"));
-            this.setCardType(getTagValue(element, "cardtype"));
-            this.setMaskedCardNumber(getTagValue(element, "maskedcardno"));
-            this.setExpiryMonth(getTagValue(element, "expirymonth"));
-            this.setExpiryYear(getTagValue(element, "expiryyear"));
-            this.setAuthCode(getTagValue(element, "authcode"));
+        } catch (ParserConfigurationException e) {
+            throw new SveaWebPayException("ParserConfigurationException", e);
+        } catch (SAXException e) {
+            throw new SveaWebPayException("SAXException", e);
+        } catch (IOException e) {
+            throw new SveaWebPayException("IOException", e);
         }
     }
     

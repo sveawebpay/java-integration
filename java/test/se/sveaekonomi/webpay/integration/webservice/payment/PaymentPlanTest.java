@@ -19,7 +19,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 public class PaymentPlanTest {
 
     @Test
-    public void testPaymentPlanRequestObjectSpecifics() throws ValidationException{
+    public void testPaymentPlanRequestObjectSpecifics() throws ValidationException {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
                 .addOrderRow(TestingTool.createOrderRow())
                 .addCustomerDetails(Item.individualCustomer()
@@ -52,7 +52,8 @@ public class PaymentPlanTest {
             //Fail on no exception
             fail();
         } catch(SveaWebPayException e) {
-            assertEquals("ERROR - CompanyCustomer is not allowed to use payment plan option.", e.getMessage());
+            String expectedMessage = "ERROR - CompanyCustomer is not allowed to use payment plan option.";
+            assertEquals(expectedMessage, e.getMessage());
         }
     }
 }
