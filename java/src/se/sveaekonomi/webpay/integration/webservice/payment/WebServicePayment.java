@@ -8,6 +8,7 @@ import javax.xml.bind.ValidationException;
 
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.WebServiceOrderValidator;
@@ -46,7 +47,7 @@ public abstract class WebServicePayment {
         return auth;
     }
     
-    public String getXML() throws Exception {
+    public String getXML() {
         SveaRequest<SveaCreateOrder> request = this.prepareRequest();
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         
@@ -70,12 +71,12 @@ public abstract class WebServicePayment {
      * @return SveaRequest
      * @throws ValidationException 
      */
-    public SveaRequest<SveaCreateOrder> prepareRequest() throws ValidationException {
+    public SveaRequest<SveaCreateOrder> prepareRequest() {
         String errors = "";
         errors = validateOrder();
         
         if (errors.length() > 0) {
-            throw new ValidationException(errors);
+            throw new SveaWebPayException("Validation failed", new ValidationException(errors)) ;
         }
         
         SveaCreateOrder sveaOrder = new SveaCreateOrder();
@@ -95,7 +96,7 @@ public abstract class WebServicePayment {
         return object;
     }
     
-    public CreateOrderResponse doRequest() throws Exception {
+    public CreateOrderResponse doRequest() {
         SveaRequest<SveaCreateOrder> request = this.prepareRequest();
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml = "";
