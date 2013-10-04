@@ -149,13 +149,7 @@ public class GetAddresses {
         SveaRequest<SveaGetAddresses> request = prepareRequest();
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
-        String xml;
-        
-        try {
-            xml = xmlBuilder.getGetAddressesXml(request.request);
-        } catch (Exception e) {
-            throw e;
-        }
+        String xml = xmlBuilder.getGetAddressesXml(request.request);
         
         URL url = config.getEndPoint(orderType.equals("Invoice") ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();

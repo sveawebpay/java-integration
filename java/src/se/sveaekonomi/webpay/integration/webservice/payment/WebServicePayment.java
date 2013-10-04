@@ -49,13 +49,8 @@ public abstract class WebServicePayment {
     public String getXML() throws Exception {
         SveaRequest<SveaCreateOrder> request = this.prepareRequest();
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
-        String xml = "";
         
-        try {
-            xml = xmlBuilder.getCreateOrderEuXml((SveaCreateOrder) request.request);
-        } catch (Exception e) {
-            throw e;
-        }
+        String xml = xmlBuilder.getCreateOrderEuXml((SveaCreateOrder) request.request);
         
         return xml;
     }
@@ -105,17 +100,14 @@ public abstract class WebServicePayment {
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml = "";
         
-        try {
-            xml = xmlBuilder.getCreateOrderEuXml((SveaCreateOrder) request.request);
-        } catch (Exception e) {
-            throw e;
-        }
+        xml = xmlBuilder.getCreateOrderEuXml((SveaCreateOrder) request.request);
         
         URL url = this.createOrderBuilder.getConfig().getEndPoint(this.orderType);
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
         NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url.toString());
         CreateOrderResponse response = new CreateOrderResponse(soapResponse);
+        
         return response;
     }
     
