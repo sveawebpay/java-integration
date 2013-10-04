@@ -26,7 +26,7 @@ public class DeliverInvoiceOrderTest {
             .setCountryCode(COUNTRYCODE.SE)
             .deliverInvoiceOrder()
             .doRequest();
-    
+        
         response.getErrorMessage();
     }
     
@@ -50,7 +50,7 @@ public class DeliverInvoiceOrderTest {
         assertEquals(0.0, response.getLowestAmountToPay(), 0);
     }
     
-    private long createInvoiceAndReturnOrderId() throws Exception {
+    private long createInvoiceAndReturnOrderId() {
         CreateOrderResponse response = WebPay.createOrder()
             .addOrderRow(TestingTool.createOrderRow())
             .addCustomerDetails(Item.individualCustomer()

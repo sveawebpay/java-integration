@@ -28,7 +28,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 public class CreateInvoiceOrderTest {
 
     @Test
-    public void testInvoiceForIndividualFromSE() throws Exception {
+    public void testInvoiceForIndividualFromSE() {
         CreateOrderResponse response = WebPay.createOrder()
         .addOrderRow(TestingTool.createOrderRow())
         .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
@@ -56,7 +56,7 @@ public class CreateInvoiceOrderTest {
     }
     
     @Test
-    public void testInvoiceRequestFailing() throws Exception {
+    public void testInvoiceRequestFailing() {
         CreateOrderResponse response = WebPay.createOrder()
         .addOrderRow(TestingTool.createOrderRow())
         .addCustomerDetails(Item.individualCustomer().setNationalIdNumber(""))
@@ -71,7 +71,7 @@ public class CreateInvoiceOrderTest {
     }
     
     @Test @Ignore
-    public void testCalculationWithDecimalsInVatPercent() throws ValidationException, Exception {
+    public void testCalculationWithDecimalsInVatPercent() {
         CreateOrderResponse response = WebPay.createOrder()
                 .addOrderRow(Item.orderRow()
                     .setArticleNumber("1")
@@ -96,7 +96,7 @@ public class CreateInvoiceOrderTest {
     }
     
     @Test @Ignore
-    public void testFormationOfDecimalsInCalculation() throws ValidationException, Exception {
+    public void testFormationOfDecimalsInCalculation() {
         CreateOrderResponse response = WebPay.createOrder()
                 .addOrderRow(Item.orderRow()
                     .setArticleNumber("1")
@@ -115,14 +115,14 @@ public class CreateInvoiceOrderTest {
                 .setClientOrderNumber("33")
                 .setCurrency(CURRENCY.SEK)
                 .useInvoicePayment()
-                    .doRequest();
+                .doRequest();
         
         assertTrue(response.isOrderAccepted());
         assertEquals(51.03, response.amount, 0);
     }
     
     @Test
-    public void testInvoiceCompanySe() throws Exception {
+    public void testInvoiceCompanySe() {
         CreateOrderResponse response = WebPay.createOrder()
                 .setCountryCode(COUNTRYCODE.SE)
                 .setOrderDate("2012-12-12")
@@ -139,7 +139,7 @@ public class CreateInvoiceOrderTest {
     }
     
     @Test
-    public void testInvoiceForIndividualFromNl() throws Exception {
+    public void testInvoiceForIndividualFromNl() {
         CreateOrderResponse response = WebPay.createOrder()
                 .addOrderRow(TestingTool.createOrderRowNl())
                 
@@ -180,7 +180,7 @@ public class CreateInvoiceOrderTest {
     }
     
     @Test
-    public void testInvoiceDoRequestWithIpAddressSetSE() throws Exception {
+    public void testInvoiceDoRequestWithIpAddressSetSE() {
         CreateOrderResponse response = WebPay.createOrder()
             .addOrderRow(TestingTool.createOrderRow())
             .addOrderRow(TestingTool.createOrderRow())
@@ -198,11 +198,11 @@ public class CreateInvoiceOrderTest {
     }
     
     @Test
-    public void testInvoiceRequestUsingAmountIncVatWithZeroVatPercent() throws Exception {
+    public void testInvoiceRequestUsingAmountIncVatWithZeroVatPercent() {
         CreateOrderResponse response = WebPay.createOrder()
-        .addOrderRow(TestingTool.createOrderRow())
-        .addOrderRow(TestingTool.createOrderRow()) 
-        .addCustomerDetails(Item.individualCustomer()
+            .addOrderRow(TestingTool.createOrderRow())
+            .addOrderRow(TestingTool.createOrderRow()) 
+            .addCustomerDetails(Item.individualCustomer()
                 .setNationalIdNumber("194605092222"))
             
             .setCountryCode(COUNTRYCODE.SE)
@@ -211,8 +211,7 @@ public class CreateInvoiceOrderTest {
             .setCurrency(CURRENCY.SEK)
             .setCustomerReference("33")
             .useInvoicePayment()
-        
-        .doRequest();
+            .doRequest();
          
         assertTrue(response.isOrderAccepted());
     }
@@ -256,7 +255,7 @@ public class CreateInvoiceOrderTest {
     }
     
     @Test
-    public void testConfiguration() throws ValidationException, Exception {
+    public void testConfiguration() {
         ConfigurationProviderTestData conf = new ConfigurationProviderTestData();
         CreateOrderResponse response = WebPay.createOrder(conf)
                 .addOrderRow(TestingTool.createOrderRow())
@@ -275,7 +274,7 @@ public class CreateInvoiceOrderTest {
     }
     
     @Test
-    public void testFormatShippingFeeRowsZero() throws ValidationException, Exception {
+    public void testFormatShippingFeeRowsZero() {
         CreateOrderResponse response = WebPay.createOrder()
                     .addOrderRow(TestingTool.createOrderRow())
                     .addFee(Item.shippingFee()
@@ -299,7 +298,7 @@ public class CreateInvoiceOrderTest {
     }
     
     @Test
-    public void testCompanyIdResponse() throws ValidationException, Exception {
+    public void testCompanyIdResponse() {
         CreateOrderResponse response = WebPay.createOrder()
                 .addOrderRow(TestingTool.createOrderRow())
                 .addCustomerDetails(Item.companyCustomer()
@@ -316,7 +315,7 @@ public class CreateInvoiceOrderTest {
     }
     
     @Test
-    public void testInvoiceCompanyDe() throws ValidationException, Exception {
+    public void testInvoiceCompanyDe() {
         CreateOrderResponse response = WebPay.createOrder()
                 .addOrderRow(TestingTool.createOrderRowDe())
                 .addCustomerDetails(Item.companyCustomer()
@@ -337,7 +336,7 @@ public class CreateInvoiceOrderTest {
     }
     
     @Test
-    public void testInvoiceCompanyNl() throws ValidationException, Exception {
+    public void testInvoiceCompanyNl() {
         CreateOrderResponse response = WebPay.createOrder()
                 .addOrderRow(TestingTool.createOrderRowNl())
                 .addCustomerDetails(Item.companyCustomer()

@@ -14,7 +14,7 @@ import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 public class SveaSoapBuilderTest {
 
     @Test
-    public void testRequest() throws Exception {
+    public void testRequest() {
         CreateOrderResponse response = WebPay.createOrder()
             .addOrderRow(TestingTool.createOrderRow())
             .addCustomerDetails(Item.individualCustomer()

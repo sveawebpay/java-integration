@@ -21,7 +21,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 public class CloseOrderTest {
     
     @Test
-    public void testCloseOrder() throws Exception {
+    public void testCloseOrder() {
         Long orderId = 0L;
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         

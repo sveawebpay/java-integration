@@ -12,7 +12,7 @@ import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 public class GetAddressesTest {
     
     @Test
-    public void testGetAddresses() throws Exception {
+    public void testGetAddresses() {
         GetAddressesResponse response = WebPay.getAddresses()
             .setCountryCode(COUNTRYCODE.SE)
             .setIndividual("460509-2222")
@@ -24,7 +24,7 @@ public class GetAddressesTest {
     }
     
     @Test
-    public void testResultGetAddresses() throws Exception {
+    public void testResultGetAddresses() {
         GetAddressesResponse response = WebPay.getAddresses()
             .setCountryCode(COUNTRYCODE.SE)
             .setIndividual("194605092222")

@@ -14,7 +14,7 @@ import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 
 public class PaymentPlanPricePerMonthTest {
     
-    private PaymentPlanParamsResponse getParamsForTesting() throws Exception {
+    private PaymentPlanParamsResponse getParamsForTesting() {
         GetPaymentPlanParams request = WebPay.getPaymentPlanParams();
         PaymentPlanParamsResponse response = request
                 .setCountryCode(COUNTRYCODE.SE)
@@ -24,7 +24,7 @@ public class PaymentPlanPricePerMonthTest {
     }
     
     @Test
-    public void testBuildPriceCalculator() throws Exception {
+    public void testBuildPriceCalculator() {
         PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
         
         List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(2000.0, paymentPlanParams);
@@ -36,7 +36,7 @@ public class PaymentPlanPricePerMonthTest {
     }
     
     @Test
-    public void testBuildPriceCalculatorWithLowPrice() throws Exception {
+    public void testBuildPriceCalculatorWithLowPrice() {
         PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
         
         List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(200.0, paymentPlanParams);

@@ -16,7 +16,7 @@ import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 public class DoPaymentPlanPaymentTest {
     
     @Test
-    public void testPaymentPlanRequestReturnsAcceptedResult() throws Exception {
+    public void testPaymentPlanRequestReturnsAcceptedResult() {
         PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams()
                 .setCountryCode(COUNTRYCODE.SE)
                 .doRequest();
@@ -82,7 +82,7 @@ public class DoPaymentPlanPaymentTest {
         assertTrue(response.isOrderAccepted());
     }
     
-    private long createPaymentPlanAndReturnOrderId() throws Exception {
+    private long createPaymentPlanAndReturnOrderId() {
         PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams()
                 .setCountryCode(COUNTRYCODE.SE)
                 .doRequest();

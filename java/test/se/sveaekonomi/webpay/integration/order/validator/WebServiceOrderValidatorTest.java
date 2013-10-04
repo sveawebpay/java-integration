@@ -87,8 +87,8 @@ public class WebServiceOrderValidatorTest {
             
             //Fail on no exception
             fail();
-        } catch (ValidationException e) {
-            assertEquals(expectedMessage, e.getMessage());
+        } catch (Exception e) {
+            assertEquals(expectedMessage, e.getCause().getMessage());
         }
     }
     
@@ -312,8 +312,8 @@ public class WebServiceOrderValidatorTest {
             
             //Fail on no exception
             fail();
-        } catch (ValidationException e) {
-            assertEquals(expectedMsg, e.getMessage());
+        } catch (Exception e) {
+            assertEquals(expectedMsg, e.getCause().getMessage());
         }
     }
     

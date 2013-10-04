@@ -7,6 +7,7 @@ import javax.xml.bind.ValidationException;
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.response.webservice.GetAddressesResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
@@ -125,12 +126,12 @@ public class GetAddresses {
         return errors;
     }
     
-    private SveaRequest<SveaGetAddresses> prepareRequest() throws ValidationException {
+    private SveaRequest<SveaGetAddresses> prepareRequest() {
         String errors = "";
         errors = validateRequest();
         
         if (errors.length() > 0) {
-            throw new ValidationException(errors);
+            throw new SveaWebPayException("Validation failed", new ValidationException(errors));
         }
         
         SveaGetAddresses sveaAddress = new SveaGetAddresses();
@@ -145,7 +146,7 @@ public class GetAddresses {
         return request;
     }
     
-    public GetAddressesResponse doRequest() throws Exception {
+    public GetAddressesResponse doRequest() {
         SveaRequest<SveaGetAddresses> request = prepareRequest();
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
