@@ -69,7 +69,6 @@ public abstract class WebServicePayment {
      * Rebuild order with soap package to be in right format for SveaWebPay Europe Web service API
      * 
      * @return SveaRequest
-     * @throws ValidationException 
      */
     public SveaRequest<SveaCreateOrder> prepareRequest() {
         String errors = "";

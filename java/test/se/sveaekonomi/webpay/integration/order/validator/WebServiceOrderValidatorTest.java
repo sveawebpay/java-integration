@@ -57,7 +57,7 @@ public class WebServiceOrderValidatorTest {
     }
     
     @Test
-    public void testFailOnMissingCountryCodeOnDeliverOrder() throws Exception {
+    public void testFailOnMissingCountryCodeOnDeliverOrder() {
         String expectedMessage ="MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
         try {
             WebPay.deliverOrder()
@@ -70,14 +70,14 @@ public class WebServiceOrderValidatorTest {
             
             //Fail on no exception
             fail();
-        } catch (ValidationException e) {
-            assertEquals(expectedMessage, e.getMessage());
+        } catch (Exception e) {
+            assertEquals(expectedMessage, e.getCause().getMessage());
         }
     }
     
     @Test
-    public void testFailOnMissingValuesForGetAddresses() throws Exception {
-        String expectedMessage ="MISSING VALUE - CountryCode is required, use setCountryCode(...).\n" 
+    public void testFailOnMissingValuesForGetAddresses() {
+        String expectedMessage ="MISSING VALUE - CountryCode is required, use setCountryCode(...).\n"
                 +"MISSING VALUE - orderType is required, use one of: setOrderTypePaymentPlan() or setOrderTypeInvoice().\n"
                 +"MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
         
@@ -334,7 +334,7 @@ public class WebServiceOrderValidatorTest {
     }
     
     @Test 
-    public void testFailOnMissingOrderIdOnDeliverOrder() throws Exception {
+    public void testFailOnMissingOrderIdOnDeliverOrder() {
         String expectedMessage = "MISSING VALUE - setOrderId is required.\n";
         
         HandleOrder handleOrder = WebPay.deliverOrder()
@@ -348,7 +348,7 @@ public class WebServiceOrderValidatorTest {
     }
     
     @Test
-    public void testFailOnMissingOrderTypeForInvoiceOrder() throws ValidationException {
+    public void testFailOnMissingOrderTypeForInvoiceOrder() {
         String expectedMessage = "MISSING VALUE - setInvoiceDistributionType is requred for deliverInvoiceOrder.\n";
         
         HandleOrder handleOrder = WebPay.deliverOrder()
@@ -362,7 +362,7 @@ public class WebServiceOrderValidatorTest {
     }
      
     @Test
-    public void testFailOnMissingRows() throws Exception {
+    public void testFailOnMissingRows() {
         String expectedMessage = "MISSING VALUE - No order or fee has been included. Use addOrder(...) or addFee(...).\n";
         
         try {
@@ -376,8 +376,8 @@ public class WebServiceOrderValidatorTest {
             
             //Fail on no exception
             fail();
-        } catch (ValidationException e) {
-            assertEquals(expectedMessage, e.getMessage());
+        } catch (Exception e) {
+            assertEquals(expectedMessage, e.getCause().getMessage());
         }
     }
     

@@ -6,6 +6,7 @@ import javax.xml.bind.ValidationException;
 
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
 import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
@@ -47,11 +48,13 @@ public class HandleOrder {
         }
     }
     
-    public SveaRequest<SveaDeliverOrder> prepareRequest() throws ValidationException {
+    public SveaRequest<SveaDeliverOrder> prepareRequest() {
         String errors = "";
         errors = validateOrder();
-        if (errors.length() > 0)
-            throw new ValidationException(errors);
+        
+        if (errors.length() > 0) {
+            throw new SveaWebPayException("Validation failed", new ValidationException(errors));
+        }
         
         sveaDeliverOrder = new SveaDeliverOrder();
         sveaDeliverOrder.auth = getStoreAuthorization(); 
@@ -79,7 +82,7 @@ public class HandleOrder {
         return request;
     }
     
-    public DeliverOrderResponse doRequest() throws Exception {
+    public DeliverOrderResponse doRequest() {
         URL url = order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE);
         
         SveaRequest<SveaDeliverOrder> request = this.prepareRequest();

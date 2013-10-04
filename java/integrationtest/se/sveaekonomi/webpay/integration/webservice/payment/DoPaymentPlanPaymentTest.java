@@ -58,7 +58,7 @@ public class DoPaymentPlanPaymentTest {
     }
     
     @Test
-    public void testDeliverPaymentPlanOrderResult() throws Exception {
+    public void testDeliverPaymentPlanOrderResult() {
         long orderId = createPaymentPlanAndReturnOrderId();
         
         DeliverOrderResponse response = WebPay.deliverOrder()
