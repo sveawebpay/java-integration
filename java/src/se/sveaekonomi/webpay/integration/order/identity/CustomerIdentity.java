@@ -1,7 +1,7 @@
 package se.sveaekonomi.webpay.integration.order.identity;
 
 public abstract class CustomerIdentity <T extends CustomerIdentity<T>> {
-    
+
     private String phoneNumber;
     private String email;
     private String ipAddress;

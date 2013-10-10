@@ -79,7 +79,7 @@ public class HostedXmlBuilderTest {
         
         xml = xmlBuilder.getXml(payment);
         
-        assertTrue(xml.contains("<customer><ssn>666666</ssn><firstname>Julius</firstname><lastname>Caesar</lastname><initials>JS</initials><phone>999999</phone><email>test@svea.com</email><address>Gatan</address><housenumber>23</housenumber><address2>c/o Eriksson</address2><zip>9999</zip><city>Stan</city><country>SE</country></customer>"));
+        assertTrue(xml.contains("<customer><ssn>666666</ssn><firstname>Julius</firstname><lastname>Caesar</lastname><initials>JS</initials><phone>999999</phone><email>test@svea.com</email><address>Gatan</address><housenumber>23</housenumber><address2>c/o Eriksson</address2><zip>9999</zip><city>Stan</city><country>SE</country></customer><ipaddress>123.123.123.123</ipaddress>"));
     }
     
     @Test
@@ -109,7 +109,7 @@ public class HostedXmlBuilderTest {
         
         xml = xmlBuilder.getXml(payment);
         
-        assertTrue(xml.contains("<customer><ssn>666666</ssn><firstname>TestCompagniet</firstname><phone>999999</phone><email>test@svea.com</email><address>Gatan</address><housenumber>23</housenumber><address2>c/o Eriksson</address2><zip>9999</zip><city>Stan</city><country>SE</country></customer>"));
+        assertTrue(xml.contains("<customer><ssn>666666</ssn><firstname>TestCompagniet</firstname><phone>999999</phone><email>test@svea.com</email><address>Gatan</address><housenumber>23</housenumber><address2>c/o Eriksson</address2><zip>9999</zip><city>Stan</city><country>SE</country></customer><ipaddress>123.123.123.123</ipaddress>"));
     }
     
     @Test

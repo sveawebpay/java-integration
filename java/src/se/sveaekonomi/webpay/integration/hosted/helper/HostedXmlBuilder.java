@@ -147,15 +147,7 @@ public class HostedXmlBuilder extends XMLBuilder {
             
             xmlw.writeEndElement();
             
-            if (order.getIsCompanyIdentity()) {
-                if (order.getCompanyCustomer().getIpAddress() != null) {
-                    writeSimpleElement("ipaddress", order.getCompanyCustomer().getIpAddress());
-                }
-            } else {
-                if (order.getIndividualCustomer().getIpAddress() != null) {
-                    writeSimpleElement("ipaddress", order.getIndividualCustomer().getIpAddress());
-                }
-            }
+            writeSimpleElement("ipaddress", customer.getIpAddress());
         } catch (XMLStreamException e) {
             throw new SveaWebPayException("Error while building XML", e);
         }
