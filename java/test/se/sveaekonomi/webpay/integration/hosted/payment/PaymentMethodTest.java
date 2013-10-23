@@ -9,7 +9,6 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
@@ -19,19 +18,14 @@ public class PaymentMethodTest {
     @Test
     public void testPayPagePaymentWithSetPaymentMethod() {
         PaymentForm form = WebPay.createOrder()
-            .addOrderRow(TestingTool.createOrderRow())
-            .addDiscount(Item.relativeDiscount()
-                .setDiscountId("1")
-                .setDiscountPercent(50)
-                .setUnit("st")
-                .setName("Relative")
-                .setDescription("RelativeDiscount"))
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addDiscount(TestingTool.createRelativeDiscount())
             .addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber("194605092222"))
-            .setCountryCode(COUNTRYCODE.SE)
+                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
-            .setCurrency(CURRENCY.SEK)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .usePaymentMethod(PAYMENTMETHOD.KORTCERT)
             .setReturnUrl("http://myurl.se")
             .getPaymentForm();
@@ -48,13 +42,8 @@ public class PaymentMethodTest {
     @Test
     public void testPayPagePaymentWithSetPaymentMethodNL() {
         PaymentForm form = WebPay.createOrder()
-            .addOrderRow(TestingTool.createOrderRow())
-            .addDiscount(Item.relativeDiscount()
-                .setDiscountId("1")
-                .setDiscountPercent(50)
-                .setUnit("st")
-                .setName("Relative")
-                .setDescription("RelativeDiscount"))
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addDiscount(TestingTool.createRelativeDiscount())
             .addCustomerDetails(Item.individualCustomer()
                 .setInitials("SB")
                 .setBirthDate(1946, 5, 9)
@@ -65,7 +54,7 @@ public class PaymentMethodTest {
             .setCountryCode(COUNTRYCODE.NL)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
-            .setCurrency(CURRENCY.SEK)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .usePaymentMethod(PAYMENTMETHOD.INVOICE)
             .setReturnUrl("http://myurl.se")
             .getPaymentForm();

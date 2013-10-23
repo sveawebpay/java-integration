@@ -7,8 +7,7 @@ import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
@@ -27,15 +26,15 @@ public class WebServiceXmlBuilderTest {
     public void testCreateOrderEu() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
             .addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber("194605092222"))
+                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
             .addOrderRow(Item.orderRow()
                 .setAmountExVat(100.00)
                 .setQuantity(1)
                 .setVatPercent(25))
-            .setCountryCode(COUNTRYCODE.SE)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .setOrderDate("2012-12-12")
             .setClientOrderNumber("33")
-            .setCurrency(CURRENCY.SEK)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .useInvoicePayment()
             .prepareRequest();
         

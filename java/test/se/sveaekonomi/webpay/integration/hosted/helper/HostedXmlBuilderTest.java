@@ -15,6 +15,7 @@ import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
+import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class HostedXmlBuilderTest {
 
@@ -31,13 +32,10 @@ public class HostedXmlBuilderTest {
     @Test
     public void testBasicXml() {
         order = WebPay.createOrder()
-                .setCountryCode(COUNTRYCODE.SE)
-                .setCurrency(CURRENCY.SEK)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
-                .addOrderRow(Item.orderRow()
-                        .setAmountExVat(4)
-                        .setVatPercent(25)
-                        .setQuantity(1))
+                .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(Item.individualCustomer()
                         .setNationalIdNumber("666666"));
         
@@ -54,13 +52,10 @@ public class HostedXmlBuilderTest {
     @Test
     public void testXmlWithIndividualCustomer() {
         order = WebPay.createOrder()
-                .setCountryCode(COUNTRYCODE.SE)
-                .setCurrency(CURRENCY.SEK)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
-                .addOrderRow(Item.orderRow()
-                        .setAmountExVat(4)
-                        .setVatPercent(25)
-                        .setQuantity(1))
+                .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(Item.individualCustomer()
                         .setName("Julius", "Caesar")
                         .setInitials("JS")
@@ -85,13 +80,10 @@ public class HostedXmlBuilderTest {
     @Test
     public void testXmlWithCompanyCustomer() {
         order = WebPay.createOrder()
-                .setCountryCode(COUNTRYCODE.SE)
-                .setCurrency(CURRENCY.SEK)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
-                .addOrderRow(Item.orderRow()
-                        .setAmountExVat(4)
-                        .setVatPercent(25)
-                        .setQuantity(1))
+                .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(Item.companyCustomer()
                         .setCompanyName("TestCompagniet")
                         .setNationalIdNumber("666666")
@@ -115,13 +107,10 @@ public class HostedXmlBuilderTest {
     @Test
     public void testXmlCancelUrl() {
         order = WebPay.createOrder() 
-                .setCountryCode(COUNTRYCODE.SE)
-                .setCurrency(CURRENCY.SEK)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
-                .addOrderRow(Item.orderRow()
-                        .setQuantity(1)
-                        .setAmountExVat(4)
-                        .setAmountIncVat(5))
+                .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(Item.companyCustomer());
         
         FakeHostedPayment payment = new FakeHostedPayment(order);
@@ -146,8 +135,8 @@ public class HostedXmlBuilderTest {
                     .setQuantity(1)
                     .setUnit("kg"))
             .addCustomerDetails(Item.companyCustomer())
-            .setCountryCode(COUNTRYCODE.SE)
-            .setCurrency(CURRENCY.SEK)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .setClientOrderNumber("nr26");
         
         FakeHostedPayment payment = new FakeHostedPayment(order);
@@ -163,13 +152,10 @@ public class HostedXmlBuilderTest {
     @Test
     public void testDirectPaymentSpecificXml() {
         xml = WebPay.createOrder()
-                .setCountryCode(COUNTRYCODE.SE)
-                .setCurrency(CURRENCY.SEK)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
-                .addOrderRow(Item.orderRow()
-                        .setQuantity(1)
-                        .setAmountExVat(4)
-                        .setAmountIncVat(5))
+                .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(Item.companyCustomer())
                 .usePayPageDirectBankOnly()
                 .setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtm")
@@ -182,13 +168,10 @@ public class HostedXmlBuilderTest {
     @Test
     public void testCardPaymentSpecificXml() {
         xml = WebPay.createOrder()
-                .setCountryCode(COUNTRYCODE.SE)
-                .setCurrency(CURRENCY.SEK)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
-                .addOrderRow(Item.orderRow()
-                        .setQuantity(1)
-                        .setAmountExVat(4)
-                        .setAmountIncVat(5))
+                .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(Item.companyCustomer())
                 .usePayPageCardOnly()
                 .setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtm")
@@ -201,13 +184,10 @@ public class HostedXmlBuilderTest {
     @Test
     public void testPayPagePaymentSpecificXmlNullPaymentMethod() {
         xml = WebPay.createOrder()
-                .setCountryCode(COUNTRYCODE.SE)
-                .setCurrency(CURRENCY.SEK)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
-                .addOrderRow(Item.orderRow()
-                        .setQuantity(1)
-                        .setAmountExVat(4)
-                        .setAmountIncVat(5))
+                .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(Item.companyCustomer())
                 .usePayPage()
                 .setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtm")
@@ -221,13 +201,10 @@ public class HostedXmlBuilderTest {
     @Test
     public void testPayPagePaymentSetLanguageCode() {
         xml = WebPay.createOrder()
-                .setCountryCode(COUNTRYCODE.SE)
-                .setCurrency(CURRENCY.SEK)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
-                .addOrderRow(Item.orderRow()
-                        .setQuantity(1)
-                        .setAmountExVat(4)
-                        .setAmountIncVat(5))
+                .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(Item.companyCustomer())
                 .usePayPage()
                 .setPayPageLanguage(LANGUAGECODE.sv)
@@ -241,13 +218,10 @@ public class HostedXmlBuilderTest {
     @Test
     public void testPayPagePaymentPayPal() {
         xml = WebPay.createOrder()
-                .setCountryCode(COUNTRYCODE.SE)
-                .setCurrency(CURRENCY.SEK)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
-                .addOrderRow(Item.orderRow()
-                        .setQuantity(1)
-                        .setAmountExVat(4)
-                        .setAmountIncVat(5))
+                .addOrderRow(TestingTool.createMiniOrderRow())
                         .addCustomerDetails(Item.companyCustomer())
                 .usePayPage()
                 .setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtm")
@@ -261,13 +235,10 @@ public class HostedXmlBuilderTest {
     @Test
     public void testPayPagePaymentSpecificXml() {
         xml = WebPay.createOrder()
-                .setCountryCode(COUNTRYCODE.SE)
-                .setCurrency(CURRENCY.SEK)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
-                .addOrderRow(Item.orderRow()
-                        .setQuantity(1)
-                        .setAmountExVat(4)
-                        .setAmountIncVat(5))
+                .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(Item.companyCustomer())
                 .usePayPage()  
                 .setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtm")

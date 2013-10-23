@@ -28,9 +28,9 @@ public class TestingTool {
     }
     
     public static OrderRowBuilder createExVatBasedOrderRow(String articleNumber) {
-    	articleNumber = articleNumber != null ? articleNumber : "1";
+    	articleNumber = articleNumber == null ? "1" : articleNumber;
         return Item.orderRow()
-                .setArticleNumber("1")
+                .setArticleNumber(articleNumber)
                 .setName("Prod")
                 .setDescription("Specification")
                 .setAmountExVat(100.00)

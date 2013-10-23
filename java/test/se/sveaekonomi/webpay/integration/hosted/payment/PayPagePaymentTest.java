@@ -11,7 +11,6 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.INVOICETYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTPLANTYPE;
@@ -26,7 +25,7 @@ public class PayPagePaymentTest {
         excludePaymentMethods.add(PAYMENTMETHOD.NORDEA_SE);
         
         PayPagePayment payPagePayment = WebPay.createOrder()
-            .setCountryCode(COUNTRYCODE.SE)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .usePayPage()
             .excludePaymentMethods(excludePaymentMethods);
         
@@ -55,7 +54,7 @@ public class PayPagePaymentTest {
     @Test
     public void testDefaultSE() {
         PayPagePayment payPagePayment = WebPay.createOrder()
-            .setCountryCode(COUNTRYCODE.SE)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .usePayPage();
         payPagePayment.configureExcludedPaymentMethods();
         
@@ -65,7 +64,7 @@ public class PayPagePaymentTest {
     @Test
     public void setPaymentMethodTestSE() {
         PayPagePayment payPagePayment = WebPay.createOrder()
-            .setCountryCode(COUNTRYCODE.SE)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .usePayPage()
             .setPaymentMethod(PAYMENTMETHOD.INVOICE);
         payPagePayment.configureExcludedPaymentMethods();
@@ -87,7 +86,7 @@ public class PayPagePaymentTest {
     @Test
     public void setPaymentMethodPaymentPlanTestSE() {
         PayPagePayment payPagePayment = WebPay.createOrder()
-            .setCountryCode(COUNTRYCODE.SE)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .usePayPage()
             .setPaymentMethod(PAYMENTMETHOD.PAYMENTPLAN);
         payPagePayment.configureExcludedPaymentMethods();
@@ -99,7 +98,7 @@ public class PayPagePaymentTest {
         ArrayList<PAYMENTMETHOD> list = new ArrayList<PAYMENTMETHOD>();
         list.add(PAYMENTMETHOD.PAYMENTPLAN);
         PayPagePayment payPagePayment = WebPay.createOrder()
-            .setCountryCode(COUNTRYCODE.SE)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .usePayPage()
             .excludePaymentMethods(list);
         
@@ -123,7 +122,7 @@ public class PayPagePaymentTest {
     @Test
     public void excludeCardPaymentMethodsTest() {
         PayPagePayment payPagePayment = WebPay.createOrder()
-                .setCountryCode(COUNTRYCODE.SE)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .usePayPage()
                 .excludeCardPaymentMethods();
         
@@ -139,7 +138,7 @@ public class PayPagePaymentTest {
         includedPaymentMethods.add(PAYMENTMETHOD.SKRILL);
         
         PayPagePayment payPagePayment = WebPay.createOrder()
-                .setCountryCode(COUNTRYCODE.SE)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .usePayPage()
                 .includePaymentMethods(includedPaymentMethods);
         
@@ -149,7 +148,7 @@ public class PayPagePaymentTest {
     @Test
     public void excludeDirectPaymentMethodsTest() {
         PayPagePayment payPagePayment = WebPay.createOrder()
-                .setCountryCode(COUNTRYCODE.SE)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .usePayPage()
                 .excludeDirectPaymentMethods();
         
@@ -171,7 +170,7 @@ public class PayPagePaymentTest {
         includedPaymentMethods.add(PAYMENTMETHOD.NORDEA_SE);
         
         PayPagePayment payPagePayment = WebPay.createOrder()
-            .setCountryCode(COUNTRYCODE.SE)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .usePayPage()
             .includePaymentMethods(includedPaymentMethods);
         
@@ -192,50 +191,36 @@ public class PayPagePaymentTest {
         paymentMethods.add(PAYMENTMETHOD.KORTCERT);
         
         PaymentForm form = WebPay.createOrder()
-            .addOrderRow(TestingTool.createOrderRow())
-            .addFee(Item.shippingFee()
-                .setAmountExVat(50)
-                .setShippingId("33")
-                .setDescription("Specification")
-                .setVatPercent(25))
-            .addDiscount(Item.relativeDiscount()
-                    .setDiscountId("1")
-                    .setDiscountPercent(50)
-                    .setUnit("st")
-                    .setName("Relative")
-                   .setDescription("RelativeDiscount"))
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addFee(TestingTool.createExVatBasedShippingFee())
+            .addDiscount(TestingTool.createRelativeDiscount())
             .addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber("194605092222"))
-            .setCountryCode(COUNTRYCODE.SE)
+                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
-            .setCurrency(CURRENCY.SEK)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .usePayPage()
             .excludePaymentMethods(paymentMethods)
             .setReturnUrl("http://myurl.se")
             .getPaymentForm();
         
         String xml = form.getXmlMessage();
-        String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--Message generated by Integration package Java--><payment><customerrefno>33</customerrefno><currency>SEK</currency><amount>18750</amount><vat>3750</vat><returnurl>http://myurl.se</returnurl><iscompany>false</iscompany><customer><ssn>194605092222</ssn><country>SE</country></customer><orderrows><row><sku>1</sku><name>Prod</name><description>Specification</description><amount>12500</amount><vat>2500</vat><quantity>2</quantity><unit>st</unit></row><row><sku>33</sku><name></name><description>Specification</description><amount>6250</amount><vat>1250</vat><quantity>1</quantity></row><row><sku>1</sku><name>Relative</name><description>RelativeDiscount</description><amount>-12500</amount><vat>-2500</vat><quantity>1</quantity><unit>st</unit></row></orderrows><excludepaymentmethods><exclude>SVEAINVOICESE</exclude><exclude>SVEAINVOICEEU_SE</exclude><exclude>SVEAINVOICEEU_NO</exclude><exclude>SVEAINVOICEEU_DK</exclude><exclude>SVEAINVOICEEU_FI</exclude><exclude>SVEAINVOICEEU_NL</exclude><exclude>SVEAINVOICEEU_DE</exclude><exclude>KORTCERT</exclude></excludepaymentmethods><addinvoicefee>false</addinvoicefee></payment>";
+        String expected = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--Message generated by Integration package Java--><payment><customerrefno>33</customerrefno><currency>SEK</currency><amount>18750</amount><vat>3750</vat><returnurl>http://myurl.se</returnurl><iscompany>false</iscompany><customer><ssn>194605092222</ssn><country>SE</country></customer><orderrows><row><sku>1</sku><name>Prod</name><description>Specification</description><amount>12500</amount><vat>2500</vat><quantity>2</quantity><unit>st</unit></row><row><sku>33</sku><name>shipping</name><description>Specification</description><amount>6250</amount><vat>1250</vat><quantity>1</quantity><unit>st</unit></row><row><sku>1</sku><name>Relative</name><description>RelativeDiscount</description><amount>-12500</amount><vat>-2500</vat><quantity>1</quantity><unit>st</unit></row></orderrows><excludepaymentmethods><exclude>SVEAINVOICESE</exclude><exclude>SVEAINVOICEEU_SE</exclude><exclude>SVEAINVOICEEU_NO</exclude><exclude>SVEAINVOICEEU_DK</exclude><exclude>SVEAINVOICEEU_FI</exclude><exclude>SVEAINVOICEEU_NL</exclude><exclude>SVEAINVOICEEU_DE</exclude><exclude>KORTCERT</exclude></excludepaymentmethods><addinvoicefee>false</addinvoicefee></payment>";
         assertEquals(expected, xml);
     }
     
     @Test
     public void testPayPagePaymentExcludeCardPayments() {
         PaymentForm form = WebPay.createOrder()
-            .addOrderRow(TestingTool.createOrderRow())
-            .addDiscount(Item.relativeDiscount()
-                    .setDiscountId("1")
-                    .setDiscountPercent(50)
-                    .setUnit("st")
-                    .setName("Relative")
-                    .setDescription("RelativeDiscount"))
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addDiscount(TestingTool.createRelativeDiscount())
             .addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber("194605092222"))
-            .setCountryCode(COUNTRYCODE.SE)
+                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
-            .setCurrency(CURRENCY.SEK)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .usePayPage()
             .excludeCardPaymentMethods()
             .setReturnUrl("http://myurl.se")
@@ -252,19 +237,14 @@ public class PayPagePaymentTest {
     @Test
     public void testExcludeDirectPaymentMethods() {
         PaymentForm form = WebPay.createOrder()
-            .addOrderRow(TestingTool.createOrderRow())
-            .addDiscount(Item.relativeDiscount()
-                    .setDiscountId("1")
-                    .setDiscountPercent(50)
-                    .setUnit("st")
-                    .setName("Relative")
-                    .setDescription("RelativeDiscount"))
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addDiscount(TestingTool.createRelativeDiscount())
             .addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber("194605092222"))
-            .setCountryCode(COUNTRYCODE.SE)
+                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
-            .setCurrency(CURRENCY.SEK)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .usePayPage()
             .excludeDirectPaymentMethods()
             .setReturnUrl("http://myurl.se")
@@ -281,19 +261,13 @@ public class PayPagePaymentTest {
         paymentMethods.add(PAYMENTMETHOD.PAYMENTPLAN);
         paymentMethods.add(PAYMENTMETHOD.SKRILL);
         PaymentForm form = WebPay.createOrder()
-                .addOrderRow(TestingTool.createOrderRow())
-                
-                .addDiscount(Item.relativeDiscount()
-                        .setDiscountId("1")
-                        .setDiscountPercent(50)
-                        .setUnit("st")
-                        .setName("Relative")
-                        .setDescription("RelativeDiscount"))
-                .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
-                .setCountryCode(COUNTRYCODE.SE)
+                .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+                .addDiscount(TestingTool.createRelativeDiscount())
+                .addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setClientOrderNumber("33")
                 .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .usePayPage()
                 .includePaymentMethods(paymentMethods)
                 .setReturnUrl("http://myurl.se")
@@ -312,19 +286,13 @@ public class PayPagePaymentTest {
         paymentMethods.add(PAYMENTMETHOD.KORTCERT);
         paymentMethods.add(PAYMENTMETHOD.SKRILL);
         PaymentForm form = WebPay.createOrder()
-            .addOrderRow(TestingTool.createOrderRow())
-           
-            .addDiscount(Item.relativeDiscount()
-                    .setDiscountId("1")
-                    .setDiscountPercent(50)
-                    .setUnit("st")
-                    .setName("Relative")
-                    .setDescription("RelativeDiscount"))
-            .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
-            .setCountryCode(COUNTRYCODE.SE)
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addDiscount(TestingTool.createRelativeDiscount())
+            .addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
-            .setCurrency(CURRENCY.SEK)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .usePayPage()
             .includePaymentMethods(paymentMethods)
             .setReturnUrl("http://myurl.se")
@@ -339,19 +307,13 @@ public class PayPagePaymentTest {
     @Test
     public void testPayPagePaymentIncludePaymentMethodsEmpty() {
         PaymentForm form = WebPay.createOrder()
-            .addOrderRow(TestingTool.createOrderRow())
-            
-            .addDiscount(Item.relativeDiscount()
-                    .setDiscountId("1")
-                    .setDiscountPercent(50)
-                    .setUnit("st")
-                    .setName("Relative")
-                    .setDescription("RelativeDiscount"))
-            .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
-            .setCountryCode(COUNTRYCODE.SE)
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addDiscount(TestingTool.createRelativeDiscount())
+            .addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .setClientOrderNumber("33")
             .setOrderDate("2012-12-12")
-            .setCurrency(CURRENCY.SEK)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .usePayPage()
             .includePaymentMethods()
             .setReturnUrl("http://myurl.se")
