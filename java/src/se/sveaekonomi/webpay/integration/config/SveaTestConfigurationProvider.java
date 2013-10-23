@@ -16,11 +16,11 @@ public class SveaTestConfigurationProvider implements ConfigurationProvider{
                 case SE:
                     return "sverigetest";
                 case NO:
-                    return "webpay_test_no";
+                    return "norgetest2";
                 case FI:
-                    return "finlandtest";
+                    return "finlandtest2";
                 case DK:
-                    return "danmarktest";
+                    return "danmarktest2";
                 case NL:
                     return "hollandtest";
                 case DE:
@@ -40,11 +40,11 @@ public class SveaTestConfigurationProvider implements ConfigurationProvider{
                 case SE:
                     return "sverigetest";
                 case NO:
-                    return "dvn349hvs9+29hvs";
+                    return "norgetest2";
                 case FI:
-                    return "finlandtest";
+                    return "finlandtest2";
                 case DK:
-                    return "danmarktest";
+                    return "danmarktest2";
                 case NL:
                     return "hollandtest";
                 case DE:
@@ -67,19 +67,19 @@ public class SveaTestConfigurationProvider implements ConfigurationProvider{
                     return 59999;
             case NO:
                 if (type == PAYMENTTYPE.INVOICE)
-                    return 32666;
+                    return 33308;
                 else if (type == PAYMENTTYPE.PAYMENTPLAN)
-                    return 36000;
+                    return 32503;
             case FI:
                 if (type == PAYMENTTYPE.INVOICE)
-                    return 29995;
+                    return 26136;
                 else if (type == PAYMENTTYPE.PAYMENTPLAN)
-                    return 29992;
+                    return 27136;
             case DK:
                 if (type == PAYMENTTYPE.INVOICE)
-                    return 60006;
+                    return 62008;
                 else if (type == PAYMENTTYPE.PAYMENTPLAN)
-                    return 60004;
+                    return 64008;
             case NL:
                 if (type == PAYMENTTYPE.INVOICE)
                     return 85997;
