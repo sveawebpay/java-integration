@@ -9,8 +9,6 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrderRow;
@@ -45,8 +43,7 @@ public class WebserviceRowFormatterTest {
     @Test
     public void testFormatShippingFeeRows() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-                    .addOrderRow(TestingTool.createOrderRow())
-                    
+                    .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
                     .addFee(Item.shippingFee()
                         .setShippingId("0")
                         .setName("Tess")
@@ -54,15 +51,13 @@ public class WebserviceRowFormatterTest {
                         .setAmountExVat(4)
                         .setVatPercent(25)
                         .setUnit("st"))
-                    
                     .addCustomerDetails(Item.individualCustomer()
-                        .setNationalIdNumber("194605092222"))
-                
-                    .setCountryCode(COUNTRYCODE.SE)
-                    .setOrderDate("2012-12-12")
-                    .setClientOrderNumber("33")
-                    .setCurrency(CURRENCY.SEK)
-                    .setCustomerReference("33")
+                        .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+                    .setCountryCode(TestingTool.DefaultTestCountryCode)
+                    .setOrderDate(TestingTool.DefaultTestDate)
+                    .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                    .setCurrency(TestingTool.DefaultTestCurrency)
+                    .setCustomerReference(TestingTool.DefaultTestCustomerReferenceNumber)
                     .useInvoicePayment()
                     .prepareRequest();
         
@@ -99,15 +94,11 @@ public class WebserviceRowFormatterTest {
     @Test
     public void testFormatFixedDiscountRows() {
         CreateOrderBuilder order = WebPay.createOrder()
-            .addOrderRow(Item.orderRow()
-                .setAmountExVat(4)
-                .setVatPercent(25)
-                .setQuantity(1))
+            .addOrderRow(TestingTool.createMiniOrderRow())
             .addDiscount(Item.fixedDiscount()
                 .setDiscountId("0")
                 .setName("Tess")
                 .setDescription("Tester")
-                //.setDiscount(1)
                 .setAmountIncVat(1)
                 .setUnit("st"));
          
@@ -126,23 +117,15 @@ public class WebserviceRowFormatterTest {
     @Test
     public void testFormatRelativeDiscountRows() {
         CreateOrderBuilder order = WebPay.createOrder()
-        .addOrderRow(Item.orderRow()
-            .setAmountExVat(4)
-            .setVatPercent(25)
-            .setQuantity(1))
-        .addDiscount(Item.relativeDiscount()
-            .setDiscountId("0")
-            .setName("Tess")
-            .setDescription("Tester")
-            .setDiscountPercent(10)
-            .setUnit("st"));
+        .addOrderRow(TestingTool.createMiniOrderRow())
+        .addDiscount(TestingTool.createRelativeDiscount());
         
         ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
         SveaOrderRow newRow = newRows.get(1);
         
-        assertEquals("0", newRow.ArticleNumber);
-        assertEquals("Tess: Tester", newRow.Description);
-        assertEquals(-0.4, newRow.PricePerUnit, 0);
+        assertEquals("1", newRow.ArticleNumber);
+        assertEquals("Relative: RelativeDiscount", newRow.Description);
+        assertEquals(-2.0, newRow.PricePerUnit, 0);
         assertEquals(25.0, newRow.VatPercent, 0);
         assertEquals(0, newRow.DiscountPercent);
         assertEquals(1, newRow.NumberOfUnits);

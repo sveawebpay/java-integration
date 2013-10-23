@@ -11,6 +11,7 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.HostedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
+import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class HostedRowFormatterTest {
     
@@ -105,11 +106,8 @@ public class HostedRowFormatterTest {
     @Test
     public void testFormatFixedDiscountRowsVat() {
         CreateOrderBuilder order = WebPay.createOrder()
-                .addOrderRow(Item.orderRow()
-                        .setAmountExVat(4)
-                        .setVatPercent(25)
-                        .setQuantity(1))
-                        .addDiscount(Item.fixedDiscount()
+                .addOrderRow(TestingTool.createMiniOrderRow())
+                .addDiscount(Item.fixedDiscount()
                         .setAmountIncVat(1)
                         .setDiscountId("0")
                         .setName("Tess")
@@ -144,10 +142,7 @@ public class HostedRowFormatterTest {
     @Test
     public void testFormatRelativeDiscountRowsAmount() {
         CreateOrderBuilder order = WebPay.createOrder()
-                .addOrderRow(Item.orderRow()
-                        .setAmountExVat(4)
-                        .setVatPercent(25)
-                        .setQuantity(1))
+                .addOrderRow(TestingTool.createMiniOrderRow())
                 .addDiscount(Item.relativeDiscount()
                         .setDiscountPercent(10));
         
@@ -160,10 +155,7 @@ public class HostedRowFormatterTest {
     @Test
     public void testFormatRelativeDiscountRowsVat() {
         CreateOrderBuilder order = WebPay.createOrder()
-                .addOrderRow(Item.orderRow()
-                        .setAmountExVat(4)
-                        .setVatPercent(25)
-                        .setQuantity(1))
+                .addOrderRow(TestingTool.createMiniOrderRow())
                 .addDiscount(Item.relativeDiscount()
                         .setDiscountPercent(10));
         

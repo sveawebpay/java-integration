@@ -3,9 +3,7 @@ package se.sveaekonomi.webpay.integration.order.validator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.payment.FakeHostedPayment;
@@ -13,7 +11,6 @@ import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
@@ -33,17 +30,12 @@ public class HostedOrderValidatorTest {
                     + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n";
         
         CreateOrderBuilder order = WebPay.createOrder()
-                .addCustomerDetails(Item.companyCustomer()
-                .setVatNumber("2345234")
-                .setCompanyName("TestCompagniet"))
+                .addCustomerDetails(TestingTool.createMiniCompanyCustomer())
                 .setValidator(new VoidValidator())
                 .build();
         
         assertEquals(expectedMessage, orderValidator.validate(order));
     }
-    
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
     
     @Test
     public void testFailOnEmptyClientOrderNumber() {
@@ -55,12 +47,9 @@ public class HostedOrderValidatorTest {
                 .setQuantity(1)
                 .setAmountExVat(100)
                 .setVatPercent(25))
-            .setCurrency(CURRENCY.SEK)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .setClientOrderNumber("")
-            .addCustomerDetails(Item.companyCustomer()
-                .setVatNumber("2345234")
-                .setCompanyName("TestCompagniet")
-                .setNationalIdNumber("1222"))
+            .addCustomerDetails(TestingTool.createMiniCompanyCustomer())
                 .setValidator(new VoidValidator())
                 .build();
         orderValidator = new HostedOrderValidator();
@@ -74,13 +63,10 @@ public class HostedOrderValidatorTest {
         
         try {
             CreateOrderBuilder order = WebPay.createOrder()
-                .setCountryCode(COUNTRYCODE.SE)
-                   .setClientOrderNumber("nr22")
-                   .setCurrency(CURRENCY.SEK)
-                .addOrderRow(Item.orderRow()
-                    .setAmountExVat(4)
-                    .setVatPercent(25)
-                    .setQuantity(1))
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                   .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                   .setCurrency(TestingTool.DefaultTestCurrency)
+                .addOrderRow(TestingTool.createMiniOrderRow())
                 .addFee(Item.shippingFee())
                 .addDiscount(Item.fixedDiscount())
                 .addDiscount(Item.relativeDiscount());
@@ -99,14 +85,9 @@ public class HostedOrderValidatorTest {
     public void succeedOnGoodValuesSe() {
         CreateOrderBuilder order = WebPay.createOrder()
             .setValidator(new VoidValidator())
-            .setClientOrderNumber("1")
-            .addOrderRow(Item.orderRow()
-                .setAmountExVat(5.0)
-                .setVatPercent(25)
-                .setQuantity(1))
-            .addCustomerDetails(Item.companyCustomer()
-                .setVatNumber("2345234")
-                .setCompanyName("TestCompagniet"));
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .addOrderRow(TestingTool.createMiniOrderRow())
+            .addCustomerDetails(TestingTool.createMiniCompanyCustomer());
         
         orderValidator = new HostedOrderValidator();
         orderValidator.validate(order);
@@ -115,15 +96,10 @@ public class HostedOrderValidatorTest {
     @Test
     public void testValidateNLCustomerIdentity() {
         CreateOrderBuilder order = WebPay.createOrder()
-                .setClientOrderNumber("1")
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                 .setCountryCode(COUNTRYCODE.NL)
-                .addOrderRow(Item.orderRow()
-                        .setAmountExVat(5.0)
-                        .setVatPercent(25)
-                        .setQuantity(1))
-                .addCustomerDetails(Item.companyCustomer()
-                        .setVatNumber("2345234")
-                        .setCompanyName("TestCompagniet"));
+                .addOrderRow(TestingTool.createMiniOrderRow())
+                .addCustomerDetails(TestingTool.createMiniCompanyCustomer());
         
         orderValidator = new HostedOrderValidator();
         orderValidator.validate(order);
@@ -132,15 +108,10 @@ public class HostedOrderValidatorTest {
     @Test
     public void testValidateDECustomerIdentity() {
         CreateOrderBuilder order = WebPay.createOrder()
-                .setClientOrderNumber("1")
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                 .setCountryCode(COUNTRYCODE.DE)
-                .addOrderRow(Item.orderRow()
-                        .setAmountExVat(5.0)
-                        .setVatPercent(25)
-                        .setQuantity(1))
-                .addCustomerDetails(Item.companyCustomer()
-                        .setVatNumber("2345234")
-                        .setCompanyName("TestCompagniet"));
+                .addOrderRow(TestingTool.createMiniOrderRow())
+                .addCustomerDetails(TestingTool.createMiniCompanyCustomer());
         orderValidator = new HostedOrderValidator();
         orderValidator.validate(order);
     }
@@ -155,12 +126,9 @@ public class HostedOrderValidatorTest {
                 .addOrderRow(Item.orderRow()
                         .setQuantity(1)
                         .setAmountExVat(100))
-                .setCurrency(CURRENCY.SEK)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("")
-                .addCustomerDetails(Item.companyCustomer()
-                        .setVatNumber("2345234")
-                        .setCompanyName("TestCompagniet")
-                        .setNationalIdNumber("1222"))
+                .addCustomerDetails(TestingTool.createMiniCompanyCustomer())
                 .setValidator(new VoidValidator())
                 .build();
         orderValidator = new HostedOrderValidator();
@@ -178,12 +146,9 @@ public class HostedOrderValidatorTest {
                 .addOrderRow(Item.orderRow()
                         .setQuantity(1)
                         .setVatPercent(25))
-                .setCurrency(CURRENCY.SEK)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("")
-                .addCustomerDetails(Item.companyCustomer()
-                        .setVatNumber("2345234")
-                        .setCompanyName("TestCompagniet")
-                        .setNationalIdNumber("1222"))
+                .addCustomerDetails(TestingTool.createMiniCompanyCustomer())
                         .setValidator(new VoidValidator())
                 .build();
         
@@ -202,12 +167,9 @@ public class HostedOrderValidatorTest {
                 .addOrderRow(Item.orderRow()
                         .setQuantity(1)
                         .setAmountIncVat(125))
-                .setCurrency(CURRENCY.SEK)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("")
-                .addCustomerDetails(Item.companyCustomer()
-                        .setVatNumber("2345234")
-                        .setCompanyName("TestCompagniet")
-                        .setNationalIdNumber("1222"))
+                .addCustomerDetails(TestingTool.createMiniCompanyCustomer())
                         .setValidator(new VoidValidator())
                 .build();
         
@@ -224,12 +186,9 @@ public class HostedOrderValidatorTest {
         
         CreateOrderBuilder order = WebPay.createOrder()
                 .addOrderRow(null)
-                .setCurrency(CURRENCY.SEK)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("")
-                .addCustomerDetails(Item.companyCustomer()
-                        .setVatNumber("2345234")
-                        .setCompanyName("TestCompagniet")
-                        .setNationalIdNumber("1222"))
+                .addCustomerDetails(TestingTool.createMiniCompanyCustomer())
                 .setValidator(new VoidValidator())
                 .build();
         
@@ -249,18 +208,13 @@ public class HostedOrderValidatorTest {
         
         try {
             WebPay.createOrder()
-                .addOrderRow(TestingTool.createOrderRow())
-                    .addDiscount(Item.relativeDiscount()
-                    .setDiscountId("1")
-                    .setDiscountPercent(50)
-                    .setUnit("st")
-                    .setName("Relative")
-                    .setDescription("RelativeDiscount"))
+                .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+                .addDiscount(TestingTool.createRelativeDiscount())
                 .addCustomerDetails(Item.individualCustomer())
                 .setCountryCode(COUNTRYCODE.NL)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setOrderDate(TestingTool.DefaultTestDate)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .usePaymentMethod(PAYMENTMETHOD.INVOICE)
                 .setReturnUrl("http://myurl.se")
                 .getPaymentForm();
@@ -282,18 +236,13 @@ public class HostedOrderValidatorTest {
         
         try {
             WebPay.createOrder()
-                .addOrderRow(TestingTool.createOrderRow())
-                    .addDiscount(Item.relativeDiscount()
-                    .setDiscountId("1")
-                    .setDiscountPercent(50)
-                    .setUnit("st")
-                    .setName("Relative")
-                    .setDescription("RelativeDiscount"))
+                .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+                .addDiscount(TestingTool.createRelativeDiscount())
                 .addCustomerDetails(Item.individualCustomer())
                 .setCountryCode(COUNTRYCODE.DE)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setOrderDate(TestingTool.DefaultTestDate)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .usePaymentMethod(PAYMENTMETHOD.INVOICE)
                 .setReturnUrl("http://myurl.se")
                 .getPaymentForm();

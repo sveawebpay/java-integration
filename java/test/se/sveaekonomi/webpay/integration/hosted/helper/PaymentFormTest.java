@@ -7,12 +7,10 @@ import java.util.Map;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
-import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
+import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class PaymentFormTest {
 
@@ -25,22 +23,11 @@ public class PaymentFormTest {
         String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
         
         PaymentForm form = WebPay.createOrder()
-                .setCountryCode(COUNTRYCODE.SE)
-                .setCurrency(CURRENCY.SEK)
-                .setClientOrderNumber("nr26")
-                .addOrderRow(Item.orderRow()
-                        .setQuantity(1)
-                        .setAmountExVat(4)
-                        .setAmountIncVat(5))
-                .addCustomerDetails(Item.companyCustomer()
-                    .setNationalIdNumber("666666")
-                    .setEmail("test@svea.com")
-                    .setPhoneNumber("999999")
-                    .setIpAddress("123.123.123.123")
-                    .setStreetAddress("Gatan", "23")
-                    .setCoAddress("c/o Eriksson")
-                    .setZipCode("9999")
-                    .setLocality("Stan"))
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setCurrency(TestingTool.DefaultTestCurrency)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .addOrderRow(TestingTool.createMiniOrderRow())
+                .addCustomerDetails(TestingTool.createCompanyCustomer())
                 .usePayPageDirectBankOnly()  
                 .setReturnUrl("http:myurl")
                 .getPaymentForm();
@@ -70,22 +57,11 @@ public class PaymentFormTest {
         String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
         
         PaymentForm form = WebPay.createOrder()
-                .setCountryCode(COUNTRYCODE.SE)
-                .setClientOrderNumber("nr26")
-                .setCurrency(CURRENCY.SEK)
-                .addOrderRow(Item.orderRow()
-                        .setQuantity(1)
-                        .setAmountExVat(4)
-                        .setAmountIncVat(5))
-                .addCustomerDetails(Item.companyCustomer()
-                    .setNationalIdNumber("666666")
-                    .setEmail("test@svea.com")
-                    .setPhoneNumber("999999")
-                    .setIpAddress("123.123.123.123")
-                    .setStreetAddress("Gatan", "23")
-                    .setCoAddress("c/o Eriksson")
-                    .setZipCode("9999")
-                    .setLocality("Stan"))
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setCurrency(TestingTool.DefaultTestCurrency)
+                .addOrderRow(TestingTool.createMiniOrderRow())
+                .addCustomerDetails(TestingTool.createCompanyCustomer())
                 .usePayPageDirectBankOnly()
                 .setReturnUrl("http:myurl.se")
                 .getPaymentForm();

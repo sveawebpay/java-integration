@@ -7,14 +7,14 @@ import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.response.webservice.GetAddressesResponse;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class GetAddressesTest {
     
     @Test
     public void testGetAddresses() {
         GetAddressesResponse response = WebPay.getAddresses()
-            .setCountryCode(COUNTRYCODE.SE)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .setIndividual("460509-2222")
             .setOrderTypeInvoice()
             .doRequest();
@@ -26,8 +26,8 @@ public class GetAddressesTest {
     @Test
     public void testResultGetAddresses() {
         GetAddressesResponse response = WebPay.getAddresses()
-            .setCountryCode(COUNTRYCODE.SE)
-            .setIndividual("194605092222")
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .setIndividual(TestingTool.DefaultTestIndividualNationalIdNumber)
             .setOrderTypeInvoice()
             .doRequest();
         

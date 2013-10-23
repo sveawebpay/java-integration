@@ -5,8 +5,6 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
-import javax.xml.bind.ValidationException;
-
 import org.junit.Ignore;
 import org.junit.Test;
 import org.w3c.dom.NodeList;
@@ -30,12 +28,12 @@ public class CreateInvoiceOrderTest {
     @Test
     public void testInvoiceForIndividualFromSE() {
         CreateOrderResponse response = WebPay.createOrder()
-        .addOrderRow(TestingTool.createOrderRow())
-        .addCustomerDetails(Item.individualCustomer().setNationalIdNumber("194605092222"))
-            .setCountryCode(COUNTRYCODE.SE)
-            .setOrderDate("2012-12-12")
-            .setClientOrderNumber("33")
-            .setCurrency(CURRENCY.SEK)
+        .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+        .addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .setOrderDate(TestingTool.DefaultTestDate)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .useInvoicePayment()
             .doRequest();
         
@@ -58,12 +56,12 @@ public class CreateInvoiceOrderTest {
     @Test
     public void testInvoiceRequestFailing() {
         CreateOrderResponse response = WebPay.createOrder()
-        .addOrderRow(TestingTool.createOrderRow())
+        .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
         .addCustomerDetails(Item.individualCustomer().setNationalIdNumber(""))
-            .setCountryCode(COUNTRYCODE.SE)
-            .setOrderDate("2012-12-12")
-            .setClientOrderNumber("33")
-            .setCurrency(CURRENCY.SEK)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .setOrderDate(TestingTool.DefaultTestDate)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .useInvoicePayment()
             .doRequest();
         
@@ -82,12 +80,11 @@ public class CreateInvoiceOrderTest {
                     .setVatPercent(12.5)
                     .setDiscountPercent(0))
                 .addCustomerDetails(Item.individualCustomer()
-                        .setNationalIdNumber("194605092222"))
-                 
-                .setCountryCode(COUNTRYCODE.SE)
-                .setOrderDate("2012-12-12")
-                .setClientOrderNumber("33")
-                .setCurrency(CURRENCY.SEK)
+                        .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setOrderDate(TestingTool.DefaultTestDate)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .useInvoicePayment()
                 .doRequest();
         
@@ -106,14 +103,12 @@ public class CreateInvoiceOrderTest {
                     .setName("Prod")
                     .setVatPercent(12.5)
                     .setDiscountPercent(0))
-                
                 .addCustomerDetails(Item.individualCustomer()
-                    .setNationalIdNumber("194605092222"))
-                
-                .setCountryCode(COUNTRYCODE.SE)
-                .setOrderDate("2012-12-12")
-                .setClientOrderNumber("33")
-                .setCurrency(CURRENCY.SEK)
+                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setOrderDate(TestingTool.DefaultTestDate)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .useInvoicePayment()
                 .doRequest();
         
@@ -124,12 +119,11 @@ public class CreateInvoiceOrderTest {
     @Test
     public void testInvoiceCompanySe() {
         CreateOrderResponse response = WebPay.createOrder()
-                .setCountryCode(COUNTRYCODE.SE)
-                .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK)
-            .addCustomerDetails(Item.companyCustomer()
-                    .setNationalIdNumber("4608142222"))
-            .addOrderRow(TestingTool.createOrderRow())
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setOrderDate(TestingTool.DefaultTestDate)
+                .setCurrency(TestingTool.DefaultTestCurrency)
+            .addCustomerDetails(TestingTool.createMiniCompanyCustomer())
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .useInvoicePayment()
             .doRequest();
         
@@ -142,7 +136,6 @@ public class CreateInvoiceOrderTest {
     public void testInvoiceForIndividualFromNl() {
         CreateOrderResponse response = WebPay.createOrder()
                 .addOrderRow(TestingTool.createOrderRowNl())
-                
                 .addCustomerDetails(Item.individualCustomer()
                         .setBirthDate(1955, 03, 07)
                         .setInitials("SB")
@@ -151,10 +144,9 @@ public class CreateInvoiceOrderTest {
                         .setLocality("BARENDRECHT")
                         .setZipCode("1102 HG")
                         .setCoAddress("138"))
-                
                 .setCountryCode(COUNTRYCODE.NL)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setOrderDate(TestingTool.DefaultTestDate)
                 .setCurrency(CURRENCY.EUR)
                 .useInvoicePayment()
                 .doRequest();
@@ -182,15 +174,15 @@ public class CreateInvoiceOrderTest {
     @Test
     public void testInvoiceDoRequestWithIpAddressSetSE() {
         CreateOrderResponse response = WebPay.createOrder()
-            .addOrderRow(TestingTool.createOrderRow())
-            .addOrderRow(TestingTool.createOrderRow())
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
             .addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber("194605092222")
+                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
                 .setIpAddress("123.123.123"))
-            .setCountryCode(COUNTRYCODE.SE)
-            .setOrderDate("2012-12-12")
-            .setClientOrderNumber("33")
-            .setCurrency(CURRENCY.SEK)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .setOrderDate(TestingTool.DefaultTestDate)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .useInvoicePayment()
             .doRequest();
         
@@ -200,16 +192,15 @@ public class CreateInvoiceOrderTest {
     @Test
     public void testInvoiceRequestUsingAmountIncVatWithZeroVatPercent() {
         CreateOrderResponse response = WebPay.createOrder()
-            .addOrderRow(TestingTool.createOrderRow())
-            .addOrderRow(TestingTool.createOrderRow()) 
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("2")) 
             .addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber("194605092222"))
-            
-            .setCountryCode(COUNTRYCODE.SE)
-            .setOrderDate("2012-12-12")
-            .setClientOrderNumber("33")
-            .setCurrency(CURRENCY.SEK)
-            .setCustomerReference("33")
+                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .setOrderDate(TestingTool.DefaultTestDate)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setCurrency(TestingTool.DefaultTestCurrency)
+            .setCustomerReference(TestingTool.DefaultTestCustomerReferenceNumber)
             .useInvoicePayment()
             .doRequest();
          
@@ -222,13 +213,13 @@ public class CreateInvoiceOrderTest {
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-        .addOrderRow(TestingTool.createOrderRow())
+        .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber("194605092222"))
-            .setCountryCode(COUNTRYCODE.SE)
-            .setClientOrderNumber("33")
-            .setOrderDate("2012-12-12")
-            .setCurrency(CURRENCY.SEK)
+                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setOrderDate(TestingTool.DefaultTestDate)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .useInvoicePayment()
             .prepareRequest();
         
@@ -258,15 +249,15 @@ public class CreateInvoiceOrderTest {
     public void testConfiguration() {
         ConfigurationProviderTestData conf = new ConfigurationProviderTestData();
         CreateOrderResponse response = WebPay.createOrder(conf)
-                .addOrderRow(TestingTool.createOrderRow())
-                .addOrderRow(TestingTool.createOrderRow())
+                .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+                .addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
                 .addCustomerDetails(Item.individualCustomer()
-                    .setNationalIdNumber("194605092222")
+                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
                     .setIpAddress("123.123.123"))
-                .setCountryCode(COUNTRYCODE.SE)
-                .setOrderDate("2012-12-12")
-                .setClientOrderNumber("33")
-                .setCurrency(CURRENCY.SEK)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setOrderDate(TestingTool.DefaultTestDate)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .useInvoicePayment()
                 .doRequest();
         
@@ -276,7 +267,7 @@ public class CreateInvoiceOrderTest {
     @Test
     public void testFormatShippingFeeRowsZero() {
         CreateOrderResponse response = WebPay.createOrder()
-                    .addOrderRow(TestingTool.createOrderRow())
+                    .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
                     .addFee(Item.shippingFee()
                         .setShippingId("0")
                         .setName("Tess")
@@ -285,12 +276,12 @@ public class CreateInvoiceOrderTest {
                         .setVatPercent(0)
                         .setUnit("st"))
                     .addCustomerDetails(Item.individualCustomer()
-                        .setNationalIdNumber("194605092222"))
-                    .setCountryCode(COUNTRYCODE.SE)
-                    .setOrderDate("2012-12-12")
-                    .setClientOrderNumber("33")
-                    .setCurrency(CURRENCY.SEK)
-                    .setCustomerReference("33")
+                        .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+                    .setCountryCode(TestingTool.DefaultTestCountryCode)
+                    .setOrderDate(TestingTool.DefaultTestDate)
+                    .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                    .setCurrency(TestingTool.DefaultTestCurrency)
+                    .setCustomerReference(TestingTool.DefaultTestCustomerReferenceNumber)
                     .useInvoicePayment()
                     .doRequest();
         
@@ -300,13 +291,13 @@ public class CreateInvoiceOrderTest {
     @Test
     public void testCompanyIdResponse() {
         CreateOrderResponse response = WebPay.createOrder()
-                .addOrderRow(TestingTool.createOrderRow())
+                .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
                 .addCustomerDetails(Item.companyCustomer()
-                    .setNationalIdNumber("4608142222"))
-                .setCountryCode(COUNTRYCODE.SE)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK)
+                    .setNationalIdNumber(TestingTool.DefaultTestCompanyNationalIdNumber))
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setOrderDate(TestingTool.DefaultTestDate)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .useInvoicePayment()
                 .doRequest();
         
@@ -325,8 +316,8 @@ public class CreateInvoiceOrderTest {
                     .setZipCode("52070")
                     .setLocality("AACHEN"))
                 .setCountryCode(COUNTRYCODE.DE)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setOrderDate(TestingTool.DefaultTestDate)
                 .setCurrency(CURRENCY.EUR)
                 .useInvoicePayment()
                 .doRequest();
@@ -345,11 +336,9 @@ public class CreateInvoiceOrderTest {
                     .setStreetAddress("broodstraat", "1")
                     .setZipCode("1111 CD")
                     .setLocality("BARENDRECHT"))
-                
                 .setCountryCode(COUNTRYCODE.NL)
-                
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setOrderDate(TestingTool.DefaultTestDate)
                 .setCurrency(CURRENCY.EUR)
                 .useInvoicePayment()
                 .doRequest();
