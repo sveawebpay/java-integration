@@ -54,10 +54,10 @@ public class WebserviceRowFormatterTest {
                     .addCustomerDetails(Item.individualCustomer()
                         .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
                     .setCountryCode(TestingTool.DefaultTestCountryCode)
-                    .setOrderDate("2012-12-12")
-                    .setClientOrderNumber("33")
+                    .setOrderDate(TestingTool.DefaultTestDate)
+                    .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                     .setCurrency(TestingTool.DefaultTestCurrency)
-                    .setCustomerReference("33")
+                    .setCustomerReference(TestingTool.DefaultTestCustomerReferenceNumber)
                     .useInvoicePayment()
                     .prepareRequest();
         

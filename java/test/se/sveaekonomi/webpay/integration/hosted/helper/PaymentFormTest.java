@@ -7,9 +7,6 @@ import java.util.Map;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
-import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
@@ -28,7 +25,7 @@ public class PaymentFormTest {
         PaymentForm form = WebPay.createOrder()
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setCurrency(TestingTool.DefaultTestCurrency)
-                .setClientOrderNumber("nr26")
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(TestingTool.createCompanyCustomer())
                 .usePayPageDirectBankOnly()  
@@ -61,7 +58,7 @@ public class PaymentFormTest {
         
         PaymentForm form = WebPay.createOrder()
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .setClientOrderNumber("nr26")
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(TestingTool.createCompanyCustomer())

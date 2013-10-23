@@ -25,8 +25,8 @@ public class NewOrderBuilderTest {
                 .addOrderRows(orderRows)
                 .addCustomerDetails(TestingTool.createCompanyCustomer())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .setCustomerReference("33")
-                .setOrderDate("2012-12-12")
+                .setCustomerReference(TestingTool.DefaultTestCustomerReferenceNumber)
+                .setOrderDate(TestingTool.DefaultTestDate)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .useInvoicePayment()
                 .prepareRequest();
@@ -42,8 +42,8 @@ public class NewOrderBuilderTest {
         .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
         .addCustomerDetails(TestingTool.createCompanyCustomer())
         .setCountryCode(TestingTool.DefaultTestCountryCode)
-        .setCustomerReference("33")
-        .setOrderDate("2012-12-12")
+        .setCustomerReference(TestingTool.DefaultTestCustomerReferenceNumber)
+        .setOrderDate(TestingTool.DefaultTestDate)
         .setCurrency(TestingTool.DefaultTestCurrency)
         .useInvoicePayment()
         .prepareRequest();

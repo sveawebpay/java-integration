@@ -33,7 +33,7 @@ public class WebServiceOrderValidatorTest {
         
          CreateOrderBuilder order = WebPay.createOrder()
                 .setValidator(new VoidValidator())
-                .setClientOrderNumber("1")
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                 .addCustomerDetails(null);
         
         assertEquals(expectedMessage, orderValidator.validate(order));
@@ -47,7 +47,7 @@ public class WebServiceOrderValidatorTest {
         
         CreateOrderBuilder order = WebPay.createOrder()
             .setValidator(new VoidValidator())
-            .setClientOrderNumber("1")
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .addCustomerDetails(Item.individualCustomer()
                     .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber));
         
@@ -99,7 +99,7 @@ public class WebServiceOrderValidatorTest {
         CreateOrderBuilder order = WebPay.createOrder()
             .addCustomerDetails(Item.individualCustomer())
             .setValidator(new VoidValidator())
-            .setClientOrderNumber("1")
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .setCountryCode(TestingTool.DefaultTestCountryCode);
         
         assertEquals(expectedMessage, orderValidator.validate(order));
@@ -112,7 +112,7 @@ public class WebServiceOrderValidatorTest {
         
         CreateOrderBuilder order = WebPay.createOrder()
             .setValidator(new VoidValidator())
-            .setClientOrderNumber("1")
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .setCountryCode(TestingTool.DefaultTestCountryCode)
             .addCustomerDetails(Item.individualCustomer()
             .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber));
@@ -127,7 +127,7 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         
         CreateOrderBuilder order = WebPay.createOrder()
-            .setClientOrderNumber("1")
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .addOrderRow(Item.orderRow())
             .addCustomerDetails(Item.individualCustomer()
                 .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
@@ -198,7 +198,7 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         
         CreateOrderBuilder order = WebPay.createOrder()
-            .setClientOrderNumber("1")
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .setCountryCode(COUNTRYCODE.DE)
             .addCustomerDetails(Item.individualCustomer())
             .setValidator(new VoidValidator());
@@ -211,7 +211,7 @@ public class WebServiceOrderValidatorTest {
         String expectedMessage = "MISSING VALUE - Vat number is required for company customers when countrycode is DE. Use setVatNumber().\n";
         
         CreateOrderBuilder order = WebPay.createOrder()
-            .setClientOrderNumber("1")
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .setCountryCode(COUNTRYCODE.DE)
             .addOrderRow(TestingTool.createMiniOrderRow())
             .addCustomerDetails(Item.companyCustomer()
@@ -219,7 +219,7 @@ public class WebServiceOrderValidatorTest {
                     .setStreetAddress("Adalbertsteinweg", "1")
                     .setLocality("AACHEN")
                     .setZipCode("52070"))
-            .setOrderDate("2012-09-09")
+            .setOrderDate(TestingTool.DefaultTestDate)
             .setValidator(new VoidValidator());
         
         assertEquals(expectedMessage, orderValidator.validate(order));
@@ -319,7 +319,7 @@ public class WebServiceOrderValidatorTest {
             .addCustomerDetails(Item.individualCustomer()
                     .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
             .setCountryCode(TestingTool.DefaultTestCountryCode)
-            .setOrderDate("2012-05-01")
+            .setOrderDate(TestingTool.DefaultTestDate)
             .setValidator(new VoidValidator());
         
         assertEquals("", orderValidator.validate(order));
@@ -379,18 +379,10 @@ public class WebServiceOrderValidatorTest {
         
         try {
             WebPay.createOrder()
-                .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-                .addCustomerDetails(Item.companyCustomer()
-                    .setNationalIdNumber(TestingTool.DefaultTestCompanyNationalIdNumber)
-                .setEmail("test@svea.com")
-                    .setPhoneNumber("999999")
-                    .setIpAddress("123.123.123.123")
-                    .setStreetAddress("Gatan", "23")
-                    .setCoAddress("c/o Eriksson")
-                    .setZipCode("9999")
-                    .setLocality("Stan"))
+                .addOrderRow(TestingTool.createPaymentPlanOrderRow())
+                .addCustomerDetails(TestingTool.createCompanyCustomer())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .setOrderDate("2012-09-09")
+                .setOrderDate(TestingTool.DefaultTestDate)
                 .usePaymentPlanPayment("camp1");
             
             //Fail on no exception

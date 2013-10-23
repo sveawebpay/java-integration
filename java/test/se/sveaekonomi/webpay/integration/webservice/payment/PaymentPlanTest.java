@@ -21,8 +21,8 @@ public class PaymentPlanTest {
                 .addCustomerDetails(Item.individualCustomer()
                         .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .setOrderDate("2012-12-12")
-                .setClientOrderNumber("33")
+                .setOrderDate(TestingTool.DefaultTestDate)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .usePaymentPlanPayment("camp1")
                 .prepareRequest();
@@ -39,8 +39,8 @@ public class PaymentPlanTest {
                 .addCustomerDetails(Item.companyCustomer()
                     .setNationalIdNumber(TestingTool.DefaultTestCompanyNationalIdNumber))
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .setOrderDate("2012-12-12")
-                .setClientOrderNumber("33")
+                .setOrderDate(TestingTool.DefaultTestDate)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .usePaymentPlanPayment("camp1")
                 .prepareRequest();

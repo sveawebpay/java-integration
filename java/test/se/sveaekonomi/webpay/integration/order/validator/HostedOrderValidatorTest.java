@@ -3,9 +3,7 @@ package se.sveaekonomi.webpay.integration.order.validator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
-import org.junit.Rule;
 import org.junit.Test;
-import org.junit.rules.ExpectedException;
 
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.hosted.payment.FakeHostedPayment;
@@ -13,7 +11,6 @@ import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
@@ -39,9 +36,6 @@ public class HostedOrderValidatorTest {
         
         assertEquals(expectedMessage, orderValidator.validate(order));
     }
-    
-    @Rule
-    public ExpectedException thrown = ExpectedException.none();
     
     @Test
     public void testFailOnEmptyClientOrderNumber() {
@@ -70,7 +64,7 @@ public class HostedOrderValidatorTest {
         try {
             CreateOrderBuilder order = WebPay.createOrder()
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
-                   .setClientOrderNumber("nr22")
+                   .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                    .setCurrency(TestingTool.DefaultTestCurrency)
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addFee(Item.shippingFee())
@@ -91,7 +85,7 @@ public class HostedOrderValidatorTest {
     public void succeedOnGoodValuesSe() {
         CreateOrderBuilder order = WebPay.createOrder()
             .setValidator(new VoidValidator())
-            .setClientOrderNumber("1")
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .addOrderRow(TestingTool.createMiniOrderRow())
             .addCustomerDetails(TestingTool.createMiniCompanyCustomer());
         
@@ -102,7 +96,7 @@ public class HostedOrderValidatorTest {
     @Test
     public void testValidateNLCustomerIdentity() {
         CreateOrderBuilder order = WebPay.createOrder()
-                .setClientOrderNumber("1")
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                 .setCountryCode(COUNTRYCODE.NL)
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(TestingTool.createMiniCompanyCustomer());
@@ -114,7 +108,7 @@ public class HostedOrderValidatorTest {
     @Test
     public void testValidateDECustomerIdentity() {
         CreateOrderBuilder order = WebPay.createOrder()
-                .setClientOrderNumber("1")
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                 .setCountryCode(COUNTRYCODE.DE)
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(TestingTool.createMiniCompanyCustomer());
@@ -218,8 +212,8 @@ public class HostedOrderValidatorTest {
                 .addDiscount(TestingTool.createRelativeDiscount())
                 .addCustomerDetails(Item.individualCustomer())
                 .setCountryCode(COUNTRYCODE.NL)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setOrderDate(TestingTool.DefaultTestDate)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .usePaymentMethod(PAYMENTMETHOD.INVOICE)
                 .setReturnUrl("http://myurl.se")
@@ -246,8 +240,8 @@ public class HostedOrderValidatorTest {
                 .addDiscount(TestingTool.createRelativeDiscount())
                 .addCustomerDetails(Item.individualCustomer())
                 .setCountryCode(COUNTRYCODE.DE)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setOrderDate(TestingTool.DefaultTestDate)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .usePaymentMethod(PAYMENTMETHOD.INVOICE)
                 .setReturnUrl("http://myurl.se")

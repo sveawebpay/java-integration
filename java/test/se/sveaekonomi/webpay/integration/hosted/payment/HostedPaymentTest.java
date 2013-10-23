@@ -13,8 +13,6 @@ import se.sveaekonomi.webpay.integration.hosted.helper.ExcludePayments;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.INVOICETYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTPLANTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
@@ -25,7 +23,7 @@ public class HostedPaymentTest {
     public void testCalculateRequestValuesNullExtraRows() {
         CreateOrderBuilder order = WebPay.createOrder() 
             .setCountryCode(TestingTool.DefaultTestCountryCode)
-               .setClientOrderNumber("nr22")
+               .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                .setCurrency(TestingTool.DefaultTestCurrency)
             .addOrderRow(TestingTool.createMiniOrderRow())
             .addFee(Item.shippingFee())
@@ -44,7 +42,7 @@ public class HostedPaymentTest {
     public void testVatPercentAndAmountIncVatCalculation() {
         CreateOrderBuilder order = WebPay.createOrder()  
             .setCountryCode(TestingTool.DefaultTestCountryCode)
-            .setClientOrderNumber("nr22")
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .setCurrency(TestingTool.DefaultTestCurrency)
             .addOrderRow(TestingTool.createMiniOrderRow());
         
@@ -63,7 +61,7 @@ public class HostedPaymentTest {
     public void testAmountIncVatAndvatPercentShippingFee() {
       CreateOrderBuilder order = WebPay.createOrder() 
             .setCountryCode(TestingTool.DefaultTestCountryCode)
-            .setClientOrderNumber("nr22")
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .setCurrency(TestingTool.DefaultTestCurrency)  
             .addOrderRow(TestingTool.createMiniOrderRow())
             .addFee(Item.shippingFee()
@@ -84,7 +82,7 @@ public class HostedPaymentTest {
     public void testAmountIncVatAndAmountExVatCalculation() {
          CreateOrderBuilder order = WebPay.createOrder()
                  .setCountryCode(TestingTool.DefaultTestCountryCode)
-                 .setClientOrderNumber("nr22")
+                 .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                  .setCurrency(TestingTool.DefaultTestCurrency)
                  .addOrderRow(TestingTool.createMiniOrderRow());
         
@@ -103,7 +101,7 @@ public class HostedPaymentTest {
     public void testCreatePaymentForm() {
          CreateOrderBuilder order = WebPay.createOrder() 
                  .setCountryCode(TestingTool.DefaultTestCountryCode)
-                 .setClientOrderNumber("nr22")
+                 .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                  .setCurrency(TestingTool.DefaultTestCurrency)
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(TestingTool.createCompanyCustomer());

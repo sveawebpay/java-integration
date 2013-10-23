@@ -28,8 +28,8 @@ public class CloseOrderTest {
                 .addCustomerDetails(Item.individualCustomer()
                     .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .setClientOrderNumber("33")
-                .setOrderDate("2012-12-12")
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setOrderDate(TestingTool.DefaultTestDate)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .useInvoicePayment()
                 .prepareRequest();

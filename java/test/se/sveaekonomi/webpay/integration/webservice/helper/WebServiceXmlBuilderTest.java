@@ -32,8 +32,8 @@ public class WebServiceXmlBuilderTest {
                 .setQuantity(1)
                 .setVatPercent(25))
             .setCountryCode(TestingTool.DefaultTestCountryCode)
-            .setOrderDate("2012-12-12")
-            .setClientOrderNumber("33")
+            .setOrderDate(TestingTool.DefaultTestDate)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .setCurrency(TestingTool.DefaultTestCurrency)
             .useInvoicePayment()
             .prepareRequest();

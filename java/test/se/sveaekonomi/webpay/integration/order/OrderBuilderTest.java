@@ -146,9 +146,9 @@ public class OrderBuilderTest {
     
     @Test
     public void testBuildOrderWithClientOrderNumber() {
-        order.setClientOrderNumber("33");
+        order.setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber);
         
-        assertEquals("33", order.getClientOrderNumber());
+        assertEquals(TestingTool.DefaultTestClientOrderNumber, order.getClientOrderNumber());
     }   
     
     private CreateOrderBuilder createTestCustomerIdentity(CreateOrderBuilder orderBuilder) {

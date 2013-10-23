@@ -7,7 +7,6 @@ import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.response.webservice.GetAddressesResponse;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class GetAddressesTest {
