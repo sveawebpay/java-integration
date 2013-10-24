@@ -22,7 +22,7 @@ public class TestingTool {
 	
     public static OrderRowBuilder createMiniOrderRow() {
         return Item.orderRow()
-                   .setQuantity(1)
+                   .setQuantity(1.0)
                    .setAmountExVat(4)
                    .setAmountIncVat(5);
     }
@@ -34,7 +34,7 @@ public class TestingTool {
                 .setName("Prod")
                 .setDescription("Specification")
                 .setAmountExVat(100.00)
-                .setQuantity(2)
+                .setQuantity(2.0)
                 .setUnit("st")
                 .setVatPercent(25)
                 .setVatDiscount(0); 
@@ -46,7 +46,7 @@ public class TestingTool {
                    .setName("Prod")
                    .setDescription("Specification")
                    .setAmountExVat(1000.00)
-                   .setQuantity(2)
+                   .setQuantity(2.0)
                    .setUnit("st")
                    .setVatPercent(25)
                    .setVatDiscount(0);
@@ -59,10 +59,10 @@ public class TestingTool {
                    .setName("Prod")
                    .setDescription("Specification")
                    .setAmountIncVat(125)
-                   .setQuantity(2)
+                   .setQuantity(2.0)
                    .setUnit("st")
                    .setVatPercent(25)
-                   .setDiscountPercent(0);
+                   .setDiscountPercent(0.0);
     }
 
     public static OrderRowBuilder createIncAndExVatOrderRow(String articleNumber) {
@@ -73,9 +73,9 @@ public class TestingTool {
                    .setDescription("Specification")
                    .setAmountIncVat(125)
                    .setAmountExVat(100)
-                   .setQuantity(2)
+                   .setQuantity(2.0)
                    .setUnit("st")
-                   .setDiscountPercent(0);
+                   .setDiscountPercent(0.0);
     }
     
     public static OrderRowBuilder createOrderRowDe() {
@@ -84,7 +84,7 @@ public class TestingTool {
                 .setName("Prod")
                 .setDescription("Specification")
                 .setAmountExVat(100.00)
-                .setQuantity(2)
+                .setQuantity(2.0)
                 .setUnit("st")
                 .setVatPercent(19)
                 .setVatDiscount(0); 
@@ -96,7 +96,7 @@ public class TestingTool {
                 .setName("Prod")
                 .setDescription("Specification")
                 .setAmountExVat(100.00)
-                .setQuantity(2)
+                .setQuantity(2.0)
                 .setUnit("st")
                 .setVatPercent(6)
                 .setVatDiscount(0); 
@@ -110,7 +110,7 @@ public class TestingTool {
                    .setAmountExVat(50)
                    .setUnit("st")
                    .setVatPercent(25)
-                   .setDiscountPercent(0);
+                   .setDiscountPercent(0.0);
     }
 
     public static ShippingFeeBuilder createIncVatBasedShippingFee() {
@@ -121,7 +121,7 @@ public class TestingTool {
                    .setAmountIncVat(62.50)
                    .setUnit("st")
                    .setVatPercent(25)
-                   .setDiscountPercent(0);
+                   .setDiscountPercent(0.0);
     }
 
     public static ShippingFeeBuilder createIncAndExVatShippingFee() {
@@ -132,7 +132,7 @@ public class TestingTool {
                    .setAmountIncVat(62.50)
                    .setAmountExVat(50)
                    .setUnit("st")
-                   .setDiscountPercent(0);
+                   .setDiscountPercent(0.0);
     }
 
     public static InvoiceFeeBuilder createExVatBasedInvoiceFee() {
@@ -142,7 +142,7 @@ public class TestingTool {
                    .setAmountExVat(50)
                    .setUnit("st")
                    .setVatPercent(25)
-                   .setDiscountPercent(0);
+                   .setDiscountPercent(0.0);
     }
 
     public static InvoiceFeeBuilder createIncVatBasedInvoiceFee() {
@@ -152,7 +152,7 @@ public class TestingTool {
                    .setAmountIncVat(62.50)
                    .setUnit("st")
                    .setVatPercent(25)
-                   .setDiscountPercent(0);
+                   .setDiscountPercent(0.0);
     }
 
     public static InvoiceFeeBuilder createIncAndExVatInvoiceFee() {
@@ -162,7 +162,7 @@ public class TestingTool {
                    .setAmountIncVat(62.50)
                    .setAmountExVat(50)
                    .setUnit("st")
-                   .setDiscountPercent(0);
+                   .setDiscountPercent(0.0);
     }
 
     public static RelativeDiscountBuilder createRelativeDiscount() {
@@ -171,7 +171,7 @@ public class TestingTool {
                    .setName("Relative")
                    .setDescription("RelativeDiscount")
                    .setUnit("st")
-                   .setDiscountPercent(50);
+                   .setDiscountPercent(50.0);
     }
 
     public static IndividualCustomer createIndividualCustomer() {

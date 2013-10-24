@@ -9,7 +9,7 @@ public class FixedDiscountBuilder implements RowBuilder {
     private String discountId;
     private String name;
     private String description;
-    private int quantity;
+    private Double quantity;
     private String unit = "";
     private double amount;
     
@@ -55,7 +55,7 @@ public class FixedDiscountBuilder implements RowBuilder {
         return this;
     }
     
-    public int getQuantity() {
+    public Double getQuantity() {
         return quantity;
     }
     

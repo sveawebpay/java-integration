@@ -183,7 +183,7 @@ public class HostedXmlBuilder extends XMLBuilder {
         }
         
         if (row.getQuantity() != 0) {
-            writeSimpleElement("quantity", Integer.toString(row.getQuantity()));
+            writeSimpleElement("quantity", Double.toString(row.getQuantity()));
         }
         
         writeSimpleElement("unit", row.getUnit());

@@ -45,8 +45,6 @@ public class CloseOrderTest {
         
         assertTrue(response.isOrderAccepted());
         
-        soapBuilder = new SveaSoapBuilder();
-        
         CloseOrderResponse closeResponse = WebPay.closeOrder()
                 .setOrderId(orderId)
                 .setCountryCode(TestingTool.DefaultTestCountryCode)

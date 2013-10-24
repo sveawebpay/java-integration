@@ -8,8 +8,8 @@ public class RelativeDiscountBuilder implements RowBuilder {
     private String discountId;
     private String name;
     private String description;
-    private int discountPercent;
-    private int quantity;
+    private Double discountPercent;
+    private Double quantity;
     private String unit;
     
     public String getDiscountId() {
@@ -54,7 +54,7 @@ public class RelativeDiscountBuilder implements RowBuilder {
         return this;
     }
     
-    public int getQuantity() {
+    public Double getQuantity() {
         return quantity;
     }
     
@@ -73,7 +73,7 @@ public class RelativeDiscountBuilder implements RowBuilder {
         return this;
     }
     
-    public int getDiscountPercent() {
+    public Double getDiscountPercent() {
         return discountPercent;
     }
     
@@ -82,7 +82,7 @@ public class RelativeDiscountBuilder implements RowBuilder {
      * @param discountPercent
      * @return RelativeDiscountBuilder
      */
-    public RelativeDiscountBuilder setDiscountPercent(int discountPercent) {
+    public RelativeDiscountBuilder setDiscountPercent(Double discountPercent) {
         this.discountPercent = discountPercent;
         return this;
     }

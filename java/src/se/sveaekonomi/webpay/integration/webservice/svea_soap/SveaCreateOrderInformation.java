@@ -23,7 +23,7 @@ public class SveaCreateOrderInformation {
         this.OrderRows = new ArrayList<SveaOrderRow> (); 
         this.CreatePaymentPlanDetails = new HashMap<String, Object>();
         
-        if (campaignCode != "") {
+        if (!campaignCode.equals("")) {
             this.CreatePaymentPlanDetails.put("CampaignCode", campaignCode);
             this.CreatePaymentPlanDetails.put("SendAutomaticGiroPaymentForm", sendAutomaticGiroPaymentForm);
         }
