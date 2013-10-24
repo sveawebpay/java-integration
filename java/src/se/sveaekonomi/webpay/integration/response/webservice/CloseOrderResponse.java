@@ -24,7 +24,6 @@ public class CloseOrderResponse extends Response{
             this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
             this.setResultCode(getTagValue(node, "ResultCode"));
             this.setErrorMessage(getTagValue(node, "ErrorMessage"));
-            //this.orderId = Long.parseLong(getTagValue(node, "SveaOrderId"));
         }
     }
     

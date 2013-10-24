@@ -19,7 +19,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrderRow;
 
 public class WebServiceXmlBuilder extends XMLBuilder {
 
-    public static String prefix = "web:";
+    public static final String prefix = "web:";
     
     public String getCreateOrderEuXml(SveaCreateOrder order) {
         XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
