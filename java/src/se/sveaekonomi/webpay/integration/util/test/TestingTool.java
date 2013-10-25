@@ -1,5 +1,7 @@
 package se.sveaekonomi.webpay.integration.util.test;
 
+import java.sql.Date;
+
 import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
@@ -11,14 +13,13 @@ import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 
 public class TestingTool {
-    
     public static final COUNTRYCODE DefaultTestCountryCode = COUNTRYCODE.SE;
     public static final CURRENCY DefaultTestCurrency = CURRENCY.SEK;
     public static final String DefaultTestClientOrderNumber = "33";
     public static final String DefaultTestCustomerReferenceNumber = "ref33";
     public static final String DefaultTestIndividualNationalIdNumber = "194605092222";
     public static final String DefaultTestCompanyNationalIdNumber = "164608142222";
-    public static final String DefaultTestDate = "2012-12-12";
+    public static Date DefaultTestDate = Date.valueOf("2012-12-12");
 	
     public static OrderRowBuilder createMiniOrderRow() {
         return Item.orderRow()

@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.webservice.svea_soap;
 
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ public class SveaCreateOrderInformation {
     public ArrayList<SveaOrderRow> OrderRows; 
     public Map<String, Object> CreatePaymentPlanDetails;
     public String CustomerReference;
-    public String OrderDate;
+    public Date OrderDate;
     
     public SveaCreateOrderInformation() {
         this("", false);

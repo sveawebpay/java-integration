@@ -2,6 +2,8 @@ package se.sveaekonomi.webpay.integration.webservice.payment;
 
 import static org.junit.Assert.assertEquals;
 
+import java.sql.Date;
+
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -276,7 +278,7 @@ public class InvoicePaymentTest {
         .useInvoicePayment()
         .prepareRequest();
         
-        assertEquals("2012-12-12", request.request.CreateOrderInformation.OrderDate);
+        assertEquals(Date.valueOf("2012-12-12"), request.request.CreateOrderInformation.OrderDate);
         assertEquals("33", request.request.CreateOrderInformation.ClientOrderNumber);
         assertEquals("Invoice", request.request.CreateOrderInformation.OrderType);
     }
