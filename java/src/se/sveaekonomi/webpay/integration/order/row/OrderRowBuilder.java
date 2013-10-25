@@ -12,10 +12,10 @@ public class OrderRowBuilder implements RowBuilder {
     private Double amountExVat;
     private Double amountIncVat;
     private Double vatPercent;
-    private int quantity;
+    private Double quantity;
     private String unit;
     private int vatDiscount;
-    private Integer discountPercent;
+    private Double discountPercent;
     
     public OrderRowBuilder() {
         
@@ -93,7 +93,7 @@ public class OrderRowBuilder implements RowBuilder {
         return this;
     }
     
-    public int getQuantity() {
+    public Double getQuantity() {
         return quantity;
     }
     
@@ -102,7 +102,7 @@ public class OrderRowBuilder implements RowBuilder {
      * @param quantity
      * @return OrderRowBuilder
      */
-    public OrderRowBuilder setQuantity(int quantity) {
+    public OrderRowBuilder setQuantity(Double quantity) {
         this.quantity = quantity;
         return this;
     }
@@ -136,7 +136,7 @@ public class OrderRowBuilder implements RowBuilder {
         return this;
     }
     
-    public Integer getDiscountPercent() {
+    public Double getDiscountPercent() {
         return discountPercent;
     }
     
@@ -145,7 +145,7 @@ public class OrderRowBuilder implements RowBuilder {
      * @param discountPercent
      * @return OrderRowBuilder
      */
-    public OrderRowBuilder setDiscountPercent(int discountPercent) {
+    public OrderRowBuilder setDiscountPercent(Double discountPercent) {
         this.discountPercent = discountPercent;
         return this;
     }

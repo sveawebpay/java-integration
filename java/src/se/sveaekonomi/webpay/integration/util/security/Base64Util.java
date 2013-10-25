@@ -41,16 +41,16 @@ public abstract class Base64Util {
             return null;
         }
         
-        String result = "";
         int sz = str.length();
         
+        StringBuilder result = new StringBuilder("");
         for (int i = 0; i < sz; i++) {
             char curChar = str.charAt(i);
             if (!(Character.isWhitespace(curChar))) {
-                result += curChar;
+            	result.append(curChar);
             }
         }
         
-        return result;
+        return result.toString();
     }
 }

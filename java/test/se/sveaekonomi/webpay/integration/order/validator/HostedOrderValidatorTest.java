@@ -44,7 +44,7 @@ public class HostedOrderValidatorTest {
         
         CreateOrderBuilder order = WebPay.createOrder()
             .addOrderRow(Item.orderRow()
-                .setQuantity(1)
+                .setQuantity(1.0)
                 .setAmountExVat(100)
                 .setVatPercent(25))
             .setCurrency(TestingTool.DefaultTestCurrency)
@@ -124,7 +124,7 @@ public class HostedOrderValidatorTest {
         
         CreateOrderBuilder order = WebPay.createOrder()
                 .addOrderRow(Item.orderRow()
-                        .setQuantity(1)
+                        .setQuantity(1.0)
                         .setAmountExVat(100))
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("")
@@ -144,7 +144,7 @@ public class HostedOrderValidatorTest {
         
         CreateOrderBuilder order = WebPay.createOrder()
                 .addOrderRow(Item.orderRow()
-                        .setQuantity(1)
+                        .setQuantity(1.0)
                         .setVatPercent(25))
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("")
@@ -165,7 +165,7 @@ public class HostedOrderValidatorTest {
         
         CreateOrderBuilder order = WebPay.createOrder()
                 .addOrderRow(Item.orderRow()
-                        .setQuantity(1)
+                        .setQuantity(1.0)
                         .setAmountIncVat(125))
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("")

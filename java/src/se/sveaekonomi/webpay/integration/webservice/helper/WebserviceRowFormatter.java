@@ -175,11 +175,14 @@ public class WebserviceRowFormatter {
         if (articleNumber != null) {
             orderRow.ArticleNumber = articleNumber;
         }
-        
-        if (description != null) {
-            orderRow.Description = (name != null ? name + ": " : "") + "" + description;
-        } else if (name != null && description == null) {
-            orderRow.Description = name;
+      
+        if (name != null)
+        {
+        	orderRow.Description = name + (description == null ? "" : ": " + description);
+        }
+        else
+        {
+        	orderRow.Description = description == null ? "" : description;
         }
         
         if (unit != null) {
@@ -196,7 +199,7 @@ public class WebserviceRowFormatter {
         } else if (vatPercent != null && amountIncVat != null) {
             orderRow.PricePerUnit = amountIncVat / ((0.01 * vatPercent) + 1);
             orderRow.VatPercent = vatPercent;
-        } else {
+        } else if (amountExVat != null && amountIncVat != null) {
             orderRow.PricePerUnit = amountExVat;
             orderRow.VatPercent = ((amountIncVat / amountExVat) - 1) * 100;
         }

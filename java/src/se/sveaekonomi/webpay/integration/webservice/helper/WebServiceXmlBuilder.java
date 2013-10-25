@@ -2,6 +2,7 @@ package se.sveaekonomi.webpay.integration.webservice.helper;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 
 import javax.xml.stream.XMLOutputFactory;
@@ -19,7 +20,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrderRow;
 
 public class WebServiceXmlBuilder extends XMLBuilder {
 
-    public static String prefix = "web:";
+    public static final String prefix = "web:";
     
     public String getCreateOrderEuXml(SveaCreateOrder order) {
         XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
@@ -70,7 +71,7 @@ public class WebServiceXmlBuilder extends XMLBuilder {
                     xmlw.writeEndElement();
                 }
                 
-                writeSimpleElement(prefix+"OrderDate", order.CreateOrderInformation.OrderDate);
+                writeSimpleElement(prefix+"OrderDate", new SimpleDateFormat("yyyy-MM-dd").format(order.CreateOrderInformation.OrderDate));
                 writeSimpleElement(prefix+"AddressSelector", order.CreateOrderInformation.AddressSelector);
                 writeSimpleElement(prefix+"CustomerReference", order.CreateOrderInformation.CustomerReference);
                 

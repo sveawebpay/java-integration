@@ -17,7 +17,7 @@ public class HashUtil {
             digest = MessageDigest.getInstance(algorithm.toString().replaceAll("_", "-"));
             digest.reset();
             byte[] hashBytes = digest.digest(inputString.getBytes());
-            hash = new String(javax.xml.bind.DatatypeConverter.printHexBinary(hashBytes).toLowerCase());
+            hash = javax.xml.bind.DatatypeConverter.printHexBinary(hashBytes).toLowerCase();
         } catch (NoSuchAlgorithmException e) {
             // ignore
         }

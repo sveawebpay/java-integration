@@ -1,7 +1,8 @@
 package se.sveaekonomi.webpay.integration.config;
 
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import java.net.URL;
+
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**

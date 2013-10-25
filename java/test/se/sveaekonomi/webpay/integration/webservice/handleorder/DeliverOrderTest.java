@@ -49,19 +49,19 @@ public class DeliverOrderTest {
         assertEquals("1", request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(0).ArticleNumber);
         assertEquals("Prod: Specification", request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(0).Description);
         assertEquals(100.00, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(0).PricePerUnit, 0);
-        assertEquals(2, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(0).NumberOfUnits);
+        assertEquals(2, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(0).NumberOfUnits, 0);
         assertEquals("st", request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(0).Unit);
         assertEquals(25, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(0).VatPercent, 0);
-        assertEquals(0, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(0).DiscountPercent);
+        assertEquals(0, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(0).DiscountPercent, 0);
         
         //Second order row is shipment
         assertEquals("33", request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(1).ArticleNumber);
         assertEquals("shipping: Specification", request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(1).Description);
         assertEquals(50, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(1).PricePerUnit, 0);
-        assertEquals(1, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(1).NumberOfUnits);
+        assertEquals(1, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(1).NumberOfUnits, 0);
         assertEquals("st", request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(1).Unit);
         assertEquals(25, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(1).VatPercent, 0);
-        assertEquals(0, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(1).DiscountPercent);
+        assertEquals(0, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(1).DiscountPercent, 0);
         
         //discount
         assertEquals(-8.0, request.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(2).PricePerUnit, 0);

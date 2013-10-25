@@ -7,7 +7,7 @@ public class HostedOrderRowBuilder {
     private String description;
     private Long amount;
     private Long vat;
-    private int quantity;
+    private Double quantity;
     private String unit;
     
     public HostedOrderRowBuilder() {
@@ -61,11 +61,11 @@ public class HostedOrderRowBuilder {
         return this;
     }
     
-    public int getQuantity() {
+    public Double getQuantity() {
         return quantity;
     }
     
-    public HostedOrderRowBuilder setQuantity(int quantity) {
+    public HostedOrderRowBuilder setQuantity(Double quantity) {
         this.quantity = quantity;
         return this;
     }

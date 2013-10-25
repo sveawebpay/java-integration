@@ -4,6 +4,6 @@ public interface RowBuilder {
 
     public String getName();
     public String getDescription();
-    public int getQuantity();
+    public Double getQuantity();
     public String getUnit();
 }

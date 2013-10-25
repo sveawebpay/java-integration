@@ -73,7 +73,7 @@ public class OrderBuilderTest {
         
         assertNotNull(order);
         assertEquals("1", order.getOrderRows().get(0).getArticleNumber());
-        assertEquals(2, order.getOrderRows().get(0).getQuantity());
+        assertEquals(2, order.getOrderRows().get(0).getQuantity(), 0);
         assertEquals(100.00, order.getOrderRows().get(0).getAmountExVat(), 0);
         assertEquals("Specification", order.getOrderRows().get(0).getDescription());
         assertEquals("st", order.getOrderRows().get(0).getUnit());
@@ -117,7 +117,7 @@ public class OrderBuilderTest {
         createTestRelativeDiscountBuilder();
         
         assertEquals("1", order.getRelativeDiscountRows().get(0).getDiscountId());
-        assertEquals(50, order.getRelativeDiscountRows().get(0).getDiscountPercent());
+        assertEquals(50, order.getRelativeDiscountRows().get(0).getDiscountPercent(), 0);
         assertEquals("RelativeDiscount", order.getRelativeDiscountRows().get(0).getDescription());
         assertEquals("Relative", order.getRelativeDiscountRows().get(0).getName());
         assertEquals("st", order.getRelativeDiscountRows().get(0).getUnit());

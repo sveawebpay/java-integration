@@ -46,19 +46,20 @@ public class HostedRowFormatter {
             }
             
             double amountExVat =  row.getAmountExVat()!= null ? row.getAmountExVat() : 0;
-            tempRow.setAmount(new Double((amountExVat * 100) * vatFactor).longValue());
+            tempRow.setAmount((long)((amountExVat * 100) * vatFactor));
             
             if (row.getAmountExVat() != null && row.getVatPercent() != null) {
-                tempRow.setAmount(new Double((row.getAmountExVat() *100) * vatFactor).longValue());
-                tempRow.setVat(new Double(tempRow.getAmount() - (row.getAmountExVat() * 100)).longValue());
+                tempRow.setAmount((long)((row.getAmountExVat() *100) * vatFactor));
+                tempRow.setVat((long)(tempRow.getAmount() - (row.getAmountExVat() * 100)));
             } else if (row.getAmountIncVat() != null && row.getVatPercent() != null) {
-                tempRow.setAmount(new Double((row.getAmountIncVat() * 100)).longValue());
-                tempRow.setVat(new Double(tempRow.getAmount() - (tempRow.getAmount() / vatFactor)).longValue());
+                tempRow.setAmount((long)((row.getAmountIncVat() * 100)));
+                tempRow.setVat((long)(tempRow.getAmount() - (tempRow.getAmount() / vatFactor)));
             } else {
-                tempRow.setAmount(new Double(row.getAmountIncVat() * 100).longValue());
-                tempRow.setVat(new Double((row.getAmountIncVat() - row.getAmountExVat()) * 100).longValue());
+                tempRow.setAmount((long)(row.getAmountIncVat() * 100));
+                tempRow.setVat((long)((row.getAmountIncVat() - row.getAmountExVat()) * 100));
             }
             
+            tempRow.setQuantity((tempRow.getQuantity() == null ? 0.0 : tempRow.getQuantity()));
             if (tempRow.getQuantity() >= 0) {
                 tempRow.setQuantity(row.getQuantity());
             }
@@ -72,8 +73,8 @@ public class HostedRowFormatter {
             }
             
             newRows.add(tempRow);
-            totalAmount += new Double(tempRow.getAmount() * row.getQuantity()).longValue();
-            totalVat += tempRow.getVat() * row.getQuantity();
+            totalAmount += (long)(tempRow.getAmount() * row.getQuantity());
+            totalVat += (long)(tempRow.getVat() * row.getQuantity());
         }
     }
     
@@ -95,19 +96,19 @@ public class HostedRowFormatter {
             }
             
             if (row.getAmountExVat() != null && row.getVatPercent() != null) {
-                tempRow.setAmount(new Double((row.getAmountExVat() * 100) * plusVatCounter).longValue());
-                tempRow.setVat(new Double(tempRow.getAmount() - (row.getAmountExVat() * 100)).longValue());
+                tempRow.setAmount((long)((row.getAmountExVat() * 100) * plusVatCounter));
+                tempRow.setVat((long)(tempRow.getAmount() - (row.getAmountExVat() * 100)));
             } else if (row.getAmountIncVat() != null && row.getVatPercent() != null ) {
-                tempRow.setAmount(new Double(row.getAmountIncVat() * 100).longValue());
-                tempRow.setVat(new Double(tempRow.getAmount() - (tempRow.getAmount() / plusVatCounter)).longValue());
+                tempRow.setAmount((long)(row.getAmountIncVat() * 100));
+                tempRow.setVat((long)(tempRow.getAmount() - (tempRow.getAmount() / plusVatCounter)));
             } else {
                 Double amountIncVat = row.getAmountIncVat()!= null ? row.getAmountIncVat() : 0;
-                tempRow.setAmount(new Double(amountIncVat * 100).longValue());
+                tempRow.setAmount((long)(amountIncVat * 100));
                 double amountExVat = row.getAmountExVat() != null ? row.getAmountExVat() : 0;
-                tempRow.setVat(new Double(amountIncVat - amountExVat).longValue());
+                tempRow.setVat((long)(amountIncVat - amountExVat));
             }
             
-            tempRow.setQuantity(1);
+            tempRow.setQuantity(1.0);
             
             if (row.getUnit() != null) {
                 tempRow.setUnit(row.getUnit());
@@ -137,17 +138,17 @@ public class HostedRowFormatter {
                 tempRow.setDescription(row.getDescription());
             }
             
-            tempRow.setAmount(new Double(-(row.getAmount() * 100)).longValue());
+            tempRow.setAmount((long)(-(row.getAmount() * 100)));
             
-            totalAmount -= new Double(row.getAmount()).longValue();
+            totalAmount -= (long)row.getAmount();
             
             double discountFactor = tempRow.getAmount() * 1.0 / totalAmount;
             
             if (totalVat > 0) {
-                tempRow.setVat(new Double(totalVat * discountFactor).longValue());
+                tempRow.setVat((long)(totalVat * discountFactor));
             }
             
-            tempRow.setQuantity(1);
+            tempRow.setQuantity(1.0);
             
             if (row.getUnit() != null) {
                 tempRow.setUnit(row.getUnit());
@@ -168,7 +169,7 @@ public class HostedRowFormatter {
         
         for (RelativeDiscountBuilder row : orderBuilder.getRelativeDiscountRows()) {
             HostedOrderRowBuilder tempRow = new HostedOrderRowBuilder();
-            double discountFactor = row.getDiscountPercent() * 0.01;
+            double discountFactor = (row.getDiscountPercent() == null ? 0.0 : row.getDiscountPercent()) * 0.01;
             
             if (row.getName() != null) {
                 tempRow.setName(row.getName());
@@ -182,17 +183,17 @@ public class HostedRowFormatter {
                 tempRow.setSku(row.getDiscountId());
             }
             
-            tempRow.setQuantity(1);
+            tempRow.setQuantity(1.0);
             
             if (row.getUnit() != null) {
                 tempRow.setUnit(row.getUnit());
             }
             
-            tempRow.setAmount(new Double(-(discountFactor * totalAmount)).longValue());
+            tempRow.setAmount((long)(-(discountFactor * totalAmount)));
             totalAmount -= tempRow.getAmount();
             
             if (totalVat > 0) {
-                tempRow.setVat(new Double(-(totalVat * discountFactor)).longValue());
+                tempRow.setVat((long)(-(totalVat * discountFactor)));
             }
             
             newRows.add(tempRow);
@@ -203,7 +204,7 @@ public class HostedRowFormatter {
         Long amount = 0L;
         
         for (HostedOrderRowBuilder row : rows) {
-            amount += row.getAmount() * row.getQuantity();
+            amount += (long)(row.getAmount() * (row.getQuantity() == null ? 0.0 : row.getQuantity()) );
         }
         
         return amount;
@@ -213,7 +214,7 @@ public class HostedRowFormatter {
         Long vat = 0L;
         
         for (HostedOrderRowBuilder row : rows) {
-            vat += row.getVat() * row.getQuantity();
+            vat += (long)(row.getVat() * (row.getQuantity() == null ? 0.0 : row.getQuantity()));
         }
         
         return vat;

@@ -24,7 +24,7 @@ public class HostedRowFormatterTest {
                 .setDescription("Tester")
                 .setAmountExVat(4)
                 .setVatPercent(25)
-                .setQuantity(1)
+                .setQuantity(1.0)
                 .setUnit("st"));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
@@ -35,7 +35,7 @@ public class HostedRowFormatterTest {
         assertEquals("Tester", newRow.getDescription());
         assertTrue(500L == newRow.getAmount());
         assertTrue(100L == newRow.getVat());
-        assertEquals(1, newRow.getQuantity());
+        assertEquals(1, newRow.getQuantity(), 0);
         assertEquals("st", newRow.getUnit());
     }
     
@@ -54,7 +54,7 @@ public class HostedRowFormatterTest {
         assertEquals("0", newRow.getSku());
         assertEquals("Tess", newRow.getName());
         assertEquals("Tester", newRow.getDescription());
-        assertEquals(1, newRow.getQuantity());
+        assertEquals(1, newRow.getQuantity(), 0);
         assertEquals("st", newRow.getUnit());
     }
     
@@ -87,7 +87,7 @@ public class HostedRowFormatterTest {
         assertEquals("0", newRow.getSku());
         assertEquals("Tess", newRow.getName());
         assertEquals("Tester", newRow.getDescription());
-        assertEquals(1, newRow.getQuantity());
+        assertEquals(1, newRow.getQuantity(), 0);
         assertEquals("st", newRow.getUnit());
     }
     
@@ -135,7 +135,7 @@ public class HostedRowFormatterTest {
         assertEquals("0", newRow.getSku());
         assertEquals("Tess", newRow.getName());
         assertEquals("Tester", newRow.getDescription());
-        assertEquals(1, newRow.getQuantity());
+        assertEquals(1, newRow.getQuantity(), 0);
         assertEquals("st", newRow.getUnit());
     }
     
@@ -144,7 +144,7 @@ public class HostedRowFormatterTest {
         CreateOrderBuilder order = WebPay.createOrder()
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addDiscount(Item.relativeDiscount()
-                        .setDiscountPercent(10));
+                        .setDiscountPercent(10.0));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(1);
@@ -157,7 +157,7 @@ public class HostedRowFormatterTest {
         CreateOrderBuilder order = WebPay.createOrder()
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addDiscount(Item.relativeDiscount()
-                        .setDiscountPercent(10));
+                        .setDiscountPercent(10.0));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(1);
@@ -170,7 +170,7 @@ public class HostedRowFormatterTest {
     public void testFormatTotalAmount() {
         HostedOrderRowBuilder row = new HostedOrderRowBuilder();
         row.setAmount(100L)
-            .setQuantity(2);
+            .setQuantity(2.0);
         ArrayList<HostedOrderRowBuilder> rows = new ArrayList<HostedOrderRowBuilder>();
         rows.add(row);
         
@@ -181,7 +181,7 @@ public class HostedRowFormatterTest {
     public void testFormatTotalVat() {
         HostedOrderRowBuilder row = new HostedOrderRowBuilder();
         row.setVat(100L)
-            .setQuantity(2);
+            .setQuantity(2.0);
         ArrayList<HostedOrderRowBuilder> rows = new ArrayList<HostedOrderRowBuilder>();
         rows.add(row);
         
@@ -192,7 +192,7 @@ public class HostedRowFormatterTest {
     public void testFormatTotalVatNegative() {
         HostedOrderRowBuilder row = new HostedOrderRowBuilder();
         row.setVat(-100L)
-            .setQuantity(2);
+            .setQuantity(2.0);
         ArrayList<HostedOrderRowBuilder> rows = new ArrayList<HostedOrderRowBuilder>();
         rows.add(row);
         
