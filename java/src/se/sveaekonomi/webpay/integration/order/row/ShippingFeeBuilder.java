@@ -4,7 +4,7 @@ package se.sveaekonomi.webpay.integration.order.row;
  * @author klar-sar
  * @since 2012-12-05
  */
-public class ShippingFeeBuilder implements RowBuilder {
+public class ShippingFeeBuilder extends RowBuilder {
     
     private String shippingId;
     private String name;
@@ -12,9 +12,8 @@ public class ShippingFeeBuilder implements RowBuilder {
     private Double amountExVat;
     private Double amountIncVat;
     private Double vatPercent;
-    private Double quantity;
     private String unit;
-    private Double discountPercent;
+    private double discountPercent;
     
     public String getShippingId() {
         return shippingId;
@@ -88,8 +87,11 @@ public class ShippingFeeBuilder implements RowBuilder {
         return this;
     }
     
+    /**
+     * There can only be one shipping fee per row
+     */
     public Double getQuantity() {
-        return quantity;
+        return 1.0;
     }
     
     /**
@@ -107,7 +109,7 @@ public class ShippingFeeBuilder implements RowBuilder {
         return this;
     }
     
-    public Double getDiscountPercent() {
+    public double getDiscountPercent() {
         return discountPercent;
     }
     
@@ -135,4 +137,11 @@ public class ShippingFeeBuilder implements RowBuilder {
         this.amountIncVat = amountIncVat;
         return this;
     }
+
+    /**
+     * For shippping fees the article number is synonomous with the shipping Id
+     */
+	public String getArticleNumber() {
+		return getShippingId();
+	}
 }

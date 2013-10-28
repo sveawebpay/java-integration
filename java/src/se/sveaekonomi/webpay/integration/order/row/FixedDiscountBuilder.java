@@ -4,12 +4,11 @@ package se.sveaekonomi.webpay.integration.order.row;
  * @author klar-sar
  * @since 2012-12-06
  */
-public class FixedDiscountBuilder implements RowBuilder {
+public class FixedDiscountBuilder extends RowBuilder {
     
     private String discountId;
     private String name;
     private String description;
-    private Double quantity;
     private String unit = "";
     private double amount;
     
@@ -55,8 +54,11 @@ public class FixedDiscountBuilder implements RowBuilder {
         return this;
     }
     
+    /**
+     * There can only be one fixed discount per row
+     */
     public Double getQuantity() {
-        return quantity;
+        return 1.0;
     }
     
     /**
@@ -88,4 +90,45 @@ public class FixedDiscountBuilder implements RowBuilder {
         this.amount = amountDisountOnTotalPrice;
         return this;
     }
+    
+    /**
+     * For fixed discounts the article number is synonomous with the discount id
+     */
+	public String getArticleNumber() {
+		return getDiscountId();
+	}
+
+    /**
+     * We do not give discounts on discounts
+     */
+	public double getDiscountPercent() {
+		return 0;
+	}
+
+    /**
+     * Do not use.
+     * Will return null.
+     * @return null
+     */
+	public Double getAmountExVat() {
+		return null;
+	}
+
+    /**
+     * Do not use.
+     * Will return null.
+     * @return null
+     */
+	public Double getVatPercent() {
+		return null;
+	}
+
+    /**
+     * Do not use.
+     * Will return null.
+     * @return null
+     */
+	public Double getAmountIncVat() {
+		return null;
+	}
 }

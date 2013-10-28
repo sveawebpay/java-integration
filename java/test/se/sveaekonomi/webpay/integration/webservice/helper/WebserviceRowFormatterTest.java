@@ -94,7 +94,10 @@ public class WebserviceRowFormatterTest {
     @Test
     public void testFormatFixedDiscountRows() {
         CreateOrderBuilder order = WebPay.createOrder()
-            .addOrderRow(TestingTool.createMiniOrderRow())
+            .addOrderRow(Item.orderRow()
+            		.setAmountExVat(4)
+            		.setVatPercent(25)
+            		.setQuantity(1.0))
             .addDiscount(Item.fixedDiscount()
                 .setDiscountId("0")
                 .setName("Tess")

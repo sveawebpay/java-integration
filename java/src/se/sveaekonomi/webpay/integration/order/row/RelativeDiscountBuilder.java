@@ -3,13 +3,12 @@ package se.sveaekonomi.webpay.integration.order.row;
 /**
  * @author klar-sar
  */
-public class RelativeDiscountBuilder implements RowBuilder {
+public class RelativeDiscountBuilder extends RowBuilder {
 
     private String discountId;
     private String name;
     private String description;
-    private Double discountPercent;
-    private Double quantity;
+    private double discountPercent;
     private String unit;
     
     public String getDiscountId() {
@@ -54,8 +53,11 @@ public class RelativeDiscountBuilder implements RowBuilder {
         return this;
     }
     
+    /**
+     * There can only be one relative discount per row
+     */
     public Double getQuantity() {
-        return quantity;
+        return 1.0;
     }
     
     /**
@@ -73,7 +75,7 @@ public class RelativeDiscountBuilder implements RowBuilder {
         return this;
     }
     
-    public Double getDiscountPercent() {
+    public double getDiscountPercent() {
         return discountPercent;
     }
     
@@ -86,4 +88,38 @@ public class RelativeDiscountBuilder implements RowBuilder {
         this.discountPercent = discountPercent;
         return this;
     }
+
+    /**
+     * For relative discounts the article number is synonymous with the discount id
+     */
+	public String getArticleNumber() {
+        return getDiscountId();
+	}
+
+    /**
+     * Do not use.
+     * Will return null.
+     * @return null
+     */
+	public Double getAmountExVat() {
+		return null;
+	}
+
+    /**
+     * Do not use.
+     * Will return null.
+     * @return null
+     */
+	public Double getVatPercent() {
+		return null;
+	}
+
+    /**
+     * Do not use.
+     * Will return null.
+     * @return null
+     */
+	public Double getAmountIncVat() {
+		return null;
+	}
 }
