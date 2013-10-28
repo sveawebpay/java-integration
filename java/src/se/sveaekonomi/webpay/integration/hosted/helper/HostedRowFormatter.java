@@ -8,6 +8,7 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.FixedDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RelativeDiscountBuilder;
+import se.sveaekonomi.webpay.integration.order.row.RowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
 
 public class HostedRowFormatter {
@@ -33,17 +34,9 @@ public class HostedRowFormatter {
 
     private <T extends OrderBuilder<T>> void formatOrderRows(OrderBuilder<T> orderBuilder) {
         for (OrderRowBuilder row : orderBuilder.getOrderRows()) {
-            HostedOrderRowBuilder tempRow = new HostedOrderRowBuilder();
+        	HostedOrderRowBuilder tempRow = getNewTempRow(row, row.getArticleNumber() == null ? "" : row.getArticleNumber());
             
             double vatFactor = row.getVatPercent() != null ? (row.getVatPercent() * 0.01) + 1 : 0;
-            
-            if (row.getName() != null) {
-                tempRow.setName(row.getName());
-            }
-            
-            if (row.getDescription() != null) {
-                tempRow.setDescription(row.getDescription());
-            }
             
             double amountExVat =  row.getAmountExVat()!= null ? row.getAmountExVat() : 0;
             tempRow.setAmount((long)((amountExVat * 100) * vatFactor));
@@ -59,18 +52,7 @@ public class HostedRowFormatter {
                 tempRow.setVat((long)((row.getAmountIncVat() - row.getAmountExVat()) * 100));
             }
             
-            tempRow.setQuantity((tempRow.getQuantity() == null ? 0.0 : tempRow.getQuantity()));
-            if (tempRow.getQuantity() >= 0) {
-                tempRow.setQuantity(row.getQuantity());
-            }
-            
-            if (row.getUnit() != null) {
-                tempRow.setUnit(row.getUnit());
-            }
-            
-            if (null != row.getArticleNumber()) {
-                tempRow.setSku(row.getArticleNumber());
-            }
+            tempRow.setQuantity(row.getQuantity());
             
             newRows.add(tempRow);
             totalAmount += (long)(tempRow.getAmount() * row.getQuantity());
@@ -84,16 +66,9 @@ public class HostedRowFormatter {
         }
         
         for (ShippingFeeBuilder row : orderBuilder.getShippingFeeRows()) {
-            HostedOrderRowBuilder tempRow = new HostedOrderRowBuilder();
+        	HostedOrderRowBuilder tempRow = getNewTempRow(row, row.getShippingId());
+        	
             double plusVatCounter = row.getVatPercent() != null ? (row.getVatPercent() * 0.01) + 1 : 0;
-            
-            if (row.getName() != null) {
-                tempRow.setName(row.getName());
-            }
-            
-            if (row.getDescription() != null) {
-                tempRow.setDescription(row.getDescription());
-            }
             
             if (row.getAmountExVat() != null && row.getVatPercent() != null) {
                 tempRow.setAmount((long)((row.getAmountExVat() * 100) * plusVatCounter));
@@ -108,16 +83,6 @@ public class HostedRowFormatter {
                 tempRow.setVat((long)(amountIncVat - amountExVat));
             }
             
-            tempRow.setQuantity(1.0);
-            
-            if (row.getUnit() != null) {
-                tempRow.setUnit(row.getUnit());
-            }
-            
-            if (row.getShippingId() != null) {
-                tempRow.setSku(row.getShippingId());
-            }
-            
             newRows.add(tempRow);
         }
     }
@@ -128,17 +93,9 @@ public class HostedRowFormatter {
         }
         
         for (FixedDiscountBuilder row : orderBuilder.getFixedDiscountRows()) {
-            HostedOrderRowBuilder tempRow = new HostedOrderRowBuilder();
-            
-            if (row.getName() != null) {
-                tempRow.setName(row.getName());
-            }
-            
-            if (row.getDescription() != null) {
-                tempRow.setDescription(row.getDescription());
-            }
-            
-            tempRow.setAmount((long)(-(row.getAmount() * 100)));
+        	HostedOrderRowBuilder tempRow = getNewTempRow(row, row.getDiscountId());
+
+        	tempRow.setAmount((long)(-(row.getAmount() * 100)));
             
             totalAmount -= (long)row.getAmount();
             
@@ -146,16 +103,6 @@ public class HostedRowFormatter {
             
             if (totalVat > 0) {
                 tempRow.setVat((long)(totalVat * discountFactor));
-            }
-            
-            tempRow.setQuantity(1.0);
-            
-            if (row.getUnit() != null) {
-                tempRow.setUnit(row.getUnit());
-            }
-            
-            if (row.getDiscountId() != null) {
-                tempRow.setSku(row.getDiscountId());
             }
             
             newRows.add(tempRow);
@@ -168,26 +115,9 @@ public class HostedRowFormatter {
         }
         
         for (RelativeDiscountBuilder row : orderBuilder.getRelativeDiscountRows()) {
-            HostedOrderRowBuilder tempRow = new HostedOrderRowBuilder();
-            double discountFactor = (row.getDiscountPercent() == null ? 0.0 : row.getDiscountPercent()) * 0.01;
+            HostedOrderRowBuilder tempRow = getNewTempRow(row, row.getDiscountId());
             
-            if (row.getName() != null) {
-                tempRow.setName(row.getName());
-            }
-            
-            if (row.getDescription() != null) {
-                tempRow.setDescription(row.getDescription());
-            }
-            
-            if (row.getDiscountId() != null) {
-                tempRow.setSku(row.getDiscountId());
-            }
-            
-            tempRow.setQuantity(1.0);
-            
-            if (row.getUnit() != null) {
-                tempRow.setUnit(row.getUnit());
-            }
+            double discountFactor = row.getDiscountPercent() * 0.01;
             
             tempRow.setAmount((long)(-(discountFactor * totalAmount)));
             totalAmount -= tempRow.getAmount();
@@ -198,6 +128,27 @@ public class HostedRowFormatter {
             
             newRows.add(tempRow);
         }
+    }
+    
+    private HostedOrderRowBuilder getNewTempRow(RowBuilder row, String sku)
+    {
+    	HostedOrderRowBuilder tempRow = new HostedOrderRowBuilder();
+
+        if (row.getName() != null)
+        {
+            tempRow.setName(row.getName());
+        }
+
+        if (row.getDescription() != null)
+        {
+            tempRow.setDescription(row.getDescription());
+        }
+
+        tempRow.setQuantity(1.0);
+        tempRow.setUnit(row.getUnit());
+        tempRow.setSku(sku);
+
+        return tempRow;
     }
     
     public Long formatTotalAmount(ArrayList<HostedOrderRowBuilder> rows) {

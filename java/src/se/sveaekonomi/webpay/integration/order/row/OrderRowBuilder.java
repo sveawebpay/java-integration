@@ -4,7 +4,7 @@ package se.sveaekonomi.webpay.integration.order.row;
  * @author klar-sar
  * @since 2012-12-04
  */
-public class OrderRowBuilder implements RowBuilder {
+public class OrderRowBuilder extends RowBuilder {
 
     private String articleNumber;
     private String name;
@@ -15,7 +15,7 @@ public class OrderRowBuilder implements RowBuilder {
     private Double quantity;
     private String unit;
     private int vatDiscount;
-    private Double discountPercent;
+    private double discountPercent;
     
     public OrderRowBuilder() {
         
@@ -136,7 +136,7 @@ public class OrderRowBuilder implements RowBuilder {
         return this;
     }
     
-    public Double getDiscountPercent() {
+    public double getDiscountPercent() {
         return discountPercent;
     }
     

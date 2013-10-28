@@ -1,15 +1,14 @@
 package se.sveaekonomi.webpay.integration.order.row;
 
-public class InvoiceFeeBuilder implements RowBuilder {
+public class InvoiceFeeBuilder extends RowBuilder {
 
     private String name;
     private String description;
     private Double amountExVat;
     private Double amountIncVat;
     private Double vatPercent;
-    private Double quantity;
     private String unit;
-    private Double discountPercent;
+    private double discountPercent;
     
     public String getName() {
         return name;
@@ -54,8 +53,11 @@ public class InvoiceFeeBuilder implements RowBuilder {
         return this;
     }
     
+    /**
+     * There can only be one invoice fee per row
+     */
     public Double getQuantity() {
-        return quantity;
+        return 1.0;
     }
     
     /**
@@ -88,7 +90,7 @@ public class InvoiceFeeBuilder implements RowBuilder {
         return this;
     }
     
-    public Double getDiscountPercent() {
+    public double getDiscountPercent() {
         return discountPercent;
     }
     
@@ -116,4 +118,11 @@ public class InvoiceFeeBuilder implements RowBuilder {
         this.amountIncVat = amountIncVat;
         return this;
     }
+    
+    /**
+     * Invoice fees have no article number
+     */
+	public String getArticleNumber() {
+		return "";
+	}
 }
