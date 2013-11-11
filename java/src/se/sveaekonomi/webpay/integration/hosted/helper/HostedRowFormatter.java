@@ -170,4 +170,14 @@ public class HostedRowFormatter {
         
         return vat;
     }
+
+	public long getTotalAmount() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
+
+	public long getTotalVat() {
+		// TODO Auto-generated method stub
+		return 0;
+	}
 }

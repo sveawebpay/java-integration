@@ -131,4 +131,14 @@ public class FixedDiscountBuilder extends RowBuilder {
 	public Double getAmountIncVat() {
 		return null;
 	}
+
+	public RowBuilder setVatPercent(double d) {
+		// TODO Auto-generated method stub
+		return null;
+	}
+
+	public OrderRowBuilder setAmountExVat(double d) {
+		// TODO Auto-generated method stub
+		return null;
+	}
 }

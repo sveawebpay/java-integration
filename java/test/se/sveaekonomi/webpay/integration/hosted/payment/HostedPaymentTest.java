@@ -9,7 +9,9 @@ import java.util.Map;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.hosted.HostedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.hosted.helper.ExcludePayments;
+import se.sveaekonomi.webpay.integration.hosted.helper.HostedRowFormatter;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -138,5 +140,329 @@ public class HostedPaymentTest {
         assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLAN_FI.getValue()));
         assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLAN_NL.getValue()));
         assertTrue(excludedPaymentMethods.contains(PAYMENTPLANTYPE.PAYMENTPLAN_NO.getValue()));
+    }
+    
+    /*
+     * 30*69.99*1.25 = 2624.625 => 2624.62 w/Bankers rounding (half-to-even)
+     * problem, sums to 2624.7, in xml request, i.e. calculates 30* round( (69.99*1.25), 2) :( 
+     */
+    @Test
+    public void testAmountFromMultipleItemsDefinedWithExVatAndVatPercent()
+    {
+        CreateOrderBuilder order = WebPay.createOrder()
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setArticleNumber("0")
+                                                                    .setName("testCalculateRequestValuesCorrectTotalAmountFromMultipleItems")
+                                                                    .setDescription("testCalculateRequestValuesCorrectTotalAmountFromMultipleItems")
+                                                                    .setAmountExVat(69.99)
+                                                                    .setVatPercent(25)
+                                                                    .setQuantity(30.0)
+                                                                    .setUnit("st"));
+
+        // follows HostedPayment calculateRequestValues() outline:
+        HostedRowFormatter formatter = new HostedRowFormatter();
+
+        List<HostedOrderRowBuilder> formatRowsList = formatter.formatRows(order);
+        long formattedTotalAmount = formatter.getTotalAmount();
+        long formattedTotalVat = formatter.getTotalVat();
+
+        assertEquals(1, formatRowsList.size());
+        assertEquals(262462, formattedTotalAmount); // 262462,5 rounded half-to-even
+        assertEquals(52492, formattedTotalVat); // 52492,5 rounded half-to-even
+    }
+
+    @Test
+    public void testAmountFromMultipleItemsDefinedWithIncVatAndVatPercent()
+    {
+        CreateOrderBuilder order = WebPay.createOrder()
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setArticleNumber("0")
+                                                                    .setName("testCalculateRequestValuesCorrectTotalAmountFromMultipleItems")
+                                                                    .setDescription("testCalculateRequestValuesCorrectTotalAmountFromMultipleItems")
+                                                                    .setAmountIncVat(87.4875) // if low precision here, i.e. 87.49, we'll get a cumulative rounding error
+                                                                    .setVatPercent(25)
+                                                                    .setQuantity(30.0)
+                                                                    .setUnit("st"));
+
+        // follows HostedPayment calculateRequestValues() outline:
+        HostedRowFormatter formatter = new HostedRowFormatter();
+
+        List<HostedOrderRowBuilder> formatRowsList = formatter.formatRows(order);
+        long formattedTotalAmount = formatter.getTotalAmount();
+        long formattedTotalVat = formatter.getTotalVat();
+
+        assertEquals(1, formatRowsList.size());
+        assertEquals(262462, formattedTotalAmount); // 262462,5 rounded half-to-even
+        assertEquals(52492, formattedTotalVat); // 52492,5 rounded half-to-even
+    }
+
+    @Test
+    public void testAmountFromMultipleItemsDefinedWithExVatAndIncVat()
+    {
+        CreateOrderBuilder order = WebPay.createOrder()
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setArticleNumber("0")
+                                                                    .setName("testCalculateRequestValuesCorrectTotalAmountFromMultipleItems")
+                                                                    .setDescription("testCalculateRequestValuesCorrectTotalAmountFromMultipleItems")
+                                                                    .setAmountExVat(69.99)
+                                                                    .setAmountIncVat(87.4875) // if low precision here, i.e. 87.49, we'll get a cumulative rounding error
+                                                                    .setQuantity(30.0)
+                                                                    .setUnit("st"));
+
+        // follows HostedPayment calculateRequestValues() outline:
+        HostedRowFormatter formatter = new HostedRowFormatter();
+
+        List<HostedOrderRowBuilder> formatRowsList = formatter.formatRows(order);
+        long formattedTotalAmount = formatter.getTotalAmount();
+        long formattedTotalVat = formatter.getTotalVat();
+
+        assertEquals(1, formatRowsList.size());
+        assertEquals(262462, formattedTotalAmount); // 262462,5 rounded half-to-even
+        assertEquals(52492, formattedTotalVat); // 52492,5 rounded half-to-even
+    }
+
+
+    // calculated fixed discount vat rate, single vat rate in order
+    @Test
+    public void testAmountFromMultipleItemsWithFixedDiscountIncVatOnly()
+    {
+        CreateOrderBuilder order = WebPay.createOrder()
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setAmountExVat(69.99)
+                                                                    .setVatPercent(25)
+                                                                    .setQuantity(30.0))
+                                                   .addDiscount(Item.fixedDiscount()
+                                                                    .setAmountIncVat(10.00));
+
+        // follows HostedPayment calculateRequestValues() outline:
+        HostedRowFormatter formatter = new HostedRowFormatter();
+
+        List<HostedOrderRowBuilder> formatRowsList = formatter.formatRows(order);
+        long formattedTotalAmount = formatter.getTotalAmount();
+        long formattedTotalVat = formatter.getTotalVat();
+
+        assertEquals(2, formatRowsList.size());
+        assertEquals(261462, formattedTotalAmount); // 262462,5 - 1000 discount rounded half-to-even
+        assertEquals(52292, formattedTotalVat); // 52492,5  -  200 discount (= 10/2624,62*524,92) rounded half-to-even
+    }
+
+    // explicit fixed discount vat rate, , single vat rate in order
+    @Test
+    public void testAmountFromMultipleItemsWithFixedDiscountIncVatAndVatPercent()
+    {
+        CreateOrderBuilder order = WebPay.createOrder()
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setAmountExVat(69.99)
+                                                                    .setVatPercent(25)
+                                                                    .setQuantity(30.0))
+                                                   .addDiscount(Item.fixedDiscount()
+                                                                    .setAmountIncVat(12.50)
+                                                                    .setVatPercent(25.0));
+
+        // follows HostedPayment calculateRequestValues() outline:
+        HostedRowFormatter formatter = new HostedRowFormatter();
+
+        List<HostedOrderRowBuilder> formatRowsList = formatter.formatRows(order);
+        long formattedTotalAmount = formatter.getTotalAmount();
+        long formattedTotalVat = formatter.getTotalVat();
+
+        assertEquals(2, formatRowsList.size());
+        assertEquals(261212, formattedTotalAmount); // 262462,5 - 1250 discount rounded half-to-even
+        assertEquals(52242, formattedTotalVat); // 52492,5 - 250 discount rounded half-to-even
+    }
+
+    // calculated fixed discount vat rate, multiple vat rate in order
+    @Test
+    public void testAmountWithFixedDiscountIncVatOnlyWithDifferentVatRatesPresent()
+    {
+        CreateOrderBuilder order = WebPay.createOrder()
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(25)
+                                                                    .setQuantity(2.0))
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(6)
+                                                                    .setQuantity(1.0))
+                                                   .addDiscount(Item.fixedDiscount()
+                                                                    .setAmountIncVat(100.00));
+
+        // follows HostedPayment calculateRequestValues() outline:
+        HostedRowFormatter formatter = new HostedRowFormatter();
+        List<HostedOrderRowBuilder> formatRowsList = formatter.formatRows(order);
+
+        long formattedTotalAmount = formatter.getTotalAmount();
+        long formattedTotalVat = formatter.getTotalVat();
+
+        assertEquals(3, formatRowsList.size());
+        // 100*250/356 = 70.22 incl. 25% vat => 14.04 vat as amount 
+        // 100*106/356 = 29.78 incl. 6% vat => 1.69 vat as amount 
+        // matches 15,73 discount (= 100/356 *56) discount
+        assertEquals(25600, formattedTotalAmount); // 35600 - 10000 discount
+        assertEquals(4027, formattedTotalVat); //  5600 -  1573 discount (= 10000/35600 *5600) discount
+    }
+
+    // explicit fixed discount vat rate, multiple vat rate in order
+    @Test
+    public void testAmountWithFixedDiscountIncVatAndVatPercentWithDifferentVatRatesPresent()
+    {
+        CreateOrderBuilder order = WebPay.createOrder()
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(25)
+                                                                    .setQuantity(2.0))
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(6)
+                                                                    .setQuantity(1.0))
+                                                   .addDiscount(Item.fixedDiscount()
+                                                                    .setAmountIncVat(125.00)
+                                                                    .setVatPercent(25.0));
+
+        // follows HostedPayment calculateRequestValues() outline:
+        HostedRowFormatter formatter = new HostedRowFormatter();
+
+        List<HostedOrderRowBuilder> formatRowsList = formatter.formatRows(order);
+        long formattedTotalAmount = formatter.getTotalAmount();
+        long formattedTotalVat = formatter.getTotalVat();
+
+        assertEquals(3, formatRowsList.size());
+        assertEquals(23100, formattedTotalAmount); // 35600 - 12500 discount
+        assertEquals(3100, formattedTotalVat); //  5600 -  2500 discount
+    }
+
+    @Test
+    public void testAmountWithFixedDiscountExVatAndVatPercentWithDifferentVatRatesPresent()
+    {
+        CreateOrderBuilder order = WebPay.createOrder()
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(25)
+                                                                    .setQuantity(2.0))
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(6)
+                                                                    .setQuantity(1.0))
+                                                   .addDiscount(Item.fixedDiscount()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(0));
+
+        // follows HostedPayment calculateRequestValues() outline:
+        HostedRowFormatter formatter = new HostedRowFormatter();
+
+        List<HostedOrderRowBuilder> formatRowsList = formatter.formatRows(order);
+        long formattedTotalAmount = formatter.getTotalAmount();
+        long formattedTotalVat = formatter.getTotalVat();
+
+        assertEquals(3, formatRowsList.size());
+        assertEquals(25600, formattedTotalAmount); // 35600 - 10000 discount
+        assertEquals(5600, formattedTotalVat); //  5600 - 0 discount
+    }
+
+    @Test
+    public void testAmountWithFixedDiscountExVatAndIncVatWithDifferentVatRatesPresent()
+    {
+        CreateOrderBuilder order = WebPay.createOrder()
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(25)
+                                                                    .setQuantity(2.0))
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(6)
+                                                                    .setQuantity(1.0))
+                                                   .addDiscount(Item.fixedDiscount()
+                                                                    .setAmountExVat(80.00)
+                                                                    .setAmountIncVat(100.00));
+
+        // follows HostedPayment calculateRequestValues() outline:
+        HostedRowFormatter formatter = new HostedRowFormatter();
+
+        List<HostedOrderRowBuilder> formatRowsList = formatter.formatRows(order);
+        long formattedTotalAmount = formatter.getTotalAmount();
+        long formattedTotalVat = formatter.getTotalVat();
+
+        assertEquals(3, formatRowsList.size());
+        assertEquals(25600, formattedTotalAmount); // 35600 - 10000 discount
+        assertEquals(3600, formattedTotalVat); //  5600 - 2000 discount
+    }
+
+    // calculated relative discount vat rate, single vat rate in order
+    @Test
+    public void testAmountFromMultipleItemsWithRelativeDiscountWithDifferentVatRatesPresent()
+    {
+        CreateOrderBuilder order = WebPay.createOrder()
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setAmountExVat(69.99)
+                                                                    .setVatPercent(25)
+                                                                    .setQuantity(30.0))
+                                                   .addDiscount(Item.relativeDiscount()
+                                                                    .setDiscountPercent(25.0));
+
+        // follows HostedPayment calculateRequestValues() outline:
+        HostedRowFormatter formatter = new HostedRowFormatter();
+
+        List<HostedOrderRowBuilder> formatRowsList = formatter.formatRows(order);
+        long formattedTotalAmount = formatter.getTotalAmount();
+        long formattedTotalVat = formatter.getTotalVat();
+
+        assertEquals(2, formatRowsList.size());
+        assertEquals(196847, formattedTotalAmount); // (262462,5  - 65615,625 discount (25%) rounded half-to-even
+        assertEquals(39369, formattedTotalVat); //  52492,5  - 13123,125 discount (25%) rounded half-to-even
+    }
+
+    // calculated relative discount vat rate, single vat rate in order
+    @Test
+    public void testAmountFromMultipleItemsWithRelativeDiscountWithDifferentVatRatesPresent2()
+    {
+        CreateOrderBuilder order = WebPay.createOrder()
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setAmountExVat(69.99)
+                                                                    .setVatPercent(25)
+                                                                    .setQuantity(1.0))
+                                                   .addDiscount(Item.relativeDiscount()
+                                                                    .setDiscountPercent(25.0));
+
+        // follows HostedPayment calculateRequestValues() outline:
+        HostedRowFormatter formatter = new HostedRowFormatter();
+
+        List<HostedOrderRowBuilder> formatRowsList = formatter.formatRows(order);
+        long formattedTotalAmount = formatter.getTotalAmount();
+        long formattedTotalVat = formatter.getTotalVat();
+
+        assertEquals(2, formatRowsList.size());
+        assertEquals(6562, formattedTotalAmount); // 8748,75 - 2187,18 discount rounded half-to-even
+        assertEquals(1312, formattedTotalVat); // 1749,75 - 437,5 discount (1750*.25) rounded half-to-even
+    }
+
+    // calculated relative discount vat rate, multiple vat rate in order
+    @Test
+    public void testAmountWithRelativeDiscountWithDifferentVatRatesPresent()
+    {
+        CreateOrderBuilder order = WebPay.createOrder()
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(25)
+                                                                    .setQuantity(2.0))
+                                                   .addOrderRow(Item.orderRow()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(6)
+                                                                    .setQuantity(1.0))
+                                                   .addDiscount(Item.relativeDiscount()
+                                                                    .setDiscountPercent(25.0));
+
+        // follows HostedPayment calculateRequestValues() outline:
+        HostedRowFormatter formatter = new HostedRowFormatter();
+
+        List<HostedOrderRowBuilder> formatRowsList = formatter.formatRows(order);
+        long formattedTotalAmount = formatter.getTotalAmount();
+        long formattedTotalVat = formatter.getTotalVat();
+
+        assertEquals(3, formatRowsList.size());
+        // 5000*.25 = 1250
+        // 600*.25 = 150  
+        // matches 1400 discount
+        assertEquals(26700, formattedTotalAmount); // 35600 - 8900 discount
+        assertEquals(4200, formattedTotalVat); //  5600 - 1400 discount (= 10000/35600 *5600) discount
     }
 }
