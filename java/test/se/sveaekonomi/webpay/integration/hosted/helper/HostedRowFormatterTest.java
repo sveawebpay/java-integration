@@ -149,7 +149,7 @@ public class HostedRowFormatterTest {
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(1);
         
-        assertTrue(-50L == newRow.getAmount());
+        assertEquals(-50L, (long)newRow.getAmount());
     }
     
     @Test
@@ -162,8 +162,8 @@ public class HostedRowFormatterTest {
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(1);
         
-        assertTrue(-50L == newRow.getAmount());
-        assertTrue(-10L == newRow.getVat());
+        assertEquals(-50L, (long)newRow.getAmount());
+        assertEquals(-10L, (long)newRow.getVat());
     }
     
     @Test
@@ -174,7 +174,7 @@ public class HostedRowFormatterTest {
         ArrayList<HostedOrderRowBuilder> rows = new ArrayList<HostedOrderRowBuilder>();
         rows.add(row);
         
-        assertTrue(200L == new HostedRowFormatter().formatTotalAmount(rows));
+        assertEquals(200L, new HostedRowFormatter().formatTotalAmount(rows));
     }
     
     @Test
@@ -185,7 +185,7 @@ public class HostedRowFormatterTest {
         ArrayList<HostedOrderRowBuilder> rows = new ArrayList<HostedOrderRowBuilder>();
         rows.add(row);
         
-        assertTrue(200L == new HostedRowFormatter().formatTotalVat(rows));
+        assertEquals(200L, new HostedRowFormatter().formatTotalVat(rows));
     }
     
     @Test
@@ -196,6 +196,6 @@ public class HostedRowFormatterTest {
         ArrayList<HostedOrderRowBuilder> rows = new ArrayList<HostedOrderRowBuilder>();
         rows.add(row);
         
-        assertTrue(-200L == new HostedRowFormatter().formatTotalVat(rows));
+        assertEquals(-200L, new HostedRowFormatter().formatTotalVat(rows));
     }
 }

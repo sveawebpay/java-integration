@@ -135,8 +135,8 @@ public abstract class HostedPayment <T extends HostedPayment<T>> {
         HostedRowFormatter formatter = new HostedRowFormatter();
         
         rowBuilder = formatter.formatRows(createOrderBuilder);
-        amount = formatter.formatTotalAmount(rowBuilder);
-        vat = formatter.formatTotalVat(rowBuilder);
+        amount = formatter.getTotalAmount();//.formatTotalAmount(rowBuilder);
+        vat = formatter.getTotalVat();//.formatTotalVat(rowBuilder);
         configureExcludedPaymentMethods();
     }
     

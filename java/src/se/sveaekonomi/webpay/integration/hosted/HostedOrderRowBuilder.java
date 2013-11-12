@@ -5,8 +5,8 @@ public class HostedOrderRowBuilder {
     private String sku;
     private String name;
     private String description;
-    private Long amount;
-    private Long vat;
+    private long amount;
+    private long vat;
     private Double quantity;
     private String unit;
     
@@ -47,7 +47,7 @@ public class HostedOrderRowBuilder {
         return amount;
     }
     
-    public HostedOrderRowBuilder setAmount(Long amount) {
+    public HostedOrderRowBuilder setAmount(long amount) {
         this.amount = amount;
         return this;
     }
@@ -56,7 +56,7 @@ public class HostedOrderRowBuilder {
         return vat;
     }
     
-    public HostedOrderRowBuilder setVat(Long vat) {
+    public HostedOrderRowBuilder setVat(long vat) {
         this.vat = vat;
         return this;
     }

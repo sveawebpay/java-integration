@@ -10,7 +10,10 @@ public class FixedDiscountBuilder extends RowBuilder {
     private String name;
     private String description;
     private String unit = "";
-    private double amount;
+    
+    private Double amountExVat;
+    private Double amountIncVat;
+    private Double vatPercent;
     
     public String getDiscountId() {
         return discountId;
@@ -77,17 +80,13 @@ public class FixedDiscountBuilder extends RowBuilder {
         return this;
     }
     
-    public double getAmount() {
-        return amount;
-    }
-    
     /**
      * Required
      * @param amountDisountOnTotalPrice
      * @return FixedDiscountBuilder
      */
     public FixedDiscountBuilder setAmountIncVat(double amountDisountOnTotalPrice) {
-        this.amount = amountDisountOnTotalPrice;
+    	amountIncVat = amountDisountOnTotalPrice;
         return this;
     }
     
@@ -105,40 +104,25 @@ public class FixedDiscountBuilder extends RowBuilder {
 		return 0;
 	}
 
-    /**
-     * Do not use.
-     * Will return null.
-     * @return null
-     */
 	public Double getAmountExVat() {
-		return null;
+		return amountExVat;
 	}
 
-    /**
-     * Do not use.
-     * Will return null.
-     * @return null
-     */
 	public Double getVatPercent() {
-		return null;
+		return vatPercent;
 	}
 
-    /**
-     * Do not use.
-     * Will return null.
-     * @return null
-     */
 	public Double getAmountIncVat() {
-		return null;
+		return amountIncVat;
 	}
 
-	public RowBuilder setVatPercent(double d) {
-		// TODO Auto-generated method stub
-		return null;
+	public FixedDiscountBuilder setVatPercent(double vatPercent) {
+		this.vatPercent = vatPercent;
+		return this;
 	}
 
-	public OrderRowBuilder setAmountExVat(double d) {
-		// TODO Auto-generated method stub
-		return null;
+	public FixedDiscountBuilder setAmountExVat(double amountExVat) {
+		this.amountExVat = amountExVat;
+		return this;
 	}
 }

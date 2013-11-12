@@ -108,7 +108,7 @@ public class OrderBuilderTest {
         createTestFixedDiscountRow();
         
         assertEquals("1", order.getFixedDiscountRows().get(0).getDiscountId());
-        assertEquals(100.00, order.getFixedDiscountRows().get(0).getAmount(), 0);
+        assertEquals(100.00, order.getFixedDiscountRows().get(0).getAmountIncVat(), 0);
         assertEquals("FixedDiscount", order.getFixedDiscountRows().get(0).getDescription());
     }
     

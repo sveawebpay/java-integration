@@ -90,7 +90,7 @@ public class WebserviceRowFormatter {
 			orderRow.NumberOfUnits = existingRow.getQuantity();
 
 			if (FixedDiscountBuilder.class.equals(existingRow.getClass())) {
-				double amount = ((FixedDiscountBuilder) existingRow).getAmount();
+				double amount = ((FixedDiscountBuilder) existingRow).getAmountIncVat();
 				double productTotalAfterDiscount = totalAmountInclVat - amount;
 				double totalProductVatAsAmountAfterDiscount = totalVatAsPercent * productTotalAfterDiscount;
 				double discountVatAsAmount = totalVatAsAmount - totalProductVatAsAmountAfterDiscount;
