@@ -221,11 +221,15 @@ public class InvoicePaymentTest {
         
         //coupon row
         assertEquals("1", request.request.CreateOrderInformation.OrderRows.get(2).ArticleNumber);
-        assertEquals("RelativeDiscount", request.request.CreateOrderInformation.OrderRows.get(2).Description);
-        assertEquals(-85.74, request.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit, 0);
+        assertEquals("RelativeDiscount (25%)", request.request.CreateOrderInformation.OrderRows.get(2).Description);
+        assertEquals("RelativeDiscount (6%)", request.request.CreateOrderInformation.OrderRows.get(3).Description);
+        assertEquals(-85.74, 
+        		request.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit + 
+        		request.request.CreateOrderInformation.OrderRows.get(3).PricePerUnit, 0.001);
         assertEquals(1, request.request.CreateOrderInformation.OrderRows.get(2).NumberOfUnits, 0);
-        assertEquals(16.64, request.request.CreateOrderInformation.OrderRows.get(2).VatPercent, 0);
-        assertEquals(0, request.request.CreateOrderInformation.OrderRows.get(2).DiscountPercent, 0); 
+        assertEquals(25, request.request.CreateOrderInformation.OrderRows.get(2).VatPercent, 0);
+        assertEquals(6, request.request.CreateOrderInformation.OrderRows.get(3).VatPercent, 0);
+        assertEquals(0, request.request.CreateOrderInformation.OrderRows.get(2).DiscountPercent, 0);
     }
     
     @Test
@@ -258,10 +262,14 @@ public class InvoicePaymentTest {
         
         //coupon row
         assertEquals("1", request.request.CreateOrderInformation.OrderRows.get(2).ArticleNumber);
-        assertEquals("FixedDiscount", request.request.CreateOrderInformation.OrderRows.get(2).Description);
-        assertEquals(-85.74, request.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit, 0);
+        assertEquals("FixedDiscount (25%)", request.request.CreateOrderInformation.OrderRows.get(2).Description);
+        assertEquals("FixedDiscount (6%)", request.request.CreateOrderInformation.OrderRows.get(3).Description);
+        assertEquals(-85.74, 
+        		request.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit + 
+        		request.request.CreateOrderInformation.OrderRows.get(3).PricePerUnit, 0.001);
         assertEquals(1, request.request.CreateOrderInformation.OrderRows.get(2).NumberOfUnits, 0);
-        assertEquals(16.64, request.request.CreateOrderInformation.OrderRows.get(2).VatPercent, 0);
+        assertEquals(25, request.request.CreateOrderInformation.OrderRows.get(2).VatPercent, 0);
+        assertEquals(6, request.request.CreateOrderInformation.OrderRows.get(3).VatPercent, 0);
         assertEquals(0, request.request.CreateOrderInformation.OrderRows.get(2).DiscountPercent, 0);
     }
     
