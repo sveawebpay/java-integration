@@ -147,8 +147,7 @@ public class HostedPaymentTest {
      * problem, sums to 2624.7, in xml request, i.e. calculates 30* round( (69.99*1.25), 2) :( 
      */
     @Test
-    public void testAmountFromMultipleItemsDefinedWithExVatAndVatPercent()
-    {
+    public void testAmountFromMultipleItemsDefinedWithExVatAndVatPercent() {
         CreateOrderBuilder order = WebPay.createOrder()
                                                    .addOrderRow(Item.orderRow()
                                                                     .setArticleNumber("0")
@@ -172,8 +171,7 @@ public class HostedPaymentTest {
     }
 
     @Test
-    public void testAmountFromMultipleItemsDefinedWithIncVatAndVatPercent()
-    {
+    public void testAmountFromMultipleItemsDefinedWithIncVatAndVatPercent() {
         CreateOrderBuilder order = WebPay.createOrder()
                                                    .addOrderRow(Item.orderRow()
                                                                     .setArticleNumber("0")
@@ -197,8 +195,7 @@ public class HostedPaymentTest {
     }
 
     @Test
-    public void testAmountFromMultipleItemsDefinedWithExVatAndIncVat()
-    {
+    public void testAmountFromMultipleItemsDefinedWithExVatAndIncVat() {
         CreateOrderBuilder order = WebPay.createOrder()
                                                    .addOrderRow(Item.orderRow()
                                                                     .setArticleNumber("0")
@@ -224,8 +221,7 @@ public class HostedPaymentTest {
 
     // calculated fixed discount vat rate, single vat rate in order
     @Test
-    public void testAmountFromMultipleItemsWithFixedDiscountIncVatOnly()
-    {
+    public void testAmountFromMultipleItemsWithFixedDiscountIncVatOnly() {
         CreateOrderBuilder order = WebPay.createOrder()
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(69.99)
@@ -248,8 +244,7 @@ public class HostedPaymentTest {
 
     // explicit fixed discount vat rate, , single vat rate in order
     @Test
-    public void testAmountFromMultipleItemsWithFixedDiscountIncVatAndVatPercent()
-    {
+    public void testAmountFromMultipleItemsWithFixedDiscountIncVatAndVatPercent() {
         CreateOrderBuilder order = WebPay.createOrder()
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(69.99)
@@ -273,8 +268,7 @@ public class HostedPaymentTest {
 
     // calculated fixed discount vat rate, multiple vat rate in order
     @Test
-    public void testAmountWithFixedDiscountIncVatOnlyWithDifferentVatRatesPresent()
-    {
+    public void testAmountWithFixedDiscountIncVatOnlyWithDifferentVatRatesPresent() {
         CreateOrderBuilder order = WebPay.createOrder()
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(100.00)
@@ -304,8 +298,7 @@ public class HostedPaymentTest {
 
     // explicit fixed discount vat rate, multiple vat rate in order
     @Test
-    public void testAmountWithFixedDiscountIncVatAndVatPercentWithDifferentVatRatesPresent()
-    {
+    public void testAmountWithFixedDiscountIncVatAndVatPercentWithDifferentVatRatesPresent() {
         CreateOrderBuilder order = WebPay.createOrder()
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(100.00)
@@ -332,8 +325,7 @@ public class HostedPaymentTest {
     }
 
     @Test
-    public void testAmountWithFixedDiscountExVatAndVatPercentWithDifferentVatRatesPresent()
-    {
+    public void testAmountWithFixedDiscountExVatAndVatPercentWithDifferentVatRatesPresent() {
         CreateOrderBuilder order = WebPay.createOrder()
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(100.00)
@@ -360,8 +352,7 @@ public class HostedPaymentTest {
     }
 
     @Test
-    public void testAmountWithFixedDiscountExVatAndIncVatWithDifferentVatRatesPresent()
-    {
+    public void testAmountWithFixedDiscountExVatAndIncVatWithDifferentVatRatesPresent() {
         CreateOrderBuilder order = WebPay.createOrder()
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(100.00)
@@ -389,8 +380,7 @@ public class HostedPaymentTest {
 
     // calculated relative discount vat rate, single vat rate in order
     @Test
-    public void testAmountFromMultipleItemsWithRelativeDiscountWithDifferentVatRatesPresent()
-    {
+    public void testAmountFromMultipleItemsWithRelativeDiscountWithDifferentVatRatesPresent() {
         CreateOrderBuilder order = WebPay.createOrder()
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(69.99)
@@ -413,8 +403,7 @@ public class HostedPaymentTest {
 
     // calculated relative discount vat rate, single vat rate in order
     @Test
-    public void testAmountFromMultipleItemsWithRelativeDiscountWithDifferentVatRatesPresent2()
-    {
+    public void testAmountFromMultipleItemsWithRelativeDiscountWithDifferentVatRatesPresent2() {
         CreateOrderBuilder order = WebPay.createOrder()
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(69.99)
@@ -437,8 +426,7 @@ public class HostedPaymentTest {
 
     // calculated relative discount vat rate, multiple vat rate in order
     @Test
-    public void testAmountWithRelativeDiscountWithDifferentVatRatesPresent()
-    {
+    public void testAmountWithRelativeDiscountWithDifferentVatRatesPresent() {
         CreateOrderBuilder order = WebPay.createOrder()
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(100.00)
