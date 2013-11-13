@@ -7,6 +7,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
@@ -17,7 +18,7 @@ public class DeliverInvoiceOrderTest {
     
     @Test
     public void testDeliverInvoiceOrderDoRequest() {
-        DeliverOrderResponse response = WebPay.deliverOrder()
+        DeliverOrderResponse response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .setOrderId(54086L)
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
@@ -32,7 +33,7 @@ public class DeliverInvoiceOrderTest {
     public void testDeliverInvoiceOrderResult() {
         long orderId = createInvoiceAndReturnOrderId();
         
-        DeliverOrderResponse response = WebPay.deliverOrder()
+        DeliverOrderResponse response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .setOrderId(orderId)
             .setNumberOfCreditDays(1)
@@ -49,7 +50,7 @@ public class DeliverInvoiceOrderTest {
     }
     
     private long createInvoiceAndReturnOrderId() {
-        CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addCustomerDetails(Item.individualCustomer()
                 .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))

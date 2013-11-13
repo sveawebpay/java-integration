@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
@@ -21,7 +22,7 @@ public class NewOrderBuilderTest {
         orderRows.add(TestingTool.createExVatBasedOrderRow("1"));
         orderRows.add(TestingTool.createExVatBasedOrderRow("2"));
         
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRows(orderRows)
                 .addCustomerDetails(TestingTool.createCompanyCustomer())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -38,7 +39,7 @@ public class NewOrderBuilderTest {
     
     @Test
     public void testBuildOrderWithCompanyCustomer() {
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
         .addCustomerDetails(TestingTool.createCompanyCustomer())
         .setCountryCode(TestingTool.DefaultTestCountryCode)

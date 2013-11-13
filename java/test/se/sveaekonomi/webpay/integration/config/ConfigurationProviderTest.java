@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.config;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.fail;
 
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -8,12 +9,17 @@ import java.net.URL;
 import org.junit.Before;
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
+import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class ConfigurationProviderTest {
     
 	private ConfigurationProvider defaultConf;
+	final String ExpectedMessage = "A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()";
 	
 	@Before
 	public void setUp() {
@@ -21,7 +27,7 @@ public class ConfigurationProviderTest {
 	}
     
     @Test
-    public void TestGetDefaultConfigSe() throws MalformedURLException
+    public void testGetDefaultConfigSe() throws MalformedURLException
     {
         final COUNTRYCODE countryCode = COUNTRYCODE.SE;
 
@@ -44,7 +50,7 @@ public class ConfigurationProviderTest {
     }
 
     @Test
-    public void TestGetDefaultConfigDk()
+    public void testGetDefaultConfigDk()
     {
         final COUNTRYCODE countryCode = COUNTRYCODE.DK;
 
@@ -59,7 +65,7 @@ public class ConfigurationProviderTest {
     }
 
     @Test
-    public void TestGetDefaultConfigDe()
+    public void testGetDefaultConfigDe()
     {
         final COUNTRYCODE countryCode = COUNTRYCODE.DE;
 
@@ -74,7 +80,7 @@ public class ConfigurationProviderTest {
     }
 
     @Test
-    public void TestGetDefaultConfigFi()
+    public void testGetDefaultConfigFi()
     {
         final COUNTRYCODE countryCode = COUNTRYCODE.FI;
 
@@ -89,7 +95,7 @@ public class ConfigurationProviderTest {
     }
 
     @Test
-    public void TestGetDefaultConfigNo()
+    public void testGetDefaultConfigNo()
     {
         final COUNTRYCODE countryCode = COUNTRYCODE.NO;
 
@@ -104,7 +110,7 @@ public class ConfigurationProviderTest {
     }
 
     @Test
-    public void TestGetDefaultConfigNl()
+    public void testGetDefaultConfigNl()
     {
         final COUNTRYCODE countryCode = COUNTRYCODE.NL;
 
@@ -119,9 +125,82 @@ public class ConfigurationProviderTest {
     }
 
     @Test
-    public void TestProductionUrls() throws MalformedURLException
+    public void testProductionUrls() throws MalformedURLException
     {
         assertEquals(new URL("https://webpay.sveaekonomi.se/webpay/payment"), SveaConfig.getProdPayPageUrl());
         assertEquals(new URL("https://webservices.sveaekonomi.se/webpay/SveaWebPay.asmx?WSDL"), SveaConfig.getProdWebserviceUrl());
+    }
+    
+    @Test
+    public void testConnectionCreateOrderFailsIfNoConfigurationIsProvided()
+    {
+        try {
+        	WebPay.createOrder()
+            	  .useInvoicePayment()
+            	  .doRequest();
+            
+            //Fail on no exception
+            fail();
+        } catch (SveaWebPayException e) {
+            assertEquals(ExpectedMessage, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testConnectionDeliverOrderFailsIfNoConfigurationIsProvided()
+    {
+        try {
+        	WebPay.deliverOrder()
+            	  .deliverInvoiceOrder()
+            	  .doRequest();
+            
+            //Fail on no exception
+            fail();
+        } catch (SveaWebPayException e) {
+            assertEquals(ExpectedMessage, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testConnectionCloseOrderFailsIfNoConfigurationIsProvided()
+    {
+        try {
+        	WebPay.closeOrder()
+            	  .closeInvoiceOrder()
+            	  .doRequest();
+            
+            //Fail on no exception
+            fail();
+        } catch (SveaWebPayException e) {
+            assertEquals(ExpectedMessage, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testConnectionGetAddressFailsIfNoConfigurationIsProvided()
+    {
+        try {
+        	WebPay.getAddresses()
+            	  .doRequest();
+            
+            //Fail on no exception
+            fail();
+        } catch (SveaWebPayException e) {
+            assertEquals(ExpectedMessage, e.getMessage());
+        }
+    }
+
+    @Test
+    public void testConnectionGetPaymentPlanFailsIfNoConfigurationIsProvided()
+    {
+        try {
+        	WebPay.getPaymentPlanParams()
+            	  .doRequest();
+            
+            //Fail on no exception
+            fail();
+        } catch (SveaWebPayException e) {
+            assertEquals(ExpectedMessage, e.getMessage());
+        }
     }
 }

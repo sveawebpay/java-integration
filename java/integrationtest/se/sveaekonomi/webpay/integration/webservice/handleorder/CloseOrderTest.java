@@ -23,7 +23,7 @@ public class CloseOrderTest {
         Long orderId = 0L;
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
                 .addCustomerDetails(Item.individualCustomer()
                     .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
@@ -45,7 +45,7 @@ public class CloseOrderTest {
         
         assertTrue(response.isOrderAccepted());
         
-        CloseOrderResponse closeResponse = WebPay.closeOrder()
+        CloseOrderResponse closeResponse = WebPay.closeOrder(SveaConfig.getDefaultConfig())
                 .setOrderId(orderId)
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .closeInvoiceOrder()

@@ -9,6 +9,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.HostedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.hosted.helper.ExcludePayments;
 import se.sveaekonomi.webpay.integration.hosted.helper.HostedRowFormatter;
@@ -23,7 +24,7 @@ public class HostedPaymentTest {
 
     @Test
     public void testCalculateRequestValuesNullExtraRows() {
-        CreateOrderBuilder order = WebPay.createOrder() 
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig()) 
             .setCountryCode(TestingTool.DefaultTestCountryCode)
                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                .setCurrency(TestingTool.DefaultTestCurrency)
@@ -42,7 +43,7 @@ public class HostedPaymentTest {
 
     @Test
     public void testVatPercentAndAmountIncVatCalculation() {
-        CreateOrderBuilder order = WebPay.createOrder()  
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())  
             .setCountryCode(TestingTool.DefaultTestCountryCode)
             .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .setCurrency(TestingTool.DefaultTestCurrency)
@@ -61,7 +62,7 @@ public class HostedPaymentTest {
     
     @Test
     public void testAmountIncVatAndvatPercentShippingFee() {
-      CreateOrderBuilder order = WebPay.createOrder() 
+      CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig()) 
             .setCountryCode(TestingTool.DefaultTestCountryCode)
             .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .setCurrency(TestingTool.DefaultTestCurrency)  
@@ -82,7 +83,7 @@ public class HostedPaymentTest {
     
     @Test
     public void testAmountIncVatAndAmountExVatCalculation() {
-         CreateOrderBuilder order = WebPay.createOrder()
+         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                  .setCountryCode(TestingTool.DefaultTestCountryCode)
                  .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                  .setCurrency(TestingTool.DefaultTestCurrency)
@@ -101,7 +102,7 @@ public class HostedPaymentTest {
     
     @Test
     public void testCreatePaymentForm() {
-         CreateOrderBuilder order = WebPay.createOrder() 
+         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig()) 
                  .setCountryCode(TestingTool.DefaultTestCountryCode)
                  .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                  .setCurrency(TestingTool.DefaultTestCurrency)
@@ -148,7 +149,7 @@ public class HostedPaymentTest {
      */
     @Test
     public void testAmountFromMultipleItemsDefinedWithExVatAndVatPercent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setArticleNumber("0")
                                                                     .setName("testCalculateRequestValuesCorrectTotalAmountFromMultipleItems")
@@ -172,7 +173,7 @@ public class HostedPaymentTest {
 
     @Test
     public void testAmountFromMultipleItemsDefinedWithIncVatAndVatPercent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setArticleNumber("0")
                                                                     .setName("testCalculateRequestValuesCorrectTotalAmountFromMultipleItems")
@@ -196,7 +197,7 @@ public class HostedPaymentTest {
 
     @Test
     public void testAmountFromMultipleItemsDefinedWithExVatAndIncVat() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setArticleNumber("0")
                                                                     .setName("testCalculateRequestValuesCorrectTotalAmountFromMultipleItems")
@@ -222,7 +223,7 @@ public class HostedPaymentTest {
     // calculated fixed discount vat rate, single vat rate in order
     @Test
     public void testAmountFromMultipleItemsWithFixedDiscountIncVatOnly() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(69.99)
                                                                     .setVatPercent(25)
@@ -245,7 +246,7 @@ public class HostedPaymentTest {
     // explicit fixed discount vat rate, , single vat rate in order
     @Test
     public void testAmountFromMultipleItemsWithFixedDiscountIncVatAndVatPercent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(69.99)
                                                                     .setVatPercent(25)
@@ -269,7 +270,7 @@ public class HostedPaymentTest {
     // calculated fixed discount vat rate, multiple vat rate in order
     @Test
     public void testAmountWithFixedDiscountIncVatOnlyWithDifferentVatRatesPresent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(25)
@@ -299,7 +300,7 @@ public class HostedPaymentTest {
     // explicit fixed discount vat rate, multiple vat rate in order
     @Test
     public void testAmountWithFixedDiscountIncVatAndVatPercentWithDifferentVatRatesPresent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(25)
@@ -326,7 +327,7 @@ public class HostedPaymentTest {
 
     @Test
     public void testAmountWithFixedDiscountExVatAndVatPercentWithDifferentVatRatesPresent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(25)
@@ -353,7 +354,7 @@ public class HostedPaymentTest {
 
     @Test
     public void testAmountWithFixedDiscountExVatAndIncVatWithDifferentVatRatesPresent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(25)
@@ -381,7 +382,7 @@ public class HostedPaymentTest {
     // calculated relative discount vat rate, single vat rate in order
     @Test
     public void testAmountFromMultipleItemsWithRelativeDiscountWithDifferentVatRatesPresent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(69.99)
                                                                     .setVatPercent(25)
@@ -404,7 +405,7 @@ public class HostedPaymentTest {
     // calculated relative discount vat rate, single vat rate in order
     @Test
     public void testAmountFromMultipleItemsWithRelativeDiscountWithDifferentVatRatesPresent2() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(69.99)
                                                                     .setVatPercent(25)
@@ -427,7 +428,7 @@ public class HostedPaymentTest {
     // calculated relative discount vat rate, multiple vat rate in order
     @Test
     public void testAmountWithRelativeDiscountWithDifferentVatRatesPresent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(25)

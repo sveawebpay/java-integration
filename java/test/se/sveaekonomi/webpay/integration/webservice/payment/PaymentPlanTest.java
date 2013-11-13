@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
@@ -16,7 +17,7 @@ public class PaymentPlanTest {
 
     @Test
     public void testPaymentPlanRequestObjectSpecifics() {
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
                 .addCustomerDetails(Item.individualCustomer()
                         .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
@@ -34,7 +35,7 @@ public class PaymentPlanTest {
     @Test
     public void testPaymentPlanFailCompanyCustomer() {
         try {
-            WebPay.createOrder()
+            WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
                 .addCustomerDetails(Item.companyCustomer()
                     .setNationalIdNumber(TestingTool.DefaultTestCompanyNationalIdNumber))

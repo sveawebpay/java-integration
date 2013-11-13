@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
@@ -18,7 +19,7 @@ public class OrderBuilderTest {
     
     @Before
     public void setUp() {
-        order = WebPay.createOrder();
+        order = WebPay.createOrder(SveaConfig.getDefaultConfig());
         order.setValidator(new VoidValidator());
     }
     

@@ -7,6 +7,7 @@ import java.util.Map;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
@@ -22,7 +23,7 @@ public class PaymentFormTest {
         String base64Payment = Base64Util.encodeBase64String("0");
         String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
         
-        PaymentForm form = WebPay.createOrder()
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
@@ -56,7 +57,7 @@ public class PaymentFormTest {
         String base64Payment = Base64Util.encodeBase64String("0");
         String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
         
-        PaymentForm form = WebPay.createOrder()
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                 .setCurrency(TestingTool.DefaultTestCurrency)

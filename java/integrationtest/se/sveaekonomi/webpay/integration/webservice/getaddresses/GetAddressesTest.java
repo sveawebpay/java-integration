@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.webservice.GetAddressesResponse;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
@@ -13,7 +14,7 @@ public class GetAddressesTest {
     
     @Test
     public void testGetAddresses() {
-        GetAddressesResponse response = WebPay.getAddresses()
+        GetAddressesResponse response = WebPay.getAddresses(SveaConfig.getDefaultConfig())
             .setCountryCode(TestingTool.DefaultTestCountryCode)
             .setIndividual("460509-2222")
             .setOrderTypeInvoice()
@@ -25,7 +26,7 @@ public class GetAddressesTest {
     
     @Test
     public void testResultGetAddresses() {
-        GetAddressesResponse response = WebPay.getAddresses()
+        GetAddressesResponse response = WebPay.getAddresses(SveaConfig.getDefaultConfig())
             .setCountryCode(TestingTool.DefaultTestCountryCode)
             .setIndividual(TestingTool.DefaultTestIndividualNationalIdNumber)
             .setOrderTypeInvoice()

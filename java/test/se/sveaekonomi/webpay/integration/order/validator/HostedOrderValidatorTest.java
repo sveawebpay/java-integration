@@ -6,6 +6,7 @@ import static org.junit.Assert.fail;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.payment.FakeHostedPayment;
 import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
@@ -29,7 +30,7 @@ public class HostedOrderValidatorTest {
                     + "MISSING VALUE - Currency is required. Use setCurrency(...).\n"
                     + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addCustomerDetails(TestingTool.createMiniCompanyCustomer())
                 .setValidator(new VoidValidator())
                 .build();
@@ -42,7 +43,7 @@ public class HostedOrderValidatorTest {
         String expectedMessage = "MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n" 
                 + "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(Item.orderRow()
                 .setQuantity(1.0)
                 .setAmountExVat(100)
@@ -62,7 +63,7 @@ public class HostedOrderValidatorTest {
         String expectedMessage = "MISSING VALUE - Return url is required, setReturnUrl(...).\n";
         
         try {
-            CreateOrderBuilder order = WebPay.createOrder()
+            CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                    .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                    .setCurrency(TestingTool.DefaultTestCurrency)
@@ -83,7 +84,7 @@ public class HostedOrderValidatorTest {
     
     @Test
     public void succeedOnGoodValuesSe() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setValidator(new VoidValidator())
             .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .addOrderRow(TestingTool.createMiniOrderRow())
@@ -95,7 +96,7 @@ public class HostedOrderValidatorTest {
     
     @Test
     public void testValidateNLCustomerIdentity() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                 .setCountryCode(COUNTRYCODE.NL)
                 .addOrderRow(TestingTool.createMiniOrderRow())
@@ -107,7 +108,7 @@ public class HostedOrderValidatorTest {
     
     @Test
     public void testValidateDECustomerIdentity() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                 .setCountryCode(COUNTRYCODE.DE)
                 .addOrderRow(TestingTool.createMiniOrderRow())
@@ -122,7 +123,7 @@ public class HostedOrderValidatorTest {
             + "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n"
             + "MISSING VALUE - At least one of the values must be set in combination with AmountExVat: AmountIncVat or VatPercent for Orderrow. Use one of: setAmountIncVat() or setVatPercent().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(Item.orderRow()
                         .setQuantity(1.0)
                         .setAmountExVat(100))
@@ -142,7 +143,7 @@ public class HostedOrderValidatorTest {
             "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n"
             + "MISSING VALUE - At least one of the values must be set in combination with VatPercent: AmountIncVat or AmountExVat for Orderrow. Use one of: setAmountExVat() or setAmountIncVat().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(Item.orderRow()
                         .setQuantity(1.0)
                         .setVatPercent(25))
@@ -163,7 +164,7 @@ public class HostedOrderValidatorTest {
             "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n"
             + "MISSING VALUE - At least one of the values must be set in combination with AmountIncVat: AmountExVat or VatPercent for Orderrow. Use one of: setAmountExVat() or setVatPercent().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(Item.orderRow()
                         .setQuantity(1.0)
                         .setAmountIncVat(125))
@@ -184,7 +185,7 @@ public class HostedOrderValidatorTest {
             "MISSING VALUE - ClientOrderNumber is required (has an empty value). Use setClientOrderNumber(...).\n"
             + "MISSING VALUES - AmountExVat, Quantity and VatPercent are required for Orderrow. Use setAmountExVat(), setQuantity() and setVatPercent().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(null)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("")
@@ -207,7 +208,7 @@ public class HostedOrderValidatorTest {
                 + "MISSING VALUE - Zip code is required for all customers when countrycode is NL. Use setZipCode().\n";
         
         try {
-            WebPay.createOrder()
+            WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
                 .addDiscount(TestingTool.createRelativeDiscount())
                 .addCustomerDetails(Item.individualCustomer())
@@ -235,7 +236,7 @@ public class HostedOrderValidatorTest {
                 + "MISSING VALUE - Zip code is required for all customers when countrycode is DE. Use setCustomerZipCode().\n";
         
         try {
-            WebPay.createOrder()
+            WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
                 .addDiscount(TestingTool.createRelativeDiscount())
                 .addCustomerDetails(Item.individualCustomer())

@@ -6,6 +6,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
@@ -17,7 +18,7 @@ public class PaymentMethodTest {
 
     @Test
     public void testPayPagePaymentWithSetPaymentMethod() {
-        PaymentForm form = WebPay.createOrder()
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addDiscount(TestingTool.createRelativeDiscount())
             .addCustomerDetails(Item.individualCustomer()
@@ -41,7 +42,7 @@ public class PaymentMethodTest {
     
     @Test
     public void testPayPagePaymentWithSetPaymentMethodNL() {
-        PaymentForm form = WebPay.createOrder()
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addDiscount(TestingTool.createRelativeDiscount())
             .addCustomerDetails(Item.individualCustomer()
