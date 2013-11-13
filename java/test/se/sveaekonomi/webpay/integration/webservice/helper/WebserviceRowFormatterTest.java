@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
@@ -18,7 +19,7 @@ public class WebserviceRowFormatterTest {
 
     @Test
     public void testFormatOrderRows() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(Item.orderRow()
             .setArticleNumber("0")
             .setName("Tess")
@@ -42,7 +43,7 @@ public class WebserviceRowFormatterTest {
     
     @Test
     public void testFormatShippingFeeRows() {
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
                     .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
                     .addFee(Item.shippingFee()
                         .setShippingId("0")
@@ -72,7 +73,7 @@ public class WebserviceRowFormatterTest {
     
     @Test
     public void testFormatInvoiceFeeRows() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addFee(Item.invoiceFee()
                 .setDescription("Tester")
                 .setAmountExVat(4)
@@ -93,7 +94,7 @@ public class WebserviceRowFormatterTest {
     
     @Test
     public void testFormatFixedDiscountRows() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(Item.orderRow()
             		.setAmountExVat(4)
             		.setVatPercent(25)
@@ -119,7 +120,7 @@ public class WebserviceRowFormatterTest {
     
     @Test
     public void testFormatRelativeDiscountRows() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(TestingTool.createMiniOrderRow())
         .addDiscount(TestingTool.createRelativeDiscount());
         
@@ -140,7 +141,7 @@ public class WebserviceRowFormatterTest {
     // two discount order rows, one for each vat rate
     @Test
     public void testFormatFixedDiscountRowsAmountIncVatWithDifferentVatRatesPresent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(25)
@@ -185,7 +186,7 @@ public class WebserviceRowFormatterTest {
     // two discount order rows, one for each vat rate
     @Test
     public void testFormatFixedDiscountRowsMixedItemVatSpecAmountIncVatWithDifferentVatRatesPresent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setAmountIncVat(125.00)
@@ -229,7 +230,7 @@ public class WebserviceRowFormatterTest {
     // amountIncVat and vatPercent => add as one row with specified vat rate only
     @Test
     public void testFormatFixedDiscountRowsAmountIncVatAndVatPercentWithSingleVatRatePresent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(4.0)
                                                                     .setVatPercent(25)
@@ -257,7 +258,7 @@ public class WebserviceRowFormatterTest {
     // amountIncVat and vatPercent => add as one row with specified vat rate only
     @Test
     public void testFormatFixedDiscountRowsAmountIncVatAndVatPercentWithDifferentVatRatesPresent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(25)
@@ -291,7 +292,7 @@ public class WebserviceRowFormatterTest {
     // amountExVat and vatPercent => add as one row with specified vat rate only
     @Test
     public void testFormatFixedDiscountRowsAmountExVatAndVatPercentWithSingleVatRatePresent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(4.0)
                                                                     .setVatPercent(25)
@@ -319,7 +320,7 @@ public class WebserviceRowFormatterTest {
     // amountExVat and vatPercent => add as one row with specified vat rate only
     @Test
     public void testFormatFixedDiscountRowsAmountExVatAndVatPercentWithDifferentVatRatesPresent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(25)
@@ -352,7 +353,7 @@ public class WebserviceRowFormatterTest {
 
     @Test
     public void testFormatRelativeDiscountRowsWithSingleVatRatePresent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(12)
@@ -380,7 +381,7 @@ public class WebserviceRowFormatterTest {
     // two discount order rows, one for each vat rate
     @Test
     public void testFormatRelativeDiscountRowsWithDifferentVatRatesPresent() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                                                    .addOrderRow(Item.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(25)

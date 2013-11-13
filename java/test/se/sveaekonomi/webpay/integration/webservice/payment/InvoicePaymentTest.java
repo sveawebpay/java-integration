@@ -7,6 +7,7 @@ import java.sql.Date;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
@@ -17,7 +18,7 @@ public class InvoicePaymentTest {
 
     @Test
     public void testInvoiceWithIndividualCustomerFromSe() {
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
             .addCustomerDetails(Item.individualCustomer()
@@ -36,7 +37,7 @@ public class InvoicePaymentTest {
     
     @Test
     public void testInvoiceWithAuth() {
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addCustomerDetails(Item.individualCustomer()
                 .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
@@ -54,7 +55,7 @@ public class InvoicePaymentTest {
     
     @Test
     public void testSetAuth() {
-        SveaRequest<SveaCreateOrder> request =  WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request =  WebPay.createOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
         .addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
         .addCustomerDetails(Item.individualCustomer()
@@ -73,7 +74,7 @@ public class InvoicePaymentTest {
     
     @Test
     public void testInvoiceWithIndividualCustomerFromNl() {
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
         .addCustomerDetails(TestingTool.createIndividualCustomer())
         .setCountryCode(COUNTRYCODE.NL)
@@ -104,7 +105,7 @@ public class InvoicePaymentTest {
     
     @Test
     public void testInvoiceWithCompanyCustomerFromNl() {
-         SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+         SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
         .addCustomerDetails(TestingTool.createIndividualCustomerNl())
         .addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
@@ -131,7 +132,7 @@ public class InvoicePaymentTest {
     
     @Test
     public void testInvoiceWithCompanyCustomerFromSe() {
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
             .addCustomerDetails(Item.companyCustomer()
@@ -150,7 +151,7 @@ public class InvoicePaymentTest {
     
     @Test
     public void testInvoiceWithProductsRows() {
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
         .addFee(TestingTool.createExVatBasedShippingFee())
         .addFee(TestingTool.createExVatBasedInvoiceFee())
@@ -193,7 +194,7 @@ public class InvoicePaymentTest {
     
     @Test
     public void testInvoiceWithRelativeDiscountOnDifferentProductVat() {
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(1.0)
@@ -234,7 +235,7 @@ public class InvoicePaymentTest {
     
     @Test
     public void testInvoiceWithFixedDiscountOnDifferentProductVat() {
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(Item.orderRow()
             .setArticleNumber("1")
             .setQuantity(1.0)
@@ -275,7 +276,7 @@ public class InvoicePaymentTest {
     
     @Test
     public void testInvoiceWithCreateOrderInformation() {
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
         .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
         .setCurrency(TestingTool.DefaultTestCurrency)
         .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
@@ -293,7 +294,7 @@ public class InvoicePaymentTest {
     
     @Test
     public void testInvoiceUsingAmountIncVatWithVatPercent() {
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
         .addCustomerDetails(Item.companyCustomer()
             .setNationalIdNumber(TestingTool.DefaultTestCompanyNationalIdNumber))
         .addOrderRow(TestingTool.createIncVatBasedOrderRow("1"))
@@ -336,7 +337,7 @@ public class InvoicePaymentTest {
     
     @Test
     public void testInvoiceUsingAmountIncVatWithAmountExVat() {
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createIncAndExVatOrderRow("1")) 
             .addFee(TestingTool.createIncAndExVatShippingFee()) 
             .addFee(TestingTool.createIncAndExVatInvoiceFee())
@@ -378,7 +379,7 @@ public class InvoicePaymentTest {
    
     @Test
     public void testInvoiceRequestXML() {
-        String xml = WebPay.createOrder()
+        String xml = WebPay.createOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
         .addOrderRow(TestingTool.createExVatBasedOrderRow("2")) 
         .addCustomerDetails(Item.individualCustomer()
@@ -398,7 +399,7 @@ public class InvoicePaymentTest {
     
     @Test
     public void testCompanyIdRequest() {
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
                 .addCustomerDetails(Item.companyCustomer()
                     .setNationalIdNumber("4354kj"))

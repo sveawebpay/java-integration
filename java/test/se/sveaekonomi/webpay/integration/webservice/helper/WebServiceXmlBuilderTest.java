@@ -6,6 +6,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
@@ -24,7 +25,7 @@ public class WebServiceXmlBuilderTest {
     
     @Test
     public void testCreateOrderEu() {
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addCustomerDetails(Item.individualCustomer()
                 .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
             .addOrderRow(Item.orderRow()

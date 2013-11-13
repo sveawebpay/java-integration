@@ -31,7 +31,7 @@ public class WebServiceOrderValidatorTest {
                  + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
                  + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         
-         CreateOrderBuilder order = WebPay.createOrder()
+         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setValidator(new VoidValidator())
                 .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                 .addCustomerDetails(null);
@@ -45,7 +45,7 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setValidator(new VoidValidator())
             .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .addCustomerDetails(Item.individualCustomer()
@@ -58,7 +58,7 @@ public class WebServiceOrderValidatorTest {
     public void testFailOnMissingCountryCodeOnDeliverOrder() {
         String expectedMessage ="MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
         try {
-            WebPay.deliverOrder()
+            WebPay.deliverOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
                 .setNumberOfCreditDays(1)
                 .setOrderId(2345L)
@@ -80,7 +80,7 @@ public class WebServiceOrderValidatorTest {
                 +"MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
         
         try {
-            WebPay.getAddresses()
+            WebPay.getAddresses(SveaConfig.getDefaultConfig())
                 .doRequest();
             
             //Fail on no exception
@@ -96,7 +96,7 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n" 
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addCustomerDetails(Item.individualCustomer())
             .setValidator(new VoidValidator())
             .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
@@ -110,7 +110,7 @@ public class WebServiceOrderValidatorTest {
         String expectedMessage = "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setValidator(new VoidValidator())
             .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -126,7 +126,7 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - Two of the values must be set: AmountExVat(not set), AmountIncVat(not set) or VatPercent(not set) for Orderrow. Use two of: setAmountExVat(), setAmountIncVat or setVatPercent().\n"
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .addOrderRow(Item.orderRow())
             .addCustomerDetails(Item.individualCustomer()
@@ -143,7 +143,7 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addCustomerDetails(Item.individualCustomer())
             .setValidator(new VoidValidator())
             .setCountryCode(TestingTool.DefaultTestCountryCode);
@@ -161,7 +161,7 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setValidator(new VoidValidator())
             .setCountryCode(COUNTRYCODE.DE)
             .addCustomerDetails(Item.individualCustomer());
@@ -175,7 +175,7 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder() 
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig()) 
             .addCustomerDetails(Item.individualCustomer()
                 .setName("Tess", "Testson")
                 .setStreetAddress("Gatan", "23")
@@ -197,7 +197,7 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n" 
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .setCountryCode(COUNTRYCODE.DE)
             .addCustomerDetails(Item.individualCustomer())
@@ -210,7 +210,7 @@ public class WebServiceOrderValidatorTest {
     public void testFailOnMissingVatNumberForCompanyOrderDE() {
         String expectedMessage = "MISSING VALUE - Vat number is required for company customers when countrycode is DE. Use setVatNumber().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .setCountryCode(COUNTRYCODE.DE)
             .addOrderRow(TestingTool.createMiniOrderRow())
@@ -236,7 +236,7 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n" 
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setValidator(new VoidValidator())
             .setCountryCode(COUNTRYCODE.NL).build() 
             .addCustomerDetails(Item.individualCustomer());
@@ -254,7 +254,7 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n" 
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setValidator(new VoidValidator())
             .setCountryCode(COUNTRYCODE.NL).build() 
             .addCustomerDetails(Item.companyCustomer());
@@ -271,7 +271,7 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setValidator(new VoidValidator())
             .setCountryCode(COUNTRYCODE.DE).build()
             .addCustomerDetails(Item.companyCustomer());
@@ -284,7 +284,7 @@ public class WebServiceOrderValidatorTest {
                 + "MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n"
                 + "MISSING VALUE - OrderDate is required. Use setOrderDate().\n";
         
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addCustomerDetails(Item.individualCustomer()
                 .setBirthDate(1923, 12, 12)
                 .setName("Tess", "Testson")
@@ -314,7 +314,7 @@ public class WebServiceOrderValidatorTest {
     
     @Test
     public void succeedOnGoodValuesSe() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createMiniOrderRow())
             .addCustomerDetails(Item.individualCustomer()
                     .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
@@ -329,7 +329,7 @@ public class WebServiceOrderValidatorTest {
     public void testFailOnMissingOrderIdOnDeliverOrder() {
         String expectedMessage = "MISSING VALUE - setOrderId is required.\n";
         
-        HandleOrder handleOrder = WebPay.deliverOrder()
+        HandleOrder handleOrder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .setNumberOfCreditDays(1)
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
@@ -343,7 +343,7 @@ public class WebServiceOrderValidatorTest {
     public void testFailOnMissingOrderTypeForInvoiceOrder() {
         String expectedMessage = "MISSING VALUE - setInvoiceDistributionType is requred for deliverInvoiceOrder.\n";
         
-        HandleOrder handleOrder = WebPay.deliverOrder()
+        HandleOrder handleOrder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .setNumberOfCreditDays(1)
             .setOrderId(2345L)
@@ -358,7 +358,7 @@ public class WebServiceOrderValidatorTest {
         String expectedMessage = "MISSING VALUE - No order or fee has been included. Use addOrder(...) or addFee(...).\n";
         
         try {
-            WebPay.deliverOrder()
+            WebPay.deliverOrder(SveaConfig.getDefaultConfig())
                 .setNumberOfCreditDays(1)
                 .setOrderId(2345L)
                 .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
@@ -378,7 +378,7 @@ public class WebServiceOrderValidatorTest {
         String expectedMessage = "ERROR - CompanyCustomer is not allowed to use payment plan option.";
         
         try {
-            WebPay.createOrder()
+            WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createPaymentPlanOrderRow())
                 .addCustomerDetails(TestingTool.createCompanyCustomer())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)

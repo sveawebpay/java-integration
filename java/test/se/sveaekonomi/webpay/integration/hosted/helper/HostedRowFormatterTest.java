@@ -8,6 +8,7 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.HostedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -17,7 +18,7 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatOrderRows() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(Item.orderRow()
                 .setArticleNumber("0")
                 .setName("Tess")
@@ -41,7 +42,7 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatShippingFeeRows() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addFee(Item.shippingFee()
                 .setShippingId("0")
                 .setName("Tess")
@@ -60,7 +61,7 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatShippingFeeRowsVat() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addFee(Item.shippingFee()
                         .setAmountExVat(4)
                         .setVatPercent(25));
@@ -74,7 +75,7 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatFixedDiscountRows() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addDiscount(Item.fixedDiscount()
                         .setDiscountId("0")
                         .setName("Tess")
@@ -93,7 +94,7 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatFixedDiscountRowsAmount() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addDiscount(Item.fixedDiscount()
                         .setAmountIncVat(4));
         
@@ -105,7 +106,7 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatFixedDiscountRowsVat() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addDiscount(Item.fixedDiscount()
                         .setAmountIncVat(1)
@@ -122,7 +123,7 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatRelativeDiscountRows() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addDiscount(Item.relativeDiscount()
                         .setDiscountId("0")
                         .setName("Tess")
@@ -141,7 +142,7 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatRelativeDiscountRowsAmount() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addDiscount(Item.relativeDiscount()
                         .setDiscountPercent(10.0));
@@ -154,7 +155,7 @@ public class HostedRowFormatterTest {
     
     @Test
     public void testFormatRelativeDiscountRowsVat() {
-        CreateOrderBuilder order = WebPay.createOrder()
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addDiscount(Item.relativeDiscount()
                         .setDiscountPercent(10.0));

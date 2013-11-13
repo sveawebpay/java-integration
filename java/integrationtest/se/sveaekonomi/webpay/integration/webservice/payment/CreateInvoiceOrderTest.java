@@ -27,7 +27,7 @@ public class CreateInvoiceOrderTest {
 
     @Test
     public void testInvoiceForIndividualFromSE() {
-        CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
         .addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
             .setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -55,7 +55,7 @@ public class CreateInvoiceOrderTest {
     
     @Test
     public void testInvoiceRequestFailing() {
-        CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
         .addCustomerDetails(Item.individualCustomer().setNationalIdNumber(""))
             .setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -70,7 +70,7 @@ public class CreateInvoiceOrderTest {
     
     @Test @Ignore
     public void testCalculationWithDecimalsInVatPercent() {
-        CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(Item.orderRow()
                     .setArticleNumber("1")
                     .setQuantity(1.0)
@@ -94,7 +94,7 @@ public class CreateInvoiceOrderTest {
     
     @Test @Ignore
     public void testFormationOfDecimalsInCalculation() {
-        CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(Item.orderRow()
                     .setArticleNumber("1")
                     .setQuantity(2.0)
@@ -118,7 +118,7 @@ public class CreateInvoiceOrderTest {
     
     @Test
     public void testInvoiceCompanySe() {
-        CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setOrderDate(TestingTool.DefaultTestDate)
                 .setCurrency(TestingTool.DefaultTestCurrency)
@@ -134,7 +134,7 @@ public class CreateInvoiceOrderTest {
     
     @Test
     public void testInvoiceForIndividualFromNl() {
-        CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createOrderRowNl())
                 .addCustomerDetails(Item.individualCustomer()
                         .setBirthDate(1955, 03, 07)
@@ -173,7 +173,7 @@ public class CreateInvoiceOrderTest {
     
     @Test
     public void testInvoiceDoRequestWithIpAddressSetSE() {
-        CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
             .addCustomerDetails(Item.individualCustomer()
@@ -191,7 +191,7 @@ public class CreateInvoiceOrderTest {
     
     @Test
     public void testInvoiceRequestUsingAmountIncVatWithZeroVatPercent() {
-        CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addOrderRow(TestingTool.createExVatBasedOrderRow("2")) 
             .addCustomerDetails(Item.individualCustomer()
@@ -212,7 +212,7 @@ public class CreateInvoiceOrderTest {
         Long orderId = 0L;
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addCustomerDetails(Item.individualCustomer()
                 .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
@@ -236,7 +236,7 @@ public class CreateInvoiceOrderTest {
         
         soapBuilder = new SveaSoapBuilder();
         
-        CloseOrder closeRequest = WebPay.closeOrder()
+        CloseOrder closeRequest = WebPay.closeOrder(SveaConfig.getDefaultConfig())
                 .setOrderId(orderId)
                 .closeInvoiceOrder();
         
@@ -266,7 +266,7 @@ public class CreateInvoiceOrderTest {
     
     @Test
     public void testFormatShippingFeeRowsZero() {
-        CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
                     .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
                     .addFee(Item.shippingFee()
                         .setShippingId("0")
@@ -290,7 +290,7 @@ public class CreateInvoiceOrderTest {
     
     @Test
     public void testCompanyIdResponse() {
-        CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
                 .addCustomerDetails(Item.companyCustomer()
                     .setNationalIdNumber(TestingTool.DefaultTestCompanyNationalIdNumber))
@@ -307,7 +307,7 @@ public class CreateInvoiceOrderTest {
     
     @Test
     public void testInvoiceCompanyDe() {
-        CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createOrderRowDe())
                 .addCustomerDetails(Item.companyCustomer()
                     .setNationalIdNumber("12345")
@@ -328,7 +328,7 @@ public class CreateInvoiceOrderTest {
     
     @Test
     public void testInvoiceCompanyNl() {
-        CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createOrderRowNl())
                 .addCustomerDetails(Item.companyCustomer()
                     .setCompanyName("Svea bakkerij 123")

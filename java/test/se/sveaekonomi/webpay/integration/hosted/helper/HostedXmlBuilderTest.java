@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.payment.FakeHostedPayment;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
@@ -29,7 +30,7 @@ public class HostedXmlBuilderTest {
     
     @Test
     public void testBasicXml() {
-        order = WebPay.createOrder()
+        order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
@@ -49,7 +50,7 @@ public class HostedXmlBuilderTest {
     
     @Test
     public void testXmlWithIndividualCustomer() {
-        order = WebPay.createOrder()
+        order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
@@ -77,7 +78,7 @@ public class HostedXmlBuilderTest {
     
     @Test
     public void testXmlWithCompanyCustomer() {
-        order = WebPay.createOrder()
+        order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
@@ -104,7 +105,7 @@ public class HostedXmlBuilderTest {
     
     @Test
     public void testXmlCancelUrl() {
-        order = WebPay.createOrder() 
+        order = WebPay.createOrder(SveaConfig.getDefaultConfig()) 
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
@@ -123,7 +124,7 @@ public class HostedXmlBuilderTest {
     
     @Test
     public void testOrderRowXml() {
-        order = WebPay.createOrder() 
+        order = WebPay.createOrder(SveaConfig.getDefaultConfig()) 
             .addOrderRow(Item.orderRow()
                     .setArticleNumber("0")
                     .setName("Product")
@@ -149,7 +150,7 @@ public class HostedXmlBuilderTest {
     
     @Test
     public void testDirectPaymentSpecificXml() {
-        xml = WebPay.createOrder()
+        xml = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
@@ -165,7 +166,7 @@ public class HostedXmlBuilderTest {
     
     @Test
     public void testCardPaymentSpecificXml() {
-        xml = WebPay.createOrder()
+        xml = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
@@ -181,7 +182,7 @@ public class HostedXmlBuilderTest {
     
     @Test
     public void testPayPagePaymentSpecificXmlNullPaymentMethod() {
-        xml = WebPay.createOrder()
+        xml = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
@@ -198,7 +199,7 @@ public class HostedXmlBuilderTest {
     
     @Test
     public void testPayPagePaymentSetLanguageCode() {
-        xml = WebPay.createOrder()
+        xml = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
@@ -215,7 +216,7 @@ public class HostedXmlBuilderTest {
     
     @Test
     public void testPayPagePaymentPayPal() {
-        xml = WebPay.createOrder()
+        xml = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")
@@ -232,7 +233,7 @@ public class HostedXmlBuilderTest {
     
     @Test
     public void testPayPagePaymentSpecificXml() {
-        xml = WebPay.createOrder()
+        xml = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setCurrency(TestingTool.DefaultTestCurrency)
                 .setClientOrderNumber("nr26")

@@ -8,6 +8,7 @@ import java.util.List;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
@@ -24,7 +25,7 @@ public class PayPagePaymentTest {
         excludePaymentMethods.add(PAYMENTMETHOD.INVOICE);
         excludePaymentMethods.add(PAYMENTMETHOD.NORDEA_SE);
         
-        PayPagePayment payPagePayment = WebPay.createOrder()
+        PayPagePayment payPagePayment = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setCountryCode(TestingTool.DefaultTestCountryCode)
             .usePayPage()
             .excludePaymentMethods(excludePaymentMethods);
@@ -42,7 +43,7 @@ public class PayPagePaymentTest {
     
     @Test
     public void setExcludePaymentMethodsTestDefaultConfigurationNoExcluded() {
-        PayPagePayment payPagePayment = WebPay.createOrder()
+        PayPagePayment payPagePayment = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .usePayPage()
                 .excludePaymentMethods();
         payPagePayment.includePaymentMethods();
@@ -53,7 +54,7 @@ public class PayPagePaymentTest {
     
     @Test
     public void testDefaultSE() {
-        PayPagePayment payPagePayment = WebPay.createOrder()
+        PayPagePayment payPagePayment = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setCountryCode(TestingTool.DefaultTestCountryCode)
             .usePayPage();
         payPagePayment.configureExcludedPaymentMethods();
@@ -63,7 +64,7 @@ public class PayPagePaymentTest {
     
     @Test
     public void setPaymentMethodTestSE() {
-        PayPagePayment payPagePayment = WebPay.createOrder()
+        PayPagePayment payPagePayment = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setCountryCode(TestingTool.DefaultTestCountryCode)
             .usePayPage()
             .setPaymentMethod(PAYMENTMETHOD.INVOICE);
@@ -74,7 +75,7 @@ public class PayPagePaymentTest {
     
     @Test
     public void setPaymentMethodTestDE() {
-        PayPagePayment payPagePayment = WebPay.createOrder()
+        PayPagePayment payPagePayment = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setCountryCode(COUNTRYCODE.DE)
             .usePayPage()
             .setPaymentMethod(PAYMENTMETHOD.INVOICE);
@@ -85,7 +86,7 @@ public class PayPagePaymentTest {
     
     @Test
     public void setPaymentMethodPaymentPlanTestSE() {
-        PayPagePayment payPagePayment = WebPay.createOrder()
+        PayPagePayment payPagePayment = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setCountryCode(TestingTool.DefaultTestCountryCode)
             .usePayPage()
             .setPaymentMethod(PAYMENTMETHOD.PAYMENTPLAN);
@@ -97,7 +98,7 @@ public class PayPagePaymentTest {
     public void excludePaymentPlanTestSE() {
         ArrayList<PAYMENTMETHOD> list = new ArrayList<PAYMENTMETHOD>();
         list.add(PAYMENTMETHOD.PAYMENTPLAN);
-        PayPagePayment payPagePayment = WebPay.createOrder()
+        PayPagePayment payPagePayment = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setCountryCode(TestingTool.DefaultTestCountryCode)
             .usePayPage()
             .excludePaymentMethods(list);
@@ -109,7 +110,7 @@ public class PayPagePaymentTest {
     
     @Test
     public void setPaymentMethodPaymentPlanTestNL() {
-        PayPagePayment payPagePayment = WebPay.createOrder()
+        PayPagePayment payPagePayment = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setCountryCode(COUNTRYCODE.NL)
             .usePayPage()
             .setPaymentMethod(PAYMENTMETHOD.PAYMENTPLAN);
@@ -121,7 +122,7 @@ public class PayPagePaymentTest {
     
     @Test
     public void excludeCardPaymentMethodsTest() {
-        PayPagePayment payPagePayment = WebPay.createOrder()
+        PayPagePayment payPagePayment = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .usePayPage()
                 .excludeCardPaymentMethods();
@@ -137,7 +138,7 @@ public class PayPagePaymentTest {
         includedPaymentMethods.add(PAYMENTMETHOD.KORTCERT);
         includedPaymentMethods.add(PAYMENTMETHOD.SKRILL);
         
-        PayPagePayment payPagePayment = WebPay.createOrder()
+        PayPagePayment payPagePayment = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .usePayPage()
                 .includePaymentMethods(includedPaymentMethods);
@@ -147,7 +148,7 @@ public class PayPagePaymentTest {
     
     @Test
     public void excludeDirectPaymentMethodsTest() {
-        PayPagePayment payPagePayment = WebPay.createOrder()
+        PayPagePayment payPagePayment = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .usePayPage()
                 .excludeDirectPaymentMethods();
@@ -169,7 +170,7 @@ public class PayPagePaymentTest {
         includedPaymentMethods.add(PAYMENTMETHOD.SEB_SE);
         includedPaymentMethods.add(PAYMENTMETHOD.NORDEA_SE);
         
-        PayPagePayment payPagePayment = WebPay.createOrder()
+        PayPagePayment payPagePayment = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setCountryCode(TestingTool.DefaultTestCountryCode)
             .usePayPage()
             .includePaymentMethods(includedPaymentMethods);
@@ -190,7 +191,7 @@ public class PayPagePaymentTest {
         paymentMethods.add(PAYMENTMETHOD.INVOICE);
         paymentMethods.add(PAYMENTMETHOD.KORTCERT);
         
-        PaymentForm form = WebPay.createOrder()
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addFee(TestingTool.createExVatBasedShippingFee())
             .addDiscount(TestingTool.createRelativeDiscount())
@@ -212,7 +213,7 @@ public class PayPagePaymentTest {
     
     @Test
     public void testPayPagePaymentExcludeCardPayments() {
-        PaymentForm form = WebPay.createOrder()
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addDiscount(TestingTool.createRelativeDiscount())
             .addCustomerDetails(Item.individualCustomer()
@@ -236,7 +237,7 @@ public class PayPagePaymentTest {
     
     @Test
     public void testExcludeDirectPaymentMethods() {
-        PaymentForm form = WebPay.createOrder()
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addDiscount(TestingTool.createRelativeDiscount())
             .addCustomerDetails(Item.individualCustomer()
@@ -260,7 +261,7 @@ public class PayPagePaymentTest {
         List<PAYMENTMETHOD> paymentMethods = new ArrayList<PAYMENTMETHOD>();
         paymentMethods.add(PAYMENTMETHOD.PAYMENTPLAN);
         paymentMethods.add(PAYMENTMETHOD.SKRILL);
-        PaymentForm form = WebPay.createOrder()
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
                 .addDiscount(TestingTool.createRelativeDiscount())
                 .addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
@@ -285,7 +286,7 @@ public class PayPagePaymentTest {
         List<PAYMENTMETHOD> paymentMethods = new ArrayList<PAYMENTMETHOD>();
         paymentMethods.add(PAYMENTMETHOD.KORTCERT);
         paymentMethods.add(PAYMENTMETHOD.SKRILL);
-        PaymentForm form = WebPay.createOrder()
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addDiscount(TestingTool.createRelativeDiscount())
             .addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
@@ -306,7 +307,7 @@ public class PayPagePaymentTest {
     
     @Test
     public void testPayPagePaymentIncludePaymentMethodsEmpty() {
-        PaymentForm form = WebPay.createOrder()
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addDiscount(TestingTool.createRelativeDiscount())
             .addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))

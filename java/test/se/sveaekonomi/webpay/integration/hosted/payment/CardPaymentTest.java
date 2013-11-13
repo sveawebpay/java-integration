@@ -8,6 +8,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
@@ -20,7 +21,7 @@ public class CardPaymentTest {
     
     @Before
     public void setUp() {
-        order = WebPay.createOrder()
+        order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setValidator(new VoidValidator());
     }
     
@@ -82,7 +83,7 @@ public class CardPaymentTest {
     
     @Test
     public void testSetAuthorization() {
-        PaymentForm form = WebPay.createOrder()
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addFee(TestingTool.createExVatBasedShippingFee())
             .addFee(TestingTool.createExVatBasedInvoiceFee())

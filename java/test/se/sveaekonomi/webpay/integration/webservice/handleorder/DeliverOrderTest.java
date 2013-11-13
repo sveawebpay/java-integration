@@ -7,6 +7,7 @@ import org.junit.Before;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
@@ -20,7 +21,7 @@ public class DeliverOrderTest {
     
     @Before
     public void setUp() {
-        order = WebPay.deliverOrder();
+        order = WebPay.deliverOrder(SveaConfig.getDefaultConfig());
     }
     
     @Test

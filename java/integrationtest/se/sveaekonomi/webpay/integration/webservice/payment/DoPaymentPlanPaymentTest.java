@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
@@ -15,12 +16,12 @@ public class DoPaymentPlanPaymentTest {
     
     @Test
     public void testPaymentPlanRequestReturnsAcceptedResult() {
-        PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams()
+        PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .doRequest();
         String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
         
-        CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(TestingTool.createPaymentPlanOrderRow())
         .addCustomerDetails(TestingTool.createIndividualCustomer())
         .setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -39,7 +40,7 @@ public class DoPaymentPlanPaymentTest {
     public void testDeliverPaymentPlanOrderResult() {
         long orderId = createPaymentPlanAndReturnOrderId();
         
-        DeliverOrderResponse response = WebPay.deliverOrder()
+        DeliverOrderResponse response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(TestingTool.createPaymentPlanOrderRow())
         .setOrderId(orderId)
         .setNumberOfCreditDays(1)
@@ -52,12 +53,12 @@ public class DoPaymentPlanPaymentTest {
     }
     
     private long createPaymentPlanAndReturnOrderId() {
-        PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams()
+        PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .doRequest();
         String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
         
-        CreateOrderResponse response = WebPay.createOrder()
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createPaymentPlanOrderRow())
         .addCustomerDetails(TestingTool.createIndividualCustomer())
         .setCountryCode(TestingTool.DefaultTestCountryCode)
