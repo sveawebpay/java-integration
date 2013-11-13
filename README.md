@@ -6,22 +6,20 @@
 | develop                           | [![Build Status](https://travis-ci.org/sveawebpay/java-integration.png?branch=develop)](https://travis-ci.org/sveawebpay/java-integration) |
 
 ## Index
-* [1. Introduction](https://github.com/sveawebpay/java-integration/tree/master#introduction)
-* [2. Build](https://github.com/sveawebpay/java-integration/tree/master#build)
-* [3. Configuration](https://github.com/sveawebpay/java-integration/tree/master#configuration)
+* [1. Introduction](https://github.com/sveawebpay/java-integration/tree/master#1-introduction)
+* [2. Build](https://github.com/sveawebpay/java-integration/tree/master#2-build)
+* [3. Configuration](https://github.com/sveawebpay/java-integration/tree/master#3-configuration)
 * [4. CreateOrder](https://github.com/sveawebpay/java-integration/tree/master#4-createorder)
-    * [Test mode](https://github.com/sveawebpay/java-integration/tree/master#41-test-mode)
-    * [Specify order](https://github.com/sveawebpay/java-integration/tree/master#42-specify-order)
-    * [Customer identity](https://github.com/sveawebpay/java-integration/tree/master#43-customer-identity)
-    * [Other values](https://github.com/sveawebpay/java-integration/tree/master#44-other-values)
-    * [Choose payment](https://github.com/sveawebpay/java-integration/tree/master#45-choose-payment)
+    * [Specify order](https://github.com/sveawebpay/java-integration/tree/master#41-specify-order)
+    * [Customer identity](https://github.com/sveawebpay/java-integration/tree/master#42-customer-identity)
+    * [Other values](https://github.com/sveawebpay/java-integration/tree/master#43-other-values)
+    * [Choose payment](https://github.com/sveawebpay/java-integration/tree/master#44-choose-payment)
 * [5. GetPaymentPlanParams](https://github.com/sveawebpay/java-integration/tree/master#5-getpaymentplanparams)
     * [PaymentPlanPricePerMonth](https://github.com/sveawebpay/java-integration/tree/master#51-paymentplanpricepermonth)
 * [6. GetAddresses](https://github.com/sveawebpay/java-integration/tree/master#6-getaddresses)
 * [7. DeliverOrder](https://github.com/sveawebpay/java-integration/tree/master#7-deliverorder)
-    * [Test mode](https://github.com/sveawebpay/java-integration/tree/master#41-testmode)
-    * [Specify order](https://github.com/sveawebpay/java-integration/tree/master#42-specify-order)
-    * [Other values](https://github.com/sveawebpay/java-integration/tree/master#44-other-values)
+    * [Specify order](https://github.com/sveawebpay/java-integration/tree/master#71-specify-order)
+    * [Other values](https://github.com/sveawebpay/java-integration/tree/master#72-other-values)
 * [8. CloseOrder](https://github.com/sveawebpay/java-integration/tree/master#8-closeorder)
 * [9. Response handler](https://github.com/sveawebpay/java-integration/tree/master#9-response-handler)
 * [APPENDIX](https://github.com/sveawebpay/java-integration/tree/master#appendix)
@@ -302,11 +300,11 @@ When discount or coupon is a percentage on total product amount.
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-### 4.3 Customer Identity   
+### 4.2 Customer Identity   
 Customer identity is required for invoice and payment plan orders. Required values varies 
 depending on country and customer type. For SE, NO, DK and FI national id number is required. Email and ip address are desirable.
 
-####4.3.1 Options for individual customers
+####4.2.1 Options for individual customers
 ```java
 .addCustomerDetails(Item.individualCustomer()
     .setNationalIdNumber("194605092222")	//Required for individual customers in SE, NO, DK and FI
@@ -322,7 +320,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
     .setIpAddress("123.123.123")       		//Optional but desirable
 ```
 
-####4.3.2 Options for company customers
+####4.2.2 Options for company customers
 ```java
 .addCustomerDetails(Item.companyCustomer()
     .setNationalIdNumber("2345234")			//Required for company customers in SE, NO, DK, FI
@@ -332,7 +330,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-###4.4 Other values  
+###4.3 Other values  
 ```java
 .setCountryCode(COUNTRYCODE.SE)         //Required
 .setCurrency("SEK")                     //Required for card payment, direct payment and PayPage payment.
@@ -342,7 +340,7 @@ depending on country and customer type. For SE, NO, DK and FI national id number
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-###4.5 Choose payment 
+###4.4 Choose payment 
 End process by choosing the payment method you desire.
 
 Invoice and payment plan will perform a synchronous payment and return an object as response. 
@@ -390,10 +388,10 @@ and the html form element as array.
 ```
 
 
-####4.5.1 PayPage with card payment options
+####4.4.1 PayPage with card payment options
 *PayPage* with availible card payments only.
 
-#####4.5.1.1 Request
+#####4.4.1.1 Request
 
 ```java
 PaymentForm form = WebPay.createOrder()
@@ -417,7 +415,7 @@ PaymentForm form = WebPay.createOrder()
 	.getPaymentForm();
 
 ```
-#####4.5.1.2 Return
+#####4.4.1.2 Return
 The values of *xmlMessageBase64*, *merchantid* and *mac* are to be sent as xml to SveaWebPay.
 Function getPaymentForm() returns object type *PaymentForm* with accessible members:
 
@@ -433,10 +431,10 @@ Function getPaymentForm() returns object type *PaymentForm* with accessible memb
 | getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
             
 
-####4.5.2 PayPage with direct bank payment options
+####4.4.2 PayPage with direct bank payment options
 *PayPage* with available direct bank payments only.
                 
-#####4.5.2.1 Request
+#####4.4.2.1 Request
 
 ```java
 PaymentForm form = WebPay.createOrder()
@@ -459,7 +457,7 @@ PaymentForm form = WebPay.createOrder()
 	.setCancelUrl("http://myurl.se")                   //Optional
 	.getPaymentForm();
 ```
-#####4.5.2.2 Return
+#####4.4.2.2 Return
 Returns object type PaymentForm:
            
 | Value                 | Returns    | Description                               |
@@ -474,11 +472,11 @@ Returns object type PaymentForm:
 | getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
  
  
-####4.5.3 PayPagePayment
+####4.4.3 PayPagePayment
 *PayPage* with all available payments. You can also custom the *PayPage* by using one of the methods for *PayPagePayments*:
 setPaymentMethod, includePaymentMethods, excludeCardPaymentMethods or excludeDirectPaymentMethods.
                 
-#####4.5.3.1 Request
+#####4.4.3.1 Request
 ```java
 PaymentForm form = WebPay.createOrder()
 .addOrderRow(Item.orderRow()
@@ -502,7 +500,7 @@ PaymentForm form = WebPay.createOrder()
 	.getPaymentForm();
 ```               
 
-######4.5.3.1.1 Exclude specific payment methods
+######4.4.3.1.1 Exclude specific payment methods
 Optional if you want to include specific payment methods for *PayPage*.
 ```java   
 .usePayPage()
@@ -511,7 +509,7 @@ Optional if you want to include specific payment methods for *PayPage*.
 	.excludePaymentMethods(PAYMENTMETHOD.DBSEBSE, PAYMENTMETHOD.SVEAINVOICE_SE)	//Optional
 	.getPaymentForm();
 ```
-######4.5.3.1.2 Include specific payment methods
+######4.4.3.1.2 Include specific payment methods
 Optional if you want to include specific payment methods for *PayPage*.
 ```java   
 .usePayPage()
@@ -520,7 +518,7 @@ Optional if you want to include specific payment methods for *PayPage*.
 	.getPaymentForm();
 ```
 
-######4.5.3.1.3 Exclude Card payments
+######4.4.3.1.3 Exclude Card payments
 Optional if you want to exclude all card payment methods from *PayPage*.
 ```java
 .usePayPage()
@@ -529,7 +527,7 @@ Optional if you want to exclude all card payment methods from *PayPage*.
 	.getPaymentForm();
 ```
 
-######4.5.3.1.4 Exclude Direct payments
+######4.4.3.1.4 Exclude Direct payments
 Optional if you want to exclude all direct bank payments methods from *PayPage*.
 ```java  
 .usePayPage()
@@ -537,7 +535,7 @@ Optional if you want to exclude all direct bank payments methods from *PayPage*.
     .excludeDirectPaymentMethods()                     //Optional
     .getPaymentForm();
 ```
-#####4.5.3.6 Return
+#####4.4.3.6 Return
 Returns object type *PaymentForm*:
                 
 | Value                 | Returns    | Description                               |
@@ -552,10 +550,10 @@ Returns object type *PaymentForm*:
 | getFormHtmlFields()   | Map<String, String>   | Map with html tags as keys with of Html form fields to include. |
  
 
-#### 4.5.4 PaymentMethod specified
+#### 4.4.4 PaymentMethod specified
 Go direct to specified payment method without the step *PayPage*.
 
-##### 4.5.4.1 Request
+##### 4.4.4.1 Request
 Set your store authorization here.
 ```java
 PaymentForm form = WebPay.createOrder()
@@ -579,7 +577,7 @@ PaymentForm form = WebPay.createOrder()
 	.getPaymentForm();
 
 ```
-##### 4.5.4.2 Return
+##### 4.4.4.2 Return
 The values of *xmlMessageBase64*, *merchantid* and *mac* are to be sent as xml to SveaWebPay.
 Function getPaymentForm() returns Object type PaymentForm with accessible members:
 
@@ -597,7 +595,7 @@ Function getPaymentForm() returns Object type PaymentForm with accessible member
 
 #### Synchronous solutions - Invoice and PaymentPlan
        
-#### 4.5.5 InvoicePayment
+#### 4.4.5 InvoicePayment
 Perform an invoice payment. This payment form will perform a synchronous payment and return a response.
 Returns *CreateOrderResponse* object. Set your store authorization here.
 ```java
@@ -619,7 +617,7 @@ CreateOrderResponse response = WebPay.createOrder()
 .useInvoicePayment()
 	.doRequest();
 ```
-#### 4.5.6 PaymentPlanPayment
+#### 4.4.6 PaymentPlanPayment
 Perform *PaymentPlanPayment*. This payment form will perform a synchronous payment and return a response.
 Returns a *CreateOrderResponse* object. Preceded by WebPay.getPaymentPlanParams(...).
 Set your store authorization here.
