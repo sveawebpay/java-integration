@@ -19,9 +19,9 @@ public class DeliverOrderResponse extends Response {
     private double lowestAmountToPay;
     private int contractNumber;  
     
-    public DeliverOrderResponse(NodeList soapResponse) {
-        super();
-        this.setValues(soapResponse);
+    public DeliverOrderResponse(NodeList soapMessage) {
+        super(soapMessage);
+        this.setValues(soapMessage);
     }
     
     public void setValues(NodeList soapResponse) {
@@ -31,13 +31,8 @@ public class DeliverOrderResponse extends Response {
         
         for (int i = 0; i < size; i++) {
             Element node = (Element) soapResponse.item(i);
-            this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
-            this.setResultCode(getTagValue(node, "ResultCode"));
-            String errorMsg = getTagValue(node, "ErrorMessage");
             
-            if (errorMsg != null) {
-                this.setErrorMessage(errorMsg);
-            } else {
+            if (this.getErrorMessage() == null) {
                 this.setAmount(Double.parseDouble(getTagValue(node, "Amount")));
                 tmpOrderType = getTagValue(node, "OrderType");
                 
@@ -54,18 +49,6 @@ public class DeliverOrderResponse extends Response {
                 }
             }
         }
-    }
-    
-    private String getTagValue(Element elementNode, String tagName) {
-        NodeList nodeList = elementNode.getElementsByTagName(tagName);
-        Element element = (Element) nodeList.item(0);
-        
-        if (element != null && element.hasChildNodes()) {
-            NodeList textList = element.getChildNodes();
-            return ((Node) textList.item(0)).getNodeValue().trim();
-        }
-        
-        return null;
     }
     
     private void setChildNodeValue(Node n, String tagName) {

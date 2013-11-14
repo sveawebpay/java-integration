@@ -1,6 +1,8 @@
 package se.sveaekonomi.webpay.integration.webservice.svea_soap;
 
 import java.io.ByteArrayInputStream;
+import java.io.IOException;
+import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
@@ -80,6 +82,16 @@ public class SveaSoapBuilder {
             SOAPMessage response = connection.call(outgoingMessage, endpoint);
             
             connection.close();
+            PrintStream out = System.out;
+            try {
+				response.writeTo(out);
+				System.out.println("\n");
+			}
+			catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			};
+            
             return response.getSOAPPart().getEnvelope().getElementsByTagName(responseHeader);
         } catch (SOAPException ex) {
             throw new SveaWebPayException("SOAP exception", ex);

@@ -45,7 +45,7 @@ public class SveaResponse extends Response {
     private String authCode;
     
     public SveaResponse(String responseXmlBase64, String secretWord) {
-        super();
+        super(null);
         this.setValues(responseXmlBase64);
     }
     
@@ -104,18 +104,6 @@ public class SveaResponse extends Response {
         String node = nodeAttr.toString();
         temp = node.split("=");
         return temp[1].substring(1, temp[1].length()-1);
-    }
-    
-    private String getTagValue(Element elementNode, String tagName) {
-        NodeList nodeList = elementNode.getElementsByTagName(tagName);
-        Element element = (Element) nodeList.item(0);
-        
-        if (element != null && element.hasChildNodes()) {
-            NodeList textList = element.getChildNodes();
-            return ((Node) textList.item(0)).getNodeValue().trim();
-        }
-        
-        return null;
     }
     
     public String getTransactionId() {

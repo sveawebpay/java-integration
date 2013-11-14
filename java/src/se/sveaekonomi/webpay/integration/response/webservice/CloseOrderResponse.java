@@ -1,7 +1,6 @@
 package se.sveaekonomi.webpay.integration.response.webservice;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.response.Response;
@@ -11,7 +10,7 @@ public class CloseOrderResponse extends Response{
     public String orderType;
     
     public CloseOrderResponse(NodeList soapMessage) {
-        super();
+        super(soapMessage);
         setValues(soapMessage);
     }
     
@@ -25,17 +24,5 @@ public class CloseOrderResponse extends Response{
             this.setResultCode(getTagValue(node, "ResultCode"));
             this.setErrorMessage(getTagValue(node, "ErrorMessage"));
         }
-    }
-    
-    private String getTagValue(Element elementNode, String tagName) {
-        NodeList nodeList = elementNode.getElementsByTagName(tagName);
-        Element element = (Element) nodeList.item(0);
-        
-        if (element != null && element.hasChildNodes()) {
-            NodeList textList = element.getChildNodes();
-            return ((Node) textList.item(0)).getNodeValue().trim();
-        }
-        
-        return null;
     }
 }

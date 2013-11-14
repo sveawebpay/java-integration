@@ -665,7 +665,7 @@ Use this function to calculate the prices per month of the payment plan campaign
 
 ## 6. getAddresses 
 Returns *getAddressesResponse* object with an *AddressSelector* for the associated addresses for a specific security number. 
-Can be used when creating an order. Only applicable for SE, NO and DK.
+Can be used when creating an order. Only applicable for SE, NO and DK. In Norway, only getAddresses of companies is supported.
 Set your store authorization here.
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)

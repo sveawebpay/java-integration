@@ -138,7 +138,7 @@ public class GetAddresses {
         sveaAddress.Auth = getStoreAuthorization();
         sveaAddress.IsCompany = (companyId != null ? true : false);
         sveaAddress.CountryCode = countryCode.toString();
-        sveaAddress.SecurityNumber = nationalNumber;
+        sveaAddress.SecurityNumber = companyId != null ? companyId : nationalNumber;
         
         SveaRequest<SveaGetAddresses> request = new SveaRequest<SveaGetAddresses>();
         request.request = sveaAddress;
