@@ -55,14 +55,12 @@ Other public targets can be found in the build.xml file.
 ## 3. Configuration 
 
 The Configuration needed to be set differs of how many different payment methods and countries you have in the same installation. 
-The authorization values are recieved from Svea Ekonomi when creating an account. If no configuration is done, default settings and 
-test data found in SveaConfig.getDefaultConfig() will be used.
+The authorization values are recieved from Svea Ekonomi when creating an account. If no configuration is done, default settings from SveaConfig.getDefaultConfig() can be used.
 
 **To configure Svea authorization:**
 Create a class (eg. one for testing values, one for production) that implements the ConfigurationProvider Interface. Let the implemented methods 
 return the authorization values asked for. 
 Later when starting a WebPay action in your integration file, put an instance of your class as parameter to the constructor.
-If left blank, the default settings will be used.
 
 *NOTE:* This solution may change in future updates! 
 
@@ -823,7 +821,7 @@ Params:
 * The POST or GET message Base64 encoded
 * Your *secret word*. 
 ```java
-  SveaRespons respObject = new SveaResponse(responseXmlBase64, mac, secretWord); 
+	SveaRespons respObject = new SveaResponse(responseXmlBase64, mac, secretWord); 
 ```
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
