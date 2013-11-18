@@ -12,9 +12,7 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
-import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class ConfigurationProviderTest {
     

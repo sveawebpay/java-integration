@@ -4,6 +4,7 @@ import static org.junit.Assert.assertEquals;
 
 import java.util.Map;
 
+import org.junit.Ignore;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -19,7 +20,7 @@ public class PaymentFormTest {
     private static final String MerchantId = "1234";
     
     @Test
-    public void testSetForm() {
+    public void testSetFormDirectBank() {
         String base64Payment = Base64Util.encodeBase64String("0");
         String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
         
@@ -30,6 +31,73 @@ public class PaymentFormTest {
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(TestingTool.createCompanyCustomer())
                 .usePayPageDirectBankOnly()  
+                .setReturnUrl("http:myurl")
+                .getPaymentForm();
+        
+        form
+                .setMessageBase64(base64Payment)
+                .setMerchantId(MerchantId)
+                .setSecretWord(SecretWord)
+                .setForm();
+        
+        final String EXPECTED = "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\""
+                + form.getUrl()
+                + "\">"
+                + "<input type=\"hidden\" name=\"merchantid\" value=\"" + MerchantId + "\" />"
+                + "<input type=\"hidden\" name=\"message\" value=\"" + base64Payment + "\" />"
+                + "<input type=\"hidden\" name=\"mac\" value=\"" + mac + "\" />"
+                + "<noscript><p>Javascript är inaktiverat i er webbläsare, ni får dirigera om till paypage manuellt</p></noscript>"
+                + "<input type=\"submit\" name=\"submit\" value=\"Betala\" />"
+                + "</form>";
+        
+        assertEquals(EXPECTED, form.getCompleteForm());
+    }
+    
+    @Test
+    public void testSetFormCard() {
+        String base64Payment = Base64Util.encodeBase64String("0");
+        String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
+        
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setCurrency(TestingTool.DefaultTestCurrency)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .addOrderRow(TestingTool.createMiniOrderRow())
+                .addCustomerDetails(TestingTool.createCompanyCustomer())
+                .usePayPageCardOnly()  
+                .setReturnUrl("http:myurl")
+                .getPaymentForm();
+        
+        form
+                .setMessageBase64(base64Payment)
+                .setMerchantId(MerchantId)
+                .setSecretWord(SecretWord)
+                .setForm();
+        
+        final String EXPECTED = "<form name=\"paymentForm\" id=\"paymentForm\" method=\"post\" action=\""
+                + form.getUrl()
+                + "\">"
+                + "<input type=\"hidden\" name=\"merchantid\" value=\"" + MerchantId + "\" />"
+                + "<input type=\"hidden\" name=\"message\" value=\"" + base64Payment + "\" />"
+                + "<input type=\"hidden\" name=\"mac\" value=\"" + mac + "\" />"
+                + "<noscript><p>Javascript är inaktiverat i er webbläsare, ni får dirigera om till paypage manuellt</p></noscript>"
+                + "<input type=\"submit\" name=\"submit\" value=\"Betala\" />"
+                + "</form>";
+        
+        assertEquals(EXPECTED, form.getCompleteForm());
+    }
+    
+    @Test @Ignore
+    public void testSetFormCardNoCustomerDetails() {
+        String base64Payment = Base64Util.encodeBase64String("0");
+        String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);
+        
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setCurrency(TestingTool.DefaultTestCurrency)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .addOrderRow(TestingTool.createMiniOrderRow())
+                .usePayPageCardOnly()  
                 .setReturnUrl("http:myurl")
                 .getPaymentForm();
         
