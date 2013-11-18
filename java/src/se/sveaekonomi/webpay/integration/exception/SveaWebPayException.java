@@ -7,4 +7,8 @@ public class SveaWebPayException extends RuntimeException {
     public SveaWebPayException(String message, Throwable t) {
         super(message, t);
     }
+    
+    public SveaWebPayException(String message) {
+        super(message);
+    }
 }

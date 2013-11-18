@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.webservice.svea_soap;
 
 import java.util.ArrayList;
+import java.sql.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,7 +14,7 @@ public class SveaCreateOrderInformation {
     public ArrayList<SveaOrderRow> OrderRows; 
     public Map<String, Object> CreatePaymentPlanDetails;
     public String CustomerReference;
-    public String OrderDate;
+    public Date OrderDate;
     
     public SveaCreateOrderInformation() {
         this("", false);
@@ -23,7 +24,7 @@ public class SveaCreateOrderInformation {
         this.OrderRows = new ArrayList<SveaOrderRow> (); 
         this.CreatePaymentPlanDetails = new HashMap<String, Object>();
         
-        if (campaignCode != "") {
+        if (!campaignCode.equals("")) {
             this.CreatePaymentPlanDetails.put("CampaignCode", campaignCode);
             this.CreatePaymentPlanDetails.put("SendAutomaticGiroPaymentForm", sendAutomaticGiroPaymentForm);
         }

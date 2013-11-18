@@ -1,7 +1,6 @@
 package se.sveaekonomi.webpay.integration.response.webservice;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.response.Response;
@@ -20,7 +19,7 @@ public class GetAddressesResponse extends Response {
     private String lastName;
     
     public GetAddressesResponse(NodeList soapMessage) {
-        super();
+        super(soapMessage);
         setValues(soapMessage);
     }
     
@@ -69,8 +68,6 @@ public class GetAddressesResponse extends Response {
         
         for (int i = 0; i < size; i++) {
             Element node = (Element) soapMessage.item(i);
-            // mandatory
-            this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
             
             legalName = getTagValue(node, "LegalName");
             securityNumber = getTagValue(node, "SecurityNumber");
@@ -83,17 +80,5 @@ public class GetAddressesResponse extends Response {
             firstName = getTagValue(node, "FirstName");
             lastName = getTagValue(node, "LastName");
         }
-    }
-    
-    private String getTagValue(Element elementNode, String tagName) {
-        NodeList nodeList = elementNode.getElementsByTagName(tagName);
-        Element element = (Element) nodeList.item(0);
-        
-        if (element != null && element.hasChildNodes()) {
-            NodeList textList = element.getChildNodes();
-            return ((Node) textList.item(0)).getNodeValue().trim();
-        }
-        
-        return null;
     }
 }

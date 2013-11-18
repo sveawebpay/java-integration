@@ -23,7 +23,7 @@ public abstract class OrderValidator {
         try {
             for (OrderRowBuilder orderRow : order.getOrderRows()) {
                 
-                if (orderRow.getQuantity() <= 0)
+                if (orderRow.getQuantity() == null || orderRow.getQuantity() <= 0)
                     errors += "MISSING VALUE - Quantity is required in Item object. Use Item.setQuantity().\n";
                 if (orderRow.getAmountExVat() == null && orderRow.getVatPercent() == null && orderRow.getAmountIncVat() == null)
                     errors += "MISSING VALUE - Two of the values must be set: AmountExVat(not set), AmountIncVat(not set) or VatPercent(not set) for Orderrow. Use two of: setAmountExVat(), setAmountIncVat or setVatPercent().\n";

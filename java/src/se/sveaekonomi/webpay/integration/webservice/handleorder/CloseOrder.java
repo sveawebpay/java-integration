@@ -44,7 +44,7 @@ public class CloseOrder {
     public SveaRequest<SveaCloseOrder> prepareRequest() {
         String errors = validateRequest();
         
-        if (errors != "") {
+        if (!errors.equals("")) {
             throw new SveaWebPayException("Validation failed", new ValidationException(errors));
         }
         

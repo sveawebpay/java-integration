@@ -7,10 +7,9 @@ import java.util.List;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
-import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
@@ -18,8 +17,8 @@ public class DirectPaymentTest {
 
     @Test
     public void testConfigureExcludedPaymentMethodsSe() {
-        List<String> excluded  = WebPay.createOrder() 
-                .setCountryCode(COUNTRYCODE.SE)
+        List<String> excluded  = WebPay.createOrder(SveaConfig.getDefaultConfig()) 
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .usePayPageDirectBankOnly()
                 .configureExcludedPaymentMethods()
                 .getExcludedPaymentMethods();
@@ -29,7 +28,7 @@ public class DirectPaymentTest {
     
     @Test
     public void testConfigureExcludedPaymentMethodsNo() {
-        List<String> excluded  = WebPay.createOrder()
+        List<String> excluded  = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setCountryCode(COUNTRYCODE.NO)
                 .usePayPageDirectBankOnly()
                 .configureExcludedPaymentMethods()
@@ -40,36 +39,16 @@ public class DirectPaymentTest {
     
     @Test
     public void testBuildDirectBankPayment() {
-        PaymentForm form = WebPay.createOrder()
-            .addOrderRow(TestingTool.createOrderRow())
-            .addFee(Item.shippingFee()
-                .setShippingId("33")
-                .setName("shipping")
-                .setDescription("Specification")
-                .setAmountExVat(50)
-                .setUnit("st")
-                .setVatPercent(25)
-                .setDiscountPercent(0))
-            .addFee(Item.invoiceFee()
-                .setName("Svea fee")
-                .setDescription("Fee for invoice")
-                .setAmountExVat(50)
-                .setUnit("st")
-                .setVatPercent(25)
-                .setDiscountPercent(0))
-            .addDiscount(Item.relativeDiscount()
-                .setDiscountId("1")
-                .setName("Relative")
-                .setDescription("RelativeDiscount")
-                .setUnit("st")
-                .setDiscountPercent(50))
-            .addCustomerDetails(Item.companyCustomer()
-                .setVatNumber("2345234")
-                .setCompanyName("TestCompagniet"))
-            .setCountryCode(COUNTRYCODE.SE)
-                .setOrderDate("2012-12-12")
-                .setClientOrderNumber("33")
-                .setCurrency(CURRENCY.SEK)
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addFee(TestingTool.createExVatBasedShippingFee())
+            .addFee(TestingTool.createExVatBasedInvoiceFee())
+            .addDiscount(TestingTool.createRelativeDiscount())
+            .addCustomerDetails(TestingTool.createMiniCompanyCustomer())
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setOrderDate(TestingTool.DefaultTestDate)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .usePayPageDirectBankOnly()
                 .setReturnUrl("http://myurl.se")
                 .getPaymentForm();
@@ -83,36 +62,16 @@ public class DirectPaymentTest {
     
     @Test
     public void testBuildDirectBankPaymentNotSE() {
-        PaymentForm form = WebPay.createOrder()
-            .addOrderRow(TestingTool.createOrderRow())
-            .addFee(Item.shippingFee()
-                 .setShippingId("33")
-                 .setName("shipping")
-                 .setDescription("Specification")
-                 .setAmountExVat(50)
-                 .setUnit("st")
-                 .setVatPercent(25)
-                 .setDiscountPercent(0))
-            .addFee(Item.invoiceFee()
-                 .setName("Svea fee")
-                 .setDescription("Fee for invoice")
-                 .setAmountExVat(50)
-                 .setUnit("st")
-                 .setVatPercent(25)
-                 .setDiscountPercent(0))
-            .addDiscount(Item.relativeDiscount()
-                 .setDiscountId("1")
-                 .setName("Relative")
-                 .setDescription("RelativeDiscount")
-                 .setUnit("st")
-                 .setDiscountPercent(50))
-            .addCustomerDetails(Item.companyCustomer()
-                .setVatNumber("2345234")
-                .setCompanyName("TestCompagniet"))
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addFee(TestingTool.createExVatBasedShippingFee())
+            .addFee(TestingTool.createExVatBasedInvoiceFee())
+            .addDiscount(TestingTool.createRelativeDiscount())
+            .addCustomerDetails(TestingTool.createMiniCompanyCustomer())
             .setCountryCode(COUNTRYCODE.DE)
-            .setOrderDate("2012-12-12")
-            .setClientOrderNumber("33")
-            .setCurrency(CURRENCY.SEK)
+            .setOrderDate(TestingTool.DefaultTestDate)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .usePayPageDirectBankOnly()
             .setReturnUrl("http://myurl.se")
             .getPaymentForm();

@@ -9,15 +9,16 @@ import java.util.Map;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class PaymentPlanPricePerMonthTest {
     
     private PaymentPlanParamsResponse getParamsForTesting() {
-        GetPaymentPlanParams request = WebPay.getPaymentPlanParams();
+        GetPaymentPlanParams request = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig());
         PaymentPlanParamsResponse response = request
-                .setCountryCode(COUNTRYCODE.SE)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .doRequest();
         
         return response;

@@ -11,14 +11,14 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.webservice.CampaignCode;
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class GetPaymentPlanParamsTest {
 
     @Test
     public void testGetPaymentPlanParams() {
         PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
-            .setCountryCode(COUNTRYCODE.SE)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .doRequest();
         
         List<CampaignCode> campaignCodes = response.getCampaignCodes();
@@ -33,7 +33,7 @@ public class GetPaymentPlanParamsTest {
     @Test
     public void testResultGetPaymentPlanParams() {
         PaymentPlanParamsResponse response = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
-            .setCountryCode(COUNTRYCODE.SE)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .doRequest();
         
         assertTrue(response.isOrderAccepted());

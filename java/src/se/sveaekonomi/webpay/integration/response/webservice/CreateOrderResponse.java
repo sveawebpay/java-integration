@@ -18,7 +18,7 @@ public class CreateOrderResponse extends Response {
     public boolean isIndividualIdentity;
     
     public CreateOrderResponse(NodeList soapMessage) {
-        super();
+        super(soapMessage);
         isIndividualIdentity = false;
         customerIdentity = new CustomerIdentityResponse();
         this.setValues(soapMessage);
@@ -29,10 +29,7 @@ public class CreateOrderResponse extends Response {
         
         for (int i = 0; i < size; i++) {
             Element node = (Element) soapMessage.item(i);
-            // mandatory
-            this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
-            
-            this.setResultCode(getTagValue(node, "ResultCode"));
+
             this.sveaWillBuyOrder = Boolean.parseBoolean(getTagValue(node, "SveaWillBuyOrder"));
             
             this.amount = Double.parseDouble(getTagValue(node, "Amount"));
@@ -55,7 +52,6 @@ public class CreateOrderResponse extends Response {
             setChildNodeValue(node, "NationalIdNumber");
             setChildNodeValue(node, "Email");
             setChildNodeValue(node, "PhoneNumber");
-            //setChildNodeValue(node, "IpAddress");
             setChildNodeValue(node, "FullName");
             setChildNodeValue(node, "Street");
             setChildNodeValue(node, "CoAddress");
@@ -65,18 +61,6 @@ public class CreateOrderResponse extends Response {
             setChildNodeValue(node, "CountryCode");
             setChildNodeValue(node, "CustomerType");
         }
-    }
-    
-    private String getTagValue(Element elementNode, String tagName) {
-        NodeList nodeList = elementNode.getElementsByTagName(tagName);
-        Element element = (Element) nodeList.item(0);
-        
-        if (element != null && element.hasChildNodes()) {
-            NodeList textList = element.getChildNodes();
-            return ((Node) textList.item(0)).getNodeValue().trim();
-        }
-        
-        return null;
     }
     
     private void setCustomerIdentityType(Node n) {

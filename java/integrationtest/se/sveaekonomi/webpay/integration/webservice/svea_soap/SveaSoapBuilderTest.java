@@ -5,24 +5,23 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class SveaSoapBuilderTest {
 
     @Test
     public void testRequest() {
-        CreateOrderResponse response = WebPay.createOrder()
-            .addOrderRow(TestingTool.createOrderRow())
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber("194605092222"))
-            .setCountryCode(COUNTRYCODE.SE)
-            .setClientOrderNumber("33")
-            .setOrderDate("2012-12-12")
-            .setCurrency(CURRENCY.SEK)
+                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setOrderDate(TestingTool.DefaultTestDate)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .useInvoicePayment()
             .doRequest();
         

@@ -8,12 +8,11 @@ import org.junit.Before;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class CardPaymentTest {
@@ -22,14 +21,14 @@ public class CardPaymentTest {
     
     @Before
     public void setUp() {
-        order = WebPay.createOrder()
+        order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setValidator(new VoidValidator());
     }
     
     @Test
     public void testConfigureExcludedPaymentMethodsSe() {
         List<String> excluded = order
-                .setCountryCode(COUNTRYCODE.SE)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .usePayPageCardOnly()
                 .configureExcludedPaymentMethods()
                 .getExcludedPaymentMethods();
@@ -39,31 +38,15 @@ public class CardPaymentTest {
     
     @Test
     public void testBuildCardPayment() {
-        PaymentForm form = order.addOrderRow(TestingTool.createOrderRow())
-            .addCustomerDetails(Item.companyCustomer()
-            .setVatNumber("2345234")
-            .setCompanyName("TestCompagniet"))
+        PaymentForm form = order.addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addCustomerDetails(TestingTool.createMiniCompanyCustomer())
+            .addFee(TestingTool.createExVatBasedShippingFee())
+            .addDiscount(TestingTool.createRelativeDiscount())
             
-            .addFee(Item.shippingFee()
-            .setShippingId("33")
-            .setName("shipping")
-            .setDescription("Specification")
-            .setAmountExVat(50)
-            .setUnit("st")
-            .setVatPercent(25)
-            .setDiscountPercent(0))
-            
-            .addDiscount(Item.relativeDiscount()
-            .setDiscountId("1")
-            .setName("Relative")
-            .setDescription("RelativeDiscount")
-            .setUnit("st")
-            .setDiscountPercent(50))
-            
-            .setCountryCode(COUNTRYCODE.SE)
-            .setOrderDate("2012-12-12")
-            .setClientOrderNumber("33")
-            .setCurrency(CURRENCY.SEK)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .setOrderDate(TestingTool.DefaultTestDate)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .usePayPageCardOnly()
             .setReturnUrl("http://myurl.se")
             .getPaymentForm();
@@ -78,31 +61,14 @@ public class CardPaymentTest {
     
     @Test
     public void testBuildCardPaymentDE() {
-        PaymentForm form = order.addOrderRow(TestingTool.createOrderRow())
-            .addCustomerDetails(Item.companyCustomer()
-            .setVatNumber("2345234")
-            .setCompanyName("TestCompagniet"))
-            
-            .addFee(Item.shippingFee()
-                .setShippingId("33")
-                .setName("shipping")
-                .setDescription("Specification")
-                .setAmountExVat(50)
-                .setUnit("st")
-                .setVatPercent(25)
-                .setDiscountPercent(0))
-            
-            .addDiscount(Item.relativeDiscount()
-                .setDiscountId("1")
-                .setName("Relative")
-                .setDescription("RelativeDiscount")
-                .setUnit("st")
-                .setDiscountPercent(50))
-            
+        PaymentForm form = order.addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addCustomerDetails(TestingTool.createMiniCompanyCustomer())
+            .addFee(TestingTool.createExVatBasedShippingFee())
+            .addDiscount(TestingTool.createRelativeDiscount())
             .setCountryCode(COUNTRYCODE.DE)
-            .setOrderDate("2012-12-12")
-            .setClientOrderNumber("33")
-            .setCurrency(CURRENCY.SEK)
+            .setOrderDate(TestingTool.DefaultTestDate)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .usePayPageCardOnly()
             .setReturnUrl("http://myurl.se")
             .getPaymentForm();
@@ -117,40 +83,16 @@ public class CardPaymentTest {
     
     @Test
     public void testSetAuthorization() {
-        PaymentForm form = WebPay.createOrder()
-            .addOrderRow(TestingTool.createOrderRow())
-            
-            .addFee(Item.shippingFee()
-                .setShippingId("33")
-                .setName("shipping")
-                .setDescription("Specification")
-                .setAmountExVat(50)
-                .setUnit("st")
-                .setVatPercent(25)
-                .setDiscountPercent(0))
-            
-            .addFee(Item.invoiceFee()
-                .setName("Svea fee")
-                .setDescription("Fee for invoice")
-                .setAmountExVat(50)
-                .setUnit("st")
-                .setVatPercent(25)
-                .setDiscountPercent(0))
-            
-            .addDiscount(Item.relativeDiscount()
-                .setName("Svea fee")
-                .setDescription("Fee for invoice")
-                .setUnit("st")
-                .setDiscountPercent(0))
-            
-            .addCustomerDetails(Item.companyCustomer()
-                .setVatNumber("2345234")
-                .setCompanyName("TestCompagniet"))
-            
-            .setCountryCode(COUNTRYCODE.SE)
-            .setOrderDate("2012-12-12")
-            .setClientOrderNumber("33")
-            .setCurrency(CURRENCY.SEK)
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addFee(TestingTool.createExVatBasedShippingFee())
+            .addFee(TestingTool.createExVatBasedInvoiceFee())
+            .addDiscount(TestingTool.createRelativeDiscount())
+            .addCustomerDetails(TestingTool.createMiniCompanyCustomer())
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .setOrderDate(TestingTool.DefaultTestDate)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .usePayPageCardOnly()
             .setReturnUrl("http://myurl.se")
             .getPaymentForm();

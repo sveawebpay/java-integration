@@ -7,11 +7,10 @@ import static org.junit.Assert.assertTrue;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
@@ -19,11 +18,11 @@ public class DeliverInvoiceOrderTest {
     
     @Test
     public void testDeliverInvoiceOrderDoRequest() {
-        DeliverOrderResponse response = WebPay.deliverOrder()
-            .addOrderRow(TestingTool.createOrderRow())
+        DeliverOrderResponse response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .setOrderId(54086L)
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-            .setCountryCode(COUNTRYCODE.SE)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .deliverInvoiceOrder()
             .doRequest();
         
@@ -34,12 +33,12 @@ public class DeliverInvoiceOrderTest {
     public void testDeliverInvoiceOrderResult() {
         long orderId = createInvoiceAndReturnOrderId();
         
-        DeliverOrderResponse response = WebPay.deliverOrder()
-            .addOrderRow(TestingTool.createOrderRow())
+        DeliverOrderResponse response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .setOrderId(orderId)
             .setNumberOfCreditDays(1)
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-            .setCountryCode(COUNTRYCODE.SE)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
             .deliverInvoiceOrder()
             .doRequest();
         
@@ -51,14 +50,14 @@ public class DeliverInvoiceOrderTest {
     }
     
     private long createInvoiceAndReturnOrderId() {
-        CreateOrderResponse response = WebPay.createOrder()
-            .addOrderRow(TestingTool.createOrderRow())
+        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
             .addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber("194605092222"))
-            .setCountryCode(COUNTRYCODE.SE)
-            .setClientOrderNumber("33")
-            .setOrderDate("2012-12-12")
-            .setCurrency(CURRENCY.SEK)
+                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setOrderDate(TestingTool.DefaultTestDate)
+            .setCurrency(TestingTool.DefaultTestCurrency)
             .useInvoicePayment()
             .doRequest();
         

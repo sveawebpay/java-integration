@@ -7,10 +7,8 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
-import se.sveaekonomi.webpay.integration.order.row.Item;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
@@ -21,72 +19,36 @@ public class NewOrderBuilderTest {
     public void testBuildOrderRowArrayList() {
         
         ArrayList<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>(); 
-        orderRows.add(Item.orderRow()
-                .setArticleNumber("1")
-                .setQuantity(2)
-                .setAmountExVat(100.00)
-                .setDescription("Specification")
-                .setName("Prod")
-                .setUnit("st")
-                .setVatPercent(25)
-                .setDiscountPercent(0));
+        orderRows.add(TestingTool.createExVatBasedOrderRow("1"));
+        orderRows.add(TestingTool.createExVatBasedOrderRow("2"));
         
-        orderRows.add(Item.orderRow()
-                .setArticleNumber("2")
-                .setQuantity(2)
-                .setAmountExVat(100.00)
-                .setDescription("Specification")
-                .setName("Prod")
-                .setUnit("st")
-                .setVatPercent(25)
-                .setDiscountPercent(0));
-        
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRows(orderRows)
-                .addCustomerDetails(Item.companyCustomer()
-                    .setNationalIdNumber("666666")
-                    .setEmail("test@svea.com")
-                    .setPhoneNumber("999999")
-                    .setIpAddress("123.123.123.123")
-                    .setStreetAddress("Gatan", "23")
-                    .setCoAddress("c/o Eriksson")
-                    .setZipCode("9999")
-                    .setLocality("Stan"))
-        
-                .setCountryCode(COUNTRYCODE.SE)
-                .setCustomerReference("33")
-                .setOrderDate("2012-12-12")
-                .setCurrency(CURRENCY.SEK)
+                .addCustomerDetails(TestingTool.createCompanyCustomer())
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setCustomerReference(TestingTool.DefaultTestCustomerReferenceNumber)
+                .setOrderDate(TestingTool.DefaultTestDate)
+                .setCurrency(TestingTool.DefaultTestCurrency)
                 .useInvoicePayment()
                 .prepareRequest();
         
-         assertEquals("666666", request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber);
+         assertEquals("164608142222", request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber);
          assertEquals("1", request.request.CreateOrderInformation.OrderRows.get(0).ArticleNumber);
          assertEquals("2", request.request.CreateOrderInformation.OrderRows.get(1).ArticleNumber);
     }
     
     @Test
     public void testBuildOrderWithCompanyCustomer() {
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder()
-        .addOrderRow(TestingTool.createOrderRow())
-        
-        .addCustomerDetails(Item.companyCustomer()
-            .setNationalIdNumber("666666")
-            .setEmail("test@svea.com")
-            .setPhoneNumber("999999")
-            .setIpAddress("123.123.123.123")
-            .setStreetAddress("Gatan", "23")
-            .setCoAddress("c/o Eriksson")
-            .setZipCode("9999")
-            .setLocality("Stan"))
-        
-        .setCountryCode(COUNTRYCODE.SE)
-        .setCustomerReference("33")
-        .setOrderDate("2012-12-12")
-        .setCurrency(CURRENCY.SEK)
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
+        .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+        .addCustomerDetails(TestingTool.createCompanyCustomer())
+        .setCountryCode(TestingTool.DefaultTestCountryCode)
+        .setCustomerReference(TestingTool.DefaultTestCustomerReferenceNumber)
+        .setOrderDate(TestingTool.DefaultTestDate)
+        .setCurrency(TestingTool.DefaultTestCurrency)
         .useInvoicePayment()
         .prepareRequest();
         
-        assertEquals("666666", request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber); 
+        assertEquals("164608142222", request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber); 
     }
 }

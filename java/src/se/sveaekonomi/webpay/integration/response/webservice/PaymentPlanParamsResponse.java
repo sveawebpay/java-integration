@@ -4,7 +4,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.response.Response;
@@ -14,7 +13,7 @@ public class PaymentPlanParamsResponse extends Response {
     private List<CampaignCode> campaignCodes;
     
     public PaymentPlanParamsResponse(NodeList soapMessage) {
-        super();
+        super(soapMessage);
         campaignCodes = new ArrayList<CampaignCode>();
         setValues(soapMessage);
     }
@@ -34,9 +33,6 @@ public class PaymentPlanParamsResponse extends Response {
             Element node = (Element)soapMessage.item(i);
             
             // mandatory
-            this.setOrderAccepted(Boolean.parseBoolean(getTagValue(node, "Accepted")));
-            
-            this.setResultCode(getTagValue(node, "ResultCode"));
             
             if (this.isOrderAccepted()) {
                 NodeList campaigns = node.getElementsByTagName("CampaignCodeInfo");
@@ -62,17 +58,5 @@ public class PaymentPlanParamsResponse extends Response {
                 }
             }
         }
-    }
-    
-    private String getTagValue(Element elementNode, String tagName) {
-        NodeList nodeList = elementNode.getElementsByTagName(tagName);
-        Element element = (Element) nodeList.item(0);
-        
-        if (element != null && element.hasChildNodes()) {
-            NodeList textList = element.getChildNodes();
-            return ((Node) textList.item(0)).getNodeValue().trim();
-        }
-        
-        return null;
     }
 }

@@ -1,5 +1,7 @@
 package se.sveaekonomi.webpay.integration.order.create;
 
+import java.sql.Date;
+
 import javax.xml.bind.ValidationException;
 
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
@@ -33,7 +35,7 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     
     private String clientOrderNumber;
     private String customerReference;
-    private String orderDate;
+    private Date orderDate;
     private COUNTRYCODE countryCode;
     private String currency;
     private String campaignCode;
@@ -74,11 +76,11 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
         return this;
     }
     
-    public String getOrderDate() {
+    public Date getOrderDate() {
         return orderDate;
     }
     
-    public CreateOrderBuilder setOrderDate(String orderDate) {
+    public CreateOrderBuilder setOrderDate(Date orderDate) {
         this.orderDate = orderDate;
         return this;
     }
