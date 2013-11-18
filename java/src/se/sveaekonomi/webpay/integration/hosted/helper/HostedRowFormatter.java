@@ -1,8 +1,5 @@
 package se.sveaekonomi.webpay.integration.hosted.helper;
 
-import java.math.BigDecimal;
-import java.math.MathContext;
-import java.math.RoundingMode;
 import java.util.ArrayList;
 
 import se.sveaekonomi.webpay.integration.hosted.HostedOrderRowBuilder;
@@ -13,6 +10,7 @@ import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RelativeDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
+import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
 
 public class HostedRowFormatter {
 
@@ -69,8 +67,8 @@ public class HostedRowFormatter {
 				tempVat = amountIncVat - amountExVat;
 			}
 
-			tempRow.setAmount(convertDecimalToCentesimal(tempAmount));
-			tempRow.setVat(convertDecimalToCentesimal(tempVat));
+			tempRow.setAmount(MathUtil.convertFromDecimalToCentesimal(tempAmount));
+			tempRow.setVat(MathUtil.convertFromDecimalToCentesimal(tempVat));
 			tempRow.setQuantity(quantity);
 
 			totalAmount += tempAmount * quantity;
@@ -110,8 +108,8 @@ public class HostedRowFormatter {
 				tempVat = amountIncVat - amountExVat;
 			}
 
-			tempRow.setAmount(convertDecimalToCentesimal(tempAmount));
-			tempRow.setVat(convertDecimalToCentesimal(tempVat));
+			tempRow.setAmount(MathUtil.convertFromDecimalToCentesimal(tempAmount));
+			tempRow.setVat(MathUtil.convertFromDecimalToCentesimal(tempVat));
 			tempRow.setQuantity(quantity);
 
 			totalShippingAmount = tempAmount * quantity;
@@ -157,13 +155,13 @@ public class HostedRowFormatter {
 			}
 
 			double discountedAmount = -tempAmount;
-			tempRow.setAmount(convertDecimalToCentesimal(discountedAmount));
+			tempRow.setAmount(MathUtil.convertFromDecimalToCentesimal(discountedAmount));
 
 			totalAmount += discountedAmount;
 
 			if (totalVat > 0) {
 				double discountedVat = -tempVat;
-				tempRow.setVat(convertDecimalToCentesimal(discountedVat));
+				tempRow.setVat(MathUtil.convertFromDecimalToCentesimal(discountedVat));
 				totalVat += discountedVat;
 			}
 
@@ -191,8 +189,8 @@ public class HostedRowFormatter {
 				totalVat = totalVat - discountVat;
 			}
 
-			tempRow.setAmount(-convertDecimalToCentesimal(discountAmount));
-			tempRow.setVat(-convertDecimalToCentesimal(discountVat));
+			tempRow.setAmount(-MathUtil.convertFromDecimalToCentesimal(discountAmount));
+			tempRow.setVat(-MathUtil.convertFromDecimalToCentesimal(discountVat));
 
 			newRows.add(tempRow);
 		}
@@ -248,22 +246,11 @@ public class HostedRowFormatter {
 		return vat;
 	}
 
-	private double bankersRound(double value) {
-		return new BigDecimal(value).setScale(2, RoundingMode.HALF_EVEN).round(new MathContext(0)).doubleValue();
-	}
-
-	private long convertDecimalToCentesimal(double value) {
-		value = Math.floor(value * 10000) / 10000; // Remove insignificant decimals
-		value = bankersRound(value); // Bankers rounding to two decimals
-		value = value * 100; // Convert to centesimal value (kr -> öre, eur -> cent, and so on)
-		return (long) bankersRound(value); // Return as long and take rounded decimals in to account
-	}
-
 	public long getTotalAmount() {
-		return convertDecimalToCentesimal(totalAmount);
+		return MathUtil.convertFromDecimalToCentesimal(totalAmount);
 	}
 
 	public long getTotalVat() {
-		return convertDecimalToCentesimal(totalVat);
+		return MathUtil.convertFromDecimalToCentesimal(totalVat);
 	}
 }
