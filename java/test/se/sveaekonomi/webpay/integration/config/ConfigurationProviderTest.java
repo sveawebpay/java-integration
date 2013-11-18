@@ -12,14 +12,12 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
-import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class ConfigurationProviderTest {
     
 	private ConfigurationProvider defaultConf;
-	final String ExpectedMessage = "A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()";
+	private final String ExpectedMessage = "A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()";
 	
 	@Before
 	public void setUp() {

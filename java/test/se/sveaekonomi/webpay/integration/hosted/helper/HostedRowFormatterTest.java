@@ -34,8 +34,8 @@ public class HostedRowFormatterTest {
         assertEquals("0", newRow.getSku());
         assertEquals("Tess", newRow.getName());
         assertEquals("Tester", newRow.getDescription());
-        assertTrue(500L == newRow.getAmount());
-        assertTrue(100L == newRow.getVat());
+        assertEquals(500L, (long)newRow.getAmount());
+        assertEquals(100L, (long)newRow.getVat());
         assertEquals(1, newRow.getQuantity(), 0);
         assertEquals("st", newRow.getUnit());
     }
@@ -101,7 +101,7 @@ public class HostedRowFormatterTest {
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(0);
         
-        assertTrue(-400L == newRow.getAmount());
+        assertEquals(-400L, (long)newRow.getAmount());
     }
     
     @Test
@@ -117,8 +117,8 @@ public class HostedRowFormatterTest {
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
         HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(1);
         
-        assertTrue(-100L == newRow.getAmount());
-        assertTrue(-20L == newRow.getVat());
+        assertEquals(-100L, (long)newRow.getAmount());
+        assertEquals(-20L, (long)newRow.getVat());
     }
     
     @Test

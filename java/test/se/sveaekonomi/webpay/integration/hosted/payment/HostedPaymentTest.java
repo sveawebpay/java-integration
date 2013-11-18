@@ -38,7 +38,7 @@ public class HostedPaymentTest {
             .setReturnUrl("myurl")
             .calculateRequestValues();
         
-        assertTrue(500L == payment.getAmount());
+        assertEquals(500L, (long)payment.getAmount());
     }
 
     @Test
@@ -57,7 +57,7 @@ public class HostedPaymentTest {
             .setReturnUrl("myUrl")
             .calculateRequestValues();
         
-        assertEquals(500L,payment.getAmount(), 0);
+        assertEquals(500L, (long)payment.getAmount());
     }
     
     @Test
@@ -78,7 +78,7 @@ public class HostedPaymentTest {
             .setReturnUrl("myUrl")
             .calculateRequestValues();
         
-        assertEquals(1000L,payment.getAmount(), 0);
+        assertEquals(1000L, (long)payment.getAmount());
     }
     
     @Test
@@ -97,7 +97,7 @@ public class HostedPaymentTest {
             .setReturnUrl("myurl")
             .calculateRequestValues();
         
-        assertTrue(500L == payment.getAmount());
+        assertEquals(500L, (long)payment.getAmount());
     }
     
     @Test

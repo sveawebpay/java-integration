@@ -12,6 +12,7 @@ import se.sveaekonomi.webpay.integration.order.row.FixedDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RelativeDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RowBuilder;
+import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrderRow;
 
 public class WebserviceRowFormatter {
@@ -111,17 +112,6 @@ public class WebserviceRowFormatter {
 		}
 	}
 	
-	private double bankersRound(double value) {
-		return new BigDecimal(value)
-					.setScale(2, RoundingMode.HALF_EVEN)
-					.round(new MathContext(0))
-					.doubleValue();
-	}
-	
-    private double reverseVatRate(double rate) {
-        return (1 - (1 / (1 + rate / 100)));
-    }
-
 	private <T extends RowBuilder> void formatRowLists(List<T> rows) {
 		for (RowBuilder existingRow : rows) {
 			if (FixedDiscountBuilder.class.equals(existingRow.getClass())) {
@@ -139,9 +129,9 @@ public class WebserviceRowFormatter {
                         }
 
                         double discountAtThisVatRateIncVat = existingRow.getAmountIncVat() * (amountAtThisVatRateIncVat / totalAmountIncVat);
-                        double discountAtThisVatRateExVat = discountAtThisVatRateIncVat - discountAtThisVatRateIncVat * reverseVatRate(vatRate);
+                        double discountAtThisVatRateExVat = discountAtThisVatRateIncVat - discountAtThisVatRateIncVat * MathUtil.reverseVatRate(vatRate);
 
-                        orderRow.PricePerUnit = -bankersRound(discountAtThisVatRateExVat);
+                        orderRow.PricePerUnit = -MathUtil.bankersRound(discountAtThisVatRateExVat);
                         orderRow.VatPercent = vatRate;
 
                         newRows.add(orderRow);
@@ -153,9 +143,9 @@ public class WebserviceRowFormatter {
 
                 	double vatRate = existingRow.getVatPercent();
                 	double discountAtThisVatRateIncVat = existingRow.getAmountIncVat();
-                	double discountAtThisVatRateExVat = discountAtThisVatRateIncVat - discountAtThisVatRateIncVat * reverseVatRate(vatRate);
+                	double discountAtThisVatRateExVat = discountAtThisVatRateIncVat - discountAtThisVatRateIncVat * MathUtil.reverseVatRate(vatRate);
 
-                    orderRow.PricePerUnit = -bankersRound(discountAtThisVatRateExVat);
+                    orderRow.PricePerUnit = -MathUtil.bankersRound(discountAtThisVatRateExVat);
                     orderRow.VatPercent = vatRate;
 
                     newRows.add(orderRow);
@@ -164,7 +154,7 @@ public class WebserviceRowFormatter {
                 {
                 	SveaOrderRow orderRow = newRowBasedOnExisting(existingRow);
 
-                    orderRow.PricePerUnit = -bankersRound(existingRow.getAmountExVat());
+                    orderRow.PricePerUnit = -MathUtil.bankersRound(existingRow.getAmountExVat());
                     orderRow.VatPercent = existingRow.getVatPercent();
 
                     newRows.add(orderRow);
@@ -184,10 +174,10 @@ public class WebserviceRowFormatter {
                         orderRow.Description = formatDiscountRowDescription(name, description, (long) vatRate);
                     }
 
-                    double amountAtThisVatRateExVat = amountAtThisVatRateIncVat - amountAtThisVatRateIncVat * reverseVatRate(vatRate);
+                    double amountAtThisVatRateExVat = amountAtThisVatRateIncVat - amountAtThisVatRateIncVat * MathUtil.reverseVatRate(vatRate);
                     double discountExVat = amountAtThisVatRateExVat * (existingRow.getDiscountPercent() / 100);
 
-                    orderRow.PricePerUnit = -bankersRound(discountExVat);
+                    orderRow.PricePerUnit = -MathUtil.bankersRound(discountExVat);
                     orderRow.VatPercent = vatRate;
 
                     //Relative discounts is a special case where we want to use the discount percent in calculations

@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.order.validator;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
 import org.junit.Test;
@@ -12,6 +13,7 @@ import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
@@ -87,11 +89,13 @@ public class HostedOrderValidatorTest {
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .setValidator(new VoidValidator())
             .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setCountryCode(COUNTRYCODE.SE)
+            .setCurrency(CURRENCY.SEK)
             .addOrderRow(TestingTool.createMiniOrderRow())
             .addCustomerDetails(TestingTool.createMiniCompanyCustomer());
         
         orderValidator = new HostedOrderValidator();
-        orderValidator.validate(order);
+        assertTrue(orderValidator.validate(order).isEmpty());
     }
     
     @Test
@@ -99,11 +103,12 @@ public class HostedOrderValidatorTest {
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                 .setCountryCode(COUNTRYCODE.NL)
+                .setCurrency(CURRENCY.EUR)
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(TestingTool.createMiniCompanyCustomer());
         
         orderValidator = new HostedOrderValidator();
-        orderValidator.validate(order);
+        assertTrue(orderValidator.validate(order).isEmpty());
     }
     
     @Test
@@ -111,10 +116,11 @@ public class HostedOrderValidatorTest {
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                 .setCountryCode(COUNTRYCODE.DE)
+                .setCurrency(CURRENCY.EUR)
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(TestingTool.createMiniCompanyCustomer());
         orderValidator = new HostedOrderValidator();
-        orderValidator.validate(order);
+        assertTrue(orderValidator.validate(order).isEmpty());
     }
     
     @Test

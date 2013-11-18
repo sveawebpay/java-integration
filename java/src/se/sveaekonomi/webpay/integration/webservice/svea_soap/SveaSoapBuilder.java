@@ -82,15 +82,6 @@ public class SveaSoapBuilder {
             SOAPMessage response = connection.call(outgoingMessage, endpoint);
             
             connection.close();
-            PrintStream out = System.out;
-            try {
-				response.writeTo(out);
-				System.out.println("\n");
-			}
-			catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			};
             
             return response.getSOAPPart().getEnvelope().getElementsByTagName(responseHeader);
         } catch (SOAPException ex) {
