@@ -87,7 +87,7 @@ public class PaymentFormTest {
         assertEquals(EXPECTED, form.getCompleteForm());
     }
     
-    @Test @Ignore
+    @Test
     public void testSetFormCardNoCustomerDetails() {
         String base64Payment = Base64Util.encodeBase64String("0");
         String mac = HashUtil.createHash(base64Payment + SecretWord, HASHALGORITHM.SHA_512);

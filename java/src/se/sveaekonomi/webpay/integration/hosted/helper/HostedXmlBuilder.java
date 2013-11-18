@@ -68,6 +68,10 @@ public class HostedXmlBuilder extends XMLBuilder {
 	}
 
 	private void serializeCustomer(CreateOrderBuilder order, HostedPayment<?> payment) {
+        if (order.customerIdentity == null) {
+            return;
+        }
+		
 		CustomerIdentity<?> customer;
 
 		try {
