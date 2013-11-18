@@ -148,8 +148,6 @@ public class CreateInvoiceOrderTest {
 
 		assertTrue(response.isOrderAccepted());
 
-		soapBuilder = new SveaSoapBuilder();
-
 		CloseOrder closeRequest = WebPay.closeOrder(SveaConfig.getDefaultConfig()).setOrderId(orderId).closeInvoiceOrder();
 
 		String expectedMsg = "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";

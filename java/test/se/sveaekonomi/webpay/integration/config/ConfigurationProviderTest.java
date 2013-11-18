@@ -17,7 +17,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 public class ConfigurationProviderTest {
     
 	private ConfigurationProvider defaultConf;
-	final String ExpectedMessage = "A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()";
+	private final String ExpectedMessage = "A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()";
 	
 	@Before
 	public void setUp() {

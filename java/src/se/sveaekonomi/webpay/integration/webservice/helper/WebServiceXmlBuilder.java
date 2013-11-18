@@ -25,7 +25,6 @@ public class WebServiceXmlBuilder extends XMLBuilder {
     public String getCreateOrderEuXml(SveaCreateOrder order) {
         XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
         ByteArrayOutputStream os = new ByteArrayOutputStream();
-        ArrayList<SveaOrderRow> rows = order.CreateOrderInformation.OrderRows;
         
         try {
             xmlw = xmlof.createXMLStreamWriter(os, "UTF-8");
@@ -35,7 +34,7 @@ public class WebServiceXmlBuilder extends XMLBuilder {
             if (order.CreateOrderInformation != null) {
                 xmlw.writeStartElement(prefix+"CreateOrderInformation");
                 writeSimpleElement(prefix+"ClientOrderNumber", order.CreateOrderInformation.ClientOrderNumber);
-                serializeOrderRows(rows);
+                serializeOrderRows(order.CreateOrderInformation.OrderRows);
                 
                 if (order.CreateOrderInformation.CustomerIdentity != null) {
                     xmlw.writeStartElement(prefix+"CustomerIdentity");
