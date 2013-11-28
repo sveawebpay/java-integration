@@ -123,6 +123,26 @@ public class HostedXmlBuilderTest {
     }
     
     @Test
+    public void testXmlCallbackUrl() {
+        order = WebPay.createOrder(SveaConfig.getDefaultConfig()) 
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setCurrency(TestingTool.DefaultTestCurrency)
+                .setClientOrderNumber("nr26")
+                .addOrderRow(TestingTool.createMiniOrderRow())
+                .addCustomerDetails(Item.companyCustomer());
+        
+        FakeHostedPayment payment = new FakeHostedPayment(order);
+        payment.setCallbacklUrl("http://www.callback.nu")
+        	.setCancelUrl("http://www.cancel.com")
+            .setReturnUrl("http://myurl.se") 
+            .calculateRequestValues();
+        
+        xml = xmlBuilder.getXml(payment);
+        
+        assertTrue(xml.contains("<callbackurl>http://www.callback.nu</callbackurl>"));
+    }
+    
+    @Test
     public void testOrderRowXml() {
         order = WebPay.createOrder(SveaConfig.getDefaultConfig()) 
             .addOrderRow(Item.orderRow()

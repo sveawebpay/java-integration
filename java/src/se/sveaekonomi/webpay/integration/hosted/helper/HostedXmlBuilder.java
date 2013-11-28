@@ -43,6 +43,7 @@ public class HostedXmlBuilder extends XMLBuilder {
 			writeSimpleElement("lang", payment.getPayPageLanguageCode());
 			writeSimpleElement("returnurl", payment.getReturnUrl());
 			writeSimpleElement("cancelurl", payment.getCancelUrl());
+			writeSimpleElement("callbackurl", payment.getCallbacklUrl());
 			writeSimpleElement("iscompany", order.getIsCompanyIdentity() ? "true" : "false");
 
 			serializeCustomer(order, payment);
