@@ -236,7 +236,7 @@ createOrder.addOrderRows(orderRows);
 ```
 	
 #### 4.1.1 OrderRow
-All products and other items. It´s required to have a minimum of one order row.
+All products and other items. Itï¿½s required to have a minimum of one order row.
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
 ```java
 .addOrderRow(Item.orderRow()     
@@ -344,8 +344,9 @@ End process by choosing the payment method you desire.
 Invoice and payment plan will perform a synchronous payment and return an object as response. 
 
 Other payments(card, direct bank and payments from the *PayPage*) on the other hand are asynchronous. They will return an html form with formatted message to send from your store.
-The response is then returned to the return url you have specified in function *setReturnUrl()*. If you
-use class *Response* with the xml response as parameter, you will receive a formatted object as well. 
+The response is then returned to the return url you have specified in function *setReturnUrl()*. The response may also be sent to the url specified with *setCallbackUrl()* in case the customer doesn't return to the store after the transaction has concluded at the bank/card payment page.
+
+If you pass the xml response to an instance of SveaResponse, you will receive a formatted response object as well. 
 
 #### Which payment method to choose?
 Invoice and/or payment plan payments.
@@ -371,7 +372,7 @@ Using more than one payment and want them gathered on one place.
 Note that Invoice and Payment plan payments will return an asynchronous response from here.
 
 
-#### Asynchronous payments - Card and Direct bank
+#### Asynchronous payments - Hosted solutions
 Build order and recieve a *PaymentForm* object. Send the *PaymentForm* parameters: *merchantid*, *xmlMessageBase64* and *mac* by POST with *url*. The *PaymentForm* object also contains a complete html form as string 
 and the html form element as array.
 
@@ -385,6 +386,11 @@ and the html form element as array.
     </form>
 ```
 
+.setReturnUrl() When a hosted payment transaction completes (regardless of outcome, i.e. accepted or denied), the payment service will answer with a response xml message sent to the return url specified.
+
+.setCallbackUrl() In case the hosted payment transaction completes, but the service is unable to return a response to the return url, the payment service will retry several times using the callback url as a fallback, if specified. This may happen if i.e. the user closes the browser before the payment service redirects back to the shop.
+
+.setCancelUrl() In case the hosted payment service is cancelled by the user, the payment service will redirect back to the cancel url. Unless a return url is specified, no cancel button will be presented at the payment service.
 
 ####4.4.1 PayPage with card payment options
 *PayPage* with availible card payments only.
@@ -409,6 +415,7 @@ PaymentForm form = WebPay.createOrder()
 .setCurrency("SEK")
 .usePayPageCardOnly()
 	.setReturnUrl("http://myurl.se")                   	//Required
+	.setCallbackUrl("http://myurl.se")                   	//Optional
 	.setCancelUrl("http://myurl.se")                   	//Optional
 	.getPaymentForm();
 
