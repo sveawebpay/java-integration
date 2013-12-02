@@ -19,16 +19,16 @@ public class InvoicePaymentTest {
     @Test
     public void testInvoiceWithIndividualCustomerFromSe() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
-            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-            .addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
-            .addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
-            .setCountryCode(TestingTool.DefaultTestCountryCode)
-            .setOrderDate(TestingTool.DefaultTestDate)
-            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-            .setCurrency(TestingTool.DefaultTestCurrency)
-            .useInvoicePayment()
-            .prepareRequest();
+										            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+										            .addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
+										            .addCustomerDetails(Item.individualCustomer()
+										                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+										            .setCountryCode(TestingTool.DefaultTestCountryCode)
+										            .setOrderDate(TestingTool.DefaultTestDate)
+										            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+										            .setCurrency(TestingTool.DefaultTestCurrency)
+										            .useInvoicePayment()
+										            .prepareRequest();
         
         assertEquals("194605092222", request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber);
         assertEquals(COUNTRYCODE.SE, request.request.CreateOrderInformation.CustomerIdentity.CountryCode);
@@ -38,15 +38,15 @@ public class InvoicePaymentTest {
     @Test
     public void testInvoiceWithAuth() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
-            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-            .addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
-            .setCountryCode(TestingTool.DefaultTestCountryCode)
-            .setOrderDate(TestingTool.DefaultTestDate)
-            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-            .setCurrency(TestingTool.DefaultTestCurrency)
-            .useInvoicePayment()
-            .prepareRequest();
+										            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+										            .addCustomerDetails(Item.individualCustomer()
+										                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+										            .setCountryCode(TestingTool.DefaultTestCountryCode)
+										            .setOrderDate(TestingTool.DefaultTestDate)
+										            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+										            .setCurrency(TestingTool.DefaultTestCurrency)
+										            .useInvoicePayment()
+										            .prepareRequest();
         
         assertEquals("sverigetest", request.request.Auth.Username);
         assertEquals("sverigetest", request.request.Auth.Password);
@@ -56,16 +56,16 @@ public class InvoicePaymentTest {
     @Test
     public void testSetAuth() {
         SveaRequest<SveaCreateOrder> request =  WebPay.createOrder(SveaConfig.getDefaultConfig())
-        .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-        .addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
-        .addCustomerDetails(Item.individualCustomer()
-            .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
-        .setCountryCode(TestingTool.DefaultTestCountryCode)
-        .setOrderDate(TestingTool.DefaultTestDate)
-        .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-        .setCurrency(TestingTool.DefaultTestCurrency)
-        .useInvoicePayment()
-        .prepareRequest();
+												        .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+												        .addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
+												        .addCustomerDetails(Item.individualCustomer()
+												            .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+												        .setCountryCode(TestingTool.DefaultTestCountryCode)
+												        .setOrderDate(TestingTool.DefaultTestDate)
+												        .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+												        .setCurrency(TestingTool.DefaultTestCurrency)
+												        .useInvoicePayment()
+												        .prepareRequest();
         
         assertEquals(79021, request.request.Auth.ClientNumber, 0);
         assertEquals("sverigetest", request.request.Auth.Username);
@@ -75,14 +75,14 @@ public class InvoicePaymentTest {
     @Test
     public void testInvoiceWithIndividualCustomerFromNl() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
-        .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-        .addCustomerDetails(TestingTool.createIndividualCustomer())
-        .setCountryCode(COUNTRYCODE.NL)
-        .setOrderDate(TestingTool.DefaultTestDate)
-        .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-        .setCurrency(TestingTool.DefaultTestCurrency)
-        .useInvoicePayment()
-        .prepareRequest();
+												        .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+												        .addCustomerDetails(TestingTool.createIndividualCustomer())
+												        .setCountryCode(COUNTRYCODE.NL)
+												        .setOrderDate(TestingTool.DefaultTestDate)
+												        .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+												        .setCurrency(TestingTool.DefaultTestCurrency)
+												        .useInvoicePayment()
+												        .prepareRequest();
          
         //CustomerIdentity
         assertEquals("Tess Persson", request.request.CreateOrderInformation.CustomerIdentity.FullName);
@@ -106,15 +106,15 @@ public class InvoicePaymentTest {
     @Test
     public void testInvoiceWithCompanyCustomerFromNl() {
          SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
-        .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-        .addCustomerDetails(TestingTool.createIndividualCustomerNl())
-        .addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
-        .setCountryCode(COUNTRYCODE.NL)
-        .setOrderDate(TestingTool.DefaultTestDate)
-        .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-        .setCurrency(TestingTool.DefaultTestCurrency)
-        .useInvoicePayment()
-        .prepareRequest();
+												        .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+												        .addCustomerDetails(TestingTool.createIndividualCustomerNl())
+												        .addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
+												        .setCountryCode(COUNTRYCODE.NL)
+												        .setOrderDate(TestingTool.DefaultTestDate)
+												        .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+												        .setCurrency(TestingTool.DefaultTestCurrency)
+												        .useInvoicePayment()
+												        .prepareRequest();
         
         //CustomerIdentity
         assertEquals("test@svea.com", request.request.CreateOrderInformation.CustomerIdentity.Email);
@@ -133,16 +133,16 @@ public class InvoicePaymentTest {
     @Test
     public void testInvoiceWithCompanyCustomerFromSe() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
-            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-            .addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
-            .addCustomerDetails(Item.companyCustomer()
-                .setNationalIdNumber("vat234"))
-            .setCountryCode(TestingTool.DefaultTestCountryCode)
-            .setOrderDate(TestingTool.DefaultTestDate)
-            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-            .setCurrency(TestingTool.DefaultTestCurrency)
-            .useInvoicePayment()
-            .prepareRequest();
+											            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+											            .addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
+											            .addCustomerDetails(Item.companyCustomer()
+											                .setNationalIdNumber("vat234"))
+											            .setCountryCode(TestingTool.DefaultTestCountryCode)
+											            .setOrderDate(TestingTool.DefaultTestDate)
+											            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+											            .setCurrency(TestingTool.DefaultTestCurrency)
+											            .useInvoicePayment()
+											            .prepareRequest();
         
         assertEquals("vat234", request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber);
         assertEquals(COUNTRYCODE.SE, request.request.CreateOrderInformation.CustomerIdentity.CountryCode);
@@ -152,17 +152,17 @@ public class InvoicePaymentTest {
     @Test
     public void testInvoiceWithProductsRows() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
-        .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-        .addFee(TestingTool.createExVatBasedShippingFee())
-        .addFee(TestingTool.createExVatBasedInvoiceFee())
-        .addCustomerDetails(Item.individualCustomer()
-            .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
-        .setCountryCode(TestingTool.DefaultTestCountryCode)
-        .setOrderDate(TestingTool.DefaultTestDate)
-        .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-        .setCurrency(TestingTool.DefaultTestCurrency)
-        .useInvoicePayment()
-        .prepareRequest();
+												        .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+												        .addFee(TestingTool.createExVatBasedShippingFee())
+												        .addFee(TestingTool.createExVatBasedInvoiceFee())
+												        .addCustomerDetails(Item.individualCustomer()
+												            .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+												        .setCountryCode(TestingTool.DefaultTestCountryCode)
+												        .setOrderDate(TestingTool.DefaultTestDate)
+												        .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+												        .setCurrency(TestingTool.DefaultTestCurrency)
+												        .useInvoicePayment()
+												        .prepareRequest();
         
         //First order row is a product
         assertEquals("1", request.request.CreateOrderInformation.OrderRows.get(0).ArticleNumber);
@@ -195,30 +195,30 @@ public class InvoicePaymentTest {
     @Test
     public void testInvoiceWithRelativeDiscountOnDifferentProductVat() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
-        .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(1.0)
-            .setAmountExVat(240.00)
-            .setDescription("CD")
-            .setVatPercent(25))
-        .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(1.0)
-            .setAmountExVat(188.68)
-            .setDescription("Bok")
-            .setVatPercent(6))
-        .addDiscount(Item.relativeDiscount()
-            .setDiscountId("1")
-            .setDiscountPercent(20.0)
-            .setDescription("RelativeDiscount"))
-        .addCustomerDetails(Item.individualCustomer()
-            .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
-        .setCountryCode(TestingTool.DefaultTestCountryCode)
-        .setOrderDate(TestingTool.DefaultTestDate)
-        .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-        .setCurrency(TestingTool.DefaultTestCurrency)
-        .useInvoicePayment()
-        .prepareRequest();
+											        .addOrderRow(Item.orderRow()
+											            .setArticleNumber("1")
+											            .setQuantity(1.0)
+											            .setAmountExVat(240.00)
+											            .setDescription("CD")
+											            .setVatPercent(25))
+											        .addOrderRow(Item.orderRow()
+											            .setArticleNumber("1")
+											            .setQuantity(1.0)
+											            .setAmountExVat(188.68)
+											            .setDescription("Bok")
+											            .setVatPercent(6))
+											        .addDiscount(Item.relativeDiscount()
+											            .setDiscountId("1")
+											            .setDiscountPercent(20.0)
+											            .setDescription("RelativeDiscount"))
+											        .addCustomerDetails(Item.individualCustomer()
+											            .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+											        .setCountryCode(TestingTool.DefaultTestCountryCode)
+											        .setOrderDate(TestingTool.DefaultTestDate)
+											        .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+											        .setCurrency(TestingTool.DefaultTestCurrency)
+											        .useInvoicePayment()
+											        .prepareRequest();
         
         //coupon row
         assertEquals("1", request.request.CreateOrderInformation.OrderRows.get(2).ArticleNumber);
@@ -236,30 +236,30 @@ public class InvoicePaymentTest {
     @Test
     public void testInvoiceWithFixedDiscountOnDifferentProductVat() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
-        .addOrderRow(Item.orderRow()
-            .setArticleNumber("1")
-            .setQuantity(1.0)
-            .setAmountExVat(240.00)
-            .setDescription("CD")
-            .setVatPercent(25))
-        .addOrderRow(Item.orderRow()
-             .setArticleNumber("1")
-             .setQuantity(1.0)
-             .setAmountExVat(188.68)
-             .setDescription("Bok")
-             .setVatPercent(6))
-        .addDiscount(Item.fixedDiscount()
-             .setDiscountId("1")
-             .setAmountIncVat(100.00)
-             .setDescription("FixedDiscount"))
-        .addCustomerDetails(Item.individualCustomer()
-            .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
-        .setCountryCode(TestingTool.DefaultTestCountryCode)
-        .setOrderDate(TestingTool.DefaultTestDate)
-        .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-        .setCurrency(TestingTool.DefaultTestCurrency)
-        .useInvoicePayment()
-        .prepareRequest();
+											        .addOrderRow(Item.orderRow()
+											            .setArticleNumber("1")
+											            .setQuantity(1.0)
+											            .setAmountExVat(240.00)
+											            .setDescription("CD")
+											            .setVatPercent(25))
+											        .addOrderRow(Item.orderRow()
+											             .setArticleNumber("1")
+											             .setQuantity(1.0)
+											             .setAmountExVat(188.68)
+											             .setDescription("Bok")
+											             .setVatPercent(6))
+											        .addDiscount(Item.fixedDiscount()
+											             .setDiscountId("1")
+											             .setAmountIncVat(100.00)
+											             .setDescription("FixedDiscount"))
+											        .addCustomerDetails(Item.individualCustomer()
+											            .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+											        .setCountryCode(TestingTool.DefaultTestCountryCode)
+											        .setOrderDate(TestingTool.DefaultTestDate)
+											        .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+											        .setCurrency(TestingTool.DefaultTestCurrency)
+											        .useInvoicePayment()
+											        .prepareRequest();
         
         //coupon row
         assertEquals("1", request.request.CreateOrderInformation.OrderRows.get(2).ArticleNumber);
@@ -272,6 +272,37 @@ public class InvoicePaymentTest {
         assertEquals(25, request.request.CreateOrderInformation.OrderRows.get(2).VatPercent, 0);
         assertEquals(6, request.request.CreateOrderInformation.OrderRows.get(3).VatPercent, 0);
         assertEquals(0, request.request.CreateOrderInformation.OrderRows.get(2).DiscountPercent, 0);
+    }
+    
+    @Test
+    public void testInvoiceWithFixedDiscountWithUneavenAmount() {
+    	SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
+										                .addOrderRow(Item.orderRow()
+										                    .setArticleNumber("1")
+										                    .setQuantity(1.0)
+										                    .setAmountExVat(240.00)
+										                    .setDescription("CD")
+										                    .setVatPercent(25))
+										                .addDiscount(Item.fixedDiscount()
+										                    .setAmountIncVat(101.50)
+										                    .setDescription("FixedDiscount")
+										                    .setDiscountId("1"))
+										                .addCustomerDetails(Item.individualCustomer()
+										                		.setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+										                    .setCountryCode(TestingTool.DefaultTestCountryCode)
+										                    .setCustomerReference(TestingTool.DefaultTestCustomerReferenceNumber)
+										                    .setOrderDate(TestingTool.DefaultTestDate)
+										                    .setCurrency(TestingTool.DefaultTestCurrency)
+										                    .useInvoicePayment()
+										                    .prepareRequest();
+
+    	assertEquals("1", request.request.CreateOrderInformation.OrderRows.get(1).ArticleNumber);
+    	assertEquals("FixedDiscount", request.request.CreateOrderInformation.OrderRows.get(1).Description);
+    	assertEquals(-81.2, request.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit, 0);
+    	assertEquals(1, request.request.CreateOrderInformation.OrderRows.get(1).NumberOfUnits, 0);
+    	assertEquals("", request.request.CreateOrderInformation.OrderRows.get(1).Unit);
+    	assertEquals(25, request.request.CreateOrderInformation.OrderRows.get(1).VatPercent, 0);
+    	assertEquals(0, request.request.CreateOrderInformation.OrderRows.get(1).DiscountPercent, 0);
     }
     
     @Test
@@ -295,17 +326,17 @@ public class InvoicePaymentTest {
     @Test
     public void testInvoiceUsingAmountIncVatWithVatPercent() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
-        .addCustomerDetails(Item.companyCustomer()
-            .setNationalIdNumber(TestingTool.DefaultTestCompanyNationalIdNumber))
-        .addOrderRow(TestingTool.createIncVatBasedOrderRow("1"))
-        .addFee(TestingTool.createIncVatBasedShippingFee())
-        .addFee(TestingTool.createIncVatBasedInvoiceFee())
-        .setCountryCode(TestingTool.DefaultTestCountryCode)
-        .setOrderDate(TestingTool.DefaultTestDate)
-        .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-        .setCurrency(TestingTool.DefaultTestCurrency)
-        .useInvoicePayment()
-        .prepareRequest();
+											        .addCustomerDetails(Item.companyCustomer()
+											            .setNationalIdNumber(TestingTool.DefaultTestCompanyNationalIdNumber))
+											        .addOrderRow(TestingTool.createIncVatBasedOrderRow("1"))
+											        .addFee(TestingTool.createIncVatBasedShippingFee())
+											        .addFee(TestingTool.createIncVatBasedInvoiceFee())
+											        .setCountryCode(TestingTool.DefaultTestCountryCode)
+											        .setOrderDate(TestingTool.DefaultTestDate)
+											        .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+											        .setCurrency(TestingTool.DefaultTestCurrency)
+											        .useInvoicePayment()
+											        .prepareRequest();
         
         //First order row is a product
         assertEquals("1", request.request.CreateOrderInformation.OrderRows.get(0).ArticleNumber);
@@ -338,16 +369,16 @@ public class InvoicePaymentTest {
     @Test
     public void testInvoiceUsingAmountIncVatWithAmountExVat() {
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
-            .addOrderRow(TestingTool.createIncAndExVatOrderRow("1")) 
-            .addFee(TestingTool.createIncAndExVatShippingFee()) 
-            .addFee(TestingTool.createIncAndExVatInvoiceFee())
-            .addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
-       .setCountryCode(TestingTool.DefaultTestCountryCode)
-       .setOrderDate(TestingTool.DefaultTestDate)
-       .setCurrency(TestingTool.DefaultTestCurrency)
-       .useInvoicePayment()
-       .prepareRequest();
+										            .addOrderRow(TestingTool.createIncAndExVatOrderRow("1")) 
+										            .addFee(TestingTool.createIncAndExVatShippingFee()) 
+										            .addFee(TestingTool.createIncAndExVatInvoiceFee())
+										            .addCustomerDetails(Item.individualCustomer()
+										                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+												       .setCountryCode(TestingTool.DefaultTestCountryCode)
+												       .setOrderDate(TestingTool.DefaultTestDate)
+												       .setCurrency(TestingTool.DefaultTestCurrency)
+												       .useInvoicePayment()
+												       .prepareRequest();
         
         //First order row is a product
         assertEquals("1", request.request.CreateOrderInformation.OrderRows.get(0).ArticleNumber);
@@ -380,17 +411,17 @@ public class InvoicePaymentTest {
     @Test
     public void testInvoiceRequestXML() {
         String xml = WebPay.createOrder(SveaConfig.getDefaultConfig())
-        .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-        .addOrderRow(TestingTool.createExVatBasedOrderRow("2")) 
-        .addCustomerDetails(Item.individualCustomer()
-            .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
-            .setCountryCode(TestingTool.DefaultTestCountryCode)
-            .setOrderDate(TestingTool.DefaultTestDate)
-            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-            .setCurrency(TestingTool.DefaultTestCurrency)
-            .setCustomerReference(TestingTool.DefaultTestCustomerReferenceNumber)
-            .useInvoicePayment()
-            .getXML();
+					        .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+					        .addOrderRow(TestingTool.createExVatBasedOrderRow("2")) 
+					        .addCustomerDetails(Item.individualCustomer()
+					            .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+					            .setCountryCode(TestingTool.DefaultTestCountryCode)
+					            .setOrderDate(TestingTool.DefaultTestDate)
+					            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+					            .setCurrency(TestingTool.DefaultTestCurrency)
+					            .setCustomerReference(TestingTool.DefaultTestCustomerReferenceNumber)
+					            .useInvoicePayment()
+					            .getXML();
         
         final String expectedXML = "<web:request><web:Auth><web:ClientNumber>79021</web:ClientNumber><web:Username>sverigetest</web:Username><web:Password>sverigetest</web:Password></web:Auth><web:CreateOrderInformation><web:ClientOrderNumber>33</web:ClientOrderNumber><web:OrderRows><web:OrderRow><web:ArticleNumber>1</web:ArticleNumber><web:Description>Prod: Specification</web:Description><web:PricePerUnit>100.0</web:PricePerUnit><web:NumberOfUnits>2.0</web:NumberOfUnits><web:Unit>st</web:Unit><web:VatPercent>25.0</web:VatPercent><web:DiscountPercent>0.0</web:DiscountPercent></web:OrderRow><web:OrderRow><web:ArticleNumber>2</web:ArticleNumber><web:Description>Prod: Specification</web:Description><web:PricePerUnit>100.0</web:PricePerUnit><web:NumberOfUnits>2.0</web:NumberOfUnits><web:Unit>st</web:Unit><web:VatPercent>25.0</web:VatPercent><web:DiscountPercent>0.0</web:DiscountPercent></web:OrderRow></web:OrderRows><web:CustomerIdentity><web:NationalIdNumber>194605092222</web:NationalIdNumber><web:Email></web:Email><web:PhoneNumber></web:PhoneNumber><web:IpAddress></web:IpAddress><web:FullName></web:FullName><web:Street></web:Street><web:CoAddress></web:CoAddress><web:ZipCode></web:ZipCode><web:HouseNumber></web:HouseNumber><web:Locality></web:Locality><web:CountryCode>SE</web:CountryCode><web:CustomerType>Individual</web:CustomerType></web:CustomerIdentity><web:OrderDate>2012-12-12</web:OrderDate><web:AddressSelector></web:AddressSelector><web:CustomerReference>ref33</web:CustomerReference><web:OrderType>Invoice</web:OrderType></web:CreateOrderInformation></web:request>";
         
