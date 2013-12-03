@@ -107,7 +107,7 @@ public class InvoicePaymentTest {
     public void testInvoiceWithCompanyCustomerFromNl() {
          SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
 												        .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-												        .addCustomerDetails(TestingTool.createIndividualCustomerNl())
+												        .addCustomerDetails(TestingTool.createCompanyCustomer(COUNTRYCODE.NL))
 												        .addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
 												        .setCountryCode(COUNTRYCODE.NL)
 												        .setOrderDate(TestingTool.DefaultTestDate)
@@ -119,15 +119,15 @@ public class InvoicePaymentTest {
         //CustomerIdentity
         assertEquals("test@svea.com", request.request.CreateOrderInformation.CustomerIdentity.Email);
         assertEquals("999999", request.request.CreateOrderInformation.CustomerIdentity.PhoneNumber);
-        assertEquals("123.123.123", request.request.CreateOrderInformation.CustomerIdentity.IpAddress);
+        assertEquals("123.123.123.123", request.request.CreateOrderInformation.CustomerIdentity.IpAddress);
         assertEquals("Svea bakkerij 123", request.request.CreateOrderInformation.CustomerIdentity.FullName);
-        assertEquals("Gatan", request.request.CreateOrderInformation.CustomerIdentity.Street);
-        assertEquals("c/o Eriksson", request.request.CreateOrderInformation.CustomerIdentity.CoAddress);
-        assertEquals("9999", request.request.CreateOrderInformation.CustomerIdentity.ZipCode);
-        assertEquals("23", request.request.CreateOrderInformation.CustomerIdentity.HouseNumber);
-        assertEquals("Stan", request.request.CreateOrderInformation.CustomerIdentity.Locality);
+        assertEquals("broodstraat", request.request.CreateOrderInformation.CustomerIdentity.Street);
+        assertEquals("236", request.request.CreateOrderInformation.CustomerIdentity.CoAddress);
+        assertEquals("1111 CD", request.request.CreateOrderInformation.CustomerIdentity.ZipCode);
+        assertEquals("1", request.request.CreateOrderInformation.CustomerIdentity.HouseNumber);
+        assertEquals("BARENDRECHT", request.request.CreateOrderInformation.CustomerIdentity.Locality);
         assertEquals(COUNTRYCODE.NL, request.request.CreateOrderInformation.CustomerIdentity.CountryCode);
-        assertEquals("Individual", request.request.CreateOrderInformation.CustomerIdentity.CustomerType);
+        assertEquals("Company", request.request.CreateOrderInformation.CustomerIdentity.CustomerType);
     }
     
     @Test

@@ -2,6 +2,7 @@ package se.sveaekonomi.webpay.integration.util.test;
 
 import java.sql.Date;
 
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
@@ -174,34 +175,97 @@ public class TestingTool {
                    .setUnit("st")
                    .setDiscountPercent(50.0);
     }
-
+    
     public static IndividualCustomer createIndividualCustomer() {
-        return Item.individualCustomer()
+    	return createIndividualCustomer(null);
+    }
+    
+    public static CompanyCustomer createCompanyCustomer() {
+    	return createCompanyCustomer(null);
+    }
+
+    public static IndividualCustomer createIndividualCustomer(COUNTRYCODE country) {
+        IndividualCustomer iCustomer = null;
+        country = country == null ? COUNTRYCODE.SE : country; 
+        
+        switch (country) {
+            case SE:
+                iCustomer = Item.individualCustomer()
                    .setInitials("SB")
                    .setName("Tess", "Persson")
                    .setEmail("test@svea.com")
                    .setPhoneNumber("0811111111")
                    .setIpAddress("123.123.123")
                    .setStreetAddress("Testgatan", "1")
-                   .setBirthDate(1923,12,12)
+                   .setBirthDate("19231212")
                    .setCoAddress("c/o Eriksson, Erik")
                    .setNationalIdNumber(DefaultTestIndividualNationalIdNumber)
                    .setZipCode("99999")
                    .setLocality("Stan");
-    }
-
-    public static IndividualCustomer createIndividualCustomerNl() {
-        return Item.individualCustomer()
+                break;
+            case NO:
+                iCustomer = Item.individualCustomer()
+                   .setName("Ola", "Normann")
+                   .setEmail("test@svea.com")
+                   .setPhoneNumber("21222222")
+                   .setIpAddress("123.123.123")
+                   .setStreetAddress("Testveien", "2")
+                   .setNationalIdNumber("17054512066")
+                   .setZipCode("359")
+                   .setLocality("Oslo");
+                break;
+            case FI:
+                iCustomer = Item.individualCustomer()
+                   .setName("Kukka-Maaria", "Kanerva Haapakoski")
+                   .setEmail("test@svea.com")
+                   .setIpAddress("123.123.123")
+                   .setStreetAddress("Atomitie", "2 C")
+                   .setNationalIdNumber("160264-999N")
+                   .setZipCode("370")
+                   .setLocality("Helsinki");
+                break;
+            case DK:
+                iCustomer = Item.individualCustomer()
+                   .setName("Hanne", "Jensen")
+                   .setEmail("test@svea.com")
+                   .setPhoneNumber("22222222")
+                   .setIpAddress("123.123.123")
+                   .setStreetAddress("Testvejen", "42")
+                   .setCoAddress("c/o Test A/S")
+                   .setNationalIdNumber("2603692503")
+                   .setZipCode("2100")
+                   .setLocality("KØBENHVN Ø");
+                break;
+            case DE:
+                iCustomer = Item.individualCustomer()
+                   .setName("Theo", "Giebel")
+                   .setEmail("test@svea.com")
+                   .setIpAddress("123.123.123")
+                   .setStreetAddress("Zörgiebelweg", "21")
+                   .setCoAddress("c/o Test A/S")
+                   .setNationalIdNumber("19680403")
+                   .setZipCode("13591")
+                   .setLocality("BERLIN");
+                break;
+            case NL:
+                iCustomer = Item.individualCustomer()
                    .setInitials("SB")
-                   .setBirthDate(1923,12,12)
-                   .setName("Svea bakkerij", "123")
+                   .setName("Sneider", "Boasman")
                    .setEmail("test@svea.com")
                    .setPhoneNumber("999999")
-                   .setIpAddress("123.123.123")
-                   .setStreetAddress("Gatan", "23")
-                   .setCoAddress("c/o Eriksson")
-                   .setZipCode("9999")
-                   .setLocality("Stan");
+                   .setIpAddress("123.123.123.123")
+                   .setStreetAddress("Gate", "42")
+                   .setBirthDate("19550307")
+                   .setCoAddress("138")
+                   .setNationalIdNumber("19550307")
+                   .setZipCode("1102 HG")
+                   .setLocality("BARENDRECHT");
+                break;
+            default:
+                throw new SveaWebPayException("Unsupported argument for method.");
+        }
+
+        return iCustomer;
     }
 
     public static CompanyCustomer createMiniCompanyCustomer() {
@@ -211,8 +275,13 @@ public class TestingTool {
                    .setCompanyName("TestCompagniet");
     }
 
-    public static CompanyCustomer createCompanyCustomer() {
-        return Item.companyCustomer()
+    public static CompanyCustomer createCompanyCustomer(COUNTRYCODE country) {
+        CompanyCustomer cCustomer = null;
+        country = country == null ? COUNTRYCODE.SE : country; 
+
+        switch (country) {
+            case SE:
+                cCustomer = Item.companyCustomer()
                    .setCompanyName("Tess, T Persson")
                    .setNationalIdNumber(DefaultTestCompanyNationalIdNumber)
                    .setEmail("test@svea.com")
@@ -222,5 +291,68 @@ public class TestingTool {
                    .setCoAddress("c/o Eriksson, Erik")
                    .setZipCode("99999")
                    .setLocality("Stan");
+                break;
+            case NO:
+                cCustomer = Item.companyCustomer()
+                   .setCompanyName("Test firma AS")
+                   .setNationalIdNumber("923313850")
+                   .setEmail("test@svea.com")
+                   .setPhoneNumber("22222222")
+                   .setIpAddress("123.123.123.123")
+                   .setStreetAddress("Testveien", "1")
+                   .setZipCode("259")
+                   .setLocality("Oslo");
+                break;
+            case FI:
+                cCustomer = Item.companyCustomer()
+                   .setCompanyName("Testi Yritys Oy")
+                   .setNationalIdNumber("9999999-2")
+                   .setEmail("test@svea.com")
+                   .setPhoneNumber("22222222")
+                   .setIpAddress("123.123.123.123")
+                   .setStreetAddress("Testitie", "1")
+                   .setZipCode("370")
+                   .setLocality("Helsinki");
+                break;
+            case DK:
+                cCustomer = Item.companyCustomer()
+                   .setCompanyName("Test A/S")
+                   .setNationalIdNumber("99999993")
+                   .setEmail("test@svea.com")
+                   .setPhoneNumber("22222222")
+                   .setIpAddress("123.123.123.123")
+                   .setStreetAddress("Testvejen", "42")
+                   .setZipCode("2100")
+                   .setLocality("KØBENHVN Ø");
+                break;
+            case DE:
+                cCustomer = Item.companyCustomer()
+                   .setCompanyName("K. H. Maier gmbH")
+                   .setNationalIdNumber("12345")
+                   .setVatNumber("DE123456789")
+                   .setEmail("test@svea.com")
+                   .setPhoneNumber("0241/12 34 56")
+                   .setIpAddress("123.123.123.123")
+                   .setStreetAddress("Adalbertsteinweg", "1")
+                   .setZipCode("52070")
+                   .setLocality("AACHEN");
+                break;
+            case NL:
+                cCustomer = Item.companyCustomer()
+                   .setCompanyName("Svea bakkerij 123")
+                   .setVatNumber("NL123456789A12")
+                   .setEmail("test@svea.com")
+                   .setPhoneNumber("999999")
+                   .setIpAddress("123.123.123.123")
+                   .setStreetAddress("broodstraat", "1")
+                   .setCoAddress("236")
+                   .setZipCode("1111 CD")
+                   .setLocality("BARENDRECHT");
+                break;
+            default:
+                throw new SveaWebPayException("Unsupported argument for method.");
+        }
+
+        return cCustomer;
     }
 }
