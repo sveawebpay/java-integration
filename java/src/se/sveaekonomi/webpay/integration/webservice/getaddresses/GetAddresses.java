@@ -108,7 +108,7 @@ public class GetAddresses {
     
     private SveaAuth getStoreAuthorization() {
          SveaAuth auth = new SveaAuth();
-         PAYMENTTYPE type = (orderType.equals("Invoice") ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
+         PAYMENTTYPE type = (orderType != null && orderType.equals("Invoice") ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
          auth.Username = config.getUsername(type, countryCode);
          auth.Password = config.getPassword(type, countryCode);
          auth.ClientNumber = config.getClientNumber(type, countryCode);
@@ -119,8 +119,6 @@ public class GetAddresses {
         String errors ="";
         if (countryCode == null)
             errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-        if (orderType==null)
-            errors += "MISSING VALUE - orderType is required, use one of: setOrderTypePaymentPlan() or setOrderTypeInvoice().\n";
         if (this.nationalNumber==null && this.companyId==null)
             errors += "MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
         return errors;
@@ -152,7 +150,7 @@ public class GetAddresses {
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml = xmlBuilder.getGetAddressesXml(request.request);
         
-        URL url = config.getEndPoint(orderType.equals("Invoice") ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
+        URL url = config.getEndPoint((orderType != null && orderType.equals("Invoice")) ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("GetAddresses", xml);
         NodeList soapResponse = soapBuilder.createGetAddressesEuRequest(soapMessage, url.toString());

@@ -76,9 +76,7 @@ public class WebServiceOrderValidatorTest {
     @Test
     public void testFailOnMissingValuesForGetAddresses() {
         String expectedMessage ="MISSING VALUE - CountryCode is required, use setCountryCode(...).\n"
-                +"MISSING VALUE - orderType is required, use one of: setOrderTypePaymentPlan() or setOrderTypeInvoice().\n"
                 +"MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
-        
         try {
             WebPay.getAddresses(SveaConfig.getDefaultConfig())
                 .doRequest();
