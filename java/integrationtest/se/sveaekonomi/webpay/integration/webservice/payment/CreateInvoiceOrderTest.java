@@ -99,11 +99,11 @@ public class CreateInvoiceOrderTest {
 		assertNull(response.customerIdentity.getPhoneNumber());
 		assertNull(response.customerIdentity.getEmail());
 		assertNull(response.customerIdentity.getIpAddress());
-		assertEquals("Gate 42", response.customerIdentity.getStreet());
-		assertEquals("138", response.customerIdentity.getCoAddress());
-		assertEquals("23", response.customerIdentity.getHouseNumber());
-		assertEquals("1102 HG", response.customerIdentity.getZipCode());
-		assertEquals("BARENDRECHT", response.customerIdentity.getCity());
+		assertEquals("Gate", response.customerIdentity.getStreet());
+		assertNull(response.customerIdentity.getCoAddress());
+		assertEquals("42", response.customerIdentity.getHouseNumber());
+		assertEquals("1102 BARENDRECHT", response.customerIdentity.getZipCode());
+		assertEquals("HG", response.customerIdentity.getCity());
 		assertEquals("NL", response.customerIdentity.getCountryCode());
 	}
 

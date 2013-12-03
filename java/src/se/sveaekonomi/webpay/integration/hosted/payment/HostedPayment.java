@@ -38,6 +38,7 @@ public abstract class HostedPayment<T extends HostedPayment<T>> {
 	private Long vat;
 	protected String returnUrl;
 	protected String cancelUrl;
+	protected String callbackUrl;
 	protected ExcludePayments excluded;
 	protected String languageCode;
 
@@ -79,8 +80,8 @@ public abstract class HostedPayment<T extends HostedPayment<T>> {
 	 * @param returnUrl
 	 * @return HostedPayment
 	 */
-	public T setReturnUrl(String returnUrl) {
-		this.returnUrl = returnUrl;
+	public T setReturnUrl(String url) {
+		returnUrl = url;
 		return getGenericThis();
 	}
 
@@ -88,9 +89,18 @@ public abstract class HostedPayment<T extends HostedPayment<T>> {
 		return cancelUrl;
 	}
 
-	public T setCancelUrl(String returnUrl) {
-		this.cancelUrl = returnUrl;
+	public T setCancelUrl(String url) {
+		cancelUrl = url;
 		return getGenericThis();
+	}
+	
+	public T setCallbacklUrl(String url) {
+		callbackUrl = url;
+		return getGenericThis();
+	}
+	
+	public String getCallbacklUrl() {
+		return callbackUrl;
 	}
 
 	public T setPayPageLanguageCode(LANGUAGECODE languageCode) {

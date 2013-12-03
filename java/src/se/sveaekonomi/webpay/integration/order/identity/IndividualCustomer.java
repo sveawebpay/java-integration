@@ -39,6 +39,8 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
      * @param type (m)m
      * @param type (d)d
      * @return IndividualCustomer
+     * 
+     * @deprecated Please use IndividualCustomer.setBirthDate(String date) instead.
      */
     public IndividualCustomer setBirthDate(int year, int month, int day) {
         String monthString = String.valueOf(month);
@@ -55,6 +57,17 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
         
         this.birthDate = String.valueOf(year) + monthString + dayString;
         
+        return this;
+    }
+    
+    /**
+     * Required for private customers in NL and DE
+     * @param type yyyy(m)m(d)d
+     * 
+     * @return IndividualCustomer
+     */
+    public IndividualCustomer setBirthDate(String date) {
+        this.birthDate = date; 
         return this;
     }
     
