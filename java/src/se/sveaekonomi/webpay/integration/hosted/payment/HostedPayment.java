@@ -121,8 +121,9 @@ public abstract class HostedPayment<T extends HostedPayment<T>> {
 		HostedOrderValidator validator = new HostedOrderValidator();
 		// Check if payment method is EU country, PaymentMethod: INVOICE or PAYMENTPLAN
 		if (getClass().equals(PaymentMethodPayment.class)) {
-			if (((PaymentMethodPayment) this).getPaymentMethod() == PAYMENTMETHOD.INVOICE || 
-					((PaymentMethodPayment) this).getPaymentMethod() == PAYMENTMETHOD.PAYMENTPLAN) {
+			HostedPayment<T> tmp = this;
+			if (((PaymentMethodPayment) tmp).getPaymentMethod() == PAYMENTMETHOD.INVOICE || 
+					((PaymentMethodPayment) tmp).getPaymentMethod() == PAYMENTMETHOD.PAYMENTPLAN) {
 				if (this.createOrderBuilder.getCountryCode().equals(COUNTRYCODE.NL)) {
 					errors += new IdentityValidator().validateNLIdentity(createOrderBuilder);
 				}
