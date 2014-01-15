@@ -80,7 +80,7 @@ public class WebServiceXmlBuilder extends XMLBuilder {
                     xmlw.writeStartElement(prefix+"CreatePaymentPlanDetails");
                     String code = (String)order.CreateOrderInformation.CreatePaymentPlanDetails.get("CampaignCode");
                     writeSimpleElement(prefix+"CampaignCode", code);
-                    writeSimpleElement("SendAutomaticGiroPaymentForm", String.valueOf((boolean)order.CreateOrderInformation.CreatePaymentPlanDetails.get("SendAutomaticGiroPaymentForm")));
+                    writeSimpleElement("SendAutomaticGiroPaymentForm", "" + order.CreateOrderInformation.CreatePaymentPlanDetails.get("SendAutomaticGiroPaymentForm"));
                     
                     // ?? CoCustomerIdentity ???
                     //?? writeSimpleElement("FixedMonthlyAmount", order.CreateOrderInformation.CreatePaymentPlanDetails.)
