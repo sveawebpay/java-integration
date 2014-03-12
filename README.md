@@ -18,10 +18,11 @@
     * [PaymentPlanPricePerMonth](https://github.com/sveawebpay/java-integration/tree/master#51-paymentplanpricepermonth)
 * [6. GetAddresses](https://github.com/sveawebpay/java-integration/tree/master#6-getaddresses)
 * [7. DeliverOrder](https://github.com/sveawebpay/java-integration/tree/master#7-deliverorder)
-    * [Specify order](https://github.com/sveawebpay/java-integration/tree/master#71-specify-order)
+    * [Deliver Invoice order](https://github.com/sveawebpay/java-integration/tree/master#71-deliver-invoice-order)
     * [Other values](https://github.com/sveawebpay/java-integration/tree/master#72-other-values)
-* [8. CloseOrder](https://github.com/sveawebpay/java-integration/tree/master#8-closeorder)
-* [9. Response handler](https://github.com/sveawebpay/java-integration/tree/master#9-response-handler)
+* [8. Credit Invoice](https://github.com/sveawebpay/java-integration/tree/master#8-credit-invoice)
+* [9. CloseOrder](https://github.com/sveawebpay/java-integration/tree/master#9-closeorder)
+* [10. Response handler](https://github.com/sveawebpay/java-integration/tree/master#10-response-handler)
 * [APPENDIX](https://github.com/sveawebpay/java-integration/tree/master#appendix)
 
 
@@ -702,16 +703,47 @@ GetAddressesResponse response = WebPay.getAddresses(myConfig)		//see more about 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
 ## 7. deliverOrder                                                           
-Updates the status on a previous created order as delivered. Add rows that you want delivered. The rows will automatically be
-matched with the rows that was sent when creating the order.
-Only applicable for invoice and payment plan payments.
+Use the WebPay.deliverOrder request to deliver to the customer invoices for fulfilled orders.
+Svea will invoice the customer upon receiving the deliverOrder request.
+A deliverOrder request may also be used to partly deliver an order on Invoice orders.
+Add rows that you want delivered. The rows will automatically be matched with the rows that was sent when creating the order.
+When Svea receives the deliverOrder request the status on the previous created order is set to *delivered*.
+The deliverOrder functionallity is only applicable to invoice and payment plan payment method payments.
+
 Returns *DeliverOrderResult* object. Set your store authorization here.
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-### 7.1 Specify order                                                        
-Continue by adding values for products and other. You can add OrderRow, Fee and Discount. Chose the right Item object as parameter.
-You can use the **add** functions with an Item object or an List of Item objects as parameters. 
+### 7.1 Deliver Invoice order                                                       
+This works more or less like WebPay.createOrder above, and makes use of the same order item information.
+Add the corresponding order id and the order rows that you want delivered before making the deliverOrder request.
+The specified rows will automatically be matched with the previous rows that was sent when creating the order.
+We recommend storing the order row data to ensure that matching orderrows can be recreated in the deliverOrder request.
+
+If an item is left out from the deliverOrder request that was present in the createOrder request, a new invoice will be created as the order is assumed to be partially fulfilled.
+Any left out items should not be delivered physically, as they will not be invoiced when the deliverOrder request is sent.
+
+```java
+	DeliverOrderResponse response = Webpay.deliverOrder()
+    .addOrderRow(
+        Item.orderRow()
+            .setArticleNumber("1")
+            .setQuantity(2)
+            .setAmountExVat(100.00)
+            .setDescription("Specification")
+            .setName("Prod")
+            .setUnit("st")
+            .setVatPercent(25)
+            .setDiscountPercent(0)
+        )
+        .setOrderId(1234) //Recieved from CreateOrder request
+        .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+        .deliverInvoiceOrder()
+            .doRequest();
+```
+
+You can add OrderRow, Fee and Discount. Choose the right Item as parameter.
+You can use the **.add** functions with an Item or list of Items as parameters.
 
 ```java
 .addOrderRow(Item.orderRow(). ...)
@@ -721,7 +753,7 @@ You can use the **add** functions with an Item object or an List of Item objects
 List<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>(); //or use another preferrable List object
 orderRows.add(Item.orderRow(). ...)
 ...
-createOrder.addOrderRows(orderRows);
+deliverOrder.addOrderRows(orderRows);
 ```
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
@@ -774,32 +806,43 @@ If invoice order is credit invoice use setCreditInvoice(invoiceId) and setNumber
     .setCreditInvoice()                    				//Use for invoice orders, if this should be a credit invoice.   
 ```
 
-```java
-DeliverOrderResponse response = WebPay.deliverOrder(
-.addOrderRow(Item.orderRow()
-	.setArticleNumber("1")
-	.setName("Prod")
-	.setDescription("Specification")
-	.setQuantity(2)
-	.setUnit("st")
-	.setAmountExVat(100.00)
-	.setVatPercent(25.00)
-	.setDiscountPercent(0))
-		
-.setOrderId(3434)
-.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-.deliverInvoiceOrder()	
-	.doRequest();
-```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-## 8. closeOrder                                                             
+## 8. Credit Invoice
+When you want to credit an invoice. The order must first be delivered. When doing [DeliverOrder](https://github.com/sveawebpay/java-integration/tree/master#7-deliverorder)
+you will recieve an *InvoiceId* in the Response. To credit the invoice you follow the steps as in [7. DeliverOrder](https://github.com/sveawebpay/java-integration/tree/master#7-deliverorder)
+ but you add the call `.setCreditInvoice(invoiceId)`:
+
+```java
+	DeliverOrderResponse response = Webpay.deliverOrder()
+    .addOrderRow(
+        Item.orderRow()
+            .setArticleNumber("1")
+            .setQuantity(2)
+            .setAmountExVat(100.00)
+            .setDescription("Specification")
+            .setName("Prod")
+            .setUnit("st")
+            .setVatPercent(25)
+            .setDiscountPercent(0)
+        )
+        .setOrderId(1234) //Recieved from CreateOrder request
+        .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+        //Credit invoice flag. Note that you first must deliver the order and recieve an InvoiceId, then do the deliver request again but with this call:
+        .setCreditInvoice(4321) //Use for invoice orders, if this should be a credit invoice. Params: InvoiceId recieved from when doing deliverOrder
+        .deliverInvoiceOrder()
+            .doRequest();
+```
+
+[<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
+
+## 9. closeOrder                                                             
 Use when you want to cancel an undelivered order. Valid only for invoice and payment plan orders. 
 Required is the order id received when creating the order. Set your store authorization here.
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-### 8.1 Close by payment type                                                
+### 9.1 Close by payment type                                                
 ```java
     .closeInvoiceOrder()
 or
@@ -815,7 +858,7 @@ CloseOrderResponse  =  WebPay.closeOrder(
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-## 9. Response handler                                                       
+## 10. Response handler                                                       
 All synchronous responses are handled through *SveaResponse* and structured into objects.
 Asynchronous responses recieved after sending the values *merchantid* and *xmlMessageBase64* to
 hosted solutions can also be processed through the *SveaResponse* class.
