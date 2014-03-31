@@ -1,8 +1,6 @@
 package se.sveaekonomi.webpay.integration.webservice.svea_soap;
 
 import java.io.ByteArrayInputStream;
-import java.io.IOException;
-import java.io.PrintStream;
 import java.net.MalformedURLException;
 import java.net.URL;
 
