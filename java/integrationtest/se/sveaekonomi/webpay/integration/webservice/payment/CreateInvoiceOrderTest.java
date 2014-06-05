@@ -102,8 +102,8 @@ public class CreateInvoiceOrderTest {
 		assertEquals("Gate", response.customerIdentity.getStreet());
 		assertNull(response.customerIdentity.getCoAddress());
 		assertEquals("42", response.customerIdentity.getHouseNumber());
-		assertEquals("1102 BARENDRECHT", response.customerIdentity.getZipCode());
-		assertEquals("HG", response.customerIdentity.getCity());
+		assertEquals("1102 HG", response.customerIdentity.getZipCode());
+		assertEquals("BARENDRECHT", response.customerIdentity.getCity());
 		assertEquals("NL", response.customerIdentity.getCountryCode());
 	}
 
