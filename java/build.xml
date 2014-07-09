@@ -24,7 +24,6 @@
     <property name="integration.report.dir"  location="${build.dir}/junitreport/integration"/>
     <property name="unit.report.dir"  location="${build.dir}/junitreport/unit"/>
 
-
 	
     <target name="clean" >
         <delete dir="${build.dir}"/>
@@ -52,12 +51,14 @@
     </target>
 
 	
-    <target name="junit">
-        <mkdir dir="${unit.report.dir}"/>
+    <target name="junit">    	
+    	<mkdir dir="${unit.report.dir}"/>
         
     	<junit printsummary="yes" >
+    		<jvmarg value="-Dfile.encoding=UTF-8"/>
+    		
             <classpath refid="all.test.classpath"/>
-            
+    		 
             <formatter type="xml"/>
             
             <batchtest fork="no" todir="${unit.report.dir}"  failureproperty="unittests.failed">
@@ -74,7 +75,7 @@
         </junitreport>
     </target>
 
-    <target name="jar">
+    <target name="jar" depends="build">
         <mkdir dir="${jar.dir}"/>
         <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${src.classes.dir}">
             <manifest>
@@ -103,8 +104,10 @@
         <mkdir dir="${integration.report.dir}"/>
         
         <junit printsummary="yes" >
-            <classpath refid="all.integrationtest.classpath"/>
-            
+    		<jvmarg value="-Dfile.encoding=UTF-8"/>
+
+        	<classpath refid="all.integrationtest.classpath"/>
+           
             <formatter type="xml"/>
             
             <batchtest fork="no" todir="${integration.report.dir}" failureproperty="integrationtests.failed">
@@ -134,4 +137,19 @@
     <target name="clean-jar" depends="clean-test, jar" description="Clean, build, unit test and package a jar file"/>
     <target name="clean-integrationtest" depends="clean-jar, integrationtest.compile, integrationtest" description="Run integration tests from created jar file"/>
 
+
+	<target name="jar-example" depends="clean, build, jar" description="builds and moves jar to examples">
+		<copy todir="example/invoiceorder/lib">
+			<fileset file="${jar.dir}/sveawebpay.jar" />
+		</copy>
+	</target>
+	
+	<include file="example/invoiceorder/build.xml" as="invoiceorder" />
+
+	<target name="invoiceorder" depends="jar-example, invoiceorder.deploy_local" description="builds example InvoiceOrder deploys to http://[local tomcat installation]/InvoiceOrder">
+	</target>
+			
+	<target name="examples" depends="invoiceorder" description="builds all example files">
+	</target>
+	
 </project>
