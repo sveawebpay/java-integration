@@ -2,12 +2,14 @@ package se.sveaekonomi.webpay.integration;
 
 import java.io.IOException;
 
+// import servlet classes (provided in /lib/servlet-api.jar)
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+// import Svea integration package (provided in /lib/sveawebpay.jar)
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.config.SveaTestConfigurationProvider;
@@ -34,15 +36,26 @@ public class InvoiceOrderServlet extends HttpServlet implements Servlet {
 		ConfigurationProvider myConfig = new SveaTestConfigurationProvider();
 				
 		// We assume that you've collected the following information about the order in your shop: 
-		// The shop cart contains one item "Billy" which cost 700,99 kr excluding vat (25%).
-		// When selecting to pay using the invoice payment method, the customer has also provided their social security number, which is required for invoice orders.
+		
+		// customer information:
+		String customerFirstName = "Tess T";
+		String customerLastName = "Persson";
+		String customerAddress = "Testgatan";
+		String customerHouseNumber = "1";
+		String customerZipCode = "99999";
+		String customerCity = "Stan";
+		String customerCountry = "Sverige";
 
+		// The customer has bought three items, one "Billy" which cost 700,99 kr excluding vat (25%) and two hotdogs for 5 kr (incl. vat).
+
+		// We'll also need information about the customer country, and the currency used for this order, etc., see below		
+		
 		// Begin the order creation process by creating an order builder object using the WebPay::createOrder() method:
 		CreateOrderBuilder myOrder = WebPay.createOrder(myConfig);
-		
+
 		// We then add information to the order object by using the various methods in the CreateOrderBuilder class.
 
-		// We begin by adding any additional information required by the payment method, which for an invoice order means:
+		// We begin by adding any additional information required by the intended payment method, which for an invoice order means:
 		myOrder.setCountryCode(COUNTRYCODE.SE);
 		myOrder.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
 		
@@ -53,12 +66,28 @@ public class InvoiceOrderServlet extends HttpServlet implements Servlet {
 		boughtItem.setVatPercent(25);
 		boughtItem.setQuantity(1.0);
 
-		// Add the order rows to the order: 
+		// Add boughtItem to the order: 
 		myOrder.addOrderRow( boughtItem ); 
 		
-		// Next, we create a customer identity object, for invoice orders Svea will look up the customer address et al based on the social security number
-		IndividualCustomer customerInformation = Item.individualCustomer();
-		customerInformation.setNationalIdNumber("194605092222");
+		// Add a second item in a fluent fashion 
+		myOrder
+			.addOrderRow( 
+				Item.orderRow()
+					.setAmountIncVat(5.00)
+					.setVatPercent(12.00)
+					.setQuantity(2.0)
+					.setDescription("Korv med bröd") 
+			)
+		;		
+		
+		// Next, we create a customer identity object, note that for invoice orders Svea overrides any given address w/verified credit report address in the response.
+		IndividualCustomer customerInformation = Item.individualCustomer();	// there's also a companyCustomer() method, used for non-person entities
+		customerInformation.setNationalIdNumber("194605092222");			// sole required field for an invoice order
+		
+		// Also, for card orders addCustomerDetails() is optional, but recommended -- we'll just add what info we have, but do remember to check the response address!		
+		customerInformation.setName(customerFirstName, customerLastName);
+		customerInformation.setStreetAddress(customerAddress, customerHouseNumber);
+		customerInformation.setZipCode(customerZipCode).setLocality(customerCity);
 		
 		// Add the customer to the order: 
 		myOrder.addCustomerDetails(customerInformation);
@@ -69,17 +98,8 @@ public class InvoiceOrderServlet extends HttpServlet implements Servlet {
 		// Then send the request to Svea using the doRequest method, and immediately receive the service response object
 		CreateOrderResponse myResponse = myInvoiceOrderRequest.doRequest();
 		
-		request.setAttribute("invoiceorder_result", "foo");		
-		// If the response attribute accepted is true, the payment succeeded.
-		if( myResponse.isOrderAccepted() ) {
-			request.setAttribute("invoiceorder_result", "invoice payment succeeded");
-		}
-		else {
-			request.setAttribute("invoiceorder_result", "invoice payment failed");
-		}
-				
-		// set hello_string attribute in request, and forward the request to the hello.jsp page where it will be presented to the user
-		request.getRequestDispatcher("/invoiceorder.jsp").forward(request, response);
-		
+		// Pass service response to invoiceorder.jsp view as attribute in HttpServletRequest
+		request.setAttribute("invoiceorder_response", myResponse);
+		request.getRequestDispatcher("/invoiceorder.jsp").forward(request, response);				
 	}
 }
