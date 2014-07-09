@@ -24,7 +24,6 @@
     <property name="integration.report.dir"  location="${build.dir}/junitreport/integration"/>
     <property name="unit.report.dir"  location="${build.dir}/junitreport/unit"/>
 
-
 	
     <target name="clean" >
         <delete dir="${build.dir}"/>
@@ -76,7 +75,7 @@
         </junitreport>
     </target>
 
-    <target name="jar">
+    <target name="jar" depends="build">
         <mkdir dir="${jar.dir}"/>
         <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${src.classes.dir}">
             <manifest>
@@ -138,59 +137,19 @@
     <target name="clean-jar" depends="clean-test, jar" description="Clean, build, unit test and package a jar file"/>
     <target name="clean-integrationtest" depends="clean-jar, integrationtest.compile, integrationtest" description="Run integration tests from created jar file"/>
 
+
+	<target name="jar-example" depends="clean, build, jar" description="builds and moves jar to examples">
+		<copy todir="example/invoiceorder/lib">
+			<fileset file="${jar.dir}/sveawebpay.jar" />
+		</copy>
+	</target>
 	
-	
-	<target name="invoiceorder" description="builds InvoiceOrder webapp and deploys to local tomcat installation">
+	<include file="example/invoiceorder/build.xml" as="invoiceorder" />
 
-		<property file="example/invoiceorder/build.properties" />
-
-		<copy todir="${invoiceorder.lib.dir}">
-			<fileset file="${jar.dir}/${ant.project.name}.jar" />
-		</copy>		
-		
-		<path id="classpath">
-			<fileset dir="${invoiceorder.lib.dir}" includes="servlet-api.jar" />
-			<fileset dir="${invoiceorder.lib.dir}" includes="sveawebpay.jar" />
-		</path>
-
-		<echo>Cleaning the ${invoiceorder.build.dir}</echo>
-		<delete dir="${invoiceorder.build.dir}" />
-		<delete dir="${invoiceorder.dist.dir}" />
-
-		<echo>Creating the build directory</echo>
-		<mkdir dir="${invoiceorder.build.dir}/WEB-INF/classes" />
-		<mkdir dir="${invoiceorder.build.dir}/WEB-INF/lib" />
-		<mkdir dir="${invoiceorder.dist.dir}" />
-
-		<echo>Compile the source files</echo>
-		<javac srcdir="${invoiceorder.src.dir}" destdir="${invoiceorder.build.dir}/WEB-INF/classes">
-			<classpath refid="classpath" />
-		</javac>
-		
-		<copy todir="${invoiceorder.build.dir}/WEB-INF">
-			<fileset dir="${invoiceorder.web.dir}/WEB-INF" />
-		</copy>
-		<copy todir="${invoiceorder.build.dir}">
-			<fileset dir="${invoiceorder.web.dir}" />
-		</copy>
-		<copy todir="${invoiceorder.build.dir}/WEB-INF/lib">
-			<fileset dir="${invoiceorder.lib.dir}">
-				<exclude name="servlet-api.jar" />
-			</fileset>
-		</copy>
-
-		<echo>Building the war file</echo>
-		<war destfile="${invoiceorder.dist.dir}/${invoiceorder.project.name}.war" webxml="${invoiceorder.build.dir}/WEB-INF/web.xml">
-			<fileset dir="${invoiceorder.build.dir}" />
-		</war>
-
-		<echo>Deploying .war to local Tomcat</echo>
-		<copy todir="${invoiceorder.tomcat.dir}">
-			<fileset dir="${invoiceorder.dist.dir}">
-				<include name="${invoiceorder.project.name}.war" />
-			</fileset>
-		</copy>
-
+	<target name="invoiceorder" depends="jar-example, invoiceorder.deploy_local" description="builds example InvoiceOrder deploys to http://[local tomcat installation]/InvoiceOrder">
+	</target>
+			
+	<target name="examples" depends="invoiceorder" description="builds all example files">
 	</target>
 	
 </project>
