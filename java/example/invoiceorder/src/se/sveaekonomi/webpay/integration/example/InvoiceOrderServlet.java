@@ -1,4 +1,4 @@
-package se.sveaekonomi.webpay.integration;
+package se.sveaekonomi.webpay.integration.example;
 
 import java.io.IOException;
 

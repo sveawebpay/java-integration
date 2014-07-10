@@ -137,19 +137,28 @@
     <target name="clean-jar" depends="clean-test, jar" description="Clean, build, unit test and package a jar file"/>
     <target name="clean-integrationtest" depends="clean-jar, integrationtest.compile, integrationtest" description="Run integration tests from created jar file"/>
 
-
 	<target name="jar-example" depends="clean, build, jar" description="builds and moves jar to examples">
 		<copy todir="example/invoiceorder/lib">
 			<fileset file="${jar.dir}/sveawebpay.jar" />
 		</copy>
 	</target>
 	
-	<include file="example/invoiceorder/build.xml" as="invoiceorder" />
-
-	<target name="invoiceorder" depends="jar-example, invoiceorder.deploy_local" description="builds example InvoiceOrder deploys to http://[local tomcat installation]/InvoiceOrder">
+	
+	<include file="example/invoiceorder/build.xml" as="invoiceorder"/>
+	
+	<target name="invoiceorder" depends="jar-example, invoiceorder.deploy_invoiceorder" 
+		description="builds example InvoiceOrder deploys to http://[local tomcat installation]/InvoiceOrder">
 	</target>
-			
-	<target name="examples" depends="invoiceorder" description="builds all example files">
+
+	
+	<include file="example/cardorder/build.xml" as="cardorder"/>	
+	
+	<target name="cardorder" depends="jar-example, cardorder.deploy_cardorder" 
+		description="builds example CardOrder deploys to http://[local tomcat installation]/CardOrder">
+	</target>			
+	
+	
+	<target name="examples" depends="invoiceorder, cardorder" description="builds all example files">
 	</target>
 	
 </project>
