@@ -1,31 +1,39 @@
-package se.sveaekonomi.webpay.integration;
+package se.sveaekonomi.webpay.integration.example;
 
 import java.io.IOException;
 
-// import servlet classes (provided in /lib/servlet-api.jar)
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
-// import Svea integration package (provided in /lib/sveawebpay.jar)
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.config.SveaTestConfigurationProvider;
+import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
+import se.sveaekonomi.webpay.integration.hosted.payment.PaymentMethodPayment;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
-import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.webservice.payment.InvoicePayment;
+import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
+// import servlet classes (provided in /lib/servlet-api.jar)
+// import Svea integration package (provided in /lib/sveawebpay.jar)
 
-public class InvoiceOrderServlet extends HttpServlet implements Servlet {
+/**
+ * example file, how to create a card order request
+ * 
+ * @author Kristian Grossman-madsen for Svea WebPay
+ */
+public class CardOrderServlet extends HttpServlet implements Servlet {
 
 	private static final long serialVersionUID = 1L;
 
-	public InvoiceOrderServlet() {
+	public CardOrderServlet() {
 		super();
 	}
 
@@ -44,7 +52,6 @@ public class InvoiceOrderServlet extends HttpServlet implements Servlet {
 		String customerHouseNumber = "1";
 		String customerZipCode = "99999";
 		String customerCity = "Stan";
-		String customerCountry = "Sverige";
 
 		// The customer has bought three items, one "Billy" which cost 700,99 kr excluding vat (25%) and two hotdogs for 5 kr (incl. vat).
 
@@ -55,9 +62,10 @@ public class InvoiceOrderServlet extends HttpServlet implements Servlet {
 
 		// We then add information to the order object by using the various methods in the CreateOrderBuilder class.
 
-		// We begin by adding any additional information required by the intended payment method, which for an invoice order means:
-		myOrder.setCountryCode(COUNTRYCODE.SE);
-		myOrder.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+		// We begin by adding any additional information required by the intended payment method, which for an card order means:
+		myOrder.setCountryCode(COUNTRYCODE.SE);					// customer country, we recommend basing this on the customer billing address
+		myOrder.setCurrency(CURRENCY.SEK);                      // order currency
+		myOrder.setClientOrderNumber( new String( "order #" + new java.util.Date().getTime() ) );  // required - use a not previously sent client side order identifier, i.e. "order #20140519-371"
 		
 		// To add the cart contents to the order we first create and specify a new orderRow item using methods from the Svea\OrderRow class:
 		OrderRowBuilder boughtItem = Item.orderRow();
@@ -84,7 +92,7 @@ public class InvoiceOrderServlet extends HttpServlet implements Servlet {
 		IndividualCustomer customerInformation = Item.individualCustomer();	// there's also a companyCustomer() method, used for non-person entities
 		customerInformation.setNationalIdNumber("194605092222");			// sole required field for an invoice order
 		
-		// Also, for card orders addCustomerDetails() is optional, but recommended -- we'll just add what info we have, but do remember to check the response address!		
+		// Also, for card orders addCustomerDetails() is optional, but recommended -- we'll just add what info we have to the order
 		customerInformation.setName(customerFirstName, customerLastName);
 		customerInformation.setStreetAddress(customerAddress, customerHouseNumber);
 		customerInformation.setZipCode(customerZipCode).setLocality(customerCity);
@@ -93,13 +101,18 @@ public class InvoiceOrderServlet extends HttpServlet implements Servlet {
 		myOrder.addCustomerDetails(customerInformation);
 		
 		// We have now completed specifying the order, and wish to send the payment request to Svea. To do so, we first select the invoice payment method:
-		InvoicePayment myInvoiceOrderRequest = myOrder.useInvoicePayment();
+		// For card orders, we recommend using the .usePaymentMethod(PaymentMethod::KORTCERT), which processes card orders via Certitrade.
+		PaymentMethodPayment myCardOrderRequest = (PaymentMethodPayment) myOrder.usePaymentMethod(PAYMENTMETHOD.KORTCERT);
 
-		// Then send the request to Svea using the doRequest method, and immediately receive the service response object
-		CreateOrderResponse myResponse = myInvoiceOrderRequest.doRequest();
+		// Then set any additional required request attributes as detailed below. (See PaymentMethodPayment and HostedPayment classes for details.)
+		myCardOrderRequest.setPayPageLanguageCode(LANGUAGECODE.sv);
+		myCardOrderRequest.setReturnUrl("http://localhost:8080/CardOrder/landingpage");		// TODO move to constant etc.
+				
+		// Get a payment form object which you can use to send the payment request to Svea
+		PaymentForm myCardOrderPaymentForm = myCardOrderRequest.getPaymentForm();
 		
-		// Pass service response to invoiceorder.jsp view as attribute in HttpServletRequest
-		request.setAttribute("invoiceorder_response", myResponse);
-		request.getRequestDispatcher("/invoiceorder.jsp").forward(request, response);				
+		// Go to cardorder.jsp view to state that we have sent the card order, before we receive the callback and are sent to landingpage
+		request.setAttribute("payment_form", myCardOrderPaymentForm);
+		request.getRequestDispatcher("/cardorder.jsp").forward(request, response);				
 	}
 }

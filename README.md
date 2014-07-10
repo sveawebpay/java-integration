@@ -1012,3 +1012,74 @@ Enumeration, used in .setInvoiceDistributionType(...).
 | Email								| Invoice is sent by e-mail	|
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
+
+
+=============
+nytt i java-integration version 2.0:
+
+
+## x.x Examples
+The provided examples show how to use the Svea java integration package to specify an order and send a payment request to Svea.
+
+### x.x.1 Running the examples
+We assume that you are running a local installation of Tomcat 7 or later on localhost port 8080. 
+Build and deploy the examples to localhost using ant, see build.xml and edit build.properties with your tomcat installation path: 
+
+```
+$ pwd
+/c/projects/java-integration/java
+
+$ cd example/invoiceorder
+
+$ echo "remember to edit build.properties with your tomcat installation path (i.e. where we should deploy the example .war file)"
+
+$ ant deploy_invoiceorder
+Buildfile: c:\projects\java-integration\java\example\invoiceorder\build.xml
+
+clean:
+     [echo] Cleaning the build
+
+init:
+     [echo] Creating the build directory
+    [mkdir] Created dir: c:\projects\java-integration\java\example\invoiceorder\build\WEB-INF\classes
+    [mkdir] Created dir: c:\projects\java-integration\java\example\invoiceorder\build\WEB-INF\lib
+    [mkdir] Created dir: c:\projects\java-integration\java\example\invoiceorder\dist
+
+compile:
+     [echo] Compile the source files
+    [javac] Compiling 1 source file to c:\projects\java-integration\java\example\invoiceorder\build\WEB-INF\classes
+
+copy:
+     [copy] Copying 1 file to c:\projects\java-integration\java\example\invoiceorder\build\WEB-INF
+     [copy] Copying 2 files to c:\projects\java-integration\java\example\invoiceorder\build
+     [copy] Copying 1 file to c:\projects\java-integration\java\example\invoiceorder\build\WEB-INF\lib
+
+war:
+     [echo] Building the war file
+      [war] Building war: c:\projects\java-integration\java\example\invoiceorder\dist\InvoiceOrder.war
+
+deploy_invoiceorder:
+     [echo] Deploying .war to local Tomcat
+     [copy] Copying 1 file to C:\Program Files\Apache Software Foundation\Tomcat 7.0\webapps
+
+BUILD SUCCESSFUL
+Total time: 1 second
+$
+```
+(You may also build the examples using the main package ant target "examples".)
+
+You should now be able to access the example by going to http://localhost:8080/InvoiceOrder
+
+The web.xml file contains the servlet routing information for the InvoiceOrder application. 
+When you land on the index.jsp file it redirects you to /invoiceorder, which in turn passes the request to InvoiceOrderServlet as stated in web.xml.
+The backend InvoiceOrderServlet builds an order and sends a payment request to Svea. After the service responds, you're redirected to invoiceorder.jsp.
+The frontend invoiceorder.jsp file then presents the response result.
+
+### x.x.2 Svea invoice order
+An example of a synchronous (invoice) order can be found in the example/invoiceorder folder.
+
+###x.x.3 Card order
+An example of an asynchronous card order can be found in the example/cardorder folder.
+
+
+

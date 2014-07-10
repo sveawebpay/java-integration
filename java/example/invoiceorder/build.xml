@@ -1,5 +1,5 @@
 <?xml version="1.0"?>
-<project name="InvoiceOrder" default="deploy_local" basedir=".">
+<project name="InvoiceOrder" default="deploy_invoiceorder" basedir=".">
 
 	<dirname property="InvoiceOrder.basedir" file="${ant.file.InvoiceOrder}" />
 	<property file="${InvoiceOrder.basedir}/build.properties" />		
@@ -50,7 +50,7 @@
 		</war>
 	</target>
 
-	<target name="deploy_local" depends="war">
+	<target name="deploy_invoiceorder" depends="war">
 		<echo>Deploying .war to local Tomcat</echo>
 		<copy todir="${invoiceorder.tomcat.dir}">
 			<fileset dir="${InvoiceOrder.basedir}/${invoiceorder.dist.dir}">
