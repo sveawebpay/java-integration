@@ -29,13 +29,60 @@ import se.sveaekonomi.webpay.integration.util.xml.XMLBuilder;
  */
 public class HostedXmlBuilder extends XMLBuilder {
 	
+	
+	/**
+	 * used by getPaymentUrl() to build hosted service payment with added fields needed for preparedpayment request
+	 * 
+	 * @param payment
+	 * @return
+	 */
+	public String getPaymentUrlXml(HostedPayment<?> payment) {
+		XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
+		ByteArrayOutputStream os = new ByteArrayOutputStream();
+
+		try {
+			xmlw = xmlof.createXMLStreamWriter(os, "UTF-8");
+			
+			// common payment elements
+			getPaymentXml(xmlw, payment);
+
+			// preparedpayment required elements
+			writeSimpleElement("lang", payment.getPayPageLanguageCode() );
+			writeSimpleElement("ipaddress", payment.getCreateOrderBuilder().getCustomerIdentity().getIpAddress() );
+			
+			xmlw.writeEndDocument();
+			xmlw.close();
+
+			return new String(os.toByteArray(), "UTF-8");
+		}
+		catch (XMLStreamException e) {
+			throw new SveaWebPayException("Error when building XML", e);
+		}
+		catch (UnsupportedEncodingException e) {
+			throw new SveaWebPayException("Unsupported encoding UTF-8", e);
+		}
+		catch (Exception e) {
+			throw new SveaWebPayException("Exception", e);
+		}
+	}
+	
+	
+	/**
+	 * used by getPaymentForm() to build hosted service payment request
+	 * 
+	 * @param payment
+	 * @return
+	 */
 	public String getXml(HostedPayment<?> payment) {
 		XMLOutputFactory xmlof = XMLOutputFactory.newInstance();
 		ByteArrayOutputStream os = new ByteArrayOutputStream();
 
 		try {
 			xmlw = xmlof.createXMLStreamWriter(os, "UTF-8");
+			
+			// common payment elements
 			getPaymentXml(xmlw, payment);
+
 			xmlw.writeEndDocument();
 			xmlw.close();
 
@@ -94,9 +141,6 @@ public class HostedXmlBuilder extends XMLBuilder {
 		return xmlw;
 	}
 
-	//	public String getPreparedPaymentXml( HostedPayment<?> payment ) {
-	//	
-	//}	
 	
 	private void serializeCustomer(CreateOrderBuilder order, HostedPayment<?> payment) {
         if (order.customerIdentity == null) {
