@@ -8,16 +8,18 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
+import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class HostedPaymentsRequestTest {
 
     @Test
-    public void testDoCardPaymentRequest() {
+    public void test_HostedPayment_getPaymentForm_xml() {
     	
     	
     	OrderRowBuilder row = Item.orderRow()
@@ -28,17 +30,11 @@ public class HostedPaymentsRequestTest {
         .setQuantity(1.0)
         .setUnit("st")
         .setVatPercent(25);
-//        .setVatDiscount(0);     	
     	
     	
         PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(row)
-//        .addFee(TestingTool.createExVatBasedShippingFee())
-//        .addFee(TestingTool.createExVatBasedInvoiceFee())
-//        .addDiscount(TestingTool.createRelativeDiscount())
-//        .addCustomerDetails(TestingTool.createMiniCompanyCustomer())
         .setCountryCode(TestingTool.DefaultTestCountryCode)
-//        .setOrderDate(TestingTool.DefaultTestDate)
         .setClientOrderNumber("test5")
         .setCurrency(CURRENCY.EUR)
     	.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
@@ -73,8 +69,51 @@ public class HostedPaymentsRequestTest {
 //        </orderrows>
 //        <addinvoicefee>false</addinvoicefee>
 //        </payment>        	
-//      mac=222a0015dc8fc05dbb5ea670f590d4d21c941b5a892be5a641a6925b09f4bfb4a3ce375a33d2c6a88406165fa27d5386517031cbad476e09b5f45df5e9ddd528
-//      merchantid=1130
-//		message=PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48IS0tTWVzc2FnZSBnZW5lcmF0ZWQgYnkgSW50ZWdyYXRpb24gcGFja2FnZSBKYXZhLS0+PHBheW1lbnQ+PHBheW1lbnRtZXRob2Q+S09SVENFUlQ8L3BheW1lbnRtZXRob2Q+PGN1c3RvbWVycmVmbm8+dGVzdDU8L2N1c3RvbWVycmVmbm8+PGN1cnJlbmN5PkVVUjwvY3VycmVuY3k+PGFtb3VudD41MDA8L2Ftb3VudD48dmF0PjEwMDwvdmF0PjxyZXR1cm51cmw+aHR0cHM6Ly90ZXN0LnN2ZWFla29ub21pLnNlL3dlYnBheS1hZG1pbi9hZG1pbi9tZXJjaGFudHJlc3BvbnNldGVzdC54aHRtbDwvcmV0dXJudXJsPjxpc2NvbXBhbnk+ZmFsc2U8L2lzY29tcGFueT48b3JkZXJyb3dzPjxyb3c+PHNrdT42NjU8L3NrdT48bmFtZT5PcmRlcnJvdzE8L25hbWU+PGRlc2NyaXB0aW9uPk9yZGVycm93IGRlc2NyaXB0aW9uPC9kZXNjcmlwdGlvbj48YW1vdW50PjUwMDwvYW1vdW50Pjx2YXQ+MTAwPC92YXQ+PHF1YW50aXR5PjEuMDwvcXVhbnRpdHk+PHVuaXQ+c3Q8L3VuaXQ+PC9yb3c+PC9vcmRlcnJvd3M+PGFkZGludm9pY2VmZWU+ZmFsc2U8L2FkZGludm9pY2VmZWU+PC9wYXltZW50Pg==
     }
+    
+    @Test
+    public void test_HostedPayment_getPaymentUrl_xml() {
+    	    	
+    	OrderRowBuilder row = Item.orderRow()
+        .setArticleNumber("665")
+        .setName("Orderrow1")
+        .setDescription("Orderrow description")
+        .setAmountExVat(4.00)
+        .setQuantity(1.0)
+        .setUnit("st")
+        .setVatPercent(25);
+    	
+    	IndividualCustomer customer = Item.individualCustomer()
+		.setIpAddress("127.0.0.1");
+
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
+		.addOrderRow(row)
+		.addCustomerDetails(customer)
+        .setCountryCode(TestingTool.DefaultTestCountryCode)
+        .setClientOrderNumber("test5")
+        .setCurrency(CURRENCY.EUR)
+    	.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
+        	.setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+        	.setPayPageLanguageCode(LANGUAGECODE.sv )
+        	.getPaymentUrl();
+        
+        Assert.assertNotNull(form);
+
+// TODO update w/preparedpayment xml       String message = "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48IS0tTWVzc2FnZSBnZW5lcmF0ZWQgYnkgSW50ZWdyYXRpb24gcGFja2FnZSBKYXZhLS0+PHBheW1lbnQ+PHBheW1lbnRtZXRob2Q+S09SVENFUlQ8L3BheW1lbnRtZXRob2Q+PGN1c3RvbWVycmVmbm8+dGVzdDU8L2N1c3RvbWVycmVmbm8+PGN1cnJlbmN5PkVVUjwvY3VycmVuY3k+PGFtb3VudD41MDA8L2Ftb3VudD48dmF0PjEwMDwvdmF0PjxyZXR1cm51cmw+aHR0cHM6Ly90ZXN0LnN2ZWFla29ub21pLnNlL3dlYnBheS1hZG1pbi9hZG1pbi9tZXJjaGFudHJlc3BvbnNldGVzdC54aHRtbDwvcmV0dXJudXJsPjxpc2NvbXBhbnk+ZmFsc2U8L2lzY29tcGFueT48b3JkZXJyb3dzPjxyb3c+PHNrdT42NjU8L3NrdT48bmFtZT5PcmRlcnJvdzE8L25hbWU+PGRlc2NyaXB0aW9uPk9yZGVycm93IGRlc2NyaXB0aW9uPC9kZXNjcmlwdGlvbj48YW1vdW50PjUwMDwvYW1vdW50Pjx2YXQ+MTAwPC92YXQ+PHF1YW50aXR5PjEuMDwvcXVhbnRpdHk+PHVuaXQ+c3Q8L3VuaXQ+PC9yb3c+PC9vcmRlcnJvd3M+PGFkZGludm9pY2VmZWU+ZmFsc2U8L2FkZGludm9pY2VmZWU+PC9wYXltZW50Pg==";
+// TODO update w/preparedpayment xml        String mac = "222a0015dc8fc05dbb5ea670f590d4d21c941b5a892be5a641a6925b09f4bfb4a3ce375a33d2c6a88406165fa27d5386517031cbad476e09b5f45df5e9ddd528";
+        String merchantid = "1130";
+//
+        assertEquals(merchantid, form.getMerchantId());
+//        assertEquals(message, form.getXmlMessageBase64());
+//        assertEquals(mac, form.getMacSha512());
+                
+        
+        
+
+
+    }
+
+    
+    
+    
 }
