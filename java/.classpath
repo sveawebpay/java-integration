@@ -14,5 +14,9 @@
 	<classpathentry kind="lib" path="lib/test/xercesImpl-2.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/test/xmlParserAPIs-2.6.1.jar"/>
 	<classpathentry kind="lib" path="lib/example/servlet-api.jar"/>
+	<classpathentry kind="lib" path="lib/src/httpclient-4.3.4.jar"/>
+	<classpathentry kind="lib" path="lib/src/httpcore-4.3.2.jar"/>
+	<classpathentry kind="lib" path="lib/src/commons-logging-1.2-javadoc.jar"/>
+	<classpathentry kind="lib" path="lib/src/commons-logging-1.2.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
