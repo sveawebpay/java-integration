@@ -21,8 +21,6 @@ import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
-// import servlet classes (provided in /lib/servlet-api.jar)
-// import Svea integration package (provided in /lib/sveawebpay.jar)
 
 /**
  * example file, how to create a card order request
