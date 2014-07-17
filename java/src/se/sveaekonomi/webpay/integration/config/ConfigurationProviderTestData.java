@@ -38,6 +38,10 @@ public class ConfigurationProviderTestData implements ConfigurationProvider {
             return SveaConfig.getTestPayPageUrl();
         }
         
+        if (PAYMENTTYPE.HOSTED_ADMIN == type) {
+            return SveaConfig.getTestHostedAdminUrl();
+        }
+        
         return SveaConfig.getTestWebserviceUrl();
     }
 }
