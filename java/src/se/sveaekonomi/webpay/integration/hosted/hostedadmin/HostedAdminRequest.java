@@ -3,15 +3,21 @@
  */
 package se.sveaekonomi.webpay.integration.hosted.hostedadmin;
 
+import java.util.Hashtable;
+
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
+import se.sveaekonomi.webpay.integration.util.security.Base64Util;
+import se.sveaekonomi.webpay.integration.util.security.HashUtil;
+import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 
 
 /**
  * @author Kristian Grossman-Madsen
  *
  */
-public class HostedAdminRequest {
+public abstract class HostedAdminRequest {
 
 	protected ConfigurationProvider config;
 	protected String method;
@@ -35,19 +41,30 @@ public class HostedAdminRequest {
 	public COUNTRYCODE getCountryCode() {
 		return countryCode;
 	}
+		
+	/**
+	 * returns the request fields to post to service
+	 */
+	public Hashtable<String,String> prepareRequest() {
+		Hashtable<String,String> requestFields = new Hashtable<>();
+
+		String merchantId = this.config.getMerchantId(PAYMENTTYPE.HOSTED, this.getCountryCode());
+		String secretWord = this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode());		
+		
+    	String xmlMessage = getRequestMessageXml();
+    	String xmlMessageBase64 = Base64Util.encodeBase64String(xmlMessage);
+    	String macSha512 =  HashUtil.createHash(xmlMessageBase64 + secretWord, HASHALGORITHM.SHA_512);			
+
+    	requestFields.put("message", xmlMessageBase64);
+    	requestFields.put("mac", macSha512);
+    	requestFields.put("merchantid", merchantId);
+    	
+		return requestFields;
+	}
 	
-	
-//    /**
-//     * Performs a request using HttpClient, parsing the response using SveaResponse 
-//     * and returning the resulting HostedAdminResponse<T> instance.
-//     */
-//	public HostedAdminResponse doRequest() {
-//		
-//		
-//		
-//		
-//		HostedAdminResponse response = new PreparePaymentResponse("foo", "bar");		
-//		return response;
-//	}
+	/**
+	 * implemented by child classes, should return the request message xml for the method in question
+	 */
+	abstract String getRequestMessageXml();
 	
 }
