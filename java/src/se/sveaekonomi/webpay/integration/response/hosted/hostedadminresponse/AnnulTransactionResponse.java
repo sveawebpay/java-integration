@@ -16,20 +16,18 @@ import org.xml.sax.SAXException;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 
 /**
- * Handles preparepayment request response from hosted admin webservice
+ * Handles annul request response from hosted admin webservice
  * 
  * @author Kristian Grossman-Madsen
  */
-public class PreparePaymentResponse extends HostedAdminResponse {
+public class AnnulTransactionResponse extends HostedAdminResponse {
 
 	private String rawResponse;
-	private String id;
-    private String created;
+    private String customerrefno;
 	
-	public PreparePaymentResponse(String responseXmlBase64, String secretWord) {
+	public AnnulTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
-		this.rawResponse = this.xml;
-		
+		this.rawResponse = this.xml;		
 		this.setValues();
 	}
 
@@ -60,8 +58,7 @@ public class PreparePaymentResponse extends HostedAdminResponse {
 				
 				if( this.isOrderAccepted() ) {	// don't attempt to parse a bad response
 
-					this.id = getTagValue(element, "id");
-					this.created = getTagValue(element, "created");
+					this.customerrefno = getTagValue(element, "customerrefno");
 				}
 			}
 		} catch (ParserConfigurationException e) {
@@ -77,12 +74,9 @@ public class PreparePaymentResponse extends HostedAdminResponse {
 		return rawResponse;
 	}
 
-    public String getId() {
-		return id;
+    public String getCustomerRefNo() {
+		return customerrefno;
 	}
 
-    public String getCreated() {
-		return created;
-	}
 }
 
