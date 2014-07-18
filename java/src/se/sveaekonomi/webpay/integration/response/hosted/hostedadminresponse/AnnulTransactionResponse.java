@@ -23,8 +23,9 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 public class AnnulTransactionResponse extends HostedAdminResponse {
 
 	private String rawResponse;
-    private String customerrefno;
-	
+	private String transactionid;
+	private String customerrefno;
+
 	public AnnulTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
 		this.rawResponse = this.xml;		
@@ -58,6 +59,7 @@ public class AnnulTransactionResponse extends HostedAdminResponse {
 				
 				if( this.isOrderAccepted() ) {	// don't attempt to parse a bad response
 
+					this.transactionid = getTagAttribute(element, "transaction", "id");
 					this.customerrefno = getTagValue(element, "customerrefno");
 				}
 			}
@@ -74,9 +76,14 @@ public class AnnulTransactionResponse extends HostedAdminResponse {
 		return rawResponse;
 	}
 
-    public String getCustomerRefNo() {
+    public String getTransactionId() {
+		return transactionid;
+	}
+
+	public String getCustomerRefNo() {
 		return customerrefno;
 	}
+    
 
 }
 

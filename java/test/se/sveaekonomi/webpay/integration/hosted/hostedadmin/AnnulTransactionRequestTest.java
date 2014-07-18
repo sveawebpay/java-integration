@@ -66,7 +66,7 @@ public class AnnulTransactionRequestTest extends TestCase {
     }
     
     @Test
-    public void test_doRequest_returns_AnnulTransactionResponse() {
+    public void test_doRequest_returns_AnnulTransactionResponse_failure() {
     	this.request.setTransactionId( "987654" );
     	
     	AnnulTransactionResponse response = null;
@@ -88,4 +88,29 @@ public class AnnulTransactionRequestTest extends TestCase {
         assertFalse( response.isOrderAccepted() );
     	assertEquals( response.getResultCode(), "128 (NO_SUCH_TRANS)" );      	
     }
+    
+    @Test
+    public void manual_test_doRequest_returns_AnnulTransactionResponse_success() {
+    	this.request.setTransactionId( "584534" );
+    	
+    	AnnulTransactionResponse response = null;
+		try {
+			response = this.request.doRequest();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+
+    	assertThat( response, instanceOf(AnnulTransactionResponse.class) );
+        assertThat( response, instanceOf(HostedAdminResponse.class) );
+          
+        // if we receive an error from the service, the integration test passes
+        assertTrue( response.isOrderAccepted() );
+        assertEquals( response.getTransactionId(), "584534" );
+    	assertEquals( response.getCustomerRefNo(), "test_1405694000814" );      	
+	}        
+    
 }

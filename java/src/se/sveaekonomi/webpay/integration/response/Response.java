@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.response;
 
 import org.w3c.dom.Element;
+import org.w3c.dom.NamedNodeMap;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
@@ -36,7 +37,17 @@ public class Response {
         
         return null;
     }
-     
+
+	protected String getTagAttribute(Element elementNode, String tagName, String attributeName) {
+		String[] temp;
+		Node trans = elementNode.getElementsByTagName(tagName).item(0);
+		NamedNodeMap attr = trans.getAttributes();
+		Node nodeAttr = attr.getNamedItem("id");
+		String node = nodeAttr.toString();
+		temp = node.split("=");
+		return temp[1].substring(1, temp[1].length() - 1);
+	}
+        
     public boolean isOrderAccepted() {
         return isOrderAccepted;
     }

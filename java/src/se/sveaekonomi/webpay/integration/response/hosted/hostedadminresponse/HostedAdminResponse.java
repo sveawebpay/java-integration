@@ -1,9 +1,5 @@
 package se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse;
 
-import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
-
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.Response;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
@@ -35,16 +31,6 @@ public abstract class HostedAdminResponse extends Response {
 	 */
 	abstract void setValues();
 	
-	protected String getTagAttribute(Element elementNode, String tagName, String attributeName) {
-		String[] temp;
-		Node trans = elementNode.getElementsByTagName(tagName).item(0);
-		NamedNodeMap attr = trans.getAttributes();
-		Node nodeAttr = attr.getNamedItem("id");
-		String node = nodeAttr.toString();
-		temp = node.split("=");
-		return temp[1].substring(1, temp[1].length() - 1);
-	}
-
 	public String getXml() {
 		return xml;
 	}

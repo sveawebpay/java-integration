@@ -9,8 +9,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.NamedNodeMap;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -94,17 +92,7 @@ public class SveaResponse extends Response {
         } catch (IOException e) {
             throw new SveaWebPayException("IOException", e);
         }
-    }
-    
-    private String getTagAttribute(Element elementNode, String tagName, String attributeName) {
-        String[] temp;
-        Node trans =  elementNode.getElementsByTagName(tagName).item(0);
-        NamedNodeMap attr = trans.getAttributes();
-        Node nodeAttr = attr.getNamedItem("id");
-        String node = nodeAttr.toString();
-        temp = node.split("=");
-        return temp[1].substring(1, temp[1].length()-1);
-    }
+    } 
     
     public String getTransactionId() {
         return transactionId;
