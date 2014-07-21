@@ -102,7 +102,7 @@ public class AnnulTransactionRequest extends HostedAdminRequest {
     	Hashtable<String, String> requestFields = this.prepareRequest();
     	
     	// do request to Svea
-		String endpoint = this.config.getEndPoint(PAYMENTTYPE.HOSTED_ADMIN).toString().concat( this.method );		// TODO get from config - använd URIBuilder-klassen
+		String endpoint = this.config.getEndPoint(PAYMENTTYPE.HOSTED_ADMIN).toString().concat( this.method );
 		
 		CloseableHttpClient client = HttpClients.createDefault();
 		HttpPost post = new HttpPost(endpoint);				
