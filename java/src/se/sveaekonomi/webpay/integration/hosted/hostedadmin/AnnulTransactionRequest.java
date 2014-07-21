@@ -95,107 +95,11 @@ public class AnnulTransactionRequest extends HostedAdminRequest {
 				throw new SveaWebPayException("Unsupported encoding UTF-8", e);
 		}
 	}
-
-	public AnnulTransactionResponse doRequest() throws IllegalStateException, IOException {
-
-		// prepare request fields
-    	Hashtable<String, String> requestFields = this.prepareRequest();
-    	
-    	// do request to Svea
-		String endpoint = this.config.getEndPoint(PAYMENTTYPE.HOSTED_ADMIN).toString().concat( this.method );
-		
-		CloseableHttpClient client = HttpClients.createDefault();
-		HttpPost post = new HttpPost(endpoint);				
-
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("message", requestFields.get("message")));
-		params.add(new BasicNameValuePair("mac", requestFields.get("mac")));
-		params.add(new BasicNameValuePair("merchantid", requestFields.get("merchantid")));
-		
-		post.setEntity( new UrlEncodedFormEntity(params) );
-				
-		// receive response
-		/**
-		 * Used by getPaymentUrl() to parse the HttpClient request response from Svea, returning service the xml response as a string 
-		 */
-		ResponseHandler<String> rh = new ResponseHandler<String>() {
-		
-			@Override
-			public String handleResponse( final HttpResponse response ) throws IOException {
-				StatusLine statusLine = response.getStatusLine();
-				HttpEntity entity = response.getEntity();
-		
-				if( statusLine.getStatusCode() >= 300 ) {
-					throw new HttpResponseException( statusLine.getStatusCode(), statusLine.getReasonPhrase() );
-				}
-				if( entity == null ) {
-					throw new ClientProtocolException("Response contains no centent");
-				}
-				
-				BufferedReader br = new BufferedReader( new InputStreamReader(entity.getContent()) );
-		 
-				StringBuffer sb = new StringBuffer();
-				String line = "";
-				while ((line = br.readLine()) != null) {
-					sb.append(line);
-				}	    
-				return sb.toString();
-			};	
-		};	
-		
-		String xmlResponse = client.execute(post, rh);
-
-		String messageInBase64 = getResponseMessageFromXml( xmlResponse );
-				
-		// parse response message into AnnulTransactionResponse
-		AnnulTransactionResponse parsedResponse = 
-			new AnnulTransactionResponse(
-				messageInBase64, 
-				this.config.getSecretWord(PAYMENTTYPE.HOSTED,this.getCountryCode())
-			)
-		;	
-		return parsedResponse;
+    
+	// parse response message into AnnulTransactionResponse
+	public AnnulTransactionResponse parseResponse( String message ) { 
+		return new AnnulTransactionResponse( message, this.config.getSecretWord(PAYMENTTYPE.HOSTED,this.getCountryCode()) );
 	}
-	
-	/** extracts <message> node contents from xml string */	
-	private String getResponseMessageFromXml(String xml) {
-	    
-	    String message = null;
-		
-		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
-		try {
-			DocumentBuilder builder = factory.newDocumentBuilder();
-			Document d1 = builder.parse(new InputSource(new StringReader(xml)));
-			NodeList nodeList = d1.getElementsByTagName("response");
-			int size = nodeList.getLength();
-
-			for (int i = 0; i < size; i++) {
-				Element element = (Element) nodeList.item(i);
-							
-				message = getTagValue(element, "message");								
-			}
-		} catch (ParserConfigurationException e) {
-			throw new SveaWebPayException("ParserConfigurationException", e);
-		} catch (SAXException e) {
-			throw new SveaWebPayException("SAXException", e);
-		} catch (IOException e) {
-			throw new SveaWebPayException("IOException", e);
-		}		
-		
-		return message;
-	}
-	
-    protected String getTagValue(Element elementNode, String tagName) {
-        NodeList nodeList = elementNode.getElementsByTagName(tagName);
-        Element element = (Element) nodeList.item(0);
-        
-        if (element != null && element.hasChildNodes()) {
-            NodeList textList = element.getChildNodes();
-            return ((Node) textList.item(0)).getNodeValue().trim();
-        }
-        
-        return null;
-    }	
 
 }
