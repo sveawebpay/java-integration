@@ -16,6 +16,14 @@ public abstract class HostedAdminResponse extends Response {
 
 	protected String xml;
 
+	public String getXml() {
+		return xml;
+	}
+
+	public void setXml(String xml) {
+		this.xml = xml;
+	}
+	
 	/**
 	 * Parse the response and return an appropriate ResponseClassObject
 	 * depending on what response we should
@@ -24,19 +32,6 @@ public abstract class HostedAdminResponse extends Response {
 		super(null);
 		String xml = Base64Util.decodeBase64String(responseXmlBase64);
 		this.setXml(xml);
-	}
-
-	/** 
-	 * child classes implement this to parse xml and set attributes according to response attributes 
-	 */
-	abstract void setValues();
-	
-	public String getXml() {
-		return xml;
-	}
-
-	public void setXml(String xml) {
-		this.xml = xml;
 	}
 
 	protected void setErrorParams(int resultCode) {
@@ -400,5 +395,11 @@ public abstract class HostedAdminResponse extends Response {
 			break;
 		}
 	}
+	
+	/** 
+	 * child classes implement this to parse xml and set attributes according to response attributes 
+	 */
+	abstract void setValues();
+	
 }
 

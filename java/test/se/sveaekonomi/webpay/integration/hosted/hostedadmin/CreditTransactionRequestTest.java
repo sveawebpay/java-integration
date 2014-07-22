@@ -3,6 +3,8 @@ package se.sveaekonomi.webpay.integration.hosted.hostedadmin;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertThat;
 
+import java.io.IOException;
+
 import junit.framework.TestCase;
 
 import org.junit.Before;
@@ -47,7 +49,17 @@ public class CreditTransactionRequestTest extends TestCase {
     	this.request.setTransactionId( "987654" );
     	this.request.setCreditAmount(10);
     	
-		CreditTransactionResponse response = this.request.doRequest();
+		CreditTransactionResponse response = null;
+		
+		try {
+			response = this.request.doRequest();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
 		//System.out.println( response.getRawResponse() );		
     	assertThat( response, instanceOf(CreditTransactionResponse.class) );
@@ -63,7 +75,17 @@ public class CreditTransactionRequestTest extends TestCase {
     	this.request.setTransactionId( "584556" );
     	this.request.setCreditAmount(10);
     	
-    	CreditTransactionResponse response = this.request.doRequest();
+    	CreditTransactionResponse response = null;
+    	
+    	try {
+			response = this.request.doRequest();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
 
     	assertThat( response, instanceOf(CreditTransactionResponse.class) );
         assertThat( response, instanceOf(HostedAdminResponse.class) );

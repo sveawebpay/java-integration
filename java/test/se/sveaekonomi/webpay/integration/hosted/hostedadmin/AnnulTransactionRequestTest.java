@@ -71,7 +71,7 @@ public class AnnulTransactionRequestTest extends TestCase {
     	
     	AnnulTransactionResponse response = null;
 		try {
-			response = (AnnulTransactionResponse) this.request.doRequest();
+			response = this.request.doRequest();
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
@@ -95,7 +95,7 @@ public class AnnulTransactionRequestTest extends TestCase {
     	
     	AnnulTransactionResponse response = null;
 		try {
-			response = (AnnulTransactionResponse) this.request.doRequest();
+			response = this.request.doRequest();
 		} catch (IllegalStateException e) {
 			// TODO Auto-generated catch block
 			e.printStackTrace();

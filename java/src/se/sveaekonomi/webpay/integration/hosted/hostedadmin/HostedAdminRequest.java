@@ -135,7 +135,7 @@ public abstract class HostedAdminRequest {
 	}
 
 	
-	public Object doRequest() throws IllegalStateException, IOException {
+	public <T extends HostedAdminResponse> T doRequest() throws IllegalStateException, IOException {
 
 		// prepare request fields
     	Hashtable<String, String> requestFields = this.prepareRequest();
@@ -197,6 +197,6 @@ public abstract class HostedAdminRequest {
 	/**
 	 * implemented by child classes, should return the request message xml for the method in question
 	 */
-	abstract HostedAdminResponse parseResponse( String response );	
+	abstract <T extends HostedAdminResponse> T parseResponse( String response );	
 	
 }
