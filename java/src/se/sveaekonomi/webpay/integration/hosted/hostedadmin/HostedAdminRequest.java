@@ -109,7 +109,7 @@ public abstract class HostedAdminRequest {
         
         if (element != null && element.hasChildNodes()) {
             NodeList textList = element.getChildNodes();
-            return ((Node) textList.item(0)).getNodeValue().trim();
+            return (textList.item(0)).getNodeValue().trim();
         }        
         return null;
     }		

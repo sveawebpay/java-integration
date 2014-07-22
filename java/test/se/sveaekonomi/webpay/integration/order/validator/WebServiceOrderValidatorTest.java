@@ -284,7 +284,7 @@ public class WebServiceOrderValidatorTest {
         
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addCustomerDetails(Item.individualCustomer()
-                .setBirthDate(1923, 12, 12)
+                .setBirthDate("19231212")
                 .setName("Tess", "Testson")
                 .setStreetAddress("Gatan", "23")
                 .setZipCode("9999")

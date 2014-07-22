@@ -42,6 +42,7 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
      * 
      * @deprecated Please use IndividualCustomer.setBirthDate(String date) instead.
      */
+    @Deprecated
     public IndividualCustomer setBirthDate(int year, int month, int day) {
         String monthString = String.valueOf(month);
         

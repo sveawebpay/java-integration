@@ -220,6 +220,7 @@ public class HostedRowFormatter {
 	 * 
 	 * @deprecated Use {@link getTotalAmount()} instead...
 	 */
+	@Deprecated
 	public long formatTotalAmount(ArrayList<HostedOrderRowBuilder> rows) {
 		long amount = 0L;
 
@@ -236,6 +237,7 @@ public class HostedRowFormatter {
 	 * 
 	 * @deprecated Use {@link getTotalVat()} instead...
 	 */
+	@Deprecated
 	public long formatTotalVat(ArrayList<HostedOrderRowBuilder> rows) {
 		long vat = 0L;
 

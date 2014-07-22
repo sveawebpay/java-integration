@@ -66,31 +66,37 @@ public class SveaTestConfigurationProvider implements ConfigurationProvider{
                     return 79021;
                 else if (type == PAYMENTTYPE.PAYMENTPLAN)
                     return 59999;
+            	break;
             case NO:
                 if (type == PAYMENTTYPE.INVOICE)
                     return 33308;
                 else if (type == PAYMENTTYPE.PAYMENTPLAN)
                     return 32503;
+            	break;
             case FI:
                 if (type == PAYMENTTYPE.INVOICE)
                     return 26136;
                 else if (type == PAYMENTTYPE.PAYMENTPLAN)
                     return 27136;
+            	break;
             case DK:
                 if (type == PAYMENTTYPE.INVOICE)
                     return 62008;
                 else if (type == PAYMENTTYPE.PAYMENTPLAN)
                     return 64008;
+            	break;
             case NL:
                 if (type == PAYMENTTYPE.INVOICE)
                     return 85997;
                 else if (type == PAYMENTTYPE.PAYMENTPLAN)
                     return 86997;
+            	break;
             case DE:
                 if (type == PAYMENTTYPE.INVOICE)
                     return 14997;
                 else if (type == PAYMENTTYPE.PAYMENTPLAN)
                     return 16997;
+            	break;
             default:
                 break;
             }

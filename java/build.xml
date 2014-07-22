@@ -37,7 +37,9 @@
 
 	<target name="src.compile">
         <mkdir dir="${src.classes.dir}"/>
-        <javac srcdir="${src.dir}" destdir="${src.classes.dir}" classpathref="src.jars"/>
+        <javac srcdir="${src.dir}" destdir="${src.classes.dir}" classpathref="src.jars">
+        	<compilerarg value="-Xlint" />
+	    </javac>
         <path id="compiled.src.classpath" location="${src.classes.dir}" >
 			<path refid="src.jars" />
     	</path>
@@ -50,7 +52,9 @@
         	<path refid="test.jars" />
         </path>
 
-        <javac srcdir="${test.dir}" destdir="${test.classes.dir}" classpathref="compile.test.classpath" />
+        <javac srcdir="${test.dir}" destdir="${test.classes.dir}" classpathref="compile.test.classpath">
+	    	<compilerarg value="-Xlint" />
+	    </javac>
     	
         <path id="all.test.classpath">
             <path refid="compile.test.classpath" />
@@ -99,7 +103,9 @@
             <path refid="test.jars" />
         </path>
 
-        <javac srcdir="${integrationtest.dir}" destdir="${integrationtest.classes.dir}" classpathref="compile.integrationtest.classpath" />
+        <javac srcdir="${integrationtest.dir}" destdir="${integrationtest.classes.dir}" classpathref="compile.integrationtest.classpath">
+	    	<compilerarg value="-Xlint" />
+	    </javac>
         
         <path id="all.integrationtest.classpath">
             <path refid="compile.integrationtest.classpath" />

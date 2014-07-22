@@ -83,7 +83,7 @@ public class CreateInvoiceOrderTest {
 				.createOrder(SveaConfig.getDefaultConfig())
 				.addOrderRow(TestingTool.createOrderRowNl())
 				.addCustomerDetails(
-						Item.individualCustomer().setBirthDate(1955, 03, 07).setInitials("SB").setName("Sneider", "Boasman").setStreetAddress("Gate", "42").setLocality("BARENDRECHT")
+						Item.individualCustomer().setBirthDate("19550307").setInitials("SB").setName("Sneider", "Boasman").setStreetAddress("Gate", "42").setLocality("BARENDRECHT")
 								.setZipCode("1102 HG").setCoAddress("138")).setCountryCode(COUNTRYCODE.NL).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
 				.setOrderDate(TestingTool.DefaultTestDate).setCurrency(CURRENCY.EUR).useInvoicePayment().doRequest();
 

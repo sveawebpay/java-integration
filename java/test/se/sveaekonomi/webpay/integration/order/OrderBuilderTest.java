@@ -175,7 +175,7 @@ public class OrderBuilderTest {
     private void createTestFixedDiscountRow() {
         order.addDiscount(Item.fixedDiscount()
                 .setDiscountId("1")
-                .setAmountIncVat((double) 100.00)
+                .setAmountIncVat(100.00)
                 .setDescription("FixedDiscount"));
     }
     

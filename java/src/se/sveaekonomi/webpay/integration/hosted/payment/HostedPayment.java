@@ -336,7 +336,7 @@ public abstract class HostedPayment<T extends HostedPayment<T>> {
         
         if (element != null && element.hasChildNodes()) {
             NodeList textList = element.getChildNodes();
-            return ((Node) textList.item(0)).getNodeValue().trim();
+            return (textList.item(0)).getNodeValue().trim();
         }
         
         return null;

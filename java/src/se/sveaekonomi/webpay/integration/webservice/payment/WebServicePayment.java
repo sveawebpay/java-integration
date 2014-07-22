@@ -51,7 +51,7 @@ public abstract class WebServicePayment {
         SveaRequest<SveaCreateOrder> request = this.prepareRequest();
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         
-        String xml = xmlBuilder.getCreateOrderEuXml((SveaCreateOrder) request.request);
+        String xml = xmlBuilder.getCreateOrderEuXml(request.request);
         
         return xml;
     }
@@ -100,7 +100,7 @@ public abstract class WebServicePayment {
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml = "";
         
-        xml = xmlBuilder.getCreateOrderEuXml((SveaCreateOrder) request.request);
+        xml = xmlBuilder.getCreateOrderEuXml(request.request);
         
         URL url = this.createOrderBuilder.getConfig().getEndPoint(this.orderType);
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
@@ -153,7 +153,7 @@ public abstract class WebServicePayment {
                 || this.createOrderBuilder.getCountryCode() == COUNTRYCODE.FI
                 || this.createOrderBuilder.getCountryCode() == COUNTRYCODE.DK) {
             // set companyVat
-            customerIdentity.NationalIdNumber = (String) (isCompany ? String.valueOf(this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber())
+            customerIdentity.NationalIdNumber = (isCompany ? String.valueOf(this.createOrderBuilder.getCompanyCustomer().getNationalIdNumber())
                     : String.valueOf(createOrderBuilder.getIndividualCustomer().getNationalIdNumber()));
         }
         

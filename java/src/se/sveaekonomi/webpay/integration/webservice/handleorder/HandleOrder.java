@@ -87,7 +87,7 @@ public class HandleOrder {
         
         SveaRequest<SveaDeliverOrder> request = this.prepareRequest();
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
-        String xml = xmlBuilder.getDeliverOrderEuXml((SveaDeliverOrder) request.request);
+        String xml = xmlBuilder.getDeliverOrderEuXml(request.request);
         
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("DeliverOrderEu", xml);

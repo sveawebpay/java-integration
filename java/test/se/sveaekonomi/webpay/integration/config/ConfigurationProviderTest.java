@@ -133,7 +133,7 @@ public class ConfigurationProviderTest {
     public void testConnectionCreateOrderFailsIfNoConfigurationIsProvided()
     {
         try {
-        	WebPay.createOrder()
+        	WebPay.createOrder(null)
             	  .useInvoicePayment()
             	  .doRequest();
             
@@ -148,7 +148,7 @@ public class ConfigurationProviderTest {
     public void testConnectionDeliverOrderFailsIfNoConfigurationIsProvided()
     {
         try {
-        	WebPay.deliverOrder()
+        	WebPay.deliverOrder(null)
             	  .deliverInvoiceOrder()
             	  .doRequest();
             
@@ -163,7 +163,7 @@ public class ConfigurationProviderTest {
     public void testConnectionCloseOrderFailsIfNoConfigurationIsProvided()
     {
         try {
-        	WebPay.closeOrder()
+        	WebPay.closeOrder(null)
             	  .closeInvoiceOrder()
             	  .doRequest();
             
@@ -178,7 +178,7 @@ public class ConfigurationProviderTest {
     public void testConnectionGetAddressFailsIfNoConfigurationIsProvided()
     {
         try {
-        	WebPay.getAddresses()
+        	WebPay.getAddresses(null)
             	  .doRequest();
             
             //Fail on no exception
@@ -192,7 +192,7 @@ public class ConfigurationProviderTest {
     public void testConnectionGetPaymentPlanFailsIfNoConfigurationIsProvided()
     {
         try {
-        	WebPay.getPaymentPlanParams()
+        	WebPay.getPaymentPlanParams(null)
             	  .doRequest();
             
             //Fail on no exception
