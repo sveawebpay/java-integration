@@ -1,13 +1,19 @@
 <project name="sveawebpay" basedir="." default="clean-integrationtest">
  
+	<property name="java.encoding" value="UTF-8" />
+	<presetdef name="javac">
+		<javac includeantruntime="false" encoding="${java.encoding}" />
+	</presetdef>	
+	
     <property name="src.dir"     location="src"/>
     <property name="test.dir"     location="test"/>
     <property name="integrationtest.dir"     location="integrationtest"/>
 
-    <property name="test.lib.dir"     location="lib/test"/>
-
+    <property name="test.lib.dir"	location="lib/test"/>
+    <property name="src.lib.dir" 	location="lib/src"/>
+	
     <path id="src.jars">
-        <!-- no such jars at the moment -->
+        <fileset dir="${src.lib.dir}" includes="**/*.jar"/>
     </path>
 
     <path id="test.jars">
@@ -15,7 +21,7 @@
         <path refid="src.jars" />
     </path>
 	
-    
+   
     <property name="build.dir"   location="target"/>
     <property name="src.classes.dir" location="${build.dir}/classes"/>
     <property name="test.classes.dir" location="${build.dir}/testclasses"/>
@@ -32,7 +38,9 @@
 	<target name="src.compile">
         <mkdir dir="${src.classes.dir}"/>
         <javac srcdir="${src.dir}" destdir="${src.classes.dir}" classpathref="src.jars"/>
-        <path id="compiled.src.classpath" location="${src.classes.dir}"/>
+        <path id="compiled.src.classpath" location="${src.classes.dir}" >
+			<path refid="src.jars" />
+    	</path>
     </target>
 
     <target name="test.compile">
