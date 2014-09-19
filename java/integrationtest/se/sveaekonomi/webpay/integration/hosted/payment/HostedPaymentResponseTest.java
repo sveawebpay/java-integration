@@ -29,6 +29,25 @@ import com.meterware.httpunit.WebResponse;
 public class HostedPaymentResponseTest {
     
     @Test
+    public void test_do_invoice_payment_using_DoPaymentMethodPaymentRequest() {
+        HttpUnitOptions.setScriptingEnabled( false );
+        
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addCustomerDetails(TestingTool.createMiniCompanyCustomer())
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .setClientOrderNumber(Long.toString((new Date()).getTime()))
+            .setCurrency(TestingTool.DefaultTestCurrency)
+            .usePaymentMethod(PAYMENTMETHOD.INVOICE)
+            	.setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+            	.getPaymentForm();
+        
+        WebResponse result = postRequest(form);
+        
+        assertEquals("OK", result.getResponseMessage());
+    }	
+	
+    @Test
     public void testDoCardPaymentRequest() {
         HttpUnitOptions.setScriptingEnabled( false );
         
@@ -39,7 +58,7 @@ public class HostedPaymentResponseTest {
             .setClientOrderNumber(Long.toString((new Date()).getTime()))
             .setCurrency(TestingTool.DefaultTestCurrency)
             .usePayPageCardOnly()
-            .setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtml")
+            .setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
             .getPaymentForm();
         
         WebResponse result = postRequest(form);
@@ -60,7 +79,7 @@ public class HostedPaymentResponseTest {
             .setClientOrderNumber(Long.toString((new Date()).getTime()))
             .setCurrency(TestingTool.DefaultTestCurrency)
             .usePaymentMethod(PAYMENTMETHOD.NORDEA_SE)
-            .setReturnUrl("https://test.sveaekonomi.se/webpay/admin/merchantresponsetest.xhtml")
+            .setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
             .getPaymentForm();
         
         WebResponse result = postRequest(form);
