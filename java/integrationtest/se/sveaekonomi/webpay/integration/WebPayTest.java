@@ -44,7 +44,7 @@ public class WebPayTest {
 	}
 		
     @Test
-    public void testCloseOrder() {
+    public void test_closeOrder() {
     	    	
     	// create an order using defaults
     	CreateOrderResponse order = createTestOrder();
