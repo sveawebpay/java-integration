@@ -74,4 +74,12 @@ public class CancelOrderBuilder {
 		closeOrderBuilder.setOrderType(ORDERTYPE.Invoice.toString());
 		return new CloseOrder(closeOrderBuilder);
 	}
+	
+	public CloseOrder cancelPaymentPlanOrder() {
+		CloseOrderBuilder closeOrderBuilder = new CloseOrderBuilder(this.config);
+		closeOrderBuilder.setCountryCode(this.countryCode);
+		closeOrderBuilder.setOrderId(this.orderId);		
+		closeOrderBuilder.setOrderType(ORDERTYPE.PaymentPlan.toString());
+		return new CloseOrder(closeOrderBuilder);
+	}	
 }

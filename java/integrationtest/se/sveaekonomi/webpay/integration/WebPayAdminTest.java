@@ -27,4 +27,21 @@ public class WebPayAdminTest {
         
         assertTrue(response.isOrderAccepted());        
     }    
+    
+    @Test
+    public void test_cancelOrder_cancelPaymentPlanOrder() {
+    	    	
+    	// create an order using defaults
+    	CreateOrderResponse order = TestingTool.createPaymentPlanTestOrder("test_cancelOrder_cancelPaymentPlanOrder");
+        assertTrue(order.isOrderAccepted());
+
+        // test WebPay::closeOrder
+        CloseOrderResponse response = WebPayAdmin.cancelOrder(SveaConfig.getDefaultConfig())
+                .setOrderId(order.orderId)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .cancelPaymentPlanOrder()
+                	.doRequest();
+        
+        assertTrue(response.isOrderAccepted());        
+    }       
 }
