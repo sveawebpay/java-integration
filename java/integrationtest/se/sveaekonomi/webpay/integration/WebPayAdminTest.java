@@ -51,14 +51,13 @@ public class WebPayAdminTest {
         assertTrue(order.isOrderAccepted());
 
         // test WebPay::closeOrder
-        CloseOrderResponse closeResponse = WebPayAdmin.cancelOrder(SveaConfig.getDefaultConfig())
-//                .setOrderId(order.orderId)
-//                .setCountryCode(TestingTool.DefaultTestCountryCode)
+        CloseOrderResponse response = WebPayAdmin.cancelOrder(SveaConfig.getDefaultConfig())
+                .setOrderId(order.orderId)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .cancelInvoiceOrder()
                 	.doRequest();
         
-        assertTrue(closeOrderResponse.isOrderAccepted());
-        //assertTrue(closeOrderResponse.isOrderAccepted());		// TODO change to AdminService\CancelOrderResponse
+        assertTrue(response.isOrderAccepted());
         
     }
 }
