@@ -5,35 +5,34 @@
 <html>
 <head>
 <meta http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
-<title>Invoice Order</title>
+<title>Card Order Landing Page</title>
 </head>
 <body>
 <pre>
-Your order invoice payment request response:
+Your card order payment request response:
 
 <% 
-
 	SveaResponse cardOrderResponse = (SveaResponse) request.getAttribute("cardorder_response");
 
-	// Response attributes
-	out.println( "SveaResponse: " + cardOrderResponse );
-	out.println( "    isOrderAccepted: " + cardOrderResponse.isOrderAccepted() );
-	out.println( "    resultCode: " + cardOrderResponse.getResultCode() );
-	out.println( "    errorMessage: " + cardOrderResponse.getErrorMessage() );
+	out.println( "<p id='svearesponse'>SveaResponse:</p>" );
+	// Response attributes	
+	out.println( "    isOrderAccepted: <span id='accepted'>" + cardOrderResponse.isOrderAccepted() +"</span>" );
+	out.println( "    resultCode: <span id='resultCode'>" + cardOrderResponse.getResultCode() +"</span>" );
+	out.println( "    errorMessage: <span id='errorMessage'>" + cardOrderResponse.getErrorMessage() +"</span>" );
 	// SveaResponse attributes	
-	out.println( "    transactionId: " + cardOrderResponse.getTransactionId() );
-	out.println( "    paymentMethod: " + cardOrderResponse.getPaymentMethod() );
-	out.println( "    merchantId: " + cardOrderResponse.getMerchantId() );
-	out.println( "    clientOrderNumber: " + cardOrderResponse.getClientOrderNumber() );
-	out.println( "    amount: " + cardOrderResponse.getAmount() );
-	out.println( "    currency: " + cardOrderResponse.getCurrency() );
-	out.println( "    subscriptionId: " + cardOrderResponse.getSubscriptionId() );
-	out.println( "    subscriptionType: " + cardOrderResponse.getSubscriptionType() );
-	out.println( "    cardtype: " + cardOrderResponse.getCardType() );
-	out.println( "    maskedCardNumber: " + cardOrderResponse.getMaskedCardNumber() );
-	out.println( "    expiryMonth: " + cardOrderResponse.getExpiryMonth() );
-	out.println( "    expiryYear: " + cardOrderResponse.getExpiryYear() );
-	out.println( "    authCode: " + cardOrderResponse.getAuthCode() );
+	out.println( "    transactionId: <span id='transactionId'>" + cardOrderResponse.getTransactionId() +"</span>" );
+	out.println( "    paymentMethod: <span id='paymentMethod'>" + cardOrderResponse.getPaymentMethod() +"</span>" );
+	out.println( "    merchantId: <span id='merchantId'>" + cardOrderResponse.getMerchantId() +"</span>" );
+	out.println( "    clientOrderNumber: <span id='clientOrderNumber'>" + cardOrderResponse.getClientOrderNumber() +"</span>" );
+	out.println( "    amount: <span id='amount'>" + cardOrderResponse.getAmount() +"</span>" );
+	out.println( "    currency: <span id='currency'>" + cardOrderResponse.getCurrency() +"</span>" );
+	out.println( "    subscriptionId: <span id='subscriptionId'>" + cardOrderResponse.getSubscriptionId() +"</span>" );
+	out.println( "    subscriptionType: <span id='subscriptionType'>" + cardOrderResponse.getSubscriptionType() +"</span>" );
+	out.println( "    cardtype: <span id='cardtype'>" + cardOrderResponse.getCardType() +"</span>" );
+	out.println( "    maskedCardNumber: <span id='maskedCardNumber'>" + cardOrderResponse.getMaskedCardNumber() +"</span>" );
+	out.println( "    expiryMonth: <span id='expiryMonth'>" + cardOrderResponse.getExpiryMonth() +"</span>" );
+	out.println( "    expiryYear: <span id='expiryYear'>" + cardOrderResponse.getExpiryYear() +"</span>" );
+	out.println( "    authCode: <span id='authCode'>" + cardOrderResponse.getAuthCode() +"</span>" );
 
 %>	
 </pre>
