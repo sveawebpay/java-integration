@@ -20,6 +20,7 @@ import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.htmlunit.HtmlUnitDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
+import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
@@ -74,11 +75,9 @@ public class WebPayAdminTest {
                 
         // choose payment method and do request
         PaymentForm form = order.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
-                	.setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")	// TODO change to localhost
+                	.setReturnUrl("http://localhost:8080/CardOrder/landingpage")	// TODO change to localhost
                 	.getPaymentForm()
     	;
-
-        // TODO post order form and pick up transaction id from callbackurl
         
         // insert form in empty page
         FirefoxDriver driver = new FirefoxDriver();
@@ -86,11 +85,13 @@ public class WebPayAdminTest {
         String script = "document.body.innerHTML = '" + form.getCompleteForm() + "'";
         driver.executeScript(script);
         
-        // post form to certitrade page
-        WebElement element = driver.findElementById("paymentForm");
-        element.submit();
+        // post form
+        driver.findElementById("paymentForm").submit();
 
-        // enter certitrade card test credentials
+        // wait for certitrade page to load
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("paymeth-list")));
+        
+        // fill in credentials form
         WebElement cardno = driver.findElementById("cardno");
         cardno.sendKeys("4444333322221100");       
 
@@ -103,11 +104,24 @@ public class WebPayAdminTest {
         Select year = new Select(driver.findElementById("year"));
         year.selectByValue("17");
         
-        // submit card order and handle callback
+        // submit credentials form, triggering redirect to returnurl
         driver.findElementById("perform-payment").click();        
+        
+        // as our localhost landingpage is a http site, we get a popup
+        Alert alert = driver.switchTo().alert();
+        alert.accept();
 
-        // TODO set up localhost return url and parse out transaction id
+        // wait for landing page to load and then parse out transaction id
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));
+                
+        String accepted = driver.findElementById("accepted").getText();                        
+        assertEquals("true", accepted);        
+        
+        String transactionId = driver.findElementById("transactionId").getText();   
         
         // TODO do cancelCardOrder request and assert the response
+
+        System.out.println(transactionId);
+                
     }       
 }
