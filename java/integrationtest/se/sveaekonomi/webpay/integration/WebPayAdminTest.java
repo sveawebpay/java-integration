@@ -18,10 +18,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 import org.openqa.selenium.*;
-import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.htmlunit.HtmlUnitDriver;
-import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -137,6 +134,7 @@ public class WebPayAdminTest {
 			// TODO Auto-generated catch block
 			e.printStackTrace();
 		}        
-        assertTrue(response.isOrderAccepted());        
+        assertTrue(response.isOrderAccepted());  
+        assertTrue(response instanceof AnnulTransactionResponse );
     }              
 }

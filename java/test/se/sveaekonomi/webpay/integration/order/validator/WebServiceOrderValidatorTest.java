@@ -3,6 +3,8 @@ package se.sveaekonomi.webpay.integration.order.validator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.sql.Date;
+
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -23,6 +25,109 @@ public class WebServiceOrderValidatorTest {
     public WebServiceOrderValidatorTest() {
         orderValidator = new WebServiceOrderValidator();
     }
+    
+    @Test
+    public void validates_all_required_methods_for_useInvoicePayment_IndividualCustomer_SE() {
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(
+	        		Item.orderRow()
+	                    .setQuantity(1.0)
+	                    .setAmountExVat(4)
+	                    .setAmountIncVat(5)
+            )
+            .addCustomerDetails(
+            		Item.individualCustomer()
+                    	.setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+        	)
+            .setCountryCode(COUNTRYCODE.SE)
+            .setOrderDate(Date.valueOf("2012-12-12"))
+            .setValidator(new VoidValidator());
+        
+        assertEquals("", orderValidator.validate(order));
+    }
+    
+    @Test
+    public void validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_addOrderRow() {
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+//                .addOrderRow(
+//    	        		Item.orderRow()
+//    	                    .setQuantity(1.0)
+//    	                    .setAmountExVat(4)
+//    	                    .setAmountIncVat(5)
+//                )
+                .addCustomerDetails(
+                		Item.individualCustomer()
+                        	.setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+            	)
+                .setCountryCode(COUNTRYCODE.SE)
+                .setOrderDate(Date.valueOf("2012-12-12"))
+                .setValidator(new VoidValidator())
+        ;            
+        assertEquals("MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n", orderValidator.validate(order));
+    }
+    
+    @Test
+    // TODO Validator returns two identical error messages -- check and fix
+    public void validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_addCustomerDetails() {
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                .addOrderRow(
+    	        		Item.orderRow()
+    	                    .setQuantity(1.0)
+    	                    .setAmountExVat(4)
+    	                    .setAmountIncVat(5)
+                )
+//                .addCustomerDetails(
+//                		Item.individualCustomer()
+//                        	.setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+//            	)
+                .setCountryCode(COUNTRYCODE.SE)
+                .setOrderDate(Date.valueOf("2012-12-12"))
+                .setValidator(new VoidValidator())
+        ;           
+        assertEquals("MISSING VALUE - CustomerIdentity must be set.\nMISSING VALUE - CustomerIdentity must be set.\n", orderValidator.validate(order));
+    }
+    
+    @Test
+    public void validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_setCountryCode() {
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                .addOrderRow(
+    	        		Item.orderRow()
+    	                    .setQuantity(1.0)
+    	                    .setAmountExVat(4)
+    	                    .setAmountIncVat(5)
+                )
+                .addCustomerDetails(
+                		Item.individualCustomer()
+                        	.setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+            	)
+//                .setCountryCode(COUNTRYCODE.SE)
+                .setOrderDate(Date.valueOf("2012-12-12"))
+                .setValidator(new VoidValidator())
+        ;           
+        assertEquals("MISSING VALUE - CountryCode is required. Use setCountryCode().\n", orderValidator.validate(order));
+    }    
+    
+    @Test
+    public void validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_setOrderDate() {
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                .addOrderRow(
+    	        		Item.orderRow()
+    	                    .setQuantity(1.0)
+    	                    .setAmountExVat(4)
+    	                    .setAmountIncVat(5)
+                )
+                .addCustomerDetails(
+                		Item.individualCustomer()
+                        	.setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+            	)
+                .setCountryCode(COUNTRYCODE.SE)
+//                .setOrderDate(Date.valueOf("2012-12-12"))
+                .setValidator(new VoidValidator())
+        ;           
+        assertEquals("MISSING VALUE - OrderDate is required. Use setOrderDate().\n", orderValidator.validate(order));
+    }
+    
+    /////
     
     @Test
     public void testFailOnCustomerIdentityIsNull() {
@@ -310,18 +415,6 @@ public class WebServiceOrderValidatorTest {
         }
     }
     
-    @Test
-    public void succeedOnGoodValuesSe() {
-        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-            .addOrderRow(TestingTool.createMiniOrderRow())
-            .addCustomerDetails(Item.individualCustomer()
-                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
-            .setCountryCode(TestingTool.DefaultTestCountryCode)
-            .setOrderDate(TestingTool.DefaultTestDate)
-            .setValidator(new VoidValidator());
-        
-        assertEquals("", orderValidator.validate(order));
-    }
     
     @Test 
     public void testFailOnMissingOrderIdOnDeliverOrder() {
