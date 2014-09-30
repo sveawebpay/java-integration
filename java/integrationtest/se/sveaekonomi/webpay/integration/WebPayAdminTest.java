@@ -2,6 +2,7 @@ package se.sveaekonomi.webpay.integration;
 
 import static org.junit.Assert.*;
 
+import java.io.IOException;
 import java.util.Date;
 
 import org.junit.Test;
@@ -9,6 +10,7 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse.AnnulTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
@@ -75,7 +77,7 @@ public class WebPayAdminTest {
                 
         // choose payment method and do request
         PaymentForm form = order.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
-                	.setReturnUrl("http://localhost:8080/CardOrder/landingpage")	// TODO change to localhost
+                	.setReturnUrl("http://localhost:8080/CardOrder/landingpage")	// http => handle alert below
                 	.getPaymentForm()
     	;
         
@@ -117,11 +119,24 @@ public class WebPayAdminTest {
         String accepted = driver.findElementById("accepted").getText();                        
         assertEquals("true", accepted);        
         
-        String transactionId = driver.findElementById("transactionId").getText();   
-        
-        // TODO do cancelCardOrder request and assert the response
-
-        System.out.println(transactionId);
-                
-    }       
+        // do cancelCardOrder request and assert the response
+        Long transactionId = Long.decode(driver.findElementById("transactionId").getText());           
+                      
+        // test WebPay::closeOrder
+        AnnulTransactionResponse response = null;
+		try {
+			response = WebPayAdmin.cancelOrder(SveaConfig.getDefaultConfig())
+			        .setOrderId(transactionId)
+			        .setCountryCode(TestingTool.DefaultTestCountryCode)
+			        .cancelCardOrder()
+			        	.doRequest();
+		} catch (IllegalStateException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}        
+        assertTrue(response.isOrderAccepted());        
+    }              
 }

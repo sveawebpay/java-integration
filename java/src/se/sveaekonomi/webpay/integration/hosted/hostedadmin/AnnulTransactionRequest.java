@@ -67,6 +67,7 @@ public class AnnulTransactionRequest extends HostedAdminRequest {
 	}
 
 	// parse response message into AnnulTransactionResponse
+	@SuppressWarnings("unchecked")
 	@Override
 	public AnnulTransactionResponse parseResponse(String message) {
 		return new AnnulTransactionResponse(message, this.config.getSecretWord(
