@@ -46,6 +46,8 @@ public class LandingPageServlet extends HttpServlet implements Servlet {
 						
 		// Pass service response to landingpage.jsp view as attribute in HttpServletRequest
 	    request.setAttribute("cardorder_response", myResponse);
-		request.getRequestDispatcher("/landingpage.jsp").forward(request, response);				
+	    request.setAttribute("raw_response", request.getParameter("response"));
+
+	    request.getRequestDispatcher("/landingpage.jsp").forward(request, response);				
 	}
 }
