@@ -7,8 +7,6 @@ import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 
 /**
- * TODO javadoc documentation 
- * 
  * CancelOrderBuilder is the class used to cancel an order with Svea, that has
  * not yet been delivered (invoice, payment plan) or been confirmed (card).
  * 
@@ -25,17 +23,16 @@ import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
  * which ever matches the payment method used in the original order request.
  *  
  * The final doRequest() will send the cancelOrder request to Svea, and the 
- * resulting response code specifies the outcome of the request. 
- * 
- * $request =  
- *    WebPay::cancelOrder($config)
+ * resulting response object contents holds outcome of the request. 
+ *     
+ *    $response = WebPay::cancelOrder($config)
  *        ->setCountryCode("SE")          // Required. Use same country code as in createOrder request.
  *        ->setOrderId($orderId)          // Required. Use SveaOrderId received with createOrder response
  *        ->cancelInvoiceOrder()          // Use the method corresponding to the original createOrder payment method.
  *        //->cancelPaymentPlanOrder()     
  *        //->cancelCardOrder()           
  *             ->doRequest()
- * ; 
+ *    ; 
  * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
@@ -67,6 +64,15 @@ public class CancelOrderBuilder {
 		this.orderId = orderId;
 		return this;
 	}
+	
+    /**
+     * alias for setOrderId()
+     * @param orderId
+     * @return CancelOrderBuilder
+     */
+	public CancelOrderBuilder setTransactionId( Long transactionId ) {
+		return this.setOrderId(transactionId);
+	}	
 	
 	public CloseOrder cancelInvoiceOrder() {
 		CloseOrderBuilder closeOrderBuilder = new CloseOrderBuilder(this.config);
