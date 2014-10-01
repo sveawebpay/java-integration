@@ -162,7 +162,7 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     
     /**
      * Start create invoicePayment
-     * @return PaymentPlanPayment
+     * @return InvoicePayment
      */
     public InvoicePayment useInvoicePayment() {
         return new InvoicePayment(this);
