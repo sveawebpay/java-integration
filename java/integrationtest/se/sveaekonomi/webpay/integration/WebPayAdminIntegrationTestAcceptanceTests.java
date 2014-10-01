@@ -40,7 +40,7 @@ public class WebPayAdminIntegrationTestAcceptanceTests {
     	CreateOrderResponse order = TestingTool.createInvoiceTestOrder("test_cancelOrder_cancelInvoiceOrder");
         assertTrue(order.isOrderAccepted());
 
-        // test WebPay::closeOrder
+        // do cancelOrder request and assert the response
         CloseOrderResponse response = WebPayAdmin.cancelOrder(SveaConfig.getDefaultConfig())
                 .setOrderId(order.orderId)
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -58,7 +58,7 @@ public class WebPayAdminIntegrationTestAcceptanceTests {
     	CreateOrderResponse order = TestingTool.createPaymentPlanTestOrder("test_cancelOrder_cancelPaymentPlanOrder");
         assertTrue(order.isOrderAccepted());
 
-        // test WebPay::closeOrder
+        // do cancelOrder request and assert the response
         CloseOrderResponse response = WebPayAdmin.cancelOrder(SveaConfig.getDefaultConfig())
                 .setOrderId(order.orderId)
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -130,9 +130,7 @@ public class WebPayAdminIntegrationTestAcceptanceTests {
 
         assertEquals("true", accepted);        
         
-        // do cancelCardOrder request and assert the response
-                      
-        // test WebPay::closeOrder
+        // do cancelOrder request and assert the response
         AnnulTransactionResponse response = null;
 		try {
 			response = WebPayAdmin.cancelOrder(SveaConfig.getDefaultConfig())
