@@ -58,5 +58,27 @@ public class WebPayAdminUnitTestValidation {
 		}
     }	    		
 
-	
+	@Test
+    public void test_missing_required_method_for_cancelOrder_cancelInvoiceOrder_setCountryCode() {
+    	    	
+        CancelOrderBuilder cancelOrderBuilder = WebPayAdmin.cancelOrder(SveaConfig.getDefaultConfig())
+                .setOrderId(TestingTool.DefaultOrderId)
+                //.setCountryCode(TestingTool.DefaultTestCountryCode)
+        ;
+        
+		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
+		try {
+			CloseOrder closeOrder = cancelOrderBuilder.cancelInvoiceOrder();
+			SveaRequest<SveaCloseOrder> sveaRequest = closeOrder.prepareRequest();
+
+			// fail if validation passes
+	        fail();
+        }
+		catch (SveaWebPayException e){
+	        assertEquals(
+        		"MISSING VALUE - CountryCode is required, use setCountryCode(...).\n", 
+    			e.getCause().getMessage()
+    		);	
+		}
+    }		
 }
