@@ -36,9 +36,14 @@ public class CloseOrder {
     
     public String validateRequest() {
         String errors = "";
-        if (this.order.getCountryCode() == null)
+        if (this.order.getCountryCode() == null) {
             errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-        return errors;
+        }
+        
+        if (this.order.getOrderId() == null) {
+            errors += "MISSING VALUE - OrderId is required, use setOrderId().\n";
+    	}
+        return errors;    
     }
     
     public SveaRequest<SveaCloseOrder> prepareRequest() {

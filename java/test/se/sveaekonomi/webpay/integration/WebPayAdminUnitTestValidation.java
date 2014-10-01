@@ -52,7 +52,7 @@ public class WebPayAdminUnitTestValidation {
         }
 		catch (SveaWebPayException e){
 	        assertEquals(
-        		"foo", 
+        		"MISSING VALUE - OrderId is required, use setOrderId().\n", 
     			e.getCause().getMessage()
     		);	
 		}
