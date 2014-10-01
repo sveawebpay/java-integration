@@ -48,6 +48,7 @@ public class WebPayAdminIntegrationTestAcceptanceTests {
                 	.doRequest();
         
         assertTrue(response.isOrderAccepted());        
+        assertTrue(response instanceof CloseOrderResponse );
     }    
     
     @Test
@@ -65,6 +66,7 @@ public class WebPayAdminIntegrationTestAcceptanceTests {
                 	.doRequest();
         
         assertTrue(response.isOrderAccepted());        
+        assertTrue(response instanceof CloseOrderResponse );
     }       
     
     @Test
@@ -118,14 +120,17 @@ public class WebPayAdminIntegrationTestAcceptanceTests {
         Alert alert = driver.switchTo().alert();
         alert.accept();
 
-        // wait for landing page to load and then parse out transaction id
-        (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));
-                
+        // wait for landing page to load and then parse out transaction id, accepted
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));                
+        Long transactionId = Long.decode(driver.findElementById("transactionId").getText());           
         String accepted = driver.findElementById("accepted").getText();                        
+
+        // close window
+        driver.quit();
+
         assertEquals("true", accepted);        
         
         // do cancelCardOrder request and assert the response
-        Long transactionId = Long.decode(driver.findElementById("transactionId").getText());           
                       
         // test WebPay::closeOrder
         AnnulTransactionResponse response = null;

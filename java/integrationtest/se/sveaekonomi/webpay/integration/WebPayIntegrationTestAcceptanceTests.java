@@ -18,7 +18,6 @@ import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.response.hosted.SveaResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
@@ -129,11 +128,14 @@ public class WebPayIntegrationTestAcceptanceTests {
         Alert alert = driver.switchTo().alert();
         alert.accept();
 
-        // wait for landing page to load and then parse out transaction id
-        (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));
-                
+        // wait for landing page to load and then parse out accepted
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));                
         String accepted = driver.findElementById("accepted").getText();                        
-        assertEquals("true", accepted);        
+
+        // close window
+        driver.quit();
+
+        assertEquals("true", accepted);              
 	}		
 	
     @Test

@@ -45,6 +45,7 @@ public class TestingTool {
     public static final String DefaultTestIndividualNationalIdNumber = "194605092222";
     public static final String DefaultTestCompanyNationalIdNumber = "164608142222";
     public static final Date DefaultTestDate = Date.valueOf("2012-12-12");
+    public static final Long DefaultOrderId = 987654L;
 	
     public static OrderRowBuilder createMiniOrderRow() {
         return Item.orderRow()
