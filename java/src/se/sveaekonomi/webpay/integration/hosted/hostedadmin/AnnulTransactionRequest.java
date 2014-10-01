@@ -21,11 +21,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  */
 public class AnnulTransactionRequest extends HostedAdminRequest {
 
-	public String transactionId;
-
-	public String getTransactionId() {
-		return transactionId;
-	}
+	String transactionId;
 
 	public void setTransactionId(String transactionId) {
 		this.transactionId = transactionId;
@@ -67,10 +63,8 @@ public class AnnulTransactionRequest extends HostedAdminRequest {
 	}
 
 	// parse response message into AnnulTransactionResponse
-	@Override
 	public AnnulTransactionResponse parseResponse(String message) {
-		return new AnnulTransactionResponse(message, this.config.getSecretWord(
-				PAYMENTTYPE.HOSTED, this.getCountryCode()));
+		return new AnnulTransactionResponse(message, this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode()));
 	}
 
 }

@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.order.handle;
 
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
+import se.sveaekonomi.webpay.integration.hosted.hostedadmin.AnnulTransactionRequest;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
@@ -81,5 +82,12 @@ public class CancelOrderBuilder {
 		closeOrderBuilder.setOrderId(this.orderId);		
 		closeOrderBuilder.setOrderType(ORDERTYPE.PaymentPlan.toString());
 		return new CloseOrder(closeOrderBuilder);
+	}
+	
+	public AnnulTransactionRequest cancelCardOrder() {
+		AnnulTransactionRequest request = new AnnulTransactionRequest(this.config);
+		request.setTransactionId(this.orderId.toString());
+		request.setCountryCode(this.countryCode);
+		return request;
 	}	
 }

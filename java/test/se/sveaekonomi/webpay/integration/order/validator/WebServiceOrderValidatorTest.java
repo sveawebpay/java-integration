@@ -3,6 +3,8 @@ package se.sveaekonomi.webpay.integration.order.validator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.sql.Date;
+
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -23,7 +25,7 @@ public class WebServiceOrderValidatorTest {
     public WebServiceOrderValidatorTest() {
         orderValidator = new WebServiceOrderValidator();
     }
-    
+        
     @Test
     public void testFailOnCustomerIdentityIsNull() {
          String expectedMessage = "MISSING VALUE - CustomerIdentity must be set.\n"
@@ -310,18 +312,6 @@ public class WebServiceOrderValidatorTest {
         }
     }
     
-    @Test
-    public void succeedOnGoodValuesSe() {
-        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-            .addOrderRow(TestingTool.createMiniOrderRow())
-            .addCustomerDetails(Item.individualCustomer()
-                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
-            .setCountryCode(TestingTool.DefaultTestCountryCode)
-            .setOrderDate(TestingTool.DefaultTestDate)
-            .setValidator(new VoidValidator());
-        
-        assertEquals("", orderValidator.validate(order));
-    }
     
     @Test 
     public void testFailOnMissingOrderIdOnDeliverOrder() {

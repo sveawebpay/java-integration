@@ -4,6 +4,8 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertTrue;
 import static org.junit.Assert.fail;
 
+import java.sql.Date;
+
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -24,6 +26,94 @@ public class HostedOrderValidatorTest {
     public HostedOrderValidatorTest() {
         orderValidator = new HostedOrderValidator();
     }
+    
+    @Test
+    public void validates_all_required_methods_for_usePayPageCardOnly_SE() {
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(
+	        		Item.orderRow()
+	                    .setQuantity(1.0)
+	                    .setAmountExVat(4)
+	                    .setAmountIncVat(5)
+            )
+            .setCountryCode(COUNTRYCODE.SE)
+            .setCurrency(CURRENCY.SEK)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setValidator(new VoidValidator());
+        
+        assertEquals("", orderValidator.validate(order));
+    }    
+    
+    @Test
+    public void validates_missing_required_methods_for_usePayPageCardOnly_SE_addOrderRow() {
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+//            .addOrderRow(
+//	        		Item.orderRow()
+//	                    .setQuantity(1.0)
+//	                    .setAmountExVat(4)
+//	                    .setAmountIncVat(5)
+//            )
+            .setCountryCode(COUNTRYCODE.SE)
+            .setCurrency(CURRENCY.SEK)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setValidator(new VoidValidator());
+        
+        assertEquals("MISSING VALUE - OrderRows are required. Use addOrderRow(Item.orderRow) to get orderrow setters.\n", orderValidator.validate(order));
+    }    
+    
+    @Test
+    public void validates_missing_required_methods_for_usePayPageCardOnly_SE_setCountryCode() {
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(
+	        		Item.orderRow()
+	                    .setQuantity(1.0)
+	                    .setAmountExVat(4)
+	                    .setAmountIncVat(5)
+            )
+//            .setCountryCode(COUNTRYCODE.SE)
+            .setCurrency(CURRENCY.SEK)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setValidator(new VoidValidator());
+        
+        assertEquals("MISSING VALUE - CountryCode is required. Use setCountryCode(...).\n", orderValidator.validate(order));
+    }        
+    
+    @Test
+    public void validates_missing_required_methods_for_usePayPageCardOnly_SE_setCurrency() {
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(
+	        		Item.orderRow()
+	                    .setQuantity(1.0)
+	                    .setAmountExVat(4)
+	                    .setAmountIncVat(5)
+            )
+            .setCountryCode(COUNTRYCODE.SE)
+//            .setCurrency(CURRENCY.SEK)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setValidator(new VoidValidator());
+        
+        assertEquals("MISSING VALUE - Currency is required. Use setCurrency(...).\n", orderValidator.validate(order));
+    }    
+    
+    @Test
+    public void validates_missing_required_methods_for_usePayPageCardOnly_SE_setClientOrderNumber() {
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(
+	        		Item.orderRow()
+	                    .setQuantity(1.0)
+	                    .setAmountExVat(4)
+	                    .setAmountIncVat(5)
+            )
+            .setCountryCode(COUNTRYCODE.SE)
+            .setCurrency(CURRENCY.SEK)
+//            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setValidator(new VoidValidator());
+        
+        assertEquals("MISSING VALUE - ClientOrderNumber is required. Use setClientOrderNumber(...).\n", orderValidator.validate(order));
+    } 
+    
+    ////  
+    
     
     @Test
     public void testFailOnNullClientOrderNumber() {
