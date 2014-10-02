@@ -2,65 +2,22 @@ package se.sveaekonomi.webpay.integration;
 
 import static org.junit.Assert.*;
 
-import java.util.Date;
-
-import javax.xml.bind.ValidationException;
-
 import org.junit.Test;
-import org.openqa.selenium.Alert;
-import org.openqa.selenium.By;
-import org.openqa.selenium.WebElement;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
-import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
-import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
-import se.sveaekonomi.webpay.integration.order.VoidValidator;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.CloseOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
-import se.sveaekonomi.webpay.integration.response.hosted.SveaResponse;
-import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
-import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
-import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
+import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.payment.InvoicePayment;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public class WebPayUnitTestValidation {    
-	
-	public CreateOrderResponse createTestOrder() {
-
-		SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
-        
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
-                .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-                .addCustomerDetails(Item.individualCustomer()
-                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
-                .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-                .setOrderDate(TestingTool.DefaultTestDate)
-                .setCurrency(TestingTool.DefaultTestCurrency)
-                .useInvoicePayment()
-                .prepareRequest();
-        
-        WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
-        
-        String xml = xmlBuilder.getCreateOrderEuXml(request.request);
-        String url = SveaConfig.getTestWebserviceUrl().toString();
-        String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
-        NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
-        CreateOrderResponse response = new CreateOrderResponse(soapResponse);
-        
-        return response;
-	}
 
 	@Test 
 	public void test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_SE() {
@@ -94,12 +51,12 @@ public class WebPayUnitTestValidation {
 	@Test
 	public void test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_addOrderRow() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-//			.addOrderRow(
-//					Item.orderRow()
-//			            .setQuantity(1.0)
-//			            .setAmountExVat(4)
-//			            .setAmountIncVat(5)
-//			)
+			//.addOrderRow(
+			//		Item.orderRow()
+			//            .setQuantity(1.0)
+			//            .setAmountExVat(4)
+			//            .setAmountIncVat(5)
+			//)
 			.addCustomerDetails(
 					Item.individualCustomer()
 			        	.setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
@@ -133,10 +90,10 @@ public class WebPayUnitTestValidation {
 			            .setAmountExVat(4)
 			            .setAmountIncVat(5)
 			)
-//			.addCustomerDetails(
-//					Item.individualCustomer()
-//			        	.setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
-//			)
+			//.addCustomerDetails(
+			//		Item.individualCustomer()
+			//        	.setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+			//)
 			.setCountryCode(COUNTRYCODE.SE)
 			.setOrderDate(TestingTool.DefaultTestDate)
 		;
@@ -170,7 +127,7 @@ public class WebPayUnitTestValidation {
 					Item.individualCustomer()
 			        	.setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
 			)
-//			.setCountryCode(COUNTRYCODE.SE)
+			//.setCountryCode(COUNTRYCODE.SE)
 			.setOrderDate(TestingTool.DefaultTestDate)
 		;
 		
@@ -205,7 +162,7 @@ public class WebPayUnitTestValidation {
 			        	.setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
 			)
 			.setCountryCode(COUNTRYCODE.SE)
-//			.setOrderDate(TestingTool.DefaultTestDate)
+			//.setOrderDate(TestingTool.DefaultTestDate)
 		;
 		
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
@@ -289,21 +246,5 @@ public class WebPayUnitTestValidation {
 //        String accepted = driver.findElementById("accepted").getText();                        
 //        assertEquals("true", accepted);        
 //	}		
-//	
-//    @Test
-//    public void test_closeOrder_closeInvoiceOrder() {
-//    	    	
-//    	// create an order using defaults
-//    	CreateOrderResponse order = createTestOrder();
-//        assertTrue(order.isOrderAccepted());
-//
-//        // test WebPay::closeOrder
-//        CloseOrderResponse closeResponse = WebPay.closeOrder(SveaConfig.getDefaultConfig())
-//                .setOrderId(order.orderId)
-//                .setCountryCode(TestingTool.DefaultTestCountryCode)
-//                .closeInvoiceOrder()
-//                .doRequest();
-//        
-//        assertTrue(closeResponse.isOrderAccepted());
-//    }
+	
 }

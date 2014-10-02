@@ -2,7 +2,6 @@ package se.sveaekonomi.webpay.integration;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
 import java.util.Date;
 
 import org.junit.Test;
@@ -40,7 +39,7 @@ public class WebPayAdminIntegrationTestAcceptanceTests {
     	CreateOrderResponse order = TestingTool.createInvoiceTestOrder("test_cancelOrder_cancelInvoiceOrder");
         assertTrue(order.isOrderAccepted());
 
-        // test WebPay::closeOrder
+        // do cancelOrder request and assert the response
         CloseOrderResponse response = WebPayAdmin.cancelOrder(SveaConfig.getDefaultConfig())
                 .setOrderId(order.orderId)
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -48,6 +47,7 @@ public class WebPayAdminIntegrationTestAcceptanceTests {
                 	.doRequest();
         
         assertTrue(response.isOrderAccepted());        
+        assertTrue(response instanceof CloseOrderResponse );
     }    
     
     @Test
@@ -57,7 +57,7 @@ public class WebPayAdminIntegrationTestAcceptanceTests {
     	CreateOrderResponse order = TestingTool.createPaymentPlanTestOrder("test_cancelOrder_cancelPaymentPlanOrder");
         assertTrue(order.isOrderAccepted());
 
-        // test WebPay::closeOrder
+        // do cancelOrder request and assert the response
         CloseOrderResponse response = WebPayAdmin.cancelOrder(SveaConfig.getDefaultConfig())
                 .setOrderId(order.orderId)
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -65,6 +65,7 @@ public class WebPayAdminIntegrationTestAcceptanceTests {
                 	.doRequest();
         
         assertTrue(response.isOrderAccepted());        
+        assertTrue(response instanceof CloseOrderResponse );
     }       
     
     @Test
@@ -118,30 +119,24 @@ public class WebPayAdminIntegrationTestAcceptanceTests {
         Alert alert = driver.switchTo().alert();
         alert.accept();
 
-        // wait for landing page to load and then parse out transaction id
-        (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));
-                
+        // wait for landing page to load and then parse out transaction id, accepted
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));                
+        Long transactionId = Long.decode(driver.findElementById("transactionId").getText());           
         String accepted = driver.findElementById("accepted").getText();                        
+
+        // close window
+        driver.quit();
+
         assertEquals("true", accepted);        
         
-        // do cancelCardOrder request and assert the response
-        Long transactionId = Long.decode(driver.findElementById("transactionId").getText());           
-                      
-        // test WebPay::closeOrder
+        // do cancelOrder request and assert the response
         AnnulTransactionResponse response = null;
-		try {
 			response = WebPayAdmin.cancelOrder(SveaConfig.getDefaultConfig())
 			        .setOrderId(transactionId)
 			        .setCountryCode(TestingTool.DefaultTestCountryCode)
 			        .cancelCardOrder()
 			        	.doRequest();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}        
+    
         assertTrue(response.isOrderAccepted());  
         assertTrue(response instanceof AnnulTransactionResponse );
     }              

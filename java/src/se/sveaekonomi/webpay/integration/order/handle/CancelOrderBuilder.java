@@ -2,13 +2,12 @@ package se.sveaekonomi.webpay.integration.order.handle;
 
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.AnnulTransactionRequest;
+import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 
 /**
- * TODO javadoc documentation 
- * 
  * CancelOrderBuilder is the class used to cancel an order with Svea, that has
  * not yet been delivered (invoice, payment plan) or been confirmed (card).
  * 
@@ -25,23 +24,20 @@ import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
  * which ever matches the payment method used in the original order request.
  *  
  * The final doRequest() will send the cancelOrder request to Svea, and the 
- * resulting response code specifies the outcome of the request. 
- * 
- * $request =  
- *    WebPay::cancelOrder($config)
+ * resulting response object contents holds outcome of the request. 
+ *     
+ *    $response = WebPay::cancelOrder($config)
  *        ->setCountryCode("SE")          // Required. Use same country code as in createOrder request.
  *        ->setOrderId($orderId)          // Required. Use SveaOrderId received with createOrder response
  *        ->cancelInvoiceOrder()          // Use the method corresponding to the original createOrder payment method.
  *        //->cancelPaymentPlanOrder()     
  *        //->cancelCardOrder()           
  *             ->doRequest()
- * ; 
+ *    ; 
  * 
  * @author Kristian Grossman-Madsen for Svea WebPay
  */
-public class CancelOrderBuilder {
-    private final ConfigurationProvider config;
-	private COUNTRYCODE countryCode;
+public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
 	private Long orderId;
 
 	public CancelOrderBuilder(ConfigurationProvider config) {
@@ -68,6 +64,19 @@ public class CancelOrderBuilder {
 		return this;
 	}
 	
+	public Long getOrderId() {
+		return this.orderId;
+	}	
+	
+	/**
+     * alias for setOrderId()
+     * @param orderId
+     * @return CancelOrderBuilder
+     */
+	public CancelOrderBuilder setTransactionId( Long transactionId ) {
+		return this.setOrderId(transactionId);
+	}	
+	
 	public CloseOrder cancelInvoiceOrder() {
 		CloseOrderBuilder closeOrderBuilder = new CloseOrderBuilder(this.config);
 		closeOrderBuilder.setCountryCode(this.countryCode);
@@ -85,9 +94,7 @@ public class CancelOrderBuilder {
 	}
 	
 	public AnnulTransactionRequest cancelCardOrder() {
-		AnnulTransactionRequest request = new AnnulTransactionRequest(this.config);
-		request.setTransactionId(this.orderId.toString());
-		request.setCountryCode(this.countryCode);
+		AnnulTransactionRequest request = new AnnulTransactionRequest(this);
 		return request;
 	}	
 }
