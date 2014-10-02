@@ -7,8 +7,8 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+import se.sveaekonomi.webpay.integration.order.handle.CreditOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse.CreditTransactionResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
@@ -18,7 +18,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  * 
  * @author Kristian Grossman-Madsen
  */
-public class CreditTransactionRequest extends HostedAdminRequest {
+public class CreditTransactionRequest extends HostedAdminRequest<CreditOrderBuilder> {
 
 	public String transactionId;
 	public long creditAmount;	// centesimal
@@ -37,8 +37,8 @@ public class CreditTransactionRequest extends HostedAdminRequest {
 	}	
 	
 
-	public CreditTransactionRequest( ConfigurationProvider config ) {
-		super( config, "credit" );
+	public CreditTransactionRequest(CreditOrderBuilder order) {
+		super( order, "credit" );
 	}
 
     /** 
