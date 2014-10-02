@@ -2,7 +2,6 @@ package se.sveaekonomi.webpay.integration;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
 import java.util.Date;
 
 import org.junit.Test;
@@ -132,19 +131,12 @@ public class WebPayAdminIntegrationTestAcceptanceTests {
         
         // do cancelOrder request and assert the response
         AnnulTransactionResponse response = null;
-		try {
 			response = WebPayAdmin.cancelOrder(SveaConfig.getDefaultConfig())
 			        .setOrderId(transactionId)
 			        .setCountryCode(TestingTool.DefaultTestCountryCode)
 			        .cancelCardOrder()
 			        	.doRequest();
-		} catch (IllegalStateException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}        
+    
         assertTrue(response.isOrderAccepted());  
         assertTrue(response instanceof AnnulTransactionResponse );
     }              
