@@ -1,6 +1,3 @@
-/**
- * 
- */
 package se.sveaekonomi.webpay.integration.hosted.hostedadmin;
 
 import java.io.BufferedReader;
@@ -11,6 +8,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import javax.xml.bind.ValidationException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -29,13 +27,13 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse.HostedAdminResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
@@ -46,25 +44,26 @@ import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 
 /**
  * @author Kristian Grossman-Madsen
- *
  */
-public abstract class HostedAdminRequest {
+public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
 
+	protected OrderBuilder<T> order;
 	protected ConfigurationProvider config;
 	protected String method;
 	
 	/** Used to disambiguate between the various credentials in ConfigurationProvider. */
 	private COUNTRYCODE countryCode;
 		
-	public HostedAdminRequest(ConfigurationProvider config, String method) {
-		this.config = config;
+	public HostedAdminRequest(OrderBuilder<T> order, String method) {
+		this.order = order;
+		this.config = order.getConfig();
 		this.method = method;
 	}
 	
     /**
      * Required. 
      */
-    public HostedAdminRequest setCountryCode( COUNTRYCODE countryCode ) {
+    public HostedAdminRequest<T> setCountryCode( COUNTRYCODE countryCode ) {
         this.countryCode = countryCode;
         return this;
     }	
@@ -118,6 +117,15 @@ public abstract class HostedAdminRequest {
 	 * returns the request fields to post to service
 	 */
 	public Hashtable<String,String> prepareRequest() {
+
+    	// validate request and throw exception if validation fails
+        String errors = validateRequest();
+        
+        if (!errors.equals("")) {
+            throw new SveaWebPayException("Validation failed", new ValidationException(errors));
+        }
+        
+        // build inspectable request object and return // TODO not return, insert into order builder ??
 		Hashtable<String,String> requestFields = new Hashtable<>();
 
 		String merchantId = this.config.getMerchantId(PAYMENTTYPE.HOSTED, this.getCountryCode());
@@ -135,68 +143,82 @@ public abstract class HostedAdminRequest {
 	}
 
 	
-	public <T extends HostedAdminResponse> T doRequest() throws IllegalStateException, IOException {
+	public <R extends HostedAdminResponse> R doRequest() throws SveaWebPayException { // TODO this throws SveaWebPayException -- see closeOrder doRequest?? ask DB
 
-		// prepare request fields
-    	Hashtable<String, String> requestFields = this.prepareRequest();
-    	
-    	// do request to Svea
-		String endpoint = this.config.getEndPoint(PAYMENTTYPE.HOSTED_ADMIN).toString().concat( this.method );
-		
-		CloseableHttpClient client = HttpClients.createDefault();
-		HttpPost post = new HttpPost(endpoint);				
-
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("message", requestFields.get("message")));
-		params.add(new BasicNameValuePair("mac", requestFields.get("mac")));
-		params.add(new BasicNameValuePair("merchantid", requestFields.get("merchantid")));
-		
-		post.setEntity( new UrlEncodedFormEntity(params) );
-				
-		// receive response
-		/**
-		 * Used by getPaymentUrl() to parse the HttpClient request response from Svea, returning service the xml response as a string 
-		 */
-		ResponseHandler<String> rh = new ResponseHandler<String>() {
-		
-			@Override
-			public String handleResponse( final HttpResponse response ) throws IOException {
-				StatusLine statusLine = response.getStatusLine();
-				HttpEntity entity = response.getEntity();
-		
-				if( statusLine.getStatusCode() >= 300 ) {
-					throw new HttpResponseException( statusLine.getStatusCode(), statusLine.getReasonPhrase() );
-				}
-				if( entity == null ) {
-					throw new ClientProtocolException("Response contains no centent");
-				}
-				
-				BufferedReader br = new BufferedReader( new InputStreamReader(entity.getContent()) );
-		 
-				StringBuffer sb = new StringBuffer();
-				String line = "";
-				while ((line = br.readLine()) != null) {
-					sb.append(line);
-				}	    
-				return sb.toString();
+		try {
+			// prepare request fields
+	    	Hashtable<String, String> requestFields = this.prepareRequest();
+	    	
+	    	// do request to Svea
+			String endpoint = this.config.getEndPoint(PAYMENTTYPE.HOSTED_ADMIN).toString().concat( this.method );
+			
+			CloseableHttpClient client = HttpClients.createDefault();
+			HttpPost post = new HttpPost(endpoint);				
+	
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			params.add(new BasicNameValuePair("message", requestFields.get("message")));
+			params.add(new BasicNameValuePair("mac", requestFields.get("mac")));
+			params.add(new BasicNameValuePair("merchantid", requestFields.get("merchantid")));
+			
+			post.setEntity( new UrlEncodedFormEntity(params) );
+					
+			// receive response
+			/**
+			 * Used by getPaymentUrl() to parse the HttpClient request response from Svea, returning service the xml response as a string 
+			 */
+			ResponseHandler<String> rh = new ResponseHandler<String>() {
+			
+				@Override
+				public String handleResponse( final HttpResponse response ) throws IOException {
+					StatusLine statusLine = response.getStatusLine();
+					HttpEntity entity = response.getEntity();
+			
+					if( statusLine.getStatusCode() >= 300 ) {
+						throw new HttpResponseException( statusLine.getStatusCode(), statusLine.getReasonPhrase() );
+					}
+					if( entity == null ) {
+						throw new ClientProtocolException("Response contains no centent");
+					}
+					
+					BufferedReader br = new BufferedReader( new InputStreamReader(entity.getContent()) );
+			 
+					StringBuffer sb = new StringBuffer();
+					String line = "";
+					while ((line = br.readLine()) != null) {
+						sb.append(line);
+					}	    
+					return sb.toString();
+				};	
 			};	
-		};	
-		
-		String xmlResponse = client.execute(post, rh);
-
-		String messageInBase64 = getResponseMessageFromXml( xmlResponse );
-				
-		return this.parseResponse( messageInBase64 );
+			
+			String xmlResponse = client.execute(post, rh);
+	
+			String messageInBase64 = getResponseMessageFromXml( xmlResponse );
+					
+			return this.parseResponse( messageInBase64 );
+			
+	    } catch (IllegalStateException ex) {
+	        throw new SveaWebPayException("IllegalStateException", ex);
+	    } catch (IOException ex) {
+	        throw new SveaWebPayException("IOException", ex);
+	    }		
 	}
 
+	// the below methods make use of method specific information, and are implemented  by the respective request class:
 	/**
-	 * implemented by child classes, should return the request message xml for the method in question
+	 * should return the request message xml for the method in question
 	 */
 	abstract String getRequestMessageXml();
 	
 	/**
-	 * implemented by child classes, should return the request message xml for the method in question
+	 * should return an instance of the appropriate request response class, given the base64-encoded response
 	 */
-	abstract <T extends HostedAdminResponse> T parseResponse( String response );	
+	abstract <R extends HostedAdminResponse> R parseResponse( String response );	
+
+	
+	/**
+	 * should return string indicating any missing order builder setter methods on validation failure, or empty string
+	 */
+	abstract String validateRequest();
 	
 }

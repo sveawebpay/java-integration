@@ -45,7 +45,7 @@
 
 	<target name="war" depends="copy">
 		<echo>Building the war file</echo>
-		<war destfile="${CardOrder.basedir}/${cardorder.dist.dir}/${project.name}.war" webxml="${CardOrder.basedir}/${cardorder.build.dir}/WEB-INF/web.xml">
+		<war destfile="${CardOrder.basedir}/${cardorder.dist.dir}/${cardorder.project.name}.war" webxml="${CardOrder.basedir}/${cardorder.build.dir}/WEB-INF/web.xml">
 			<fileset dir="${CardOrder.basedir}/${cardorder.build.dir}" />
 		</war>
 	</target>
@@ -54,7 +54,7 @@
 		<echo>Deploying .war to local Tomcat</echo>
 		<copy todir="${cardorder.tomcat.dir}">
 			<fileset dir="${CardOrder.basedir}/${cardorder.dist.dir}">
-				<include name="${project.name}.war" />
+				<include name="${cardorder.project.name}.war" />
 			</fileset>
 		</copy>
 	</target>

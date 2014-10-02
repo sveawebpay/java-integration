@@ -89,6 +89,30 @@ public class HostedPaymentResponseTest {
     }	    
     
     @Test
+    public void test_do_KORTCERT_payment_using_DoPaymentMethodPaymentRequest() {
+        HttpUnitOptions.setScriptingEnabled( false );
+        
+        PaymentForm form = WebPay.createOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .setClientOrderNumber(Long.toString((new Date()).getTime()))
+            .setCurrency(TestingTool.DefaultTestCurrency)
+            .usePaymentMethod(PAYMENTMETHOD.KORTCERT)
+            	.setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+            	.getPaymentForm();
+        
+        String base64Payment = form.getXmlMessageBase64();
+        String html = Base64Util.decodeBase64String(base64Payment);
+        assertTrue(html.contains("<paymentmethod>KORTCERT</paymentmethod>"));
+                
+        WebResponse result = postRequest(form);
+        
+        assertEquals("OK", result.getResponseMessage());
+    }    
+    
+    
+    @Test
     public void testDoCardPaymentRequest() {
         HttpUnitOptions.setScriptingEnabled( false );
         

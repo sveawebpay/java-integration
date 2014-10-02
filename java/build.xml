@@ -11,6 +11,7 @@
 
     <property name="test.lib.dir"	location="lib/test"/>
     <property name="src.lib.dir" 	location="lib/src"/>
+    <property name="example.lib.dir"	location="lib/example"/>
 	
     <path id="src.jars">
         <fileset dir="${src.lib.dir}" includes="**/*.jar"/>
@@ -151,28 +152,43 @@
     <target name="clean-jar" depends="clean-test, jar" description="Clean, build, unit test and package a jar file"/>
     <target name="clean-integrationtest" depends="clean-jar, integrationtest.compile, integrationtest" description="Run integration tests from created jar file"/>
 
-	<target name="jar-example" depends="clean, build, jar" description="builds and moves jar to examples">
+	<target name="invoiceorder_libs" depends="clean, build, jar"
+		description="builds integration package, copies example libs, builds example, deploys to http://[local tomcat installation]/InvoiceOrder">
+
+		<mkdir dir="example/invoiceorder/lib" />
 		<copy todir="example/invoiceorder/lib">
 			<fileset file="${jar.dir}/sveawebpay.jar" />
-		</copy>
-	</target>
+			<fileset file="${src.lib.dir}/httpclient-4.3.4.jar" />
+			<fileset file="${src.lib.dir}/httpcore-4.3.2.jar" />			
+			<fileset file="${example.lib.dir}/servlet-api.jar" />
+		</copy>		
+		
+	</target>			
+		
+	<include file="example/invoiceorder/build.xml" as="deploy_invoiceorder"/>
 	
-	
-	<include file="example/invoiceorder/build.xml" as="invoiceorder"/>
-	
-	<target name="invoiceorder" depends="jar-example, invoiceorder.deploy_invoiceorder" 
+	<target name="invoiceorder" depends="invoiceorder_libs, deploy_invoiceorder.deploy_invoiceorder" 
 		description="builds example InvoiceOrder deploys to http://[local tomcat installation]/InvoiceOrder">
 	</target>
 
 	
-	<include file="example/cardorder/build.xml" as="cardorder"/>	
-	
-	<target name="cardorder" depends="jar-example, cardorder.deploy_cardorder" 
-		description="builds example CardOrder deploys to http://[local tomcat installation]/CardOrder">
+	<target name="cardorder_libs" depends="clean, build, jar"
+		description="builds integration package, copies example libs, builds example, deploys to http://[local tomcat installation]/CardOrder">
+
+		<mkdir dir="example/cardorder/lib" />
+		<copy todir="example/cardorder/lib">
+			<fileset file="${jar.dir}/sveawebpay.jar" />
+			<fileset file="${src.lib.dir}/httpclient-4.3.4.jar" />
+			<fileset file="${src.lib.dir}/httpcore-4.3.2.jar" />			
+			<fileset file="${example.lib.dir}/servlet-api.jar" />
+		</copy>		
+		
 	</target>			
 	
-	
-	<target name="examples" depends="invoiceorder, cardorder" description="builds all example files">
-	</target>
+	<include file="example/cardorder/build.xml" as="deploy_cardorder"/>	
+
+	<target name="cardorder" depends="cardorder_libs, deploy_cardorder.deploy_cardorder"
+		description="builds integration package, copies example libs, builds example, deploys to http://[local tomcat installation]/CardOrder">	
+	</target>			
 	
 </project>
