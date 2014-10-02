@@ -65,7 +65,7 @@ public class CloseOrder {
         return object;
     }
     
-    public CloseOrderResponse doRequest() {
+    public CloseOrderResponse doRequest() {	// TODO may throw SveaWebPayException in SveaSoapBuilder.sendSoapMessage, see HostedAdminRequest ?? ask DB
         URL url = order.getOrderType().equals("Invoice") ? 
                 order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE) 
                 : order.getConfig().getEndPoint(PAYMENTTYPE.PAYMENTPLAN);

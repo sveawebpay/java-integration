@@ -7,6 +7,7 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
+import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -14,6 +15,7 @@ import java.util.List;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
+import javax.xml.soap.SOAPException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -122,6 +124,7 @@ public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
 	 * returns the request fields to post to service
 	 */
 	public Hashtable<String,String> prepareRequest() {
+
 		Hashtable<String,String> requestFields = new Hashtable<>();
 
 		String merchantId = this.config.getMerchantId(PAYMENTTYPE.HOSTED, this.getCountryCode());
@@ -139,58 +142,65 @@ public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
 	}
 
 	
-	public <R extends HostedAdminResponse> R doRequest() throws IllegalStateException, IOException {
+	public <R extends HostedAdminResponse> R doRequest() throws SveaWebPayException { // TODO this throws SveaWebPayException -- see closeOrder doRequest?? ask DB
 
-		// prepare request fields
-    	Hashtable<String, String> requestFields = this.prepareRequest();
-    	
-    	// do request to Svea
-		String endpoint = this.config.getEndPoint(PAYMENTTYPE.HOSTED_ADMIN).toString().concat( this.method );
-		
-		CloseableHttpClient client = HttpClients.createDefault();
-		HttpPost post = new HttpPost(endpoint);				
-
-		List<NameValuePair> params = new ArrayList<NameValuePair>();
-		params.add(new BasicNameValuePair("message", requestFields.get("message")));
-		params.add(new BasicNameValuePair("mac", requestFields.get("mac")));
-		params.add(new BasicNameValuePair("merchantid", requestFields.get("merchantid")));
-		
-		post.setEntity( new UrlEncodedFormEntity(params) );
-				
-		// receive response
-		/**
-		 * Used by getPaymentUrl() to parse the HttpClient request response from Svea, returning service the xml response as a string 
-		 */
-		ResponseHandler<String> rh = new ResponseHandler<String>() {
-		
-			@Override
-			public String handleResponse( final HttpResponse response ) throws IOException {
-				StatusLine statusLine = response.getStatusLine();
-				HttpEntity entity = response.getEntity();
-		
-				if( statusLine.getStatusCode() >= 300 ) {
-					throw new HttpResponseException( statusLine.getStatusCode(), statusLine.getReasonPhrase() );
-				}
-				if( entity == null ) {
-					throw new ClientProtocolException("Response contains no centent");
-				}
-				
-				BufferedReader br = new BufferedReader( new InputStreamReader(entity.getContent()) );
-		 
-				StringBuffer sb = new StringBuffer();
-				String line = "";
-				while ((line = br.readLine()) != null) {
-					sb.append(line);
-				}	    
-				return sb.toString();
+		try {
+			// prepare request fields
+	    	Hashtable<String, String> requestFields = this.prepareRequest();
+	    	
+	    	// do request to Svea
+			String endpoint = this.config.getEndPoint(PAYMENTTYPE.HOSTED_ADMIN).toString().concat( this.method );
+			
+			CloseableHttpClient client = HttpClients.createDefault();
+			HttpPost post = new HttpPost(endpoint);				
+	
+			List<NameValuePair> params = new ArrayList<NameValuePair>();
+			params.add(new BasicNameValuePair("message", requestFields.get("message")));
+			params.add(new BasicNameValuePair("mac", requestFields.get("mac")));
+			params.add(new BasicNameValuePair("merchantid", requestFields.get("merchantid")));
+			
+			post.setEntity( new UrlEncodedFormEntity(params) );
+					
+			// receive response
+			/**
+			 * Used by getPaymentUrl() to parse the HttpClient request response from Svea, returning service the xml response as a string 
+			 */
+			ResponseHandler<String> rh = new ResponseHandler<String>() {
+			
+				@Override
+				public String handleResponse( final HttpResponse response ) throws IOException {
+					StatusLine statusLine = response.getStatusLine();
+					HttpEntity entity = response.getEntity();
+			
+					if( statusLine.getStatusCode() >= 300 ) {
+						throw new HttpResponseException( statusLine.getStatusCode(), statusLine.getReasonPhrase() );
+					}
+					if( entity == null ) {
+						throw new ClientProtocolException("Response contains no centent");
+					}
+					
+					BufferedReader br = new BufferedReader( new InputStreamReader(entity.getContent()) );
+			 
+					StringBuffer sb = new StringBuffer();
+					String line = "";
+					while ((line = br.readLine()) != null) {
+						sb.append(line);
+					}	    
+					return sb.toString();
+				};	
 			};	
-		};	
-		
-		String xmlResponse = client.execute(post, rh);
-
-		String messageInBase64 = getResponseMessageFromXml( xmlResponse );
-				
-		return this.parseResponse( messageInBase64 );
+			
+			String xmlResponse = client.execute(post, rh);
+	
+			String messageInBase64 = getResponseMessageFromXml( xmlResponse );
+					
+			return this.parseResponse( messageInBase64 );
+			
+	    } catch (IllegalStateException ex) {
+	        throw new SveaWebPayException("IllegalStateException", ex);
+	    } catch (IOException ex) {
+	        throw new SveaWebPayException("IOException", ex);
+	    }		
 	}
 
 	/**
