@@ -68,4 +68,16 @@ public class AnnulTransactionRequest extends HostedAdminRequest<CancelOrderBuild
 		return new AnnulTransactionResponse(message, this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode()));
 	}
 
+    public String validateRequest() {
+        String errors = "";
+        if (this.order.getCountryCode() == null) {
+            errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+        }
+        
+        if (((CancelOrderBuilder)this.order).getOrderId() == null) { // cast needed as getter in child class
+            errors += "MISSING VALUE - OrderId is required, use setOrderId().\n";
+    	}
+        return errors;    
+    }	
+	
 }

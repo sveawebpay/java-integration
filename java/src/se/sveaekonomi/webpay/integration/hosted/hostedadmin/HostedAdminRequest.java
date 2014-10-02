@@ -12,6 +12,7 @@ import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
 
+import javax.xml.bind.ValidationException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
@@ -125,6 +126,14 @@ public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
 	 */
 	public Hashtable<String,String> prepareRequest() {
 
+    	// validate request and throw exception if validation fails
+        String errors = validateRequest();
+        
+        if (!errors.equals("")) {
+            throw new SveaWebPayException("Validation failed", new ValidationException(errors));
+        }
+        
+        // build inspectable request object and return // TODO not return, insert into order builder ??
 		Hashtable<String,String> requestFields = new Hashtable<>();
 
 		String merchantId = this.config.getMerchantId(PAYMENTTYPE.HOSTED, this.getCountryCode());
@@ -204,13 +213,19 @@ public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
 	}
 
 	/**
-	 * implemented by child classes, should return the request message xml for the method in question
+	 * should return the request message xml for the method in question
 	 */
 	abstract String getRequestMessageXml();
 	
 	/**
-	 * implemented by child classes, should return the request message xml for the method in question
+	 * should return the request message xml for the method in question
 	 */
 	abstract <R extends HostedAdminResponse> R parseResponse( String response );	
+
+	
+	/**
+	 * should return string indicating any missing order builder setter methods on validation failure, or empty string
+	 */
+	abstract String validateRequest();
 	
 }

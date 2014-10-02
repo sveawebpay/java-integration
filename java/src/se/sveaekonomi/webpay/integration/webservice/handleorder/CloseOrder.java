@@ -46,13 +46,16 @@ public class CloseOrder {
         return errors;    
     }
     
-    public SveaRequest<SveaCloseOrder> prepareRequest() {
+    public SveaRequest<SveaCloseOrder> prepareRequest() { // TODO throws SveaWebPayException ??
+    	
+    	// validate request and throw exception if validation fails
         String errors = validateRequest();
         
         if (!errors.equals("")) {
             throw new SveaWebPayException("Validation failed", new ValidationException(errors));
         }
         
+        // build inspectable request object and insert into order builder
         SveaCloseOrder sveaCloseOrder = new SveaCloseOrder();
         sveaCloseOrder.Auth = getStoreAuthorization();
         SveaCloseOrderInformation orderInfo = new SveaCloseOrderInformation();
