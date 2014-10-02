@@ -26,11 +26,7 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
     
     protected ConfigurationProvider config;
     protected COUNTRYCODE countryCode;
-    
-    public OrderBuilder() {
         
-    }
-    
     public ConfigurationProvider getConfig() {
         return this.config;
     }

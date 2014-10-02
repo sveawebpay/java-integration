@@ -1,13 +1,9 @@
-/**
- * 
- */
 package se.sveaekonomi.webpay.integration.hosted.hostedadmin;
 
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.StringReader;
-import java.net.MalformedURLException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 import java.util.List;
@@ -16,7 +12,6 @@ import javax.xml.bind.ValidationException;
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
-import javax.xml.soap.SOAPException;
 
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
@@ -32,7 +27,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -50,8 +44,6 @@ import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 
 /**
  * @author Kristian Grossman-Madsen
- * @param <T>
- *
  */
 public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
 
@@ -212,13 +204,14 @@ public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
 	    }		
 	}
 
+	// the below methods make use of method specific information, and are implemented  by the respective request class:
 	/**
 	 * should return the request message xml for the method in question
 	 */
 	abstract String getRequestMessageXml();
 	
 	/**
-	 * should return the request message xml for the method in question
+	 * should return an instance of the appropriate request response class, given the base64-encoded response
 	 */
 	abstract <R extends HostedAdminResponse> R parseResponse( String response );	
 

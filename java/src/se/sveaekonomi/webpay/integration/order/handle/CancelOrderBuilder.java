@@ -64,7 +64,11 @@ public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
 		return this;
 	}
 	
-    /**
+	public Long getOrderId() {
+		return this.orderId;
+	}	
+	
+	/**
      * alias for setOrderId()
      * @param orderId
      * @return CancelOrderBuilder
@@ -91,8 +95,6 @@ public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
 	
 	public AnnulTransactionRequest cancelCardOrder() {
 		AnnulTransactionRequest request = new AnnulTransactionRequest(this);
-		request.setTransactionId(this.orderId.toString());
-		request.setCountryCode(this.countryCode);	// TODO remove
 		return request;
 	}	
 }
