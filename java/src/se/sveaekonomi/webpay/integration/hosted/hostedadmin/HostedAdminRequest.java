@@ -36,6 +36,7 @@ import org.xml.sax.SAXException;
 
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse.HostedAdminResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
@@ -46,25 +47,28 @@ import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 
 /**
  * @author Kristian Grossman-Madsen
+ * @param <T>
  *
  */
-public abstract class HostedAdminRequest {
+public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
 
+	protected OrderBuilder<T> order;
 	protected ConfigurationProvider config;
 	protected String method;
 	
 	/** Used to disambiguate between the various credentials in ConfigurationProvider. */
 	private COUNTRYCODE countryCode;
 		
-	public HostedAdminRequest(ConfigurationProvider config, String method) {
-		this.config = config;
+	public HostedAdminRequest(OrderBuilder<T> order, String method) {
+		this.order = order;
+		this.config = order.getConfig();
 		this.method = method;
 	}
 	
     /**
      * Required. 
      */
-    public HostedAdminRequest setCountryCode( COUNTRYCODE countryCode ) {
+    public HostedAdminRequest<T> setCountryCode( COUNTRYCODE countryCode ) {
         this.countryCode = countryCode;
         return this;
     }	
@@ -135,7 +139,7 @@ public abstract class HostedAdminRequest {
 	}
 
 	
-	public <T extends HostedAdminResponse> T doRequest() throws IllegalStateException, IOException {
+	public <R extends HostedAdminResponse> R doRequest() throws IllegalStateException, IOException {
 
 		// prepare request fields
     	Hashtable<String, String> requestFields = this.prepareRequest();
@@ -197,6 +201,6 @@ public abstract class HostedAdminRequest {
 	/**
 	 * implemented by child classes, should return the request message xml for the method in question
 	 */
-	abstract <T extends HostedAdminResponse> T parseResponse( String response );	
+	abstract <R extends HostedAdminResponse> R parseResponse( String response );	
 	
 }
