@@ -10,4 +10,6 @@ branches:
     - master
 
 before_script: cd java
-script: ant clean-integrationtest
+
+#script: ant clean-integrationtest # TODO integrationtests depend on localhost serving example/cardorder for webdriver tests -- host servlet at svea to reenable these /kgm
+script: ant clean-test
