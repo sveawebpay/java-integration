@@ -5,72 +5,81 @@ import static org.junit.Assert.*;
 import java.util.Date;
 
 import org.junit.Test;
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
+import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse.AnnulTransactionResponse;
+import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
-
-import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
+import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 /**
- * contains end-to-end integration tests of WebPayAdmin entrypoints
+ * contains end-to-end integration tests of WebPay entrypoints
  * used as acceptance test for package functionality, performs requests to Svea services (test environment)
  * 
  * see unit tests for validation of required entrypoint methods for the various payment methods/customers/countries
  * 
  * @author Kristian Grossman-Madsen
  */
-public class WebPayAdminIntegrationTestAcceptanceTests {    
+public class WebPayIntegrationTestAcceptanceTest {    
 	
-    @Test
-    public void test_cancelOrder_cancelInvoiceOrder() {
-    	    	
-    	// create an order using defaults
-    	CreateOrderResponse order = TestingTool.createInvoiceTestOrder("test_cancelOrder_cancelInvoiceOrder");
-        assertTrue(order.isOrderAccepted());
+	public CreateOrderResponse createTestOrder() {
 
-        // do cancelOrder request and assert the response
-        CloseOrderResponse response = WebPayAdmin.cancelOrder(SveaConfig.getDefaultConfig())
-                .setOrderId(order.orderId)
-                .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .cancelInvoiceOrder()
-                	.doRequest();
+		SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         
-        assertTrue(response.isOrderAccepted());        
-        assertTrue(response instanceof CloseOrderResponse );
-    }    
-    
-    @Test
-    public void test_cancelOrder_cancelPaymentPlanOrder() {
-    	    	
-    	// create an order using defaults
-    	CreateOrderResponse order = TestingTool.createPaymentPlanTestOrder("test_cancelOrder_cancelPaymentPlanOrder");
-        assertTrue(order.isOrderAccepted());
+        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+                .addCustomerDetails(Item.individualCustomer()
+                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setOrderDate(TestingTool.DefaultTestDate)
+                .setCurrency(TestingTool.DefaultTestCurrency)
+                .useInvoicePayment()
+                .prepareRequest();
+        
+        WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
+        
+        String xml = xmlBuilder.getCreateOrderEuXml(request.request);
+        String url = SveaConfig.getTestWebserviceUrl().toString();
+        String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
+        NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
+        CreateOrderResponse response = new CreateOrderResponse(soapResponse);
+        
+        return response;
+	}
 
-        // do cancelOrder request and assert the response
-        CloseOrderResponse response = WebPayAdmin.cancelOrder(SveaConfig.getDefaultConfig())
-                .setOrderId(order.orderId)
-                .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .cancelPaymentPlanOrder()
-                	.doRequest();
-        
-        assertTrue(response.isOrderAccepted());        
-        assertTrue(response instanceof CloseOrderResponse );
-    }       
-    
-    @Test
-    public void test_cancelOrder_cancelCardOrder() {
-    	    	
+	@Test 
+	public void test_createOrder_useInvoicePayment() {
+    	// create an order using defaults
+    	CreateOrderResponse order = TestingTool.createInvoiceTestOrder("test_createOrder_useInvoicePayment");
+        assertTrue(order.isOrderAccepted());
+	}
+
+	@Test 
+	public void test_createOrder_usePaymentPlanPayment() {
+    	// create an order using defaults
+    	CreateOrderResponse order = TestingTool.createPaymentPlanTestOrder("test_createOrder_usePaymentPlanPayment");
+        assertTrue(order.isOrderAccepted());
+	}	
+
+	@Test 
+	public void test_createOrder_usePaymentMethodPayment_KORTCERT() {
 		// create order
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
@@ -119,25 +128,30 @@ public class WebPayAdminIntegrationTestAcceptanceTests {
         Alert alert = driver.switchTo().alert();
         alert.accept();
 
-        // wait for landing page to load and then parse out transaction id, accepted
+        // wait for landing page to load and then parse out accepted
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));                
-        Long transactionId = Long.decode(driver.findElementById("transactionId").getText());           
         String accepted = driver.findElementById("accepted").getText();                        
 
         // close window
         driver.quit();
 
-        assertEquals("true", accepted);        
+        assertEquals("true", accepted);              
+	}		
+	
+    @Test
+    public void test_closeOrder_closeInvoiceOrder() {
+    	    	
+    	// create an order using defaults
+    	CreateOrderResponse order = createTestOrder();
+        assertTrue(order.isOrderAccepted());
+
+        // test WebPay::closeOrder
+        CloseOrderResponse closeResponse = WebPay.closeOrder(SveaConfig.getDefaultConfig())
+                .setOrderId(order.orderId)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .closeInvoiceOrder()
+                .doRequest();
         
-        // do cancelOrder request and assert the response
-        AnnulTransactionResponse response = null;
-			response = WebPayAdmin.cancelOrder(SveaConfig.getDefaultConfig())
-			        .setOrderId(transactionId)
-			        .setCountryCode(TestingTool.DefaultTestCountryCode)
-			        .cancelCardOrder()
-			        	.doRequest();
-    
-        assertTrue(response.isOrderAccepted());  
-        assertTrue(response instanceof AnnulTransactionResponse );
-    }              
+        assertTrue(closeResponse.isOrderAccepted());
+    }
 }
