@@ -8,7 +8,7 @@
     <property name="src.dir"     location="src"/>
     <property name="test.dir"     location="test"/>
     <property name="integrationtest.dir"     location="integrationtest"/>
-
+	
     <property name="test.lib.dir"	location="lib/test"/>
     <property name="src.lib.dir" 	location="lib/src"/>
     <property name="example.lib.dir"	location="lib/example"/>
@@ -30,7 +30,7 @@
     <property name="jar.dir"     location="${build.dir}/jar"/>
     <property name="integration.report.dir"  location="${build.dir}/junitreport/integration"/>
     <property name="unit.report.dir"  location="${build.dir}/junitreport/unit"/>
-
+    <property name="webdriver.report.dir"  location="${build.dir}/junitreport/webdriver"/>
 	
     <target name="clean" >
         <delete dir="${build.dir}"/>
@@ -126,12 +126,37 @@
             <formatter type="xml"/>
             
             <batchtest fork="no" todir="${integration.report.dir}" failureproperty="integrationtests.failed">
-                <fileset dir="${integrationtest.dir}" includes="**/*Test.java"/>
+                <fileset dir="${integrationtest.dir}" includes="**/*Test.java" excludes="**/*WebdriverTest.java" />
             </batchtest>
         </junit>
         <antcall target="fail-integration-tests" inheritall="true" inheritrefs="true" />
     </target> 
 
+	<!-- the WebPay and WebPayAdmin acceptance tests use selenium and a locally hosted exampel/cardorder, so won't run on Travis CI -->
+    <target name="webdrivertest">
+        <mkdir dir="${webdriver.report.dir}"/>
+        
+        <junit printsummary="yes" >
+    		<jvmarg value="-Dfile.encoding=UTF-8"/>
+
+        	<classpath refid="all.integrationtest.classpath"/>
+           
+            <formatter type="xml"/>
+            
+            <batchtest fork="no" todir="${webdriver.report.dir}" failureproperty="webdrivertests.failed">
+                <fileset dir="${integrationtest.dir}" includes="**/*WebdriverTest.java" />
+            </batchtest>
+        </junit>
+        <antcall target="fail-webdriver-tests" inheritall="true" inheritrefs="true" />
+    </target> 
+
+	<target name="fail-webdriver-tests" if="webdrivertests.failed">
+        <concat>
+            <fileset dir="${integration.report.dir}" includes="TEST*"/>
+        </concat>
+        <fail/>
+	</target>		
+	
 	<target name="fail-integration-tests" if="integrationtests.failed">
         <concat>
             <fileset dir="${integration.report.dir}" includes="TEST*"/>
@@ -151,7 +176,8 @@
     <target name="clean-test" depends="clean-build, junit" description="Clean, build and test"/>
     <target name="clean-jar" depends="clean-test, jar" description="Clean, build, unit test and package a jar file"/>
     <target name="clean-integrationtest" depends="clean-jar, integrationtest.compile, integrationtest" description="Run integration tests from created jar file"/>
-
+    <target name="clean-webdrivertest" depends="clean-jar, integrationtest.compile, cardorder, webdrivertest" description="Run webdriver smoke tests using cardorder example"/>
+	
 	<target name="invoiceorder_libs" depends="clean, build, jar"
 		description="builds integration package, copies example libs, builds example, deploys to http://[local tomcat installation]/InvoiceOrder">
 
