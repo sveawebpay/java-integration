@@ -12,7 +12,6 @@ public class HandleOrderValidator {
         validateOrderType(order);
         validateOrderId(order);
         validateInvoiceDetails(order);
-        validateOrderRows(order);
         return errors;
     }
     
@@ -40,14 +39,5 @@ public class HandleOrderValidator {
                 order.getInvoiceDistributionType() == null) {
             this.errors += "MISSING VALUE - setInvoiceDistributionType is requred for deliverInvoiceOrder.\n";
         }
-    }
-    
-    private void validateOrderRows(DeliverOrderBuilder order) {
-        if (order.getOrderType().equals("Invoice") &&
-                order.getOrderRows().isEmpty() &&
-                order.getShippingFeeRows().isEmpty() &&
-                order.getInvoiceFeeRows().isEmpty()) {
-            this.errors += "MISSING VALUE - No order or fee has been included. Use addOrder(...) or addFee(...).\n";
-        }
-    }
+    }    
 }
