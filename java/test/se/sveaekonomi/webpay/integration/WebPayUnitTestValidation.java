@@ -19,6 +19,8 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class WebPayUnitTestValidation {    
 
+	/// WebPay.createOrder
+	// invoice
 	@Test 
 	public void test_validates_all_required_methods_for_createOrder_useInvoicePayment_IndividualCustomer_SE() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
@@ -47,7 +49,6 @@ public class WebPayUnitTestValidation {
 	        fail();
         }	
 	}				
-    
 	@Test
 	public void test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_addOrderRow() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
@@ -79,8 +80,7 @@ public class WebPayUnitTestValidation {
     			e.getCause().getMessage()
     		);			
         }	
-	}
-    
+	}    
 	@Test
 	public void test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_addCustomerDetails() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
@@ -113,7 +113,6 @@ public class WebPayUnitTestValidation {
     		);			
         }	
 	}
-
 	@Test
 	public void test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_setCountryCode() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
@@ -146,8 +145,6 @@ public class WebPayUnitTestValidation {
     		);			
         }	
 	}
-	
-	
 	@Test
 	public void test_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_setOrderDate() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())

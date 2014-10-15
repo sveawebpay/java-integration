@@ -17,8 +17,8 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class WebPayAdminUnitTestValidation {    		
 	
+	/// cancelOrder validators
 	// validate required methods for invoice orders below:
-	
 	@Test
     public void test_validates_all_required_methods_for_cancelOrder_cancelInvoiceOrder() {
     	    	
@@ -32,13 +32,11 @@ public class WebPayAdminUnitTestValidation {
 			CloseOrder closeOrder = cancelOrderBuilder.cancelInvoiceOrder();            
 			SveaRequest<SveaCloseOrder> sveaRequest = closeOrder.prepareRequest();					
 		}
-		catch (SveaWebPayException e){
-			
+		catch (SveaWebPayException e){		
 			// fail on validation error
 	        fail();
         }
-    }
-	
+    }	
 	@Test
     public void test_missing_required_method_for_cancelOrder_cancelInvoiceOrder_setOrderId() {
     	    	
@@ -62,7 +60,6 @@ public class WebPayAdminUnitTestValidation {
     		);	
 		}
     }	    		
-
 	@Test
     public void test_missing_required_method_for_cancelOrder_cancelInvoiceOrder_setCountryCode() {
     	    	
@@ -87,9 +84,7 @@ public class WebPayAdminUnitTestValidation {
 		}
     }		
 	
-	
 	// validate required methods for payment plan orders below:
-
 	@Test
     public void test_validates_all_required_methods_for_cancelOrder_cancelPaymentPlanOrder() {
     	    	
@@ -104,12 +99,10 @@ public class WebPayAdminUnitTestValidation {
 			SveaRequest<SveaCloseOrder> sveaRequest = closeOrder.prepareRequest();					
 		}
 		catch (SveaWebPayException e){
-			
 			// fail on validation error
 	        fail();
         }
-    }
-		
+    }		
 	@Test
     public void test_missing_required_method_for_cancelOrder_cancelPaymentPlanOrder_setOrderId() {
     	    	
@@ -133,7 +126,6 @@ public class WebPayAdminUnitTestValidation {
     		);	
 		}
     }	    		
-
 	@Test
     public void test_missing_required_method_for_cancelOrder_cancelPaymentPlanOrder_setCountryCode() {
     	    	
@@ -158,9 +150,7 @@ public class WebPayAdminUnitTestValidation {
 		}
     }	
 	
-	
 	// validate required methods for card orders below:
-
 	@Test
     public void test_validates_all_required_methods_for_cancelOrder_cancelCardOrder() {
     	    	
@@ -174,8 +164,7 @@ public class WebPayAdminUnitTestValidation {
 			AnnulTransactionRequest annulTransactionRequest = cancelOrderBuilder.cancelCardOrder();
 			Hashtable<String, String> sveaRequest = annulTransactionRequest.prepareRequest();	
 		}
-		catch (SveaWebPayException e){
-			
+		catch (SveaWebPayException e){	
 			// fail on validation error
 	        fail("unexpected SveaWebPayException");
         }

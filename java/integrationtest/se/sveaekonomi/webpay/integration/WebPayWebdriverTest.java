@@ -20,6 +20,7 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
+import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
@@ -37,8 +38,8 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
  * @author Kristian Grossman-Madsen
  */
 public class WebPayWebdriverTest {    
-	
-	public CreateOrderResponse createTestOrder() {
+
+	public CreateOrderResponse createInvoiceOrder() {
 
 		SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         
@@ -64,20 +65,22 @@ public class WebPayWebdriverTest {
         return response;
 	}
 
+	/// createOrder
+	// invoice
 	@Test 
 	public void test_createOrder_useInvoicePayment() {
     	// create an order using defaults
     	CreateOrderResponse order = TestingTool.createInvoiceTestOrder("test_createOrder_useInvoicePayment");
         assertTrue(order.isOrderAccepted());
 	}
-
+	// paymentplan
 	@Test 
 	public void test_createOrder_usePaymentPlanPayment() {
     	// create an order using defaults
     	CreateOrderResponse order = TestingTool.createPaymentPlanTestOrder("test_createOrder_usePaymentPlanPayment");
         assertTrue(order.isOrderAccepted());
 	}	
-
+	// usePaymentMethodPayment - card
 	@Test 
 	public void test_createOrder_usePaymentMethodPayment_KORTCERT() {
 		// create order
@@ -137,12 +140,18 @@ public class WebPayWebdriverTest {
 
         assertEquals("true", accepted);              
 	}		
+	// directbank
+	// TODO
+	// payment method (i.e. invoice) via paypage
+	// TODO
 	
+	/// WebPay.closeOrder
+	// invoice
     @Test
     public void test_closeOrder_closeInvoiceOrder() {
     	    	
     	// create an order using defaults
-    	CreateOrderResponse order = createTestOrder();
+    	CreateOrderResponse order = createInvoiceOrder();
         assertTrue(order.isOrderAccepted());
 
         // test WebPay::closeOrder
@@ -154,4 +163,6 @@ public class WebPayWebdriverTest {
         
         assertTrue(closeResponse.isOrderAccepted());
     }
+    // paymentplan
+    // TODO
 }
