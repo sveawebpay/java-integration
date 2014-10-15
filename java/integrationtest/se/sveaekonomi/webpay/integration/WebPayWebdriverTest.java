@@ -165,4 +165,26 @@ public class WebPayWebdriverTest {
     }
     // paymentplan
     // TODO
+    
+    /// WebPay.deliverOrder
+    // deliver invoice order
+    @Test
+    public void test_deliverOrder_deliverInvoiceOrder() {
+    	    	
+    	// create an order using defaults
+    	CreateOrderResponse order = createInvoiceOrder();
+        assertTrue(order.isOrderAccepted());
+
+        DeliverOrderResponse response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+                .setOrderId(order.orderId)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .deliverInvoiceOrder()
+                .doRequest();
+        
+        assertTrue(response.isOrderAccepted());
+    }
+    // deliver paymentplan order
+    // TODO
+    // deliver card order    
+    // TODO    
 }
