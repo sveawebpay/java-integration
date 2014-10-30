@@ -20,5 +20,6 @@
 	<classpathentry kind="lib" path="lib/src/commons-logging-1.2-javadoc.jar"/>
 	<classpathentry kind="lib" path="lib/src/commons-logging-1.2.jar"/>
 	<classpathentry kind="lib" path="lib/test/selenium-server-standalone-2.43.1.jar"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
