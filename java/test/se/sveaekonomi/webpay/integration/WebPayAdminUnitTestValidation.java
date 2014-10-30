@@ -17,6 +17,9 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class WebPayAdminUnitTestValidation {    		
 	
+	
+	
+    // WebPayAdmin::cancelOrder() -------------------------------------------------------------------------------------	
 	/// cancelOrder validators
 	// validate required methods for invoice orders below:
 	@Test
@@ -198,8 +201,8 @@ public class WebPayAdminUnitTestValidation {
     public void test_missing_required_method_for_cancelOrder_cancelCardOrder_setCountryCode() {
 	    	    	
         CancelOrderBuilder cancelOrderBuilder = WebPayAdmin.cancelOrder(SveaConfig.getDefaultConfig())
-                .setOrderId(TestingTool.DefaultOrderId)
-                //.setCountryCode(TestingTool.DefaultTestCountryCode)
+            .setOrderId(TestingTool.DefaultOrderId)
+            //.setCountryCode(TestingTool.DefaultTestCountryCode)
         ;
         
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
@@ -216,5 +219,5 @@ public class WebPayAdminUnitTestValidation {
     			e.getCause().getMessage()
     		);	
 		}
-    }				
+    }		
 }

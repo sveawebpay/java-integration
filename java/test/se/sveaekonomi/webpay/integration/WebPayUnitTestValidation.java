@@ -1,5 +1,6 @@
 package se.sveaekonomi.webpay.integration;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
 import org.junit.Test;
@@ -54,8 +55,8 @@ public class WebPayUnitTestValidation {
         
         return response;
 	}	
-	
-	/// WebPay.createOrder
+
+    // WebPay.createOrder() --------------------------------------------------------------------------------------------	
 	// invoice
 	@Test 
 	public void test_createOrder_validates_all_required_methods_for_useInvoicePayment_IndividualCustomer_SE() {
@@ -275,8 +276,39 @@ public class WebPayUnitTestValidation {
 //	}		
 	
 
-    /// WebPay.deliverOrder
-    // deliver invoice order
+    // WebPay.deliverOrder() -------------------------------------------------------------------------------------------	
+	// .deliverInvoiceOrder() with orderrows => WebService/HandleOrder request (DeliverInvoice?)
+    @Test
+    public void test_deliverOrder_deliverInvoicePayment_with_orderrows_return_HandleOrder() {	
+		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			.addOrderRow(
+					Item.orderRow()
+			            .setQuantity(1.0)
+			            .setAmountExVat(4)
+			            .setAmountIncVat(5)
+			)
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderId( 123456L )
+			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
+		;
+			
+		try {
+			HandleOrder request = builder.deliverInvoiceOrder();
+			assertThat( request, instanceOf(HandleOrder.class) );
+		}
+		catch (SveaWebPayException e){
+			// fail on validation error
+	        fail(e.getCause().getMessage());
+        }	
+    }
+	// .deliverInvoiceOrder() without orderrows => AdminService/DeliverOrdersRequest
+        
+    
+	// KOLLA .deliverInvoiceOrder() with orderrows => validation error
+	// KOLLA .deliverPaymentPlanOrder() without orderrows => AdminService/DeliverOrdersRequest
+	// .deliverCardOrder => HostedService/ConfirmTransactionRequest	
+	
+	// deliver invoice order
 	// all required methods	
     @Test
     public void test_deliverOrder_validates_all_required_methods_for_deliverInvoicePayment() {
@@ -297,11 +329,13 @@ public class WebPayUnitTestValidation {
 	        fail(e.getCause().getMessage());
         }	
     }
+    
     // validate throws validation exception on missing required methods
     // TODO
     
     // deliver paymentplan order
 	// TODO
+
     // deliver card order    
 	// TODO
 }
