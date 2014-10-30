@@ -276,7 +276,9 @@ public class WebPayUnitTestValidation {
 //	}		
 	
 
-    // WebPay.deliverOrder() -------------------------------------------------------------------------------------------	
+    // WebPay.deliverOrder() -------------------------------------------------------------------------------------------
+	
+	/// test deliverInvoiceOrder() request class type
 	// .deliverInvoiceOrder() with orderrows => WebService/HandleOrder request (DeliverInvoice?)
     @Test
     public void test_deliverOrder_deliverInvoicePayment_with_orderrows_return_HandleOrder() {	
@@ -293,7 +295,7 @@ public class WebPayUnitTestValidation {
 		;
 			
 		try {
-			HandleOrder request = builder.deliverInvoiceOrder();
+			Object request = builder.deliverInvoiceOrder();
 			assertThat( request, instanceOf(HandleOrder.class) );
 		}
 		catch (SveaWebPayException e){
@@ -301,15 +303,34 @@ public class WebPayUnitTestValidation {
 	        fail(e.getCause().getMessage());
         }	
     }
+    
 	// .deliverInvoiceOrder() without orderrows => AdminService/DeliverOrdersRequest
-        
+    @Test
+    public void test_deliverOrder_deliverInvoicePayment_without_orderrows_return_DeliverOrdersRequest() {	
+		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderId( 123456L )
+			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
+		;
+			
+		try {
+			Object request = builder.deliverInvoiceOrder();
+			assertThat( request, instanceOf(DeliverOrdersRequest.class) );
+		}
+		catch (SveaWebPayException e){
+			// fail on validation error
+	        fail(e.getCause().getMessage());
+        }	
+    }        
     
 	// KOLLA .deliverInvoiceOrder() with orderrows => validation error
 	// KOLLA .deliverPaymentPlanOrder() without orderrows => AdminService/DeliverOrdersRequest
 	// .deliverCardOrder => HostedService/ConfirmTransactionRequest	
 	
-	// deliver invoice order
-	// all required methods	
+    
+	/// validation of required order builder methods
+	
+    // all required methods	
     @Test
     public void test_deliverOrder_validates_all_required_methods_for_deliverInvoicePayment() {
     	
