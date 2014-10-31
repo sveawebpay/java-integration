@@ -296,34 +296,22 @@ public class WebPayUnitTestValidation {
 			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
 		;
 			
-		try {
-			Requestable request = builder.deliverInvoiceOrder();
-			assertThat( request, instanceOf(HandleOrder.class) );
-		}
-		catch (SveaWebPayException e){
-			// fail on validation error
-	        fail(e.getCause().getMessage());
-        }	
+		Requestable request = builder.deliverInvoiceOrder();
+		assertThat( request, instanceOf(HandleOrder.class) );
     }
     
 	// .deliverInvoiceOrder() without orderrows => AdminService/DeliverOrdersRequest
-//    @Test
-//    public void test_deliverOrder_deliverInvoicePayment_without_orderrows_return_DeliverOrdersRequest() {	
-//		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
-//			.setCountryCode(TestingTool.DefaultTestCountryCode)
-//			.setOrderId( 123456L )
-//			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
-//		;
-//			
-//		try {
-//			Requestable request = builder.deliverInvoiceOrder();
-//			assertThat( request, instanceOf(DeliverOrdersRequest.class) );
-//		}
-//		catch (SveaWebPayException e){
-//			// fail on validation error
-//	        fail(e.getCause().getMessage());
-//        }	
-//    }        
+    @Test
+    public void test_deliverOrder_deliverInvoicePayment_without_orderrows_return_DeliverOrdersRequest() {	
+		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderId( 123456L )
+			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
+		;
+			
+		Requestable request = builder.deliverInvoiceOrder();
+		assertThat( request, instanceOf(DeliverOrdersRequest.class) );
+    }        
     
 	// KOLLA .deliverInvoiceOrder() with orderrows => validation error
 	// KOLLA .deliverPaymentPlanOrder() without orderrows => AdminService/DeliverOrdersRequest

@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.order.handle;
 
 import se.sveaekonomi.webpay.integration.Requestable;
+import se.sveaekonomi.webpay.integration.adminservice.request.DeliverOrdersRequest;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
@@ -84,8 +85,14 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
      * @return HandleOrder
      */
     public <T extends Requestable> T deliverInvoiceOrder() {
-        orderType = "Invoice";
-        return (T) new HandleOrder(this);
+
+    	if( this.orderRows.isEmpty() ) {
+    		return (T) new DeliverOrdersRequest(this);
+    	}
+	    else {
+	    	orderType = "Invoice";
+	        return (T) new HandleOrder(this);
+	    }
     }
     
     /**
