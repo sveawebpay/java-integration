@@ -12,8 +12,8 @@ import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderBuilder;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse.AnnulTransactionResponse;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse.HostedAdminResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.AnnulTransactionResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.HostedAdminResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 

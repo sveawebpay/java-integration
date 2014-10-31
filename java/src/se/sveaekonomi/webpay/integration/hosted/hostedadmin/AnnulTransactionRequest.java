@@ -9,7 +9,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderBuilder;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse.AnnulTransactionResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.AnnulTransactionResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**

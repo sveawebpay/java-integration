@@ -2,7 +2,7 @@ package se.sveaekonomi.webpay.integration.hosted.hostedadmin;
 
 import se.sveaekonomi.webpay.integration.Requestable;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse.ConfirmTransactionResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.ConfirmTransactionResponse;
 
 public class ConfirmTransactionRequest implements Requestable {
 

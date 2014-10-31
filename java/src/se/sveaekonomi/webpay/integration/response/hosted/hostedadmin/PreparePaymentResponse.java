@@ -1,4 +1,4 @@
-package se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse;
+package se.sveaekonomi.webpay.integration.response.hosted.hostedadmin;
 
 import java.io.IOException;
 import java.io.StringReader;
@@ -16,19 +16,20 @@ import org.xml.sax.SAXException;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 
 /**
- * Handles credit request response from hosted admin webservice
+ * Handles preparepayment request response from hosted admin webservice
  * 
  * @author Kristian Grossman-Madsen
  */
-public class CreditTransactionResponse extends HostedAdminResponse {
+public class PreparePaymentResponse extends HostedAdminResponse {
 
 	private String rawResponse;
-	private String transactionid;
-	private String customerrefno;
-
-	public CreditTransactionResponse(String responseXmlBase64, String secretWord) {
+	private String id;
+    private String created;
+	
+	public PreparePaymentResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
-		this.rawResponse = this.xml;		
+		this.rawResponse = this.xml;
+		
 		this.setValues();
 	}
 
@@ -59,8 +60,8 @@ public class CreditTransactionResponse extends HostedAdminResponse {
 				
 				if( this.isOrderAccepted() ) {	// don't attempt to parse a bad response
 
-					this.transactionid = getTagAttribute(element, "transaction", "id");
-					this.customerrefno = getTagValue(element, "customerrefno");
+					this.id = getTagValue(element, "id");
+					this.created = getTagValue(element, "created");
 				}
 			}
 		} catch (ParserConfigurationException e) {
@@ -76,14 +77,12 @@ public class CreditTransactionResponse extends HostedAdminResponse {
 		return rawResponse;
 	}
 
-    public String getTransactionId() {
-		return transactionid;
+    public String getId() {
+		return id;
 	}
 
-	public String getCustomerRefNo() {
-		return customerrefno;
+    public String getCreated() {
+		return created;
 	}
-    
-
 }
 

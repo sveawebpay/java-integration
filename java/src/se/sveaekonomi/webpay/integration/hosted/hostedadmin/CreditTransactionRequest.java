@@ -9,7 +9,7 @@ import javax.xml.stream.XMLStreamWriter;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.CreditOrderBuilder;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse.CreditTransactionResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.CreditTransactionResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**

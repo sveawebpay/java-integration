@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse.HostedAdminResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.HostedAdminResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;

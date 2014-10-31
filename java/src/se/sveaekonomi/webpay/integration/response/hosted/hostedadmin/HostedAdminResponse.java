@@ -1,4 +1,4 @@
-package se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse;
+package se.sveaekonomi.webpay.integration.response.hosted.hostedadmin;
 
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.Response;
