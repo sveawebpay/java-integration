@@ -9,6 +9,7 @@ import org.w3c.dom.NodeList;
 import se.sveaekonomi.webpay.integration.adminservice.request.DeliverOrdersRequest;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CloseOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
@@ -302,7 +303,7 @@ public class WebPayUnitTestValidation {
     
 	// .deliverInvoiceOrder() without orderrows => AdminService/DeliverOrdersRequest
     @Test
-    public void test_deliverOrder_deliverInvoicePayment_without_orderrows_return_DeliverOrdersRequest() {	
+    public void test_deliverOrder_deliverInvoiceOrder_without_orderrows_return_DeliverOrdersRequest() {	
 		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
 			.setOrderId( 123456L )
@@ -311,12 +312,23 @@ public class WebPayUnitTestValidation {
 			
 		Requestable request = builder.deliverInvoiceOrder();
 		assertThat( request, instanceOf(DeliverOrdersRequest.class) );
-    }        
+    }
     
-	// KOLLA .deliverInvoiceOrder() with orderrows => validation error
-	// KOLLA .deliverPaymentPlanOrder() without orderrows => AdminService/DeliverOrdersRequest
+	// TODO .deliverInvoiceOrder() with orderrows => validation error
+	// TODO .deliverPaymentPlanOrder() without orderrows => AdminService/DeliverOrdersRequest
+    
 	// .deliverCardOrder => HostedService/ConfirmTransactionRequest	
-	
+    @Test
+    public void test_deliverOrder_deliverCardOrder_returns_ConfirmTransactionRequest() {	
+		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderId( 123456L )
+			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
+		;
+			
+		Requestable request = builder.deliverCardOrder();
+		assertThat( request, instanceOf(ConfirmTransactionRequest.class) );
+    }
     
 	/// validation of required order builder methods
 	

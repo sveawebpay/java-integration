@@ -3,6 +3,7 @@ package se.sveaekonomi.webpay.integration.order.handle;
 import se.sveaekonomi.webpay.integration.Requestable;
 import se.sveaekonomi.webpay.integration.adminservice.request.DeliverOrdersRequest;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
+import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
@@ -103,4 +104,8 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         orderType = "PaymentPlan";
         return new HandleOrder(this);
     }
+
+	public Requestable deliverCardOrder() {
+		return new ConfirmTransactionRequest(this);
+	}
 }
