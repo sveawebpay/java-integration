@@ -1,6 +1,8 @@
 package se.sveaekonomi.webpay.integration;
 
 import se.sveaekonomi.webpay.integration.Respondable;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrder;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 /**
  * Requestable classes validates that the orderbuilder holds all required attributes,
@@ -14,6 +16,7 @@ public interface Requestable {
 	// TODO add validateOrder()
 	
 	// TODO add prepareRequest()
+	public <T> T prepareRequest();
 	
 	/**
 	 * doRequest() performs a soap request and returns the corresponding response class

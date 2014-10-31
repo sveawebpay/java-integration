@@ -314,8 +314,21 @@ public class WebPayUnitTestValidation {
 		assertThat( request, instanceOf(DeliverOrdersRequest.class) );
     }
     
-	// TODO .deliverInvoiceOrder() with orderrows => validation error
-	// TODO .deliverPaymentPlanOrder() without orderrows => AdminService/DeliverOrdersRequest
+	// TODO .deliverInvoiceOrder() with orderrows => validation error + other validation tests
+    
+    // .deliverPaymentPlanOrder() without orderrows => AdminService/DeliverOrdersRequest
+    @Test
+    public void test_deliverOrder_deliverPaymentPlanOrder_returns_DeliverOrdersRequest() {
+		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderId( 123456L )
+		;
+			
+		Requestable request = builder.deliverPaymentPlanOrder();
+		assertThat( request, instanceOf(DeliverOrdersRequest.class) );
+    }
+    
+    // TODO .deliverCardOrder validation tests
     
 	// .deliverCardOrder => HostedService/ConfirmTransactionRequest	
     @Test

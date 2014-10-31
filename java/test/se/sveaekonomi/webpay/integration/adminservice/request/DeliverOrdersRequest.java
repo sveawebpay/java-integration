@@ -16,7 +16,13 @@ public class DeliverOrdersRequest implements Requestable {
     public DeliverOrdersRequest(DeliverOrderBuilder orderBuilder) {
         this.order =  orderBuilder;
     }
-		
+
+    // TODO
+	public String prepareRequest() {
+		return "foo";
+	};    
+    
+	// TODO
 	public DeliverOrdersResponse doRequest() {
 		return new DeliverOrdersResponse();
 	};

@@ -74,16 +74,4 @@ public class DeliverOrderTest {
         assertEquals("54086", request.request.deliverOrderInformation.sveaOrderId);
         assertEquals("Invoice", request.request.deliverOrderInformation.orderType);
     }
-    
-    @Test
-    public void testDeliverPaymentPlanOrder() {
-        SveaRequest<SveaDeliverOrder> request = order
-                .setOrderId(54086L)
-                .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .deliverPaymentPlanOrder()
-                .prepareRequest();
-        
-        assertEquals("54086", request.request.deliverOrderInformation.sveaOrderId);
-        assertEquals("PaymentPlan", request.request.deliverOrderInformation.orderType);
-    }
 }

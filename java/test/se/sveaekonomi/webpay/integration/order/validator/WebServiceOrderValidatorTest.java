@@ -340,27 +340,7 @@ public class WebServiceOrderValidatorTest {
         
         assertEquals(expectedMessage, handleOrder.validateOrder());
     }
-     
-    @Test
-    public void testFailOnMissingRows() {
-        String expectedMessage = "MISSING VALUE - No order or fee has been included. Use addOrder(...) or addFee(...).\n";
-        
-        try {
-            WebPay.deliverOrder(SveaConfig.getDefaultConfig())
-                .setNumberOfCreditDays(1)
-                .setOrderId(2345L)
-                .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-                .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .deliverInvoiceOrder()
-                .doRequest();
-            
-            //Fail on no exception
-            fail();
-        } catch (Exception e) {
-            assertEquals(expectedMessage, e.getCause().getMessage());
-        }
-    }
-    
+         
     @Test
     public void testFailCompanyCustomerUsingPaymentPlan() {
         String expectedMessage = "ERROR - CompanyCustomer is not allowed to use payment plan option.";

@@ -57,7 +57,7 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
     }
     
     public DeliverOrderBuilder setInvoiceDistributionType(DISTRIBUTIONTYPE type) {
-        this.distributionType = type.toString();
+        this.distributionType = type.toString();	// TODO use enum instead
         return this;
     }
     
@@ -80,18 +80,18 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
     }
     
     /**
-     * Updates the invoice order with additional information and prepares it for delivery.
-     * Will automatically match all order rows that are to be delivered with those which was sent
-     * when creating the invoice order.
-     * @return HandleOrder
+     * Updates the order builder with additional information and passes the
+     * order builder to the correct request class.
+     * @return Requestable
      */
     public <T extends Requestable> T deliverInvoiceOrder() {
 
     	if( this.orderRows.isEmpty() ) {
+	    	this.orderType = "Invoice";		// TODO use enumeration instead
     		return (T) new DeliverOrdersRequest(this);
     	}
 	    else {
-	    	orderType = "Invoice";
+	    	this.orderType = "Invoice";
 	        return (T) new HandleOrder(this);
 	    }
     }
@@ -100,9 +100,9 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
      * Prepares the PaymentPlan order for delivery.
      * @return HandleOrder
      */
-    public HandleOrder deliverPaymentPlanOrder() {
-        orderType = "PaymentPlan";
-        return new HandleOrder(this);
+    public Requestable deliverPaymentPlanOrder() {
+    	this.orderType = "PaymentPlan";		// TODO use enumeration instead
+		return new DeliverOrdersRequest(this);
     }
 
 	public Requestable deliverCardOrder() {
