@@ -2,6 +2,9 @@ package se.sveaekonomi.webpay.integration.example;
 
 import java.io.IOException;
 
+
+
+
 // import servlet classes (provided in /lib/servlet-api.jar)
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
@@ -9,16 +12,22 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+
+
+
 // import Svea integration package (provided in /lib/sveawebpay.jar)
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.config.SveaTestConfigurationProvider;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
+import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.payment.InvoicePayment;
 
 public class CreditInvoiceOrderServlet extends HttpServlet implements Servlet {
@@ -96,10 +105,43 @@ public class CreditInvoiceOrderServlet extends HttpServlet implements Servlet {
 		InvoicePayment myInvoiceOrderRequest = myOrder.useInvoicePayment();
 
 		// Then send the request to Svea using the doRequest method, and immediately receive the service response object
-		CreateOrderResponse myResponse = myInvoiceOrderRequest.doRequest();
+		CreateOrderResponse createOrderResponse = myInvoiceOrderRequest.doRequest();
 		
 		// Pass service response to creditinvoiceorder.jsp view as attribute in HttpServletRequest
-		request.setAttribute("creditinvoiceorder_response", myResponse);
+		request.setAttribute("createinvoiceorder_response", createOrderResponse);
+
+		
+		// To perform a credit order request the order first has to be delivered to Svea -- we first perform a deliverInvoiceOrder request:
+		DeliverOrderBuilder myDelivery = WebPay.deliverOrder(myConfig);
+		
+		// To deliver an order in full, we specify order rows in the DeliverOrderBuilder that match the rows in the original CreateOrderBuilder.		
+		// We conveniently retained the first order row in a variable, so we just specify that row.
+		myDelivery.addOrderRow( boughtItem );
+		// The second order row has to be rebuilt, making sure all information matches the item from original order.
+		myDelivery
+			.addOrderRow( 
+				Item.orderRow()
+					.setAmountIncVat(5.00)
+					.setVatPercent(12.00)
+					.setQuantity(2.0)
+					.setDescription("Korv med bröd") 
+			)
+		;		
+		
+		// To deliver an invoice order the following DeliverOrderBuilder methods are required:
+		myDelivery.setOrderId( createOrderResponse.orderId );
+		myDelivery.setCountryCode(COUNTRYCODE.SE);
+		myDelivery.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post);
+		myDelivery.setNumberOfCreditDays(30);											
+
+		// Then get a request object with deliverInvoiceOrder(), and call doRequest() which validates and sends the request, returning a response:
+		DeliverOrderResponse deliverOrderResponse = myDelivery.deliverInvoiceOrder().doRequest();
+				
+		request.setAttribute("deliverinvoiceorder_response", deliverOrderResponse);
+		
+		//request.setAttribute("creditinvoiceorder_response", creditOrderResponse);
+		
+		// pass the request on to the view
 		request.getRequestDispatcher("/creditinvoiceorder.jsp").forward(request, response);				
 	}
 }

@@ -1,6 +1,8 @@
 <%@ page language="java" contentType="text/html; charset=ISO-8859-1"
 	pageEncoding="ISO-8859-1"%>
 <%@ page import="se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse" %>
+<%@ page import="se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse" %>
+
 <!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
 <html>
 <head>
@@ -12,7 +14,7 @@
 Your order invoice payment request response:
 
 <% 
-	CreateOrderResponse invoiceOrderResponse = (CreateOrderResponse) request.getAttribute("creditinvoiceorder_response");
+	CreateOrderResponse invoiceOrderResponse = (CreateOrderResponse) request.getAttribute("createinvoiceorder_response");
 
 	// Response attributes
 	out.println( "createOrderResponse: " + invoiceOrderResponse );
@@ -43,37 +45,45 @@ Your order invoice payment request response:
 	out.println( "        customerType: " + invoiceOrderResponse.customerIdentity.getCustomerType() );
 	out.println( "        ipAddress: " + invoiceOrderResponse.customerIdentity.getIpAddress() );
 %>	
+
+Your deliver order request response:
+
+<% 
+	DeliverOrderResponse deliverOrderResponse = (DeliverOrderResponse) request.getAttribute("deliverinvoiceorder_response");
+
+	// Response attributes
+	out.println( "deliverOrderResponse: " + deliverOrderResponse );
+	out.println( "    isOrderAccepted: " + deliverOrderResponse.isOrderAccepted() );
+	out.println( "    resultCode: " + deliverOrderResponse.getResultCode() );
+	out.println( "    errorMessage: " + deliverOrderResponse.getErrorMessage() );
+	// DeliverOrderResponse attributes for an invoice order (note that payment plan orders sets different attributes)
+	out.println( "    amount: " + deliverOrderResponse.getAmount() );
+	out.println( "    invoiceId: " + deliverOrderResponse.getInvoiceId() );
+	out.println( "    dueDate: " + deliverOrderResponse.getDueDate() );
+	out.println( "    invoiceDate: " + deliverOrderResponse.getInvoiceDate() );	
+	out.println( "    invoiceDistributionType: " + deliverOrderResponse.getInvoiceDistributionType() );
+	out.println( "    ocr: " + deliverOrderResponse.getOcr() );
+	out.println( "    lowestAmountToPay: " + deliverOrderResponse.getLowestAmountToPay() );
+%>
+
 </pre>
 <font color='blue'>
 <pre>
-An example of a successful request response. The 'accepted' attribute is true, and resultcode/errormessage is 0/not set. 
+An example of a successful deliver request response. The 'accepted' attribute is true, and resultcode/errormessage is 0/not set. 
 (Note that the customerIdentity received in the response indicates the Svea invoice address, which should normally match the order shipping address.)
 
-createOrderResponse: se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse@c383d72
+deliverOrderResponse: se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse@13eafae1
     isOrderAccepted: true
     resultCode: 0
     errorMessage: null
-    orderId: 375567
-    orderType: Invoice
-    sveaWillBuyOrder: true
-    amount: 886.24
-    expirationDate: 2014-09-07T00:00:00+02:00
-    clientOrderNumber: null
-    isIndividualIdentity: true
-    customerIdentity: se.sveaekonomi.webpay.integration.response.webservice.CustomerIdentityResponse@404a0da2
-        nationalIdNumber: 194605092222
-        fullName: Persson, Tess T
-        intitials: null
-        coAddress: c/o Eriksson, Erik
-        street: Testgatan 1
-        houseNumber: null
-        zipCode: 99999
-        city: Stan
-        countryCode: SE
-        phoneNumber: null
-        email: null
-        customerType: Individual
-        ipAddress: null	
+    amount: 886.23
+    invoiceId: 1037321
+    dueDate: 2014-12-03T00:00:00+01:00
+    invoiceDate: 2014-11-03T00:00:00+01:00
+    invoiceDistributionType: Post
+    ocr: 79021000103732177
+    lowestAmountToPay: 0.0
+	
 </pre>
 </body>
 </html>
