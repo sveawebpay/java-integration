@@ -15,7 +15,7 @@ import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
-public class WebPayAdminUnitTestValidation {    		
+public class WebPayAdminUnitTest {    		
 	
 	
 	

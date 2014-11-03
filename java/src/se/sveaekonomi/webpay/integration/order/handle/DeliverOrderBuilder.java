@@ -10,7 +10,7 @@ import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 
 /**
- * @author klar-sar
+ * @author klar-sar, Kristian Grossman-Madsen
  */
 public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
 

@@ -31,7 +31,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 import se.sveaekonomi.webpay.integration.Requestable;
 
-public class WebPayUnitTestValidation {    
+public class WebPayUnitTest {    
 
 	public CreateOrderResponse createInvoiceOrder() {
 
@@ -281,35 +281,15 @@ public class WebPayUnitTestValidation {
 		assertThat( request, instanceOf(ConfirmTransactionRequest.class) );
     }
     
-	/// validation of required order builder methods
-	
-    // all required methods	
-//    @Test
-//    public void test_deliverOrder_validates_all_required_methods_for_deliverInvoicePayment() {
-//    	
-//		DeliverOrderBuilder order = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
-//            .setCountryCode(TestingTool.DefaultTestCountryCode)
-//			.setOrderId( 123456L )
-//			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
-//		;
-//			
-//		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
-//		try {
-//			HandleOrder invoiceOrder = order.deliverInvoiceOrder();
-//			SveaRequest<SveaDeliverOrder> sveaRequest = invoiceOrder.prepareRequest();					
-//		}
-//		catch (SveaWebPayException e){
-//			// fail on validation error
-//	        fail(e.getCause().getMessage());
-//        }	
-//    }
-    
-    // validate throws validation exception on missing required methods
+	/// validation	
+    // .deliverInvoiceOrder() with orderrows
     // TODO
-    
-    // .deliverPaymentPlanOrder() paymentplan order
+    // deliverInvoiceOrder() without orderrows
+    // TODO    
+    // .deliverPaymentPlanOrder() with orderrows
 	// TODO
-
-    // .deliverCardOrder() validation tests
+    // .deliverPaymentPlanOrder() without orderrows
+	// TODO
+    // .deliverCardOrder()
 	// TODO
 }
