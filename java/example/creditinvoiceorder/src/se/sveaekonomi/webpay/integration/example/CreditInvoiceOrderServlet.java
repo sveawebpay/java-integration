@@ -110,15 +110,16 @@ public class CreditInvoiceOrderServlet extends HttpServlet implements Servlet {
 		// Pass service response to creditinvoiceorder.jsp view as attribute in HttpServletRequest
 		request.setAttribute("createinvoiceorder_response", createOrderResponse);
 
+		/// Deliver the order, i.e. issue an invoice
 		
 		// To perform a credit order request the order first has to be delivered to Svea -- we first perform a deliverInvoiceOrder request:
-		DeliverOrderBuilder myDelivery = WebPay.deliverOrder(myConfig);
+		DeliverOrderBuilder myDeliverInvoiceOrder = WebPay.deliverOrder(myConfig);
 		
 		// To deliver an order in full, we specify order rows in the DeliverOrderBuilder that match the rows in the original CreateOrderBuilder.		
 		// We conveniently retained the first order row in a variable, so we just specify that row.
-		myDelivery.addOrderRow( boughtItem );
+		myDeliverInvoiceOrder.addOrderRow( boughtItem );
 		// The second order row has to be rebuilt, making sure all information matches the item from original order.
-		myDelivery
+		myDeliverInvoiceOrder
 			.addOrderRow( 
 				Item.orderRow()
 					.setAmountIncVat(5.00)
@@ -129,17 +130,42 @@ public class CreditInvoiceOrderServlet extends HttpServlet implements Servlet {
 		;		
 		
 		// To deliver an invoice order the following DeliverOrderBuilder methods are required:
-		myDelivery.setOrderId( createOrderResponse.orderId );
-		myDelivery.setCountryCode(COUNTRYCODE.SE);
-		myDelivery.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post);
-		myDelivery.setNumberOfCreditDays(30);											
+		myDeliverInvoiceOrder.setOrderId( createOrderResponse.orderId );
+		myDeliverInvoiceOrder.setCountryCode(COUNTRYCODE.SE);
+		myDeliverInvoiceOrder.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post);
 
 		// Then get a request object with deliverInvoiceOrder(), and call doRequest() which validates and sends the request, returning a response:
-		DeliverOrderResponse deliverOrderResponse = myDelivery.deliverInvoiceOrder().doRequest();
+		DeliverOrderResponse deliverOrderResponse = myDeliverInvoiceOrder.deliverInvoiceOrder().doRequest();
 				
 		request.setAttribute("deliverinvoiceorder_response", deliverOrderResponse);
 		
-		//request.setAttribute("creditinvoiceorder_response", creditOrderResponse);
+		/// Credit part of the order
+		
+		// To complete the credit order request we'll issue a credit invoice using the deliverInvoiceOrder request with some additional methods:
+		DeliverOrderBuilder myCreditInvoiceOrder = WebPay.deliverOrder(myConfig);
+				
+		// To deliver an order in full, we specify a credit order row.		
+		// The add an order row to the credit invoice.
+		myCreditInvoiceOrder
+			.addOrderRow( 
+				Item.orderRow()
+					.setAmountIncVat(100.00)
+					.setVatPercent(25.00)
+					.setQuantity(1.0)
+					.setDescription("Credit issued due to late delivery.") 
+			)
+		;		
+		
+		// To deliver a credit invoice order the following DeliverOrderBuilder methods are required:
+		myCreditInvoiceOrder.setOrderId( createOrderResponse.orderId );
+		myCreditInvoiceOrder.setCountryCode(COUNTRYCODE.SE);
+		myCreditInvoiceOrder.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post);
+		myCreditInvoiceOrder.setCreditInvoice( Integer.toString( deliverOrderResponse.getInvoiceId() )  ); // the invoice to credit
+		
+		// Send the credit order request
+		DeliverOrderResponse creditOrderResponse = myCreditInvoiceOrder.deliverInvoiceOrder().doRequest();
+				
+		request.setAttribute("creditinvoiceorder_response", creditOrderResponse);
 		
 		// pass the request on to the view
 		request.getRequestDispatcher("/creditinvoiceorder.jsp").forward(request, response);				
