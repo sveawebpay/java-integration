@@ -65,7 +65,7 @@ public class WebPayWebdriverTest {
         return response;
 	}
 
-	/// createOrder
+    // WebPay.createOrder() --------------------------------------------------------------------------------------------
 	// invoice
 	@Test 
 	public void test_createOrder_useInvoicePayment() {
@@ -143,7 +143,7 @@ public class WebPayWebdriverTest {
 	// directbank
 	// TODO
 	// payment method (i.e. invoice) via paypage
-	// TODO
+	// TODO	
 	
 	/// WebPay.closeOrder
 	// invoice
@@ -166,7 +166,7 @@ public class WebPayWebdriverTest {
     // paymentplan
     // TODO
     
-    /// WebPay.deliverOrder
+    // WebPay.deliverOrder() -------------------------------------------------------------------------------------------
     // deliver invoice order
     @Test
     public void test_deliverOrder_deliverInvoiceOrder() {
@@ -175,7 +175,7 @@ public class WebPayWebdriverTest {
     	CreateOrderResponse order = createInvoiceOrder();
         assertTrue(order.isOrderAccepted());
 
-        DeliverOrderResponse response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+        Respondable response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
                 .setOrderId(order.orderId)
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .deliverInvoiceOrder()

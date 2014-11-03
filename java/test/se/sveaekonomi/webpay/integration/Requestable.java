@@ -1,8 +1,6 @@
 package se.sveaekonomi.webpay.integration;
 
 import se.sveaekonomi.webpay.integration.Respondable;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrder;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 /**
  * Requestable classes validates that the orderbuilder holds all required attributes,

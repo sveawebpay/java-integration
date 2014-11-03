@@ -60,6 +60,9 @@ public class WebPayUnitTestValidation {
 	}	
 
     // WebPay.createOrder() --------------------------------------------------------------------------------------------	
+	/// returned request class
+	// TODO
+	/// validation
 	// invoice
 	@Test 
 	public void test_createOrder_validates_all_required_methods_for_useInvoicePayment_IndividualCustomer_SE() {
@@ -217,71 +220,12 @@ public class WebPayUnitTestValidation {
     		);			
         }	
 	}
-	// for all validation tests of create order -- countries, customers, other payment methods et al, see
+	// TODO as above for all validation tests of create order -- countries, customers, other payment methods et al
 	// public class WebServiceOrderValidatorTest {
 	// public class HostedOrderValidatorTest {
 
-//	@Test 
-//	public void test_createOrder_usePaymentMethodPayment_KORTCERT() {
-//		// create order
-//        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-//                .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-//                .addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
-//                .setCountryCode(TestingTool.DefaultTestCountryCode)
-//                //.setOrderDate(TestingTool.DefaultTestDate)
-//                .setClientOrderNumber("test_cancelOrder_cancelCardOrder" + Long.toString((new Date()).getTime()))
-//                .setCurrency(TestingTool.DefaultTestCurrency)
-//        ;
-//                
-//        // choose payment method and do request
-//        PaymentForm form = order.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
-//                	.setReturnUrl("http://localhost:8080/CardOrder/landingpage")	// http => handle alert below
-//                	.getPaymentForm()
-//    	;
-//        
-//        // insert form in empty page
-//        FirefoxDriver driver = new FirefoxDriver();
-//        driver.get("about:blank");
-//        String script = "document.body.innerHTML = '" + form.getCompleteForm() + "'";
-//        driver.executeScript(script);
-//        
-//        // post form
-//        driver.findElementById("paymentForm").submit();
-//
-//        // wait for certitrade page to load
-//        (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("paymeth-list")));
-//        
-//        // fill in credentials form
-//        WebElement cardno = driver.findElementById("cardno");
-//        cardno.sendKeys("4444333322221100");       
-//
-//        WebElement cvc = driver.findElementById("cvc"); 	       
-//    	cvc.sendKeys("123");
-//
-//        Select month = new Select(driver.findElementById("month"));
-//        month.selectByValue("01");
-//
-//        Select year = new Select(driver.findElementById("year"));
-//        year.selectByValue("17");
-//        
-//        // submit credentials form, triggering redirect to returnurl
-//        driver.findElementById("perform-payment").click();        
-//        
-//        // as our localhost landingpage is a http site, we get a popup
-//        Alert alert = driver.switchTo().alert();
-//        alert.accept();
-//
-//        // wait for landing page to load and then parse out transaction id
-//        (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));
-//                
-//        String accepted = driver.findElementById("accepted").getText();                        
-//        assertEquals("true", accepted);        
-//	}		
-	
-
-    // WebPay.deliverOrder() -------------------------------------------------------------------------------------------
-	
-	/// test deliverInvoiceOrder() request class type
+    // WebPay.deliverOrder() -------------------------------------------------------------------------------------------	
+	/// returned request class
 	// .deliverInvoiceOrder() with orderrows => WebService/HandleOrder request (DeliverInvoice?)
     @Test
     public void test_deliverOrder_deliverInvoicePayment_with_orderrows_return_HandleOrder() {	
@@ -300,8 +244,7 @@ public class WebPayUnitTestValidation {
 		Requestable request = builder.deliverInvoiceOrder();
 		assertThat( request, instanceOf(HandleOrder.class) );
     }
-    
-	// .deliverInvoiceOrder() without orderrows => AdminService/DeliverOrdersRequest
+    // .deliverInvoiceOrder() without orderrows => AdminService/DeliverOrdersRequest
     @Test
     public void test_deliverOrder_deliverInvoiceOrder_without_orderrows_return_DeliverOrdersRequest() {	
 		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
@@ -313,9 +256,7 @@ public class WebPayUnitTestValidation {
 		Requestable request = builder.deliverInvoiceOrder();
 		assertThat( request, instanceOf(DeliverOrdersRequest.class) );
     }
-    
-	// TODO .deliverInvoiceOrder() with orderrows => validation error + other validation tests
-    
+	// TODO .deliverPaymentPlanOrder() with orderrows => validation error + other validation tests
     // .deliverPaymentPlanOrder() without orderrows => AdminService/DeliverOrdersRequest
     @Test
     public void test_deliverOrder_deliverPaymentPlanOrder_returns_DeliverOrdersRequest() {
@@ -327,9 +268,6 @@ public class WebPayUnitTestValidation {
 		Requestable request = builder.deliverPaymentPlanOrder();
 		assertThat( request, instanceOf(DeliverOrdersRequest.class) );
     }
-    
-    // TODO .deliverCardOrder validation tests
-    
 	// .deliverCardOrder => HostedService/ConfirmTransactionRequest	
     @Test
     public void test_deliverOrder_deliverCardOrder_returns_ConfirmTransactionRequest() {	
@@ -369,9 +307,9 @@ public class WebPayUnitTestValidation {
     // validate throws validation exception on missing required methods
     // TODO
     
-    // deliver paymentplan order
+    // .deliverPaymentPlanOrder() paymentplan order
 	// TODO
 
-    // deliver card order    
+    // .deliverCardOrder() validation tests
 	// TODO
 }
