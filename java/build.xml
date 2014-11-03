@@ -211,6 +211,24 @@
 	<target name="cardorder" depends="cardorder_libs, deploy_cardorder.deploy_cardorder"
 		description="builds integration package, copies example libs, builds example, deploys to http://[local tomcat installation]/CardOrder">	
 	</target>			
+
+	<include file="example/creditinvoiceorder/build.xml" as="deploy_creditinvoiceorder"/>
+	
+	<target name="creditinvoiceorder_libs" depends="clean, build, jar"
+		description="builds integration package, copies example libs, builds example, deploys to http://[local tomcat installation]/CreditInvoiceOrder">
+
+		<mkdir dir="example/creditinvoiceorder/lib" />
+		<copy todir="example/creditinvoiceorder/lib">
+			<fileset file="${jar.dir}/sveawebpay.jar" />
+			<fileset file="${src.lib.dir}/httpclient-4.3.4.jar" />
+			<fileset file="${src.lib.dir}/httpcore-4.3.2.jar" />			
+			<fileset file="${example.lib.dir}/servlet-api.jar" />
+		</copy>				
+	</target>			
+
+	<target name="creditinvoiceorder" depends="creditinvoiceorder_libs, deploy_creditinvoiceorder.deploy_creditinvoiceorder" 
+		description="builds example CreditInvoiceOrder deploys to http://[local tomcat installation]/InvoiceOrder">
+	</target>
 			
 	<target name="build" depends="src.compile, test.compile" description="Compile src and test"/>
     <target name="clean-build" depends="clean, build" description="Clean, then compile src and test"/>
@@ -218,6 +236,7 @@
     <target name="clean-jar" depends="clean-test, jar" description="Clean, build, unit test and package a jar file"/>
     <target name="clean-integrationtest" depends="clean-jar, integrationtest.compile, integrationtest" description="Run integration tests from created jar file"/>
     <target name="clean-webdrivertest" depends="clean-jar, integrationtest.compile, cardorder, webdrivertest" description="Run webdriver smoke tests using cardorder example"/>
-    <target name="clean-all" depends="clean-jar, invoiceorder, cardorder, integrationtest, webdrivertest" description="Build, deploy examples, run all tests."/>		
-
+	<target name="examples" depends="invoiceorder, cardorder, creditinvoiceorder" description="Build and deploy examples"/>
+    <target name="clean-all" depends="clean-jar, integrationtest, webdrivertest, examples" description="Build, deploy examples, run all tests."/>		
+	
 </project>

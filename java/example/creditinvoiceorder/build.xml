@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<project name="CreditInvoiceOrder" default="deploy_creditinvoiceorder" basedir=".">
+
+	<dirname property="CreditInvoiceOrder.basedir" file="${ant.file.CreditInvoiceOrder}" />
+	<property file="${CreditInvoiceOrder.basedir}/build.properties" />		
+
+	<path id="classpath">
+		<fileset dir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.lib.dir}" includes="servlet-api.jar" />
+		<fileset dir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.lib.dir}" includes="sveawebpay.jar" />
+	</path>
+	
+	<target name="clean">				
+		<echo>Cleaning the ${creditinvoiceorder.build.dir}</echo>
+		<delete dir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.build.dir}" />
+		<delete dir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.dist.dir}" />
+	</target>
+
+	<target name="init" depends="clean">
+		<echo>Creating the build directory</echo>
+		<mkdir dir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.build.dir}/WEB-INF/classes" />
+		<mkdir dir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.build.dir}/WEB-INF/lib" />
+		<mkdir dir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.dist.dir}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<echo>Compile the source files</echo>
+		<javac srcdir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.src.dir}" destdir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.build.dir}/WEB-INF/classes">
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<target name="copy" depends="compile">
+		<copy todir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.build.dir}/WEB-INF">
+			<fileset dir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.web.dir}/WEB-INF" />
+		</copy>
+		<copy todir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.build.dir}">
+			<fileset dir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.web.dir}" />
+		</copy>
+		<copy todir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.build.dir}/WEB-INF/lib">
+			<fileset dir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.lib.dir}">
+				<exclude name="servlet-api.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="war" depends="copy">
+		<echo>Building the war file</echo>
+		<war destfile="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.dist.dir}/${creditinvoiceorder.project.name}.war" webxml="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.build.dir}/WEB-INF/web.xml">
+			<fileset dir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.build.dir}" />
+		</war>
+	</target>
+
+	<target name="deploy_creditinvoiceorder" depends="war">
+		<echo>Deploying .war to local Tomcat</echo>
+		<copy todir="${creditinvoiceorder.tomcat.dir}">
+			<fileset dir="${CreditInvoiceOrder.basedir}/${creditinvoiceorder.dist.dir}">
+				<include name="${creditinvoiceorder.project.name}.war" />
+			</fileset>
+		</copy>
+	</target>
+
+</project>

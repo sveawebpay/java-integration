@@ -21,11 +21,11 @@ import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.webservice.payment.InvoicePayment;
 
-public class InvoiceOrderServlet extends HttpServlet implements Servlet {
+public class CreditInvoiceOrderServlet extends HttpServlet implements Servlet {
 
 	private static final long serialVersionUID = 1L;
 
-	public InvoiceOrderServlet() {
+	public CreditInvoiceOrderServlet() {
 		super();
 	}
 
@@ -44,6 +44,7 @@ public class InvoiceOrderServlet extends HttpServlet implements Servlet {
 		String customerHouseNumber = "1";
 		String customerZipCode = "99999";
 		String customerCity = "Stan";
+		String customerCountry = "Sverige";
 
 		// The customer has bought three items, one "Billy" which cost 700,99 kr excluding vat (25%) and two hotdogs for 5 kr (incl. vat).
 
@@ -97,8 +98,8 @@ public class InvoiceOrderServlet extends HttpServlet implements Servlet {
 		// Then send the request to Svea using the doRequest method, and immediately receive the service response object
 		CreateOrderResponse myResponse = myInvoiceOrderRequest.doRequest();
 		
-		// Pass service response to invoiceorder.jsp view as attribute in HttpServletRequest
-		request.setAttribute("invoiceorder_response", myResponse);
-		request.getRequestDispatcher("/invoiceorder.jsp").forward(request, response);				
+		// Pass service response to creditinvoiceorder.jsp view as attribute in HttpServletRequest
+		request.setAttribute("creditinvoiceorder_response", myResponse);
+		request.getRequestDispatcher("/creditinvoiceorder.jsp").forward(request, response);				
 	}
 }
