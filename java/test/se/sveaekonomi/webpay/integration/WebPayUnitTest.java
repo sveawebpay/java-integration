@@ -3,6 +3,8 @@ package se.sveaekonomi.webpay.integration;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
+import java.util.Date;
+
 import org.junit.Test;
 import org.w3c.dom.NodeList;
 
@@ -293,9 +295,10 @@ public class WebPayUnitTest {
     @Test
     public void test_deliverOrder_validates_all_required_methods_for_deliverCardOrder() {	
 		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
-			.setCountryCode(TestingTool.DefaultTestCountryCode)
-			.setOrderId( 123456L )
-			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
+			//.setOrderId(123456L)													// invoice, partpayment only, required
+		    .setTransactionId(123456L)            				   					// card only, optional -- you can also use setOrderId
+			.setCountryCode(TestingTool.DefaultTestCountryCode)						// required
+		    .setCaptureDate( String.format("%tFT%<tRZ", new Date()) )              	// card only, optional
 		;			
 
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
@@ -310,11 +313,10 @@ public class WebPayUnitTest {
         }			
     }
     @Test
-    public void test_createOrder_validates_missing_required_method_for_deliverCardOrder_setCountryCode() {	
+    public void test_createOrder_validates_missing_required_method_for_deliverCardOrder_setOrderId() {	
 		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
-			//.setCountryCode(TestingTool.DefaultTestCountryCode)
-			.setOrderId( 123456L )
-			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
+			//.setOrderId(123456L)													// invoice, partpayment only, required
+			.setCountryCode(TestingTool.DefaultTestCountryCode)						// required
 		;			
 		
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
@@ -327,7 +329,29 @@ public class WebPayUnitTest {
 		}
 		catch (SveaWebPayException e){			
 	        assertEquals(
-        		"MISSING VALUE - CountryCode must be set.\n", 
+        		"MISSING VALUE - setOrderId is required.\n", 
+    			e.getCause().getMessage()
+    		);			
+        }			
+    }
+    @Test
+    public void test_createOrder_validates_missing_required_method_for_deliverCardOrder_setCountryCode() {	
+		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			.setOrderId(123456L)													// invoice, partpayment only, required
+			//.setCountryCode(TestingTool.DefaultTestCountryCode)					// required
+		;			
+		
+		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
+		try {
+			Requestable request = builder.deliverCardOrder();						
+			//SveaRequest<SveaCreateOrder> sveaRequest = invoicePayment.prepareRequest();					
+			Object soapRequest = request.prepareRequest();		
+			// fail if validation passes
+	        fail();		
+		}
+		catch (SveaWebPayException e){			
+	        assertEquals(
+        		"MISSING VALUE - CountryCode is required, use setCountryCode(...).\n", 
     			e.getCause().getMessage()
     		);			
         }			

@@ -1,5 +1,7 @@
 package se.sveaekonomi.webpay.integration.order.handle;
 
+import java.util.Date;
+
 import se.sveaekonomi.webpay.integration.Requestable;
 import se.sveaekonomi.webpay.integration.adminservice.request.DeliverOrdersRequest;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
@@ -21,6 +23,7 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
     private String distributionType;
     private String invoiceIdToCredit;
     private Integer numberOfCreditDays;
+    private String captureDate;
     
     public DeliverOrderBuilder(ConfigurationProvider config) {
         this.config = config;
@@ -79,6 +82,34 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         return this;
     }
     
+	/**
+	 * card only, optional
+	 * @param date -- date on format YYYY-MM-DD (similar to ISO8601 date)
+	 * @return DeliverOrderBuilder
+	 */
+	public DeliverOrderBuilder setCaptureDate(String captureDate) {
+		this.captureDate = captureDate;
+		return this;
+	}
+	
+    public String getCaptureDate() {
+        return captureDate;
+    }
+    
+	/**
+	 * card only, optional -- alias for setOrderId
+	 * @param transactionId
+	 * @return DeliverOrderBuilder
+	 */
+    public DeliverOrderBuilder setTransactionId(long transactionId) {        
+        return setOrderId( transactionId );
+    }
+    
+    public long getTransactionId() {
+        return getOrderId();
+    }
+    
+    
     /**
      * Updates the order builder with additional information and passes the
      * order builder to the correct request class.
@@ -105,7 +136,25 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
 		return new DeliverOrdersRequest(this);
     }
 
+    
+    /**
+     * deliverCardOrder() is used to set the status of a card order to CONFIRMED
+     * 
+     * A default capturedate equal to the current date will be supplied. This 
+     * may be overridden using the ConfirmTransaction setCaptureDate() method 
+     * on the returned ConfirmTransaction object.
+     * 
+     * @return DeliverPaymentPlan
+     */    
 	public Requestable deliverCardOrder() {
+		this.orderType = "HOSTED"; // TODO use enumeration instead
+		
+        // if no captureDate set, use today's date as default.
+        if( this.getCaptureDate() == null ) {
+        	this.setCaptureDate( String.format("%tFT%<tRZ", new Date()) );
+        }
+		
 		return new ConfirmTransactionRequest(this);
 	}
+
 }

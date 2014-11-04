@@ -6,6 +6,10 @@ public class HandleOrderValidator {
 
     private String errors = "";
     
+    /**
+     * @param order
+     * @return string containing cumulative list of error
+     */
     public String validate(DeliverOrderBuilder order) {
         errors = "";
         validateCountry(order);
