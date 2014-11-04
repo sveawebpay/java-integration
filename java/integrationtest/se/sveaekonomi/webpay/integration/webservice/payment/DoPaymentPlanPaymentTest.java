@@ -11,6 +11,7 @@ import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderRespons
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
+import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 
 public class DoPaymentPlanPaymentTest {
     
