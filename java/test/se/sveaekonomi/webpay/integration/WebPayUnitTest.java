@@ -275,8 +275,7 @@ public class WebPayUnitTest {
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
 			.setOrderId( 123456L )
 			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
-		;
-			
+		;			
 		Requestable request = builder.deliverCardOrder();
 		assertThat( request, instanceOf(ConfirmTransactionRequest.class) );
     }
@@ -291,5 +290,46 @@ public class WebPayUnitTest {
     // .deliverPaymentPlanOrder() without orderrows
 	// TODO
     // .deliverCardOrder()
-	// TODO
+    @Test
+    public void test_deliverOrder_validates_all_required_methods_for_deliverCardOrder() {	
+		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderId( 123456L )
+			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
+		;			
+
+		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
+		try {			
+			Requestable request = builder.deliverCardOrder();						
+			//SveaRequest<SveaCreateOrder> sveaRequest = invoicePayment.prepareRequest();					
+			Object soapRequest = request.prepareRequest();					
+		}
+		catch (SveaWebPayException e){			
+			// fail on validation error
+	        fail();
+        }			
+    }
+    @Test
+    public void test_createOrder_validates_missing_required_method_for_deliverCardOrder_setCountryCode() {	
+		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			//.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderId( 123456L )
+			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
+		;			
+		
+		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
+		try {
+			Requestable request = builder.deliverCardOrder();						
+			//SveaRequest<SveaCreateOrder> sveaRequest = invoicePayment.prepareRequest();					
+			Object soapRequest = request.prepareRequest();		
+			// fail if validation passes
+	        fail();		
+		}
+		catch (SveaWebPayException e){			
+	        assertEquals(
+        		"MISSING VALUE - CountryCode must be set.\n", 
+    			e.getCause().getMessage()
+    		);			
+        }			
+    }
 }
