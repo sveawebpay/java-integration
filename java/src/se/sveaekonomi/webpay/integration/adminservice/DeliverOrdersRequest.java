@@ -1,7 +1,6 @@
-package se.sveaekonomi.webpay.integration.adminservice.request;
+package se.sveaekonomi.webpay.integration.adminservice;
 
 import se.sveaekonomi.webpay.integration.Requestable;
-import se.sveaekonomi.webpay.integration.adminservice.response.DeliverOrdersResponse;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 
 /**

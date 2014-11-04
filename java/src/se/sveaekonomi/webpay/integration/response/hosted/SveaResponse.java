@@ -25,7 +25,7 @@ import se.sveaekonomi.webpay.integration.util.security.Base64Util;
  */
 public class SveaResponse extends Response {
 
-    public final SveaConfig config = new SveaConfig();
+	public final SveaConfig config = new SveaConfig();
     
     private String xml;
     private String transactionId;

@@ -1,4 +1,4 @@
-package se.sveaekonomi.webpay.integration.adminservice.response;
+package se.sveaekonomi.webpay.integration.adminservice;
 
 import se.sveaekonomi.webpay.integration.Respondable;
 

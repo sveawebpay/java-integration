@@ -8,7 +8,7 @@ import java.util.Date;
 import org.junit.Test;
 import org.w3c.dom.NodeList;
 
-import se.sveaekonomi.webpay.integration.adminservice.request.DeliverOrdersRequest;
+import se.sveaekonomi.webpay.integration.adminservice.DeliverOrdersRequest;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
@@ -296,7 +296,7 @@ public class WebPayUnitTest {
     public void test_deliverOrder_validates_all_required_methods_for_deliverCardOrder() {	
 		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
 			//.setOrderId(123456L)													// invoice, partpayment only, required
-		    .setTransactionId(123456L)            				   					// card only, optional -- you can also use setOrderId
+		    .setTransactionId("123456")            				   					// card only, optional -- you can also use setOrderId
 			.setCountryCode(TestingTool.DefaultTestCountryCode)						// required
 		    .setCaptureDate( String.format("%tFT%<tRZ", new Date()) )              	// card only, optional
 		;			

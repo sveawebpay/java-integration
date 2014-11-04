@@ -3,7 +3,7 @@ package se.sveaekonomi.webpay.integration.order.handle;
 import java.util.Date;
 
 import se.sveaekonomi.webpay.integration.Requestable;
-import se.sveaekonomi.webpay.integration.adminservice.request.DeliverOrdersRequest;
+import se.sveaekonomi.webpay.integration.adminservice.DeliverOrdersRequest;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
@@ -98,11 +98,11 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
     
 	/**
 	 * card only, optional -- alias for setOrderId
-	 * @param transactionId
+	 * @param transactionId as string, i.e. as transactionId is returned in HostedPaymentResponse
 	 * @return DeliverOrderBuilder
 	 */
-    public DeliverOrderBuilder setTransactionId(long transactionId) {        
-        return setOrderId( transactionId );
+    public DeliverOrderBuilder setTransactionId( String transactionId) {        
+        return setOrderId( Long.parseLong(transactionId) );
     }
     
     public long getTransactionId() {
@@ -115,7 +115,8 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
      * order builder to the correct request class.
      * @return Requestable
      */
-    public <T extends Requestable> T deliverInvoiceOrder() {
+    @SuppressWarnings("unchecked")
+	public <T extends Requestable> T deliverInvoiceOrder() {
 
     	if( this.orderRows.isEmpty() ) {
 	    	this.orderType = "Invoice";		// TODO use enumeration instead
@@ -151,7 +152,7 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
 		
         // if no captureDate set, use today's date as default.
         if( this.getCaptureDate() == null ) {
-        	this.setCaptureDate( String.format("%tFT%<tRZ", new Date()) );
+        	this.setCaptureDate( String.format("%tF", new Date()) ); //'t' => time, 'F' => ISO 8601 complete date formatted as "%tY-%tm-%td"
         }
 		
 		return new ConfirmTransactionRequest(this);
