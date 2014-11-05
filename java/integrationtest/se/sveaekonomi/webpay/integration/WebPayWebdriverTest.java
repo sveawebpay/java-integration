@@ -64,7 +64,7 @@ public class WebPayWebdriverTest {
                 .addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 //.setOrderDate(TestingTool.DefaultTestDate)
-                .setClientOrderNumber("test_cancelOrder_cancelCardOrder" + Long.toString((new Date()).getTime()))
+                .setClientOrderNumber("test_createCardOrder" + Long.toString((new Date()).getTime()))
                 .setCurrency(TestingTool.DefaultTestCurrency)
         ;
                 
@@ -120,6 +120,10 @@ public class WebPayWebdriverTest {
         return cardOrderResponse;
 	}
 	
+	/**
+	 *  Creates an invoice order and returns the response.
+	 * @return the invoice order response
+	 */
 	public CreateOrderResponse createInvoiceOrder() {
 
 		SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
@@ -214,20 +218,20 @@ public class WebPayWebdriverTest {
     // deliver paymentplan order
     // TODO
     // deliver card order    
-//    @Test
-//    public void test_deliverOrder_deliverCardOrder() {
-//    	    	
-//    	// create an order using defaults
-//    	HostedPaymentResponse order = createCardOrder();    	
-//    	assertTrue(order.isOrderAccepted());
-//
-//    	// deliver order
-//        Respondable response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
-//                .setTransactionId( order.getTransactionId() )
-//                .setCountryCode(TestingTool.DefaultTestCountryCode)
-//                .deliverCardOrder()
-//                .doRequest();
-//        
-//        assertTrue(response.isOrderAccepted());
-//    }
+    @Test
+    public void test_deliverOrder_deliverCardOrder() {
+    	    	
+    	// create an order using defaults
+    	HostedPaymentResponse order = createCardOrder();    	
+    	assertTrue(order.isOrderAccepted());
+    	
+    	// deliver order
+        Respondable response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+                .setTransactionId( order.getTransactionId() )
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .deliverCardOrder()
+                .doRequest();
+        
+        assertTrue(response.isOrderAccepted());
+    }
 }

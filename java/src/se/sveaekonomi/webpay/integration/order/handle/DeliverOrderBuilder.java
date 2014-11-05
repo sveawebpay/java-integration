@@ -9,6 +9,7 @@ import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRe
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 
 /**
@@ -148,7 +149,7 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
      * @return DeliverPaymentPlan
      */    
 	public Requestable deliverCardOrder() {
-		this.orderType = "HOSTED"; // TODO use enumeration instead
+		this.orderType = "HOSTED_ADMIN"; // TODO use enumeration instead, PAYMENTTYPE.HOSTED_ADMIN
 		
         // if no captureDate set, use today's date as default.
         if( this.getCaptureDate() == null ) {
