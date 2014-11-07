@@ -1,7 +1,7 @@
 package se.sveaekonomi.webpay.integration.hosted.helper;
 
 import se.sveaekonomi.webpay.integration.response.Response;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse.PreparePaymentResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.PreparePaymentResponse;
 
 public class PaymentUrl extends Response {
 

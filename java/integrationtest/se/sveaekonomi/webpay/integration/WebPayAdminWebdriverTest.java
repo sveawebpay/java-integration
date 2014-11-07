@@ -9,7 +9,7 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse.AnnulTransactionResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.AnnulTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
@@ -32,6 +32,8 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  */
 public class WebPayAdminWebdriverTest {    
 	
+	/// cancelOrder
+	// invoice
     @Test
     public void test_cancelOrder_cancelInvoiceOrder() {
     	    	
@@ -49,7 +51,7 @@ public class WebPayAdminWebdriverTest {
         assertTrue(response.isOrderAccepted());        
         assertTrue(response instanceof CloseOrderResponse );
     }    
-    
+	// payment plan    
     @Test
     public void test_cancelOrder_cancelPaymentPlanOrder() {
     	    	
@@ -67,7 +69,7 @@ public class WebPayAdminWebdriverTest {
         assertTrue(response.isOrderAccepted());        
         assertTrue(response instanceof CloseOrderResponse );
     }       
-    
+    // card
     @Test
     public void test_cancelOrder_cancelCardOrder() {
     	    	
@@ -139,5 +141,5 @@ public class WebPayAdminWebdriverTest {
     
         assertTrue(response.isOrderAccepted());  
         assertTrue(response instanceof AnnulTransactionResponse );
-    }              
+    }      
 }

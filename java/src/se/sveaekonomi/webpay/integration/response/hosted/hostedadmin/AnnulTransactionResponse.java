@@ -1,4 +1,4 @@
-package se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse;
+package se.sveaekonomi.webpay.integration.response.hosted.hostedadmin;
 
 import java.io.IOException;
 import java.io.StringReader;

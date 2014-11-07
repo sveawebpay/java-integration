@@ -34,7 +34,7 @@ import org.xml.sax.SAXException;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse.HostedAdminResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.HostedAdminResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
@@ -119,7 +119,7 @@ public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
 	public Hashtable<String,String> prepareRequest() {
 
     	// validate request and throw exception if validation fails
-        String errors = validateRequest();
+        String errors = validateOrder();
         
         if (!errors.equals("")) {
             throw new SveaWebPayException("Validation failed", new ValidationException(errors));
@@ -219,6 +219,6 @@ public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
 	/**
 	 * should return string indicating any missing order builder setter methods on validation failure, or empty string
 	 */
-	abstract String validateRequest();
+	abstract String validateOrder();
 	
 }

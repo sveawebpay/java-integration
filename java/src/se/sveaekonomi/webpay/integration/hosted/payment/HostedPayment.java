@@ -43,7 +43,7 @@ import se.sveaekonomi.webpay.integration.hosted.helper.PaymentUrl;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HostedOrderValidator;
 import se.sveaekonomi.webpay.integration.order.validator.IdentityValidator;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadminresponse.PreparePaymentResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.PreparePaymentResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
