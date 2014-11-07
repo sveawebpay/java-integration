@@ -3,10 +3,12 @@ package se.sveaekonomi.webpay.integration;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
+import java.util.Date;
+
 import org.junit.Test;
 import org.w3c.dom.NodeList;
 
-import se.sveaekonomi.webpay.integration.adminservice.request.DeliverOrdersRequest;
+import se.sveaekonomi.webpay.integration.adminservice.DeliverOrdersRequest;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
@@ -275,8 +277,7 @@ public class WebPayUnitTest {
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
 			.setOrderId( 123456L )
 			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
-		;
-			
+		;			
 		Requestable request = builder.deliverCardOrder();
 		assertThat( request, instanceOf(ConfirmTransactionRequest.class) );
     }
@@ -291,5 +292,68 @@ public class WebPayUnitTest {
     // .deliverPaymentPlanOrder() without orderrows
 	// TODO
     // .deliverCardOrder()
-	// TODO
+    @Test
+    public void test_deliverOrder_validates_all_required_methods_for_deliverCardOrder() {	
+		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			//.setOrderId(123456L)													// invoice, partpayment only, required
+		    .setTransactionId("123456")            				   					// card only, optional -- you can also use setOrderId
+			.setCountryCode(TestingTool.DefaultTestCountryCode)						// required
+		    .setCaptureDate( String.format("%tFT%<tRZ", new Date()) )              	// card only, optional
+		;			
+
+		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
+		try {			
+			Requestable request = builder.deliverCardOrder();						
+			//SveaRequest<SveaCreateOrder> sveaRequest = invoicePayment.prepareRequest();					
+			Object soapRequest = request.prepareRequest();					
+		}
+		catch (SveaWebPayException e){			
+			// fail on validation error
+	        fail();
+        }			
+    }
+    @Test
+    public void test_createOrder_validates_missing_required_method_for_deliverCardOrder_setOrderId() {	
+		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			//.setOrderId(123456L)													// invoice, partpayment only, required
+			.setCountryCode(TestingTool.DefaultTestCountryCode)						// required
+		;			
+		
+		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
+		try {
+			Requestable request = builder.deliverCardOrder();						
+			//SveaRequest<SveaCreateOrder> sveaRequest = invoicePayment.prepareRequest();					
+			Object soapRequest = request.prepareRequest();		
+			// fail if validation passes
+	        fail();		
+		}
+		catch (SveaWebPayException e){			
+	        assertEquals(
+        		"MISSING VALUE - setOrderId is required.\n", 
+    			e.getCause().getMessage()
+    		);			
+        }			
+    }
+    @Test
+    public void test_createOrder_validates_missing_required_method_for_deliverCardOrder_setCountryCode() {	
+		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			.setOrderId(123456L)													// invoice, partpayment only, required
+			//.setCountryCode(TestingTool.DefaultTestCountryCode)					// required
+		;			
+		
+		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
+		try {
+			Requestable request = builder.deliverCardOrder();						
+			//SveaRequest<SveaCreateOrder> sveaRequest = invoicePayment.prepareRequest();					
+			Object soapRequest = request.prepareRequest();		
+			// fail if validation passes
+	        fail();		
+		}
+		catch (SveaWebPayException e){			
+	        assertEquals(
+        		"MISSING VALUE - CountryCode is required, use setCountryCode(...).\n", 
+    			e.getCause().getMessage()
+    		);			
+        }			
+    }
 }

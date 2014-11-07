@@ -13,7 +13,9 @@ public interface Requestable {
 
 	// TODO add validateOrder()
 	
-	// TODO add prepareRequest()
+	/**
+	 * prepareRequest() validates the order and returns an inspectable representation of the soap request data
+	 */
 	public <T> T prepareRequest();
 	
 	/**

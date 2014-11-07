@@ -119,7 +119,7 @@ public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
 	public Hashtable<String,String> prepareRequest() {
 
     	// validate request and throw exception if validation fails
-        String errors = validateRequest();
+        String errors = validateOrder();
         
         if (!errors.equals("")) {
             throw new SveaWebPayException("Validation failed", new ValidationException(errors));
@@ -219,6 +219,6 @@ public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
 	/**
 	 * should return string indicating any missing order builder setter methods on validation failure, or empty string
 	 */
-	abstract String validateRequest();
+	abstract String validateOrder();
 	
 }
