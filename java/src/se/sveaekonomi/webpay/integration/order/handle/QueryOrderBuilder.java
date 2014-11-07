@@ -1,12 +1,18 @@
 package se.sveaekonomi.webpay.integration.order.handle;
 
+import java.util.Date;
+
+import se.sveaekonomi.webpay.integration.Requestable;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
+import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
+import se.sveaekonomi.webpay.integration.hosted.hostedadmin.QueryTransactionRequest;
+import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 
 /**
  * @author Kristian Grossman-Madsen
  */
-public class QueryOrderBuilder {
+public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
 	
     protected ConfigurationProvider config;
     protected COUNTRYCODE countryCode;
@@ -55,5 +61,10 @@ public class QueryOrderBuilder {
     }   
     public long getTransactionId() {
         return getOrderId();
-    }	
+    }
+
+
+	public Requestable queryCardOrder() {		
+		return new QueryTransactionRequest(this);
+	}	
 }

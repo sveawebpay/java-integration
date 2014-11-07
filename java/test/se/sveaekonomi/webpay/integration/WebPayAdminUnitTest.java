@@ -3,6 +3,7 @@ package se.sveaekonomi.webpay.integration;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
+import java.util.Date;
 import java.util.Hashtable;
 
 import org.junit.Test;
@@ -11,6 +12,7 @@ import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.AnnulTransactionRequest;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
+import se.sveaekonomi.webpay.integration.hosted.hostedadmin.QueryTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
@@ -23,9 +25,9 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class WebPayAdminUnitTest {    		
 	
-	
-	
     // WebPayAdmin::cancelOrder() -------------------------------------------------------------------------------------	
+	/// returned request class
+	// TODO
 	/// cancelOrder validators
 	// invoice
 	@Test
@@ -226,8 +228,11 @@ public class WebPayAdminUnitTest {
     /// WebPay.queryOrder() --------------------------------------------------------------------------------------------	
 	/// returned request class
 	// .queryInvoiceOrder => AdminService/GetOrdersRequest
+	// TODO
 	// .queryPaymentPlanOrder => AdminService/GetOrdersRequest
+	// TODO
 	// .queryDirectBankOrder => HostedService/QueryTransactionRequest
+	// TODO
 	// .queryCardOrder => HostedService/QueryTransactionRequest
     @Test
     public void test_queryOrder_queryCardOrder_returns_QueryTransactionRequest() {
@@ -247,10 +252,58 @@ public class WebPayAdminUnitTest {
 	// directbank
 	// TODO public void test_validates_all_required_methods_for_queryOrder_queryDirectBankOrder() {
 	// card
-//    public void test_validates_all_required_methods_for_queryOrder_queryCardOrder() {
-//    }
-	
-
-
-
+    @Test
+    public void test_validates_all_required_methods_for_queryOrder_queryCardOrder() {
+		QueryOrderBuilder builder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+			//.setOrderId(123456L)													// invoice, partpayment only, required
+		    .setTransactionId("123456")            				   					// card, direct bank only, optional -- you can also use setOrderId
+			.setCountryCode(TestingTool.DefaultTestCountryCode)						// required
+		;			
+		try {			
+			Requestable request = builder.queryCardOrder();						
+			Object soapRequest = request.prepareRequest();					
+		}
+		catch (SveaWebPayException e){			
+			// fail on validation error
+	        fail();
+        }			 
+    }
+    @Test
+    public void test_createOrder_validates_missing_required_method_for_deliverCardOrder_setOrderId() {	
+		QueryOrderBuilder builder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+			//.setOrderId(123456L)													// invoice, partpayment only, required
+			.setCountryCode(TestingTool.DefaultTestCountryCode)						// required
+		;			
+		try {
+			Requestable request = builder.queryCardOrder();						
+			Object soapRequest = request.prepareRequest();		
+			// fail if validation passes
+	        fail();		
+		}
+		catch (SveaWebPayException e){			
+	        assertEquals(
+        		"MISSING VALUE - setOrderId is required.\n", 
+    			e.getCause().getMessage()
+    		);			
+        }			
+    }
+    @Test
+    public void test_queryOrder_validates_missing_required_method_for_queryCardOrder_setCountryCode() {	
+		QueryOrderBuilder builder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+			.setOrderId(123456L)													// invoice, partpayment only, required
+			//.setCountryCode(TestingTool.DefaultTestCountryCode)					// required
+		;			
+		try {
+			Requestable request = builder.queryCardOrder();						
+			Object soapRequest = request.prepareRequest();		
+			// fail if validation passes
+	        fail();		
+		}
+		catch (SveaWebPayException e){			
+	        assertEquals(
+        		"MISSING VALUE - CountryCode is required, use setCountryCode(...).\n", 
+    			e.getCause().getMessage()
+    		);			
+        }			
+    }
 }
