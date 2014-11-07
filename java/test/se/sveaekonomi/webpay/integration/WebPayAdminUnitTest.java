@@ -1,5 +1,6 @@
 package se.sveaekonomi.webpay.integration;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
 import java.util.Hashtable;
@@ -9,7 +10,10 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.AnnulTransactionRequest;
+import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCloseOrder;
@@ -21,7 +25,7 @@ public class WebPayAdminUnitTest {
 	
     // WebPayAdmin::cancelOrder() -------------------------------------------------------------------------------------	
 	/// cancelOrder validators
-	// validate required methods for invoice orders below:
+	// invoice
 	@Test
     public void test_validates_all_required_methods_for_cancelOrder_cancelInvoiceOrder() {
     	    	
@@ -85,9 +89,8 @@ public class WebPayAdminUnitTest {
     			e.getCause().getMessage()
     		);	
 		}
-    }		
-	
-	// validate required methods for payment plan orders below:
+    }			
+	// paymentplan
 	@Test
     public void test_validates_all_required_methods_for_cancelOrder_cancelPaymentPlanOrder() {
     	    	
@@ -151,9 +154,8 @@ public class WebPayAdminUnitTest {
     			e.getCause().getMessage()
     		);	
 		}
-    }	
-	
-	// validate required methods for card orders below:
+    }		
+	// card
 	@Test
     public void test_validates_all_required_methods_for_cancelOrder_cancelCardOrder() {
     	    	
@@ -171,8 +173,7 @@ public class WebPayAdminUnitTest {
 			// fail on validation error
 	        fail("unexpected SveaWebPayException");
         }
-    }
-	
+    }	
 	@Test
     public void test_missing_required_method_for_cancelOrder_cancelCardOrder_setOrderId() {
     	    	
@@ -196,7 +197,6 @@ public class WebPayAdminUnitTest {
     		);	
 		}
     }	    		
-
 	@Test
     public void test_missing_required_method_for_cancelOrder_cancelCardOrder_setCountryCode() {
 	    	    	
@@ -220,4 +220,35 @@ public class WebPayAdminUnitTest {
     		);	
 		}
     }		
+
+    /// WebPay.queryOrder() --------------------------------------------------------------------------------------------	
+	/// returned request class
+	// .queryInvoiceOrder => AdminService/GetOrdersRequest
+	// .queryPaymentPlanOrder => AdminService/GetOrdersRequest
+	// .queryDirectBankOrder => HostedService/QueryTransactionRequest
+	// .queryCardOrder => HostedService/QueryTransactionRequest
+    @Test
+    public void test_queryOrder_queryCardOrder_returns_QueryTransactionRequest() {
+		QueryOrderBuilder builder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+			.setOrderId()          // required
+			.setCountryCode()      // required      
+		;
+		Requestable request = builder.queryCardOrder();
+		assertThat( request, instanceOf(QueryTransactionRequest.class));
+	}
+    
+    /// builder object validation
+	// invoice
+	// TODO public void test_validates_all_required_methods_for_queryOrder_queryInvoiceOrder(){
+	// paymentplan
+	// TODO public void test_validates_all_required_methods_for_queryOrder_queryPaymentPlanOrder() {
+	// directbank
+	// TODO public void test_validates_all_required_methods_for_queryOrder_queryDirectBankOrder() {
+	// card
+//    public void test_validates_all_required_methods_for_queryOrder_queryCardOrder() {
+//    }
+	
+
+
+
 }

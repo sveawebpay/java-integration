@@ -32,7 +32,7 @@ import org.openqa.selenium.support.ui.WebDriverWait;
  */
 public class WebPayAdminWebdriverTest {    
 	
-	/// cancelOrder
+    /// WebPayAdmin.cancelOrder() --------------------------------------------------------------------------------------
 	// invoice
     @Test
     public void test_cancelOrder_cancelInvoiceOrder() {
@@ -142,4 +142,14 @@ public class WebPayAdminWebdriverTest {
         assertTrue(response.isOrderAccepted());  
         assertTrue(response instanceof AnnulTransactionResponse );
     }      
+
+    /// WebPayAdmin.queryOrder() ---------------------------------------------------------------------------------------
+    // invoice
+    // TODO
+    // paymentplan
+    // TODO
+    // card
+    // TODO
+    // directbank
+    // TODO
 }
