@@ -13,6 +13,8 @@ import se.sveaekonomi.webpay.integration.hosted.hostedadmin.AnnulTransactionRequ
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
@@ -230,8 +232,8 @@ public class WebPayAdminUnitTest {
     @Test
     public void test_queryOrder_queryCardOrder_returns_QueryTransactionRequest() {
 		QueryOrderBuilder builder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
-			.setOrderId()          // required
-			.setCountryCode()      // required      
+			.setTransactionId( "987654" )
+			.setCountryCode( COUNTRYCODE.SE )    
 		;
 		Requestable request = builder.queryCardOrder();
 		assertThat( request, instanceOf(QueryTransactionRequest.class));

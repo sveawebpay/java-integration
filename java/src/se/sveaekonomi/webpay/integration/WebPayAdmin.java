@@ -4,6 +4,7 @@ import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CloseOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
 
 /**
  * @author Kristian Grossman-Madsen
@@ -41,12 +42,13 @@ public class WebPayAdmin {
      * ...
      * 
 	 */
-	public static QueryOrderBuilder queryOrderBuilder(ConfigurationProvider config) {
+	public static QueryOrderBuilder queryOrder(ConfigurationProvider config) {
         if (config == null) {
             throw new SveaWebPayException("A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()");
         }    	
         
         return new QueryOrderBuilder(config);		
 	}
+
 
 }
