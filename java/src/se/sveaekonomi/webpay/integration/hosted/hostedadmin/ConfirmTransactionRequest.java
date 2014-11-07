@@ -2,6 +2,7 @@ package se.sveaekonomi.webpay.integration.hosted.hostedadmin;
 
 import java.io.ByteArrayOutputStream;
 import java.io.UnsupportedEncodingException;
+import java.util.Hashtable;
 
 import javax.xml.bind.ValidationException;
 import javax.xml.stream.XMLOutputFactory;
@@ -26,15 +27,13 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 public class ConfirmTransactionRequest extends HostedAdminRequest<DeliverOrderBuilder> implements Requestable {
 	
 	public ConfirmTransactionRequest( DeliverOrderBuilder orderbuilder ) {
-		super(orderbuilder, "annul");
-		
+		super(orderbuilder, "confirm");	
 	}
 	
 	@Override
 	public ConfirmTransactionResponse doRequest() {
 		// HERE -- call parent doRequest, make sure to return correct type, having parsed the response
 		return super.doRequest();
-//		return new ConfirmTransactionResponse();
 	}
 	
 	/**
@@ -97,8 +96,15 @@ public class ConfirmTransactionRequest extends HostedAdminRequest<DeliverOrderBu
 	}
 	
 	// parse response message into AnnulTransactionResponse
+	@SuppressWarnings("unchecked")
 	public ConfirmTransactionResponse parseResponse(String message) {
 		return new ConfirmTransactionResponse(message, this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.order.getCountryCode()));
 	}
 
+	@Override
+	@SuppressWarnings("unchecked")
+	public Hashtable<String,String> prepareRequest() {		
+		return super.prepareRequest();
+	}
+	
 }

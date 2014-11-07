@@ -63,6 +63,7 @@ public class AnnulTransactionRequest extends HostedAdminRequest<CancelOrderBuild
 	}
 
 	// parse response message into AnnulTransactionResponse
+	@SuppressWarnings("unchecked")
 	public AnnulTransactionResponse parseResponse(String message) {
 		return new AnnulTransactionResponse(message, this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.order.getCountryCode()));
 	}
