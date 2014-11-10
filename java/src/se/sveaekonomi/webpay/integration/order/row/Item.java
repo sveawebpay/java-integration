@@ -1,39 +1,40 @@
 package se.sveaekonomi.webpay.integration.order.row;
 
+import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 
 /**
- * Use to specify types of customer, fees, discounts or row.
+ * @deprecated -- use class WebPayItem methods instead.
  * @author klar-sar
  */
 public class Item {
     
     public static OrderRowBuilder orderRow() {
-        return new OrderRowBuilder();
+        return WebPayItem.orderRow();
    }
     
    public static IndividualCustomer individualCustomer() {
-       return new IndividualCustomer();
+       return WebPayItem.individualCustomer();
    }
    
    public static CompanyCustomer companyCustomer() {
-       return new CompanyCustomer();
+       return WebPayItem.companyCustomer();
    }
    
    public static ShippingFeeBuilder shippingFee() {
-       return new ShippingFeeBuilder();
+       return WebPayItem.shippingFee();
    }
    
    public static InvoiceFeeBuilder invoiceFee() {
-       return new InvoiceFeeBuilder();
+       return WebPayItem.invoiceFee();
    }
    
    public static FixedDiscountBuilder fixedDiscount() {
-       return new FixedDiscountBuilder();
+       return WebPayItem.fixedDiscount();
    }
    
    public static RelativeDiscountBuilder relativeDiscount() {
-       return new RelativeDiscountBuilder();
+       return WebPayItem.relativeDiscount();
    }
 }
