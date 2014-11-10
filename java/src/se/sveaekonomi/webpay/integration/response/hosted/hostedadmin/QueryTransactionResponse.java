@@ -139,7 +139,7 @@ public class QueryTransactionResponse extends HostedAdminResponse implements Res
 					this.setChname(getTagValue(element, "chname"));
 					this.setAuthCode(getTagValue(element, "authCode"));
 
-					// TODO??? add customer info -- not in php package... backport?
+					// TODO??? customer info -- not in php package... backport?
 					
 					// HERE! Add NumberedOrderRows class, iterate over the nodes in the 'orderrows' and for each add a new NumberedOrderRow.
 					//this.numberedOrderRows = TODO ... 					
