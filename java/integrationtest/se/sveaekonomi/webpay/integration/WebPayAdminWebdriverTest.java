@@ -9,7 +9,9 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.AnnulTransactionResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.QueryTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
@@ -149,7 +151,108 @@ public class WebPayAdminWebdriverTest {
     // paymentplan
     // TODO
     // card
-    // TODO
+    @Test
+    public void test_queryOrder_queryCardOrder_single_order_row() {
+        // created w/java package TODO make self-contained using webdriver to create card order     
+        long createdOrderId = 587673L;  
+        
+        QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
+            .setOrderId( createdOrderId )
+            .setCountryCode( COUNTRYCODE.SE )
+        ;                
+        QueryTransactionResponse response = queryOrderBuilder.queryCardOrder().doRequest();         
+        
+        assertTrue( response.isOrderAccepted() );     
+        
+        // expected xml response:
+		//        <?xml version="1.0" encoding="UTF-8"?><response>
+		//        <transaction id="587673">
+		//          <customerrefno>test_cancelOrder_cancelCardOrder1413208130564</customerrefno>
+		//          <merchantid>1130</merchantid>
+		//          <status>SUCCESS</status>
+		//          <amount>12500</amount>
+		//          <currency>SEK</currency>
+		//          <vat>2500</vat>
+		//          <capturedamount>12500</capturedamount>
+		//          <authorizedamount>12500</authorizedamount>
+		//          <created>2014-10-13 15:48:56.487</created>
+		//          <creditstatus>CREDNONE</creditstatus>
+		//          <creditedamount>0</creditedamount>
+		//          <merchantresponsecode>0</merchantresponsecode>
+		//          <paymentmethod>KORTCERT</paymentmethod>
+		//          <callbackurl/>
+		//          <capturedate>2014-10-14 00:15:10.287</capturedate>
+		//          <subscriptionid/>
+		//          <subscriptiontype/>
+		//          <customer id="13662">
+		//            <firstname>Tess</firstname>
+		//            <lastname>Persson</lastname>
+		//            <initials>SB</initials>
+		//            <email>test@svea.com</email>
+		//            <ssn>194605092222</ssn>
+		//            <address>Testgatan</address>
+		//            <address2>c/o Eriksson, Erik</address2>
+		//            <city>Stan</city>
+		//            <country>SE</country>
+		//            <zip>99999</zip>
+		//            <phone>0811111111</phone>
+		//            <vatnumber/>
+		//            <housenumber>1</housenumber>
+		//            <companyname/>
+		//            <fullname/>
+		//          </customer>
+		//          <orderrows>
+		//            <row>
+		//              <id>55950</id>
+		//              <name>orderrow 1</name>
+		//              <amount>12500</amount>
+		//              <vat>2500</vat>
+		//              <description>description 1</description>
+		//              <quantity>1.0</quantity>
+		//              <sku/>
+		//              <unit/>
+		//            </row>
+		//          </orderrows>
+		//        </transaction>
+		//        <statuscode>0</statuscode>
+		//      </response>
+               
+		assertEquals("587673", response.getTransactionId() );
+		assertEquals("test_cancelOrder_cancelCardOrder1413208130564", response.getClientOrderNumber() );
+		assertEquals("1130", response.getMerchantId());
+		assertEquals("SUCCESS", response.getStatus());
+		assertEquals("12500", response.getAmount());
+		assertEquals("SEK", response.getCurrency());
+		assertEquals("2500", response.getVat());
+		assertEquals("12500", response.getCapturedAmount());
+		assertEquals("12500", response.getAuthorizedAmount());									
+		assertEquals("2014-10-13 15:48:56.487", response.getCreated());					
+		assertEquals("CREDNONE", response.getCreditstatus());
+		assertEquals("0", response.getCreditedAmount());						// TODO test
+		assertEquals("0", response.getMerchantResponseCode());					
+		assertEquals("KORTCERT", response.getPaymentMethod());
+		assertEquals(null, response.getCallbackUrl());						// TODO test
+		assertEquals("2014-10-14 00:15:10.287", response.getCaptureDate());
+		assertEquals(null, response.getSubscriptionId());					// TODO test
+		assertEquals(null, response.getSubscriptionType());
+		assertEquals(null, response.getCardType());								
+		assertEquals(null, response.getMaskedCardNumber());						
+		assertEquals(null, response.getEci());										
+		assertEquals(null, response.getMdstatus());
+		assertEquals(null, response.getExpiryYear());
+		assertEquals(null, response.getExpiryMonth());
+		assertEquals(null, response.getChname());
+		assertEquals(null, response.getAuthCode());			        
+		
+		// customer entry is ignored		
+		// TODO test order rows:		
+//        assertEquals("1", response.numberedOrderRows[0].rowNumber );
+//        assertEquals("1.00", response.numberedOrderRows[0].quantity );
+//        assertEquals("100.00", response.numberedOrderRows[0].amountExVat );
+//        assertEquals("25", response.numberedOrderRows[0].vatPercent );
+//        assertEquals("orderrow 1", response.numberedOrderRows[0].name );
+//        assertEquals("description 1", response.numberedOrderRows[0].description );              	
+    }
     // directbank
     // TODO
 }
