@@ -31,9 +31,11 @@ public class PaymentPlanPricePerMonthTest {
         List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(2000.0, paymentPlanParams);
         
         assertEquals("213060", result.get(0).get("campaignCode"));
-        assertEquals("2029", result.get(0).get("pricePerMonth"));
-        
-        assertEquals("202", result.get(1).get("pricePerMonth"));
+        assertEquals("2029", result.get(0).get("pricePerMonth"));        
+        assertEquals("223060", result.get(1).get("campaignCode"));
+        assertEquals("2029", result.get(1).get("pricePerMonth"));
+        assertEquals("310012", result.get(2).get("campaignCode"));
+        assertEquals("202", result.get(2).get("pricePerMonth"));
     }
     
     @Test
