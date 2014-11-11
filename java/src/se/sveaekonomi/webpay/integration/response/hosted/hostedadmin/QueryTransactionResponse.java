@@ -2,6 +2,7 @@ package se.sveaekonomi.webpay.integration.response.hosted.hostedadmin;
 
 import java.io.IOException;
 import java.io.StringReader;
+import java.util.ArrayList;
 
 import javax.xml.parsers.DocumentBuilder;
 import javax.xml.parsers.DocumentBuilderFactory;
@@ -9,87 +10,109 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
+import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
 import se.sveaekonomi.webpay.integration.Respondable;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
+import se.sveaekonomi.webpay.integration.util.constant.OrderRowStatus;
 
-public class QueryTransactionResponse extends HostedAdminResponse implements Respondable {
-	
+public class QueryTransactionResponse extends HostedAdminResponse implements
+		Respondable {
+
 	private String rawResponse;
-    /** $transactionId  -- the order id at Svea */	
+	/** transactionId -- the order id at Svea */
 	private String transactionid;
-    /** $clientOrderNumber -- the customer reference number, i.e. order number */
+	/** clientOrderNumber -- the customer reference number, i.e. order number */
 	private String clientOrderNumber;
-    /** $merchantId -- the merchant id */
+	/** merchantId -- the merchant id */
 	private String merchantId;
-    /** $status -- Latest transaction status, one of {AUTHORIZED, CONFIRMED, SUCCESS} */
+	/**
+	 * status -- Latest transaction status, one of {AUTHORIZED, CONFIRMED,
+	 * SUCCESS}
+	 */
 	private String status;
-    /** $amount -- Total amount including VAT, in minor currency (e.g. SEK 10.50 = 1050) */
+	/**
+	 * amount -- Total amount including VAT, in minor currency (e.g. SEK 10.50 =
+	 * 1050)
+	 */
 	private String amount;
-    /** $currency -- ISO 4217 alphabetic, e.g. SEK */
+	/** currency -- ISO 4217 alphabetic, e.g. SEK */
 	private String currency;
-    /** $vat -- VAT, in minor currency */
+	/** vat -- VAT, in minor currency */
 	private String vat;
-    /** $capturedamount -- Captured amount */
+	/** capturedamount -- Captured amount */
 	private String capturedamount;
-    /** $authorizedamount -- Authorized amount */
+	/** authorizedamount -- Authorized amount */
 	private String authorizedamount;
-    /** $created -- Timestamp when transaction was created in Sveas' system, e.g. 2011-09-27 16:55:01.21 */
+	/**
+	 * created -- Timestamp when transaction was created in Sveas' system, e.g.
+	 * 2011-09-27 16:55:01.21
+	 */
 	private String created;
-    /** $creditstatus -- Status of the last credit attempt */
+	/** creditstatus -- Status of the last credit attempt */
 	private String creditstatus;
-    /** $creditedamount -- Total amount that has been credited, in minor currency */
+	/** creditedamount -- Total amount that has been credited, in minor currency */
 	private String creditedamount;
-    /** $merchantresponsecode -- Last statuscode response returned to merchant */
+	/** merchantresponsecode -- Last statuscode response returned to merchant */
 	private String merchantresponsecode;
-    /** $paymentMethod */
+	/** paymentMethod */
 	private String paymentMethod;
-    /** @var NumberedOrderRow[] $numberedOrderRows  array of NumberedOrderRows w/set Name, Description, ArticleNumber, AmountExVat, VatPercent, Quantity and Unit, rowNumber */
-	// TODO private NumberedOrderRow[] numberedOrderRows
-	
-    /** $callbackurl */
+	/**
+	 * NumberedOrderRows w/set Name, Description, ArticleNumber, AmountExVat,
+	 * VatPercent, Quantity and Unit, rowNumber
+	 */
+	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
+	/** callbackurl */
 	private String callbackurl;
-    /** $capturedate -- The date the transaction was captured, e.g. 2011-09-27 16:55:01.21 */ 
+	/**
+	 * capturedate -- The date the transaction was captured, e.g. 2011-09-27
+	 * 16:55:01.21
+	 */
 	private String capturedate;
-    /** $subscriptionId */
+	/** subscriptionId */
 	private String subscriptionId;
-    /** $subscriptiontype */
+	/** subscriptiontype */
 	private String subscriptiontype;
-    /** $cardType */
+	/** cardType */
 	private String cardType;
-    /** $maskedCardNumber */
+	/** maskedCardNumber */
 	private String maskedCardNumber;
-    /** $eci -- Enrollment status from MPI. If the card is 3Dsecure enabled or not. */
+	/**
+	 * eci -- Enrollment status from MPI. If the card is 3Dsecure enabled or
+	 * not.
+	 */
 	private String eci;
-    /** $mdstatus -- Value calculated from eci as requested by acquiring bank. */
+	/** mdstatus -- Value calculated from eci as requested by acquiring bank. */
 	private String mdstatus;
-    /** $expiryYear -- Expire year of the card */
+	/** expiryYear -- Expire year of the card */
 	private String expiryYear;
-    /** $expiryMonth -- Expire month of the month */
+	/** expiryMonth -- Expire month of the month */
 	private String expiryMonth;
-    /** $chname -- Cardholder name as entered by cardholder */
+	/** chname -- Cardholder name as entered by cardholder */
 	private String chname;
-    /** $authCode -- EDB authorization code */
+	/** authCode -- EDB authorization code */
 	private String authCode;
-	
+
 	public void setTransactionId(String transactionid) {
 		this.transactionid = transactionid;
 	}
 
 	public QueryTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
-		this.rawResponse = this.xml;		
+		this.rawResponse = this.xml;
+		this.setNumberedOrderRows(new ArrayList<NumberedOrderRowBuilder>());
 		this.setValues();
-	}	
-	
-	/** 
-	 * parses response xml and sets response attributes 
+	}
+
+	/**
+	 * parses response xml and sets response attributes
 	 */
-	void setValues() {		
-				
+	void setValues() {
+
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
 		try {
@@ -101,7 +124,8 @@ public class QueryTransactionResponse extends HostedAdminResponse implements Res
 			for (int i = 0; i < size; i++) {
 				Element element = (Element) nodeList.item(i);
 
-				int status = Integer.parseInt(getTagValue(element, "statuscode"));
+				int status = Integer
+						.parseInt(getTagValue(element, "statuscode"));
 				if (status == 0) {
 					this.setOrderAccepted(true);
 					this.setResultCode("0 (ORDER_ACCEPTED)");
@@ -109,29 +133,39 @@ public class QueryTransactionResponse extends HostedAdminResponse implements Res
 					this.setOrderAccepted(false);
 					setErrorParams(status);
 				}
-				
-				if( this.isOrderAccepted() ) {	// don't attempt to parse a bad response
 
-					this.setTransactionId(getTagAttribute(element, "transaction", "id"));
-					this.setClientOrderNumber(getTagValue(element, "customerrefno"));
+				if (this.isOrderAccepted()) { // don't attempt to parse a bad
+												// response
+
+					this.setTransactionId(getTagAttribute(element,
+							"transaction", "id"));
+					this.setClientOrderNumber(getTagValue(element,
+							"customerrefno"));
 					this.setMerchantId(getTagValue(element, "merchantid"));
 					this.setStatus(getTagValue(element, "status"));
 					this.setAmount(getTagValue(element, "amount"));
 					this.setCurrency(getTagValue(element, "currency"));
 					this.setVat(getTagValue(element, "vat"));
-					this.setCapturedamount(getTagValue(element, "capturedamount"));
-					this.setAuthorizedamount(getTagValue(element, "authorizedamount"));									
-					this.setCreated(getTagValue(element, "created"));					
+					this.setCapturedamount(getTagValue(element,
+							"capturedamount"));
+					this.setAuthorizedamount(getTagValue(element,
+							"authorizedamount"));
+					this.setCreated(getTagValue(element, "created"));
 					this.setCreditstatus(getTagValue(element, "creditstatus"));
-					this.setCreditedamount(getTagValue(element, "creditedamount"));
-					this.setMerchantresponsecode(getTagValue(element, "merchantresponsecode"));					
+					this.setCreditedamount(getTagValue(element,
+							"creditedamount"));
+					this.setMerchantresponsecode(getTagValue(element,
+							"merchantresponsecode"));
 					this.setPaymentMethod(getTagValue(element, "paymentmethod"));
 					this.setCallbackUrl(getTagValue(element, "callbackurl"));
 					this.setCapturedate(getTagValue(element, "capturedate"));
-					this.setSubscriptionId(getTagValue(element, "subscriptionid"));
-					this.setSubscriptiontype(getTagValue(element, "subscriptiontype"));
+					this.setSubscriptionId(getTagValue(element,
+							"subscriptionid"));
+					this.setSubscriptiontype(getTagValue(element,
+							"subscriptiontype"));
 					this.setCardType(getTagValue(element, "cardType"));
-					this.setMaskedCardNumber(getTagValue(element, "maskedcardno"));
+					this.setMaskedCardNumber(getTagValue(element,
+							"maskedcardno"));
 					this.setEci(getTagValue(element, "eci"));
 					this.setMdstatus(getTagValue(element, "mdstatus"));
 					this.setExpiryYear(getTagValue(element, "expiryyear"));
@@ -139,17 +173,34 @@ public class QueryTransactionResponse extends HostedAdminResponse implements Res
 					this.setChname(getTagValue(element, "chname"));
 					this.setAuthCode(getTagValue(element, "authCode"));
 
-					// TODO??? customer info -- not in php package... backport?
-					
-					// HERE! Add NumberedOrderRows class, iterate over the nodes in the 'orderrows' and for each add a new NumberedOrderRow.
-					//this.numberedOrderRows = TODO ... 					
-//					if( getTagValue(element, "orderrows") != null ) {
-//						getTagValue(element, "orderrows")
-//					}
-					
-					
-					
-					
+
+
+					NodeList orderrows = getTagNodes(element, "orderrows");
+					for (int r = 0; r < orderrows.getLength(); r++) {
+						Element row = (Element) orderrows.item(r);
+						NumberedOrderRowBuilder nrow = new NumberedOrderRowBuilder();
+
+						nrow.setName(getTagValue(row,"name"));
+						
+						float row_amount = Float.valueOf( getTagValue(row,"amount") );	// centessimal
+						float row_vat = Float.valueOf( getTagValue(row,"vat") ); // centessimal
+						float row_amountExVat = (row_amount-row_vat);
+						float row_vatPercent = (row_vat/(row_amountExVat));
+						
+						nrow.setAmountExVat( row_amountExVat /100f ); 
+						nrow.setVatPercent( row_vatPercent *100f);
+						nrow.setDescription(getTagValue(row,"description"));
+						nrow.setQuantity( Double.valueOf( getTagValue(row,"quantity") ) );
+						nrow.setArticleNumber(getTagValue(row,"sku"));
+						nrow.setUnit(getTagValue(row,"unit"));
+
+						nrow.setCreditInvoiceId(null);
+						nrow.setInvoiceId(null);
+						nrow.setRowNumber(r+1);
+						nrow.setStatus(null);
+						
+						this.numberedOrderRows.add(nrow);
+					}
 				}
 			}
 		} catch (ParserConfigurationException e) {
@@ -160,12 +211,12 @@ public class QueryTransactionResponse extends HostedAdminResponse implements Res
 			throw new SveaWebPayException("IOException", e);
 		}
 	}
-	
-    public String getRawResponse() {
+
+	public String getRawResponse() {
 		return rawResponse;
 	}
 
-    public String getTransactionId() {
+	public String getTransactionId() {
 		return transactionid;
 	}
 
@@ -369,5 +420,13 @@ public class QueryTransactionResponse extends HostedAdminResponse implements Res
 		this.expiryMonth = expiryMonth;
 	}
 
-	
+	public ArrayList<NumberedOrderRowBuilder> getNumberedOrderRows() {
+		return numberedOrderRows;
+	}
+
+	public void setNumberedOrderRows(
+			ArrayList<NumberedOrderRowBuilder> numberedOrderRows) {
+		this.numberedOrderRows = numberedOrderRows;
+	}
+
 }

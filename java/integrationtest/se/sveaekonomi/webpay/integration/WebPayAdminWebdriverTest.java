@@ -10,6 +10,7 @@ import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.AnnulTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.QueryTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
@@ -243,16 +244,45 @@ public class WebPayAdminWebdriverTest {
 		assertEquals(null, response.getExpiryMonth());
 		assertEquals(null, response.getChname());
 		assertEquals(null, response.getAuthCode());			        
-		
-		// customer entry is ignored		
-		// TODO test order rows:		
-//        assertEquals("1", response.numberedOrderRows[0].rowNumber );
-//        assertEquals("1.00", response.numberedOrderRows[0].quantity );
-//        assertEquals("100.00", response.numberedOrderRows[0].amountExVat );
-//        assertEquals("25", response.numberedOrderRows[0].vatPercent );
-//        assertEquals("orderrow 1", response.numberedOrderRows[0].name );
-//        assertEquals("description 1", response.numberedOrderRows[0].description );              	
+
+
+        assertEquals( 1, response.getNumberedOrderRows().get(0).getRowNumber() );
+        assertEquals( Double.valueOf(1.00), response.getNumberedOrderRows().get(0).getQuantity() ); // first Double.valueOf disambiguates double/Double
+        assertEquals( Double.valueOf(100.00), response.getNumberedOrderRows().get(0).getAmountExVat() );
+        assertEquals( Double.valueOf(25.00), response.getNumberedOrderRows().get(0).getVatPercent() ); 
+        assertEquals( "orderrow 1", response.getNumberedOrderRows().get(0).getName() );
+        assertEquals( "description 1", response.getNumberedOrderRows().get(0).getDescription() );        	
     }
+
+    @Test
+    public void test_queryOrder_queryCardOrder_multiple_order_row() {
+        // created w/java package TODO make self-contained using webdriver to create card order     
+        long createdOrderId = 587679L;  
+        
+        QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
+            .setOrderId( createdOrderId )
+            .setCountryCode( COUNTRYCODE.SE )
+        ;                
+        QueryTransactionResponse response = queryOrderBuilder.queryCardOrder().doRequest();         
+        
+        assertTrue( response.isOrderAccepted() );     
+           
+		assertEquals( 1, response.getNumberedOrderRows().get(0).getRowNumber() );
+        assertEquals( Double.valueOf(1.00), response.getNumberedOrderRows().get(0).getQuantity() ); // first Double.valueOf disambiguates double/Double
+        assertEquals( Double.valueOf(100.00), response.getNumberedOrderRows().get(0).getAmountExVat() );
+        assertEquals( Double.valueOf(25.00), response.getNumberedOrderRows().get(0).getVatPercent() ); 
+        assertEquals( "orderrow 1", response.getNumberedOrderRows().get(0).getName() );
+        assertEquals( "description 1", response.getNumberedOrderRows().get(0).getDescription() );        	
+
+		assertEquals( 2, response.getNumberedOrderRows().get(1).getRowNumber() );
+        assertEquals( Double.valueOf(1.00), response.getNumberedOrderRows().get(1).getQuantity() ); // first Double.valueOf disambiguates double/Double
+        assertEquals( Double.valueOf(100.00), response.getNumberedOrderRows().get(1).getAmountExVat() );
+        assertEquals( Double.valueOf(25.00), response.getNumberedOrderRows().get(1).getVatPercent() ); 
+        assertEquals( "orderrow 2", response.getNumberedOrderRows().get(1).getName() );
+        assertEquals( "description 2", response.getNumberedOrderRows().get(1).getDescription() );  
+    
+	}
+    
     // directbank
     // TODO
 }
