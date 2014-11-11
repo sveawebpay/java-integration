@@ -411,7 +411,7 @@ public class TestingTool {
         
         // include customer reference with test name if passed in
         if( nameOfOriginatingTest != null ) {
-            order.setCustomerReference(nameOfOriginatingTest);
+            order.setCustomerReference(nameOfOriginatingTest.substring(0, Math.min(nameOfOriginatingTest.length(),30)));
         }
         
         // break and inspect here, if needed
@@ -444,9 +444,12 @@ public class TestingTool {
                 .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                 .setOrderDate(TestingTool.DefaultTestDate)
                 .setCurrency(TestingTool.DefaultTestCurrency)
-                .setCustomerReference(nameOfOriginatingTest)
     	;
 
+        if( nameOfOriginatingTest != null ) {
+            order.setCustomerReference(nameOfOriginatingTest.substring(0, Math.min(nameOfOriginatingTest.length(),30)));
+        }
+        
     	// get payment plan params
         PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
