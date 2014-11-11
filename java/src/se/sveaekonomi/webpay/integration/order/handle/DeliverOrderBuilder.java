@@ -43,6 +43,9 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         return orderId;
     }
     
+    /**
+     * required, invoice or payment plan only, order to deliver
+     */
     public DeliverOrderBuilder setOrderId(long orderId) {
         this.orderId = orderId;
         return this;
