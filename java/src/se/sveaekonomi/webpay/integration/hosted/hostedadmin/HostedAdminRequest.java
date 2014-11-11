@@ -190,7 +190,6 @@ public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
 					return sb.toString();
 				};	
 			};	
-			
 			String xmlResponse = client.execute(post, rh);
 	
 			String messageInBase64 = getResponseMessageFromXml( xmlResponse );
@@ -199,7 +198,10 @@ public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
 			
 	    } catch (IllegalStateException ex) {
 	        throw new SveaWebPayException("IllegalStateException", ex);
-	    } catch (IOException ex) {
+	    } 
+		catch (IOException ex) {
+			//System.out.println(ex.toString());
+			//System.out.println(((HttpResponseException)ex).getStatusCode());
 	        throw new SveaWebPayException("IOException", ex);
 	    }		
 	}

@@ -25,19 +25,36 @@ public class Response {
             this.setErrorMessage(getTagValue(node, "ErrorMessage"));
         }
     }
-    
-    protected String getTagValue(Element elementNode, String tagName) {
+
+    // get child nodes from a node with name "tag" , or null if not found
+    protected NodeList getTagNodes( Element elementNode, String tagName ) {
         NodeList nodeList = elementNode.getElementsByTagName(tagName);
         Element element = (Element) nodeList.item(0);
         
         if (element != null && element.hasChildNodes()) {
             NodeList textList = element.getChildNodes();
-            return (textList.item(0)).getNodeValue().trim();
+            return textList;
+        }
+        
+        return null;
+    }
+    
+    // get node value from a node with name "tag", or null if not found
+    protected String getTagValue(Element elementNode, String tagName) {
+        NodeList nodeList = elementNode.getElementsByTagName(tagName);
+        Element element = (Element) nodeList.item(0);
+        
+        if (element != null && element.hasChildNodes()) {
+            NodeList textList = element.getChildNodes();            
+            Node node = textList.item(0);
+			String trim = node.getNodeValue().trim();
+			return trim;
         }
         
         return null;
     }
 
+    // get attribute value from a node with name "tag", or null if not found
 	protected String getTagAttribute(Element elementNode, String tagName, String attributeName) {
 		String[] temp;
 		Node trans = elementNode.getElementsByTagName(tagName).item(0);
