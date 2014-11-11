@@ -24,10 +24,11 @@ public class GetPaymentPlanParamsTest {
         List<CampaignCode> campaignCodes = response.getCampaignCodes();
         
         assertTrue(response.isOrderAccepted());
-        assertEquals(3, campaignCodes.size());
+        assertEquals(4, campaignCodes.size());
         assertEquals("213060", campaignCodes.get(0).getCampaignCode());
-        assertEquals("310012", campaignCodes.get(1).getCampaignCode());
-        assertEquals("410024", campaignCodes.get(2).getCampaignCode());
+        assertEquals("223060", campaignCodes.get(1).getCampaignCode());
+        assertEquals("310012", campaignCodes.get(2).getCampaignCode());
+        assertEquals("410024", campaignCodes.get(3).getCampaignCode());
     }
     
     @Test
