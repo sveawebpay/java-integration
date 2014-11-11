@@ -2,7 +2,10 @@ package se.sveaekonomi.webpay.integration.util.test;
 
 import java.sql.Date;
 
+import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
@@ -10,8 +13,12 @@ import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RelativeDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
+import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
+import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class TestingTool {
     public static final COUNTRYCODE DefaultTestCountryCode = COUNTRYCODE.SE;
@@ -355,4 +362,85 @@ public class TestingTool {
 
         return cCustomer;
     }
+
+    /**
+     * returns a minimal invoice test order response from Svea using defaults values
+     * @return CreateOrderResponse
+     */
+	public static CreateOrderResponse createInvoiceTestOrder() {
+		return createInvoiceTestOrder( null );		    		    
+	}    
+    
+	/**
+	 * returns an invoice test order response from Svea using defaults values, including test name as customer reference
+	 * 
+	 * @param nameOfOriginatingTest
+	 * @return CreateOrderResponse
+	 */
+	public static CreateOrderResponse createInvoiceTestOrder( String nameOfOriginatingTest ) {
+        
+		// create order
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+                .addCustomerDetails(Item.individualCustomer()
+                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+                )
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setOrderDate(TestingTool.DefaultTestDate)
+    	;
+        
+        // include customer reference with test name if passed in
+        if( nameOfOriginatingTest != null ) {
+            order.setCustomerReference(nameOfOriginatingTest.substring(0, Math.min(nameOfOriginatingTest.length(),30)));
+        }
+        
+        // break and inspect here, if needed
+        @SuppressWarnings("unused")
+		SveaRequest<SveaCreateOrder> soap_request = order.useInvoicePayment().prepareRequest();
+        
+        // choose payment method and do request
+        CreateOrderResponse response = order.useInvoicePayment().doRequest();
+        
+        return response;
+	}
+    
+    
+	
+	/**
+	 * returns a payment plan test order response from Svea. 
+	 * 
+	 * @param nameOfOriginatingTest
+	 * @return
+	 */
+	public static CreateOrderResponse createPaymentPlanTestOrder( String nameOfOriginatingTest ) {
+        		
+		// create order
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+        		// add order rows with sufficiently large total amount to allow payment plan to be used
+                .addOrderRow(TestingTool.createPaymentPlanOrderRow())
+                .addCustomerDetails(Item.individualCustomer()
+                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setOrderDate(TestingTool.DefaultTestDate)
+                .setCurrency(TestingTool.DefaultTestCurrency)
+    	;
+
+        if( nameOfOriginatingTest != null ) {
+            order.setCustomerReference(nameOfOriginatingTest.substring(0, Math.min(nameOfOriginatingTest.length(),30)));
+        }
+        
+    	// get payment plan params
+        PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .doRequest();
+        String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
+
+        // choose payment method and do request
+        SveaRequest<SveaCreateOrder> soap_request = order.usePaymentPlanPayment(code).prepareRequest(); // break and inspect here, if needed
+        
+        CreateOrderResponse response = order.usePaymentPlanPayment(code).doRequest();
+        
+        return response;
+	}	
 }
