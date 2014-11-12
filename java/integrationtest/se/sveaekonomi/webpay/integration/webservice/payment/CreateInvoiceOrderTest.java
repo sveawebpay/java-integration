@@ -4,17 +4,21 @@ import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import java.util.Date;
 
 import org.junit.Test;
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.Requestable;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProviderTestData;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
@@ -340,10 +344,50 @@ public class CreateInvoiceOrderTest {
         //   <web:VatPercent>25.0</web:VatPercent>
         //   <web:DiscountPercent>0.0</web:DiscountPercent>
         // </web:OrderRow>
-       <///web:OrderRows>
+        ///web:OrderRows>
 		// ...		
 	}
 
 	//validation of same order row price/vat specification in same order
 	// TODO
+	@Test
+	public void test_that_createOrder_with_mixed_orderRow_specification_throws_validation_error() {
+		
+		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+		;				
+		OrderRowBuilder exvatRow = WebPayItem.orderRow()
+			.setAmountExVat(100.00)
+			.setVatPercent(25)			
+			.setQuantity(1.0)
+			.setName("exvatRow")
+		;
+		OrderRowBuilder incvatRow = WebPayItem.orderRow()
+			.setAmountIncVat(125.00)
+			.setVatPercent(25)			
+			.setQuantity(1.0)
+			.setName("incvatRow")
+		;		
+		
+		order.addOrderRow(exvatRow);
+		order.addOrderRow(incvatRow);
+		
+
+		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
+		try {
+			SveaRequest<SveaCreateOrder> soapRequest = order.useInvoicePayment().prepareRequest();
+			// fail if validation passes
+	        fail( "Expected SveaWebPayException not thrown." );		
+		}
+		catch (SveaWebPayException e){			
+	        assertEquals(
+        		"INCOMPATIBLE ORDER ROW PRICE SPECIFICATION - all order rows must have their price specified using the same two methods.\n", 
+    			e.getCause().getMessage()
+    		);			
+        }			
+	}	
+	
+	
 }
