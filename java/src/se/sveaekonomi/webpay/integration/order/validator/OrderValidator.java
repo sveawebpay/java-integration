@@ -21,8 +21,23 @@ public abstract class OrderValidator {
     
     protected void validateOrderRow(CreateOrderBuilder order) {
         try {
-            for (OrderRowBuilder orderRow : order.getOrderRows()) {
+        	
+        	boolean exvat_and_vatpercent_orderrow_found = false;
+        	boolean incvat_and_vatpercent_orderrow_found = false;
+        	boolean incvat_and_exvat_orderrow_found = false;
+        	
+        	for (OrderRowBuilder orderRow : order.getOrderRows()) {
                 
+                if (orderRow.getAmountExVat() != null && orderRow.getVatPercent() != null && orderRow.getAmountIncVat() == null) {
+                	exvat_and_vatpercent_orderrow_found = true;
+                }
+                if (orderRow.getAmountExVat() == null && orderRow.getVatPercent() != null && orderRow.getAmountIncVat() != null) {
+                	incvat_and_vatpercent_orderrow_found = true;
+                }
+                if (orderRow.getAmountExVat() != null && orderRow.getVatPercent() == null && orderRow.getAmountIncVat() != null) {
+                	incvat_and_exvat_orderrow_found = true;
+                }
+        		
                 if (orderRow.getQuantity() == null || orderRow.getQuantity() <= 0)
                     errors += "MISSING VALUE - Quantity is required in Item object. Use Item.setQuantity().\n";
                 if (orderRow.getAmountExVat() == null && orderRow.getVatPercent() == null && orderRow.getAmountIncVat() == null)
@@ -32,9 +47,16 @@ public abstract class OrderValidator {
                 else if (orderRow.getAmountExVat() == null && orderRow.getVatPercent() == null && orderRow.getAmountIncVat() != null)
                     errors += "MISSING VALUE - At least one of the values must be set in combination with AmountIncVat: AmountExVat or VatPercent for Orderrow. Use one of: setAmountExVat() or setVatPercent().\n";
                 else if (orderRow.getAmountExVat() == null && orderRow.getVatPercent() != null && orderRow.getAmountIncVat() == null)
-                    errors += "MISSING VALUE - At least one of the values must be set in combination with VatPercent: AmountIncVat or AmountExVat for Orderrow. Use one of: setAmountExVat() or setAmountIncVat().\n";
-                
+                    errors += "MISSING VALUE - At least one of the values must be set in combination with VatPercent: AmountIncVat or AmountExVat for Orderrow. Use one of: setAmountExVat() or setAmountIncVat().\n";                
             }
+        	
+        	int no_of_price_specifications_methods_in_order = 
+        			(exvat_and_vatpercent_orderrow_found ? 1 : 0) + (incvat_and_vatpercent_orderrow_found ? 1 : 0) + (incvat_and_exvat_orderrow_found ? 1 : 0);
+        	
+        	if( no_of_price_specifications_methods_in_order > 1 ) {
+        		this.errors += "INCOMPATIBLE ORDER ROW PRICE SPECIFICATION - all order rows must have their price specified using the same two methods.\n";
+        	}
+        	
         } catch (NullPointerException e) {
             this.errors += "MISSING VALUES - AmountExVat, Quantity and VatPercent are required for Orderrow. Use setAmountExVat(), setQuantity() and setVatPercent().\n";            
         }
