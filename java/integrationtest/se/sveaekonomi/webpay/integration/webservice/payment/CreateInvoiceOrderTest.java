@@ -18,6 +18,7 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
+import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
@@ -280,7 +281,69 @@ public class CreateInvoiceOrderTest {
 	}
 	
 	//payment plan request
-	// TODO
+	@Test
+	public void test_orderRows_specified_exvat_and_vat_sent_to_webservice_using_usePaymentPlanPayment_are_sent_as_exvat_and_vat() {
+		
+		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+		;				
+		OrderRowBuilder exvatRow = WebPayItem.orderRow()
+			.setAmountExVat(1000.00)
+			.setVatPercent(25)			
+			.setQuantity(1.0)
+			.setName("exvatRow")
+		;
+		OrderRowBuilder exvatRow2 = WebPayItem.orderRow()
+			.setAmountExVat(1000.00)
+			.setVatPercent(25)			
+			.setQuantity(1.0)
+			.setName("exvatRow2")
+		;		
+		
+		order.addOrderRow(exvatRow);
+		order.addOrderRow(exvatRow2);
+		
+    	// get payment plan params
+        PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .doRequest();
+        String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
+
+        CreateOrderResponse response = order.usePaymentPlanPayment(code).doRequest();
+    
+		assertTrue( response.isOrderAccepted() );
+		System.out.println( "Check logs that order rows were sent as exvat+vat for order row #"+response.orderId);		
+		// Expected log:
+		// ...
+        //<web:OrderRows>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>exvatRow</web:Description>
+        //   <web:PricePerUnit>1000.0</web:PricePerUnit>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>25.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>exvatRow2</web:Description>
+        //   <web:PricePerUnit>1000.0</web:PricePerUnit>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>25.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+       <///web:OrderRows>
+		// ...		
+	}
+
 	//validation of same order row price/vat specification in same order
 	// TODO
 }
