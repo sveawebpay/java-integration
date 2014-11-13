@@ -72,14 +72,22 @@ public abstract class OrderValidator {
         	}
         	
         	// check invoice fees
-        	for(InvoiceFeeBuilder row : order.getInvoiceFeeRows()) {                
-        		checkRowSpecificationType(row, rowSpecificationTypesFound);               
-        	}
+        	try {
+        		for(InvoiceFeeBuilder row : order.getInvoiceFeeRows()) {                
+            		checkRowSpecificationType(row, rowSpecificationTypesFound);               
+            	}
+        	} catch (NullPointerException e) {
+        		// no InvoiceFeeRows specified
+        	}        	
         	
         	// check shipping fees        	
-        	for(ShippingFeeBuilder row : order.getShippingFeeRows()) {                
-        		checkRowSpecificationType(row, rowSpecificationTypesFound);               
-        	}
+        	try {
+	        	for(ShippingFeeBuilder row : order.getShippingFeeRows()) {                
+	        		checkRowSpecificationType(row, rowSpecificationTypesFound);               
+	        	}
+	    	} catch (NullPointerException e) {
+	    		// no InvoiceFeeRows specified
+	    	}    
 
         	// validation error if multiple price specification types among rows
           	if( countRowSpecificationTypesFound() > 1 ) {
