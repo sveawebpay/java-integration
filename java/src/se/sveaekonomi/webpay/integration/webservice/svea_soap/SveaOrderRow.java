@@ -9,4 +9,5 @@ public class SveaOrderRow {
     public String Unit = "";
     public double VatPercent = 0;
     public double DiscountPercent = 0;
+	public Boolean PriceIncludingVat;
 }

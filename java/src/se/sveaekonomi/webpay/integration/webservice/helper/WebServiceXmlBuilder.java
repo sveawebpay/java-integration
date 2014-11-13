@@ -81,9 +81,6 @@ public class WebServiceXmlBuilder extends XMLBuilder {
                     String code = (String)order.CreateOrderInformation.CreatePaymentPlanDetails.get("CampaignCode");
                     writeSimpleElement(prefix+"CampaignCode", code);
                     writeSimpleElement("SendAutomaticGiroPaymentForm", "" + order.CreateOrderInformation.CreatePaymentPlanDetails.get("SendAutomaticGiroPaymentForm"));
-                    
-                    // ?? CoCustomerIdentity ???
-                    //?? writeSimpleElement("FixedMonthlyAmount", order.CreateOrderInformation.CreatePaymentPlanDetails.)
                 }
                 
                 xmlw.writeEndElement();
@@ -240,6 +237,7 @@ public class WebServiceXmlBuilder extends XMLBuilder {
         writeSimpleElement(prefix+"ArticleNumber", row.ArticleNumber.toString());
         writeSimpleElement(prefix+"Description", row.Description);
         writeSimpleElement(prefix+"PricePerUnit", String.valueOf(row.PricePerUnit));
+        writeSimpleElement(prefix+"PriceIncludingVat", String.valueOf(row.PriceIncludingVat));
         writeSimpleElement(prefix+"NumberOfUnits", String.valueOf(row.NumberOfUnits));
         writeSimpleElement(prefix+"Unit", row.Unit);
         writeSimpleElement(prefix+"VatPercent", String.valueOf(row.VatPercent));
