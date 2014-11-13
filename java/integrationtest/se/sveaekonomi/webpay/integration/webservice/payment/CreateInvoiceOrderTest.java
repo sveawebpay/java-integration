@@ -316,6 +316,56 @@ public class CreateInvoiceOrderTest {
 		//</web:OrderRows>
 		// ...		
 	}
+
+	@Test
+	public void test_orderRows_and_Fees_specified_incvat_and_vat_sent_to_webservice_using_useInvoicePayment_are_sent_as_incvat_and_vat() {
+		
+		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+		;				
+		OrderRowBuilder incvatRow = WebPayItem.orderRow()
+			.setAmountIncVat(100.00)
+			.setVatPercent(25)			
+			.setQuantity(1.0)
+			.setName("incvatRow")
+		;
+		OrderRowBuilder incvatRow2 = WebPayItem.orderRow()
+			.setAmountExVat(100.00)
+			.setVatPercent(25)			
+			.setQuantity(1.0)
+			.setName("incvatRow2")
+		;		
+		
+		InvoiceFeeBuilder incvatInvoiceFee = WebPayItem.invoiceFee()
+			.setAmountExVat(10.00)
+			.setVatPercent(25)
+			.setName("incvatInvoiceFee")
+		;		
+		
+		ShippingFeeBuilder incvatShippingFee = WebPayItem.shippingFee()
+			.setAmountExVat(20.00)
+			.setVatPercent(25)
+			.setName("incvatShippingFee")
+		;	
+		
+		order.addOrderRow(incvatRow);
+		order.addOrderRow(incvatRow2);
+		order.addFee(incvatInvoiceFee);
+		order.addFee(incvatShippingFee);
+		
+		CreateOrderResponse response = order.useInvoicePayment().doRequest();
+
+		assertTrue( response.isOrderAccepted() );
+		System.out.println( "Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);		
+		// Expected log:
+		// ...
+
+			// TODO
+		// ...		
+	}
+
 	
 	//payment plan request	
 	@Test
