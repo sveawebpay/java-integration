@@ -444,7 +444,6 @@ public class CreateInvoiceOrderTest {
 	}
 
 	//validation of same order row price/vat specification in same order
-	// TODO
 	@Test
 	public void test_that_createOrder_with_mixed_orderRow_specification_throws_validation_error() {
 		
@@ -469,7 +468,6 @@ public class CreateInvoiceOrderTest {
 		order.addOrderRow(exvatRow);
 		order.addOrderRow(incvatRow);
 		
-
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
 			SveaRequest<SveaCreateOrder> soapRequest = order.useInvoicePayment().prepareRequest();
