@@ -231,26 +231,26 @@ public class CreateInvoiceOrderTest {
 			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
 		;				
 		OrderRowBuilder exvatRow = WebPayItem.orderRow()
-			.setAmountExVat(100.00)
+			.setAmountExVat(80.00)
 			.setVatPercent(25)			
 			.setQuantity(1.0)
 			.setName("exvatRow")
 		;
 		OrderRowBuilder exvatRow2 = WebPayItem.orderRow()
-			.setAmountExVat(100.00)
+			.setAmountExVat(80.00)
 			.setVatPercent(25)			
 			.setQuantity(1.0)
 			.setName("exvatRow2")
 		;		
 		
 		InvoiceFeeBuilder exvatInvoiceFee = WebPayItem.invoiceFee()
-			.setAmountExVat(10.00)
+			.setAmountExVat(8.00)
 			.setVatPercent(25)
 			.setName("exvatInvoiceFee")
 		;		
 		
 		ShippingFeeBuilder exvatShippingFee = WebPayItem.shippingFee()
-			.setAmountExVat(20.00)
+			.setAmountExVat(16.00)
 			.setVatPercent(25)
 			.setName("exvatShippingFee")
 		;	
@@ -267,51 +267,55 @@ public class CreateInvoiceOrderTest {
 		// Expected log:
 		// ...
 		//<web:OrderRows>
-		// <web:OrderRow>
-		//   <web:ArticleNumber>
-		//   </web:ArticleNumber>
-		//   <web:Description>exvatRow</web:Description>
-		//   <web:PricePerUnit>100.0</web:PricePerUnit>
-		//   <web:NumberOfUnits>1.0</web:NumberOfUnits>
-		//   <web:Unit>
-		//   </web:Unit>
-		//   <web:VatPercent>25.0</web:VatPercent>
-		//   <web:DiscountPercent>0.0</web:DiscountPercent>
-		// </web:OrderRow>
-		// <web:OrderRow>
-		//   <web:ArticleNumber>
-		//   </web:ArticleNumber>
-		//   <web:Description>exvatRow2</web:Description>
-		//   <web:PricePerUnit>100.0</web:PricePerUnit>
-		//   <web:NumberOfUnits>1.0</web:NumberOfUnits>
-		//   <web:Unit>
-		//   </web:Unit>
-		//   <web:VatPercent>25.0</web:VatPercent>
-		//   <web:DiscountPercent>0.0</web:DiscountPercent>
-		// </web:OrderRow>
-		// <web:OrderRow>
-		//   <web:ArticleNumber>
-		//   </web:ArticleNumber>
-		//   <web:Description>exvatShippingFee</web:Description>
-		//   <web:PricePerUnit>20.0</web:PricePerUnit>
-		//   <web:NumberOfUnits>1.0</web:NumberOfUnits>
-		//   <web:Unit>
-		//   </web:Unit>
-		//   <web:VatPercent>25.0</web:VatPercent>
-		//   <web:DiscountPercent>0.0</web:DiscountPercent>
-		// </web:OrderRow>
-		// <web:OrderRow>
-		//   <web:ArticleNumber>
-		//   </web:ArticleNumber>
-		//   <web:Description>exvatInvoiceFee</web:Description>
-		//   <web:PricePerUnit>10.0</web:PricePerUnit>
-		//   <web:NumberOfUnits>1.0</web:NumberOfUnits>
-		//   <web:Unit>
-		//   </web:Unit>
-		//   <web:VatPercent>25.0</web:VatPercent>
-		//   <web:DiscountPercent>0.0</web:DiscountPercent>
-		// </web:OrderRow>
-		//</web:OrderRows>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>exvatRow</web:Description>
+        //   <web:PricePerUnit>80.0</web:PricePerUnit>
+        //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>25.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>exvatRow2</web:Description>
+        //   <web:PricePerUnit>80.0</web:PricePerUnit>
+        //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>25.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>exvatShippingFee</web:Description>
+        //   <web:PricePerUnit>16.0</web:PricePerUnit>
+        //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>25.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>exvatInvoiceFee</web:Description>
+        //   <web:PricePerUnit>8.0</web:PricePerUnit>
+        //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>25.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        //</web:OrderRows>
 		// ...		
 	}
 
@@ -359,8 +363,56 @@ public class CreateInvoiceOrderTest {
 		System.out.println( "Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);		
 		// Expected log:
 		// ...
-
-			// TODO
+		//<web:OrderRows>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>incvatRow</web:Description>
+        //   <web:PricePerUnit>100.0</web:PricePerUnit>
+        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>25.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>incvatRow2</web:Description>
+        //   <web:PricePerUnit>100.0</web:PricePerUnit>
+        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>25.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>incvatShippingFee</web:Description>
+        //   <web:PricePerUnit>20.0</web:PricePerUnit>
+        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>25.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>incvatInvoiceFee</web:Description>
+        //   <web:PricePerUnit>10.0</web:PricePerUnit>
+        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>25.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        //</web:OrderRows>
 		// ...		
 	}
 	

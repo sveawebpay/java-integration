@@ -227,10 +227,10 @@ public class CreateInvoiceOrderUnitTest {
 	}
 	
 	
-	/// tests for INTG-515, sending orderRows to webservice, specified as exvat + vat in soap request
+	/// tests for INTG-515, preparing order rows price specification
 	// invoice request	
 	@Test
-	public void test_orderRows_and_Fees_specified_exvat_and_vat_sent_to_webservice_using_useInvoicePayment_are_sent_as_exvat_and_vat() {
+	public void test_orderRows_and_Fees_specified_exvat_and_vat_using_useInvoicePayment_are_prepared_as_exvat_and_vat() {
 		
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
@@ -238,26 +238,26 @@ public class CreateInvoiceOrderUnitTest {
 			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
 		;				
 		OrderRowBuilder exvatRow = WebPayItem.orderRow()
-			.setAmountExVat(100.00)
+			.setAmountExVat(80.00)
 			.setVatPercent(25)			
 			.setQuantity(1.0)
 			.setName("exvatRow")
 		;
 		OrderRowBuilder exvatRow2 = WebPayItem.orderRow()
-			.setAmountExVat(100.00)
+			.setAmountExVat(80.00)
 			.setVatPercent(25)			
 			.setQuantity(1.0)
 			.setName("exvatRow2")
 		;		
 		
 		InvoiceFeeBuilder exvatInvoiceFee = WebPayItem.invoiceFee()
-			.setAmountExVat(10.00)
+			.setAmountExVat(8.00)
 			.setVatPercent(25)
 			.setName("exvatInvoiceFee")
 		;		
 		
 		ShippingFeeBuilder exvatShippingFee = WebPayItem.shippingFee()
-			.setAmountExVat(20.00)
+			.setAmountExVat(16.00)
 			.setVatPercent(25)
 			.setName("exvatShippingFee")
 		;	
@@ -276,7 +276,7 @@ public class CreateInvoiceOrderUnitTest {
 	}
 
 	@Test
-	public void test_orderRows_and_Fees_specified_incvat_and_vat_sent_to_webservice_using_useInvoicePayment_are_sent_as_incvat_and_vat() {
+	public void test_orderRows_and_Fees_specified_incvat_and_vat_using_useInvoicePayment_are_prepared_as_incvat_and_vat() {
 		
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
@@ -315,7 +315,7 @@ public class CreateInvoiceOrderUnitTest {
 		
 		
 		SveaRequest<SveaCreateOrder> soapRequest = order.useInvoicePayment().prepareRequest();
-		assertEquals( (Object)80.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)100.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit  ); // cast avoids deprecation
 		assertEquals( true, soapRequest.request.CreateOrderInformation.OrderRows.get(0).PriceIncludingVat );
 		
 		// TODO other rows
@@ -327,7 +327,7 @@ public class CreateInvoiceOrderUnitTest {
 	// TODO payment plan tests
 	
 //	@Test
-//	public void test_orderRows_and_Fees_specified_exvat_and_vat_sent_to_webservice_using_usePaymentPlanPayment_are_sent_as_exvat_and_vat() {
+//	public void test_orderRows_and_Fees_specified_exvat_and_vat_using_usePaymentPlanPayment_are_prepared_as_exvat_and_vat() {
 //		
 //		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 //			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
