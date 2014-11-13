@@ -463,7 +463,6 @@ public class CreateInvoiceOrderTest {
 		order.addOrderRow(exvatRow);
 		order.addOrderRow(incvatRow);
 		
-
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
 			@SuppressWarnings("unused")
