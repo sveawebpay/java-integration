@@ -692,7 +692,7 @@ public class CreateInvoiceOrderUnitTest {
 			.setVatPercent(10)
 			.setName("exvatShippingFee")
 		;	
-	
+
 		RelativeDiscountBuilder relativeDiscount = WebPayItem.relativeDiscount()
 			.setDiscountPercent(10.0)
 			.setDiscountId("TenPercentOff")
