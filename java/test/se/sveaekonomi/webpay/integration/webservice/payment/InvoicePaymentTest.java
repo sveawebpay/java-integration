@@ -383,7 +383,7 @@ public class InvoicePaymentTest {
         //First order row is a product
         assertEquals("1", request.request.CreateOrderInformation.OrderRows.get(0).ArticleNumber);
         assertEquals("Prod: Specification", request.request.CreateOrderInformation.OrderRows.get(0).Description);
-        assertEquals(100.00, request.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit, 0);
+        assertEquals(125.00, request.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit, 0);
         assertEquals(2, request.request.CreateOrderInformation.OrderRows.get(0).NumberOfUnits, 0);
         assertEquals("st", request.request.CreateOrderInformation.OrderRows.get(0).Unit);
         assertEquals(25, request.request.CreateOrderInformation.OrderRows.get(0).VatPercent, 0);
@@ -392,7 +392,7 @@ public class InvoicePaymentTest {
         //Second order row is shipment
         assertEquals("33", request.request.CreateOrderInformation.OrderRows.get(1).ArticleNumber);
         assertEquals("shipping: Specification", request.request.CreateOrderInformation.OrderRows.get(1).Description);
-        assertEquals(50, request.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit, 0);
+        assertEquals(62.50, request.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit, 0);
         assertEquals(1, request.request.CreateOrderInformation.OrderRows.get(1).NumberOfUnits, 0);
         assertEquals("st", request.request.CreateOrderInformation.OrderRows.get(1).Unit);
         assertEquals(25, request.request.CreateOrderInformation.OrderRows.get(1).VatPercent, 0);
@@ -401,7 +401,7 @@ public class InvoicePaymentTest {
         //Third order row is invoice fee
         assertEquals("", request.request.CreateOrderInformation.OrderRows.get(2).ArticleNumber);
         assertEquals("Svea fee: Fee for invoice", request.request.CreateOrderInformation.OrderRows.get(2).Description);
-        assertEquals(50, request.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit, 0);
+        assertEquals(62.50, request.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit, 0);
         assertEquals(1, request.request.CreateOrderInformation.OrderRows.get(2).NumberOfUnits, 0);
         assertEquals("st", request.request.CreateOrderInformation.OrderRows.get(2).Unit);
         assertEquals(25, request.request.CreateOrderInformation.OrderRows.get(2).VatPercent, 0);

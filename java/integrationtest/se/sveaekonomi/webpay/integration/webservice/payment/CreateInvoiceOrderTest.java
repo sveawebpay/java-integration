@@ -270,7 +270,7 @@ public class CreateInvoiceOrderTest {
 		CreateOrderResponse response = order.useInvoicePayment().doRequest();
 
 		assertTrue( response.isOrderAccepted() );
-		System.out.println( "Check logs that order rows were sent as exvat+vat for order row #"+response.orderId);		
+		System.out.println( "test_orderRows_and_Fees_specified_exvat_and_vat_sent_to_webservice_using_useInvoicePayment_are_sent_as_exvat_and_vat\n  Check logs that order rows were sent as exvat+vat for order row #"+response.orderId);		
 		// Expected log:
 		// ...
 		//<web:OrderRows>
@@ -367,7 +367,7 @@ public class CreateInvoiceOrderTest {
 		CreateOrderResponse response = order.useInvoicePayment().doRequest();
 
 		assertTrue( response.isOrderAccepted() );
-		System.out.println( "Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);		
+		System.out.println( "test_orderRows_and_Fees_specified_incvat_and_vat_sent_to_webservice_using_useInvoicePayment_are_sent_as_incvat_and_vat\n  Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);		
 		// Expected log:
 		// ...
 		//<web:OrderRows>
@@ -422,6 +422,104 @@ public class CreateInvoiceOrderTest {
         //</web:OrderRows>
 		// ...		
 	}
+
+	@Test
+	public void test_orderRows_and_Fees_specified_incvat_and_exvat_sent_to_webservice_using_useInvoicePayment_are_sent_as_incvat_and_vat() {
+		
+		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+		;				
+		OrderRowBuilder incvatRow = WebPayItem.orderRow()
+			.setAmountIncVat(100.00)
+			.setAmountExVat(80.00)
+			.setQuantity(1.0)
+			.setName("incvatRow")
+		;
+		OrderRowBuilder incvatRow2 = WebPayItem.orderRow()
+			.setAmountIncVat(100.00)
+			.setAmountExVat(80.00)		
+			.setQuantity(1.0)
+			.setName("incvatRow2")
+		;		
+		
+		InvoiceFeeBuilder incvatInvoiceFee = WebPayItem.invoiceFee()
+			.setAmountIncVat(10.00)
+			.setAmountExVat(8.00)
+			.setName("incvatInvoiceFee")
+		;		
+		
+		ShippingFeeBuilder incvatShippingFee = WebPayItem.shippingFee()
+			.setAmountIncVat(20.00)
+			.setAmountExVat(16.00)
+			.setName("incvatShippingFee")
+		;	
+		
+		order.addOrderRow(incvatRow);
+		order.addOrderRow(incvatRow2);
+		order.addFee(incvatInvoiceFee);
+		order.addFee(incvatShippingFee);
+		
+		CreateOrderResponse response = order.useInvoicePayment().doRequest();
+
+		assertTrue( response.isOrderAccepted() );
+		System.out.println( "test_orderRows_and_Fees_specified_incvat_and_exvat_sent_to_webservice_using_useInvoicePayment_are_sent_as_incvat_and_vat\n  Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);		
+		// Expected log:
+		// ...
+        // <web:OrderRows>
+        //  <web:OrderRow>
+        //    <web:ArticleNumber>
+        //    </web:ArticleNumber>
+        //    <web:Description>incvatRow</web:Description>
+        //    <web:PricePerUnit>100.0</web:PricePerUnit>
+        //    <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //    <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //    <web:Unit>
+        //    </web:Unit>
+        //    <web:VatPercent>25.0</web:VatPercent>
+        //    <web:DiscountPercent>0.0</web:DiscountPercent>
+        //  </web:OrderRow>
+        //  <web:OrderRow>
+        //    <web:ArticleNumber>
+        //    </web:ArticleNumber>
+        //    <web:Description>incvatRow2</web:Description>
+        //    <web:PricePerUnit>100.0</web:PricePerUnit>
+        //    <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //    <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //    <web:Unit>
+        //    </web:Unit>
+        //    <web:VatPercent>25.0</web:VatPercent>
+        //    <web:DiscountPercent>0.0</web:DiscountPercent>
+        //  </web:OrderRow>
+        //  <web:OrderRow>
+        //    <web:ArticleNumber>
+        //    </web:ArticleNumber>
+        //    <web:Description>incvatShippingFee</web:Description>
+        //    <web:PricePerUnit>20.0</web:PricePerUnit>
+        //    <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //    <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //    <web:Unit>
+        //    </web:Unit>
+        //    <web:VatPercent>25.0</web:VatPercent>
+        //    <web:DiscountPercent>0.0</web:DiscountPercent>
+        //  </web:OrderRow>
+        //  <web:OrderRow>
+        //    <web:ArticleNumber>
+        //    </web:ArticleNumber>
+        //    <web:Description>incvatInvoiceFee</web:Description>
+        //    <web:PricePerUnit>10.0</web:PricePerUnit>
+        //    <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //    <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //    <web:Unit>
+        //    </web:Unit>
+        //    <web:VatPercent>25.0</web:VatPercent>
+        //    <web:DiscountPercent>0.0</web:DiscountPercent>
+        //  </web:OrderRow>
+        // <web:OrderRows>
+        // ...		
+	}
+	
 	
 	//payment plan request	
 	@Test
@@ -471,7 +569,7 @@ public class CreateInvoiceOrderTest {
         CreateOrderResponse response = order.usePaymentPlanPayment(code).doRequest();
     
 		assertTrue( response.isOrderAccepted() );
-		System.out.println( "Check logs that order rows were sent as exvat+vat for order row #"+response.orderId);		
+		System.out.println( "test_orderRows_and_Fees_specified_exvat_and_vat_sent_to_webservice_using_usePaymentPlanPayment_are_sent_as_exvat_and_vat\n  Check logs that order rows were sent as exvat+vat for order row #"+response.orderId);		
 		// Expected log:
 		// ...
 		
