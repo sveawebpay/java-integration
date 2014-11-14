@@ -301,9 +301,9 @@ public class WebserviceRowFormatter {
 			orderRow.PriceIncludingVat = true;
 		}
 		else if (amountExVat != null && amountIncVat != null) {
-			// TODO
-			orderRow.PricePerUnit = amountExVat;
+			orderRow.PricePerUnit = amountIncVat;
 			orderRow.VatPercent = ((amountIncVat / amountExVat) - 1) * 100;
+			orderRow.PriceIncludingVat = true;
 		}
 
 		return orderRow;
