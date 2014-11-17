@@ -21,7 +21,6 @@ public class WebserviceRowFormatter {
 
 	private double totalAmountExVat;
 	private double totalAmountIncVat;
-	private double totalVatAsAmount;
 	
 	private LinkedHashMap<Double,Double> totalAmountPerVatRateIncVat;
 	private LinkedHashMap<Double,Double> totalAmountPerVatRateExVat;
@@ -57,7 +56,6 @@ public class WebserviceRowFormatter {
 	private void calculateTotals() {
 		totalAmountIncVat = 0;
 		totalAmountExVat = 0;
-		totalVatAsAmount = 0;
 		
 		totalAmountPerVatRateIncVat = new LinkedHashMap<Double, Double>();
 		totalAmountPerVatRateExVat = new LinkedHashMap<Double, Double>();
@@ -84,7 +82,6 @@ public class WebserviceRowFormatter {
 			if (existingRow.getVatPercent() != null && existingRow.getAmountExVat() != null) {
 				
                 totalAmountExVat += amountExVat * quantity;
-                totalVatAsAmount += vatPercentAsHundredth * amountExVat * quantity;
                 totalAmountIncVat += (amountExVat + (vatPercentAsHundredth * amountExVat)) * quantity;
 
                 increaseCumulativeVatRateAmounts(totalAmountPerVatRateIncVat, vatPercent, amountExVat*quantity*(1 + vatPercentAsHundredth) );                
@@ -93,7 +90,6 @@ public class WebserviceRowFormatter {
             // amountIncVat & vatPercent used to specify product price
 			else if (existingRow.getVatPercent() != null && existingRow.getAmountIncVat() != null) {
                 totalAmountIncVat += amountIncVat * quantity;
-                totalVatAsAmount += (vatPercentAsHundredth / (1 + vatPercentAsHundredth)) * amountIncVat * quantity;
                 totalAmountExVat += (amountIncVat - ((vatPercentAsHundredth / (1 + vatPercentAsHundredth)) * amountIncVat)) * quantity;
 
                 increaseCumulativeVatRateAmounts(totalAmountPerVatRateIncVat, vatPercent, amountIncVat*quantity );                
@@ -103,7 +99,6 @@ public class WebserviceRowFormatter {
 			else {
                 totalAmountIncVat += amountIncVat * quantity;
                 totalAmountExVat += amountExVat * quantity;
-                totalVatAsAmount += (amountIncVat - amountExVat) * quantity;
 
                 double vatRate = (amountIncVat == 0.0 || amountExVat == 0.0) ? 0 : 
                     ((amountIncVat / amountExVat) - 1) * 100;
