@@ -76,7 +76,10 @@ public class WebserviceRowFormatter {
                 totalAmountIncVat += (amountExVat + (vatPercentAsHundredth * amountExVat)) * quantity;
 
                 if (totalAmountPerVatRateIncVat.containsKey(vatPercent)) {
-                	totalAmountPerVatRateIncVat.put(vatPercent, (amountExVat * quantity * (1 + vatPercentAsHundredth)));
+                	totalAmountPerVatRateIncVat.put(vatPercent, 
+                									(amountExVat * quantity * (1 + vatPercentAsHundredth)) + 
+                									totalAmountPerVatRateIncVat.get(vatPercent)
+            									);
                 }
                 else {
                     totalAmountPerVatRateIncVat.put(vatPercent, amountExVat * quantity * (1 + vatPercentAsHundredth));
