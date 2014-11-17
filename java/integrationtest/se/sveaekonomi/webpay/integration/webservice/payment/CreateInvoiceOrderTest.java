@@ -562,8 +562,8 @@ public class CreateInvoiceOrderTest {
 		CreateOrderResponse response = order.useInvoicePayment().doRequest();
 
 		assertTrue( response.isOrderAccepted() );
-		// order total should be (72+33+17.6+8.8)*.9 = 118.26		
-		assertEquals( "118.26", response.amount );		
+		// order total should be (72+33+17.6+8.8)-10 = 121.40, see integration test
+		assertEquals( "121.40", response.amount );		
 		System.out.println( "test_that_createOrder_request_is_sent_as_incvat_iff_no_exvat_specified_anywhere_in_order\n  Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);		
 		
 		// Expected log:
