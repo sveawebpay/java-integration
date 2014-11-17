@@ -251,7 +251,6 @@ public class CreateInvoiceOrderUnitTest {
 			.setQuantity(1.0)
 			.setName("exvatRow2")
 		;		
-		
 		InvoiceFeeBuilder exvatInvoiceFee = WebPayItem.invoiceFee()
 			.setAmountExVat(8.00)
 			.setVatPercent(25)
