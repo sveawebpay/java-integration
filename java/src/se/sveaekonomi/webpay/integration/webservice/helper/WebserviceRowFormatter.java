@@ -21,6 +21,7 @@ public class WebserviceRowFormatter {
 	private double totalVatAsAmount;
 	
 	private LinkedHashMap<Double,Double> totalAmountPerVatRateIncVat;
+	private LinkedHashMap<Double,Double> totalAmountPerVatRateExVat;
 
 	private ArrayList<SveaOrderRow> newRows;
 
@@ -41,12 +42,22 @@ public class WebserviceRowFormatter {
 		return newRows;
 	}
 
+    private void increaseCumulativeVatRateAmounts( LinkedHashMap<Double, Double> amountPerVatRate, Double key, Double value ) {    	
+        if (amountPerVatRate.containsKey(key)) {
+        	amountPerVatRate.put(key,  value + amountPerVatRate.get(key) );
+        }
+        else {
+        	amountPerVatRate.put(key, value);
+        }	
+    }		
+	
 	private void calculateTotals() {
 		totalAmountIncVat = 0;
 		totalAmountExVat = 0;
 		totalVatAsAmount = 0;
 		
 		totalAmountPerVatRateIncVat = new LinkedHashMap<Double, Double>();
+		totalAmountPerVatRateExVat = new LinkedHashMap<Double, Double>();
 		
 		List<OrderRowBuilder> orderRows = order.getOrderRows();
 		
@@ -66,34 +77,26 @@ public class WebserviceRowFormatter {
 			amountIncVat = existingRow.getAmountIncVat() != null ? existingRow.getAmountIncVat() : 0;
 			quantity = existingRow.getQuantity() != null ? existingRow.getQuantity() : 0;
 			
+            // amountExVat & vatPercent used to specify product price
 			if (existingRow.getVatPercent() != null && existingRow.getAmountExVat() != null) {
-
+				
                 totalAmountExVat += amountExVat * quantity;
                 totalVatAsAmount += vatPercentAsHundredth * amountExVat * quantity;
                 totalAmountIncVat += (amountExVat + (vatPercentAsHundredth * amountExVat)) * quantity;
 
-                if (totalAmountPerVatRateIncVat.containsKey(vatPercent)) {
-                	totalAmountPerVatRateIncVat.put(vatPercent, 
-                									(amountExVat * quantity * (1 + vatPercentAsHundredth)) + 
-                									totalAmountPerVatRateIncVat.get(vatPercent)
-            									);
-                }
-                else {
-                    totalAmountPerVatRateIncVat.put(vatPercent, amountExVat * quantity * (1 + vatPercentAsHundredth));
-                }
+                increaseCumulativeVatRateAmounts(totalAmountPerVatRateIncVat, vatPercent, amountExVat*quantity*(1 + vatPercentAsHundredth) );                
+                increaseCumulativeVatRateAmounts(totalAmountPerVatRateExVat, vatPercent, amountExVat*quantity );                
 			}
+            // amountIncVat & vatPercent used to specify product price
 			else if (existingRow.getVatPercent() != null && existingRow.getAmountIncVat() != null) {
                 totalAmountIncVat += amountIncVat * quantity;
                 totalVatAsAmount += (vatPercentAsHundredth / (1 + vatPercentAsHundredth)) * amountIncVat * quantity;
                 totalAmountExVat += (amountIncVat - ((vatPercentAsHundredth / (1 + vatPercentAsHundredth)) * amountIncVat)) * quantity;
 
-                if (totalAmountPerVatRateIncVat.containsKey(vatPercent)) {
-                	totalAmountPerVatRateIncVat.put(vatPercent, (amountIncVat * quantity));
-                }
-                else {
-                    totalAmountPerVatRateIncVat.put(vatPercent, amountIncVat * quantity);
-                }
+                increaseCumulativeVatRateAmounts(totalAmountPerVatRateIncVat, vatPercent, amountIncVat*quantity );                
+                increaseCumulativeVatRateAmounts(totalAmountPerVatRateExVat, vatPercent, amountExVat*quantity );                
 			}
+            // no vatPercent given
 			else {
                 totalAmountIncVat += amountIncVat * quantity;
                 totalAmountExVat += amountExVat * quantity;
@@ -101,13 +104,10 @@ public class WebserviceRowFormatter {
 
                 double vatRate = (amountIncVat == 0.0 || amountExVat == 0.0) ? 0 : 
                     ((amountIncVat / amountExVat) - 1) * 100;
-
-                if (totalAmountPerVatRateIncVat.containsKey(vatRate)) {
-                	totalAmountPerVatRateIncVat.put(vatPercent, (amountExVat * quantity * (1 + vatRate / 100)));
-                }
-                else {
-                    totalAmountPerVatRateIncVat.put(vatRate, amountExVat * quantity * (1 + vatRate / 100));
-                }
+                double vatRateAsHundredth = vatPercent * 0.01;
+                
+                increaseCumulativeVatRateAmounts(totalAmountPerVatRateIncVat, vatRate, (amountExVat * quantity * (1 + vatRateAsHundredth)) );                
+                increaseCumulativeVatRateAmounts(totalAmountPerVatRateExVat, vatRate, amountExVat*quantity );                                
 			}
 		}
 	}
@@ -115,10 +115,10 @@ public class WebserviceRowFormatter {
 	private <T extends RowBuilder> void formatRowLists(List<T> rows) {
 		for (RowBuilder existingRow : rows) {
 
-			// if fixedDiscount row, calculate vat, split over several rows if needed.
+			// if fixedDiscount row, create one or more discount rows, if needed calculate vat split across existing order row vat rates
 			if (FixedDiscountBuilder.class.equals(existingRow.getClass())) {
 				
-				// incvat set only
+				// incvat set only, calculate discount from amount inc vat
 				if (existingRow.getAmountIncVat() != null && existingRow.getVatPercent() == null && existingRow.getAmountExVat() == null) {
 
                 	for (double vatRate : totalAmountPerVatRateIncVat.keySet()) {
@@ -138,10 +138,36 @@ public class WebserviceRowFormatter {
 
                         orderRow.PricePerUnit = -MathUtil.bankersRound(discountAtThisVatRateExVat);
                         orderRow.VatPercent = vatRate;
-
+                        orderRow.PriceIncludingVat = false;
+                        
                         newRows.add(orderRow);
                     }
                 }
+
+				// exvat set only, calculate discount from amount ex vat
+				if (existingRow.getAmountIncVat() == null && existingRow.getVatPercent() == null && existingRow.getAmountExVat() != null) {
+
+                	for (double vatRate : totalAmountPerVatRateExVat.keySet()) {
+                    	SveaOrderRow orderRow = newRowBasedOnExisting(existingRow);
+
+                        double amountAtThisVatRateExVat = totalAmountPerVatRateExVat.get(vatRate);
+
+                        if (totalAmountPerVatRateExVat.size() > 1) {
+                            String name = existingRow.getName();
+                            String description = existingRow.getDescription();
+
+                            orderRow.Description = formatDiscountRowDescription(name, description, (long) vatRate);
+                        }
+
+                        double discountAtThisVatRateExVat = existingRow.getAmountExVat() * (amountAtThisVatRateExVat / totalAmountExVat) ;                     
+
+                        orderRow.PricePerUnit = -MathUtil.bankersRound(discountAtThisVatRateExVat);
+                        orderRow.VatPercent = vatRate;
+                        orderRow.PriceIncludingVat = false;		// TODO fix this
+
+                        newRows.add(orderRow);
+                    }
+                }				
 				
 				// incvat, vatpercent set
                 else if (existingRow.getAmountIncVat() != null && existingRow.getVatPercent() != null && existingRow.getAmountExVat() == null)
