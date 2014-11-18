@@ -225,7 +225,7 @@ public class CreateInvoiceOrderTest {
 	}
 	
 	
-	/// tests for INTG-515, sending orderRows to webservice, specified as exvat + vat in soap request
+	/// tests for sending orderRows to webservice, specified as exvat + vat in soap request
 	// invoice request	
 	@Test
 	public void test_orderRows_and_Fees_specified_exvat_and_vat_sent_to_webservice_using_useInvoicePayment_are_sent_as_exvat_and_vat() {
