@@ -18,7 +18,6 @@ import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
-import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
@@ -222,327 +221,163 @@ public class CreateInvoiceOrderTest {
 	
 	
 	/// tests for sending orderRows to webservice, specified as exvat + vat in soap request
-	// invoice request	
 	@Test
-	public void test_orderRows_and_Fees_specified_exvat_and_vat_sent_to_webservice_using_useInvoicePayment_are_sent_as_exvat_and_vat() {
-		
+	public void test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
 			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
 		;				
 		OrderRowBuilder exvatRow = WebPayItem.orderRow()
-			.setAmountExVat(80.00)
-			.setVatPercent(25)			
-			.setQuantity(1.0)
-			.setName("exvatRow")
+				.setAmountExVat(600.00)
+				.setVatPercent(20)			
+				.setQuantity(1.0)
+				.setName("exvatRow")
 		;
 		OrderRowBuilder exvatRow2 = WebPayItem.orderRow()
-			.setAmountExVat(80.00)
-			.setVatPercent(25)			
+			.setAmountExVat(300.00)
+			.setVatPercent(10)			
 			.setQuantity(1.0)
 			.setName("exvatRow2")
 		;		
 		
 		InvoiceFeeBuilder exvatInvoiceFee = WebPayItem.invoiceFee()
-			.setAmountExVat(8.00)
-			.setVatPercent(25)
+			.setAmountExVat(80.00)
+			.setVatPercent(10)
 			.setName("exvatInvoiceFee")
-		;		
+		;
 		
 		ShippingFeeBuilder exvatShippingFee = WebPayItem.shippingFee()
-			.setAmountExVat(16.00)
-			.setVatPercent(25)
+			.setAmountExVat(160.00)
+			.setVatPercent(10)
 			.setName("exvatShippingFee")
 		;	
+	
+		FixedDiscountBuilder fixedDiscount = WebPayItem.fixedDiscount()
+			.setAmountIncVat(10.0)
+			.setDiscountId("TenCrownsOff")
+			.setName("fixedDiscount: 10 off incvat")
+		;     
 		
 		order.addOrderRow(exvatRow);
 		order.addOrderRow(exvatRow2);
 		order.addFee(exvatInvoiceFee);
 		order.addFee(exvatShippingFee);
+		order.addDiscount(fixedDiscount);		
 		
 		CreateOrderResponse response = order.useInvoicePayment().doRequest();
 
 		assertTrue( response.isOrderAccepted() );
-		System.out.println( "test_orderRows_and_Fees_specified_exvat_and_vat_sent_to_webservice_using_useInvoicePayment_are_sent_as_exvat_and_vat\n  Check logs that order rows were sent as exvat+vat for order row #"+response.orderId);		
+		assertEquals( (Object)1304.00, response.amount );		
+		System.out.println( "test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false\n"
+				+ "  Check logs that order rows were sent as exvat+vat for order row #"+response.orderId);		
+		
 		// Expected log:
 		// ...
 		//<web:OrderRows>
-        // <web:OrderRow>
-        //   <web:ArticleNumber>
-        //   </web:ArticleNumber>
-        //   <web:Description>exvatRow</web:Description>
-        //   <web:PricePerUnit>80.0</web:PricePerUnit>
-        //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
-        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
-        //   <web:Unit>
-        //   </web:Unit>
-        //   <web:VatPercent>25.0</web:VatPercent>
-        //   <web:DiscountPercent>0.0</web:DiscountPercent>
-        // </web:OrderRow>
-        // <web:OrderRow>
-        //   <web:ArticleNumber>
-        //   </web:ArticleNumber>
-        //   <web:Description>exvatRow2</web:Description>
-        //   <web:PricePerUnit>80.0</web:PricePerUnit>
-        //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
-        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
-        //   <web:Unit>
-        //   </web:Unit>
-        //   <web:VatPercent>25.0</web:VatPercent>
-        //   <web:DiscountPercent>0.0</web:DiscountPercent>
-        // </web:OrderRow>
-        // <web:OrderRow>
-        //   <web:ArticleNumber>
-        //   </web:ArticleNumber>
-        //   <web:Description>exvatShippingFee</web:Description>
-        //   <web:PricePerUnit>16.0</web:PricePerUnit>
-        //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
-        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
-        //   <web:Unit>
-        //   </web:Unit>
-        //   <web:VatPercent>25.0</web:VatPercent>
-        //   <web:DiscountPercent>0.0</web:DiscountPercent>
-        // </web:OrderRow>
-        // <web:OrderRow>
-        //   <web:ArticleNumber>
-        //   </web:ArticleNumber>
-        //   <web:Description>exvatInvoiceFee</web:Description>
-        //   <web:PricePerUnit>8.0</web:PricePerUnit>
-        //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
-        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
-        //   <web:Unit>
-        //   </web:Unit>
-        //   <web:VatPercent>25.0</web:VatPercent>
-        //   <web:DiscountPercent>0.0</web:DiscountPercent>
-        // </web:OrderRow>
-        //</web:OrderRows>
-		// ...		
-	}
+	    // <web:OrderRow>
+	    //   <web:ArticleNumber>
+	    //   </web:ArticleNumber>
+	    //   <web:Description>exvatRow</web:Description>
+	    //   <web:PricePerUnit>600.0</web:PricePerUnit>
+	    //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
+	    //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+	    //   <web:Unit>
+	    //   </web:Unit>
+	    //   <web:VatPercent>20.0</web:VatPercent>
+	    //   <web:DiscountPercent>0.0</web:DiscountPercent>
+	    // </web:OrderRow>
+	    // <web:OrderRow>
+	    //   <web:ArticleNumber>
+	    //   </web:ArticleNumber>
+	    //   <web:Description>exvatRow2</web:Description>
+	    //   <web:PricePerUnit>300.0</web:PricePerUnit>
+	    //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
+	    //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+	    //   <web:Unit>
+	    //   </web:Unit>
+	    //   <web:VatPercent>10.0</web:VatPercent>
+	    //   <web:DiscountPercent>0.0</web:DiscountPercent>
+	    // </web:OrderRow>
+	    // <web:OrderRow>
+	    //   <web:ArticleNumber>
+	    //   </web:ArticleNumber>
+	    //   <web:Description>exvatShippingFee</web:Description>
+	    //   <web:PricePerUnit>160.0</web:PricePerUnit>
+	    //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
+	    //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+	    //   <web:Unit>
+	    //   </web:Unit>
+	    //   <web:VatPercent>10.0</web:VatPercent>
+	    //   <web:DiscountPercent>0.0</web:DiscountPercent>
+	    // </web:OrderRow>
+	    // <web:OrderRow>
+	    //   <web:ArticleNumber>
+	    //   </web:ArticleNumber>
+	    //   <web:Description>exvatInvoiceFee</web:Description>
+	    //   <web:PricePerUnit>80.0</web:PricePerUnit>
+	    //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
+	    //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+	    //   <web:Unit>
+	    //   </web:Unit>
+	    //   <web:VatPercent>10.0</web:VatPercent>
+	    //   <web:DiscountPercent>0.0</web:DiscountPercent>
+	    // </web:OrderRow>
+	    // <web:OrderRow>
+	    //   <web:ArticleNumber>TenCrownsOff</web:ArticleNumber>
+	    //   <web:Description>fixedDiscount: 10 off incvat (20%)</web:Description>
+	    //   <web:PricePerUnit>-5.71</web:PricePerUnit>
+	    //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
+	    //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+	    //   <web:Unit>
+	    //   </web:Unit>
+	    //   <web:VatPercent>20.0</web:VatPercent>
+	    //   <web:DiscountPercent>0.0</web:DiscountPercent>
+	    // </web:OrderRow>
+	    // <web:OrderRow>
+	    //   <web:ArticleNumber>TenCrownsOff</web:ArticleNumber>
+	    //   <web:Description>fixedDiscount: 10 off incvat (10%)</web:Description>
+	    //   <web:PricePerUnit>-2.86</web:PricePerUnit>
+	    //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
+	    //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+	    //   <web:Unit>
+	    //   </web:Unit>
+	    //   <web:VatPercent>10.0</web:VatPercent>
+	    //   <web:DiscountPercent>0.0</web:DiscountPercent>
+	    // </web:OrderRow>
+	    //</web:OrderRows>
+	    // ...	
+	
+	}		
 
 	@Test
-	public void test_orderRows_and_Fees_specified_incvat_and_vat_sent_to_webservice_using_useInvoicePayment_are_sent_as_incvat_and_vat() {
-		
+	public void test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_true() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
 			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
 		;				
 		OrderRowBuilder incvatRow = WebPayItem.orderRow()
-			.setAmountIncVat(100.00)
-			.setVatPercent(25)			
-			.setQuantity(1.0)
-			.setName("incvatRow")
-		;
-		OrderRowBuilder incvatRow2 = WebPayItem.orderRow()
-			.setAmountIncVat(100.00)
-			.setVatPercent(25)			
-			.setQuantity(1.0)
-			.setName("incvatRow2")
-		;		
-		
-		InvoiceFeeBuilder incvatInvoiceFee = WebPayItem.invoiceFee()
-			.setAmountIncVat(10.00)
-			.setVatPercent(25)
-			.setName("incvatInvoiceFee")
-		;		
-		
-		ShippingFeeBuilder incvatShippingFee = WebPayItem.shippingFee()
-			.setAmountIncVat(20.00)
-			.setVatPercent(25)
-			.setName("incvatShippingFee")
-		;	
-		
-		order.addOrderRow(incvatRow);
-		order.addOrderRow(incvatRow2);
-		order.addFee(incvatInvoiceFee);
-		order.addFee(incvatShippingFee);
-		
-		CreateOrderResponse response = order.useInvoicePayment().doRequest();
-
-		assertTrue( response.isOrderAccepted() );
-		System.out.println( "test_orderRows_and_Fees_specified_incvat_and_vat_sent_to_webservice_using_useInvoicePayment_are_sent_as_incvat_and_vat\n  Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);		
-		// Expected log:
-		// ...
-		//<web:OrderRows>
-        // <web:OrderRow>
-        //   <web:ArticleNumber>
-        //   </web:ArticleNumber>
-        //   <web:Description>incvatRow</web:Description>
-        //   <web:PricePerUnit>100.0</web:PricePerUnit>
-        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
-        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
-        //   <web:Unit>
-        //   </web:Unit>
-        //   <web:VatPercent>25.0</web:VatPercent>
-        //   <web:DiscountPercent>0.0</web:DiscountPercent>
-        // </web:OrderRow>
-        // <web:OrderRow>
-        //   <web:ArticleNumber>
-        //   </web:ArticleNumber>
-        //   <web:Description>incvatRow2</web:Description>
-        //   <web:PricePerUnit>100.0</web:PricePerUnit>
-        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
-        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
-        //   <web:Unit>
-        //   </web:Unit>
-        //   <web:VatPercent>25.0</web:VatPercent>
-        //   <web:DiscountPercent>0.0</web:DiscountPercent>
-        // </web:OrderRow>
-        // <web:OrderRow>
-        //   <web:ArticleNumber>
-        //   </web:ArticleNumber>
-        //   <web:Description>incvatShippingFee</web:Description>
-        //   <web:PricePerUnit>20.0</web:PricePerUnit>
-        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
-        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
-        //   <web:Unit>
-        //   </web:Unit>
-        //   <web:VatPercent>25.0</web:VatPercent>
-        //   <web:DiscountPercent>0.0</web:DiscountPercent>
-        // </web:OrderRow>
-        // <web:OrderRow>
-        //   <web:ArticleNumber>
-        //   </web:ArticleNumber>
-        //   <web:Description>incvatInvoiceFee</web:Description>
-        //   <web:PricePerUnit>10.0</web:PricePerUnit>
-        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
-        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
-        //   <web:Unit>
-        //   </web:Unit>
-        //   <web:VatPercent>25.0</web:VatPercent>
-        //   <web:DiscountPercent>0.0</web:DiscountPercent>
-        // </web:OrderRow>
-        //</web:OrderRows>
-		// ...		
-	}
-
-	@Test
-	public void test_orderRows_and_Fees_specified_incvat_and_exvat_sent_to_webservice_using_useInvoicePayment_are_sent_as_incvat_and_vat() {
-		
-		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
-			.setCountryCode(TestingTool.DefaultTestCountryCode)
-			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
-		;				
-		OrderRowBuilder incvatRow = WebPayItem.orderRow()
-			.setAmountIncVat(100.00)
-			.setAmountExVat(80.00)
-			.setQuantity(1.0)
-			.setName("incvatRow")
-		;
-		OrderRowBuilder incvatRow2 = WebPayItem.orderRow()
-			.setAmountIncVat(100.00)
-			.setAmountExVat(80.00)		
-			.setQuantity(1.0)
-			.setName("incvatRow2")
-		;		
-		
-		InvoiceFeeBuilder incvatInvoiceFee = WebPayItem.invoiceFee()
-			.setAmountIncVat(10.00)
-			.setAmountExVat(8.00)
-			.setName("incvatInvoiceFee")
-		;		
-		
-		ShippingFeeBuilder incvatShippingFee = WebPayItem.shippingFee()
-			.setAmountIncVat(20.00)
-			.setAmountExVat(16.00)
-			.setName("incvatShippingFee")
-		;	
-		
-		order.addOrderRow(incvatRow);
-		order.addOrderRow(incvatRow2);
-		order.addFee(incvatInvoiceFee);
-		order.addFee(incvatShippingFee);
-		
-		CreateOrderResponse response = order.useInvoicePayment().doRequest();
-
-		assertTrue( response.isOrderAccepted() );
-		System.out.println( "test_orderRows_and_Fees_specified_incvat_and_exvat_sent_to_webservice_using_useInvoicePayment_are_sent_as_incvat_and_vat\n  Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);		
-		// Expected log:
-		// ...
-        // <web:OrderRows>
-        //  <web:OrderRow>
-        //    <web:ArticleNumber>
-        //    </web:ArticleNumber>
-        //    <web:Description>incvatRow</web:Description>
-        //    <web:PricePerUnit>100.0</web:PricePerUnit>
-        //    <web:PriceIncludingVat>true</web:PriceIncludingVat>
-        //    <web:NumberOfUnits>1.0</web:NumberOfUnits>
-        //    <web:Unit>
-        //    </web:Unit>
-        //    <web:VatPercent>25.0</web:VatPercent>
-        //    <web:DiscountPercent>0.0</web:DiscountPercent>
-        //  </web:OrderRow>
-        //  <web:OrderRow>
-        //    <web:ArticleNumber>
-        //    </web:ArticleNumber>
-        //    <web:Description>incvatRow2</web:Description>
-        //    <web:PricePerUnit>100.0</web:PricePerUnit>
-        //    <web:PriceIncludingVat>true</web:PriceIncludingVat>
-        //    <web:NumberOfUnits>1.0</web:NumberOfUnits>
-        //    <web:Unit>
-        //    </web:Unit>
-        //    <web:VatPercent>25.0</web:VatPercent>
-        //    <web:DiscountPercent>0.0</web:DiscountPercent>
-        //  </web:OrderRow>
-        //  <web:OrderRow>
-        //    <web:ArticleNumber>
-        //    </web:ArticleNumber>
-        //    <web:Description>incvatShippingFee</web:Description>
-        //    <web:PricePerUnit>20.0</web:PricePerUnit>
-        //    <web:PriceIncludingVat>true</web:PriceIncludingVat>
-        //    <web:NumberOfUnits>1.0</web:NumberOfUnits>
-        //    <web:Unit>
-        //    </web:Unit>
-        //    <web:VatPercent>25.0</web:VatPercent>
-        //    <web:DiscountPercent>0.0</web:DiscountPercent>
-        //  </web:OrderRow>
-        //  <web:OrderRow>
-        //    <web:ArticleNumber>
-        //    </web:ArticleNumber>
-        //    <web:Description>incvatInvoiceFee</web:Description>
-        //    <web:PricePerUnit>10.0</web:PricePerUnit>
-        //    <web:PriceIncludingVat>true</web:PriceIncludingVat>
-        //    <web:NumberOfUnits>1.0</web:NumberOfUnits>
-        //    <web:Unit>
-        //    </web:Unit>
-        //    <web:VatPercent>25.0</web:VatPercent>
-        //    <web:DiscountPercent>0.0</web:DiscountPercent>
-        //  </web:OrderRow>
-        // <web:OrderRows>
-        // ...		
-	}
-
-	//if mixed specification types, send order as exvat if at least one exvat + vat found
-	public void test_that_createOrder_request_is_sent_as_incvat_iff_no_exvat_specified_anywhere_in_order() {
-		
-		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
-			.setCountryCode(TestingTool.DefaultTestCountryCode)
-			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
-		;				
-		OrderRowBuilder incvatRow = WebPayItem.orderRow()
-				.setAmountExVat(72.00)
+				.setAmountIncVat(720.00)
 				.setVatPercent(20)			
 				.setQuantity(1.0)
 				.setName("incvatRow")
 		;
 		OrderRowBuilder incvatRow2 = WebPayItem.orderRow()
-			.setAmountIncVat(33.00)
+			.setAmountIncVat(330.00)
 			.setVatPercent(10)			
 			.setQuantity(1.0)
 			.setName("incvatRow2")
 		;		
 		
 		InvoiceFeeBuilder incvatInvoiceFee = WebPayItem.invoiceFee()
-			.setAmountIncVat(8.80)
+			.setAmountIncVat(88.00)
 			.setVatPercent(10)
 			.setName("incvatInvoiceFee")
 		;
 		
 		ShippingFeeBuilder incvatShippingFee = WebPayItem.shippingFee()
-			.setAmountIncVat(17.60)
+			.setAmountIncVat(172.00)
 			.setVatPercent(10)
 			.setName("incvatShippingFee")
 		;	
@@ -551,7 +386,7 @@ public class CreateInvoiceOrderTest {
 			.setAmountIncVat(10.0)
 			.setDiscountId("TenCrownsOff")
 			.setName("fixedDiscount: 10 off incvat")
-		;   
+		;     
 		
 		order.addOrderRow(incvatRow);
 		order.addOrderRow(incvatRow2);
@@ -562,74 +397,85 @@ public class CreateInvoiceOrderTest {
 		CreateOrderResponse response = order.useInvoicePayment().doRequest();
 
 		assertTrue( response.isOrderAccepted() );
-		// order total should be (72+33+17.6+8.8)-10 = 121.40, see integration test
-		assertEquals( "121.40", response.amount );		
-		System.out.println( "test_that_createOrder_request_is_sent_as_incvat_iff_no_exvat_specified_anywhere_in_order\n  Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);		
+		assertEquals( (Object)1300.00, response.amount );		
+		System.out.println( "test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_true\n"
+				+ "  Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);		
 		
-		// Expected log:
-		// ...
-        
-		// TODO
-		
-		// <web:OrderRows>
-        // ...	
-		
-	}
-	
-	//payment plan request	
-	@Test
-	public void test_orderRows_and_Fees_specified_exvat_and_vat_sent_to_webservice_using_usePaymentPlanPayment_are_sent_as_exvat_and_vat() {
-		
-		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
-			.setCountryCode(TestingTool.DefaultTestCountryCode)
-			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
-		;				
-		OrderRowBuilder exvatRow = WebPayItem.orderRow()
-			.setAmountExVat(1000.00)
-			.setVatPercent(25)			
-			.setQuantity(1.0)
-			.setName("exvatRow")
-		;
-		OrderRowBuilder exvatRow2 = WebPayItem.orderRow()
-			.setAmountExVat(1000.00)
-			.setVatPercent(25)			
-			.setQuantity(1.0)
-			.setName("exvatRow2")
-		;		
-		
-		InvoiceFeeBuilder exvatInvoiceFee = WebPayItem.invoiceFee()
-			.setAmountExVat(10.00)
-			.setVatPercent(25)
-			.setName("exvatInvoiceFee")
-		;		
-		
-		ShippingFeeBuilder exvatShippingFee = WebPayItem.shippingFee()
-			.setAmountExVat(20.00)
-			.setVatPercent(25)
-			.setName("exvatShippingFee")
-		;	
-		
-		order.addOrderRow(exvatRow);
-		order.addOrderRow(exvatRow2);
-		order.addFee(exvatInvoiceFee);
-		order.addFee(exvatShippingFee);
-		
-    	// get payment plan params
-        PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
-            .setCountryCode(TestingTool.DefaultTestCountryCode)
-            .doRequest();
-        String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
+		//Expected log:
+		//...
+		//<web:OrderRows>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>incvatRow</web:Description>
+        //   <web:PricePerUnit>720.0</web:PricePerUnit>
+        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>20.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>incvatRow2</web:Description>
+        //   <web:PricePerUnit>330.0</web:PricePerUnit>
+        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>10.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>incvatShippingFee</web:Description>
+        //   <web:PricePerUnit>172.0</web:PricePerUnit>
+        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>10.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>incvatInvoiceFee</web:Description>
+        //   <web:PricePerUnit>88.0</web:PricePerUnit>
+        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>10.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>TenCrownsOff</web:ArticleNumber>
+        //   <web:Description>fixedDiscount: 10 off incvat (20%)</web:Description>
+        //   <web:PricePerUnit>-6.86</web:PricePerUnit>
+        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>20.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>TenCrownsOff</web:ArticleNumber>
+        //   <web:Description>fixedDiscount: 10 off incvat (10%)</web:Description>
+        //   <web:PricePerUnit>-3.14</web:PricePerUnit>
+        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>10.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        //</web:OrderRows>
+	    // ...			
+	}		
 
-        CreateOrderResponse response = order.usePaymentPlanPayment(code).doRequest();
-    
-		assertTrue( response.isOrderAccepted() );
-		System.out.println( "test_orderRows_and_Fees_specified_exvat_and_vat_sent_to_webservice_using_usePaymentPlanPayment_are_sent_as_exvat_and_vat\n  Check logs that order rows were sent as exvat+vat for order row #"+response.orderId);		
-		// Expected log:
-		// ...
-		
-		// TODO
-		
-		// ...		
-	}
 }
