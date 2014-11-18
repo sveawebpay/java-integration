@@ -7,6 +7,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Set;
 
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.FixedDiscountBuilder;
@@ -83,6 +84,7 @@ public class WebserviceRowFormatter {
 		formatOrderRows(usePriceIncludingVat);
 		formatShippingFeeRows(usePriceIncludingVat);
 		formatInvoiceFeeRows(usePriceIncludingVat);
+		
 		formatFixedDiscountRows(usePriceIncludingVat);
 		formatRelativeDiscountRows(usePriceIncludingVat);
 		
@@ -145,9 +147,16 @@ public class WebserviceRowFormatter {
                 totalAmountIncVat += amountIncVat * quantity;
                 totalAmountExVat += amountExVat * quantity;
 
-                double vatRate = (amountIncVat == 0.0 || amountExVat == 0.0) ? 0 : 
-                    ((amountIncVat / amountExVat) - 1) * 100;
-                double vatRateAsHundredth = vatPercent * 0.01;
+                double vatRate;
+                double vatRateAsHundredth;
+                
+                if(amountIncVat == 0.0 || amountExVat == 0.0) {
+                	vatRate = 0;
+                }
+                else {
+                	vatRate = MathUtil.bankersRound( ((amountIncVat/amountExVat)-1)*100 );	// round to avoid i.e. inc/ex 33/30 => vat 10.00000000000009            	
+                }
+                vatRateAsHundredth = vatRate * 0.01;
                 
                 increaseCumulativeVatRateAmounts(totalAmountPerVatRateIncVat, vatRate, (amountExVat * quantity * (1 + vatRateAsHundredth)) );                
                 increaseCumulativeVatRateAmounts(totalAmountPerVatRateExVat, vatRate, amountExVat*quantity );                                
@@ -164,11 +173,12 @@ public class WebserviceRowFormatter {
 				// incvat set only, calculate discount from amount inc vat
 				if (existingRow.getAmountIncVat() != null && existingRow.getVatPercent() == null && existingRow.getAmountExVat() == null) 
 				{
-				
-                	for (double vatRate : totalAmountPerVatRateIncVat.keySet()) {
+					
+                	Set<Double> keySet = totalAmountPerVatRateIncVat.keySet();
+					for (double vatRate : keySet) {
                     	SveaOrderRow orderRow = newRowBasedOnExisting(existingRow);
 
-                        double amountAtThisVatRateIncVat = totalAmountPerVatRateIncVat.get(vatRate);
+                    	double amountAtThisVatRateIncVat = totalAmountPerVatRateIncVat.get(vatRate);
 
                         if (totalAmountPerVatRateIncVat.size() > 1) {
                             String name = existingRow.getName();
@@ -312,15 +322,13 @@ public class WebserviceRowFormatter {
             	// serializeAmountAndVat gives preference to ExVat and vatPercent, i.e. PriceIncludingVat flag is set to false (legacy), so we need to
 				// make sure ExVat and VatPercent are set/not set according to whether we want to force order to use price excluding vat or not in request
                 if( usePriceIncludingVat == true  ) {                	
-                	//vat satt ? använd vat : räkna om från incvat, exvat
-                	//incvat satt ? använd incvat : räkna om från vat, exvat 
-                	//exvat = null
+                	
                 	double vat;
                 	if( existingRow.getVatPercent() != null ) { 
             			vat = existingRow.getVatPercent();
                 	} 
                 	else {
-                		vat = ((existingRow.getAmountIncVat()/existingRow.getAmountExVat())-1)*100;
+                		vat = MathUtil.bankersRound( ((existingRow.getAmountIncVat()/existingRow.getAmountExVat())-1)*100 );	// round vat to two decimals
                 	}
                 	
     				double incvat;
@@ -328,22 +336,20 @@ public class WebserviceRowFormatter {
                 		incvat = existingRow.getAmountIncVat();                	
 	                }
 	                else {
-            			incvat = (existingRow.getAmountExVat()*((vat)+1));
+            			incvat = MathUtil.bankersRound( (existingRow.getAmountExVat()*((vat)+1)) );
 	                }
                 	
                 	newRows.add(serializeAmountAndVat(null, vat,
                 			incvat, newRowBasedOnExisting(existingRow)));
                 }
                 if( (usePriceIncludingVat == false ) ) {
-                	//vat satt ? använd vat : räkna om från incvat, exvat
-                	//exvat satt ? använd exvat : räkna om från vat, incvat 
-                	//incvat = null
+
                 	double vat;
                 	if( existingRow.getVatPercent() != null ) { 
             			vat = existingRow.getVatPercent();
                 	} 
                 	else {
-                		vat = ((existingRow.getAmountIncVat()/existingRow.getAmountExVat())-1)*100;
+                		vat = MathUtil.bankersRound( ((existingRow.getAmountIncVat()/existingRow.getAmountExVat())-1)*100 );
                 	}
     				double exvat;
                 	if( existingRow.getAmountExVat() != null ) {

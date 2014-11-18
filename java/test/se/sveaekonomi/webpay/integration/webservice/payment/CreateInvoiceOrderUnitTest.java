@@ -631,7 +631,7 @@ public class CreateInvoiceOrderUnitTest {
 		;
 		OrderRowBuilder incvatRow2 = WebPayItem.orderRow()
 			.setAmountIncVat(33.00)
-			.setVatPercent(10)			
+			.setAmountExVat(30.00)
 			.setQuantity(1.0)
 			.setName("incvatRow2")
 		;		
@@ -762,6 +762,8 @@ public class CreateInvoiceOrderUnitTest {
 		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(5).PriceIncludingVat );
 		// order total should be (72+33+17.6+8.8)-10 = 121.40, see integration test
 	}
+	
+	
 	
 	
 	/// relative discount examples:        
@@ -1160,5 +1162,5 @@ public class CreateInvoiceOrderUnitTest {
 		assertEquals( (Object)(-2.86), (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(5).PricePerUnit  ); // cast avoids deprecation
 		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(5).VatPercent  ); // cast avoids deprecation		
 		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(5).PriceIncludingVat );
-	}
+	}	
 }
