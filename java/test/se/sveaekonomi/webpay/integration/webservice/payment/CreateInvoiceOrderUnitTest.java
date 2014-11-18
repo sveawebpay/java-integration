@@ -778,9 +778,9 @@ public class CreateInvoiceOrderUnitTest {
 		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(5).PriceIncludingVat );
 	}	
 	
-    /// fixed discount examples:        
+    // fixed discount examples:        
 	@Test
-	public void test_fixedDiscount_with_amount_specified_as_exvat_and_vat_rate_order_sent_with_PriceIncludingVat_false() {
+	public void test_fixedDiscount_with_amount_specified_as_exvat_and_given_vat_rate_order_sent_with_PriceIncludingVat_false() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -848,7 +848,7 @@ public class CreateInvoiceOrderUnitTest {
 	}	
 	
 	@Test
-	public void test_fixedDiscount_with_amount_specified_as_exvat_and_vat_rate_order_sent_with_PriceIncludingVat_true() {
+	public void test_fixedDiscount_with_amount_specified_as_exvat_and_given_vat_rate_order_sent_with_PriceIncludingVat_true() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -916,7 +916,7 @@ public class CreateInvoiceOrderUnitTest {
 	}	
 
 	@Test
-	public void test_fixedDiscount_with_amount_specified_as_incvat_and_vat_rate_sent_with_PriceIncludingVat_false() {
+	public void test_fixedDiscount_with_amount_specified_as_incvat_and_given_vat_rate_order_sent_with_PriceIncludingVat_false() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -984,7 +984,7 @@ public class CreateInvoiceOrderUnitTest {
 	}	
 
 	@Test
-	public void test_fixedDiscount_with_amount_specified_as_incvat_and_vat_rate_order_sent_with_PriceIncludingVat_true() {
+	public void test_fixedDiscount_with_amount_specified_as_incvat_and_given_vat_rate_order_sent_with_PriceIncludingVat_true() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -1051,43 +1051,42 @@ public class CreateInvoiceOrderUnitTest {
 		assertEquals( true, soapRequest.request.CreateOrderInformation.OrderRows.get(4).PriceIncludingVat );
 	}	
 	
-	
 	@Test
-	public void test_fixedDiscount_amount_with_calculated_vat_rate_exvat() {
+	public void test_fixedDiscount_amount_with_specified_as_exvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
 			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
 		;				
 		OrderRowBuilder exvatRow = WebPayItem.orderRow()
-				.setAmountExVat(60.00)
+				.setAmountExVat(600.00)
 				.setVatPercent(20)			
 				.setQuantity(1.0)
 				.setName("exvatRow")
 		;
 		OrderRowBuilder exvatRow2 = WebPayItem.orderRow()
-			.setAmountExVat(30.00)
+			.setAmountExVat(300.00)
 			.setVatPercent(10)			
 			.setQuantity(1.0)
 			.setName("exvatRow2")
 		;		
 		
 		InvoiceFeeBuilder exvatInvoiceFee = WebPayItem.invoiceFee()
-			.setAmountExVat(8.00)
+			.setAmountExVat(80.00)
 			.setVatPercent(10)
 			.setName("exvatInvoiceFee")
 		;
 		
 		ShippingFeeBuilder exvatShippingFee = WebPayItem.shippingFee()
-			.setAmountExVat(16.00)
+			.setAmountExVat(160.00)
 			.setVatPercent(10)
 			.setName("exvatShippingFee")
 		;	
 	
 		FixedDiscountBuilder fixedDiscount = WebPayItem.fixedDiscount()
 			.setAmountExVat(10.0)
-			.setDiscountId("TenCrownsOff")
-			.setName("fixedDiscount: 10 off exvat")
+			.setDiscountId("TenCrownsOffExVat")
+			.setName("fixedDiscount: 10 off exvat")	
 		;   
 		
 		order.addOrderRow(exvatRow);
@@ -1098,18 +1097,18 @@ public class CreateInvoiceOrderUnitTest {
 
 		SveaRequest<SveaCreateOrder> soapRequest = order.useInvoicePayment().prepareRequest();
 		// all order rows
-		assertEquals( (Object)60.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)600.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit  ); // cast avoids deprecation
 		assertEquals( (Object)20.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(0).VatPercent  ); // cast avoids deprecation		
 		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(0).PriceIncludingVat );
-		assertEquals( (Object)30.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)300.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit  ); // cast avoids deprecation
 		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(1).VatPercent  ); // cast avoids deprecation		
 		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(1).PriceIncludingVat );
 		// all shipping fee rows
-		assertEquals( (Object)16.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)160.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit  ); // cast avoids deprecation
 		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(2).VatPercent  ); // cast avoids deprecation		
 		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(2).PriceIncludingVat );
 		// all invoice fee rows		
-		assertEquals( (Object)8.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(3).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)80.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(3).PricePerUnit  ); // cast avoids deprecation
 		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(3).VatPercent  ); // cast avoids deprecation				
 		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(3).PriceIncludingVat );
         // all discount rows
@@ -1121,35 +1120,104 @@ public class CreateInvoiceOrderUnitTest {
 		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(5).VatPercent  ); // cast avoids deprecation		
 		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(5).PriceIncludingVat );
 	}	
-    
+
 	@Test
-	public void test_fixedDiscount_amount_with_calculated_vat_rate_incvat() {
+	public void test_fixedDiscount_amount_with_specified_as_exvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_true() {
+		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+		;				
+		OrderRowBuilder incvatRow = WebPayItem.orderRow()
+				.setAmountIncVat(720.00)
+				.setVatPercent(20)			
+				.setQuantity(1.0)
+				.setName("incvatRow")
+		;
+		OrderRowBuilder incvatRow2 = WebPayItem.orderRow()
+			.setAmountIncVat(330.00)
+			.setVatPercent(10)			
+			.setQuantity(1.0)
+			.setName("incvatRow2")
+		;		
+		
+		InvoiceFeeBuilder incvatInvoiceFee = WebPayItem.invoiceFee()
+			.setAmountIncVat(88.00)
+			.setVatPercent(10)
+			.setName("incvatInvoiceFee")
+		;
+		
+		ShippingFeeBuilder incvatShippingFee = WebPayItem.shippingFee()
+			.setAmountIncVat(172.00)
+			.setVatPercent(10)
+			.setName("incvatShippingFee")
+		;	
+	
+		FixedDiscountBuilder fixedDiscount = WebPayItem.fixedDiscount()
+			.setAmountExVat(10.0)
+			.setDiscountId("TenCrownsOffExVat")
+			.setName("fixedDiscount: 10 off exvat")	
+		;   
+		
+		order.addOrderRow(incvatRow);
+		order.addOrderRow(incvatRow2);
+		order.addFee(incvatInvoiceFee);
+		order.addFee(incvatShippingFee);
+		order.addDiscount(fixedDiscount);		
+
+		SveaRequest<SveaCreateOrder> soapRequest = order.useInvoicePayment().prepareRequest();
+		// all order rows
+		assertEquals( (Object)720.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)20.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(0).VatPercent  ); // cast avoids deprecation		
+		assertEquals( true, soapRequest.request.CreateOrderInformation.OrderRows.get(0).PriceIncludingVat );
+		assertEquals( (Object)330.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(1).VatPercent  ); // cast avoids deprecation		
+		assertEquals( true, soapRequest.request.CreateOrderInformation.OrderRows.get(1).PriceIncludingVat );
+		// all shipping fee rows
+		assertEquals( (Object)172.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(2).VatPercent  ); // cast avoids deprecation		
+		assertEquals( true, soapRequest.request.CreateOrderInformation.OrderRows.get(2).PriceIncludingVat );
+		// all invoice fee rows		
+		assertEquals( (Object)88.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(3).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(3).VatPercent  ); // cast avoids deprecation				
+		assertEquals( true, soapRequest.request.CreateOrderInformation.OrderRows.get(3).PriceIncludingVat );
+        // all discount rows
+        // expected: fixedDiscount: 10 off exvat, order row amount are 66% at 20% vat, 33% at 10% vat => 6.67ex @20% = 8.0 inc and 3.33ex @10% = 3.66inc 
+		assertEquals( (Object)(-8.00), (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(4).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)20.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(4).VatPercent  ); // cast avoids deprecation							
+		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(4).PriceIncludingVat );
+		assertEquals( (Object)(-3.66), (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(5).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(5).VatPercent  ); // cast avoids deprecation		
+		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(5).PriceIncludingVat );
+	}		
+	
+	public void test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
 			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
 		;				
 		OrderRowBuilder exvatRow = WebPayItem.orderRow()
-				.setAmountExVat(60.00)
+				.setAmountExVat(600.00)
 				.setVatPercent(20)			
 				.setQuantity(1.0)
 				.setName("exvatRow")
 		;
 		OrderRowBuilder exvatRow2 = WebPayItem.orderRow()
-			.setAmountExVat(30.00)
+			.setAmountExVat(300.00)
 			.setVatPercent(10)			
 			.setQuantity(1.0)
 			.setName("exvatRow2")
 		;		
 		
 		InvoiceFeeBuilder exvatInvoiceFee = WebPayItem.invoiceFee()
-			.setAmountExVat(8.00)
+			.setAmountExVat(80.00)
 			.setVatPercent(10)
 			.setName("exvatInvoiceFee")
 		;
 		
 		ShippingFeeBuilder exvatShippingFee = WebPayItem.shippingFee()
-			.setAmountExVat(16.00)
+			.setAmountExVat(160.00)
 			.setVatPercent(10)
 			.setName("exvatShippingFee")
 		;	
@@ -1158,7 +1226,7 @@ public class CreateInvoiceOrderUnitTest {
 			.setAmountIncVat(10.0)
 			.setDiscountId("TenCrownsOff")
 			.setName("fixedDiscount: 10 off incvat")
-		;   
+		;     
 		
 		order.addOrderRow(exvatRow);
 		order.addOrderRow(exvatRow2);
@@ -1168,18 +1236,18 @@ public class CreateInvoiceOrderUnitTest {
 
 		SveaRequest<SveaCreateOrder> soapRequest = order.useInvoicePayment().prepareRequest();
 		// all order rows
-		assertEquals( (Object)60.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)600.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit  ); // cast avoids deprecation
 		assertEquals( (Object)20.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(0).VatPercent  ); // cast avoids deprecation		
 		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(0).PriceIncludingVat );
-		assertEquals( (Object)30.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)300.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit  ); // cast avoids deprecation
 		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(1).VatPercent  ); // cast avoids deprecation		
 		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(1).PriceIncludingVat );
 		// all shipping fee rows
-		assertEquals( (Object)16.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)160.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit  ); // cast avoids deprecation
 		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(2).VatPercent  ); // cast avoids deprecation		
 		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(2).PriceIncludingVat );
 		// all invoice fee rows		
-		assertEquals( (Object)8.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(3).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)80.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(3).PricePerUnit  ); // cast avoids deprecation
 		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(3).VatPercent  ); // cast avoids deprecation				
 		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(3).PriceIncludingVat );
 	    // all discount rows
@@ -1190,6 +1258,78 @@ public class CreateInvoiceOrderUnitTest {
 		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(4).PriceIncludingVat );
 		assertEquals( (Object)(-2.86), (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(5).PricePerUnit  ); // cast avoids deprecation
 		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(5).VatPercent  ); // cast avoids deprecation		
-		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(5).PriceIncludingVat );
-	}	
+		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(5).PriceIncludingVat );	
+	}		
+
+	@Test
+	public void test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_true() {
+		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+		;				
+		OrderRowBuilder incvatRow = WebPayItem.orderRow()
+				.setAmountIncVat(720.00)
+				.setVatPercent(20)			
+				.setQuantity(1.0)
+				.setName("incvatRow")
+		;
+		OrderRowBuilder incvatRow2 = WebPayItem.orderRow()
+			.setAmountIncVat(330.00)
+			.setVatPercent(10)			
+			.setQuantity(1.0)
+			.setName("incvatRow2")
+		;		
+		
+		InvoiceFeeBuilder incvatInvoiceFee = WebPayItem.invoiceFee()
+			.setAmountIncVat(88.00)
+			.setVatPercent(10)
+			.setName("incvatInvoiceFee")
+		;
+		
+		ShippingFeeBuilder incvatShippingFee = WebPayItem.shippingFee()
+			.setAmountIncVat(172.00)
+			.setVatPercent(10)
+			.setName("incvatShippingFee")
+		;	
+	
+		FixedDiscountBuilder fixedDiscount = WebPayItem.fixedDiscount()
+			.setAmountIncVat(10.0)
+			.setDiscountId("TenCrownsOff")
+			.setName("fixedDiscount: 10 off incvat")
+		;     
+		
+		order.addOrderRow(incvatRow);
+		order.addOrderRow(incvatRow2);
+		order.addFee(incvatInvoiceFee);
+		order.addFee(incvatShippingFee);
+		order.addDiscount(fixedDiscount);		
+
+		SveaRequest<SveaCreateOrder> soapRequest = order.useInvoicePayment().prepareRequest();
+		// all order rows
+		assertEquals( (Object)720.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)20.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(0).VatPercent  ); // cast avoids deprecation		
+		assertEquals( true, soapRequest.request.CreateOrderInformation.OrderRows.get(0).PriceIncludingVat );
+		assertEquals( (Object)330.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(1).VatPercent  ); // cast avoids deprecation		
+		assertEquals( true, soapRequest.request.CreateOrderInformation.OrderRows.get(1).PriceIncludingVat );
+		// all shipping fee rows
+		assertEquals( (Object)172.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(2).VatPercent  ); // cast avoids deprecation		
+		assertEquals( true, soapRequest.request.CreateOrderInformation.OrderRows.get(2).PriceIncludingVat );
+		// all invoice fee rows		
+		assertEquals( (Object)88.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(3).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(3).VatPercent  ); // cast avoids deprecation				
+		assertEquals( true, soapRequest.request.CreateOrderInformation.OrderRows.get(3).PriceIncludingVat );
+	    // all discount rows
+        // expected: fixedDiscount: 10 off incvat, order row amount are 66% at 20% vat, 33% at 10% vat  
+        // 1.2*0.66x + 1.1*0.33x = 10 => x = 8.6580 => 5.7143 @20% and 2.8571 @10% = 10kr
+		assertEquals( (Object)(-6.86), (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(4).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)20.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(4).VatPercent  ); // cast avoids deprecation							
+		assertEquals( true, soapRequest.request.CreateOrderInformation.OrderRows.get(4).PriceIncludingVat );
+		assertEquals( (Object)(-3.14), (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(5).PricePerUnit  ); // cast avoids deprecation
+		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(5).VatPercent  ); // cast avoids deprecation		
+		assertEquals( true, soapRequest.request.CreateOrderInformation.OrderRows.get(5).PriceIncludingVat );	
+	}		
+
 }
