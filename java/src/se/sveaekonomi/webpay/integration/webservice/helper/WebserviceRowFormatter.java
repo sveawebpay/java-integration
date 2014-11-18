@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Set;
 
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
@@ -203,12 +204,12 @@ public class WebserviceRowFormatter {
 
 				// exvat set only, calculate discount from amount ex vat
 				if (existingRow.getAmountIncVat() == null && existingRow.getVatPercent() == null && existingRow.getAmountExVat() != null) 
-				{
-
+				{              
                 	for (double vatRate : totalAmountPerVatRateExVat.keySet()) {
                     	SveaOrderRow orderRow = newRowBasedOnExisting(existingRow);
 
-                        double amountAtThisVatRateExVat = totalAmountPerVatRateExVat.get(vatRate);
+     					// we'll need the ex vat total, so reconstruct totalAmountExVat from inc vat totals
+                        double amountAtThisVatRateExVat = totalAmountPerVatRateIncVat.get(vatRate)/(1+(vatRate/100));
 
                         if (totalAmountPerVatRateExVat.size() > 1) {
                             String name = existingRow.getName();
@@ -220,7 +221,7 @@ public class WebserviceRowFormatter {
                         double discountAtThisVatRateExVat = existingRow.getAmountExVat() * (amountAtThisVatRateExVat / totalAmountExVat) ;                     
 
                         if( usePriceIncludingVat ) {
-                        	orderRow.PricePerUnit = -MathUtil.bankersRound( convertExVatToIncVat(discountAtThisVatRateExVat, vatRate) );	// TODO 
+                        	orderRow.PricePerUnit = -MathUtil.bankersRound( convertExVatToIncVat(discountAtThisVatRateExVat, vatRate) ); 
                         	orderRow.VatPercent = vatRate;
                         	orderRow.PriceIncludingVat = true;                        	
                         }
