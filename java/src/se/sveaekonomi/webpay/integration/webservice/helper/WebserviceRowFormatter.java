@@ -7,7 +7,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Set;
 
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
@@ -72,15 +71,25 @@ public class WebserviceRowFormatter {
 	} 	
 	
 	public ArrayList<SveaOrderRow> formatRows() {
+		return formatRows(null);
+	}
+	
+	/**
+	 * creates builds SveaOrderRows from OrderBuilder order rows, fees and discounts
+	 * @param usePriceIncludingVat if true, forces order rows PricePerUnit to include vat, and sets PriceIncludingVat flag to true 
+	 * @return
+	 */
+	public ArrayList<SveaOrderRow> formatRows(Boolean usePriceIncludingVat) {
 		newRows = new ArrayList<SveaOrderRow>();		
-
 
 		// calculate order row totals, used to calculate discounts split per vatrate
 		calculateTotals();				
-
-		// check if any rows were specified w/PriceIncludingVat = false, and if so, convert all rows to use legacy setting of flag = false
-		// done first so as not to lose accuracy by converting back in/from serializeAmountAndVat later 
-		boolean usePriceIncludingVat = checkUntaintedByExVatAndVatPercent();		
+		
+		if( usePriceIncludingVat == null ) {
+			// check if any rows were specified w/PriceIncludingVat = false, and if so, convert all rows to use legacy setting of flag = false
+			// done first so as not to lose accuracy by converting back in/from serializeAmountAndVat later 
+			usePriceIncludingVat = checkUntaintedByExVatAndVatPercent();		
+		}
 		
 		formatOrderRows(usePriceIncludingVat);
 		formatShippingFeeRows(usePriceIncludingVat);
@@ -247,7 +256,7 @@ public class WebserviceRowFormatter {
                 	double discountAtThisVatRateExVat = discountAtThisVatRateIncVat - discountAtThisVatRateIncVat * MathUtil.reverseVatRate(vatRate);
                     
                     if( usePriceIncludingVat ) {
-                    	orderRow.PricePerUnit = -MathUtil.bankersRound( convertExVatToIncVat(discountAtThisVatRateExVat, vatRate) );	// TODO 
+                    	orderRow.PricePerUnit = -MathUtil.bankersRound( convertExVatToIncVat(discountAtThisVatRateExVat, vatRate) );
                     	orderRow.VatPercent = vatRate;
                     	orderRow.PriceIncludingVat = true;                        	
                     }
@@ -266,7 +275,7 @@ public class WebserviceRowFormatter {
                 	SveaOrderRow orderRow = newRowBasedOnExisting(existingRow);
 
                     if( usePriceIncludingVat ) {
-                    	orderRow.PricePerUnit = -MathUtil.bankersRound( convertExVatToIncVat(existingRow.getAmountExVat(), existingRow.getVatPercent()) );	// TODO 
+                    	orderRow.PricePerUnit = -MathUtil.bankersRound( convertExVatToIncVat(existingRow.getAmountExVat(), existingRow.getVatPercent()) ); 
                     	orderRow.VatPercent = existingRow.getVatPercent();
                     	orderRow.PriceIncludingVat = true;                        	
                     }
@@ -337,11 +346,10 @@ public class WebserviceRowFormatter {
                 		incvat = existingRow.getAmountIncVat();                	
 	                }
 	                else {
-            			incvat = MathUtil.bankersRound( (existingRow.getAmountExVat()*((vat)+1)) );
+            			incvat = MathUtil.bankersRound( (existingRow.getAmountExVat()*((vat/100)+1)) );
 	                }
                 	
-                	newRows.add(serializeAmountAndVat(null, vat,
-                			incvat, newRowBasedOnExisting(existingRow)));
+                	newRows.add(serializeAmountAndVat(null, vat, incvat, newRowBasedOnExisting(existingRow)));
                 }
                 if( (usePriceIncludingVat == false ) ) {
 
@@ -360,8 +368,7 @@ public class WebserviceRowFormatter {
             			exvat = MathUtil.bankersRound( (existingRow.getAmountIncVat()/((vat/100)+1)) );
 	                }                	
                 
-                	newRows.add(serializeAmountAndVat(exvat, vat,
-                			null, newRowBasedOnExisting(existingRow)));                  	
+                	newRows.add(serializeAmountAndVat(exvat, vat, null, newRowBasedOnExisting(existingRow)));                  	
                 }
 			}
 		}
@@ -448,7 +455,7 @@ public class WebserviceRowFormatter {
 		return orderRow;
 	}
 
-	// serializeAmountAndVat gives preference to ExVat and vatPercent, i.e. PriceIncludingVat flag is set to false (legacy)
+	// serializeAmountAndVat gives preference to ExVat and vatPercent, and PriceIncludingVat flag is not set (=legacy PricePerUnit specification)
 	private SveaOrderRow serializeAmountAndVat(Double amountExVat, Double vatPercent, Double amountIncVat, SveaOrderRow orderRow) {
 		if (vatPercent != null && amountExVat != null) {
 			orderRow.PricePerUnit = amountExVat;

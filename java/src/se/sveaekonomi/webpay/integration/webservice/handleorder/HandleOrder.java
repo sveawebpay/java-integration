@@ -49,6 +49,10 @@ public class HandleOrder {
     }
     
     public SveaRequest<SveaDeliverOrder> prepareRequest() {
+    	return prepareRequest(null);
+    }
+    
+    public SveaRequest<SveaDeliverOrder> prepareRequest(Boolean usePriceIncludingVat) {
         String errors = "";
         errors = validateOrder();
         
@@ -72,7 +76,8 @@ public class HandleOrder {
                     ? order.getNumberOfCreditDays() : 0);
             
             WebserviceRowFormatter formatter = new WebserviceRowFormatter(order);
-            invoiceDetails.OrderRows  = formatter.formatRows(); 
+                        
+            invoiceDetails.OrderRows  = formatter.formatRows(usePriceIncludingVat); 
             orderInformation.deliverInvoiceDetails = invoiceDetails;
         }
         
@@ -93,6 +98,20 @@ public class HandleOrder {
         String soapMessage = soapBuilder.makeSoapMessage("DeliverOrderEu", xml);
         NodeList soapResponse = soapBuilder.deliverOrderEuRequest(soapMessage, url.toString());
         DeliverOrderResponse response = new DeliverOrderResponse(soapResponse); 
+        
+        // if we received error 50036 from webservice , resend request with PriceIncludingVat flipped in request
+        String resultCode = response.getResultCode();
+		if( resultCode.equals("50036") ) {         				
+			Boolean oldVatFlag = request.request.deliverOrderInformation.getDeliverInvoiceDetails().OrderRows.get(0).PriceIncludingVat;   
+        	SveaRequest<SveaDeliverOrder> flippedVatRequest = this.prepareRequest(!oldVatFlag);
+            String flippedVatXml = xmlBuilder.getDeliverOrderEuXml(flippedVatRequest.request);
+            SveaSoapBuilder newSoapBuilder = new SveaSoapBuilder();
+            String flippedVatSoapMessage = newSoapBuilder.makeSoapMessage("DeliverOrderEu", flippedVatXml);
+            NodeList flippedVatSoapResponse = newSoapBuilder.deliverOrderEuRequest(flippedVatSoapMessage, url.toString());
+            DeliverOrderResponse flippedVatResponse = new DeliverOrderResponse(flippedVatSoapResponse);   
+            response = flippedVatResponse;
+        }
+        
         return response;
     }
 }
