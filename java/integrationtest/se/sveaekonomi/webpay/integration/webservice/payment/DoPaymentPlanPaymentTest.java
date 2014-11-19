@@ -139,8 +139,8 @@ public class DoPaymentPlanPaymentTest {
   		
   		assertTrue( response.isOrderAccepted() );
   		assertEquals( (Object)1304.00, response.amount );		
-  		System.out.println( "test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false\n"
-  				+ "  Check logs that order rows were sent as exvat+vat for order row #"+response.orderId);			
+  		//System.out.println( "test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false\n"
+  		//		+ "  Check logs that order rows were sent as exvat+vat for order row #"+response.orderId);			
   	}		
 
   	@Test
@@ -197,8 +197,8 @@ public class DoPaymentPlanPaymentTest {
   		
   		assertTrue( response.isOrderAccepted() );
   		assertEquals( (Object)1300.00, response.amount );		
-  		System.out.println( "test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_true\n"
-  				+ "  Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);			
+  		//System.out.println( "test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_true\n"
+  		//		+ "  Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);			
   	}		    
     
 }
