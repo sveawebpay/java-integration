@@ -114,9 +114,14 @@ public class WebserviceRowFormatter {
 	
 	private <T extends RowBuilder> void formatRowLists(List<T> rows) {
 		for (RowBuilder existingRow : rows) {
+
+			// if fixedDiscount row, calculate vat, split over several rows if needed.
 			if (FixedDiscountBuilder.class.equals(existingRow.getClass())) {
-                if (existingRow.getAmountIncVat() != null && existingRow.getVatPercent() == null && existingRow.getAmountExVat() == null) {
-                    for (double vatRate : totalAmountPerVatRateIncVat.keySet()) {
+				
+				// incvat set only
+				if (existingRow.getAmountIncVat() != null && existingRow.getVatPercent() == null && existingRow.getAmountExVat() == null) {
+
+                	for (double vatRate : totalAmountPerVatRateIncVat.keySet()) {
                     	SveaOrderRow orderRow = newRowBasedOnExisting(existingRow);
 
                         double amountAtThisVatRateIncVat = totalAmountPerVatRateIncVat.get(vatRate);
@@ -137,6 +142,8 @@ public class WebserviceRowFormatter {
                         newRows.add(orderRow);
                     }
                 }
+				
+				// incvat, vatpercent set
                 else if (existingRow.getAmountIncVat() != null && existingRow.getVatPercent() != null && existingRow.getAmountExVat() == null)
                 {
                 	SveaOrderRow orderRow = newRowBasedOnExisting(existingRow);
@@ -150,6 +157,8 @@ public class WebserviceRowFormatter {
 
                     newRows.add(orderRow);
                 }
+				
+				// exvat, vatpercent set
                 else if (existingRow.getAmountIncVat() == null && existingRow.getVatPercent() != null && existingRow.getAmountExVat() != null)
                 {
                 	SveaOrderRow orderRow = newRowBasedOnExisting(existingRow);
@@ -160,6 +169,8 @@ public class WebserviceRowFormatter {
                     newRows.add(orderRow);
                 }
 			}
+			
+			// if relativeDiscount row, calculate vat, split over several rows if needed.
 			else if (RelativeDiscountBuilder.class.equals(existingRow.getClass())) {
 				for (double vatRate : totalAmountPerVatRateIncVat.keySet()) {
                 	SveaOrderRow orderRow = newRowBasedOnExisting(existingRow);
@@ -188,6 +199,8 @@ public class WebserviceRowFormatter {
                     newRows.add(orderRow);
                 }
 			}
+			
+			// other row types (order row, shipping fee, invoice fee)
 			else {
                 newRows.add(serializeAmountAndVat(existingRow.getAmountExVat(), existingRow.getVatPercent(),
                         existingRow.getAmountIncVat(), newRowBasedOnExisting(existingRow)));
@@ -256,6 +269,7 @@ public class WebserviceRowFormatter {
 		formatRowLists(order.getRelativeDiscountRows());
 	}
 
+	// populate SveaOrderRow from passed arguments (taken from OrderRow)
 	private SveaOrderRow serializeOrder(String articleNumber, String description, String name, String unit, SveaOrderRow orderRow) {
 		if (articleNumber != null) {
 			orderRow.ArticleNumber = articleNumber;
@@ -270,7 +284,7 @@ public class WebserviceRowFormatter {
 
 		if (unit != null) {
 			orderRow.Unit = unit;
-		}
+		}	
 
 		return orderRow;
 	}
@@ -279,12 +293,15 @@ public class WebserviceRowFormatter {
 		if (vatPercent != null && amountExVat != null) {
 			orderRow.PricePerUnit = amountExVat;
 			orderRow.VatPercent = vatPercent;
+			orderRow.PriceIncludingVat = false;
 		}
 		else if (vatPercent != null && amountIncVat != null) {
-			orderRow.PricePerUnit = amountIncVat / ((0.01 * vatPercent) + 1);
+			orderRow.PricePerUnit = amountIncVat;
 			orderRow.VatPercent = vatPercent;
+			orderRow.PriceIncludingVat = true;
 		}
 		else if (amountExVat != null && amountIncVat != null) {
+			// TODO
 			orderRow.PricePerUnit = amountExVat;
 			orderRow.VatPercent = ((amountIncVat / amountExVat) - 1) * 100;
 		}
