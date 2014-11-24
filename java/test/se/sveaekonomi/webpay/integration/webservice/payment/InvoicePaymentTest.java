@@ -341,7 +341,7 @@ public class InvoicePaymentTest {
         //First order row is a product
         assertEquals("1", request.request.CreateOrderInformation.OrderRows.get(0).ArticleNumber);
         assertEquals("Prod: Specification", request.request.CreateOrderInformation.OrderRows.get(0).Description);
-        assertEquals(100.00, request.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit, 0);
+        assertEquals(125.00, request.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit, 0);
         assertEquals(2, request.request.CreateOrderInformation.OrderRows.get(0).NumberOfUnits, 0);
         assertEquals("st", request.request.CreateOrderInformation.OrderRows.get(0).Unit);
         assertEquals(25, request.request.CreateOrderInformation.OrderRows.get(0).VatPercent, 0);
@@ -350,7 +350,7 @@ public class InvoicePaymentTest {
         //Second order row is shipment
         assertEquals("33", request.request.CreateOrderInformation.OrderRows.get(1).ArticleNumber);
         assertEquals("shipping: Specification", request.request.CreateOrderInformation.OrderRows.get(1).Description);
-        assertEquals(50, request.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit, 0);
+        assertEquals(62.50, request.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit, 0);
         assertEquals(1, request.request.CreateOrderInformation.OrderRows.get(1).NumberOfUnits, 0);
         assertEquals("st", request.request.CreateOrderInformation.OrderRows.get(1).Unit);
         assertEquals(25, request.request.CreateOrderInformation.OrderRows.get(1).VatPercent, 0);
@@ -359,7 +359,7 @@ public class InvoicePaymentTest {
         //Third order row is invoice fee
         assertEquals("", request.request.CreateOrderInformation.OrderRows.get(2).ArticleNumber);
         assertEquals("Svea fee: Fee for invoice", request.request.CreateOrderInformation.OrderRows.get(2).Description);
-        assertEquals(50, request.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit, 0);
+        assertEquals(62.50, request.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit, 0);
         assertEquals(1, request.request.CreateOrderInformation.OrderRows.get(2).NumberOfUnits, 0);
         assertEquals("st", request.request.CreateOrderInformation.OrderRows.get(2).Unit);
         assertEquals(25, request.request.CreateOrderInformation.OrderRows.get(2).VatPercent, 0);
@@ -383,7 +383,7 @@ public class InvoicePaymentTest {
         //First order row is a product
         assertEquals("1", request.request.CreateOrderInformation.OrderRows.get(0).ArticleNumber);
         assertEquals("Prod: Specification", request.request.CreateOrderInformation.OrderRows.get(0).Description);
-        assertEquals(100.00, request.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit, 0);
+        assertEquals(125.00, request.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit, 0);
         assertEquals(2, request.request.CreateOrderInformation.OrderRows.get(0).NumberOfUnits, 0);
         assertEquals("st", request.request.CreateOrderInformation.OrderRows.get(0).Unit);
         assertEquals(25, request.request.CreateOrderInformation.OrderRows.get(0).VatPercent, 0);
@@ -392,7 +392,7 @@ public class InvoicePaymentTest {
         //Second order row is shipment
         assertEquals("33", request.request.CreateOrderInformation.OrderRows.get(1).ArticleNumber);
         assertEquals("shipping: Specification", request.request.CreateOrderInformation.OrderRows.get(1).Description);
-        assertEquals(50, request.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit, 0);
+        assertEquals(62.50, request.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit, 0);
         assertEquals(1, request.request.CreateOrderInformation.OrderRows.get(1).NumberOfUnits, 0);
         assertEquals("st", request.request.CreateOrderInformation.OrderRows.get(1).Unit);
         assertEquals(25, request.request.CreateOrderInformation.OrderRows.get(1).VatPercent, 0);
@@ -401,7 +401,7 @@ public class InvoicePaymentTest {
         //Third order row is invoice fee
         assertEquals("", request.request.CreateOrderInformation.OrderRows.get(2).ArticleNumber);
         assertEquals("Svea fee: Fee for invoice", request.request.CreateOrderInformation.OrderRows.get(2).Description);
-        assertEquals(50, request.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit, 0);
+        assertEquals(62.50, request.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit, 0);
         assertEquals(1, request.request.CreateOrderInformation.OrderRows.get(2).NumberOfUnits, 0);
         assertEquals("st", request.request.CreateOrderInformation.OrderRows.get(2).Unit);
         assertEquals(25, request.request.CreateOrderInformation.OrderRows.get(2).VatPercent, 0);
@@ -423,7 +423,7 @@ public class InvoicePaymentTest {
 					            .useInvoicePayment()
 					            .getXML();
         
-        final String expectedXML = "<web:request><web:Auth><web:ClientNumber>79021</web:ClientNumber><web:Username>sverigetest</web:Username><web:Password>sverigetest</web:Password></web:Auth><web:CreateOrderInformation><web:ClientOrderNumber>33</web:ClientOrderNumber><web:OrderRows><web:OrderRow><web:ArticleNumber>1</web:ArticleNumber><web:Description>Prod: Specification</web:Description><web:PricePerUnit>100.0</web:PricePerUnit><web:NumberOfUnits>2.0</web:NumberOfUnits><web:Unit>st</web:Unit><web:VatPercent>25.0</web:VatPercent><web:DiscountPercent>0.0</web:DiscountPercent></web:OrderRow><web:OrderRow><web:ArticleNumber>2</web:ArticleNumber><web:Description>Prod: Specification</web:Description><web:PricePerUnit>100.0</web:PricePerUnit><web:NumberOfUnits>2.0</web:NumberOfUnits><web:Unit>st</web:Unit><web:VatPercent>25.0</web:VatPercent><web:DiscountPercent>0.0</web:DiscountPercent></web:OrderRow></web:OrderRows><web:CustomerIdentity><web:NationalIdNumber>194605092222</web:NationalIdNumber><web:Email></web:Email><web:PhoneNumber></web:PhoneNumber><web:IpAddress></web:IpAddress><web:FullName></web:FullName><web:Street></web:Street><web:CoAddress></web:CoAddress><web:ZipCode></web:ZipCode><web:HouseNumber></web:HouseNumber><web:Locality></web:Locality><web:CountryCode>SE</web:CountryCode><web:CustomerType>Individual</web:CustomerType></web:CustomerIdentity><web:OrderDate>2012-12-12</web:OrderDate><web:AddressSelector></web:AddressSelector><web:CustomerReference>ref33</web:CustomerReference><web:OrderType>Invoice</web:OrderType></web:CreateOrderInformation></web:request>";
+        final String expectedXML = "<web:request><web:Auth><web:ClientNumber>79021</web:ClientNumber><web:Username>sverigetest</web:Username><web:Password>sverigetest</web:Password></web:Auth><web:CreateOrderInformation><web:ClientOrderNumber>33</web:ClientOrderNumber><web:OrderRows><web:OrderRow><web:ArticleNumber>1</web:ArticleNumber><web:Description>Prod: Specification</web:Description><web:PricePerUnit>100.0</web:PricePerUnit><web:PriceIncludingVat>false</web:PriceIncludingVat><web:NumberOfUnits>2.0</web:NumberOfUnits><web:Unit>st</web:Unit><web:VatPercent>25.0</web:VatPercent><web:DiscountPercent>0.0</web:DiscountPercent></web:OrderRow><web:OrderRow><web:ArticleNumber>2</web:ArticleNumber><web:Description>Prod: Specification</web:Description><web:PricePerUnit>100.0</web:PricePerUnit><web:PriceIncludingVat>false</web:PriceIncludingVat><web:NumberOfUnits>2.0</web:NumberOfUnits><web:Unit>st</web:Unit><web:VatPercent>25.0</web:VatPercent><web:DiscountPercent>0.0</web:DiscountPercent></web:OrderRow></web:OrderRows><web:CustomerIdentity><web:NationalIdNumber>194605092222</web:NationalIdNumber><web:Email></web:Email><web:PhoneNumber></web:PhoneNumber><web:IpAddress></web:IpAddress><web:FullName></web:FullName><web:Street></web:Street><web:CoAddress></web:CoAddress><web:ZipCode></web:ZipCode><web:HouseNumber></web:HouseNumber><web:Locality></web:Locality><web:CountryCode>SE</web:CountryCode><web:CustomerType>Individual</web:CustomerType></web:CustomerIdentity><web:OrderDate>2012-12-12</web:OrderDate><web:AddressSelector></web:AddressSelector><web:CustomerReference>ref33</web:CustomerReference><web:OrderType>Invoice</web:OrderType></web:CreateOrderInformation></web:request>";
         
         assertEquals(expectedXML, xml);
     }

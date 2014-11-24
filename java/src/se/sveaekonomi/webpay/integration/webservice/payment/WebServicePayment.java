@@ -2,7 +2,6 @@ package se.sveaekonomi.webpay.integration.webservice.payment;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.xml.bind.ValidationException;
 
@@ -10,7 +9,6 @@ import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.WebServiceOrderValidator;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
@@ -82,7 +80,7 @@ public abstract class WebServicePayment {
         sveaOrder.Auth = this.getPasswordBasedAuthorization();
         
         // make order rows and put in CreateOrderInformation
-        orderInformation = this.formatOrderInformationWithOrderRows(this.createOrderBuilder.getOrderRows());
+        orderInformation = this.formatOrderInformationWithOrderRows();
         orderInformation.CustomerIdentity = this.formatCustomerIdentity();
         orderInformation.ClientOrderNumber = this.createOrderBuilder.getClientOrderNumber();
         orderInformation.OrderDate = this.createOrderBuilder.getOrderDate();
@@ -195,7 +193,7 @@ public abstract class WebServicePayment {
         return customerIdentity;
     }
     
-    public SveaCreateOrderInformation formatOrderInformationWithOrderRows(List<OrderRowBuilder> rows) {
+    public SveaCreateOrderInformation formatOrderInformationWithOrderRows() {
         String campaignCode = (this.createOrderBuilder.getCampaignCode() != null) ? this.createOrderBuilder.getCampaignCode() : "";
         boolean sendAutomaticGiroPaymentForm = (this.createOrderBuilder.getSendAutomaticGiroPaymentForm() != null) ? this.createOrderBuilder.getSendAutomaticGiroPaymentForm() : false;
         orderInformation = new SveaCreateOrderInformation(campaignCode, sendAutomaticGiroPaymentForm);

@@ -2,16 +2,23 @@ package se.sveaekonomi.webpay.integration.util.test;
 
 import java.sql.Date;
 
+import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.WebPayItem;
+import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
-import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RelativeDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
+import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
+import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class TestingTool {
     public static final COUNTRYCODE DefaultTestCountryCode = COUNTRYCODE.SE;
@@ -23,15 +30,15 @@ public class TestingTool {
     public static final Date DefaultTestDate = Date.valueOf("2012-12-12");
 	
     public static OrderRowBuilder createMiniOrderRow() {
-        return Item.orderRow()
+        return WebPayItem.orderRow()
                    .setQuantity(1.0)
                    .setAmountExVat(4)
-                   .setAmountIncVat(5);
+                   .setVatPercent(25);
     }
     
     public static OrderRowBuilder createExVatBasedOrderRow(String articleNumber) {
     	articleNumber = articleNumber == null ? "1" : articleNumber;
-        return Item.orderRow()
+        return WebPayItem.orderRow()
                 .setArticleNumber(articleNumber)
                 .setName("Prod")
                 .setDescription("Specification")
@@ -43,7 +50,7 @@ public class TestingTool {
     }
     
     public static OrderRowBuilder createPaymentPlanOrderRow() {
-        return Item.orderRow()
+        return WebPayItem.orderRow()
                    .setArticleNumber("1")
                    .setName("Prod")
                    .setDescription("Specification")
@@ -56,7 +63,7 @@ public class TestingTool {
     
     public static OrderRowBuilder createIncVatBasedOrderRow(String articleNumber) {
     	articleNumber = articleNumber != null ? articleNumber : "1";
-        return Item.orderRow()
+        return WebPayItem.orderRow()
                    .setArticleNumber(articleNumber)
                    .setName("Prod")
                    .setDescription("Specification")
@@ -69,7 +76,7 @@ public class TestingTool {
 
     public static OrderRowBuilder createIncAndExVatOrderRow(String articleNumber) {
     	articleNumber = articleNumber != null ? articleNumber : "1";
-        return Item.orderRow()
+        return WebPayItem.orderRow()
                    .setArticleNumber(articleNumber)
                    .setName("Prod")
                    .setDescription("Specification")
@@ -81,7 +88,7 @@ public class TestingTool {
     }
     
     public static OrderRowBuilder createOrderRowDe() {
-        return Item.orderRow()
+        return WebPayItem.orderRow()
                 .setArticleNumber("1")
                 .setName("Prod")
                 .setDescription("Specification")
@@ -93,7 +100,7 @@ public class TestingTool {
     }
     
     public static OrderRowBuilder createOrderRowNl() {
-        return Item.orderRow()
+        return WebPayItem.orderRow()
                 .setArticleNumber("1")
                 .setName("Prod")
                 .setDescription("Specification")
@@ -105,7 +112,7 @@ public class TestingTool {
     }
     
     public static ShippingFeeBuilder createExVatBasedShippingFee() {
-        return Item.shippingFee()
+        return WebPayItem.shippingFee()
                    .setShippingId("33")
                    .setName("shipping")
                    .setDescription("Specification")
@@ -116,7 +123,7 @@ public class TestingTool {
     }
 
     public static ShippingFeeBuilder createIncVatBasedShippingFee() {
-        return Item.shippingFee()
+        return WebPayItem.shippingFee()
                    .setShippingId("33")
                    .setName("shipping")
                    .setDescription("Specification")
@@ -127,7 +134,7 @@ public class TestingTool {
     }
 
     public static ShippingFeeBuilder createIncAndExVatShippingFee() {
-        return Item.shippingFee()
+        return WebPayItem.shippingFee()
                    .setShippingId("33")
                    .setName("shipping")
                    .setDescription("Specification")
@@ -138,7 +145,7 @@ public class TestingTool {
     }
 
     public static InvoiceFeeBuilder createExVatBasedInvoiceFee() {
-        return Item.invoiceFee()
+        return WebPayItem.invoiceFee()
                    .setName("Svea fee")
                    .setDescription("Fee for invoice")
                    .setAmountExVat(50)
@@ -148,7 +155,7 @@ public class TestingTool {
     }
 
     public static InvoiceFeeBuilder createIncVatBasedInvoiceFee() {
-        return Item.invoiceFee()
+        return WebPayItem.invoiceFee()
                    .setName("Svea fee")
                    .setDescription("Fee for invoice")
                    .setAmountIncVat(62.50)
@@ -158,7 +165,7 @@ public class TestingTool {
     }
 
     public static InvoiceFeeBuilder createIncAndExVatInvoiceFee() {
-        return Item.invoiceFee()
+        return WebPayItem.invoiceFee()
                    .setName("Svea fee")
                    .setDescription("Fee for invoice")
                    .setAmountIncVat(62.50)
@@ -168,7 +175,7 @@ public class TestingTool {
     }
 
     public static RelativeDiscountBuilder createRelativeDiscount() {
-        return Item.relativeDiscount()
+        return WebPayItem.relativeDiscount()
                    .setDiscountId("1")
                    .setName("Relative")
                    .setDescription("RelativeDiscount")
@@ -190,7 +197,7 @@ public class TestingTool {
         
         switch (country) {
             case SE:
-                iCustomer = Item.individualCustomer()
+                iCustomer = WebPayItem.individualCustomer()
                    .setInitials("SB")
                    .setName("Tess", "Persson")
                    .setEmail("test@svea.com")
@@ -204,7 +211,7 @@ public class TestingTool {
                    .setLocality("Stan");
                 break;
             case NO:
-                iCustomer = Item.individualCustomer()
+                iCustomer = WebPayItem.individualCustomer()
                    .setName("Ola", "Normann")
                    .setEmail("test@svea.com")
                    .setPhoneNumber("21222222")
@@ -215,7 +222,7 @@ public class TestingTool {
                    .setLocality("Oslo");
                 break;
             case FI:
-                iCustomer = Item.individualCustomer()
+                iCustomer = WebPayItem.individualCustomer()
                    .setName("Kukka-Maaria", "Kanerva Haapakoski")
                    .setEmail("test@svea.com")
                    .setIpAddress("123.123.123")
@@ -225,7 +232,7 @@ public class TestingTool {
                    .setLocality("Helsinki");
                 break;
             case DK:
-                iCustomer = Item.individualCustomer()
+                iCustomer = WebPayItem.individualCustomer()
                    .setName("Hanne", "Jensen")
                    .setEmail("test@svea.com")
                    .setPhoneNumber("22222222")
@@ -237,7 +244,7 @@ public class TestingTool {
                    .setLocality("KØBENHVN Ø");
                 break;
             case DE:
-                iCustomer = Item.individualCustomer()
+                iCustomer = WebPayItem.individualCustomer()
                    .setName("Theo", "Giebel")
                    .setEmail("test@svea.com")
                    .setIpAddress("123.123.123")
@@ -248,7 +255,7 @@ public class TestingTool {
                    .setLocality("BERLIN");
                 break;
             case NL:
-                iCustomer = Item.individualCustomer()
+                iCustomer = WebPayItem.individualCustomer()
                    .setInitials("SB")
                    .setName("Sneider", "Boasman")
                    .setEmail("test@svea.com")
@@ -269,7 +276,7 @@ public class TestingTool {
     }
 
     public static CompanyCustomer createMiniCompanyCustomer() {
-        return Item.companyCustomer()
+        return WebPayItem.companyCustomer()
                    .setVatNumber("2345234")
                    .setNationalIdNumber(DefaultTestCompanyNationalIdNumber)
                    .setCompanyName("TestCompagniet");
@@ -281,7 +288,7 @@ public class TestingTool {
 
         switch (country) {
             case SE:
-                cCustomer = Item.companyCustomer()
+                cCustomer = WebPayItem.companyCustomer()
                    .setCompanyName("Tess, T Persson")
                    .setNationalIdNumber(DefaultTestCompanyNationalIdNumber)
                    .setEmail("test@svea.com")
@@ -293,7 +300,7 @@ public class TestingTool {
                    .setLocality("Stan");
                 break;
             case NO:
-                cCustomer = Item.companyCustomer()
+                cCustomer = WebPayItem.companyCustomer()
                    .setCompanyName("Test firma AS")
                    .setNationalIdNumber("923313850")
                    .setEmail("test@svea.com")
@@ -304,7 +311,7 @@ public class TestingTool {
                    .setLocality("Oslo");
                 break;
             case FI:
-                cCustomer = Item.companyCustomer()
+                cCustomer = WebPayItem.companyCustomer()
                    .setCompanyName("Testi Yritys Oy")
                    .setNationalIdNumber("9999999-2")
                    .setEmail("test@svea.com")
@@ -315,7 +322,7 @@ public class TestingTool {
                    .setLocality("Helsinki");
                 break;
             case DK:
-                cCustomer = Item.companyCustomer()
+                cCustomer = WebPayItem.companyCustomer()
                    .setCompanyName("Test A/S")
                    .setNationalIdNumber("99999993")
                    .setEmail("test@svea.com")
@@ -326,7 +333,7 @@ public class TestingTool {
                    .setLocality("KØBENHVN Ø");
                 break;
             case DE:
-                cCustomer = Item.companyCustomer()
+                cCustomer = WebPayItem.companyCustomer()
                    .setCompanyName("K. H. Maier gmbH")
                    .setNationalIdNumber("12345")
                    .setVatNumber("DE123456789")
@@ -338,7 +345,7 @@ public class TestingTool {
                    .setLocality("AACHEN");
                 break;
             case NL:
-                cCustomer = Item.companyCustomer()
+                cCustomer = WebPayItem.companyCustomer()
                    .setCompanyName("Svea bakkerij 123")
                    .setVatNumber("NL123456789A12")
                    .setEmail("test@svea.com")
@@ -355,4 +362,85 @@ public class TestingTool {
 
         return cCustomer;
     }
+
+    /**
+     * returns a minimal invoice test order response from Svea using defaults values
+     * @return CreateOrderResponse
+     */
+	public static CreateOrderResponse createInvoiceTestOrder() {
+		return createInvoiceTestOrder( null );		    		    
+	}    
+    
+	/**
+	 * returns an invoice test order response from Svea using defaults values, including test name as customer reference
+	 * 
+	 * @param nameOfOriginatingTest
+	 * @return CreateOrderResponse
+	 */
+	public static CreateOrderResponse createInvoiceTestOrder( String nameOfOriginatingTest ) {
+        
+		// create order
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+                .addCustomerDetails(WebPayItem.individualCustomer()
+                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+                )
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setOrderDate(TestingTool.DefaultTestDate)
+    	;
+        
+        // include customer reference with test name if passed in
+        if( nameOfOriginatingTest != null ) {
+            order.setCustomerReference(nameOfOriginatingTest.substring(0, Math.min(nameOfOriginatingTest.length(),30)));
+        }
+        
+        // break and inspect here, if needed
+        @SuppressWarnings("unused")
+		SveaRequest<SveaCreateOrder> soap_request = order.useInvoicePayment().prepareRequest();
+        
+        // choose payment method and do request
+        CreateOrderResponse response = order.useInvoicePayment().doRequest();
+        
+        return response;
+	}
+    
+    
+	
+	/**
+	 * returns a payment plan test order response from Svea. 
+	 * 
+	 * @param nameOfOriginatingTest
+	 * @return
+	 */
+	public static CreateOrderResponse createPaymentPlanTestOrder( String nameOfOriginatingTest ) {
+        		
+		// create order
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+        		// add order rows with sufficiently large total amount to allow payment plan to be used
+                .addOrderRow(TestingTool.createPaymentPlanOrderRow())
+                .addCustomerDetails(WebPayItem.individualCustomer()
+                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setOrderDate(TestingTool.DefaultTestDate)
+                .setCurrency(TestingTool.DefaultTestCurrency)
+    	;
+
+        if( nameOfOriginatingTest != null ) {
+            order.setCustomerReference(nameOfOriginatingTest.substring(0, Math.min(nameOfOriginatingTest.length(),30)));
+        }
+        
+    	// get payment plan params
+        PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .doRequest();
+        String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
+
+        // choose payment method and do request
+        SveaRequest<SveaCreateOrder> soap_request = order.usePaymentPlanPayment(code).prepareRequest(); // break and inspect here, if needed
+        
+        CreateOrderResponse response = order.usePaymentPlanPayment(code).doRequest();
+        
+        return response;
+	}	
 }
