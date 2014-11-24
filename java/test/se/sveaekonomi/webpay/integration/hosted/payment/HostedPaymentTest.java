@@ -9,13 +9,13 @@ import java.util.Map;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.HostedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.hosted.helper.ExcludePayments;
 import se.sveaekonomi.webpay.integration.hosted.helper.HostedRowFormatter;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.util.constant.INVOICETYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTPLANTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
@@ -29,9 +29,9 @@ public class HostedPaymentTest {
                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
                .setCurrency(TestingTool.DefaultTestCurrency)
             .addOrderRow(TestingTool.createMiniOrderRow())
-            .addFee(Item.shippingFee())
-            .addDiscount(Item.fixedDiscount())
-            .addDiscount(Item.relativeDiscount());
+            .addFee(WebPayItem.shippingFee())
+            .addDiscount(WebPayItem.fixedDiscount())
+            .addDiscount(WebPayItem.relativeDiscount());
             
         FakeHostedPayment payment = new FakeHostedPayment(order);
         payment
@@ -67,8 +67,8 @@ public class HostedPaymentTest {
             .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
             .setCurrency(TestingTool.DefaultTestCurrency)  
             .addOrderRow(TestingTool.createMiniOrderRow())
-            .addFee(Item.shippingFee()
-                    .setAmountIncVat(5)
+            .addFee(WebPayItem.shippingFee()
+                    .setAmountExVat(4)
                     .setVatPercent(25));
         
         order.setFixedDiscountRows(null);
@@ -150,7 +150,7 @@ public class HostedPaymentTest {
     @Test
     public void testAmountFromMultipleItemsDefinedWithExVatAndVatPercent() {
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setArticleNumber("0")
                                                                     .setName("testCalculateRequestValuesCorrectTotalAmountFromMultipleItems")
                                                                     .setDescription("testCalculateRequestValuesCorrectTotalAmountFromMultipleItems")
@@ -174,7 +174,7 @@ public class HostedPaymentTest {
     @Test
     public void testAmountFromMultipleItemsDefinedWithIncVatAndVatPercent() {
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setArticleNumber("0")
                                                                     .setName("testCalculateRequestValuesCorrectTotalAmountFromMultipleItems")
                                                                     .setDescription("testCalculateRequestValuesCorrectTotalAmountFromMultipleItems")
@@ -198,7 +198,7 @@ public class HostedPaymentTest {
     @Test
     public void testAmountFromMultipleItemsDefinedWithExVatAndIncVat() {
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setArticleNumber("0")
                                                                     .setName("testCalculateRequestValuesCorrectTotalAmountFromMultipleItems")
                                                                     .setDescription("testCalculateRequestValuesCorrectTotalAmountFromMultipleItems")
@@ -224,11 +224,11 @@ public class HostedPaymentTest {
     @Test
     public void testAmountFromMultipleItemsWithFixedDiscountIncVatOnly() {
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setAmountExVat(69.99)
                                                                     .setVatPercent(25)
                                                                     .setQuantity(30.0))
-                                                   .addDiscount(Item.fixedDiscount()
+                                                   .addDiscount(WebPayItem.fixedDiscount()
                                                                     .setAmountIncVat(10.00));
 
         // follows HostedPayment calculateRequestValues() outline:
@@ -247,11 +247,11 @@ public class HostedPaymentTest {
     @Test
     public void testAmountFromMultipleItemsWithFixedDiscountIncVatAndVatPercent() {
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setAmountExVat(69.99)
                                                                     .setVatPercent(25)
                                                                     .setQuantity(30.0))
-                                                   .addDiscount(Item.fixedDiscount()
+                                                   .addDiscount(WebPayItem.fixedDiscount()
                                                                     .setAmountIncVat(12.50)
                                                                     .setVatPercent(25.0));
 
@@ -271,15 +271,15 @@ public class HostedPaymentTest {
     @Test
     public void testAmountWithFixedDiscountIncVatOnlyWithDifferentVatRatesPresent() {
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(25)
                                                                     .setQuantity(2.0))
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(6)
                                                                     .setQuantity(1.0))
-                                                   .addDiscount(Item.fixedDiscount()
+                                                   .addDiscount(WebPayItem.fixedDiscount()
                                                                     .setAmountIncVat(100.00));
 
         // follows HostedPayment calculateRequestValues() outline:
@@ -301,15 +301,15 @@ public class HostedPaymentTest {
     @Test
     public void testAmountWithFixedDiscountIncVatAndVatPercentWithDifferentVatRatesPresent() {
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(25)
                                                                     .setQuantity(2.0))
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(6)
                                                                     .setQuantity(1.0))
-                                                   .addDiscount(Item.fixedDiscount()
+                                                   .addDiscount(WebPayItem.fixedDiscount()
                                                                     .setAmountIncVat(125.00)
                                                                     .setVatPercent(25.0));
 
@@ -328,15 +328,15 @@ public class HostedPaymentTest {
     @Test
     public void testAmountWithFixedDiscountExVatAndVatPercentWithDifferentVatRatesPresent() {
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(25)
                                                                     .setQuantity(2.0))
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(6)
                                                                     .setQuantity(1.0))
-                                                   .addDiscount(Item.fixedDiscount()
+                                                   .addDiscount(WebPayItem.fixedDiscount()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(0));
 
@@ -355,15 +355,15 @@ public class HostedPaymentTest {
     @Test
     public void testAmountWithFixedDiscountExVatAndIncVatWithDifferentVatRatesPresent() {
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(25)
                                                                     .setQuantity(2.0))
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(6)
                                                                     .setQuantity(1.0))
-                                                   .addDiscount(Item.fixedDiscount()
+                                                   .addDiscount(WebPayItem.fixedDiscount()
                                                                     .setAmountExVat(80.00)
                                                                     .setAmountIncVat(100.00));
 
@@ -383,11 +383,11 @@ public class HostedPaymentTest {
     @Test
     public void testAmountFromMultipleItemsWithRelativeDiscountWithDifferentVatRatesPresent() {
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setAmountExVat(69.99)
                                                                     .setVatPercent(25)
                                                                     .setQuantity(30.0))
-                                                   .addDiscount(Item.relativeDiscount()
+                                                   .addDiscount(WebPayItem.relativeDiscount()
                                                                     .setDiscountPercent(25.0));
 
         // follows HostedPayment calculateRequestValues() outline:
@@ -406,11 +406,11 @@ public class HostedPaymentTest {
     @Test
     public void testAmountFromMultipleItemsWithRelativeDiscountWithDifferentVatRatesPresent2() {
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setAmountExVat(69.99)
                                                                     .setVatPercent(25)
                                                                     .setQuantity(1.0))
-                                                   .addDiscount(Item.relativeDiscount()
+                                                   .addDiscount(WebPayItem.relativeDiscount()
                                                                     .setDiscountPercent(25.0));
 
         // follows HostedPayment calculateRequestValues() outline:
@@ -429,15 +429,15 @@ public class HostedPaymentTest {
     @Test
     public void testAmountWithRelativeDiscountWithDifferentVatRatesPresent() {
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(25)
                                                                     .setQuantity(2.0))
-                                                   .addOrderRow(Item.orderRow()
+                                                   .addOrderRow(WebPayItem.orderRow()
                                                                     .setAmountExVat(100.00)
                                                                     .setVatPercent(6)
                                                                     .setQuantity(1.0))
-                                                   .addDiscount(Item.relativeDiscount()
+                                                   .addDiscount(WebPayItem.relativeDiscount()
                                                                     .setDiscountPercent(25.0));
 
         // follows HostedPayment calculateRequestValues() outline:

@@ -9,9 +9,14 @@ import org.junit.Test;
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProviderTestData;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
-import se.sveaekonomi.webpay.integration.order.row.Item;
+import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.row.FixedDiscountBuilder;
+import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
+import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
+import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
@@ -27,7 +32,7 @@ public class CreateInvoiceOrderTest {
 	@Test
 	public void testInvoiceForIndividualFromSE() {
 		CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig()).addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-				.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
+				.addCustomerDetails(WebPayItem.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
 				.setOrderDate(TestingTool.DefaultTestDate).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setCurrency(TestingTool.DefaultTestCurrency).useInvoicePayment().doRequest();
 
 		assertEquals("Invoice", response.orderType);
@@ -49,7 +54,7 @@ public class CreateInvoiceOrderTest {
 	@Test
 	public void testInvoiceRequestFailing() {
 		CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig()).addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-				.addCustomerDetails(Item.individualCustomer().setNationalIdNumber("")).setCountryCode(TestingTool.DefaultTestCountryCode).setOrderDate(TestingTool.DefaultTestDate)
+				.addCustomerDetails(WebPayItem.individualCustomer().setNationalIdNumber("")).setCountryCode(TestingTool.DefaultTestCountryCode).setOrderDate(TestingTool.DefaultTestDate)
 				.setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setCurrency(TestingTool.DefaultTestCurrency).useInvoicePayment().doRequest();
 
 		assertFalse(response.isOrderAccepted());
@@ -58,8 +63,8 @@ public class CreateInvoiceOrderTest {
 	@Test
 	public void testFormationOfDecimalsInCalculation() {
 		CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
-				.addOrderRow(Item.orderRow().setArticleNumber("1").setQuantity(2.0).setAmountExVat(22.68).setDescription("Specification").setName("Prod").setVatPercent(6.0).setDiscountPercent(0.0))
-				.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
+				.addOrderRow(WebPayItem.orderRow().setArticleNumber("1").setQuantity(2.0).setAmountExVat(22.68).setDescription("Specification").setName("Prod").setVatPercent(6.0).setDiscountPercent(0.0))
+				.addCustomerDetails(WebPayItem.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
 				.setOrderDate(TestingTool.DefaultTestDate).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setCurrency(TestingTool.DefaultTestCurrency).useInvoicePayment().doRequest();
 
 		assertTrue(response.isOrderAccepted());
@@ -83,7 +88,7 @@ public class CreateInvoiceOrderTest {
 				.createOrder(SveaConfig.getDefaultConfig())
 				.addOrderRow(TestingTool.createOrderRowNl())
 				.addCustomerDetails(
-						Item.individualCustomer().setBirthDate(1955, 03, 07).setInitials("SB").setName("Sneider", "Boasman").setStreetAddress("Gate", "42").setLocality("BARENDRECHT")
+						WebPayItem.individualCustomer().setBirthDate(1955, 03, 07).setInitials("SB").setName("Sneider", "Boasman").setStreetAddress("Gate", "42").setLocality("BARENDRECHT")
 								.setZipCode("1102 HG").setCoAddress("138")).setCountryCode(COUNTRYCODE.NL).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
 				.setOrderDate(TestingTool.DefaultTestDate).setCurrency(CURRENCY.EUR).useInvoicePayment().doRequest();
 
@@ -110,7 +115,7 @@ public class CreateInvoiceOrderTest {
 	@Test
 	public void testInvoiceDoRequestWithIpAddressSetSE() {
 		CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig()).addOrderRow(TestingTool.createExVatBasedOrderRow("1")).addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
-				.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber).setIpAddress("123.123.123"))
+				.addCustomerDetails(WebPayItem.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber).setIpAddress("123.123.123"))
 				.setCountryCode(TestingTool.DefaultTestCountryCode).setOrderDate(TestingTool.DefaultTestDate).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
 				.setCurrency(TestingTool.DefaultTestCurrency).useInvoicePayment().doRequest();
 
@@ -120,7 +125,7 @@ public class CreateInvoiceOrderTest {
 	@Test
 	public void testInvoiceRequestUsingAmountIncVatWithZeroVatPercent() {
 		CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig()).addOrderRow(TestingTool.createExVatBasedOrderRow("1")).addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
-				.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
+				.addCustomerDetails(WebPayItem.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
 				.setOrderDate(TestingTool.DefaultTestDate).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setCurrency(TestingTool.DefaultTestCurrency)
 				.setCustomerReference(TestingTool.DefaultTestCustomerReferenceNumber).useInvoicePayment().doRequest();
 
@@ -133,7 +138,7 @@ public class CreateInvoiceOrderTest {
 		SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
 
 		SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig()).addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-				.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
+				.addCustomerDetails(WebPayItem.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
 				.setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setOrderDate(TestingTool.DefaultTestDate).setCurrency(TestingTool.DefaultTestCurrency).useInvoicePayment()
 				.prepareRequest();
 
@@ -159,7 +164,7 @@ public class CreateInvoiceOrderTest {
 	public void testConfiguration() {
 		ConfigurationProviderTestData conf = new ConfigurationProviderTestData();
 		CreateOrderResponse response = WebPay.createOrder(conf).addOrderRow(TestingTool.createExVatBasedOrderRow("1")).addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
-				.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber).setIpAddress("123.123.123"))
+				.addCustomerDetails(WebPayItem.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber).setIpAddress("123.123.123"))
 				.setCountryCode(TestingTool.DefaultTestCountryCode).setOrderDate(TestingTool.DefaultTestDate).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
 				.setCurrency(TestingTool.DefaultTestCurrency).useInvoicePayment().doRequest();
 
@@ -169,8 +174,8 @@ public class CreateInvoiceOrderTest {
 	@Test
 	public void testFormatShippingFeeRowsZero() {
 		CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig()).addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-				.addFee(Item.shippingFee().setShippingId("0").setName("Tess").setDescription("Tester").setAmountExVat(0).setVatPercent(0).setUnit("st"))
-				.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
+				.addFee(WebPayItem.shippingFee().setShippingId("0").setName("Tess").setDescription("Tester").setAmountExVat(0).setVatPercent(0).setUnit("st"))
+				.addCustomerDetails(WebPayItem.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
 				.setOrderDate(TestingTool.DefaultTestDate).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setCurrency(TestingTool.DefaultTestCurrency)
 				.setCustomerReference(TestingTool.DefaultTestCustomerReferenceNumber).useInvoicePayment().doRequest();
 
@@ -180,7 +185,7 @@ public class CreateInvoiceOrderTest {
 	@Test
 	public void testCompanyIdResponse() {
 		CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig()).addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-				.addCustomerDetails(Item.companyCustomer().setNationalIdNumber(TestingTool.DefaultTestCompanyNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
+				.addCustomerDetails(WebPayItem.companyCustomer().setNationalIdNumber(TestingTool.DefaultTestCompanyNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
 				.setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setOrderDate(TestingTool.DefaultTestDate).setCurrency(TestingTool.DefaultTestCurrency).useInvoicePayment().doRequest();
 
 		assertFalse(response.isIndividualIdentity);
@@ -192,7 +197,7 @@ public class CreateInvoiceOrderTest {
 		CreateOrderResponse response = WebPay
 				.createOrder(SveaConfig.getDefaultConfig())
 				.addOrderRow(TestingTool.createOrderRowDe())
-				.addCustomerDetails(Item.companyCustomer().setNationalIdNumber("12345").setVatNumber("DE123456789").setStreetAddress("Adalbertsteinweg", "1").setZipCode("52070").setLocality("AACHEN"))
+				.addCustomerDetails(WebPayItem.companyCustomer().setNationalIdNumber("12345").setVatNumber("DE123456789").setStreetAddress("Adalbertsteinweg", "1").setZipCode("52070").setLocality("AACHEN"))
 				.setCountryCode(COUNTRYCODE.DE).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setOrderDate(TestingTool.DefaultTestDate).setCurrency(CURRENCY.EUR).useInvoicePayment()
 				.doRequest();
 
@@ -206,11 +211,271 @@ public class CreateInvoiceOrderTest {
 				.createOrder(SveaConfig.getDefaultConfig())
 				.addOrderRow(TestingTool.createOrderRowNl())
 				.addCustomerDetails(
-						Item.companyCustomer().setCompanyName("Svea bakkerij 123").setVatNumber("NL123456789A12").setStreetAddress("broodstraat", "1").setZipCode("1111 CD").setLocality("BARENDRECHT"))
+						WebPayItem.companyCustomer().setCompanyName("Svea bakkerij 123").setVatNumber("NL123456789A12").setStreetAddress("broodstraat", "1").setZipCode("1111 CD").setLocality("BARENDRECHT"))
 				.setCountryCode(COUNTRYCODE.NL).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setOrderDate(TestingTool.DefaultTestDate).setCurrency(CURRENCY.EUR).useInvoicePayment()
 				.doRequest();
 
 		assertFalse(response.isIndividualIdentity);
 		assertTrue(response.isOrderAccepted());
 	}
+	
+	
+	/// tests for sending orderRows to webservice, specified as exvat + vat in soap request
+	@Test
+	public void test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false() {
+		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+		;				
+		OrderRowBuilder exvatRow = WebPayItem.orderRow()
+				.setAmountExVat(600.00)
+				.setVatPercent(20)			
+				.setQuantity(1.0)
+				.setName("exvatRow")
+		;
+		OrderRowBuilder exvatRow2 = WebPayItem.orderRow()
+			.setAmountExVat(300.00)
+			.setVatPercent(10)			
+			.setQuantity(1.0)
+			.setName("exvatRow2")
+		;		
+		
+		InvoiceFeeBuilder exvatInvoiceFee = WebPayItem.invoiceFee()
+			.setAmountExVat(80.00)
+			.setVatPercent(10)
+			.setName("exvatInvoiceFee")
+		;
+		
+		ShippingFeeBuilder exvatShippingFee = WebPayItem.shippingFee()
+			.setAmountExVat(160.00)
+			.setVatPercent(10)
+			.setName("exvatShippingFee")
+		;	
+	
+		FixedDiscountBuilder fixedDiscount = WebPayItem.fixedDiscount()
+			.setAmountIncVat(10.0)
+			.setDiscountId("TenCrownsOff")
+			.setName("fixedDiscount: 10 off incvat")
+		;     
+		
+		order.addOrderRow(exvatRow);
+		order.addOrderRow(exvatRow2);
+		order.addFee(exvatInvoiceFee);
+		order.addFee(exvatShippingFee);
+		order.addDiscount(fixedDiscount);		
+		
+		CreateOrderResponse response = order.useInvoicePayment().doRequest();
+
+		assertTrue( response.isOrderAccepted() );
+		assertEquals( (Object)1304.00, response.amount );		
+		System.out.println( "test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false\n"
+				+ "  Check logs that order rows were sent as exvat+vat for order row #"+response.orderId);		
+		
+		// Expected log:
+		// ...
+		//<web:OrderRows>
+	    // <web:OrderRow>
+	    //   <web:ArticleNumber>
+	    //   </web:ArticleNumber>
+	    //   <web:Description>exvatRow</web:Description>
+	    //   <web:PricePerUnit>600.0</web:PricePerUnit>
+	    //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
+	    //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+	    //   <web:Unit>
+	    //   </web:Unit>
+	    //   <web:VatPercent>20.0</web:VatPercent>
+	    //   <web:DiscountPercent>0.0</web:DiscountPercent>
+	    // </web:OrderRow>
+	    // <web:OrderRow>
+	    //   <web:ArticleNumber>
+	    //   </web:ArticleNumber>
+	    //   <web:Description>exvatRow2</web:Description>
+	    //   <web:PricePerUnit>300.0</web:PricePerUnit>
+	    //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
+	    //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+	    //   <web:Unit>
+	    //   </web:Unit>
+	    //   <web:VatPercent>10.0</web:VatPercent>
+	    //   <web:DiscountPercent>0.0</web:DiscountPercent>
+	    // </web:OrderRow>
+	    // <web:OrderRow>
+	    //   <web:ArticleNumber>
+	    //   </web:ArticleNumber>
+	    //   <web:Description>exvatShippingFee</web:Description>
+	    //   <web:PricePerUnit>160.0</web:PricePerUnit>
+	    //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
+	    //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+	    //   <web:Unit>
+	    //   </web:Unit>
+	    //   <web:VatPercent>10.0</web:VatPercent>
+	    //   <web:DiscountPercent>0.0</web:DiscountPercent>
+	    // </web:OrderRow>
+	    // <web:OrderRow>
+	    //   <web:ArticleNumber>
+	    //   </web:ArticleNumber>
+	    //   <web:Description>exvatInvoiceFee</web:Description>
+	    //   <web:PricePerUnit>80.0</web:PricePerUnit>
+	    //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
+	    //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+	    //   <web:Unit>
+	    //   </web:Unit>
+	    //   <web:VatPercent>10.0</web:VatPercent>
+	    //   <web:DiscountPercent>0.0</web:DiscountPercent>
+	    // </web:OrderRow>
+	    // <web:OrderRow>
+	    //   <web:ArticleNumber>TenCrownsOff</web:ArticleNumber>
+	    //   <web:Description>fixedDiscount: 10 off incvat (20%)</web:Description>
+	    //   <web:PricePerUnit>-5.71</web:PricePerUnit>
+	    //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
+	    //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+	    //   <web:Unit>
+	    //   </web:Unit>
+	    //   <web:VatPercent>20.0</web:VatPercent>
+	    //   <web:DiscountPercent>0.0</web:DiscountPercent>
+	    // </web:OrderRow>
+	    // <web:OrderRow>
+	    //   <web:ArticleNumber>TenCrownsOff</web:ArticleNumber>
+	    //   <web:Description>fixedDiscount: 10 off incvat (10%)</web:Description>
+	    //   <web:PricePerUnit>-2.86</web:PricePerUnit>
+	    //   <web:PriceIncludingVat>false</web:PriceIncludingVat>
+	    //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+	    //   <web:Unit>
+	    //   </web:Unit>
+	    //   <web:VatPercent>10.0</web:VatPercent>
+	    //   <web:DiscountPercent>0.0</web:DiscountPercent>
+	    // </web:OrderRow>
+	    //</web:OrderRows>
+	    // ...	
+	
+	}		
+
+	@Test
+	public void test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_true() {
+		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+		;				
+		OrderRowBuilder incvatRow = WebPayItem.orderRow()
+				.setAmountIncVat(720.00)
+				.setVatPercent(20)			
+				.setQuantity(1.0)
+				.setName("incvatRow")
+		;
+		OrderRowBuilder incvatRow2 = WebPayItem.orderRow()
+			.setAmountIncVat(330.00)
+			.setVatPercent(10)			
+			.setQuantity(1.0)
+			.setName("incvatRow2")
+		;		
+		
+		InvoiceFeeBuilder incvatInvoiceFee = WebPayItem.invoiceFee()
+			.setAmountIncVat(88.00)
+			.setVatPercent(10)
+			.setName("incvatInvoiceFee")
+		;
+		
+		ShippingFeeBuilder incvatShippingFee = WebPayItem.shippingFee()
+			.setAmountIncVat(172.00)
+			.setVatPercent(10)
+			.setName("incvatShippingFee")
+		;	
+	
+		FixedDiscountBuilder fixedDiscount = WebPayItem.fixedDiscount()
+			.setAmountIncVat(10.0)
+			.setDiscountId("TenCrownsOff")
+			.setName("fixedDiscount: 10 off incvat")
+		;     
+		
+		order.addOrderRow(incvatRow);
+		order.addOrderRow(incvatRow2);
+		order.addFee(incvatInvoiceFee);
+		order.addFee(incvatShippingFee);
+		order.addDiscount(fixedDiscount);		
+
+		CreateOrderResponse response = order.useInvoicePayment().doRequest();
+
+		assertTrue( response.isOrderAccepted() );
+		assertEquals( (Object)1300.00, response.amount );		
+		System.out.println( "test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_true\n"
+				+ "  Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);		
+		
+		//Expected log:
+		//...
+		//<web:OrderRows>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>incvatRow</web:Description>
+        //   <web:PricePerUnit>720.0</web:PricePerUnit>
+        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>20.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>incvatRow2</web:Description>
+        //   <web:PricePerUnit>330.0</web:PricePerUnit>
+        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>10.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>incvatShippingFee</web:Description>
+        //   <web:PricePerUnit>172.0</web:PricePerUnit>
+        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>10.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>
+        //   </web:ArticleNumber>
+        //   <web:Description>incvatInvoiceFee</web:Description>
+        //   <web:PricePerUnit>88.0</web:PricePerUnit>
+        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>10.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>TenCrownsOff</web:ArticleNumber>
+        //   <web:Description>fixedDiscount: 10 off incvat (20%)</web:Description>
+        //   <web:PricePerUnit>-6.86</web:PricePerUnit>
+        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>20.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        // <web:OrderRow>
+        //   <web:ArticleNumber>TenCrownsOff</web:ArticleNumber>
+        //   <web:Description>fixedDiscount: 10 off incvat (10%)</web:Description>
+        //   <web:PricePerUnit>-3.14</web:PricePerUnit>
+        //   <web:PriceIncludingVat>true</web:PriceIncludingVat>
+        //   <web:NumberOfUnits>1.0</web:NumberOfUnits>
+        //   <web:Unit>
+        //   </web:Unit>
+        //   <web:VatPercent>10.0</web:VatPercent>
+        //   <web:DiscountPercent>0.0</web:DiscountPercent>
+        // </web:OrderRow>
+        //</web:OrderRows>
+	    // ...			
+	}		
+
 }
