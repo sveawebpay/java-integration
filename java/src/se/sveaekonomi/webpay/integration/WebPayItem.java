@@ -103,4 +103,5 @@ public class WebPayItem {
 	public static RelativeDiscountBuilder relativeDiscount() {
 		return new RelativeDiscountBuilder();
 	}
+
 }

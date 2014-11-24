@@ -249,6 +249,7 @@ public class CreateInvoiceOrderUnitTest {
 			.setQuantity(1.0)
 			.setName("exvatRow2")
 		;		
+
 		InvoiceFeeBuilder exvatInvoiceFee = WebPayItem.invoiceFee()
 			.setAmountExVat(8.00)
 			.setVatPercent(25)
@@ -392,7 +393,103 @@ public class CreateInvoiceOrderUnitTest {
 		assertEquals( true, soapRequest.request.CreateOrderInformation.OrderRows.get(0).PriceIncludingVat );
 	}
 	
+	//validation of same order row price/vat specification in same order
+	@Test
+	public void test_that_createOrder_with_uniform_orderRow_and_Fee_price_specifications_does_not_throw_validation_error() {
+		
+		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+		;				
+		OrderRowBuilder exvatRow = WebPayItem.orderRow()
+			.setAmountExVat(100.00)
+			.setVatPercent(25)			
+			.setQuantity(1.0)
+			.setName("exvatRow")
+		;
+		OrderRowBuilder incvatRow = WebPayItem.orderRow()
+			.setAmountExVat(100.00)
+			.setVatPercent(25)			
+			.setQuantity(1.0)
+			.setName("incvatRow")
+		;		
+		
+		InvoiceFeeBuilder exvatInvoiceFee = WebPayItem.invoiceFee()
+			.setAmountExVat(12.50)
+			.setVatPercent(25)
+			.setName("exvatInvoiceFee")
+		;		
+		
+		ShippingFeeBuilder exvatShippingFee = WebPayItem.shippingFee()
+			.setAmountExVat(20.00)
+			.setVatPercent(25)
+			.setName("exvatShippingFee")
+		;	
+		
+		order.addOrderRow(exvatRow);
+		order.addOrderRow(incvatRow);
+		order.addFee(exvatInvoiceFee);
+		order.addFee(exvatShippingFee);		
+
+		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
+		try {
+			@SuppressWarnings("unused")
+			SveaRequest<SveaCreateOrder> soapRequest = order.useInvoicePayment().prepareRequest();
+		}
+		catch (SveaWebPayException e){			
+	        fail( "Unexpected SveaWebPayException thrown: "+e.getCause().getMessage() );		
+		}
+    }	
 	
+	@Test
+	public void test_that_createOrder_with_mixed_orderRow_and_Fee_price_specifications_does_not_throw_validation_error() {
+		
+		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+		;				
+		OrderRowBuilder exvatRow = WebPayItem.orderRow()
+			.setAmountExVat(100.00)
+			.setVatPercent(25)			
+			.setQuantity(1.0)
+			.setName("exvatRow")
+		;
+		OrderRowBuilder incvatRow = WebPayItem.orderRow()
+			.setAmountExVat(100.00)
+			.setVatPercent(25)			
+			.setQuantity(1.0)
+			.setName("incvatRow")
+		;		
+		
+		InvoiceFeeBuilder exvatInvoiceFee = WebPayItem.invoiceFee()
+			.setAmountIncVat(12.50)
+			.setVatPercent(25)
+			.setName("exvatInvoiceFee")
+		;		
+		
+		ShippingFeeBuilder exvatShippingFee = WebPayItem.shippingFee()
+			.setAmountExVat(20.00)
+			.setVatPercent(25)
+			.setName("exvatShippingFee")
+		;	
+		
+		order.addOrderRow(exvatRow);
+		order.addOrderRow(incvatRow);
+		order.addFee(exvatInvoiceFee);
+		order.addFee(exvatShippingFee);		
+
+		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
+		try {
+			@SuppressWarnings("unused")
+			SveaRequest<SveaCreateOrder> soapRequest = order.useInvoicePayment().prepareRequest();
+		}
+		catch (SveaWebPayException e){			
+	        fail( "Unexpected SveaWebPayException thrown: "+e.getCause().getMessage() );		
+		}		
+	}
+				
 	//if no mixed specification types, default to sending order as incvat
 	@Test
 	public void test_that_createOrder_request_is_sent_as_incvat_iff_no_exvat_specified_anywhere_in_order() {
@@ -642,7 +739,7 @@ public class CreateInvoiceOrderUnitTest {
 			.setVatPercent(10)
 			.setName("exvatShippingFee")
 		;	
-	
+
 		RelativeDiscountBuilder relativeDiscount = WebPayItem.relativeDiscount()
 			.setDiscountPercent(10.0)
 			.setDiscountId("TenPercentOff")

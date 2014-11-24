@@ -83,7 +83,18 @@ public class DeliverOrderTest {
         assertEquals("Invoice", request.request.deliverOrderInformation.orderType);
     }
     
-    
+//    @Test
+//    public void testDeliverPaymentPlanOrder() {
+//        SveaRequest<SveaDeliverOrder> request = order
+//                .setOrderId(54086L)
+//                .setCountryCode(TestingTool.DefaultTestCountryCode)
+//                .deliverPaymentPlanOrder()
+//                .prepareRequest();
+//        
+//        assertEquals("54086", request.request.deliverOrderInformation.sveaOrderId);
+//        assertEquals("PaymentPlan", request.request.deliverOrderInformation.orderType);
+//    }
+
     /// tests preparing order rows price specification
   	// invoice request	
   	@Test
@@ -926,6 +937,4 @@ public class DeliverOrderTest {
   		assertEquals( (Object)10.0, (Object)soapRequest.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(5).VatPercent  ); // cast avoids deprecation		
   		assertEquals( true, soapRequest.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(5).PriceIncludingVat );	
   	}		
-    
-    
 }

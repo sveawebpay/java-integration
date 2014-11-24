@@ -1,6 +1,6 @@
 # Java Integration Package API for Svea WebPay
 
-Version 1.4.4
+Version 1.5.0
 
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |
@@ -232,19 +232,19 @@ Build order -> choose payment type -> doRequest/getPaymentForm
 ```java
 CreateOrderResponse response = WebPay.createOrder(myConfig)		//See Configuration chapt.3
 //For all products and other items
-.addOrderRow(Item.orderRow()...)
+.addOrderRow(WebPayItem.orderRow()...)
 //If shipping fee
-.addFee(Item.shippingFee()...)
+.addFee(WebPayItem.shippingFee()...)
 //If invoice with invoice fee
-.addFee(Item.invoiceFee()...)
+.addFee(WebPayItem.invoiceFee()...)
 //If discount or coupon with fixed amount
-.addDiscount(Item.fixedDiscount()...)
+.addDiscount(WebPayItem.fixedDiscount()...)
 //If discount or coupon with percent discount
-.addDiscount(Item.relativeDiscount()...)
+.addDiscount(WebPayItem.relativeDiscount()...)
 //Individual customer values
-.addCustomerDetails(Item.individualCustomer()...)
+.addCustomerDetails(WebPayItem.individualCustomer()...)
 //Company customer values
-.addCustomerDetails(Item.companyCustomer()...)
+.addCustomerDetails(WebPayItem.companyCustomer()...)
 //Other values
 .setCountryCode(COUNTRYCODE.SE)
 .setOrderDate("2012-12-12")
@@ -281,17 +281,26 @@ CreateOrderResponse response = WebPay.createOrder(myConfig)		//See Configuration
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
 	
-### 4.1 Specify order                                                        
-Continue by adding values for products and other. You can add order row, fee and discount. Chose the right Item object as parameter.
-You can use the *add* functions with an Item object or a List of Item objects as parameters. See types of Item objects in examples in 4.1.2 - 4.1.5 and 4.3.1 - 4.3.2.
+### 4.1 Specify item price                                                    
+Continue by adding values for products and other. You can add order row, fee and discount. 
+See types of WebPayItem objects in examples in 4.1.2--4.1.5 and 4.3.1--4.3.2.
+
+Specify item price using precisely two of these methods in order to specify the item price and tax rate: setAmountIncVat(), setVatPercent() and setAmountExVat().
+
+The recommended way to specify an item price is by using the setAmountIncVat() and setVatPercent() methods. This will ensure that the total order amount and vat sums precisely match the amount and vat specified in the order items.
+
+When using setAmountExVat() and setVatPercent(), the service will work with less accuracy and may accumulate rounding errors, resulting in order totals differing from total of the amount and vat specified in the row items. It is not recommended to specify price using the setAmountExVat() method.
+
+When using setAmountIncVat() with setAmountExVat() to specify an item price, the package converts the price to amount including vat and vat percent, in an effort to maintain maximum accuracy.
+
 
 ```java
-.addOrderRow(Item.orderRow(). ...)
+.addOrderRow(WebPayItem.orderRow(). ...)
 
 //or
 
 List<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>(); //or use another preferrable List object
-orderRows.add(Item.orderRow(). ...)
+orderRows.add(WebPayItem.orderRow(). ...)
 ...
 createOrder.addOrderRows(orderRows);
 ```
@@ -300,7 +309,7 @@ createOrder.addOrderRows(orderRows);
 All products and other items. It�s required to have a minimum of one order row.
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
 ```java
-.addOrderRow(Item.orderRow()     
+.addOrderRow(WebPayItem.orderRow()     
 	.setQuantity(2)                        //Required
 	.setAmountExVat(100.00)                //Optional, see info above
 	.setAmountIncVat(125.00)               //Optional, see info above
@@ -315,7 +324,7 @@ All products and other items. It�s required to have a minimum of one order row
 #### 4.1.2 ShippingFee
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat()and setVatPercent().**
 ```java
-.addFee(Item.shippingFee()
+.addFee(WebPayItem.shippingFee()
 	.setAmountExVat(50)                    //Optional, see info above
 	.setAmountIncVat(62.50)                //Optional, see info above
 	.setVatPercent(25.00)                  //Optional, see info above
@@ -328,7 +337,7 @@ All products and other items. It�s required to have a minimum of one order row
 #### 4.1.3 InvoiceFee
 **The price can be set in a combination by using a minimum of two out of three functions: setAmountExVat(), setAmountIncVat() and setVatPercent().**
 ```java
-.addFee(Item.invoiceFee()
+.addFee(WebPayItem.invoiceFee()
 	.setAmountExVat(50)                    //Optional, see info above
 	.setAmountIncVat(62.50)                //Optional, see info above
 	.setVatPercent(25.00)       	       //Optional, see info above
@@ -340,7 +349,7 @@ All products and other items. It�s required to have a minimum of one order row
 #### 4.1.4 Fixed Discount
 When discount or coupon is a fixed amount on total product amount.
 ```java
-.addDiscount(Item.fixedDiscount()                
+.addDiscount(WebPayItem.fixedDiscount()                
 	.setAmountIncVat(100.00)               //Required
 	.setDiscountId("1")                    //Optional        
 	.setUnit("st")                         //Optional
@@ -350,7 +359,7 @@ When discount or coupon is a fixed amount on total product amount.
 #### 4.1.5 Relative Discount
 When discount or coupon is a percentage on total product amount.
 ```java
-.addDiscount(Item.relativeDiscount()
+.addDiscount(WebPayItem.relativeDiscount()
 	.setDiscountPercent(50)                //Required
 	.setDiscountId("1")                    //Optional      
 	.setUnit("st")                         //Optional
@@ -361,11 +370,13 @@ When discount or coupon is a percentage on total product amount.
 
 ### 4.2 Customer Identity   
 Customer identity is required for invoice and payment plan orders. Required values varies 
-depending on country and customer type. For SE, NO, DK and FI national id number is required. Email and ip address are desirable.
+depending on country and customer type. For SE, NO, DK and FI national id number is required. 
+
+If the customer email and/or ip address are available, they should be added to the customer identity object.
 
 ####4.2.1 Options for individual customers
 ```java
-.addCustomerDetails(Item.individualCustomer()
+.addCustomerDetails(WebPayItem.individualCustomer()
     .setNationalIdNumber("194605092222")	//Required for individual customers in SE, NO, DK and FI
     .setBirthDate(1923, 12, 12)        		//Required for individual customers in NL and DE
     .setName("Tess", "Testson")        		//Required for individual customers in NL and DE
@@ -375,13 +386,13 @@ depending on country and customer type. For SE, NO, DK and FI national id number
     .setZipCode(9999)                  		//Required in NL and DE
     .setLocality("Stan")               		//Required in NL and DE
     .setPhoneNumber("999999"))           	//Optional
-    .setEmail("test@svea.com")         		//Optional but desirable
-    .setIpAddress("123.123.123")       		//Optional but desirable
+    .setEmail("test@svea.com")         		//Required if available
+    .setIpAddress("123.123.123")       		//Required if available
 ```
 
 ####4.2.2 Options for company customers
 ```java
-.addCustomerDetails(Item.companyCustomer()
+.addCustomerDetails(WebPayItem.companyCustomer()
     .setNationalIdNumber("2345234")			//Required for company customers in SE, NO, DK, FI
     .setVatNumber("NL2345234")				//Required for NL and DE
     .setCompanyName("TestCompagniet")) 		//Required for Eu countries like NL and DE
@@ -460,7 +471,7 @@ and the html form element as array.
 
 ```java
 PaymentForm form = WebPay.createOrder()
-.addOrderRow(Item.orderRow()
+.addOrderRow(WebPayItem.orderRow()
 	.setArticleNumber("1")
 	.setName("Prod")
 	.setDescription("Specification")
@@ -504,7 +515,7 @@ Function getPaymentForm() returns object type *PaymentForm* with accessible memb
 
 ```java
 PaymentForm form = WebPay.createOrder()
-.addOrderRow(Item.orderRow()
+.addOrderRow(WebPayItem.orderRow()
 	.setArticleNumber("1")
 	.setName("Prod")
 	.setDescription("Specification")
@@ -545,7 +556,7 @@ setPaymentMethod, includePaymentMethods, excludeCardPaymentMethods or excludeDir
 #####4.4.3.1 Request
 ```java
 PaymentForm form = WebPay.createOrder()
-.addOrderRow(Item.orderRow()
+.addOrderRow(WebPayItem.orderRow()
 	.setArticleNumber("1")
 	.setName("Prod")
 	.setDescription("Specification")
@@ -623,7 +634,7 @@ Go direct to specified payment method without the step *PayPage*.
 Set your store authorization here.
 ```java
 PaymentForm form = WebPay.createOrder()
-.addOrderRow(Item.orderRow()
+.addOrderRow(WebPayItem.orderRow()
 	.setArticleNumber("1")
 	.setName("Prod")
 	.setDescription("Specification")
@@ -666,7 +677,7 @@ Perform an invoice payment. This payment form will perform a synchronous payment
 Returns *CreateOrderResponse* object. Set your store authorization here.
 ```java
 CreateOrderResponse response = WebPay.createOrder()
-.addOrderRow(Item.orderRow()
+.addOrderRow(WebPayItem.orderRow()
 .setArticleNumber("1")
 .setName("Prod")
 .setDescription("Specification")
@@ -690,7 +701,7 @@ Set your store authorization here.
 Param: Campaign code recieved from getPaymentPlanParams().
 ```java
 CreateOrderResponse response = WebPay.createOrder()
-.addOrderRow(Item.orderRow()
+.addOrderRow(WebPayItem.orderRow()
 	.setArticleNumber("1")
 	.setName("Prod")
 	.setDescription("Specification")
@@ -806,12 +817,12 @@ You can add OrderRow, Fee and Discount. Choose the right Item as parameter.
 You can use the **.add** functions with an Item or list of Items as parameters.
 
 ```java
-.addOrderRow(Item.orderRow(). ...)
+.addOrderRow(WebPayItem.orderRow(). ...)
 
 //or
 
 List<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>(); //or use another preferrable List object
-orderRows.add(Item.orderRow(). ...)
+orderRows.add(WebPayItem.orderRow(). ...)
 ...
 deliverOrder.addOrderRows(orderRows);
 ```
@@ -821,7 +832,7 @@ deliverOrder.addOrderRows(orderRows);
 #### 7.1.1 OrderRow
 All products and other items. It is required to have a minimum of one row.
 ```java
-.addOrderRow(Item.orderRow()
+.addOrderRow(WebPayItem.orderRow()
    .setArticleNumber("1")               //Optional
    .setName("Prod")                 	//Optional
    .setDescription("Specification")	    //Optional
@@ -834,7 +845,7 @@ All products and other items. It is required to have a minimum of one row.
 
 #### 7.1.2 ShippingFee
 ```java
-.addFee(Item.shippingFee()
+.addFee(WebPayItem.shippingFee()
 	.setAmountExVat(50)               	//Required
 	.setVatPercent(25.00)              	//Required
 	.setShippingId("33")               	//Optional
@@ -845,7 +856,7 @@ All products and other items. It is required to have a minimum of one row.
 ```
 #### 7.1.3 InvoiceFee
 ```java
-.addFee(Item.invoiceFee()
+.addFee(WebPayItem.invoiceFee()
 	.setAmountExVat(50)            		//Required
 	.setVatPercent(25.00)          		//Required
 	.setName("Svea fee")           		//Optional

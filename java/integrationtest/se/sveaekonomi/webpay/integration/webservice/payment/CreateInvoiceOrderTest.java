@@ -275,7 +275,7 @@ public class CreateInvoiceOrderTest {
 		assertEquals( (Object)1304.00, response.amount );		
 		//System.out.println( "test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false\n"
 		//		+ "  Check logs that order rows were sent as exvat+vat for order row #"+response.orderId);		
-		
+	
 		// Expected log:
 		// ...
 		//<web:OrderRows>
@@ -595,6 +595,5 @@ public class CreateInvoiceOrderTest {
 		//		+ "  Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);		
 		
 		
-	}		
-	
+	}
 }

@@ -2,18 +2,6 @@ package se.sveaekonomi.webpay.integration.util.test;
 
 import java.sql.Date;
 
-
-
-
-//import org.openqa.selenium.Alert;
-//import org.openqa.selenium.By;
-//import org.openqa.selenium.WebElement;
-//import org.openqa.selenium.firefox.FirefoxDriver;
-//import org.openqa.selenium.support.ui.ExpectedConditions;
-//import org.openqa.selenium.support.ui.Select;
-//import org.openqa.selenium.support.ui.WebDriverWait;
-
-
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
@@ -25,7 +13,6 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
-import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RelativeDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
@@ -132,7 +119,7 @@ public class TestingTool {
     }
     
     public static ShippingFeeBuilder createExVatBasedShippingFee() {
-        return Item.shippingFee()
+        return WebPayItem.shippingFee()
                    .setShippingId("33")
                    .setName("shipping")
                    .setDescription("Specification")
@@ -382,9 +369,7 @@ public class TestingTool {
 
         return cCustomer;
     }
-    
 
-    
     /**
      * returns a minimal invoice test order response from Svea using defaults values
      * @return CreateOrderResponse
