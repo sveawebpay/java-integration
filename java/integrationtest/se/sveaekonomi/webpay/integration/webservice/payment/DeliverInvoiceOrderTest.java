@@ -141,8 +141,8 @@ public class DeliverInvoiceOrderTest {
 
 		assertTrue( deliverResponse.isOrderAccepted() );
 		assertEquals( (Object)1304.00, deliverResponse.getAmount() );		
-		System.out.println( "test_deliverOrder_sent_with_PriceIncludingVat_false\n"
-				+ "  Check logs that order rows were sent as incvat+vat for orderId/invoiceId #"+response.orderId+"/"+deliverResponse.getInvoiceId());		
+		//System.out.println( "test_deliverOrder_sent_with_PriceIncludingVat_false\n"
+		//		+ "  Check logs that order rows were sent as incvat+vat for orderId/invoiceId #"+response.orderId+"/"+deliverResponse.getInvoiceId());		
 					
 		// Expected log:
 		// ...
@@ -223,7 +223,7 @@ public class DeliverInvoiceOrderTest {
 	}		
 
 	@Test
-	public void test_deliverOrder_sent_with_PriceIncludingVat_true_which_does_not_match_CreateOrder_PriceIncludingVat_false_fails() {
+	public void test_deliverOrder_sent_with_PriceIncludingVat_true_which_does_not_match_CreateOrder_PriceIncludingVat_false_is_redelivered_true() {
 
 		// create order is sent with PriceIncludingVat = false
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
@@ -268,9 +268,14 @@ public class DeliverInvoiceOrderTest {
 		order.addFee(exvatShippingFee);
 		order.addDiscount(fixedDiscount);		
 		
-		CreateOrderResponse response = order.useInvoicePayment().doRequest();
-		assertTrue( response.isOrderAccepted() );
+		double expectedCreateOrderAmount = 1304.00;				
+		
+		CreateOrderResponse response = order.useInvoicePayment().doRequest();		
+		//System.out.println("created order #"+response.orderId+" with total order amount "+response.amount);
 
+		assertTrue( response.isOrderAccepted() );
+		assertEquals( (Object)expectedCreateOrderAmount, response.amount );
+		
   		long orderId = response.orderId;
 		
 		// deliver order is sent with PriceIncludingVat = true		
@@ -300,7 +305,7 @@ public class DeliverInvoiceOrderTest {
 		;
 		
 		ShippingFeeBuilder incvatShippingFee = WebPayItem.shippingFee()
-			.setAmountIncVat(172.00)
+			.setAmountIncVat(176.00)
 			.setVatPercent(10)
 			.setName("incvatShippingFee")
 		;	
@@ -309,13 +314,114 @@ public class DeliverInvoiceOrderTest {
 		deliverOrder.addOrderRow(incvatRow2);
 		deliverOrder.addFee(incvatInvoiceFee);
 		deliverOrder.addFee(incvatShippingFee);
-		deliverOrder.addDiscount(fixedDiscount); // same, ok		
+		deliverOrder.addDiscount(fixedDiscount);		
 
 		DeliverOrderResponse deliverResponse = deliverOrder.deliverInvoiceOrder().doRequest();
+		//System.out.println("(re)delivered order #"+response.orderId+" with total order amount "+deliverResponse.getAmount());
 
-//		System.out.println(deliverResponse.getResultCode());
-//		System.out.println(deliverResponse.getErrorMessage());
-		assertEquals( false, deliverResponse.isOrderAccepted() );
-		assertEquals( "50036", deliverResponse.getResultCode() );	
+		//System.out.println(deliverResponse.getResultCode());
+		//System.out.println(deliverResponse.getErrorMessage());		
+		assertEquals( true, deliverResponse.isOrderAccepted() );
+		assertEquals( (Object)expectedCreateOrderAmount, deliverResponse.getAmount() );	
 	}		
+	
+	@Test
+	public void test_deliverOrder_sent_with_PriceIncludingVat_false_which_does_not_match_CreateOrder_PriceIncludingVat_true_is_redelivered_false() {
+
+		// create order is sent with PriceIncludingVat = false
+		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+		;				
+		OrderRowBuilder exvatRow = WebPayItem.orderRow()
+			.setAmountExVat(600.00)
+			.setVatPercent(20)			
+			.setQuantity(1.0)
+			.setName("exvatRow")
+		;
+		OrderRowBuilder exvatRow2 = WebPayItem.orderRow()
+			.setAmountExVat(300.00)
+			.setVatPercent(10)			
+			.setQuantity(1.0)
+			.setName("exvatRow2")
+		;		
+		
+		InvoiceFeeBuilder exvatInvoiceFee = WebPayItem.invoiceFee()
+			.setAmountExVat(80.00)
+			.setVatPercent(10)
+			.setName("exvatInvoiceFee")
+		;
+		
+		ShippingFeeBuilder exvatShippingFee = WebPayItem.shippingFee()
+			.setAmountExVat(160.00)
+			.setVatPercent(10)
+			.setName("exvatShippingFee")
+		;	
+	
+		FixedDiscountBuilder fixedDiscount = WebPayItem.fixedDiscount()
+			.setAmountIncVat(10.0)
+			.setDiscountId("TenCrownsOff")
+			.setName("fixedDiscount: 10 off incvat")
+		;     
+		
+		OrderRowBuilder incvatRow = WebPayItem.orderRow()
+			.setAmountIncVat(720.00)
+			.setVatPercent(20)			
+			.setQuantity(1.0)
+			.setName("incvatRow")
+		;
+		OrderRowBuilder incvatRow2 = WebPayItem.orderRow()
+			.setAmountIncVat(330.00)
+			.setVatPercent(10)			
+			.setQuantity(1.0)
+			.setName("incvatRow2")
+		;		
+		
+		InvoiceFeeBuilder incvatInvoiceFee = WebPayItem.invoiceFee()
+			.setAmountIncVat(88.00)
+			.setVatPercent(10)
+			.setName("incvatInvoiceFee")
+		;
+		
+		ShippingFeeBuilder incvatShippingFee = WebPayItem.shippingFee()
+			.setAmountIncVat(176.00)
+			.setVatPercent(10)
+			.setName("incvatShippingFee")
+		;	
+	
+		order.addOrderRow(incvatRow);
+		order.addOrderRow(incvatRow2);
+		order.addFee(incvatInvoiceFee);
+		order.addFee(incvatShippingFee);
+		order.addDiscount(fixedDiscount); // same, ok		
+		
+		double expectedCreateOrderAmount = 1304.00;				
+						
+		CreateOrderResponse response = order.useInvoicePayment().doRequest();
+		//System.out.println("created order #"+response.orderId+" with total order amount "+response.amount);
+		
+		assertTrue( response.isOrderAccepted() );
+
+  		long orderId = response.orderId;
+		
+		// deliver order is sent with PriceIncludingVat = true		
+  		DeliverOrderBuilder deliverOrder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			.setOrderId(orderId)
+  			.setCountryCode(TestingTool.DefaultTestCountryCode)
+  			.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+  		;	
+		
+		deliverOrder.addOrderRow(exvatRow);
+		deliverOrder.addOrderRow(exvatRow2);
+		deliverOrder.addFee(exvatInvoiceFee);
+		deliverOrder.addFee(exvatShippingFee);
+		deliverOrder.addDiscount(fixedDiscount);	
+		
+		DeliverOrderResponse deliverResponse = deliverOrder.deliverInvoiceOrder().doRequest();
+		//System.out.println("(re)delivered order #"+response.orderId+" with total order amount "+deliverResponse.getAmount());
+
+		assertEquals( true, deliverResponse.isOrderAccepted() );
+		assertEquals( (Object)expectedCreateOrderAmount, deliverResponse.getAmount() );		
+	}			
 }
