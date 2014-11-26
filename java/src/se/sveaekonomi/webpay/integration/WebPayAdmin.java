@@ -20,25 +20,25 @@ public class WebPayAdmin {
         return new CancelOrderBuilder(config);
 	}
 	
+	// TODO check below javadoc
 	/**
-	 * TODO check below javadoc
-     * The WebPayAdmin.queryOrder entrypoint method is used to get information about an order.
+	 * The WebPayAdmin.queryOrder entrypoint method is used to get information about an order.
      * 
      * Note that for invoice and payment plan orders, the order rows name and description is merged into the description field in the query response.
      * 
      * Get an query builder instance using the WebPayAdmin.queryOrder entrypoint, then provide more information about the order and send the request using the QueryOrderBuilder methods:
      * 
      * ...
-     *     response = WebPayAdmin.queryOrder(config)
+     *     request = WebPayAdmin.queryOrder(config)
      *          .setOrderId()          // required
+     *          .setTransactionId	   // optional, card or direct bank only, alias for setOrderId 
      *          .setCountryCode()      // required      
-     *          .queryInvoiceOrder()   // select request class and
-     *              .doRequest()       // perform the request, returns GetOrdersResponse
-     * 
-     *          //.queryPaymentPlanOrder().doRequest() // returns GetOrdersResponse
-     *          //.queryCardOrder().doRequest()        // returns QueryTransactionResponse
-     *          //.queryDirectBankOrder().doRequest()  // returns QueryTransactionResponse
      *     ;
+     *     // then select the corresponding request class and send request
+     *     response = request.queryInvoiceOrder().doRequest();		// returns GetOrdersResponse
+     *     response = request.queryPaymentPlanOrder().doRequest(); 	// returns GetOrdersResponse
+     *     response = request.queryCardOrder().doRequest();        	// returns QueryTransactionResponse
+     *     response = request.queryDirectBankOrder().doRequest();  	// returns QueryTransactionResponse
      * ...
      * 
 	 */
@@ -49,6 +49,36 @@ public class WebPayAdmin {
         
         return new QueryOrderBuilder(config);		
 	}
+
+	// TODO check below javadoc
+	/**
+     * The WebPayAdmin.deliverOrderRows entrypoint method is used to deliver individual order rows.
+     * 1.6.0: Supports card orders. To deliver invoice order rows, use WebPay.deliverOrder with specified order rows.
+     * 
+     * Get an order builder instance using the WebPayAdmin.deliverOrderRows entrypoint,
+     * then provide more information about the transaction and send the request using
+     * the DeliverOrderRowsBuilder methods:
+     *
+     *     request = WebPayAdmin.deliverOrder(config)
+     *          .setOrderId()          		// required
+     *          .setTransactionId	   		// optional, card only, alias for setOrderId 
+     *          .setCountryCode()      		// required    	
+     *          .setRowToDeliver()	   		// required, index of order rows you wish to deliver 
+     *          .addNumberedOrderRow()		// required for card orders, should match row indexes 
+     *     ;
+     *     // then select the corresponding request class and send request
+     *     response = request.deliverCardOrderRows().doRequest()	// returns ConfirmTransactionResponse
+     * 
+     * The final doRequest() returns a DeliverOrderRowsResponse or ConfirmTransactionResponse
+     *
+     */
+    public static DeliverOrderBuilder deliverOrderRows( ConfigurationProvider config ) {
+        if (config == null) {
+        	throw new SveaWebPayException("A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()");
+	    }    	
+	    
+	    return new DeliverOrderBuilder(config);	
+    }    
 
 
 }
