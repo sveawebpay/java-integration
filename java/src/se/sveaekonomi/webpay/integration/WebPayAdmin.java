@@ -4,6 +4,7 @@ import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CloseOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
 
 /**
@@ -50,7 +51,7 @@ public class WebPayAdmin {
         return new QueryOrderBuilder(config);		
 	}
 
-	// TODO check below javadoc
+	// TODO check below javadoc, backport docblock to php
 	/**
      * The WebPayAdmin.deliverOrderRows entrypoint method is used to deliver individual order rows.
      * 1.6.0: Supports card orders. To deliver invoice order rows, use WebPay.deliverOrder with specified order rows.
@@ -59,25 +60,27 @@ public class WebPayAdmin {
      * then provide more information about the transaction and send the request using
      * the DeliverOrderRowsBuilder methods:
      *
-     *     request = WebPayAdmin.deliverOrder(config)
-     *          .setOrderId()          		// required
-     *          .setTransactionId	   		// optional, card only, alias for setOrderId 
-     *          .setCountryCode()      		// required    	
-     *          .setRowToDeliver()	   		// required, index of order rows you wish to deliver 
-     *          .addNumberedOrderRow()		// required for card orders, should match row indexes 
-     *     ;
-     *     // then select the corresponding request class and send request
-     *     response = request.deliverCardOrderRows().doRequest()	// returns ConfirmTransactionResponse
+     * ...
+     * 		request = WebPayAdmin.deliverOrder(config)
+     *          .setOrderId()          			// required
+     *          .setTransactionId()	   			// optional, card only, alias for setOrderId 
+     *          .setCountryCode()      			// required    	
+     *          .setInvoiceDistributionType()	// required, invoice only
+     *          .setRowToDeliver()	   			// required, index of original order rows you wish to deliver 
+     *          .addNumberedOrderRow()			// required for card orders, should match original row indexes 
+     *          .addOrderRow()					// optional, add new order row to deliver along with indexed rows 	// TODO backport to php
+     *     	;
+     *     	// then select the corresponding request class and send request
+     *     	response = request.deliverCardOrderRows().doRequest()	// returns ConfirmTransactionResponse
+     * ...
      * 
-     * The final doRequest() returns a DeliverOrderRowsResponse or ConfirmTransactionResponse
-     *
      */
-    public static DeliverOrderBuilder deliverOrderRows( ConfigurationProvider config ) {
+    public static DeliverOrderRowsBuilder deliverOrderRows( ConfigurationProvider config ) {
         if (config == null) {
         	throw new SveaWebPayException("A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()");
 	    }    	
 	    
-	    return new DeliverOrderBuilder(config);	
+	    return new DeliverOrderRowsBuilder(config);	
     }    
 
 
