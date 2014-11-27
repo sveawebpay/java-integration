@@ -16,25 +16,22 @@ import org.xml.sax.SAXException;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 
 /**
- * Handles annul request response from hosted admin webservice
+ * Handles lowertransaction request response from hosted admin webservice
  * 
  * @author Kristian Grossman-Madsen
  */
-public class AnnulTransactionResponse extends HostedAdminResponse {
+public class LowerTransactionResponse extends HostedAdminResponse {
 
 	private String rawResponse;
 	private String transactionid;
 	private String clientOrderNumber;
 
-	public AnnulTransactionResponse(String responseXmlBase64, String secretWord) {
+	public LowerTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
 		this.rawResponse = this.xml;		
 		this.setValues();
 	}
 
-	/** 
-	 * implement this to parse xml and set attributes according to response attributes 
-	 */
 	void setValues() {		
 				
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();

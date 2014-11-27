@@ -6,15 +6,18 @@ import java.util.HashSet;
 import com.gargoylesoftware.htmlunit.html.xpath.LowerCaseFunction;
 
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
+import se.sveaekonomi.webpay.integration.hosted.hostedadmin.LowerTransactionRequest;
+import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
+import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 
 /**
  * @author Kristian Grossman-Madsen
  */
 
-public class DeliverOrderRowsBuilder {
+public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilder> {
 	
     private ConfigurationProvider config;
     private COUNTRYCODE countryCode;
@@ -35,46 +38,63 @@ public class DeliverOrderRowsBuilder {
 		return config;
 	}
 
-	public void setConfig(ConfigurationProvider config) {
+	public DeliverOrderRowsBuilder setConfig(ConfigurationProvider config) {
 		this.config = config;
+		return this;
 	}
 
 	public COUNTRYCODE getCountryCode() {
 		return countryCode;
 	}
 
-	public void setCountryCode(COUNTRYCODE countryCode) {
+	public DeliverOrderRowsBuilder setCountryCode(COUNTRYCODE countryCode) {
 		this.countryCode = countryCode;
+		return this;
 	}
 
 	public ArrayList<Integer> getRowsToDeliver() {
 		return rowIndexesToDeliver;
 	}
 
-	public void setRowsToDeliver(ArrayList<Integer> rowIndexesToDeliver) {
+	public DeliverOrderRowsBuilder setRowsToDeliver(ArrayList<Integer> rowIndexesToDeliver) {
 		this.rowIndexesToDeliver = rowIndexesToDeliver;
+		return this;
 	}
 
 	public ArrayList<NumberedOrderRowBuilder> getNumberedOrderRows() {
 		return numberedOrderRows;
 	}
 
-	public void addNumberedOrderRows(ArrayList<NumberedOrderRowBuilder> numberedOrderRows) {
+	public DeliverOrderRowsBuilder addNumberedOrderRows(ArrayList<NumberedOrderRowBuilder> numberedOrderRows) {
 		this.numberedOrderRows = numberedOrderRows;
+		return this;
 	}
 
 	public long getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(long orderId) {
+	public DeliverOrderRowsBuilder setOrderId(long orderId) {
 		this.orderId = orderId;
+		return this;
 	}
+	
+	/**
+	 * optional, card only -- alias for setOrderId
+	 * @param transactionId as string, i.e. as transactionId is returned in HostedPaymentResponse
+	 * @return DeliverOrderRowsBuilder
+	 */
+    public DeliverOrderRowsBuilder setTransactionId( String transactionId) {        
+        return setOrderId( Long.parseLong(transactionId) );
+    }   
+    public long getTransactionId() {
+        return getOrderId();
+    }
 	
 	public LowerTransactionRequest deliverCardOrderRows() {
 		
 		
-		validateDeliverCardOrderRows();
+		//validateDeliverCardOrderRows();
 		
 		// calculate original order rows total, incvat row sum over numberedOrderRows
 		double originalOrderTotal = 0.0;
@@ -93,15 +113,17 @@ public class DeliverOrderRowsBuilder {
 		}
 		
 		double amountToLowerOrderBy = originalOrderTotal - deliveredOrderTotal;
-		amountToLowerOrderBy *=100; // request uses minor currency
-
-		LowerTransactionRequest lowerTransactionRequest = new LowerTransactionRequest( this.config );
+		
+		LowerTransactionRequest lowerTransactionRequest = new LowerTransactionRequest( this );
 		lowerTransactionRequest.setCountryCode( this.countryCode );
-		lowerTransactionRequest.setTransactionId( this.orderId );
-		lowerTransactionRequest.setAmountToLower( amountToLowerOrderBy );
+		lowerTransactionRequest.setTransactionId( Double.toString(this.orderId) );
+		lowerTransactionRequest.setAmountToLower( (int)MathUtil.bankersRound(amountToLowerOrderBy) * 100 ); // request uses minor currency );
 		lowerTransactionRequest.setAlsoDoConfirm( true );
-				
+		
+		return( lowerTransactionRequest );				
 	}
+
+
 	
 	
 	

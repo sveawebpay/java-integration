@@ -51,7 +51,7 @@ public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
 	/**
 	 * optional, card or direct bank only -- alias for setOrderId
 	 * @param transactionId as string, i.e. as transactionId is returned in HostedPaymentResponse
-	 * @return DeliverOrderBuilder
+	 * @return QueryOrderBuilder
 	 */
     public QueryOrderBuilder setTransactionId( String transactionId) {        
         return setOrderId( Long.parseLong(transactionId) );
