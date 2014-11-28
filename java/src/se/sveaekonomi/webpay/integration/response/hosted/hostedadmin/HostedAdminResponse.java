@@ -33,6 +33,7 @@ public abstract class HostedAdminResponse extends Response {
 		String xml = Base64Util.decodeBase64String(responseXmlBase64);
 		this.setXml(xml);
 	}
+	
 
 	protected void setErrorParams(int resultCode) {
 		switch (resultCode) {

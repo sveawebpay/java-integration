@@ -159,7 +159,7 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         	this.setCaptureDate( String.format("%tF", new Date()) ); //'t' => time, 'F' => ISO 8601 complete date formatted as "%tY-%tm-%td"
         }
 		
-		return new ConfirmTransactionRequest(this);
+		return new ConfirmTransactionRequest(this.getConfig());
 	}
 
 }

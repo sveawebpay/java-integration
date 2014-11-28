@@ -31,6 +31,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import se.sveaekonomi.webpay.integration.Respondable;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
@@ -45,25 +46,23 @@ import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 /**
  * @author Kristian Grossman-Madsen
  */
-public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
+public abstract class HostedAdminRequest {
 
-	protected OrderBuilder<T> order;
 	protected ConfigurationProvider config;
 	protected String method;
 	
 	/** Used to disambiguate between the various credentials in ConfigurationProvider. */
 	private COUNTRYCODE countryCode;
 		
-	public HostedAdminRequest(OrderBuilder<T> order, String method) {
-		this.order = order;
-		this.config = order.getConfig();
+	public HostedAdminRequest(ConfigurationProvider config, String method) {
+		this.config = config;
 		this.method = method;
 	}
 	
     /**
      * Required. 
      */
-    public HostedAdminRequest<T> setCountryCode( COUNTRYCODE countryCode ) {
+    public HostedAdminRequest setCountryCode( COUNTRYCODE countryCode ) {
         this.countryCode = countryCode;
         return this;
     }	
@@ -122,6 +121,7 @@ public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
         String errors = validateOrder();
         
         if (!errors.equals("")) {
+        	System.out.println(errors);
             throw new SveaWebPayException("Validation failed", new ValidationException(errors));
         }
         
@@ -143,7 +143,7 @@ public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
 	}
 
 	
-	public <R extends HostedAdminResponse> R doRequest() throws SveaWebPayException { // TODO this throws SveaWebPayException -- see closeOrder doRequest?? ask DB
+	public <R extends Respondable> R doRequest() throws SveaWebPayException {
 
 		try {
 			// prepare request fields
@@ -215,7 +215,7 @@ public abstract class HostedAdminRequest<T extends OrderBuilder<T>> {
 	/**
 	 * should return an instance of the appropriate request response class, given the base64-encoded response
 	 */
-	abstract <R extends HostedAdminResponse> R parseResponse( String response );	
+	abstract <R extends Respondable> R parseResponse( String response );	
 
 	
 	/**

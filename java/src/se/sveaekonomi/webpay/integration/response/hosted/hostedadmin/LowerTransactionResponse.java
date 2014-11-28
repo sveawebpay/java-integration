@@ -13,6 +13,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import se.sveaekonomi.webpay.integration.Respondable;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 
 /**
@@ -20,7 +21,7 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
  * 
  * @author Kristian Grossman-Madsen
  */
-public class LowerTransactionResponse extends HostedAdminResponse {
+public class LowerTransactionResponse extends HostedAdminResponse implements Respondable {
 
 	private String rawResponse;
 	private String transactionid;

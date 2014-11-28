@@ -3,8 +3,6 @@ package se.sveaekonomi.webpay.integration.order.handle;
 import java.util.ArrayList;
 import java.util.HashSet;
 
-import com.gargoylesoftware.htmlunit.html.xpath.LowerCaseFunction;
-
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.LowerTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
@@ -25,7 +23,7 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
     private ArrayList<Integer> rowIndexesToDeliver;
 	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
 	private ArrayList<OrderRowBuilder> newOrderRows;
-    private long orderId;
+    private String orderId;
 
 	public DeliverOrderRowsBuilder( ConfigurationProvider config ) {
 		this.config = config;
@@ -56,6 +54,11 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 		return rowIndexesToDeliver;
 	}
 
+	public DeliverOrderRowsBuilder setRowToDeliver( int rowIndexToDeliver ) {
+		this.rowIndexesToDeliver.add(rowIndexToDeliver);
+		return this;
+	}
+
 	public DeliverOrderRowsBuilder setRowsToDeliver(ArrayList<Integer> rowIndexesToDeliver) {
 		this.rowIndexesToDeliver = rowIndexesToDeliver;
 		return this;
@@ -70,11 +73,11 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 		return this;
 	}
 
-	public long getOrderId() {
+	public String getOrderId() {
 		return orderId;
 	}
 
-	public DeliverOrderRowsBuilder setOrderId(long orderId) {
+	public DeliverOrderRowsBuilder setOrderId(String orderId) {
 		this.orderId = orderId;
 		return this;
 	}
@@ -85,15 +88,11 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 	 * @return DeliverOrderRowsBuilder
 	 */
     public DeliverOrderRowsBuilder setTransactionId( String transactionId) {        
-        return setOrderId( Long.parseLong(transactionId) );
+        return setOrderId( transactionId );
     }   
-    public long getTransactionId() {
-        return getOrderId();
-    }
 	
 	public LowerTransactionRequest deliverCardOrderRows() {
-		
-		
+	
 		//validateDeliverCardOrderRows();
 		
 		// calculate original order rows total, incvat row sum over numberedOrderRows
@@ -105,7 +104,7 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 		// calculate delivered order rows total, incvat row sum over deliveredOrderRows + newOrderRows
 		double deliveredOrderTotal = 0.0;
 		for( Integer rowIndex : new HashSet<Integer>(rowIndexesToDeliver) ) {
-			NumberedOrderRowBuilder deliveredRow = numberedOrderRows.get(rowIndex);
+			NumberedOrderRowBuilder deliveredRow = numberedOrderRows.get(rowIndex-1);	// -1 as NumberedOrderRows is one-indexed
 			deliveredOrderTotal +=  deliveredRow.getAmountExVat() * (1+deliveredRow.getVatPercent()/100.0);
 		}		
 		for( OrderRowBuilder newRow : newOrderRows ) {
@@ -113,18 +112,13 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 		}
 		
 		double amountToLowerOrderBy = originalOrderTotal - deliveredOrderTotal;
-		
-		LowerTransactionRequest lowerTransactionRequest = new LowerTransactionRequest( this );
-		lowerTransactionRequest.setCountryCode( this.countryCode );
-		lowerTransactionRequest.setTransactionId( Double.toString(this.orderId) );
+				
+		LowerTransactionRequest lowerTransactionRequest = new LowerTransactionRequest( this.getConfig() );
+		lowerTransactionRequest.setCountryCode( this.getCountryCode() );
+		lowerTransactionRequest.setTransactionId( this.getOrderId() );
 		lowerTransactionRequest.setAmountToLower( (int)MathUtil.bankersRound(amountToLowerOrderBy) * 100 ); // request uses minor currency );
 		lowerTransactionRequest.setAlsoDoConfirm( true );
 		
 		return( lowerTransactionRequest );				
 	}
-
-
-	
-	
-	
 }

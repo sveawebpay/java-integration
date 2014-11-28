@@ -1,6 +1,5 @@
 package se.sveaekonomi.webpay.integration.order.handle;
 
-import se.sveaekonomi.webpay.integration.Requestable;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.QueryTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
@@ -14,21 +13,18 @@ public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
     protected ConfigurationProvider config;
     protected COUNTRYCODE countryCode;
         
+    private long orderId;
+
     public ConfigurationProvider getConfig() {
         return this.config;
     }
-    
-    private long orderId;
-
 
 	public QueryOrderBuilder(ConfigurationProvider config) {
 		this.config = config;
 	}
     
 	
-    /**
-     * required
-     */	
+    /** Required */	
     public QueryOrderBuilder setCountryCode(COUNTRYCODE countryCode) {
         this.countryCode = countryCode;
         return this;
@@ -37,9 +33,7 @@ public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
         return this.countryCode;
     } 
     
-    /**
-     * required, invoice or payment plan only, order to get details for
-     */
+    /** Required, invoice or payment plan only, order to get details for */
     public QueryOrderBuilder setOrderId(long orderId) {
         this.orderId = orderId;
         return this;
@@ -49,7 +43,7 @@ public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
     }
     
 	/**
-	 * optional, card or direct bank only -- alias for setOrderId
+	 * Optional, card or direct bank only -- alias for setOrderId
 	 * @param transactionId as string, i.e. as transactionId is returned in HostedPaymentResponse
 	 * @return QueryOrderBuilder
 	 */
@@ -61,7 +55,11 @@ public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
     }
 
 
-	public Requestable queryCardOrder() {		
-		return new QueryTransactionRequest(this);
+	public QueryTransactionRequest queryCardOrder() {		
+		QueryTransactionRequest request = (QueryTransactionRequest) new QueryTransactionRequest(this.getConfig())
+			.setTransactionId( Long.toString(this.getOrderId()) )
+			.setCountryCode( this.getCountryCode() )
+		;
+		return request;
 	}	
 }

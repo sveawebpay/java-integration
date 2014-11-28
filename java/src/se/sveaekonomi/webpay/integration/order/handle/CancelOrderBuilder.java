@@ -69,13 +69,23 @@ public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
 	}	
 	
 	/**
-     * alias for setOrderId()
+	 * optional, card only -- alias for setOrderId
+     * @deprecated
      * @param orderId
      * @return CancelOrderBuilder
      */
 	public CancelOrderBuilder setTransactionId( Long transactionId ) {
 		return this.setOrderId(transactionId);
 	}	
+	
+	/**
+	 * optional, card only -- alias for setOrderId
+	 * @param transactionId as string, i.e. as transactionId is returned in HostedPaymentResponse
+	 * @return DeliverOrderRowsBuilder
+	 */
+    public CancelOrderBuilder setTransactionId( String transactionId) {        
+        return this.setOrderId( Long.parseLong(transactionId) );
+    } 	
 	
 	public CloseOrder cancelInvoiceOrder() {
 		CloseOrderBuilder closeOrderBuilder = new CloseOrderBuilder(this.config);
@@ -94,7 +104,7 @@ public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
 	}
 	
 	public AnnulTransactionRequest cancelCardOrder() {
-		AnnulTransactionRequest request = new AnnulTransactionRequest(this);
+		AnnulTransactionRequest request = new AnnulTransactionRequest(this.getConfig());
 		return request;
 	}	
 }

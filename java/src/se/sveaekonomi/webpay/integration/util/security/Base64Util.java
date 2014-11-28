@@ -17,7 +17,8 @@ public abstract class Base64Util {
     }
     
     public static String decodeBase64String(String msg) {
-        return new String(decode(msg));
+    	String decodedMsg = (msg == null) ? null : new String(decode(msg));
+    	return decodedMsg; 
     }
     
     public static byte[] decodeBase64(String msg) {

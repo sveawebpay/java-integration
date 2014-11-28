@@ -1,15 +1,39 @@
 package se.sveaekonomi.webpay.integration.hosted.hostedadmin;
 
+import java.io.BufferedReader;
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.UnsupportedEncodingException;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.Hashtable;
+import java.util.List;
 
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+import org.apache.http.HttpEntity;
+import org.apache.http.HttpResponse;
+import org.apache.http.NameValuePair;
+import org.apache.http.StatusLine;
+import org.apache.http.client.ClientProtocolException;
+import org.apache.http.client.HttpResponseException;
+import org.apache.http.client.ResponseHandler;
+import org.apache.http.client.entity.UrlEncodedFormEntity;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
+import org.apache.http.message.BasicNameValuePair;
+
+import se.sveaekonomi.webpay.integration.Respondable;
+import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.AnnulTransactionResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.ConfirmTransactionResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.HostedAdminResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.LowerTransactionResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
@@ -21,7 +45,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  * 
  * @author Kristian Grossman-Madsen
  */
-public class LowerTransactionRequest extends HostedAdminRequest<DeliverOrderRowsBuilder> {
+public class LowerTransactionRequest extends HostedAdminRequest {
 
     /** Required. */
 	public String transactionId;
@@ -29,6 +53,7 @@ public class LowerTransactionRequest extends HostedAdminRequest<DeliverOrderRows
 	public Integer amountToLower;
     /** Optional. Iff true, doRequest() will perform a confirm request following a successful loweramount request */
 	public Boolean alsoDoConfirm;
+	
 	
 	public Boolean getAlsoDoConfirm() {
 		return alsoDoConfirm;
@@ -57,8 +82,8 @@ public class LowerTransactionRequest extends HostedAdminRequest<DeliverOrderRows
 		return this;
 	}
 
-	public LowerTransactionRequest(DeliverOrderRowsBuilder order) {
-		super(order, "loweramount");
+	public LowerTransactionRequest(ConfigurationProvider config) {
+		super(config, "loweramount");
 	}
 
 	public String getRequestMessageXml() {
@@ -94,12 +119,12 @@ public class LowerTransactionRequest extends HostedAdminRequest<DeliverOrderRows
 
 	@SuppressWarnings("unchecked")
 	public LowerTransactionResponse parseResponse(String message) {
-		return new LowerTransactionResponse(message, this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.order.getCountryCode()));
+		return new LowerTransactionResponse(message, this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode()));
 	}
 
     public String validateOrder() {
         String errors = "";
-        if (this.order.getCountryCode() == null) {
+        if (this.getCountryCode() == null) {
             errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
         }
         
@@ -108,4 +133,48 @@ public class LowerTransactionRequest extends HostedAdminRequest<DeliverOrderRows
     	}
         return errors;    
     }	
+    
+    
+    
+    @SuppressWarnings("unchecked")
+	@Override
+    public Respondable doRequest() throws SveaWebPayException {
+
+		// if do request
+		LowerTransactionResponse lowerTransactionResponse = super.doRequest();
+		
+		Respondable returnedResponse = lowerTransactionResponse;
+		// if needed, also do confirm
+		if( this.alsoDoConfirm ) {			
+			
+			ConfirmTransactionResponse confirmTransactionResponse = null;
+			// if there were an error other than 305 (i.e. assume that we tried to lower amount by 0), return a ConfirmTransactionResponse with errormessage set
+			if( (lowerTransactionResponse.isOrderAccepted() == false) &&
+				(! lowerTransactionResponse.getResultCode().startsWith("305")) ) {
+				
+				confirmTransactionResponse = new ConfirmTransactionResponse( null, null ); // new empty response
+				confirmTransactionResponse.setOrderAccepted(false);
+                confirmTransactionResponse.setResultCode( "100" );  //INTERNAL_ERROR
+                confirmTransactionResponse.setErrorMessage( "IntegrationPackage: LowerAmount request with flag alsoDoConfirm failed:" +
+            												lowerTransactionResponse.getResultCode() + " " + lowerTransactionResponse.getErrorMessage() )
+        		;
+                
+                returnedResponse = confirmTransactionResponse;
+			}
+            
+			// lowerTransaction request went well, do confirmTransaction request
+            else {
+				ConfirmTransactionRequest confirmTransactionRequest = new ConfirmTransactionRequest( this.config );
+				confirmTransactionRequest.setCountryCode( this.getCountryCode() );
+                confirmTransactionRequest.setTransactionId( this.getTransactionId() );
+                confirmTransactionRequest.setCaptureDate( String.format("%tFT%<tRZ", new Date()) ); // capture today
+                
+                confirmTransactionResponse = confirmTransactionRequest.doRequest();
+                
+                returnedResponse = confirmTransactionResponse;
+            }            
+        }        
+		return returnedResponse;
+    }
+    
 }
