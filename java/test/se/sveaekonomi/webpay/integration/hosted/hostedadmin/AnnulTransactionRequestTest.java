@@ -94,7 +94,7 @@ public class AnnulTransactionRequestTest extends TestCase {
         // if we receive an error from the service, the integration test passes
         assertTrue( response.isOrderAccepted() );
         assertEquals( response.getTransactionId(), "584534" );
-    	assertEquals( response.getCustomerRefNo(), "test_1405694000814" );      	
+    	assertEquals( response.getClientOrderNumber(), "test_1405694000814" );      	
 	}        
     
 }

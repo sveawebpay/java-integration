@@ -71,35 +71,7 @@ public class LowerTransactionRequestTest extends TestCase {
     	assertEquals( expectedXmlMessageBase64, requestFields.get("message") );
     	assertEquals( expectedMacSha512, requestFields.get("mac") );
     	assertEquals( merchantId, requestFields.get("merchantid") );
-    	// TODO replace with fix string!
+    	// TODO replace with fixed request string!
     }
-    
-    @Test
-    public void test_doRequest_returns_LowerTransactionResponse_failure() {
-    	
-    	LowerTransactionResponse response = this.request.doRequest();
-
-    	assertThat( response, instanceOf(LowerTransactionResponse.class) );
-        assertThat( response, instanceOf(HostedAdminResponse.class) );
-          
-        // if we receive an error from the service, the integration test passes
-        assertFalse( response.isOrderAccepted() );
-    	assertEquals( response.getResultCode(), "128 (NO_SUCH_TRANS)" );      	
-    }
-    
-//    @Test
-//    public void manual_test_doRequest_returns_AnnulTransactionResponse_success() {	// TODO replace with webdriver test
-//    	this.request.setTransactionId( "584534" );
-//    	
-//    	LowerTransactionResponse response = this.request.doRequest();
-//
-//    	assertThat( response, instanceOf(LowerTransactionResponse.class) );
-//        assertThat( response, instanceOf(HostedAdminResponse.class) );
-//          
-//        // if we receive an error from the service, the integration test passes
-//        assertTrue( response.isOrderAccepted() );
-//        assertEquals( response.getTransactionId(), "584534" );
-//    	assertEquals( response.getClientOrderNumber(), "test_1405694000814" );      	
-//	}        
     
 }
