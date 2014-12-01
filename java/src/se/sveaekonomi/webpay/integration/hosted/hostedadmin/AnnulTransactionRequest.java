@@ -1,16 +1,25 @@
 package se.sveaekonomi.webpay.integration.hosted.hostedadmin;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.util.Hashtable;
 
+import javax.xml.bind.ValidationException;
 import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
+
+
+import se.sveaekonomi.webpay.integration.Respondable;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.AnnulTransactionResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
+import se.sveaekonomi.webpay.integration.util.security.Base64Util;
+import se.sveaekonomi.webpay.integration.util.security.HashUtil;
+import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 
 /**
  * AnnulTransaction is used to cancel (annul) a card transaction. The
@@ -37,7 +46,7 @@ public class AnnulTransactionRequest extends HostedAdminRequest<AnnulTransaction
 	}
 
 	/**
-	 * returns xml for hosted webservice "annul" request
+	 * should return the request message xml for the method in question
 	 */
 	public String getRequestMessageXml() {
 
@@ -65,15 +74,12 @@ public class AnnulTransactionRequest extends HostedAdminRequest<AnnulTransaction
 		} catch (UnsupportedEncodingException e) {
 			throw new SveaWebPayException("Unsupported encoding UTF-8", e);
 		}
-	}
-
-	// parse response message into AnnulTransactionResponse
-	@SuppressWarnings("unchecked")
-	public AnnulTransactionResponse parseResponse(String message) {
-		return new AnnulTransactionResponse(message, this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode()));
-	}
-
-    public String validateOrder() {
+	}	
+	    
+	/**
+	 * should return string indicating any missing order builder setter methods on validation failure, or empty string
+	 */
+	public String validateOrder() {
         String errors = "";
         if (this.getCountryCode() == null) {
             errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
@@ -83,6 +89,63 @@ public class AnnulTransactionRequest extends HostedAdminRequest<AnnulTransaction
             errors += "MISSING VALUE - OrderId is required, use setOrderId().\n";
     	}
         return errors;    
-    }	
+    }
+	
+	/**
+	 * returns the request fields to post to service
+	 */
+	public Hashtable<String,String> prepareRequest() {
+
+    	// validate request and throw exception if validation fails
+        String errors = validateOrder();
+        
+        if (!errors.equals("")) {
+        	System.out.println(errors);
+            throw new SveaWebPayException("Validation failed", new ValidationException(errors));
+        }
+        
+        // build inspectable request object and return
+		Hashtable<String,String> requestFields = new Hashtable<>();
+
+		String merchantId = this.config.getMerchantId(PAYMENTTYPE.HOSTED, this.getCountryCode());
+		String secretWord = this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode());		
+		
+    	String xmlMessage = getRequestMessageXml();
+    	String xmlMessageBase64 = Base64Util.encodeBase64String(xmlMessage);
+    	String macSha512 =  HashUtil.createHash(xmlMessageBase64 + secretWord, HASHALGORITHM.SHA_512);			
+
+    	requestFields.put("message", xmlMessageBase64);
+    	requestFields.put("mac", macSha512);
+    	requestFields.put("merchantid", merchantId);
+    	
+		return requestFields;
+	}
+    
+	/**
+	 * validate, prepare and do request
+	 * @return AnnulTransactionResponse
+	 * @throws SveaWebPayException
+	 */
+	public AnnulTransactionResponse doRequest() throws SveaWebPayException {
+
+		try {
+			// prepare request fields
+	    	Hashtable<String, String> requestFields = this.prepareRequest();
+
+	    	// send request 
+	    	String xmlResponse = sendHostedAdminRequest(requestFields);
+	
+	    	// parse response	
+			return new AnnulTransactionResponse( getResponseMessageFromXml(xmlResponse), this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode()));
+			
+	    } catch (IllegalStateException ex) {
+	        throw new SveaWebPayException("IllegalStateException", ex);
+	    } 
+		catch (IOException ex) {
+			//System.out.println(ex.toString());
+			//System.out.println(((HttpResponseException)ex).getStatusCode());
+	        throw new SveaWebPayException("IOException", ex);
+	    }		
+	}
 	
 }
