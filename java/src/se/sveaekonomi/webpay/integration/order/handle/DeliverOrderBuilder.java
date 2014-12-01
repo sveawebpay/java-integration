@@ -10,6 +10,7 @@ import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
+import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 
 /**
@@ -154,12 +155,19 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
 	public Requestable deliverCardOrder() {
 		this.orderType = "HOSTED_ADMIN"; // TODO use enumeration instead, PAYMENTTYPE.HOSTED_ADMIN
 		
+
         // if no captureDate set, use today's date as default.
         if( this.getCaptureDate() == null ) {
         	this.setCaptureDate( String.format("%tF", new Date()) ); //'t' => time, 'F' => ISO 8601 complete date formatted as "%tY-%tm-%td"
         }
 		
-		return new ConfirmTransactionRequest(this.getConfig());
+        ConfirmTransactionRequest request = new ConfirmTransactionRequest(this.getConfig())
+        	.setCaptureDate( this.getCaptureDate() )
+        	.setTransactionId( Long.toString(this.getTransactionId()) )
+        	.setCountryCode(TestingTool.DefaultTestCountryCode)
+    	;
+        
+        return request;
 	}
 
 }

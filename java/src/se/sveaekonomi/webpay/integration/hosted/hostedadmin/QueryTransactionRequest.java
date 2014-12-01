@@ -35,7 +35,7 @@ public class QueryTransactionRequest extends HostedAdminRequest implements Reque
 	@SuppressWarnings("unchecked")
 	@Override
 	public QueryTransactionResponse doRequest() {
-		return super.doRequest();
+		return (QueryTransactionResponse) super.doRequest();
 	}	
 
 	/**

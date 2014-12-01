@@ -45,13 +45,14 @@ public class QueryTransactionTest {
         // use known order to test all returned values     
         long createdOrderId = 587673L;  
 
-    	// create an order using defaults
-    	HostedPaymentResponse order = (HostedPaymentResponse)TestingTool.createCardTestOrder("test_cancelOrder_cancelCardOrder");
-        assertTrue(order.isOrderAccepted());
-        
+//    	// create an order using defaults
+//    	HostedPaymentResponse order = (HostedPaymentResponse)TestingTool.createCardTestOrder("test_cancelOrder_cancelCardOrder");
+//        assertTrue(order.isOrderAccepted());
+//        
         // query order
         QueryOrderBuilder queryOrderBuilder = new QueryOrderBuilder( SveaConfig.getDefaultConfig() )
-            .setTransactionId( order.getTransactionId() )
+        .setTransactionId( Long.toString(createdOrderId) )
+//        .setTransactionId( order.getTransactionId() )
             .setCountryCode( COUNTRYCODE.SE )
         ;                
         QueryTransactionResponse response = queryOrderBuilder.queryCardOrder().doRequest();         
@@ -175,4 +176,4 @@ public class QueryTransactionTest {
         assertEquals( "description 2", response.getNumberedOrderRows().get(1).getDescription() );  
     
 	}
-    }
+}

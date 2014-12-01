@@ -12,8 +12,6 @@ import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.HostedAdminResponse;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.LowerTransactionResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
@@ -27,11 +25,8 @@ public class LowerTransactionRequestTest extends TestCase {
 	
 	@Before
 	public void setUp() {
-		order = new DeliverOrderRowsBuilder(SveaConfig.getDefaultConfig());
-    	order.setCountryCode(COUNTRYCODE.SE);
-
-    	request = new LowerTransactionRequest(order); 
-    	request.config = SveaConfig.getDefaultConfig();
+    	request = new LowerTransactionRequest(SveaConfig.getDefaultConfig()); 
+    	request.setCountryCode(COUNTRYCODE.SE);
     	request.setTransactionId( "123456" );
     	request.setAmountToLower(100);
 	}

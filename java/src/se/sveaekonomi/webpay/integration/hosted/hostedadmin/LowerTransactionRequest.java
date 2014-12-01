@@ -45,7 +45,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  * 
  * @author Kristian Grossman-Madsen
  */
-public class LowerTransactionRequest extends HostedAdminRequest {
+public class LowerTransactionRequest extends HostedAdminRequest <LowerTransactionRequest> {
 
     /** Required. */
 	public String transactionId;
@@ -84,6 +84,7 @@ public class LowerTransactionRequest extends HostedAdminRequest {
 
 	public LowerTransactionRequest(ConfigurationProvider config) {
 		super(config, "loweramount");
+		this.alsoDoConfirm = false;
 	}
 
 	public String getRequestMessageXml() {
@@ -141,7 +142,7 @@ public class LowerTransactionRequest extends HostedAdminRequest {
     public Respondable doRequest() throws SveaWebPayException {
 
 		// if do request
-		LowerTransactionResponse lowerTransactionResponse = super.doRequest();
+		LowerTransactionResponse lowerTransactionResponse = (LowerTransactionResponse) super.doRequest();
 		
 		Respondable returnedResponse = lowerTransactionResponse;
 		// if needed, also do confirm

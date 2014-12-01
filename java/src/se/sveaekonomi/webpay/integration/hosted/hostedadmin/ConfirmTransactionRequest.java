@@ -14,7 +14,7 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.ConfirmTransactionResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
-public class ConfirmTransactionRequest extends HostedAdminRequest implements Requestable {
+public class ConfirmTransactionRequest extends HostedAdminRequest<ConfirmTransactionRequest> implements Requestable {
 	
     /** Required. */
 	public String transactionId;
@@ -27,16 +27,18 @@ public class ConfirmTransactionRequest extends HostedAdminRequest implements Req
 		return captureDate;
 	}
 
-	public void setCaptureDate(String captureDate) {
+	public ConfirmTransactionRequest setCaptureDate(String captureDate) {
 		this.captureDate = captureDate;
+		return this;
 	}
 
 	public String getTransactionId() {
 		return transactionId;
 	}
 
-	public void setTransactionId(String transactionId) {
+	public ConfirmTransactionRequest setTransactionId(String transactionId) {
 		this.transactionId = transactionId;
+		return this;
 	}
 
 	public ConfirmTransactionRequest( ConfigurationProvider config ) {
@@ -46,7 +48,7 @@ public class ConfirmTransactionRequest extends HostedAdminRequest implements Req
 	@SuppressWarnings("unchecked")
 	@Override
 	public ConfirmTransactionResponse doRequest() {
-		return super.doRequest();
+		return (ConfirmTransactionResponse) super.doRequest();
 	}
 	
 	/**

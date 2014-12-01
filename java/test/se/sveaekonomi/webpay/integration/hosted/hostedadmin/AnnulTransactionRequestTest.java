@@ -29,7 +29,7 @@ public class AnnulTransactionRequestTest extends TestCase {
     	order.setTransactionId( "123456" );    	
 		request = new AnnulTransactionRequest(SveaConfig.getDefaultConfig())
 			.setCountryCode(order.getCountryCode())
-			.setTransactionId(order.getTransactionId() ); 
+			.setTransactionId( Long.toString(order.getOrderId()) );
 	}
 	
     @Test

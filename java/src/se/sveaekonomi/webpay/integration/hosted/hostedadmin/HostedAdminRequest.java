@@ -34,8 +34,6 @@ import org.xml.sax.SAXException;
 import se.sveaekonomi.webpay.integration.Respondable;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
-import se.sveaekonomi.webpay.integration.order.OrderBuilder;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.HostedAdminResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
@@ -46,7 +44,7 @@ import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 /**
  * @author Kristian Grossman-Madsen
  */
-public abstract class HostedAdminRequest {
+public abstract class HostedAdminRequest<T extends HostedAdminRequest<T>> {
 
 	protected ConfigurationProvider config;
 	protected String method;
@@ -62,9 +60,10 @@ public abstract class HostedAdminRequest {
     /**
      * Required. 
      */
-    public HostedAdminRequest setCountryCode( COUNTRYCODE countryCode ) {
+    @SuppressWarnings("unchecked")
+	public T setCountryCode( COUNTRYCODE countryCode ) {
         this.countryCode = countryCode;
-        return this;
+        return (T) this;
     }	
     
 	public COUNTRYCODE getCountryCode() {

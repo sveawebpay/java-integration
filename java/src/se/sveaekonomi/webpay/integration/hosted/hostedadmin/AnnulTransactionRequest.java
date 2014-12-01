@@ -9,7 +9,6 @@ import javax.xml.stream.XMLStreamWriter;
 
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
-import se.sveaekonomi.webpay.integration.order.handle.CancelOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.AnnulTransactionResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
@@ -20,7 +19,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  * 
  * @author Kristian Grossman-Madsen
  */
-public class AnnulTransactionRequest extends HostedAdminRequest {
+public class AnnulTransactionRequest extends HostedAdminRequest<AnnulTransactionRequest> {
 
 	String transactionId;
 
@@ -28,8 +27,9 @@ public class AnnulTransactionRequest extends HostedAdminRequest {
 		return transactionId;
 	}
 
-	public void setTransactionId(String transactionId) {
+	public AnnulTransactionRequest setTransactionId(String transactionId) {
 		this.transactionId = transactionId;
+		return this;
 	}
 
 	public AnnulTransactionRequest(ConfigurationProvider config) {

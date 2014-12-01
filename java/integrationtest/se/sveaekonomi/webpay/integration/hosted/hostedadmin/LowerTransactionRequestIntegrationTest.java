@@ -3,8 +3,6 @@ package se.sveaekonomi.webpay.integration.hosted.hostedadmin;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertThat;
 
-import java.util.Hashtable;
-
 import junit.framework.TestCase;
 
 import org.junit.Before;
@@ -15,12 +13,8 @@ import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.HostedAdminResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.LowerTransactionResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
-import se.sveaekonomi.webpay.integration.util.security.Base64Util;
-import se.sveaekonomi.webpay.integration.util.security.HashUtil;
-import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 
-public class LowerTransactionRequestTest extends TestCase {
+public class LowerTransactionRequestIntegrationTest extends TestCase {
 
 	private DeliverOrderRowsBuilder order;
 	private LowerTransactionRequest request;
@@ -30,8 +24,8 @@ public class LowerTransactionRequestTest extends TestCase {
 		order = new DeliverOrderRowsBuilder(SveaConfig.getDefaultConfig());
     	order.setCountryCode(COUNTRYCODE.SE);
 
-    	request = new LowerTransactionRequest(order); 
-    	request.config = SveaConfig.getDefaultConfig();
+    	request = new LowerTransactionRequest(SveaConfig.getDefaultConfig()); 
+    	request.setCountryCode(COUNTRYCODE.SE);
     	request.setTransactionId( "123456" );
     	request.setAmountToLower(100);
 	}
@@ -39,7 +33,7 @@ public class LowerTransactionRequestTest extends TestCase {
     @Test
     public void test_doRequest_returns_LowerTransactionResponse_failure() {
     	
-    	LowerTransactionResponse response = this.request.doRequest();
+    	LowerTransactionResponse response = (LowerTransactionResponse) this.request.doRequest();
 
     	assertThat( response, instanceOf(LowerTransactionResponse.class) );
         assertThat( response, instanceOf(HostedAdminResponse.class) );
