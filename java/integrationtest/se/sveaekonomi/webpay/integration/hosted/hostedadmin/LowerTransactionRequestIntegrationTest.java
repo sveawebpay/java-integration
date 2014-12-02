@@ -62,7 +62,6 @@ public class LowerTransactionRequestIntegrationTest extends TestCase {
         LowerTransactionResponse response = request.doRequest();       
         
         assertTrue( response.isOrderAccepted() ); 
-		assertEquals( order.getTransactionId(),response.getTransactionId() );	
     }	
 	
     
