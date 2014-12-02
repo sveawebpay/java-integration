@@ -2,31 +2,12 @@ package se.sveaekonomi.webpay.integration.hosted.hostedadmin;
 
 import static org.junit.Assert.*;
 
-import java.util.Date;
-
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
-import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
-import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
-import se.sveaekonomi.webpay.integration.response.hosted.HostedPaymentResponse;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.AnnulTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.QueryTransactionResponse;
-import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
-import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
-import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
-import se.sveaekonomi.webpay.integration.util.test.TestingTool;
-
-import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.support.ui.ExpectedConditions;
-import org.openqa.selenium.support.ui.Select;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 /**
  * contains end-to-end integration tests of WebPayAdmin entrypoints
@@ -44,15 +25,10 @@ public class QueryTransactionTest {
     public void test_queryOrder_queryCardOrder_single_order_row() {
         // use known order to test all returned values     
         long createdOrderId = 587673L;  
-
-//    	// create an order using defaults
-//    	HostedPaymentResponse order = (HostedPaymentResponse)TestingTool.createCardTestOrder("test_cancelOrder_cancelCardOrder");
-//        assertTrue(order.isOrderAccepted());
-//        
+   
         // query order
         QueryOrderBuilder queryOrderBuilder = new QueryOrderBuilder( SveaConfig.getDefaultConfig() )
         .setTransactionId( Long.toString(createdOrderId) )
-//        .setTransactionId( order.getTransactionId() )
             .setCountryCode( COUNTRYCODE.SE )
         ;                
         QueryTransactionResponse response = queryOrderBuilder.queryCardOrder().doRequest();         
@@ -123,12 +99,12 @@ public class QueryTransactionTest {
 		assertEquals("12500", response.getAuthorizedAmount());									
 		assertEquals("2014-10-13 15:48:56.487", response.getCreated());					
 		assertEquals("CREDNONE", response.getCreditstatus());
-		assertEquals("0", response.getCreditedAmount());						// TODO test
+		assertEquals("0", response.getCreditedAmount());
 		assertEquals("0", response.getMerchantResponseCode());					
 		assertEquals("KORTCERT", response.getPaymentMethod());
-		assertEquals(null, response.getCallbackUrl());						// TODO test
+		assertEquals(null, response.getCallbackUrl());
 		assertEquals("2014-10-14 00:15:10.287", response.getCaptureDate());
-		assertEquals(null, response.getSubscriptionId());					// TODO test
+		assertEquals(null, response.getSubscriptionId());
 		assertEquals(null, response.getSubscriptionType());
 		assertEquals(null, response.getCardType());								
 		assertEquals(null, response.getMaskedCardNumber());						
@@ -138,7 +114,6 @@ public class QueryTransactionTest {
 		assertEquals(null, response.getExpiryMonth());
 		assertEquals(null, response.getChname());
 		assertEquals(null, response.getAuthCode());			        
-
 
         assertEquals( 1, response.getNumberedOrderRows().get(0).getRowNumber() );
         assertEquals( Double.valueOf(1.00), response.getNumberedOrderRows().get(0).getQuantity() ); // first Double.valueOf disambiguates double/Double
@@ -174,6 +149,5 @@ public class QueryTransactionTest {
         assertEquals( Double.valueOf(25.00), response.getNumberedOrderRows().get(1).getVatPercent() ); 
         assertEquals( "orderrow 2", response.getNumberedOrderRows().get(1).getName() );
         assertEquals( "description 2", response.getNumberedOrderRows().get(1).getDescription() );  
-    
 	}
 }

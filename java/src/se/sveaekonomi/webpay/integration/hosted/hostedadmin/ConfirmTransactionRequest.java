@@ -109,7 +109,6 @@ public class ConfirmTransactionRequest extends HostedAdminRequest<ConfirmTransac
 		}
 	}
 	
-
 	/**
 	 * returns the request fields to post to service
 	 */
@@ -155,7 +154,7 @@ public class ConfirmTransactionRequest extends HostedAdminRequest<ConfirmTransac
 	    	String xmlResponse = sendHostedAdminRequest(requestFields);
 	
 	    	// parse response	
-			return new ConfirmTransactionResponse( getResponseMessageFromXml(xmlResponse), this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode()));
+			return new ConfirmTransactionResponse( getResponseMessageFromXml(xmlResponse), this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode()) );
 			
 	    } catch (IllegalStateException ex) {
 	        throw new SveaWebPayException("IllegalStateException", ex);
@@ -166,6 +165,4 @@ public class ConfirmTransactionRequest extends HostedAdminRequest<ConfirmTransac
 	        throw new SveaWebPayException("IOException", ex);
 	    }		
 	}
-		
-	
 }
