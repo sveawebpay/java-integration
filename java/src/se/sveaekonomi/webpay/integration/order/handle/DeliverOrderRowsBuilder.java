@@ -1,10 +1,14 @@
 package se.sveaekonomi.webpay.integration.order.handle;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashSet;
 
+import javax.xml.bind.ValidationException;
+
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
-import se.sveaekonomi.webpay.integration.hosted.hostedadmin.LowerTransactionRequest;
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
@@ -24,6 +28,7 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
 	private ArrayList<OrderRowBuilder> newOrderRows;
     private String orderId;
+    private String captureDate;
 
 	public DeliverOrderRowsBuilder( ConfigurationProvider config ) {
 		this.config = config;
@@ -91,9 +96,32 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
         return setOrderId( transactionId );
     }   
 	
-	public LowerTransactionRequest deliverCardOrderRows() {
+	/**
+	 * card only, optional
+	 * @param date -- date on format YYYY-MM-DD (similar to ISO8601 date)
+	 * @return DeliverOrderBuilder
+	 */
+	public DeliverOrderRowsBuilder setCaptureDate(String captureDate) {
+		this.captureDate = captureDate;
+		return this;
+	}
 	
-		//validateDeliverCardOrderRows();
+    public String getCaptureDate() {
+        return captureDate;
+    }
+    
+	public ConfirmTransactionRequest deliverCardOrderRows() {
+	
+    	// validate request and throw exception if validation fails
+        String errors = validateDeliverCardOrderRows(); 
+        if (!errors.equals("")) {
+            throw new SveaWebPayException("Validation failed", new ValidationException(errors));
+        } 
+					
+        // if no captureDate set, use today's date as default.
+        if( this.getCaptureDate() == null ) {
+        	this.setCaptureDate( String.format("%tF", new Date()) ); //'t' => time, 'F' => ISO 8601 complete date formatted as "%tY-%tm-%td"
+        }
 		
 		// calculate original order rows total, incvat row sum over numberedOrderRows
 		double originalOrderTotal = 0.0;
@@ -113,12 +141,34 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 		
 		double amountToLowerOrderBy = originalOrderTotal - deliveredOrderTotal;
 				
-		LowerTransactionRequest lowerTransactionRequest = new LowerTransactionRequest( this.getConfig() );
-		lowerTransactionRequest.setCountryCode( this.getCountryCode() );
-		lowerTransactionRequest.setTransactionId( this.getOrderId() );
-		lowerTransactionRequest.setAmountToLower( (int)MathUtil.bankersRound(amountToLowerOrderBy) * 100 ); // request uses minor currency );
-		lowerTransactionRequest.setAlsoDoConfirm( true );
+		ConfirmTransactionRequest confirmTransactionRequest = new ConfirmTransactionRequest( this.getConfig() );
+		confirmTransactionRequest.setCaptureDate(this.getCaptureDate());
+		confirmTransactionRequest.setCountryCode( this.getCountryCode() );
+		confirmTransactionRequest.setTransactionId( this.getOrderId() );
+		confirmTransactionRequest.setAlsoDoLowerAmount( (int)MathUtil.bankersRound(amountToLowerOrderBy) * 100 ); // request uses minor currency );
 		
-		return( lowerTransactionRequest );				
+		return confirmTransactionRequest;				
 	}
+	
+	// validates required attributes
+    public String validateDeliverCardOrderRows() {
+        String errors = "";
+        if (this.getCountryCode() == null) {
+            errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+        }
+        
+        if (this.getOrderId() == null) {
+            errors += "MISSING VALUE - OrderId is required, use setOrderId().\n";
+    	}
+        
+        if( this.rowIndexesToDeliver.size() == 0 ) {
+        	errors += "MISSING VALUE - rowsToDeliver is required for deliverCardOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().\n";
+    	}
+        
+        if( this.numberedOrderRows.size() == 0 ) {
+        	errors += "MISSING VALUE - numberedOrderRows is required for deliverCardOrderRows(). Use setNumberedOrderRow() or setNumberedOrderRows().\n";
+    	}
+
+        return errors;  
+    }
 }

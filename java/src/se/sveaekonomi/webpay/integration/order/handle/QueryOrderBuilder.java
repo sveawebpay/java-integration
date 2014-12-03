@@ -1,6 +1,9 @@
 package se.sveaekonomi.webpay.integration.order.handle;
 
+import javax.xml.bind.ValidationException;
+
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.QueryTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
@@ -13,17 +16,13 @@ public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
     protected ConfigurationProvider config;
     protected COUNTRYCODE countryCode;
         
-    private long orderId;
+    /** Required. */
+    private Long orderId;
 
     public ConfigurationProvider getConfig() {
         return this.config;
     }
 
-	public QueryOrderBuilder(ConfigurationProvider config) {
-		this.config = config;
-	}
-    
-	
     /** Required */	
     public QueryOrderBuilder setCountryCode(COUNTRYCODE countryCode) {
         this.countryCode = countryCode;
@@ -38,7 +37,7 @@ public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
         this.orderId = orderId;
         return this;
     }
-    public long getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
     
@@ -50,16 +49,40 @@ public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
     public QueryOrderBuilder setTransactionId( String transactionId) {        
         return setOrderId( Long.parseLong(transactionId) );
     }   
-    public long getTransactionId() {
+    public Long getTransactionId() {
         return getOrderId();
     }
 
-
-	public QueryTransactionRequest queryCardOrder() {		
+	public QueryOrderBuilder(ConfigurationProvider config) {
+		this.config = config;
+	}
+        
+	public QueryTransactionRequest queryCardOrder() {	
+		
+		// validate request and throw exception if validation fails
+        String errors = validateQueryCardOrder();        
+        if (!errors.equals("")) {
+            throw new SveaWebPayException("Validation failed", new ValidationException(errors));
+        } 
+				
 		QueryTransactionRequest request = (QueryTransactionRequest) new QueryTransactionRequest(this.getConfig())
 			.setTransactionId( Long.toString(this.getOrderId()) )
 			.setCountryCode( this.getCountryCode() )
 		;
 		return request;
 	}	
+	
+	// validates  queryCardOrder (querytransactionid) required attributes
+    public String validateQueryCardOrder() {
+        String errors = "";
+        if (this.getCountryCode() == null) {
+            errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+        }
+        
+        if (this.getOrderId() == null) {
+            errors += "MISSING VALUE - OrderId is required, use setOrderId().\n";
+    	}
+        return errors;    
+    }
+	
 }

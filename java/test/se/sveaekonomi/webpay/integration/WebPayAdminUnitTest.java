@@ -3,7 +3,6 @@ package se.sveaekonomi.webpay.integration;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
-import java.util.Date;
 import java.util.Hashtable;
 
 import org.junit.Test;
@@ -11,13 +10,10 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.AnnulTransactionRequest;
-import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.QueryTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCloseOrder;
@@ -41,6 +37,7 @@ public class WebPayAdminUnitTest {
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
 			CloseOrder closeOrder = cancelOrderBuilder.cancelInvoiceOrder();            
+			@SuppressWarnings("unused")
 			SveaRequest<SveaCloseOrder> sveaRequest = closeOrder.prepareRequest();					
 		}
 		catch (SveaWebPayException e){		
@@ -59,6 +56,7 @@ public class WebPayAdminUnitTest {
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
 			CloseOrder closeOrder = cancelOrderBuilder.cancelInvoiceOrder();
+			@SuppressWarnings("unused")
 			SveaRequest<SveaCloseOrder> sveaRequest = closeOrder.prepareRequest();
 
 			// fail if validation passes
@@ -82,6 +80,7 @@ public class WebPayAdminUnitTest {
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
 			CloseOrder closeOrder = cancelOrderBuilder.cancelInvoiceOrder();
+			@SuppressWarnings("unused")
 			SveaRequest<SveaCloseOrder> sveaRequest = closeOrder.prepareRequest();
 
 			// fail if validation passes
@@ -106,6 +105,7 @@ public class WebPayAdminUnitTest {
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
 			CloseOrder closeOrder = cancelOrderBuilder.cancelPaymentPlanOrder();            
+			@SuppressWarnings("unused")
 			SveaRequest<SveaCloseOrder> sveaRequest = closeOrder.prepareRequest();					
 		}
 		catch (SveaWebPayException e){
@@ -124,6 +124,7 @@ public class WebPayAdminUnitTest {
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
 			CloseOrder closeOrder = cancelOrderBuilder.cancelPaymentPlanOrder();
+			@SuppressWarnings("unused")
 			SveaRequest<SveaCloseOrder> sveaRequest = closeOrder.prepareRequest();
 
 			// fail if validation passes
@@ -147,6 +148,7 @@ public class WebPayAdminUnitTest {
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
 			CloseOrder closeOrder = cancelOrderBuilder.cancelPaymentPlanOrder();
+			@SuppressWarnings("unused")
 			SveaRequest<SveaCloseOrder> sveaRequest = closeOrder.prepareRequest();
 
 			// fail if validation passes
@@ -171,6 +173,7 @@ public class WebPayAdminUnitTest {
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
 			AnnulTransactionRequest annulTransactionRequest = cancelOrderBuilder.cancelCardOrder();
+			@SuppressWarnings("unused")
 			Hashtable<String, String> sveaRequest = annulTransactionRequest.prepareRequest();	
 		}
 		catch (SveaWebPayException e){	
@@ -189,6 +192,7 @@ public class WebPayAdminUnitTest {
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
 			AnnulTransactionRequest annulTransactionRequest = cancelOrderBuilder.cancelCardOrder();
+			@SuppressWarnings("unused")
 			Hashtable<String, String> sveaRequest = annulTransactionRequest.prepareRequest();
 
 			// fail if validation passes
@@ -212,6 +216,7 @@ public class WebPayAdminUnitTest {
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
 			AnnulTransactionRequest annulTransactionRequest = cancelOrderBuilder.cancelCardOrder();
+			@SuppressWarnings("unused")
 			Hashtable<String, String> sveaRequest = annulTransactionRequest.prepareRequest();
 
 			// fail if validation passes
@@ -240,7 +245,7 @@ public class WebPayAdminUnitTest {
 			.setTransactionId( "987654" )
 			.setCountryCode( COUNTRYCODE.SE )    
 		;
-		Requestable request = builder.queryCardOrder();
+		QueryTransactionRequest request = builder.queryCardOrder();
 		assertThat( request, instanceOf(QueryTransactionRequest.class));
 	}
     
@@ -260,7 +265,8 @@ public class WebPayAdminUnitTest {
 			.setCountryCode(TestingTool.DefaultTestCountryCode)						// required
 		;			
 		try {			
-			Requestable request = builder.queryCardOrder();						
+			QueryTransactionRequest request = builder.queryCardOrder();						
+			@SuppressWarnings("unused")
 			Object soapRequest = request.prepareRequest();					
 		}
 		catch (SveaWebPayException e){			
@@ -270,19 +276,20 @@ public class WebPayAdminUnitTest {
     }
     @Test
     public void test_createOrder_validates_missing_required_method_for_deliverCardOrder_setOrderId() {	
-		QueryOrderBuilder builder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+		QueryOrderBuilder builder = new QueryOrderBuilder(SveaConfig.getDefaultConfig())
 			//.setOrderId(123456L)													// invoice, partpayment only, required
 			.setCountryCode(TestingTool.DefaultTestCountryCode)						// required
-		;			
+		;
 		try {
-			Requestable request = builder.queryCardOrder();						
+			QueryTransactionRequest request = builder.queryCardOrder();						
+			@SuppressWarnings("unused")
 			Object soapRequest = request.prepareRequest();		
 			// fail if validation passes
 	        fail();		
 		}
 		catch (SveaWebPayException e){			
 	        assertEquals(
-        		"MISSING VALUE - setOrderId is required.\n", 
+        		"MISSING VALUE - OrderId is required, use setOrderId().\n", 
     			e.getCause().getMessage()
     		);			
         }			
@@ -294,7 +301,8 @@ public class WebPayAdminUnitTest {
 			//.setCountryCode(TestingTool.DefaultTestCountryCode)					// required
 		;			
 		try {
-			Requestable request = builder.queryCardOrder();						
+			QueryTransactionRequest request = builder.queryCardOrder();						
+			@SuppressWarnings("unused")
 			Object soapRequest = request.prepareRequest();		
 			// fail if validation passes
 	        fail();		

@@ -120,10 +120,43 @@ public class WebPayAdminWebdriverTest {
     // TODO
     // card
     @Test
-    public void test_deliverOrderRows_deliverCardOrderRows_deliver_first_row() {
+    public void test_deliverOrderRows_deliverCardOrderRows_deliver_all_rows() {
     	
     	// create an order using defaults
     	HostedPaymentResponse order = TestingTool.createCardTestOrder("test_deliverOrderRows_deliverCardOrderRows_deliver_entire_order");
+        assertTrue(order.isOrderAccepted());
+
+        // do deliverOrderRows request and assert the response
+        
+        // first, queryOrder to get original order rows
+        QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
+            .setTransactionId(order.getTransactionId())
+            .setCountryCode( COUNTRYCODE.SE )
+        ;                
+        QueryTransactionResponse queryResponse = queryOrderBuilder.queryCardOrder().doRequest();         
+        
+        assertTrue( queryResponse.isOrderAccepted() );             
+        assertEquals( 1, queryResponse.getNumberedOrderRows().get(0).getRowNumber() );
+
+        DeliverOrderRowsBuilder deliverRequest = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+    		.setTransactionId( queryResponse.getTransactionId() )
+            .setCountryCode( COUNTRYCODE.SE )
+		    .setRowToDeliver(1)
+		    .addNumberedOrderRows(queryResponse.getNumberedOrderRows()) 
+		;
+        
+		// then select the corresponding request class and send request
+        ConfirmTransactionResponse response = deliverRequest.deliverCardOrderRows().doRequest();
+
+        assertTrue(response.isOrderAccepted());        
+        assertTrue(response instanceof ConfirmTransactionResponse );    	
+    }
+    
+    @Test
+    public void test_deliverOrderRows_deliverCardOrderRows_deliver_first_row_of_three() {
+    	
+    	// create an order using defaults
+    	HostedPaymentResponse order = TestingTool.createCardTestOrderWithThreeRows("test_deliverOrderRows_deliverCardOrderRows_deliver_entire_order");
         assertTrue(order.isOrderAccepted());
 
         // do deliverOrderRows request and assert the response
@@ -147,7 +180,7 @@ public class WebPayAdminWebdriverTest {
 		;
         
 		// then select the corresponding request class and send request
-        ConfirmTransactionResponse response = (ConfirmTransactionResponse)deliverRequest.deliverCardOrderRows().setAlsoDoConfirm(true).doRequest();
+        ConfirmTransactionResponse response = deliverRequest.deliverCardOrderRows().doRequest();
 
         assertTrue(response.isOrderAccepted());        
         assertTrue(response instanceof ConfirmTransactionResponse );    	

@@ -12,7 +12,6 @@ import javax.xml.stream.XMLStreamWriter;
 
 
 
-import se.sveaekonomi.webpay.integration.Respondable;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.AnnulTransactionResponse;
