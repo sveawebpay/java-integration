@@ -126,17 +126,17 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 		// calculate original order rows total, incvat row sum over numberedOrderRows
 		double originalOrderTotal = 0.0;
 		for( NumberedOrderRowBuilder originalRow : numberedOrderRows ) {
-			originalOrderTotal += originalRow.getAmountExVat() * (1+originalRow.getVatPercent()/100.0); 	// TODO change to method, backport to php
+			originalOrderTotal += originalRow.getAmountExVat() * (1+originalRow.getVatPercent()/100.0) * originalRow.getQuantity(); // TODO change to method, backport to php
 		}
 		
 		// calculate delivered order rows total, incvat row sum over deliveredOrderRows + newOrderRows
 		double deliveredOrderTotal = 0.0;
 		for( Integer rowIndex : new HashSet<Integer>(rowIndexesToDeliver) ) {
 			NumberedOrderRowBuilder deliveredRow = numberedOrderRows.get(rowIndex-1);	// -1 as NumberedOrderRows is one-indexed
-			deliveredOrderTotal +=  deliveredRow.getAmountExVat() * (1+deliveredRow.getVatPercent()/100.0);
-		}		
+			deliveredOrderTotal +=  deliveredRow.getAmountExVat() * (1+deliveredRow.getVatPercent()/100.0) * deliveredRow.getQuantity();
+		}			
 		for( OrderRowBuilder newRow : newOrderRows ) {
-			deliveredOrderTotal += newRow.getAmountExVat() * (1+newRow.getVatPercent()/100.0);
+			deliveredOrderTotal += newRow.getAmountExVat() * (1+newRow.getVatPercent()/100.0) * newRow.getQuantity();
 		}
 		
 		double amountToLowerOrderBy = originalOrderTotal - deliveredOrderTotal;
