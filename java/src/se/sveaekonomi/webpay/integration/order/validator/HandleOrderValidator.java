@@ -32,15 +32,17 @@ public class HandleOrderValidator {
     }
     
     private void validateOrderId(DeliverOrderBuilder order) {
-        if (order.getOrderId() <= 0) {
+        if (order.getOrderId() == null) {
             this.errors += "MISSING VALUE - setOrderId is required.\n";
         }
     }
     
     private void validateInvoiceDetails(DeliverOrderBuilder order) {
-        if (order.getOrderId() > 0 &&
+        if (	(order.getOrderId() != null) &&
                 order.getOrderType().equals("Invoice") &&
-                order.getInvoiceDistributionType() == null) {
+                order.getInvoiceDistributionType() == null
+            ) 
+        {
             this.errors += "MISSING VALUE - setInvoiceDistributionType is requred for deliverInvoiceOrder.\n";
         }
     }    

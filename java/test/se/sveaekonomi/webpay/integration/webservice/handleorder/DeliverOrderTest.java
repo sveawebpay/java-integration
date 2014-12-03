@@ -37,7 +37,7 @@ public class DeliverOrderTest {
         DeliverOrderBuilder request = order
             .setOrderId(54086L);
         
-        assertEquals(54086L, request.getOrderId());
+        assertEquals(Long.valueOf(54086L), request.getOrderId());
     }
     
     @Test

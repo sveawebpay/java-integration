@@ -13,22 +13,15 @@ import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.CloseOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
-import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
-import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.payment.InvoicePayment;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrder;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 import se.sveaekonomi.webpay.integration.Requestable;
@@ -41,7 +34,7 @@ public class WebPayUnitTest {
         
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-                .addCustomerDetails(Item.individualCustomer()
+                .addCustomerDetails(WebPayItem.individualCustomer()
                     .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
@@ -70,13 +63,13 @@ public class WebPayUnitTest {
 	public void test_createOrder_validates_all_required_methods_for_useInvoicePayment_IndividualCustomer_SE() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addOrderRow(
-					Item.orderRow()
+					WebPayItem.orderRow()
 			            .setQuantity(1.0)
 			            .setAmountExVat(4)
 			            .setAmountIncVat(5)
 			)
 			.addCustomerDetails(
-					Item.individualCustomer()
+					WebPayItem.individualCustomer()
 			        	.setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
 			)
 			.setCountryCode(COUNTRYCODE.SE)
@@ -86,6 +79,7 @@ public class WebPayUnitTest {
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
 			InvoicePayment invoicePayment = order.useInvoicePayment();
+			@SuppressWarnings("unused")
 			SveaRequest<SveaCreateOrder> sveaRequest = invoicePayment.prepareRequest();					
 		}
 		catch (SveaWebPayException e){
@@ -104,7 +98,7 @@ public class WebPayUnitTest {
 			//            .setAmountIncVat(5)
 			//)
 			.addCustomerDetails(
-					Item.individualCustomer()
+					WebPayItem.individualCustomer()
 			        	.setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
 			)
 			.setCountryCode(COUNTRYCODE.SE)
@@ -114,6 +108,7 @@ public class WebPayUnitTest {
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
 			InvoicePayment invoicePayment = order.useInvoicePayment();
+			@SuppressWarnings("unused")
 			SveaRequest<SveaCreateOrder> sveaRequest = invoicePayment.prepareRequest();					
 
 			// fail if validation passes
@@ -130,7 +125,7 @@ public class WebPayUnitTest {
 	public void test_createOrder_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_addCustomerDetails() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addOrderRow(
-					Item.orderRow()
+					WebPayItem.orderRow()
 			            .setQuantity(1.0)
 			            .setAmountExVat(4)
 			            .setAmountIncVat(5)
@@ -146,6 +141,7 @@ public class WebPayUnitTest {
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
 			InvoicePayment invoicePayment = order.useInvoicePayment();
+			@SuppressWarnings("unused")
 			SveaRequest<SveaCreateOrder> sveaRequest = invoicePayment.prepareRequest();					
 
 			// fail if validation passes
@@ -162,13 +158,13 @@ public class WebPayUnitTest {
 	public void test_createOrder_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_setCountryCode() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addOrderRow(
-					Item.orderRow()
+					WebPayItem.orderRow()
 			            .setQuantity(1.0)
 			            .setAmountExVat(4)
 			            .setAmountIncVat(5)
 			)
 			.addCustomerDetails(
-					Item.individualCustomer()
+					WebPayItem.individualCustomer()
 			        	.setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
 			)
 			//.setCountryCode(COUNTRYCODE.SE)
@@ -178,6 +174,7 @@ public class WebPayUnitTest {
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
 			InvoicePayment invoicePayment = order.useInvoicePayment();
+			@SuppressWarnings("unused")
 			SveaRequest<SveaCreateOrder> sveaRequest = invoicePayment.prepareRequest();					
 
 			// fail if validation passes
@@ -194,13 +191,13 @@ public class WebPayUnitTest {
 	public void test_createOrder_validates_missing_required_method_for_useInvoicePayment_IndividualCustomer_SE_setOrderDate() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addOrderRow(
-					Item.orderRow()
+					WebPayItem.orderRow()
 			            .setQuantity(1.0)
 			            .setAmountExVat(4)
 			            .setAmountIncVat(5)
 			)
 			.addCustomerDetails(
-					Item.individualCustomer()
+					WebPayItem.individualCustomer()
 			        	.setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
 			)
 			.setCountryCode(COUNTRYCODE.SE)
@@ -210,6 +207,7 @@ public class WebPayUnitTest {
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
 			InvoicePayment invoicePayment = order.useInvoicePayment();
+			@SuppressWarnings("unused")
 			SveaRequest<SveaCreateOrder> sveaRequest = invoicePayment.prepareRequest();					
 
 			// fail if validation passes
@@ -233,7 +231,7 @@ public class WebPayUnitTest {
     public void test_deliverOrder_deliverInvoicePayment_with_orderrows_return_HandleOrder() {	
 		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
 			.addOrderRow(
-					Item.orderRow()
+					WebPayItem.orderRow()
 			            .setQuantity(1.0)
 			            .setAmountExVat(4)
 			            .setAmountIncVat(5)
@@ -278,7 +276,7 @@ public class WebPayUnitTest {
 			.setOrderId( 123456L )
 			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
 		;			
-		Requestable request = builder.deliverCardOrder();
+		ConfirmTransactionRequest request = builder.deliverCardOrder();
 		assertThat( request, instanceOf(ConfirmTransactionRequest.class) );
     }
     
@@ -303,8 +301,9 @@ public class WebPayUnitTest {
 
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {			
-			Requestable request = builder.deliverCardOrder();						
+			ConfirmTransactionRequest request = builder.deliverCardOrder();						
 			//SveaRequest<SveaCreateOrder> sveaRequest = invoicePayment.prepareRequest();					
+			@SuppressWarnings("unused")
 			Object soapRequest = request.prepareRequest();					
 		}
 		catch (SveaWebPayException e){			
@@ -321,15 +320,16 @@ public class WebPayUnitTest {
 		
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
-			Requestable request = builder.deliverCardOrder();						
+			ConfirmTransactionRequest request = builder.deliverCardOrder();						
 			//SveaRequest<SveaCreateOrder> sveaRequest = invoicePayment.prepareRequest();					
+			@SuppressWarnings("unused")
 			Object soapRequest = request.prepareRequest();		
 			// fail if validation passes
 	        fail();		
 		}
 		catch (SveaWebPayException e){			
 	        assertEquals(
-        		"MISSING VALUE - setOrderId is required.\n", 
+        		"MISSING VALUE - OrderId is required, use setOrderId().\n", 
     			e.getCause().getMessage()
     		);			
         }			
@@ -343,8 +343,9 @@ public class WebPayUnitTest {
 		
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
-			Requestable request = builder.deliverCardOrder();						
+			ConfirmTransactionRequest request = builder.deliverCardOrder();						
 			//SveaRequest<SveaCreateOrder> sveaRequest = invoicePayment.prepareRequest();					
+			@SuppressWarnings("unused")
 			Object soapRequest = request.prepareRequest();		
 			// fail if validation passes
 	        fail();		
