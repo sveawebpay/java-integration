@@ -2,14 +2,18 @@ package se.sveaekonomi.webpay.integration.order.handle;
 
 import java.util.Date;
 
+import javax.xml.bind.ValidationException;
+
 import se.sveaekonomi.webpay.integration.Requestable;
 import se.sveaekonomi.webpay.integration.adminservice.DeliverOrdersRequest;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+import se.sveaekonomi.webpay.integration.hosted.hostedadmin.AnnulTransactionRequest;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
-import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
+import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 
 /**
@@ -19,7 +23,7 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
 
     private HandleOrderValidator validator;
     
-    private long orderId;
+    private Long orderId;
     private String orderType;
     private String distributionType;
     private String invoiceIdToCredit;
@@ -39,14 +43,14 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         return this;
     }
     
-    public long getOrderId() {
+    public Long getOrderId() {
         return orderId;
     }
     
     /**
      * required, invoice or payment plan only, order to deliver
      */
-    public DeliverOrderBuilder setOrderId(long orderId) {
+    public DeliverOrderBuilder setOrderId(Long orderId) {
         this.orderId = orderId;
         return this;
     }
@@ -151,15 +155,39 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
      * 
      * @return DeliverPaymentPlan
      */    
-	public Requestable deliverCardOrder() {
-		this.orderType = "HOSTED_ADMIN"; // TODO use enumeration instead, PAYMENTTYPE.HOSTED_ADMIN
+	public ConfirmTransactionRequest deliverCardOrder() {
+		this.orderType = "HOSTED_ADMIN"; // TODO use enumeration instead, 
 		
+    	// validate request and throw exception if validation fails
+        String errors = validateDeliverCardOrder(); 
+        if (!errors.equals("")) {
+            throw new SveaWebPayException("Validation failed", new ValidationException(errors));
+        } 
+					
         // if no captureDate set, use today's date as default.
         if( this.getCaptureDate() == null ) {
         	this.setCaptureDate( String.format("%tF", new Date()) ); //'t' => time, 'F' => ISO 8601 complete date formatted as "%tY-%tm-%td"
         }
 		
-		return new ConfirmTransactionRequest(this);
+        ConfirmTransactionRequest request = new ConfirmTransactionRequest(this.getConfig())
+        	.setCaptureDate( this.getCaptureDate() )
+        	.setTransactionId( Long.toString(this.getTransactionId()) )
+        	.setCountryCode(TestingTool.DefaultTestCountryCode)
+    	;
+        
+        return request;
 	}
 
+	// validates deliverCardOrder (confirm) required attributes
+    public String validateDeliverCardOrder() {
+        String errors = "";
+        if (this.getCountryCode() == null) {
+            errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+        }
+        
+        if (this.getOrderId() == null) {
+            errors += "MISSING VALUE - OrderId is required, use setOrderId().\n";
+    	}
+        return errors;    
+    }	
 }

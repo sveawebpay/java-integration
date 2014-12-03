@@ -1,11 +1,16 @@
 package se.sveaekonomi.webpay.integration.order.handle;
 
+import javax.xml.bind.ValidationException;
+
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.AnnulTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCloseOrder;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 /**
  * CancelOrderBuilder is the class used to cancel an order with Svea, that has
@@ -69,13 +74,23 @@ public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
 	}	
 	
 	/**
-     * alias for setOrderId()
+	 * optional, card only -- alias for setOrderId
+     * @deprecated
      * @param orderId
      * @return CancelOrderBuilder
      */
 	public CancelOrderBuilder setTransactionId( Long transactionId ) {
 		return this.setOrderId(transactionId);
 	}	
+	
+	/**
+	 * optional, card only -- alias for setOrderId
+	 * @param transactionId as string, i.e. as transactionId is returned in HostedPaymentResponse
+	 * @return DeliverOrderRowsBuilder
+	 */
+    public CancelOrderBuilder setTransactionId( String transactionId) {        
+        return this.setOrderId( Long.parseLong(transactionId) );
+    } 	
 	
 	public CloseOrder cancelInvoiceOrder() {
 		CloseOrderBuilder closeOrderBuilder = new CloseOrderBuilder(this.config);
@@ -94,7 +109,30 @@ public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
 	}
 	
 	public AnnulTransactionRequest cancelCardOrder() {
-		AnnulTransactionRequest request = new AnnulTransactionRequest(this);
+		
+    	// validate request and throw exception if validation fails
+        String errors = validateCancelCardOrder();
+        
+        if (!errors.equals("")) {
+            throw new SveaWebPayException("Validation failed", new ValidationException(errors));
+        } 
+				
+		AnnulTransactionRequest request = new AnnulTransactionRequest(this.getConfig());
+		request.setCountryCode(this.getCountryCode());
+		request.setTransactionId(Long.toString(this.orderId));		
 		return request;
-	}	
+	}
+	
+	// validates CancelCardOrder required attributes
+    public String validateCancelCardOrder() {
+        String errors = "";
+        if (this.getCountryCode() == null) {
+            errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+        }
+        
+        if (this.getOrderId() == null) {
+            errors += "MISSING VALUE - OrderId is required, use setOrderId().\n";
+    	}
+        return errors;    
+    }
 }

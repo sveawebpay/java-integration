@@ -16,23 +16,23 @@ import org.xml.sax.SAXException;
 import se.sveaekonomi.webpay.integration.Respondable;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 
-public class ConfirmTransactionResponse extends HostedAdminResponse implements Respondable {
-		
+/**
+ * Handles lowertransaction request response from hosted admin webservice
+ * 
+ * @author Kristian Grossman-Madsen
+ */
+public class LowerTransactionResponse extends HostedAdminResponse implements Respondable {
+
 	private String rawResponse;
 	private String transactionid;
-	private String customerrefno;
+	private String clientOrderNumber;
 
-	public ConfirmTransactionResponse(String responseXmlBase64, String secretWord) {
+	public LowerTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
 		this.rawResponse = this.xml;		
-		if( responseXmlBase64 != null ) {
-			this.setValues();
-		}
-	}	
-	
-	/** 
-	 * parses response xml and sets response attributes 
-	 */
+		this.setValues();
+	}
+
 	void setValues() {		
 				
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -58,7 +58,7 @@ public class ConfirmTransactionResponse extends HostedAdminResponse implements R
 				if( this.isOrderAccepted() ) {	// don't attempt to parse a bad response
 
 					this.transactionid = getTagAttribute(element, "transaction", "id");
-					this.customerrefno = getTagValue(element, "customerrefno");
+					this.clientOrderNumber = getTagValue(element, "customerrefno");
 				}
 			}
 		} catch (ParserConfigurationException e) {
@@ -78,7 +78,10 @@ public class ConfirmTransactionResponse extends HostedAdminResponse implements R
 		return transactionid;
 	}
 
-	public String getCustomerRefNo() {
-		return customerrefno;
+	public String getClientOrderNumber() {
+		return clientOrderNumber;
 	}
+    
+
 }
+

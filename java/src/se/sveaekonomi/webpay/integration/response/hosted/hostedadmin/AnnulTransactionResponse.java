@@ -13,6 +13,7 @@ import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
 
+import se.sveaekonomi.webpay.integration.Respondable;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 
 /**
@@ -20,11 +21,11 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
  * 
  * @author Kristian Grossman-Madsen
  */
-public class AnnulTransactionResponse extends HostedAdminResponse {
+public class AnnulTransactionResponse extends HostedAdminResponse implements Respondable {
 
 	private String rawResponse;
 	private String transactionid;
-	private String customerrefno;
+	private String clientOrderNumber;
 
 	public AnnulTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
@@ -60,7 +61,7 @@ public class AnnulTransactionResponse extends HostedAdminResponse {
 				if( this.isOrderAccepted() ) {	// don't attempt to parse a bad response
 
 					this.transactionid = getTagAttribute(element, "transaction", "id");
-					this.customerrefno = getTagValue(element, "customerrefno");
+					this.clientOrderNumber = getTagValue(element, "customerrefno");
 				}
 			}
 		} catch (ParserConfigurationException e) {
@@ -80,8 +81,8 @@ public class AnnulTransactionResponse extends HostedAdminResponse {
 		return transactionid;
 	}
 
-	public String getCustomerRefNo() {
-		return customerrefno;
+	public String getClientOrderNumber() {
+		return clientOrderNumber;
 	}
     
 
