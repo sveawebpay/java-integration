@@ -3,6 +3,7 @@ package se.sveaekonomi.webpay.integration;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
 
@@ -60,14 +61,13 @@ public class WebPayAdmin {
      * the DeliverOrderRowsBuilder methods:
      *
      * ...
-     * 		request = WebPayAdmin.deliverOrder(config)
+     * 		request = WebPayAdmin.deliverOrderRows(config)
      *          .setOrderId()          			// required
      *          .setTransactionId()	   			// optional, card only, alias for setOrderId 
      *          .setCountryCode()      			// required    	
      *          .setInvoiceDistributionType()	// required, invoice only
      *          .setRowToDeliver()	   			// required, index of original order rows you wish to deliver 
      *          .addNumberedOrderRow()			// required for card orders, should match original row indexes 
-     *          .addOrderRow()					// optional, add new order row to deliver along with indexed rows 	// TODO backport to php
      *     	;
      *     	// then select the corresponding request class and send request
      *     	response = request.deliverCardOrderRows().doRequest()	// returns ConfirmTransactionResponse
@@ -82,5 +82,33 @@ public class WebPayAdmin {
 	    return new DeliverOrderRowsBuilder(config);	
     }    
 
-
+    
+	/**
+     * The WebPayAdmin.cancelOrderRows entrypoint method is used to cancel rows in an order before it has been delivered.
+     * 1.6.0: Supports card orders.
+     * 
+     * Get an order builder instance using the WebPayAdmin.cancelOrderRows entrypoint,
+     * then provide more information about the transaction and send the request using
+     * the CancelOrderRowsBuilder methods:
+     *
+     * ...
+     * 		request = WebPayAdmin.cancelOrderRows(config)
+     *          .setOrderId()          			// required
+     *          .setTransactionId()	   			// optional, card only, alias for setOrderId 
+     *          .setCountryCode()      			// required    	
+     *          .setRowToCancel()	   			// required, index of original order rows you wish to deliver 
+     *          .addNumberedOrderRow()			// required for card orders, should match original row indexes 
+     *     	;
+     *     	// then select the corresponding request class and send request
+     *     	response = request.deliverCardOrderRows().doRequest()	// returns ConfirmTransactionResponse
+     * ...
+     * 
+     */    
+    public static CancelOrderRowsBuilder cancelOrderRows( ConfigurationProvider config ) {
+        if (config == null) {
+        	throw new SveaWebPayException("A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()");
+	    }    	
+	    
+	    return new CancelOrderRowsBuilder(config);	    	
+    }
 }
