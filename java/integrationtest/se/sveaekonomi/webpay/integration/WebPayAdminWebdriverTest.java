@@ -7,17 +7,16 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
+import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.hosted.HostedPaymentResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.AnnulTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.ConfirmTransactionResponse;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.HostedAdminResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.LowerTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.QueryTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
-import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
@@ -124,19 +123,14 @@ public class WebPayAdminWebdriverTest {
     @Test
     public void test_deliverOrderRows_deliverCardOrderRows_deliver_all_rows() {
     	
-    	// create an order using defaults
-    	HostedPaymentResponse order = TestingTool.createCardTestOrder("test_deliverOrderRows_deliverCardOrderRows_deliver_entire_order");
+    	HostedPaymentResponse order = TestingTool.createCardTestOrder("test_deliverOrderRows_deliverCardOrderRows_deliver_all_rows");
         assertTrue(order.isOrderAccepted());
 
-        // do deliverOrderRows request and assert the response
-        
-        // first, queryOrder to get original order rows
         QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
             .setTransactionId(order.getTransactionId())
             .setCountryCode( COUNTRYCODE.SE )
         ;                
         QueryTransactionResponse queryResponse = queryOrderBuilder.queryCardOrder().doRequest();         
-        
         assertTrue( queryResponse.isOrderAccepted() );             
         assertEquals( 1, queryResponse.getNumberedOrderRows().get(0).getRowNumber() );
 
@@ -146,107 +140,124 @@ public class WebPayAdminWebdriverTest {
 		    .setRowToDeliver(1)
 		    .addNumberedOrderRows(queryResponse.getNumberedOrderRows()) 
 		;
-        
-		// then select the corresponding request class and send request
         ConfirmTransactionResponse response = deliverRequest.deliverCardOrderRows().doRequest();
-
         assertTrue(response.isOrderAccepted());        
-        assertTrue(response instanceof ConfirmTransactionResponse );    	
-    }
-    
-    @Test
-    public void test_deliverOrderRows_deliverCardOrderRows_deliver_first_row_of_three() {
-    	
-    	// create an order using defaults
-    	HostedPaymentResponse order = TestingTool.createCardTestOrderWithThreeRows("test_deliverOrderRows_deliverCardOrderRows_deliver_first_row_of_three");
-        assertTrue(order.isOrderAccepted());
-
-        // do deliverOrderRows request and assert the response
-        
-        // first, queryOrder to get original order rows
-        QueryOrderBuilder queryOriginalOrder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
-            .setTransactionId(order.getTransactionId())
-            .setCountryCode( COUNTRYCODE.SE )
-        ;                
-        QueryTransactionResponse originalOrder = queryOriginalOrder.queryCardOrder().doRequest();         
-        
-        assertTrue( originalOrder.isOrderAccepted() );             
-        assertEquals( 1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
-
-        DeliverOrderRowsBuilder deliverRequest = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
-    		.setTransactionId( originalOrder.getTransactionId() )
-            .setCountryCode( COUNTRYCODE.SE )
-		    .setRowToDeliver(1)
-		    .addNumberedOrderRows(originalOrder.getNumberedOrderRows()) 
-		    //.addOrderRow()					// optional, add new order row to deliver along with indexed rows 	// TODO backport to php
-		;
-        
-		// then select the corresponding request class and send request
-        ConfirmTransactionResponse response = deliverRequest.deliverCardOrderRows().doRequest();
-
-        assertTrue(response.isOrderAccepted());        
-        assertTrue(response instanceof ConfirmTransactionResponse );    	
-
-        // check amounts in deliveredOrder
-        QueryOrderBuilder queryDeliveredOrder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
-            .setTransactionId( order.getTransactionId() )
-            .setCountryCode( COUNTRYCODE.SE )
-        ;                
-        QueryTransactionResponse deliveredOrder = queryDeliveredOrder.queryCardOrder().doRequest();         
-        
-        assertTrue( deliveredOrder.isOrderAccepted() );        
-		assertEquals("75000", deliveredOrder.getAmount());	
-		assertEquals("25000", deliveredOrder.getAuthorizedAmount());    
-    }
+    } 
     
     @Test
     public void test_deliverOrderRows_deliverCardOrderRows_deliver_first_and_second_row_of_three() {
     	
-    	// create an order using defaults
     	HostedPaymentResponse order = TestingTool.createCardTestOrderWithThreeRows("test_deliverOrderRows_deliverCardOrderRows_deliver_first_and_second_row_of_three");
         assertTrue(order.isOrderAccepted());
 
-        // do deliverOrderRows request and assert the response
-        
-        // first, queryOrder to get original order rows
         QueryOrderBuilder queryOriginalOrder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
             .setTransactionId(order.getTransactionId())
             .setCountryCode( COUNTRYCODE.SE )
         ;                
         QueryTransactionResponse originalOrder = queryOriginalOrder.queryCardOrder().doRequest();         
-        
         assertTrue( originalOrder.isOrderAccepted() );             
         assertEquals( 1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
 
         ArrayList<Integer> indexes = new ArrayList<Integer>();
         indexes.add(1);
         indexes.add(2);
-        
         DeliverOrderRowsBuilder deliverRequest = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
     		.setTransactionId( originalOrder.getTransactionId() )
             .setCountryCode( COUNTRYCODE.SE )
             .setRowToDeliver(1)
 		    .setRowsToDeliver( indexes )
 		    .addNumberedOrderRows(originalOrder.getNumberedOrderRows()) 
-		    //.addOrderRow()					// optional, add new order row to deliver along with indexed rows 	// TODO backport to php
 		;
-        
-		// then select the corresponding request class and send request
+
         ConfirmTransactionResponse response = deliverRequest.deliverCardOrderRows().doRequest();
-
         assertTrue(response.isOrderAccepted());        
-        assertTrue(response instanceof ConfirmTransactionResponse );    	
 
-        // check amounts in deliveredOrder
         QueryOrderBuilder queryDeliveredOrder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
             .setTransactionId( order.getTransactionId() )
             .setCountryCode( COUNTRYCODE.SE )
-        ;                
-        QueryTransactionResponse deliveredOrder = queryDeliveredOrder.queryCardOrder().doRequest();         
-        
+        ;             
+        QueryTransactionResponse deliveredOrder = queryDeliveredOrder.queryCardOrder().doRequest();                
         assertTrue( deliveredOrder.isOrderAccepted() );        
 		assertEquals("75000", deliveredOrder.getAmount());	
 		assertEquals("50000", deliveredOrder.getAuthorizedAmount());    
     }
+        
+    /// WebPayAdmin.cancelOrderRows() --------------------------------------------------------------------------------------------	
+    // card
+    @Test
+    public void test_cancelOrderRows_cancelCardOrderRows_cancel_all_rows() {
+    	
+    	// create an order using defaults
+    	HostedPaymentResponse order = TestingTool.createCardTestOrder("test_cancelOrderRows_cancelCardOrderRows_cancel_all_rows");
+        assertTrue(order.isOrderAccepted());
+        
+        // first, queryOrder to get original order rows
+        QueryOrderBuilder queryOriginalOrder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
+            .setTransactionId(order.getTransactionId())
+            .setCountryCode( COUNTRYCODE.SE )
+        ;                
+        QueryTransactionResponse originalOrder = queryOriginalOrder.queryCardOrder().doRequest();                 
+        assertTrue( originalOrder.isOrderAccepted() );             
+        assertEquals( 1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
+
+        // do cancelOrderRows request and assert the response
+        CancelOrderRowsBuilder cancelRequest = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
+    		.setTransactionId( originalOrder.getTransactionId() )
+            .setCountryCode( COUNTRYCODE.SE )
+		    .setRowToCancel(1)	// only row in order
+		    .addNumberedOrderRows(originalOrder.getNumberedOrderRows()) 
+		;
+        LowerTransactionResponse response = cancelRequest.cancelCardOrderRows().doRequest();
+        assertTrue(response.isOrderAccepted());        
+        
+        // query cancelled order and assert amounts
+        QueryOrderBuilder queryCancelledOrder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
+            .setTransactionId(order.getTransactionId())
+            .setCountryCode( COUNTRYCODE.SE )
+        ;                
+        QueryTransactionResponse cancelledOrder = queryCancelledOrder.queryCardOrder().doRequest();                 
+        assertTrue(cancelledOrder.isOrderAccepted());
+        assertEquals( "0", cancelledOrder.getAuthorizedAmount());
+        assertEquals( "ANNULLED", cancelledOrder.getStatus()); // i.e. loweredamount caused order authorizedamount = 0        
+    }
     
+    @Test
+    public void test_cancelOrderRows_cancelCardOrderRows_cancel_first_and_second_row_of_three() {
+    	
+    	// create an order using defaults
+    	HostedPaymentResponse order = TestingTool.createCardTestOrderWithThreeRows("test_cancelOrderRows_cancelCardOrderRows_cancel_first_and_second_row_of_three");
+        assertTrue(order.isOrderAccepted());
+        
+        // first, queryOrder to get original order rows
+        QueryOrderBuilder queryOriginalOrder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
+            .setTransactionId(order.getTransactionId())
+            .setCountryCode( COUNTRYCODE.SE )
+        ;   
+        QueryTransactionResponse originalOrder = queryOriginalOrder.queryCardOrder().doRequest();                 
+        assertTrue( originalOrder.isOrderAccepted() );             
+        assertEquals( 1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
+        
+        // do cancelOrderRows request and assert the response
+        ArrayList<Integer> indexes = new ArrayList<Integer>();
+        indexes.add(1);
+        indexes.add(2);    
+        CancelOrderRowsBuilder cancelRequest = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
+    		.setTransactionId( originalOrder.getTransactionId() )
+            .setCountryCode( COUNTRYCODE.SE )
+		    .setRowsToCancel( indexes )
+		    .addNumberedOrderRows(originalOrder.getNumberedOrderRows()) 
+		;         
+        LowerTransactionResponse response = cancelRequest.cancelCardOrderRows().doRequest();
+        assertTrue(response.isOrderAccepted());        	
+
+        // query cancelled order and assert amounts
+        QueryOrderBuilder queryCancelledOrder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
+            .setTransactionId(order.getTransactionId())
+            .setCountryCode( COUNTRYCODE.SE )
+        ;                
+        QueryTransactionResponse cancelledOrder = queryCancelledOrder.queryCardOrder().doRequest();                 
+        assertTrue(cancelledOrder.isOrderAccepted());
+		assertEquals("75000", cancelledOrder.getAmount());	
+		assertEquals("25000", cancelledOrder.getAuthorizedAmount());    
+    }    
 }

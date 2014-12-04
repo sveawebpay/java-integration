@@ -3,6 +3,7 @@ package se.sveaekonomi.webpay.integration;
 import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
+import java.util.ArrayList;
 import java.util.Hashtable;
 
 import org.junit.Test;
@@ -10,9 +11,14 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.AnnulTransactionRequest;
+import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
+import se.sveaekonomi.webpay.integration.hosted.hostedadmin.LowerTransactionRequest;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.QueryTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
@@ -21,7 +27,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class WebPayAdminUnitTest {    		
 	
-    // WebPayAdmin::cancelOrder() -------------------------------------------------------------------------------------	
+    // WebPayAdmin.cancelOrder() -------------------------------------------------------------------------------------	
 	/// returned request class
 	// TODO
 	/// cancelOrder validators
@@ -230,7 +236,7 @@ public class WebPayAdminUnitTest {
 		}
     }		
 
-    /// WebPay.queryOrder() --------------------------------------------------------------------------------------------	
+    /// WebPayAdmin.queryOrder() --------------------------------------------------------------------------------------------	
 	/// returned request class
 	// .queryInvoiceOrder => AdminService/GetOrdersRequest
 	// TODO
@@ -275,7 +281,7 @@ public class WebPayAdminUnitTest {
         }			 
     }
     @Test
-    public void test_createOrder_validates_missing_required_method_for_deliverCardOrder_setOrderId() {	
+    public void test_queryOrder_validates_missing_required_method_for_queryCardOrder_setOrderId() {	
 		QueryOrderBuilder builder = new QueryOrderBuilder(SveaConfig.getDefaultConfig())
 			//.setOrderId(123456L)													// invoice, partpayment only, required
 			.setCountryCode(TestingTool.DefaultTestCountryCode)						// required
@@ -314,4 +320,150 @@ public class WebPayAdminUnitTest {
     		);			
         }			
     }
+
+    /// WebPayAdmin.deliverOrderRows() --------------------------------------------------------------------------------------------	
+	/// returned request class
+	// TODO other methods
+	// .deliverCardOrderRows => HostedService/ConfirmTransactionRequest
+    @Test
+    public void test_deliverOrderRows_deliverCardOrderRows_returns_ConfirmTransactionResponse() {
+    	
+		ArrayList<NumberedOrderRowBuilder> rows = new ArrayList<NumberedOrderRowBuilder>();
+		rows.add( TestingTool.createNumberedOrderRow(1) );
+		
+		DeliverOrderRowsBuilder builder = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+	    	.setOrderId( "123456" )
+	    	.setCountryCode( COUNTRYCODE.SE )
+	    	.setRowToDeliver( 1 )
+	    	.addNumberedOrderRows( rows )
+    	;
+		ConfirmTransactionRequest request = builder.deliverCardOrderRows();
+		assertThat( request, instanceOf(ConfirmTransactionRequest.class));
+	}    
+    // builder object validation
+    // TODO other methods
+    // .deliverCardOrderRows validation
+	@Test
+    public void test_validates_all_required_methods_for_deliverOrderRows_deliverCardOrderRows() {
+		ArrayList<NumberedOrderRowBuilder> rows = new ArrayList<NumberedOrderRowBuilder>();
+		rows.add( TestingTool.createNumberedOrderRow(1) );
+		
+	    DeliverOrderRowsBuilder builder = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+	    	.setOrderId( "123456" )
+	    	.setCountryCode( COUNTRYCODE.SE )
+	    	.setRowToDeliver( 1 )
+	    	.addNumberedOrderRows( rows )
+    	;
+		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
+		try {
+			ConfirmTransactionRequest request = builder.deliverCardOrderRows();            
+			@SuppressWarnings("unused")
+			Hashtable<String,String> hash = request.prepareRequest();					
+		}
+		catch (SveaWebPayException e){		
+			// fail on validation error
+	        fail();
+        }
+    }		
+	@Test
+    public void test_deliverOrderRows_validates_missing_required_method_for_deliverCardOrderRows() { 	
+		ArrayList<NumberedOrderRowBuilder> rows = new ArrayList<NumberedOrderRowBuilder>();
+		rows.add( TestingTool.createNumberedOrderRow(1) );
+		
+	    DeliverOrderRowsBuilder builder = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+	    	//.setOrderId( "123456" )
+	    	//.setCountryCode( COUNTRYCODE.SE )
+	    	//.setRowToDeliver( 1 )
+	    	//.addNumberedOrderRows( rows )
+    	;
+		try {
+			ConfirmTransactionRequest request = builder.deliverCardOrderRows();            
+			@SuppressWarnings("unused")
+			Hashtable<String,String> hash = request.prepareRequest();			
+			// fail if validation passes
+	        fail();		
+		}
+		catch (SveaWebPayException e){			
+	        assertEquals(
+        		"MISSING VALUE - CountryCode is required, use setCountryCode(...).\n" +
+        		"MISSING VALUE - OrderId is required, use setOrderId().\n" +
+        		"MISSING VALUE - rowIndexesToDeliver is required for deliverCardOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().\n" +
+        		"MISSING VALUE - numberedOrderRows is required for deliverCardOrderRows(). Use setNumberedOrderRow() or setNumberedOrderRows().\n",
+    			e.getCause().getMessage()
+    		);			
+        }
+    }	
+    
+    /// WebPayAdmin.cancelOrderRows() --------------------------------------------------------------------------------------------	
+	/// returned request class
+	// TODO other methods
+	// .cancelCardOrderRows => HostedService/AnnulTransactionRequest
+    @Test
+    public void test_cancelOrderRows_cancelCardOrderRows_returns_LowerTransactionResponse() {
+    	
+		ArrayList<NumberedOrderRowBuilder> rows = new ArrayList<NumberedOrderRowBuilder>();
+		rows.add( TestingTool.createNumberedOrderRow(1) );
+		
+	    CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
+	    	.setOrderId( "123456" )
+	    	.setCountryCode( COUNTRYCODE.SE )
+	    	.setRowToCancel( 1 )
+	    	.addNumberedOrderRows( rows )
+    	;        
+	    LowerTransactionRequest request = builder.cancelCardOrderRows();            
+		assertThat( request, instanceOf(LowerTransactionRequest.class));
+	}    
+    // builder object validation
+    // TODO other methods
+	// .cancelCardOrderRow validation
+	@Test
+    public void test_validates_all_required_methods_for_cancelOrderRows_cancelCardOrderRows() {
+		ArrayList<NumberedOrderRowBuilder> rows = new ArrayList<NumberedOrderRowBuilder>();
+		rows.add( TestingTool.createNumberedOrderRow(1) );
+		
+	    CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
+	    	.setOrderId( "123456" )
+	    	.setCountryCode( COUNTRYCODE.SE )
+	    	.setRowToCancel( 1 )
+	    	.addNumberedOrderRows( rows )
+    	;
+		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
+		try {
+			LowerTransactionRequest request = builder.cancelCardOrderRows();            
+			@SuppressWarnings("unused")
+			Hashtable<String,String> hash = request.prepareRequest();					
+		}
+		catch (SveaWebPayException e){		
+			// fail on validation error
+	        fail();
+        }
+    }		
+	@Test
+    public void test_cancelOrderRows_validates_missing_required_method_for_cancelCardOrderRows() { 	
+		ArrayList<NumberedOrderRowBuilder> rows = new ArrayList<NumberedOrderRowBuilder>();
+		rows.add( TestingTool.createNumberedOrderRow(1) );
+		
+	    CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
+	    	//.setOrderId( "123456" )
+	    	//.setCountryCode( COUNTRYCODE.SE )
+	    	//.setRowToCancel( 1 )
+	    	//.addNumberedOrderRows( rows )
+    	;
+		try {
+			LowerTransactionRequest request = builder.cancelCardOrderRows();            
+			@SuppressWarnings("unused")
+			Hashtable<String,String> hash = request.prepareRequest();			
+			// fail if validation passes
+	        fail();		
+		}
+		catch (SveaWebPayException e){			
+	        assertEquals(
+        		"MISSING VALUE - CountryCode is required, use setCountryCode(...).\n" +
+        		"MISSING VALUE - OrderId is required, use setOrderId().\n" +
+        		"MISSING VALUE - rowIndexesToCancel is required for cancelCardOrderRows(). Use methods setRowToCancel() or setRowsToCancel().\n" +
+        		"MISSING VALUE - numberedOrderRows is required for cancelCardOrderRows(). Use setNumberedOrderRow() or setNumberedOrderRows().\n",
+    			e.getCause().getMessage()
+    		);			
+        }
+    }	
 }
