@@ -342,8 +342,57 @@ public class WebPayAdminUnitTest {
 	}    
     // builder object validation
     // TODO other methods
-    // card
-    // TODO
+    // .deliverCardOrderRows validation
+	@Test
+    public void test_validates_all_required_methods_for_deliverOrderRows_deliverCardOrderRows() {
+		ArrayList<NumberedOrderRowBuilder> rows = new ArrayList<NumberedOrderRowBuilder>();
+		rows.add( TestingTool.createNumberedOrderRow(1) );
+		
+	    DeliverOrderRowsBuilder builder = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+	    	.setOrderId( "123456" )
+	    	.setCountryCode( COUNTRYCODE.SE )
+	    	.setRowToDeliver( 1 )
+	    	.addNumberedOrderRows( rows )
+    	;
+		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
+		try {
+			ConfirmTransactionRequest request = builder.deliverCardOrderRows();            
+			@SuppressWarnings("unused")
+			Hashtable<String,String> hash = request.prepareRequest();					
+		}
+		catch (SveaWebPayException e){		
+			// fail on validation error
+	        fail();
+        }
+    }		
+	@Test
+    public void test_deliverOrderRows_validates_missing_required_method_for_deliverCardOrderRows() { 	
+		ArrayList<NumberedOrderRowBuilder> rows = new ArrayList<NumberedOrderRowBuilder>();
+		rows.add( TestingTool.createNumberedOrderRow(1) );
+		
+	    DeliverOrderRowsBuilder builder = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+	    	//.setOrderId( "123456" )
+	    	//.setCountryCode( COUNTRYCODE.SE )
+	    	//.setRowToDeliver( 1 )
+	    	//.addNumberedOrderRows( rows )
+    	;
+		try {
+			ConfirmTransactionRequest request = builder.deliverCardOrderRows();            
+			@SuppressWarnings("unused")
+			Hashtable<String,String> hash = request.prepareRequest();			
+			// fail if validation passes
+	        fail();		
+		}
+		catch (SveaWebPayException e){			
+	        assertEquals(
+        		"MISSING VALUE - CountryCode is required, use setCountryCode(...).\n" +
+        		"MISSING VALUE - OrderId is required, use setOrderId().\n" +
+        		"MISSING VALUE - rowIndexesToDeliver is required for deliverCardOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().\n" +
+        		"MISSING VALUE - numberedOrderRows is required for deliverCardOrderRows(). Use setNumberedOrderRow() or setNumberedOrderRows().\n",
+    			e.getCause().getMessage()
+    		);			
+        }
+    }	
     
     /// WebPayAdmin.cancelOrderRows() --------------------------------------------------------------------------------------------	
 	/// returned request class
@@ -388,7 +437,7 @@ public class WebPayAdminUnitTest {
 			// fail on validation error
 	        fail();
         }
-    }	
+    }		
 	@Test
     public void test_cancelOrderRows_validates_missing_required_method_for_cancelCardOrderRows() { 	
 		ArrayList<NumberedOrderRowBuilder> rows = new ArrayList<NumberedOrderRowBuilder>();
