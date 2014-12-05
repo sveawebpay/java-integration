@@ -64,7 +64,7 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 	}
 
 	public DeliverOrderRowsBuilder setRowsToDeliver(ArrayList<Integer> rowIndexesToDeliver) {
-		this.rowIndexesToDeliver = rowIndexesToDeliver;
+		this.rowIndexesToDeliver.addAll(rowIndexesToDeliver);
 		return this;
 	}
 
@@ -73,7 +73,7 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 	}
 
 	public DeliverOrderRowsBuilder addNumberedOrderRows(ArrayList<NumberedOrderRowBuilder> numberedOrderRows) {
-		this.numberedOrderRows = numberedOrderRows;
+		this.numberedOrderRows.addAll(numberedOrderRows);
 		return this;
 	}
 

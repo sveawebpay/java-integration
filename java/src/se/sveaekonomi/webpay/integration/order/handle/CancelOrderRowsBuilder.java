@@ -60,7 +60,7 @@ public class CancelOrderRowsBuilder extends OrderBuilder<CancelOrderRowsBuilder>
 	}
 
 	public CancelOrderRowsBuilder setRowsToCancel(ArrayList<Integer> rowIndexesToCancel) {
-		this.rowIndexesToCancel = rowIndexesToCancel;
+		this.rowIndexesToCancel.addAll(rowIndexesToCancel);
 		return this;
 	}
 
@@ -69,7 +69,7 @@ public class CancelOrderRowsBuilder extends OrderBuilder<CancelOrderRowsBuilder>
 	}
 
 	public CancelOrderRowsBuilder addNumberedOrderRows(ArrayList<NumberedOrderRowBuilder> numberedOrderRows) {
-		this.numberedOrderRows = numberedOrderRows;
+		this.numberedOrderRows.addAll(numberedOrderRows);
 		return this;
 	}
 

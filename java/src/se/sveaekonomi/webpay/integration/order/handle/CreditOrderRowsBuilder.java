@@ -64,8 +64,8 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
 		return this;
 	}
 
-	public CreditOrderRowsBuilder setRowsToCredit(ArrayList<Integer> rowIndexesToDeliver) {
-		this.rowIndexesToCredit.addAll(rowIndexesToDeliver);
+	public CreditOrderRowsBuilder setRowsToCredit(ArrayList<Integer> rowIndexesToCredit) {
+		this.rowIndexesToCredit.addAll(rowIndexesToCredit);
 		return this;
 	}
 
