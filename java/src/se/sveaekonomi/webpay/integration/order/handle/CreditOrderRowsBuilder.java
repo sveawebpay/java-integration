@@ -25,9 +25,11 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
 
     private ArrayList<Integer> rowIndexesToCredit;
 	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
+	@SuppressWarnings("rawtypes")
 	private ArrayList<OrderRowBuilder> newCreditOrderRows;
     private String orderId;
     
+	@SuppressWarnings("rawtypes")
 	public CreditOrderRowsBuilder( ConfigurationProvider config ) {
 		this.config = config;
 		this.rowIndexesToCredit = new ArrayList<Integer>();
@@ -76,11 +78,11 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
 		return this;
 	}
 
-	public CreditOrderRowsBuilder addCreditOrderRow(OrderRowBuilder customAmountRow) {
+	public CreditOrderRowsBuilder addCreditOrderRow(@SuppressWarnings("rawtypes") OrderRowBuilder customAmountRow) {
 		this.newCreditOrderRows.add(customAmountRow);
 		return this;
 	}	
-	public CreditOrderRowsBuilder addCreditOrderRows(ArrayList<OrderRowBuilder> customAmountRows) {
+	public CreditOrderRowsBuilder addCreditOrderRows(@SuppressWarnings("rawtypes") ArrayList<OrderRowBuilder> customAmountRows) {
 		this.newCreditOrderRows.addAll(customAmountRows);
 		return this;
 	}		
@@ -111,16 +113,7 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
             throw new SveaWebPayException("Validation failed", new ValidationException(errors));
         }
 		
-		// calculate credited order rows total, incvat row sum over creditedOrderRows + newOrderRows
-		double creditedOrderTotal = 0.0;
-		for( Integer rowIndex : new HashSet<Integer>(rowIndexesToCredit) ) {
-			NumberedOrderRowBuilder creditedRow = numberedOrderRows.get(rowIndex-1);	// -1 as NumberedOrderRows is one-indexed
-			creditedOrderTotal +=  creditedRow.getAmountExVat() * (1+creditedRow.getVatPercent()/100.0) * creditedRow.getQuantity();
-		}			
-
-		for( OrderRowBuilder newCreditRow : newCreditOrderRows ) {
-			creditedOrderTotal +=  newCreditRow.getAmountExVat() * (1+newCreditRow.getVatPercent()/100.0) * newCreditRow.getQuantity();
-		}			
+		double creditedOrderTotal = calculateCreditAmount();			
 		
 		CreditTransactionRequest creditTransactionRequest = new CreditTransactionRequest( this.getConfig() );
 		creditTransactionRequest.setCountryCode( this.getCountryCode() );
@@ -153,4 +146,61 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
 
         return errors;  
     }	
+    
+    public CreditTransactionRequest creditDirectBankOrderRows() {
+    	
+    	// validate request and throw exception if validation fails
+        String errors = validateCreditDirectBankOrderRows(); 
+        if (!errors.equals("")) {
+            throw new SveaWebPayException("Validation failed", new ValidationException(errors));
+        }
+		
+		// calculate credited order rows total, incvat row sum over creditedOrderRows + newOrderRows
+		double creditedOrderTotal = calculateCreditAmount();			
+		
+		CreditTransactionRequest creditTransactionRequest = new CreditTransactionRequest( this.getConfig() );
+		creditTransactionRequest.setCountryCode( this.getCountryCode() );
+		creditTransactionRequest.setTransactionId( this.getOrderId() );
+		creditTransactionRequest.setCreditAmount((int)MathUtil.bankersRound(creditedOrderTotal) * 100);
+		
+		return creditTransactionRequest;				
+	}
+	
+	// validates required attributes
+    public String validateCreditDirectBankOrderRows() {
+        String errors = "";
+        if (this.getCountryCode() == null) {
+            errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
+        }
+        
+        if (this.getOrderId() == null) {
+            errors += "MISSING VALUE - OrderId is required, use setOrderId().\n";
+    	}
+        
+        // need either row indexes or new credit rows to calculate amount to credit
+        if( this.rowIndexesToCredit.size() == 0 && this.newCreditOrderRows.size() == 0 ) {
+        	errors += "MISSING VALUE - rowIndexesToCredit or newCreditOrderRows is required for creditDirectBankOrderRows(). Use methods setRowToCredit()/setRowsToCredit() or addCreditOrderRow()/addCreditOrderRows().\n";
+    	}
+        
+        // iff specified row indexes, need to pass in the order rows as well for orders
+        if( this.rowIndexesToCredit.size() > 0 && this.numberedOrderRows.size() == 0 ) {
+        	errors += "MISSING VALUE - numberedOrderRows is required for creditDirectBankOrderRows(). Use setNumberedOrderRow() or setNumberedOrderRows().\n";
+    	}
+
+        return errors;  
+    }	
+    
+	private double calculateCreditAmount() {
+		double creditedOrderTotal = 0.0;
+		for( Integer rowIndex : new HashSet<Integer>(rowIndexesToCredit) ) {
+			NumberedOrderRowBuilder creditedRow = numberedOrderRows.get(rowIndex-1);	// -1 as NumberedOrderRows is one-indexed
+			creditedOrderTotal +=  creditedRow.getAmountExVat() * (1+creditedRow.getVatPercent()/100.0) * creditedRow.getQuantity();
+		}			
+
+		for( @SuppressWarnings("rawtypes") OrderRowBuilder newCreditRow : newCreditOrderRows ) {
+			creditedOrderTotal +=  newCreditRow.getAmountExVat() * (1+newCreditRow.getVatPercent()/100.0) * newCreditRow.getQuantity();
+		}
+		return creditedOrderTotal;
+	}
+    
 }
