@@ -49,7 +49,7 @@ public class CreditTransactionRequest extends HostedAdminRequest<CreditTransacti
 		super( config, "credit" );
 	}
 
-	public String validateOrder() {
+	public String validateRequest() {
         String errors = "";
         if (this.getCountryCode() == null) {
             errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
@@ -97,7 +97,7 @@ public class CreditTransactionRequest extends HostedAdminRequest<CreditTransacti
 	public Hashtable<String,String> prepareRequest() {
 
     	// validate request and throw exception if validation fails
-        String errors = validateOrder();
+        String errors = validateRequest();
         
         if (!errors.equals("")) {
         	System.out.println(errors);
