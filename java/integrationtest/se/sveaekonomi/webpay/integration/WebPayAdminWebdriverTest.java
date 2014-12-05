@@ -8,11 +8,13 @@ import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.CreditOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.hosted.HostedPaymentResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.AnnulTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.ConfirmTransactionResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.CreditTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.LowerTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.QueryTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
@@ -260,4 +262,82 @@ public class WebPayAdminWebdriverTest {
 		assertEquals("75000", cancelledOrder.getAmount());	
 		assertEquals("25000", cancelledOrder.getAuthorizedAmount());    
     }    
+
+    /// WebPayAdmin.creditOrderRows() --------------------------------------------------------------------------------------------	
+    // card
+    @Test
+    public void test_creditOrderRows_creditCardOrderRows_credit_all_rows() {
+    	
+    	// use an existing captured order (status SUCCESS), as we can't do a capture on an order via the webservice
+    	String capturedOrderId = "590775";
+
+    	// first, queryOrder to get original order rows
+        QueryOrderBuilder queryOriginalOrder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
+            .setTransactionId( capturedOrderId )
+            .setCountryCode( COUNTRYCODE.SE )
+        ;                
+        QueryTransactionResponse originalOrder = queryOriginalOrder.queryCardOrder().doRequest();                 
+        assertTrue( originalOrder.isOrderAccepted() );             
+        assertEquals( 1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
+
+        // do creditOrderRows request and assert the response
+        CreditOrderRowsBuilder creditRequest = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
+    		.setTransactionId( originalOrder.getTransactionId() )
+            .setCountryCode( COUNTRYCODE.SE )
+		    .setRowToCredit(1)	// only row in order
+		    .addNumberedOrderRows(originalOrder.getNumberedOrderRows()) 
+		;
+        CreditTransactionResponse response = creditRequest.creditCardOrderRows().doRequest();
+        assertTrue(response.isOrderAccepted());        
+        
+        // query credited order and assert amounts
+        QueryOrderBuilder queryCreditedOrder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
+            .setTransactionId( capturedOrderId )
+            .setCountryCode( COUNTRYCODE.SE )
+        ;                
+        QueryTransactionResponse creditedOrder = queryCreditedOrder.queryCardOrder().doRequest();                 
+        assertTrue(creditedOrder.isOrderAccepted());
+        //assertEquals( "25000", creditedOrder.getCreditedAmount()); // only valid for first test on a transactionId
+    	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());
+	}
+    
+    @Test
+    public void test_creditOrderRows_creditCardOrderRows_credit_first_and_second_row_of_three() {
+    	
+    	// use an existing captured order (status SUCCESS), as we can't do a capture on an order via the webservice
+    	String capturedOrderId = "590775";
+
+    	// first, queryOrder to get original order rows
+        QueryOrderBuilder queryOriginalOrder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
+            .setTransactionId( capturedOrderId )
+            .setCountryCode( COUNTRYCODE.SE )
+        ; 
+        QueryTransactionResponse originalOrder = queryOriginalOrder.queryCardOrder().doRequest();                 
+        assertTrue( originalOrder.isOrderAccepted() );             
+        assertEquals( 1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
+        
+        // do creditOrderRows request and assert the response
+        ArrayList<Integer> indexes = new ArrayList<Integer>();
+        indexes.add(1);
+        indexes.add(2);    
+        CreditOrderRowsBuilder creditRequest = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
+    		.setOrderId( originalOrder.getTransactionId() )
+            .setCountryCode( COUNTRYCODE.SE )
+		    .setRowsToCredit( indexes )
+		    .addNumberedOrderRows(originalOrder.getNumberedOrderRows()) 
+		;
+        CreditTransactionResponse response = creditRequest.creditCardOrderRows().doRequest();
+        assertTrue(response.isOrderAccepted());        	
+
+        // query credited order and assert amounts
+        QueryOrderBuilder queryCancelledOrder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
+            .setTransactionId(capturedOrderId)
+            .setCountryCode( COUNTRYCODE.SE )
+        ;                
+        QueryTransactionResponse creditedOrder = queryCancelledOrder.queryCardOrder().doRequest();                 
+        assertTrue(creditedOrder.isOrderAccepted());
+        //assertEquals( "50000", creditedOrder.getCreditedAmount()); // only valid for first test on a transactionId
+    	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());
+    }    
+    
 }
