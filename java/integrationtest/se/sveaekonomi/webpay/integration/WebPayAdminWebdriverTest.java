@@ -393,10 +393,8 @@ public class WebPayAdminWebdriverTest {
 
     // direct bank
     @Test
-    public void test_creditOrderRows_creditDirectBankOrderRows_credit_original_order_first_and_second_rows_of_three() {
-    	
-//    	// use an existing captured order (status SUCCESS), as we can't do a capture on an order via the webservice
-//    	String capturedOrderId = "590775";
+    public void test_creditOrderRows_creditDirectBankOrderRows_credit_original_order_first_and_second_rows_of_three() {    	
+    	String capturedOrderId = "590801";
 
     	// first, queryOrder to get original order rows
         QueryOrderBuilder queryOriginalOrder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
@@ -417,7 +415,7 @@ public class WebPayAdminWebdriverTest {
 		    .setRowsToCredit( indexes )
 		    .addNumberedOrderRows(originalOrder.getNumberedOrderRows()) 
 		;
-        CreditTransactionResponse response = creditRequest.creditCardOrderRows().doRequest();
+        CreditTransactionResponse response = creditRequest.creditDirectBankOrderRows().doRequest();
         assertTrue(response.isOrderAccepted());        	
 
         // query credited order and assert amounts
@@ -433,10 +431,8 @@ public class WebPayAdminWebdriverTest {
 
     @Test
     public void test_creditOrderRows_creditDirectBankOrderRows_credit_original_order_row_and_new_custom_order_row() {
+    	String capturedOrderId = "590801";
     	
-//    	// use an existing captured order (status SUCCESS), as we can't do a capture on an order via the webservice
-//    	String capturedOrderId = "590775";
-
     	// first, queryOrder to get original order rows
         QueryOrderBuilder queryOriginalOrder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
             .setTransactionId( capturedOrderId )
@@ -461,7 +457,7 @@ public class WebPayAdminWebdriverTest {
 		    .addNumberedOrderRows(originalOrder.getNumberedOrderRows()) 
 		    .addCreditOrderRow( customAmountRow )
 	    ;
-        CreditTransactionResponse response = creditRequest.creditCardOrderRows().doRequest();
+        CreditTransactionResponse response = creditRequest.creditDirectBankOrderRows().doRequest();
         assertTrue(response.isOrderAccepted());        
         
         // query credited order and assert amounts
@@ -477,9 +473,7 @@ public class WebPayAdminWebdriverTest {
     
     @Test
     public void test_creditOrderRows_creditDirectBankOrderRows_credit_only_new_custom_order_row() {
-    	
-//    	// use an existing captured order (status SUCCESS), as we can't do a capture on an order via the webservice
-//    	String capturedOrderId = "590775";
+    	String capturedOrderId = "590801";
 
     	// first, queryOrder to get original order rows
         QueryOrderBuilder queryOriginalOrder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
@@ -503,7 +497,7 @@ public class WebPayAdminWebdriverTest {
             .setCountryCode( COUNTRYCODE.SE )
 		    .addCreditOrderRow( customAmountRow )
 	    ;
-        CreditTransactionResponse response = creditRequest.creditCardOrderRows().doRequest();
+        CreditTransactionResponse response = creditRequest.creditDirectBankOrderRows().doRequest();
         assertTrue(response.isOrderAccepted());        
         
         // query credited order and assert amounts
