@@ -62,15 +62,15 @@ public class ConfirmTransactionRequest extends HostedAdminRequest<ConfirmTransac
 	 * validates that all required attributes needed for the request are present in the builder object
 	 * @return indicating which methods are missing, or empty String if no problems found
 	 */
-	public String validateOrder() {
+	public String validateRequest() {
 		String errors = "";		
-		errors += validateOrderId();
+		errors += validateRequestId();
 		errors += validateCountryCode();
 		errors += validateCaptureDate();
 		return errors;
 	}
 	
-    private String validateOrderId() {
+    private String validateRequestId() {
     	return (this.getTransactionId() == null) ? "MISSING VALUE - setOrderId is required.\n" : "";
     }
    
@@ -122,7 +122,7 @@ public class ConfirmTransactionRequest extends HostedAdminRequest<ConfirmTransac
 	public Hashtable<String,String> prepareRequest() {
 
     	// validate request and throw exception if validation fails
-        String errors = validateOrder();
+        String errors = validateRequest();
         
         if (!errors.equals("")) {
         	System.out.println(errors);

@@ -78,7 +78,7 @@ public class AnnulTransactionRequest extends HostedAdminRequest<AnnulTransaction
 	/**
 	 * should return string indicating any missing order builder setter methods on validation failure, or empty string
 	 */
-	public String validateOrder() {
+	public String validateRequest() {
         String errors = "";
         if (this.getCountryCode() == null) {
             errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
@@ -96,7 +96,7 @@ public class AnnulTransactionRequest extends HostedAdminRequest<AnnulTransaction
 	public Hashtable<String,String> prepareRequest() {
 
     	// validate request and throw exception if validation fails
-        String errors = validateOrder();
+        String errors = validateRequest();
         
         if (!errors.equals("")) {
         	System.out.println(errors);
