@@ -21,6 +21,7 @@ import se.sveaekonomi.webpay.integration.order.handle.CreditOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
+import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
@@ -492,7 +493,7 @@ public class WebPayAdminUnitTest {
     // TODO other methods
 	// .creditCardOrderRow validation
 	@Test
-    public void test_validates_all_required_methods_for_creditOrderRows_creditCardOrderRows() {
+    public void test_validates_all_required_methods_for_creditOrderRows_creditCardOrderRows_with_setRowToCredit() {
 		ArrayList<NumberedOrderRowBuilder> rows = new ArrayList<NumberedOrderRowBuilder>();
 		rows.add( TestingTool.createNumberedOrderRow(1) );
 		
@@ -501,6 +502,7 @@ public class WebPayAdminUnitTest {
 	    	.setCountryCode( COUNTRYCODE.SE )
 	    	.setRowToCredit( 1 )
 	    	.addNumberedOrderRows( rows )
+		    //.addCreditOrderRow( customAmountRow )
     	;
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
@@ -513,8 +515,35 @@ public class WebPayAdminUnitTest {
 	        fail();
         }
     }		
-		@Test
-	    public void test_creditOrderRows_validates_missing_required_method_for_creditCardOrderRows() { 	
+	@Test
+    public void test_validates_all_required_methods_for_creditOrderRows_creditCardOrderRows_with_addRowToCredit() {
+		@SuppressWarnings("rawtypes")
+		OrderRowBuilder customAmountRow = WebPayItem.orderRow()
+			.setAmountExVat(100.0)
+			.setVatPercent(10.0)
+			.setQuantity(1.0)
+		;
+		
+	    CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
+	    	.setOrderId( "123456" )
+	    	.setCountryCode( COUNTRYCODE.SE )
+	    	//.setRowToCredit( 1 )
+	    	//.addNumberedOrderRows( rows )
+		    .addCreditOrderRow( customAmountRow )
+    	;
+		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
+		try {
+			CreditTransactionRequest request = builder.creditCardOrderRows();            
+			@SuppressWarnings("unused")
+			Hashtable<String,String> hash = request.prepareRequest();					
+		}
+		catch (SveaWebPayException e){		
+			// fail on validation error
+	        fail();
+        }
+    }
+	@Test
+    public void test_creditOrderRows_validates_missing_required_method_for_creditCardOrderRows_with_setRowToCredit() { 	
 			ArrayList<NumberedOrderRowBuilder> rows = new ArrayList<NumberedOrderRowBuilder>();
 			rows.add( TestingTool.createNumberedOrderRow(1) );
 			
@@ -535,11 +564,43 @@ public class WebPayAdminUnitTest {
 		        assertEquals(
 	        		"MISSING VALUE - CountryCode is required, use setCountryCode(...).\n" +
 	        		"MISSING VALUE - OrderId is required, use setOrderId().\n" +
-	        		"MISSING VALUE - rowIndexesToCredit is required for creditCardOrderRows(). Use methods setRowToCredit() or setRowsToCredit().\n" +
+	        		"MISSING VALUE - rowIndexesToCredit or newCreditOrderRows is required for creditCardOrderRows(). Use methods setRowToCredit()/setRowsToCredit() or addCreditOrderRow()/addCreditOrderRows().\n",
+	        		e.getCause().getMessage()
+	    		);			
+	        }
+	    }	
+	@Test
+    public void test_creditOrderRows_validates_missing_required_method_for_creditCardOrderRows_with_setRowToCredit_but_missing_NumberedOrderRows() { 				
+			ArrayList<NumberedOrderRowBuilder> rows = new ArrayList<NumberedOrderRowBuilder>();
+			rows.add( TestingTool.createNumberedOrderRow(1) );
+			
+			@SuppressWarnings("rawtypes")
+			OrderRowBuilder customAmountRow = WebPayItem.orderRow()
+				.setAmountExVat(100.0)
+				.setVatPercent(10.0)
+				.setQuantity(1.0)
+			;
+			
+		    CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
+		    	.setOrderId( "123456" )
+		    	.setCountryCode( COUNTRYCODE.SE )
+		    	.setRowToCredit( 1 )
+		    	//.addNumberedOrderRows( rows )
+		    	.addCreditOrderRow( customAmountRow )
+	    	;
+			
+			try {
+				CreditTransactionRequest request = builder.creditCardOrderRows();            
+				@SuppressWarnings("unused")
+				Hashtable<String,String> hash = request.prepareRequest();			
+				// fail if validation passes
+		        fail();		
+			}
+			catch (SveaWebPayException e){							
+		        assertEquals(
 	        		"MISSING VALUE - numberedOrderRows is required for creditCardOrderRows(). Use setNumberedOrderRow() or setNumberedOrderRows().\n",
 	    			e.getCause().getMessage()
 	    		);			
 	        }
-	    }	
-
-}
+	    }
+	}
