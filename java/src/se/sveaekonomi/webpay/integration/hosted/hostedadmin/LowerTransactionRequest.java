@@ -60,7 +60,7 @@ public class LowerTransactionRequest extends HostedAdminRequest <LowerTransactio
 	 * validates that all required attributes needed for the request are present in the builder object
 	 * @return indicating which methods are missing, or empty String if no problems found
 	 */
-	public String validateOrder() {
+	public String validateRequest() {
         String errors = "";
         if (this.getCountryCode() == null) {
             errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
@@ -112,7 +112,7 @@ public class LowerTransactionRequest extends HostedAdminRequest <LowerTransactio
 	public Hashtable<String,String> prepareRequest() {
 
     	// validate request and throw exception if validation fails
-        String errors = validateOrder();
+        String errors = validateRequest();
         
         if (!errors.equals("")) {
         	System.out.println(errors);

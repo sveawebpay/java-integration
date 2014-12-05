@@ -40,14 +40,14 @@ public class QueryTransactionRequest extends HostedAdminRequest<QueryTransaction
 	 * validates that all required attributes needed for the request are present in the builder object
 	 * @return indicating which methods are missing, or empty String if no problems found
 	 */
-	public String validateOrder() {
+	public String validateRequest() {
 		String errors = "";		
-		errors += validateOrderId();
+		errors += validateRequestId();
 		errors += validateCountryCode();
 		return errors;
 	}
 	
-    private String validateOrderId() {
+    private String validateRequestId() {
     	String tid = this.getTransactionId();
     	return (tid == null) ? "MISSING VALUE - setOrderId is required.\n" : "";
     }
@@ -94,7 +94,7 @@ public class QueryTransactionRequest extends HostedAdminRequest<QueryTransaction
 	public Hashtable<String,String> prepareRequest() {
 
     	// validate request and throw exception if validation fails
-        String errors = validateOrder();
+        String errors = validateRequest();
         
         if (!errors.equals("")) {
         	System.out.println(errors);

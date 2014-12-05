@@ -4,6 +4,7 @@ import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.CreditOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
 
@@ -133,5 +134,37 @@ public class WebPayAdmin {
 	    }    	
 	    
 	    return new CancelOrderRowsBuilder(config);	    	
+    }
+
+    // TODO update docblock here and in php to confirm with credit/deliverorderrows
+    /**
+     * The WebPayAdmin.creditOrderRows entrypoint method is used to credit rows in an order after it has been delivered.
+     * 1.6.0: Supports card and direct bank orders.
+     * :
+     * 
+     *     request = WebPay.creditOrder(config)
+     *         .setInvoiceId()                // invoice only, required
+     *         .setInvoiceDistributionType()  // invoice only, required
+     *         .setOrderId()                  // card and direct bank only, required
+     *         .setCountryCode()              // required
+     *         .addCreditOrderRow()           // optional, use to specify a new credit row, i.e. for amounts not present in the original order
+     *         .addCreditOrderRows()          // optional
+     *         .setRowToCredit()              // optional, index of one of the original order row you wish to credit
+     *         .setRowsToCredit()             // optional
+     *         .addNumberedOrderRow()         // card and direct bank only, required with setRowToCredit()
+     *         .addNumberedOrderRows()        // card and direct bank only, optional
+     *     ;
+     *     // then select the corresponding request class and send request
+     *     response = request.creditCardOrderRows().doRequest();       // returns CreditTransactionResponse
+     *     response = request.creditDirectBankOrderRows().doRequest(); // returns CreditTransactionResponse
+     * 
+     * @author Kristian Grossman-Madsen
+     */
+    public static CreditOrderRowsBuilder creditOrderRows( ConfigurationProvider config ) {
+        if (config == null) {
+        	throw new SveaWebPayException("A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()");
+	    }    	
+	    
+	    return new CreditOrderRowsBuilder(config);	    	
     }
 }
