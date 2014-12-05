@@ -288,7 +288,9 @@ public class WebPayAdminWebdriverTest {
         CreditOrderRowsBuilder creditRequest = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
     		.setOrderId( originalOrder.getTransactionId() )
             .setCountryCode( COUNTRYCODE.SE )
-		    .setRowsToCredit( indexes )
+            //.setRowToCredit(1)
+            //.setRowToCredit(2) // => 1,2
+		    .setRowsToCredit( indexes )	// => 1,2
 		    .addNumberedOrderRows(originalOrder.getNumberedOrderRows()) 
 		;
         CreditTransactionResponse response = creditRequest.creditCardOrderRows().doRequest();
@@ -301,7 +303,7 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse creditedOrder = queryCancelledOrder.queryCardOrder().doRequest();                 
         assertTrue(creditedOrder.isOrderAccepted());
-        //assertEquals( "50000", creditedOrder.getCreditedAmount()); // only valid for first test on a transactionId
+        assertEquals( (Long)(Long.valueOf(originalOrder.getCreditedAmount())+25000+25000), (Long)Long.valueOf(creditedOrder.getCreditedAmount()));
     	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());
     }    
 
@@ -408,11 +410,13 @@ public class WebPayAdminWebdriverTest {
         // do creditOrderRows request and assert the response
         ArrayList<Integer> indexes = new ArrayList<Integer>();
         indexes.add(1);
-        indexes.add(2);    
+        ArrayList<Integer> indexes2 = new ArrayList<Integer>();
+        indexes2.add(2);    
         CreditOrderRowsBuilder creditRequest = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
     		.setOrderId( originalOrder.getTransactionId() )
             .setCountryCode( COUNTRYCODE.SE )
 		    .setRowsToCredit( indexes )
+		    .setRowsToCredit( indexes2 ) // test adds upp to 1,2
 		    .addNumberedOrderRows(originalOrder.getNumberedOrderRows()) 
 		;
         CreditTransactionResponse response = creditRequest.creditDirectBankOrderRows().doRequest();
@@ -425,7 +429,7 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse creditedOrder = queryCancelledOrder.queryCardOrder().doRequest();                 
         assertTrue(creditedOrder.isOrderAccepted());
-        //assertEquals( "50000", creditedOrder.getCreditedAmount()); // only valid for first test on a transactionId
+        assertEquals( (Long)(Long.valueOf(originalOrder.getCreditedAmount())+25000+25000), (Long)Long.valueOf(creditedOrder.getCreditedAmount()));
     	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());
     }    
 
@@ -510,5 +514,4 @@ public class WebPayAdminWebdriverTest {
         assertEquals( (Long)(Long.valueOf(originalOrder.getCreditedAmount())+11000), (Long)Long.valueOf(creditedOrder.getCreditedAmount()));
     	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());    	
 	}
-
 }
