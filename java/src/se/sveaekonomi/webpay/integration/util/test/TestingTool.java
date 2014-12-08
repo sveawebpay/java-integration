@@ -23,6 +23,7 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
+import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RelativeDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
@@ -50,8 +51,24 @@ public class TestingTool {
         return WebPayItem.orderRow()
                    .setQuantity(1.0)
                    .setAmountExVat(4)
-                   .setVatPercent(25);
+                   .setVatPercent(25)
+       ;
     }
+     
+    public static NumberedOrderRowBuilder createNumberedOrderRow( int rowNumber ) {    	
+    	return WebPayItem.numberedOrderRow()
+		        .setArticleNumber("nor1")
+		        .setQuantity( 2.0 )
+		        .setAmountExVat( 100.0 )
+		        .setDescription("Numbered Order Row")
+		        .setName("NOR")
+		        .setUnit("st")
+		        .setVatPercent(25.0)
+		        .setDiscountPercent(0.0)
+		        .setRowNumber( rowNumber )
+    	;
+    }
+
     
     public static OrderRowBuilder createExVatBasedOrderRow(String articleNumber) {
     	articleNumber = articleNumber == null ? "1" : articleNumber;

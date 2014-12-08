@@ -34,7 +34,6 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 		this.config = config;
 		this.rowIndexesToDeliver = new ArrayList<Integer>();
 		this.numberedOrderRows = new ArrayList<NumberedOrderRowBuilder>();
-		this.newOrderRows = new ArrayList<OrderRowBuilder>();
 	}
 
 	public ConfigurationProvider getConfig() {
@@ -135,9 +134,7 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 			NumberedOrderRowBuilder deliveredRow = numberedOrderRows.get(rowIndex-1);	// -1 as NumberedOrderRows is one-indexed
 			deliveredOrderTotal +=  deliveredRow.getAmountExVat() * (1+deliveredRow.getVatPercent()/100.0) * deliveredRow.getQuantity();
 		}			
-		for( OrderRowBuilder newRow : newOrderRows ) {
-			deliveredOrderTotal += newRow.getAmountExVat() * (1+newRow.getVatPercent()/100.0) * newRow.getQuantity();
-		}
+
 		
 		double amountToLowerOrderBy = originalOrderTotal - deliveredOrderTotal;
 				
@@ -162,7 +159,7 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
     	}
         
         if( this.rowIndexesToDeliver.size() == 0 ) {
-        	errors += "MISSING VALUE - rowsToDeliver is required for deliverCardOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().\n";
+        	errors += "MISSING VALUE - rowIndexesToDeliver is required for deliverCardOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().\n";
     	}
         
         if( this.numberedOrderRows.size() == 0 ) {

@@ -3,7 +3,7 @@ package se.sveaekonomi.webpay.integration.order.row;
 /**
  * @author klar-sar, Kristian Grossman-Madsen
  */
-public class OrderRowBuilder extends RowBuilder {
+public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 
 	private String articleNumber;
 	private String name;
@@ -25,9 +25,9 @@ public class OrderRowBuilder extends RowBuilder {
 	 * @param articleNumber
 	 * @return OrderRowBuilder
 	 */
-	public OrderRowBuilder setArticleNumber(String articleNumber) {
+	public T setArticleNumber(String articleNumber) {
 		this.articleNumber = articleNumber;
-		return this;
+		return (T) this;
 	}
 	public String getArticleNumber() {
 		return articleNumber;
@@ -40,9 +40,9 @@ public class OrderRowBuilder extends RowBuilder {
 	 * @param name
 	 * @return OrderRowBuilder
 	 */
-	public OrderRowBuilder setName(String name) {
+	public T setName(String name) {
 		this.name = name;
-		return this;
+		return (T) this;
 	}
 
 	public String getName() {
@@ -56,9 +56,9 @@ public class OrderRowBuilder extends RowBuilder {
 	 * @param description
 	 * @return OrderRowBuilder
 	 */
-	public OrderRowBuilder setDescription(String description) {
+	public T setDescription(String description) {
 		this.description = description;
-		return this;
+		return (T) this;
 	}
 
 	public String getDescription() {
@@ -77,9 +77,9 @@ public class OrderRowBuilder extends RowBuilder {
 	 * @param float $AmountAsFloat
 	 * @return $this
 	 */
-	public OrderRowBuilder setAmountExVat(double dExVatAmount) {
+	public T setAmountExVat(double dExVatAmount) {
 		this.amountExVat = dExVatAmount;
-		return this;
+		return (T) this;
 	}
 
 	public Double getAmountExVat() {
@@ -98,9 +98,9 @@ public class OrderRowBuilder extends RowBuilder {
 	 * @param vatPercent
 	 * @return OrderRowBuilder
 	 */
-	public OrderRowBuilder setVatPercent(double vatPercent) {
+	public T setVatPercent(double vatPercent) {
 		this.vatPercent = vatPercent;
-		return this;
+		return (T) this;
 	}
 
 	public Double getVatPercent() {
@@ -116,9 +116,9 @@ public class OrderRowBuilder extends RowBuilder {
 	 * @param quantity
 	 * @return OrderRowBuilder
 	 */
-	public OrderRowBuilder setQuantity(Double quantity) {
+	public T setQuantity(Double quantity) {
 		this.quantity = quantity;
-		return this;
+		return (T) this;
 	}
 
 	public Double getQuantity() {
@@ -131,9 +131,9 @@ public class OrderRowBuilder extends RowBuilder {
 	 * 
 	 * @return OrderRowBuilder
 	 */
-	public OrderRowBuilder setUnit(String unit) {
+	public T setUnit(String unit) {
 		this.unit = unit;
-		return this;
+		return (T) this;
 	}
 	
 	public String getUnit() {
@@ -147,9 +147,9 @@ public class OrderRowBuilder extends RowBuilder {
 	 * @return OrderRowBuilder
 	 */
 	// TODO investigate this, not used in php package (defaults to 0)??
-	public OrderRowBuilder setVatDiscount(int vatDiscount) {
+	public T setVatDiscount(int vatDiscount) {
 		this.vatDiscount = vatDiscount;
-		return this;
+		return (T) this;
 	}
 	
 	public int getVatDiscount() {
@@ -162,9 +162,9 @@ public class OrderRowBuilder extends RowBuilder {
 	 * @param discountPercent
 	 * @return OrderRowBuilder
 	 */
-	public OrderRowBuilder setDiscountPercent(Double discountPercent) {
+	public T setDiscountPercent(Double discountPercent) {
 		this.discountPercent = discountPercent;
-		return this;
+		return (T) this;
 	}
 	
 	public double getDiscountPercent() {
@@ -186,9 +186,9 @@ public class OrderRowBuilder extends RowBuilder {
 	 * @param amountIncVat
 	 * @return OrderRowBuilder
 	 */
-	public OrderRowBuilder setAmountIncVat(double amountIncVat) {
+	public T setAmountIncVat(double amountIncVat) {
 		this.amountIncVat = amountIncVat;
-		return this;
+		return (T) this;
 	}
 
 	public Double getAmountIncVat() {
