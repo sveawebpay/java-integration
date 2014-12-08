@@ -38,30 +38,33 @@ public class AnnulTransactionIntegrationTest {
     
     @Test
     public void test_doRequest_returns_AnnulTransactionResponse_success() {
-    	HostedPaymentResponse order = (HostedPaymentResponse)TestingTool.createCardTestOrder("test_doRequest_returns_AnnulTransactionResponse_success");
-        assertTrue(order.isOrderAccepted());
-        
-        AnnulTransactionRequest request = new AnnulTransactionRequest( SveaConfig.getDefaultConfig() )
-        	.setTransactionId( order.getTransactionId() )
-            .setCountryCode( COUNTRYCODE.SE )
-        ;                
-        AnnulTransactionResponse response = request.doRequest();
-        
-    	assertThat( response, instanceOf(AnnulTransactionResponse.class) );
-        assertThat( response, instanceOf(HostedAdminResponse.class) );
-        
-        assertTrue( response.isOrderAccepted() ); 
-		assertEquals( order.getTransactionId(),response.getTransactionId() );
-		
-		// query result
-        QueryOrderBuilder query = new QueryOrderBuilder( SveaConfig.getDefaultConfig() )
-        	.setTransactionId( order.getTransactionId()  )
-            .setCountryCode( COUNTRYCODE.SE )
-        ;                
-        QueryTransactionResponse answer = query.queryCardOrder().doRequest();         
-        
-        assertTrue( answer.isOrderAccepted() ); 
-
-		assertEquals("ANNULLED", answer.getStatus());
+    	
+    	// see WebPayAdminWebdriverTest test_cancelOrder_cancelCardOrder
+    	
+//    	HostedPaymentResponse order = (HostedPaymentResponse)TestingTool.createCardTestOrder("test_doRequest_returns_AnnulTransactionResponse_success");
+//        assertTrue(order.isOrderAccepted());
+//        
+//        AnnulTransactionRequest request = new AnnulTransactionRequest( SveaConfig.getDefaultConfig() )
+//        	.setTransactionId( order.getTransactionId() )
+//            .setCountryCode( COUNTRYCODE.SE )
+//        ;                
+//        AnnulTransactionResponse response = request.doRequest();
+//        
+//    	assertThat( response, instanceOf(AnnulTransactionResponse.class) );
+//        assertThat( response, instanceOf(HostedAdminResponse.class) );
+//        
+//        assertTrue( response.isOrderAccepted() ); 
+//		assertEquals( order.getTransactionId(),response.getTransactionId() );
+//		
+//		// query result
+//        QueryOrderBuilder query = new QueryOrderBuilder( SveaConfig.getDefaultConfig() )
+//        	.setTransactionId( order.getTransactionId()  )
+//            .setCountryCode( COUNTRYCODE.SE )
+//        ;                
+//        QueryTransactionResponse answer = query.queryCardOrder().doRequest();         
+//        
+//        assertTrue( answer.isOrderAccepted() ); 
+//
+//		assertEquals("ANNULLED", answer.getStatus());
     }
 }
