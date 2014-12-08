@@ -13,7 +13,29 @@ import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
  */
 public class WebPayAdmin {
 	
-	// TODO javadoc
+
+    /**
+     * The WebPayAdmin.cancelOrder() entrypoint method is used to cancel an order with Svea, 
+     * that has not yet been delivered (invoice, payment plan) or confirmed (card).
+     * 
+     * Supports Invoice, Payment Plan and Card orders. For Direct Bank orders, use WebPayAdmin.creditOrderRows() instead.
+     *  
+     * Get an instance using the WebPayAdmin.queryOrder entrypoint, then provide more information about the order and send 
+     * the request using the CancelOrderBuilder methods:
+     * 
+     * ...
+     *     request = WebPayAdmin.cancelOrder(config)
+     *          .setOrderId()		// required, use SveaOrderId recieved with createOrder response
+     *          .setTransactionId	// optional, card or direct bank only, alias for setOrderId 
+     *          .setCountryCode()	// required, use same country code as in createOrder request      
+     *     ;
+     *     // then select the corresponding request class and send request
+     *     response = request.cancelInvoiceOrder().doRequest();		// returns CloseOrderResponse
+     *     response = request.cancelPaymentPlanOrder().doRequest();	// returns CloseOrderResponse
+     *     response = request.cancelCardOrder().doRequest();		// returns AnnulTransactionResponse
+     * ...
+     * 
+	 */
 	public static CancelOrderBuilder cancelOrder(ConfigurationProvider config) {
         if (config == null) {
             throw new SveaWebPayException("A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()");
@@ -26,9 +48,11 @@ public class WebPayAdmin {
 	/**
 	 * The WebPayAdmin.queryOrder entrypoint method is used to get information about an order.
      * 
-     * Note that for invoice and payment plan orders, the order rows name and description is merged into the description field in the query response.
+     * Note that for invoice and payment plan orders, the order rows name and description is merged into the 
+     * description field in the query response.
      * 
-     * Get an query builder instance using the WebPayAdmin.queryOrder entrypoint, then provide more information about the order and send the request using the QueryOrderBuilder methods:
+     * Get an instance using the WebPayAdmin.queryOrder entrypoint, then provide more information about the order and 
+     * send the request using the QueryOrderBuilder methods:
      * 
      * ...
      *     request = WebPayAdmin.queryOrder(config)
