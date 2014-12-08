@@ -4,10 +4,11 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.Respondable;
 import se.sveaekonomi.webpay.integration.response.Response;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 
-public class DeliverOrderResponse extends Response {
+public class DeliverOrderResponse extends Response implements Respondable {
 
     private double amount;
     private ORDERTYPE orderType;

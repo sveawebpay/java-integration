@@ -5,6 +5,7 @@ import static org.junit.Assert.assertTrue;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.Respondable;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
@@ -19,6 +20,7 @@ import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsRe
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
+import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 
 public class DoPaymentPlanPaymentTest {
     
@@ -48,7 +50,7 @@ public class DoPaymentPlanPaymentTest {
     public void testDeliverPaymentPlanOrderResult() {
         long orderId = createPaymentPlanAndReturnOrderId();
         
-        DeliverOrderResponse response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+        Respondable response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
         .addOrderRow(TestingTool.createPaymentPlanOrderRow())
         .setOrderId(orderId)
         .setNumberOfCreditDays(1)

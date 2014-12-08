@@ -38,6 +38,7 @@ public class WebPay {
      * 
      * @deprecated A configuration must be provided. For testing purposes use {@link SveaConfig.GetDefaultConfig()}.
      */
+    @Deprecated
     public static CreateOrderBuilder createOrder() {
         return createOrder(null); 
     }
@@ -61,6 +62,7 @@ public class WebPay {
      * 
      * @deprecated A configuration must be provided. For testing purposes use {@link SveaConfig.GetDefaultConfig()}.
      */
+    @Deprecated
     public static CloseOrderBuilder closeOrder() {
         return closeOrder(null);
     }
@@ -83,6 +85,7 @@ public class WebPay {
      * 
      * @deprecated A configuration must be provided. For testing purposes use {@link SveaConfig.GetDefaultConfig()}.
      */
+    @Deprecated
     public static DeliverOrderBuilder deliverOrder() {
         return deliverOrder(null);
     }
@@ -106,6 +109,7 @@ public class WebPay {
      * 
      * @deprecated A configuration must be provided. For testing purposes use {@link SveaConfig.GetDefaultConfig()}.
      */
+    @Deprecated
     public static GetPaymentPlanParams getPaymentPlanParams() {
         return getPaymentPlanParams(null);
     }
@@ -129,6 +133,7 @@ public class WebPay {
      * 
      * @deprecated A configuration must be provided. For testing purposes use {@link SveaConfig.GetDefaultConfig()}.
      */
+    @Deprecated
     public static GetAddresses getAddresses() {
         return getAddresses(null);
     }

@@ -28,8 +28,7 @@ public class PaymentPlanPricePerMonthTest {
     public void testBuildPriceCalculator() {
         PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
         
-        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(2000.0, paymentPlanParams);
-        
+        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(2000.0, paymentPlanParams);      
         assertEquals("213060", result.get(0).get("campaignCode"));
         assertEquals("2029", result.get(0).get("pricePerMonth"));        
         assertEquals("223060", result.get(1).get("campaignCode"));

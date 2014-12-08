@@ -1,0 +1,3 @@
+package se.sveaekonomi.webpay.integration.hosted.hostedadmin;
+
+// see test_doRequest_with_setAlsoDoLowerAmount_returns_ConfirmTransactionResponse_success

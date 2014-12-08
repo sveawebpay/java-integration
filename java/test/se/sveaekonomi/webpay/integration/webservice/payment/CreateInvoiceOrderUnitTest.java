@@ -249,7 +249,7 @@ public class CreateInvoiceOrderUnitTest {
 			.setQuantity(1.0)
 			.setName("exvatRow2")
 		;		
-		
+
 		InvoiceFeeBuilder exvatInvoiceFee = WebPayItem.invoiceFee()
 			.setAmountExVat(8.00)
 			.setVatPercent(25)
@@ -739,7 +739,7 @@ public class CreateInvoiceOrderUnitTest {
 			.setVatPercent(10)
 			.setName("exvatShippingFee")
 		;	
-		
+
 		RelativeDiscountBuilder relativeDiscount = WebPayItem.relativeDiscount()
 			.setDiscountPercent(10.0)
 			.setDiscountId("TenPercentOff")

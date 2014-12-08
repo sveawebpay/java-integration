@@ -5,6 +5,10 @@ import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertNull;
 import static org.junit.Assert.assertTrue;
 
+
+
+
+
 import org.junit.Test;
 import org.w3c.dom.NodeList;
 
@@ -88,7 +92,7 @@ public class CreateInvoiceOrderTest {
 				.createOrder(SveaConfig.getDefaultConfig())
 				.addOrderRow(TestingTool.createOrderRowNl())
 				.addCustomerDetails(
-						WebPayItem.individualCustomer().setBirthDate(1955, 03, 07).setInitials("SB").setName("Sneider", "Boasman").setStreetAddress("Gate", "42").setLocality("BARENDRECHT")
+						WebPayItem.individualCustomer().setBirthDate("19550307").setInitials("SB").setName("Sneider", "Boasman").setStreetAddress("Gate", "42").setLocality("BARENDRECHT")
 								.setZipCode("1102 HG").setCoAddress("138")).setCountryCode(COUNTRYCODE.NL).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
 				.setOrderDate(TestingTool.DefaultTestDate).setCurrency(CURRENCY.EUR).useInvoicePayment().doRequest();
 
@@ -269,9 +273,9 @@ public class CreateInvoiceOrderTest {
 
 		assertTrue( response.isOrderAccepted() );
 		assertEquals( (Object)1304.00, response.amount );		
-		System.out.println( "test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false\n"
-				+ "  Check logs that order rows were sent as exvat+vat for order row #"+response.orderId);		
-		
+		//System.out.println( "test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false\n"
+		//		+ "  Check logs that order rows were sent as exvat+vat for order row #"+response.orderId);		
+	
 		// Expected log:
 		// ...
 		//<web:OrderRows>
@@ -398,8 +402,8 @@ public class CreateInvoiceOrderTest {
 
 		assertTrue( response.isOrderAccepted() );
 		assertEquals( (Object)1300.00, response.amount );		
-		System.out.println( "test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_true\n"
-				+ "  Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);		
+		//System.out.println( "test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_true\n"
+		//		+ "  Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);		
 		
 		//Expected log:
 		//...
@@ -477,5 +481,119 @@ public class CreateInvoiceOrderTest {
         //</web:OrderRows>
 	    // ...			
 	}		
+	
+	// real world examples of response total order amount not matching shop order total (159.1 vs 159.0) 
+	@Test
+	public void test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false_exvat_two_decimals_wrong() {
+		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+		;				
+		OrderRowBuilder exvatRow = WebPayItem.orderRow()
+				.setAmountExVat(116.94)
+				.setVatPercent(24)			
+				.setQuantity(1.0)
+				.setName("exvatRow")
+		;
+		OrderRowBuilder exvatRow2 = WebPayItem.orderRow()
+			.setAmountExVat(7.26)
+			.setVatPercent(24)			
+			.setQuantity(1.0)
+			.setName("exvatRow2")
+		;		
+		OrderRowBuilder exvatRow3 = WebPayItem.orderRow()
+				.setAmountExVat(4.03)
+				.setVatPercent(24)			
+				.setQuantity(1.0)
+				.setName("exvatRow2")
+			;	
+		
+		order.addOrderRow(exvatRow);
+		order.addOrderRow(exvatRow2);
+		order.addOrderRow(exvatRow3);
+	
+		CreateOrderResponse response = order.useInvoicePayment().doRequest();
+		
+		//System.out.println(response.amount);
+		assertTrue( response.isOrderAccepted() );
+		assertEquals( (Object)159.01, response.amount );		
+	}		
+	@Test
+	public void test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false_exvat_many_decimals_wrong() {
+		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+		;				
+		OrderRowBuilder exvatRow = WebPayItem.orderRow()
+				.setAmountExVat(116.93548)
+				.setVatPercent(24)			
+				.setQuantity(1.0)
+				.setName("exvatRow")
+		;
+		OrderRowBuilder exvatRow2 = WebPayItem.orderRow()
+			.setAmountExVat(7.2580645)
+			.setVatPercent(24)			
+			.setQuantity(1.0)
+			.setName("exvatRow2")
+		;		
+		OrderRowBuilder exvatRow3 = WebPayItem.orderRow()
+				.setAmountExVat(4.032258)
+				.setVatPercent(24)			
+				.setQuantity(1.0)
+				.setName("exvatRow2")
+			;	
+		
+		order.addOrderRow(exvatRow);
+		order.addOrderRow(exvatRow2);
+		order.addOrderRow(exvatRow3);
+	
+		CreateOrderResponse response = order.useInvoicePayment().doRequest();
+		
+		//System.out.println(response.amount);
+		assertTrue( response.isOrderAccepted() );
+		assertEquals( (Object)159.01, response.amount );		
+	}	
+	@Test
+	public void test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_true_incvat_intended() {
+		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+		;				
+		OrderRowBuilder incvatRow = WebPayItem.orderRow()
+				.setAmountIncVat(145)
+				.setVatPercent(24)			
+				.setQuantity(1.0)
+				.setName("incvatRow")
+		;
+		OrderRowBuilder incvatRow2 = WebPayItem.orderRow()
+			.setAmountIncVat(9.00)
+			.setVatPercent(24)			
+			.setQuantity(1.0)
+			.setName("incvatRow2")
+		;		
+		OrderRowBuilder incvatRow3 = WebPayItem.orderRow()
+			.setAmountIncVat(5.00)
+			.setVatPercent(24)			
+			.setQuantity(1.0)
+			.setName("incvatRow3")
+		;
+		
+		order.addOrderRow(incvatRow);
+		order.addOrderRow(incvatRow2);
+		order.addOrderRow(incvatRow3);
+	
 
+		CreateOrderResponse response = order.useInvoicePayment().doRequest();
+
+		//System.out.println(response.amount);
+		assertTrue( response.isOrderAccepted() );
+		assertEquals( (Object)159.00, response.amount );		
+		//System.out.println( "test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_true\n"
+		//		+ "  Check logs that order rows were sent as incvat+vat for order row #"+response.orderId);		
+		
+		
+	}
 }

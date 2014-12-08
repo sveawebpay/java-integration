@@ -3,6 +3,8 @@ package se.sveaekonomi.webpay.integration.order.validator;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.fail;
 
+import java.sql.Date;
+
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -29,7 +31,7 @@ public class WebServiceOrderValidatorTest {
     public WebServiceOrderValidatorTest() {
         orderValidator = new WebServiceOrderValidator();
     }
-    
+        
     @Test
     public void testFailOnCustomerIdentityIsNull() {
          String expectedMessage = "MISSING VALUE - CustomerIdentity must be set.\n"
@@ -82,9 +84,7 @@ public class WebServiceOrderValidatorTest {
     @Test
     public void testFailOnMissingValuesForGetAddresses() {
         String expectedMessage ="MISSING VALUE - CountryCode is required, use setCountryCode(...).\n"
-                +"MISSING VALUE - orderType is required, use one of: setOrderTypePaymentPlan() or setOrderTypeInvoice().\n"
                 +"MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
-        
         try {
             WebPay.getAddresses(SveaConfig.getDefaultConfig())
                 .doRequest();
@@ -292,7 +292,7 @@ public class WebServiceOrderValidatorTest {
         
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
             .addCustomerDetails(Item.individualCustomer()
-                .setBirthDate(1923, 12, 12)
+                .setBirthDate("19231212")
                 .setName("Tess", "Testson")
                 .setStreetAddress("Gatan", "23")
                 .setZipCode("9999")
@@ -318,18 +318,6 @@ public class WebServiceOrderValidatorTest {
         }
     }
     
-    @Test
-    public void succeedOnGoodValuesSe() {
-        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-            .addOrderRow(TestingTool.createMiniOrderRow())
-            .addCustomerDetails(Item.individualCustomer()
-                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
-            .setCountryCode(TestingTool.DefaultTestCountryCode)
-            .setOrderDate(TestingTool.DefaultTestDate)
-            .setValidator(new VoidValidator());
-        
-        assertEquals("", orderValidator.validate(order));
-    }
     
     @Test 
     public void testFailOnMissingOrderIdOnDeliverOrder() {
@@ -358,27 +346,7 @@ public class WebServiceOrderValidatorTest {
         
         assertEquals(expectedMessage, handleOrder.validateOrder());
     }
-     
-    @Test
-    public void testFailOnMissingRows() {
-        String expectedMessage = "MISSING VALUE - No order or fee has been included. Use addOrder(...) or addFee(...).\n";
-        
-        try {
-            WebPay.deliverOrder(SveaConfig.getDefaultConfig())
-                .setNumberOfCreditDays(1)
-                .setOrderId(2345L)
-                .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-                .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .deliverInvoiceOrder()
-                .doRequest();
-            
-            //Fail on no exception
-            fail();
-        } catch (Exception e) {
-            assertEquals(expectedMessage, e.getCause().getMessage());
-        }
-    }
-    
+         
     @Test
     public void testFailCompanyCustomerUsingPaymentPlan() {
         String expectedMessage = "ERROR - CompanyCustomer is not allowed to use payment plan option.";

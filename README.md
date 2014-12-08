@@ -20,10 +20,11 @@ Version 1.5.0
     * [PaymentPlanPricePerMonth](https://github.com/sveawebpay/java-integration/tree/master#51-paymentplanpricepermonth)
 * [6. GetAddresses](https://github.com/sveawebpay/java-integration/tree/master#6-getaddresses)
 * [7. DeliverOrder](https://github.com/sveawebpay/java-integration/tree/master#7-deliverorder)
-    * [Specify order](https://github.com/sveawebpay/java-integration/tree/master#71-specify-order)
+    * [Deliver Invoice order](https://github.com/sveawebpay/java-integration/tree/master#71-deliver-invoice-order)
     * [Other values](https://github.com/sveawebpay/java-integration/tree/master#72-other-values)
-* [8. CloseOrder](https://github.com/sveawebpay/java-integration/tree/master#8-closeorder)
-* [9. Response handler](https://github.com/sveawebpay/java-integration/tree/master#9-response-handler)
+* [8. Credit Invoice](https://github.com/sveawebpay/java-integration/tree/master#8-credit-invoice)
+* [9. CloseOrder](https://github.com/sveawebpay/java-integration/tree/master#9-closeorder)
+* [10. Response handler](https://github.com/sveawebpay/java-integration/tree/master#10-response-handler)
 * [APPENDIX](https://github.com/sveawebpay/java-integration/tree/master#appendix)
 
 
@@ -159,6 +160,64 @@ Step 2: Put an instance of your configuration object as a parameter to the reque
 	.....
 	
 ```
+
+A complete example:  
+
+```java
+		// import Svea WebPay java integration package
+		import se.sveaekonomi.webpay.integration.*;
+
+		// get configuration object holding the Svea service login credentials
+		ConfigurationProvider myConfig = new SveaTestConfigurationProvider();
+				
+		// We assume that you've collected the following information about the order in your shop: 
+		// The shop cart contains one item "Billy" which cost 700,99 kr excluding vat (25%).
+		// When selecting to pay using the invoice payment method, the customer has also provided their social security number, which is required for invoice orders.
+
+		// Begin the order creation process by creating an order builder object using the WebPay::createOrder() method:
+		CreateOrderBuilder myOrder = WebPay.createOrder(myConfig);
+		
+		// We then add information to the order object by using the various methods in the CreateOrderBuilder class.
+
+		// We begin by adding any additional information required by the payment method, which for an invoice order means:
+		myOrder.setCountryCode(COUNTRYCODE.SE);
+		myOrder.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
+		
+		// To add the cart contents to the order we first create and specify a new orderRow item using methods from the Svea\OrderRow class:
+		OrderRowBuilder boughtItem = Item.orderRow();
+		boughtItem.setDescription("Billy");
+		boughtItem.setAmountExVat(700.99);
+		boughtItem.setVatPercent(25);
+		boughtItem.setQuantity(1.0);
+
+		// Add the order rows to the order: 
+		myOrder.addOrderRow( boughtItem ); 
+		
+		// Next, we create a customer identity object, for invoice orders Svea will look up the customer address et al based on the social security number
+		IndividualCustomer customerInformation = Item.individualCustomer();
+		customerInformation.setNationalIdNumber("194605092222");
+		
+		// Add the customer to the order: 
+		myOrder.addCustomerDetails(customerInformation);
+		
+		// We have now completed specifying the order, and wish to send the payment request to Svea. To do so, we first select the invoice payment method:
+		InvoicePayment myInvoiceOrderRequest = myOrder.useInvoicePayment();
+
+		// Then send the request to Svea using the doRequest method, and immediately receive the service response object
+		CreateOrderResponse myResponse = myInvoiceOrderRequest.doRequest();
+		
+		// Act on service request response
+		if( myResponse.isOrderAccepted() ) 
+		{ 
+			System.out.println( "Order payment request accepted by Svea." ); 
+		}
+		else 
+		{
+			System.out.println( "Order payment request failed. Svea error: " + myResponse.getResultCode() + " " + myResponse.getErrorMessage() ); 
+		}
+```  
+  
+  
   
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
@@ -715,16 +774,47 @@ GetAddressesResponse response = WebPay.getAddresses(myConfig)		//see more about 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
 ## 7. deliverOrder                                                           
-Updates the status on a previous created order as delivered. Add rows that you want delivered. The rows will automatically be
-matched with the rows that was sent when creating the order.
-Only applicable for invoice and payment plan payments.
+Use the WebPay.deliverOrder request to deliver to the customer invoices for fulfilled orders.
+Svea will invoice the customer upon receiving the deliverOrder request.
+A deliverOrder request may also be used to partly deliver an order on Invoice orders.
+Add rows that you want delivered. The rows will automatically be matched with the rows that was sent when creating the order.
+When Svea receives the deliverOrder request the status on the previous created order is set to *delivered*.
+The deliverOrder functionallity is only applicable to invoice and payment plan payment method payments.
+
 Returns *DeliverOrderResult* object. Set your store authorization here.
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-### 7.1 Specify order                                                        
-Continue by adding values for products and other. You can add OrderRow, Fee and Discount. Chose the right WebPayItem object as parameter.
-You can use the **add** functions with an WebPayItem object or an List of WebPayItem objects as parameters. 
+### 7.1 Deliver Invoice order                                                       
+This works more or less like WebPay.createOrder above, and makes use of the same order item information.
+Add the corresponding order id and the order rows that you want delivered before making the deliverOrder request.
+The specified rows will automatically be matched with the previous rows that was sent when creating the order.
+We recommend storing the order row data to ensure that matching orderrows can be recreated in the deliverOrder request.
+
+If an item is left out from the deliverOrder request that was present in the createOrder request, a new invoice will be created as the order is assumed to be partially fulfilled.
+Any left out items should not be delivered physically, as they will not be invoiced when the deliverOrder request is sent.
+
+```java
+	DeliverOrderResponse response = Webpay.deliverOrder()
+    .addOrderRow(
+        Item.orderRow()
+            .setArticleNumber("1")
+            .setQuantity(2)
+            .setAmountExVat(100.00)
+            .setDescription("Specification")
+            .setName("Prod")
+            .setUnit("st")
+            .setVatPercent(25)
+            .setDiscountPercent(0)
+        )
+        .setOrderId(1234) //Recieved from CreateOrder request
+        .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+        .deliverInvoiceOrder()
+            .doRequest();
+```
+
+You can add OrderRow, Fee and Discount. Choose the right Item as parameter.
+You can use the **.add** functions with an Item or list of Items as parameters.
 
 ```java
 .addOrderRow(WebPayItem.orderRow(). ...)
@@ -734,7 +824,7 @@ You can use the **add** functions with an WebPayItem object or an List of WebPay
 List<OrderRowBuilder> orderRows = new ArrayList<OrderRowBuilder>(); //or use another preferrable List object
 orderRows.add(WebPayItem.orderRow(). ...)
 ...
-createOrder.addOrderRows(orderRows);
+deliverOrder.addOrderRows(orderRows);
 ```
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
@@ -787,32 +877,43 @@ If invoice order is credit invoice use setCreditInvoice(invoiceId) and setNumber
     .setCreditInvoice()                    				//Use for invoice orders, if this should be a credit invoice.   
 ```
 
-```java
-DeliverOrderResponse response = WebPay.deliverOrder(
-.addOrderRow(WebPayItem.orderRow()
-	.setArticleNumber("1")
-	.setName("Prod")
-	.setDescription("Specification")
-	.setQuantity(2)
-	.setUnit("st")
-	.setAmountExVat(100.00)
-	.setVatPercent(25.00)
-	.setDiscountPercent(0))
-		
-.setOrderId(3434)
-.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-.deliverInvoiceOrder()	
-	.doRequest();
-```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-## 8. closeOrder                                                             
+## 8. Credit Invoice
+When you want to credit an invoice. The order must first be delivered. When doing [DeliverOrder](https://github.com/sveawebpay/java-integration/tree/master#7-deliverorder)
+you will recieve an *InvoiceId* in the Response. To credit the invoice you follow the steps as in [7. DeliverOrder](https://github.com/sveawebpay/java-integration/tree/master#7-deliverorder)
+ but you add the call `.setCreditInvoice(invoiceId)`:
+
+```java
+	DeliverOrderResponse response = Webpay.deliverOrder()
+    .addOrderRow(
+        Item.orderRow()
+            .setArticleNumber("1")
+            .setQuantity(2)
+            .setAmountExVat(100.00)
+            .setDescription("Specification")
+            .setName("Prod")
+            .setUnit("st")
+            .setVatPercent(25)
+            .setDiscountPercent(0)
+        )
+        .setOrderId(1234) //Recieved from CreateOrder request
+        .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+        //Credit invoice flag. Note that you first must deliver the order and recieve an InvoiceId, then do the deliver request again but with this call:
+        .setCreditInvoice(4321) //Use for invoice orders, if this should be a credit invoice. Params: InvoiceId recieved from when doing deliverOrder
+        .deliverInvoiceOrder()
+            .doRequest();
+```
+
+[<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
+
+## 9. closeOrder                                                             
 Use when you want to cancel an undelivered order. Valid only for invoice and payment plan orders. 
 Required is the order id received when creating the order. Set your store authorization here.
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-### 8.1 Close by payment type                                                
+### 9.1 Close by payment type                                                
 ```java
     .closeInvoiceOrder()
 or
@@ -828,7 +929,7 @@ CloseOrderResponse  =  WebPay.closeOrder(
 ```
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
 
-## 9. Response handler                                                       
+## 10. Response handler                                                       
 All synchronous responses are handled through *SveaResponse* and structured into objects.
 Asynchronous responses recieved after sending the values *merchantid* and *xmlMessageBase64* to
 hosted solutions can also be processed through the *SveaResponse* class.
@@ -924,3 +1025,74 @@ Enumeration, used in .setInvoiceDistributionType(...).
 | Email								| Invoice is sent by e-mail	|
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
+
+
+=============
+nytt i java-integration version 2.0:
+
+
+## x.x Examples
+The provided examples show how to use the Svea java integration package to specify an order and send a payment request to Svea.
+
+### x.x.1 Running the examples
+We assume that you are running a local installation of Tomcat 7 or later on localhost port 8080. 
+Build and deploy the examples to localhost using ant, see build.xml and edit build.properties with your tomcat installation path: 
+
+```
+$ pwd
+/c/projects/java-integration/java
+
+$ cd example/invoiceorder
+
+$ echo "remember to edit build.properties with your tomcat installation path (i.e. where we should deploy the example .war file)"
+
+$ ant deploy_invoiceorder
+Buildfile: c:\projects\java-integration\java\example\invoiceorder\build.xml
+
+clean:
+     [echo] Cleaning the build
+
+init:
+     [echo] Creating the build directory
+    [mkdir] Created dir: c:\projects\java-integration\java\example\invoiceorder\build\WEB-INF\classes
+    [mkdir] Created dir: c:\projects\java-integration\java\example\invoiceorder\build\WEB-INF\lib
+    [mkdir] Created dir: c:\projects\java-integration\java\example\invoiceorder\dist
+
+compile:
+     [echo] Compile the source files
+    [javac] Compiling 1 source file to c:\projects\java-integration\java\example\invoiceorder\build\WEB-INF\classes
+
+copy:
+     [copy] Copying 1 file to c:\projects\java-integration\java\example\invoiceorder\build\WEB-INF
+     [copy] Copying 2 files to c:\projects\java-integration\java\example\invoiceorder\build
+     [copy] Copying 1 file to c:\projects\java-integration\java\example\invoiceorder\build\WEB-INF\lib
+
+war:
+     [echo] Building the war file
+      [war] Building war: c:\projects\java-integration\java\example\invoiceorder\dist\InvoiceOrder.war
+
+deploy_invoiceorder:
+     [echo] Deploying .war to local Tomcat
+     [copy] Copying 1 file to C:\Program Files\Apache Software Foundation\Tomcat 7.0\webapps
+
+BUILD SUCCESSFUL
+Total time: 1 second
+$
+```
+(You may also build the examples using the main package ant target "examples".)
+
+You should now be able to access the example by going to http://localhost:8080/InvoiceOrder
+
+The web.xml file contains the servlet routing information for the InvoiceOrder application. 
+When you land on the index.jsp file it redirects you to /invoiceorder, which in turn passes the request to InvoiceOrderServlet as stated in web.xml.
+The backend InvoiceOrderServlet builds an order and sends a payment request to Svea. After the service responds, you're redirected to invoiceorder.jsp.
+The frontend invoiceorder.jsp file then presents the response result.
+
+### x.x.2 Svea invoice order
+An example of a synchronous (invoice) order can be found in the example/invoiceorder folder.
+
+###x.x.3 Card order
+An example of an asynchronous card order can be found in the example/cardorder folder.
+
+
+

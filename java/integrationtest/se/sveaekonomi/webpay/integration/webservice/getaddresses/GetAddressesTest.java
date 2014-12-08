@@ -27,6 +27,17 @@ public class GetAddressesTest {
     }
     
     @Test
+    public void testGetAddressesWithoutOrderType() {
+        GetAddressesResponse response = WebPay.getAddresses(SveaConfig.getDefaultConfig())
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .setIndividual("460509-2222")
+            .doRequest();
+        
+        assertTrue(response.isOrderAccepted());
+        assertEquals("Persson, Tess T", response.getLegalName());
+    }
+    
+    @Test
     public void testResultGetAddresses() {
         GetAddressesResponse response = WebPay.getAddresses(SveaConfig.getDefaultConfig())
             .setCountryCode(TestingTool.DefaultTestCountryCode)
