@@ -160,12 +160,11 @@ public class WebPayAdmin {
 	    return new CancelOrderRowsBuilder(config);	    	
     }
 
-    // TODO update docblock here and in php to confirm with credit/deliverorderrows
     /**
      * The WebPayAdmin.creditOrderRows entrypoint method is used to credit rows in an order after it has been delivered.
      * 1.6.0: Supports card and direct bank orders.
-     * :
      * 
+     * ...
      *     request = WebPay.creditOrder(config)
      *         .setInvoiceId()                // invoice only, required
      *         .setInvoiceDistributionType()  // invoice only, required
@@ -181,6 +180,7 @@ public class WebPayAdmin {
      *     // then select the corresponding request class and send request
      *     response = request.creditCardOrderRows().doRequest();       // returns CreditTransactionResponse
      *     response = request.creditDirectBankOrderRows().doRequest(); // returns CreditTransactionResponse
+     * ...
      * 
      * @author Kristian Grossman-Madsen
      */

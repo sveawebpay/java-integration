@@ -1220,6 +1220,34 @@ order has been modified (i.e. rows cancelled or credited) after the initial orde
     	response = request.deliverCardOrderRows().doRequest()	// returns LowerTransactionResponse
 ...
 
+
+## WebPayAdmin.creditOrderRows entrypoint
+
+
+The WebPayAdmin.creditOrderRows entrypoint method is used to credit rows in an order after it has been delivered.
+1.6.0: Supports card and direct bank orders.
+
+...
+    request = WebPay.creditOrder(config)
+        .setInvoiceId()                // invoice only, required
+        .setInvoiceDistributionType()  // invoice only, required
+        .setOrderId()                  // card and direct bank only, required
+        .setCountryCode()              // required
+        .addCreditOrderRow()           // optional, use to specify a new credit row, i.e. for amounts not present in the original order
+        .addCreditOrderRows()          // optional
+        .setRowToCredit()              // optional, index of one of the original order row you wish to credit
+        .setRowsToCredit()             // optional
+        .addNumberedOrderRow()         // card and direct bank only, required with setRowToCredit()
+        .addNumberedOrderRows()        // card and direct bank only, optional
+    ;
+    // then select the corresponding request class and send request
+    response = request.creditCardOrderRows().doRequest();       // returns CreditTransactionResponse
+    response = request.creditDirectBankOrderRows().doRequest(); // returns CreditTransactionResponse
+...
+
+@author Kristian Grossman-Madsen
+
+
    
 
 
