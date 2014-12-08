@@ -88,6 +88,7 @@ public class WebPayAdminWebdriverTest {
     
         assertTrue(response.isOrderAccepted());  
         assertTrue(response instanceof AnnulTransactionResponse );
+ 
     }      
 
     /// WebPayAdmin.queryOrder() ---------------------------------------------------------------------------------------

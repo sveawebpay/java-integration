@@ -6,7 +6,7 @@ import org.junit.Test;
  * @author Kristian Grossman-Madsen
  */
 
-//see test_doRequest_with_setAlsoDoLowerAmount_returns_ConfirmTransactionResponse_success
+// see ConfirmTransactionIntegrationTest and test_doRequest_with_setAlsoDoLowerAmount_returns_ConfirmTransactionResponse_success
 
 public class LowerTransactionRequestIntegrationTest {    
 	

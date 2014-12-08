@@ -478,9 +478,6 @@ public class TestingTool {
         return response;
 	}	
 
-//
-//	TODO check why we don't include the selenium jar in the classpath (buildpath?) for this method -- see build.xml, lib/test & lib/src??	
-//	
 	/**
 	 * returns a card test order response from Svea 
 	 * 
