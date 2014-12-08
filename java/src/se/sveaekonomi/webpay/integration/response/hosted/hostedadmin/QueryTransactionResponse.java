@@ -63,14 +63,14 @@ public class QueryTransactionResponse extends HostedAdminResponse implements
 	private String paymentMethod;
 	/**
 	 * NumberedOrderRows w/set Name, Description, ArticleNumber, AmountExVat,
-	 * VatPercent, Quantity and Unit, rowNumber
+	 * VatPercent, Quantity and Unit, rowNumber. May be null if no order rows 
+	 * specified when order was created.
 	 */
 	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
 	/** callbackurl */
 	private String callbackurl;
 	/**
-	 * capturedate -- The date the transaction was captured, e.g. 2011-09-27
-	 * 16:55:01.21
+	 * capturedate -- The date the transaction was captured, e.g. 2011-09-2716:55:01.21
 	 */
 	private String capturedate;
 	/** subscriptionId */
@@ -176,6 +176,7 @@ public class QueryTransactionResponse extends HostedAdminResponse implements
 
 
 					NodeList orderrows = getTagNodes(element, "orderrows");
+					try {
 					for (int r = 0; r < orderrows.getLength(); r++) {
 						Element row = (Element) orderrows.item(r);
 						NumberedOrderRowBuilder nrow = new NumberedOrderRowBuilder();
@@ -200,6 +201,10 @@ public class QueryTransactionResponse extends HostedAdminResponse implements
 						nrow.setStatus(null);
 						
 						this.numberedOrderRows.add(nrow);
+					}
+					}
+					catch ( NullPointerException e ) {
+						// no order rows in queried order
 					}
 				}
 			}
