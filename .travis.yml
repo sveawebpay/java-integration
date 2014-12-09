@@ -10,4 +10,7 @@ branches:
     - master
 
 before_script: cd java
-script: ant clean-integrationtest
+
+script: ant clean-integrationtest 
+# ant clean-webdriver
+# ^^ smoke tests depend on localhost serving example/cardorder for webdriver tests -- host servlet at svea & switch to headless driver to enable these in future /kgm

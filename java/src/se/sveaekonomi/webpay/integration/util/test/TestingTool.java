@@ -1,22 +1,39 @@
 package se.sveaekonomi.webpay.integration.util.test;
 
+import static org.junit.Assert.assertEquals;
+
 import java.sql.Date;
+
+import org.openqa.selenium.Alert;
+import org.openqa.selenium.By;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.support.ui.ExpectedConditions;
+import org.openqa.selenium.support.ui.Select;
+import org.openqa.selenium.support.ui.WebDriverWait;
 
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.WebPayItem;
+import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
+import se.sveaekonomi.webpay.integration.config.SveaTestConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
+import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RelativeDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
+import se.sveaekonomi.webpay.integration.response.hosted.HostedPaymentResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
@@ -27,14 +44,31 @@ public class TestingTool {
     public static final String DefaultTestCustomerReferenceNumber = "ref33";
     public static final String DefaultTestIndividualNationalIdNumber = "194605092222";
     public static final String DefaultTestCompanyNationalIdNumber = "164608142222";
-    public static final Date DefaultTestDate = Date.valueOf("2012-12-12");
+    public static final Date DefaultTestDate = java.sql.Date.valueOf("2012-12-12");
+    public static final Long DefaultOrderId = 987654L;
 	
     public static OrderRowBuilder createMiniOrderRow() {
         return WebPayItem.orderRow()
                    .setQuantity(1.0)
                    .setAmountExVat(4)
-                   .setVatPercent(25);
+                   .setVatPercent(25)
+       ;
     }
+     
+    public static NumberedOrderRowBuilder createNumberedOrderRow( int rowNumber ) {    	
+    	return WebPayItem.numberedOrderRow()
+		        .setArticleNumber("nor1")
+		        .setQuantity( 2.0 )
+		        .setAmountExVat( 100.0 )
+		        .setDescription("Numbered Order Row")
+		        .setName("NOR")
+		        .setUnit("st")
+		        .setVatPercent(25.0)
+		        .setDiscountPercent(0.0)
+		        .setRowNumber( rowNumber )
+    	;
+    }
+
     
     public static OrderRowBuilder createExVatBasedOrderRow(String articleNumber) {
     	articleNumber = articleNumber == null ? "1" : articleNumber;
@@ -443,4 +477,146 @@ public class TestingTool {
         
         return response;
 	}	
+
+	/**
+	 * returns a card test order response from Svea 
+	 * 
+	 * @param nameOfOriginatingTest
+	 * @return
+	 */
+	public static HostedPaymentResponse createCardTestOrder( String nameOfOriginatingTest ) {
+
+		// create order
+	    CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+	            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+	            .addCustomerDetails(TestingTool.createIndividualCustomer(TestingTool.DefaultTestCountryCode))
+	            .setCountryCode(TestingTool.DefaultTestCountryCode)
+	            //.setOrderDate(TestingTool.DefaultTestDate)
+                .setClientOrderNumber("test_cancelOrder_cancelCardOrder" + Long.toString((new java.util.Date()).getTime()))
+	            .setCurrency(TestingTool.DefaultTestCurrency)
+	    ;
+	            
+	    // choose payment method and do request
+	    PaymentForm form = order.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
+	            	.setReturnUrl("http://localhost:8080/CardOrder/landingpage")	// http => handle alert below
+	            	.getPaymentForm()
+		;
+    
+	    // insert form in empty page
+        FirefoxDriver driver = new FirefoxDriver();
+        driver.get("about:blank");
+        String script = "document.body.innerHTML = '" + form.getCompleteForm() + "'";
+        driver.executeScript(script);
+        
+        // post form
+        driver.findElementById("paymentForm").submit();
+
+        // wait for certitrade page to load
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("paymeth-list")));
+
+        // fill in credentials form
+        WebElement cardno = driver.findElementById("cardno");
+        cardno.sendKeys("4444333322221100");       
+
+        WebElement cvc = driver.findElementById("cvc"); 	       
+    	cvc.sendKeys("123");
+
+        Select month = new Select(driver.findElementById("month"));
+        month.selectByValue("01");
+
+        Select year = new Select(driver.findElementById("year"));
+        year.selectByValue("17");
+        
+        // submit credentials form, triggering redirect to returnurl
+        driver.findElementById("perform-payment").click();                
+        
+        // as our localhost landingpage is a http site, we get a popup
+        Alert alert = driver.switchTo().alert();
+        alert.accept();
+
+        // wait for landing page to load and then parse out raw response
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));                
+	    String rawresponse = driver.findElementById("rawresponse").getText();                     
+	    
+        // close window
+        driver.quit();         
+	    
+        // return the parsed HostedPaymentResponse object
+		ConfigurationProvider myConfig = new SveaTestConfigurationProvider();
+		String mySecretWord = myConfig.getSecretWord(PAYMENTTYPE.HOSTED, DefaultTestCountryCode);		
+		HostedPaymentResponse myResponse = new HostedPaymentResponse(rawresponse, mySecretWord);	    
+	    return myResponse; 
+	}
+	
+	/**
+	 * returns a card test order response from Svea 
+	 * 
+	 * @param nameOfOriginatingTest
+	 * @return
+	 */
+	public static HostedPaymentResponse createCardTestOrderWithThreeRows( String nameOfOriginatingTest ) {
+
+		// create order
+	    CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+	            .addOrderRow(TestingTool.createExVatBasedOrderRow("A"))
+	            .addOrderRow(TestingTool.createExVatBasedOrderRow("B"))
+	            .addOrderRow(TestingTool.createExVatBasedOrderRow("C"))	            
+	            .addCustomerDetails(TestingTool.createIndividualCustomer(TestingTool.DefaultTestCountryCode))
+	            .setCountryCode(TestingTool.DefaultTestCountryCode)
+	            //.setOrderDate(TestingTool.DefaultTestDate)
+                .setClientOrderNumber("test_cancelOrder_cancelCardOrder" + Long.toString((new java.util.Date()).getTime()))
+	            .setCurrency(TestingTool.DefaultTestCurrency)
+	    ;
+	            
+	    // choose payment method and do request
+	    PaymentForm form = order.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
+	            	.setReturnUrl("http://localhost:8080/CardOrder/landingpage")	// http => handle alert below
+	            	.getPaymentForm()
+		;
+    
+	    // insert form in empty page
+        FirefoxDriver driver = new FirefoxDriver();
+        driver.get("about:blank");
+        String script = "document.body.innerHTML = '" + form.getCompleteForm() + "'";
+        driver.executeScript(script);
+        
+        // post form
+        driver.findElementById("paymentForm").submit();
+
+        // wait for certitrade page to load
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("paymeth-list")));
+
+        // fill in credentials form
+        WebElement cardno = driver.findElementById("cardno");
+        cardno.sendKeys("4444333322221100");       
+
+        WebElement cvc = driver.findElementById("cvc"); 	       
+    	cvc.sendKeys("123");
+
+        Select month = new Select(driver.findElementById("month"));
+        month.selectByValue("01");
+
+        Select year = new Select(driver.findElementById("year"));
+        year.selectByValue("17");
+        
+        // submit credentials form, triggering redirect to returnurl
+        driver.findElementById("perform-payment").click();                
+        
+        // as our localhost landingpage is a http site, we get a popup
+        Alert alert = driver.switchTo().alert();
+        alert.accept();
+
+        // wait for landing page to load and then parse out raw response
+        (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));                
+	    String rawresponse = driver.findElementById("rawresponse").getText();                     
+	    
+        // close window
+        driver.quit();         
+	    
+        // return the parsed HostedPaymentResponse object
+		ConfigurationProvider myConfig = new SveaTestConfigurationProvider();
+		String mySecretWord = myConfig.getSecretWord(PAYMENTTYPE.HOSTED, DefaultTestCountryCode);		
+		HostedPaymentResponse myResponse = new HostedPaymentResponse(rawresponse, mySecretWord);	    
+	    return myResponse; 
+	}
 }

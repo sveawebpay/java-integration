@@ -47,7 +47,7 @@ public class PaymentMethodTest {
             .addDiscount(TestingTool.createRelativeDiscount())
             .addCustomerDetails(Item.individualCustomer()
                 .setInitials("SB")
-                .setBirthDate(1946, 5, 9)
+                .setBirthDate("19460509")
                 .setName("Sneider", "Boasman")
                 .setStreetAddress("Gate", "42")
                 .setLocality("BARENDRECHT")

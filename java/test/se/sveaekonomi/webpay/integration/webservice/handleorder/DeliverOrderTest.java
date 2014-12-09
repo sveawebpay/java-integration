@@ -9,14 +9,17 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
+import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.FixedDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RelativeDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
+import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
@@ -34,7 +37,7 @@ public class DeliverOrderTest {
         DeliverOrderBuilder request = order
             .setOrderId(54086L);
         
-        assertEquals(54086L, request.getOrderId());
+        assertEquals(Long.valueOf(54086L), request.getOrderId());
     }
     
     @Test
@@ -80,17 +83,17 @@ public class DeliverOrderTest {
         assertEquals("Invoice", request.request.deliverOrderInformation.orderType);
     }
     
-    @Test
-    public void testDeliverPaymentPlanOrder() {
-        SveaRequest<SveaDeliverOrder> request = order
-                .setOrderId(54086L)
-                .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .deliverPaymentPlanOrder()
-                .prepareRequest();
-        
-        assertEquals("54086", request.request.deliverOrderInformation.sveaOrderId);
-        assertEquals("PaymentPlan", request.request.deliverOrderInformation.orderType);
-    }
+//    @Test
+//    public void testDeliverPaymentPlanOrder() {
+//        SveaRequest<SveaDeliverOrder> request = order
+//                .setOrderId(54086L)
+//                .setCountryCode(TestingTool.DefaultTestCountryCode)
+//                .deliverPaymentPlanOrder()
+//                .prepareRequest();
+//        
+//        assertEquals("54086", request.request.deliverOrderInformation.sveaOrderId);
+//        assertEquals("PaymentPlan", request.request.deliverOrderInformation.orderType);
+//    }
 
     /// tests preparing order rows price specification
   	// invoice request	

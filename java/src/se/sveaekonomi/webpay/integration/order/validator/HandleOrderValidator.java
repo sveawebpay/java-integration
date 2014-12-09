@@ -6,13 +6,16 @@ public class HandleOrderValidator {
 
     private String errors = "";
     
+    /**
+     * @param order
+     * @return string containing cumulative list of error
+     */
     public String validate(DeliverOrderBuilder order) {
         errors = "";
         validateCountry(order);
         validateOrderType(order);
         validateOrderId(order);
         validateInvoiceDetails(order);
-        validateOrderRows(order);
         return errors;
     }
     
@@ -29,25 +32,18 @@ public class HandleOrderValidator {
     }
     
     private void validateOrderId(DeliverOrderBuilder order) {
-        if (order.getOrderId() <= 0) {
+        if (order.getOrderId() == null) {
             this.errors += "MISSING VALUE - setOrderId is required.\n";
         }
     }
     
     private void validateInvoiceDetails(DeliverOrderBuilder order) {
-        if (order.getOrderId() > 0 &&
+        if (	(order.getOrderId() != null) &&
                 order.getOrderType().equals("Invoice") &&
-                order.getInvoiceDistributionType() == null) {
+                order.getInvoiceDistributionType() == null
+            ) 
+        {
             this.errors += "MISSING VALUE - setInvoiceDistributionType is requred for deliverInvoiceOrder.\n";
         }
-    }
-    
-    private void validateOrderRows(DeliverOrderBuilder order) {
-        if (order.getOrderType().equals("Invoice") &&
-                order.getOrderRows().isEmpty() &&
-                order.getShippingFeeRows().isEmpty() &&
-                order.getInvoiceFeeRows().isEmpty()) {
-            this.errors += "MISSING VALUE - No order or fee has been included. Use addOrder(...) or addFee(...).\n";
-        }
-    }
+    }    
 }

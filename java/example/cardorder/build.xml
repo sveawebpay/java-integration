@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<project name="CardOrder" default="deploy_cardorder" basedir=".">
+
+	<dirname property="CardOrder.basedir" file="${ant.file.CardOrder}" />
+	<property file="${CardOrder.basedir}/build.properties" />		
+
+	<path id="classpath">
+		<fileset dir="${CardOrder.basedir}/${cardorder.lib.dir}" includes="servlet-api.jar" />
+		<fileset dir="${CardOrder.basedir}/${cardorder.lib.dir}" includes="sveawebpay.jar" />
+	</path>
+	
+	<target name="clean">				
+		<echo>Cleaning the ${cardorder.build.dir}</echo>
+		<delete dir="${CardOrder.basedir}/${cardorder.build.dir}" />
+		<delete dir="${CardOrder.basedir}/${cardorder.dist.dir}" />
+	</target>
+
+	<target name="init" depends="clean">
+		<echo>Creating the build directory</echo>
+		<mkdir dir="${CardOrder.basedir}/${cardorder.build.dir}/WEB-INF/classes" />
+		<mkdir dir="${CardOrder.basedir}/${cardorder.build.dir}/WEB-INF/lib" />
+		<mkdir dir="${CardOrder.basedir}/${cardorder.dist.dir}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<echo>Compile the source files</echo>
+		<javac srcdir="${CardOrder.basedir}/${cardorder.src.dir}" destdir="${CardOrder.basedir}/${cardorder.build.dir}/WEB-INF/classes">
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<target name="copy" depends="compile">
+		<copy todir="${CardOrder.basedir}/${cardorder.build.dir}/WEB-INF">
+			<fileset dir="${CardOrder.basedir}/${cardorder.web.dir}/WEB-INF" />
+		</copy>
+		<copy todir="${CardOrder.basedir}/${cardorder.build.dir}">
+			<fileset dir="${CardOrder.basedir}/${cardorder.web.dir}" />
+		</copy>
+		<copy todir="${CardOrder.basedir}/${cardorder.build.dir}/WEB-INF/lib">
+			<fileset dir="${CardOrder.basedir}/${cardorder.lib.dir}">
+				<exclude name="servlet-api.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="war" depends="copy">
+		<echo>Building the war file</echo>
+		<war destfile="${CardOrder.basedir}/${cardorder.dist.dir}/${cardorder.project.name}.war" webxml="${CardOrder.basedir}/${cardorder.build.dir}/WEB-INF/web.xml">
+			<fileset dir="${CardOrder.basedir}/${cardorder.build.dir}" />
+		</war>
+	</target>
+
+	<target name="deploy_cardorder" depends="war">
+		<echo>Deploying .war to local Tomcat</echo>
+		<copy todir="${cardorder.tomcat.dir}">
+			<fileset dir="${CardOrder.basedir}/${cardorder.dist.dir}">
+				<include name="${cardorder.project.name}.war" />
+			</fileset>
+		</copy>
+	</target>
+
+</project>

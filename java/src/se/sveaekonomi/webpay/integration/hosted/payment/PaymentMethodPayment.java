@@ -39,7 +39,7 @@ public class PaymentMethodPayment extends HostedPayment<PaymentMethodPayment> {
     public XMLStreamWriter getPaymentSpecificXml(XMLStreamWriter xmlw) throws XMLStreamException {
         if (paymentMethod != null) {
 
-    		// invoice -- now swap in country specific invoice/payment plan and write "paymentmethod" to request xml
+    		// invoice -- now swap in country specific invoice/partpayment paymentmethod code and write to request xml
         	if (paymentMethod == PAYMENTMETHOD.INVOICE) {
                 INVOICETYPE invoicetype;
                 switch (createOrderBuilder.getCountryCode()) {
@@ -64,7 +64,7 @@ public class PaymentMethodPayment extends HostedPayment<PaymentMethodPayment> {
                 }
                 writeSimpleElement(xmlw, "paymentmethod", invoicetype.getValue());
         	} 
-        	// elseif( paymentMethod == PAYMENTMETHOD.PAYMENTPLAN) {	TODO handle paymentplan per country }
+        	// handle partpayment per country
         	else if(paymentMethod == PAYMENTMETHOD.PAYMENTPLAN) {
                 PAYMENTPLANTYPE paymentplantype;
                 switch (createOrderBuilder.getCountryCode()) {

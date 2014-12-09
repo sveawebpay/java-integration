@@ -6,6 +6,7 @@ import javax.xml.bind.ValidationException;
 
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.Requestable;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
@@ -20,7 +21,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrderIn
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
-public class HandleOrder {
+public class HandleOrder implements Requestable {
 
     private DeliverOrderBuilder order;
     private SveaDeliverOrder sveaDeliverOrder;
@@ -92,7 +93,7 @@ public class HandleOrder {
         
         SveaRequest<SveaDeliverOrder> request = this.prepareRequest();
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
-        String xml = xmlBuilder.getDeliverOrderEuXml((SveaDeliverOrder) request.request);
+        String xml = xmlBuilder.getDeliverOrderEuXml(request.request);
         
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("DeliverOrderEu", xml);

@@ -29,7 +29,7 @@ public class HostedRowFormatterTest {
                 .setUnit("st"));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
-        HostedOrderRowBuilder newRow = (HostedOrderRowBuilder)newRows.get(0);
+        HostedOrderRowBuilder newRow = newRows.get(0);
         
         assertEquals("0", newRow.getSku());
         assertEquals("Tess", newRow.getName());
@@ -50,7 +50,7 @@ public class HostedRowFormatterTest {
                 .setUnit("st"));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
-        HostedOrderRowBuilder newRow = (HostedOrderRowBuilder)newRows.get(0);
+        HostedOrderRowBuilder newRow = newRows.get(0);
         
         assertEquals("0", newRow.getSku());
         assertEquals("Tess", newRow.getName());
@@ -67,7 +67,7 @@ public class HostedRowFormatterTest {
                         .setVatPercent(25));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
-        HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(0);
+        HostedOrderRowBuilder newRow = newRows.get(0);
         
         assertTrue(500L == newRow.getAmount());
         assertTrue(100L == newRow.getVat());
@@ -83,7 +83,7 @@ public class HostedRowFormatterTest {
                         .setUnit("st"));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
-        HostedOrderRowBuilder newRow = (HostedOrderRowBuilder)newRows.get(0);
+        HostedOrderRowBuilder newRow = newRows.get(0);
         
         assertEquals("0", newRow.getSku());
         assertEquals("Tess", newRow.getName());
@@ -99,7 +99,7 @@ public class HostedRowFormatterTest {
                         .setAmountIncVat(4));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
-        HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(0);
+        HostedOrderRowBuilder newRow = newRows.get(0);
         
         assertEquals(-400L, (long)newRow.getAmount());
     }
@@ -115,7 +115,7 @@ public class HostedRowFormatterTest {
                         .setDescription("Tester"));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
-        HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(1);
+        HostedOrderRowBuilder newRow = newRows.get(1);
         
         assertEquals(-100L, (long)newRow.getAmount());
         assertEquals(-20L, (long)newRow.getVat());
@@ -131,7 +131,7 @@ public class HostedRowFormatterTest {
                         .setUnit("st"));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
-        HostedOrderRowBuilder newRow = (HostedOrderRowBuilder)newRows.get(0);
+        HostedOrderRowBuilder newRow = newRows.get(0);
         
         assertEquals("0", newRow.getSku());
         assertEquals("Tess", newRow.getName());
@@ -148,7 +148,7 @@ public class HostedRowFormatterTest {
                         .setDiscountPercent(10.0));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
-        HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(1);
+        HostedOrderRowBuilder newRow = newRows.get(1);
         
         assertEquals(-50L, (long)newRow.getAmount());
     }
@@ -161,13 +161,14 @@ public class HostedRowFormatterTest {
                         .setDiscountPercent(10.0));
         
         ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
-        HostedOrderRowBuilder newRow = (HostedOrderRowBuilder) newRows.get(1);
+        HostedOrderRowBuilder newRow = newRows.get(1);
         
         assertEquals(-50L, (long)newRow.getAmount());
         assertEquals(-10L, (long)newRow.getVat());
     }
     
-    @Test
+    @SuppressWarnings("deprecation")
+	@Test
     public void testFormatTotalAmount() {
         HostedOrderRowBuilder row = new HostedOrderRowBuilder();
         row.setAmount(100L)
@@ -178,7 +179,8 @@ public class HostedRowFormatterTest {
         assertEquals(200L, new HostedRowFormatter().formatTotalAmount(rows));
     }
     
-    @Test
+    @SuppressWarnings("deprecation")
+	@Test
     public void testFormatTotalVat() {
         HostedOrderRowBuilder row = new HostedOrderRowBuilder();
         row.setVat(100L)
@@ -189,7 +191,8 @@ public class HostedRowFormatterTest {
         assertEquals(200L, new HostedRowFormatter().formatTotalVat(rows));
     }
     
-    @Test
+    @SuppressWarnings("deprecation")
+	@Test
     public void testFormatTotalVatNegative() {
         HostedOrderRowBuilder row = new HostedOrderRowBuilder();
         row.setVat(-100L)

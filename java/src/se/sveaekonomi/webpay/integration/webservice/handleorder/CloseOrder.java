@@ -36,18 +36,26 @@ public class CloseOrder {
     
     public String validateRequest() {
         String errors = "";
-        if (this.order.getCountryCode() == null)
+        if (this.order.getCountryCode() == null) {
             errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-        return errors;
+        }
+        
+        if (this.order.getOrderId() == null) {
+            errors += "MISSING VALUE - OrderId is required, use setOrderId().\n";
+    	}
+        return errors;    
     }
     
-    public SveaRequest<SveaCloseOrder> prepareRequest() {
+    public SveaRequest<SveaCloseOrder> prepareRequest() { // TODO throws SveaWebPayException ??
+    	
+    	// validate request and throw exception if validation fails
         String errors = validateRequest();
         
         if (!errors.equals("")) {
             throw new SveaWebPayException("Validation failed", new ValidationException(errors));
         }
         
+        // build inspectable request object and insert into order builder
         SveaCloseOrder sveaCloseOrder = new SveaCloseOrder();
         sveaCloseOrder.Auth = getStoreAuthorization();
         SveaCloseOrderInformation orderInfo = new SveaCloseOrderInformation();
@@ -60,7 +68,7 @@ public class CloseOrder {
         return object;
     }
     
-    public CloseOrderResponse doRequest() {
+    public CloseOrderResponse doRequest() {	// TODO may throw SveaWebPayException in SveaSoapBuilder.sendSoapMessage, see HostedAdminRequest ?? ask DB
         URL url = order.getOrderType().equals("Invoice") ? 
                 order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE) 
                 : order.getConfig().getEndPoint(PAYMENTTYPE.PAYMENTPLAN);

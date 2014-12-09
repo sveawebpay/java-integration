@@ -1,0 +1,62 @@
+<?xml version="1.0"?>
+<project name="InvoiceOrder" default="deploy_invoiceorder" basedir=".">
+
+	<dirname property="InvoiceOrder.basedir" file="${ant.file.InvoiceOrder}" />
+	<property file="${InvoiceOrder.basedir}/build.properties" />		
+
+	<path id="classpath">
+		<fileset dir="${InvoiceOrder.basedir}/${invoiceorder.lib.dir}" includes="servlet-api.jar" />
+		<fileset dir="${InvoiceOrder.basedir}/${invoiceorder.lib.dir}" includes="sveawebpay.jar" />
+	</path>
+	
+	<target name="clean">				
+		<echo>Cleaning the ${invoiceorder.build.dir}</echo>
+		<delete dir="${InvoiceOrder.basedir}/${invoiceorder.build.dir}" />
+		<delete dir="${InvoiceOrder.basedir}/${invoiceorder.dist.dir}" />
+	</target>
+
+	<target name="init" depends="clean">
+		<echo>Creating the build directory</echo>
+		<mkdir dir="${InvoiceOrder.basedir}/${invoiceorder.build.dir}/WEB-INF/classes" />
+		<mkdir dir="${InvoiceOrder.basedir}/${invoiceorder.build.dir}/WEB-INF/lib" />
+		<mkdir dir="${InvoiceOrder.basedir}/${invoiceorder.dist.dir}" />
+	</target>
+
+	<target name="compile" depends="init">
+		<echo>Compile the source files</echo>
+		<javac srcdir="${InvoiceOrder.basedir}/${invoiceorder.src.dir}" destdir="${InvoiceOrder.basedir}/${invoiceorder.build.dir}/WEB-INF/classes">
+			<classpath refid="classpath" />
+		</javac>
+	</target>
+
+	<target name="copy" depends="compile">
+		<copy todir="${InvoiceOrder.basedir}/${invoiceorder.build.dir}/WEB-INF">
+			<fileset dir="${InvoiceOrder.basedir}/${invoiceorder.web.dir}/WEB-INF" />
+		</copy>
+		<copy todir="${InvoiceOrder.basedir}/${invoiceorder.build.dir}">
+			<fileset dir="${InvoiceOrder.basedir}/${invoiceorder.web.dir}" />
+		</copy>
+		<copy todir="${InvoiceOrder.basedir}/${invoiceorder.build.dir}/WEB-INF/lib">
+			<fileset dir="${InvoiceOrder.basedir}/${invoiceorder.lib.dir}">
+				<exclude name="servlet-api.jar" />
+			</fileset>
+		</copy>
+	</target>
+
+	<target name="war" depends="copy">
+		<echo>Building the war file</echo>
+		<war destfile="${InvoiceOrder.basedir}/${invoiceorder.dist.dir}/${invoiceorder.project.name}.war" webxml="${InvoiceOrder.basedir}/${invoiceorder.build.dir}/WEB-INF/web.xml">
+			<fileset dir="${InvoiceOrder.basedir}/${invoiceorder.build.dir}" />
+		</war>
+	</target>
+
+	<target name="deploy_invoiceorder" depends="war">
+		<echo>Deploying .war to local Tomcat</echo>
+		<copy todir="${invoiceorder.tomcat.dir}">
+			<fileset dir="${InvoiceOrder.basedir}/${invoiceorder.dist.dir}">
+				<include name="${invoiceorder.project.name}.war" />
+			</fileset>
+		</copy>
+	</target>
+
+</project>
