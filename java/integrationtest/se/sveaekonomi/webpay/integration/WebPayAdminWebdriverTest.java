@@ -92,11 +92,28 @@ public class WebPayAdminWebdriverTest {
     }      
 
     /// WebPayAdmin.queryOrder() ---------------------------------------------------------------------------------------
-    // invoice
-    // TODO
+    // .queryInvoiceOrder
+    @Test
+    public void test_queryOrder_queryInvoiceOrder() {
+
+    	// create an order using defaults
+        CreateOrderResponse order = TestingTool.createInvoiceTestOrder("test_queryOrder_queryInvoiceOrder");
+        assertTrue(order.isOrderAccepted());
+        
+        // query order
+        QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
+            .setOrderId( order.orderId )
+            .setCountryCode( COUNTRYCODE.SE )
+        ;
+        GetOrdersResponse response = queryOrderBuilder.queryCardOrder().doRequest();         
+        
+        assertTrue( response.isOrderAccepted() );     
+   		assertEquals( order.orderId, response.getOrderId() );
+    }
     // paymentplan
     // TODO
-    // card
+    
+    // .queryCardOrder
     @Test
     public void test_queryOrder_queryCardOrder() {
 
@@ -114,7 +131,6 @@ public class WebPayAdminWebdriverTest {
         assertTrue( response.isOrderAccepted() );     
    		assertEquals( order.getTransactionId(), response.getTransactionId() );
     }
-
     // directbank
     // TODO
 
