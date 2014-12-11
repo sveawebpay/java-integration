@@ -6,7 +6,10 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.adminservice.AdminServiceResponse;
+import se.sveaekonomi.webpay.integration.adminservice.GetOrdersResponse;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
+import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CreditOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
@@ -96,8 +99,17 @@ public class WebPayAdminWebdriverTest {
     @Test
     public void test_queryOrder_queryInvoiceOrder() {
 
-    	// create an order using defaults
-        CreateOrderResponse order = TestingTool.createInvoiceTestOrder("test_queryOrder_queryInvoiceOrder");
+		// create order
+        CreateOrderBuilder builder = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))                
+                .addCustomerDetails(WebPayItem.individualCustomer()
+                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+                )
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setOrderDate(TestingTool.DefaultTestDate)
+    	;
+        
+        CreateOrderResponse order = builder.useInvoicePayment().doRequest();
         assertTrue(order.isOrderAccepted());
         
         // query order
@@ -105,10 +117,16 @@ public class WebPayAdminWebdriverTest {
             .setOrderId( order.orderId )
             .setCountryCode( COUNTRYCODE.SE )
         ;
-        GetOrdersResponse response = queryOrderBuilder.queryCardOrder().doRequest();         
-        
-        assertTrue( response.isOrderAccepted() );     
-   		assertEquals( order.orderId, response.getOrderId() );
+        try {
+        	GetOrdersResponse response = queryOrderBuilder.queryInvoiceOrder().doRequest();         
+
+			assertTrue( response.isOrderAccepted() );     
+	   		assertEquals( String.valueOf(order.orderId), response.getOrderId() );
+   			// TODO rest of asserts
+        }
+        catch( Exception e ) {
+        	System.out.println( e.getClass() + e.getMessage() );
+        }
     }
     // paymentplan
     // TODO

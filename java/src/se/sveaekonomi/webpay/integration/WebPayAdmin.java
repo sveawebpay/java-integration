@@ -118,7 +118,6 @@ public class WebPayAdmin {
 	    
 	    return new DeliverOrderRowsBuilder(config);	
     }    
-
     
 	/**
      * The WebPayAdmin.cancelOrderRows entrypoint method is used to cancel rows in an order before it has been delivered.
