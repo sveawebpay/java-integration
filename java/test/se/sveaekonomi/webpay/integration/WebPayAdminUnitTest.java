@@ -8,6 +8,7 @@ import java.util.Hashtable;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.adminservice.GetOrdersRequest;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.AnnulTransactionRequest;
@@ -283,7 +284,10 @@ public class WebPayAdminUnitTest {
 		catch (SveaWebPayException e){			
 			// fail on validation error
 	        fail();
-        }			 
+        }		
+        catch( Exception e ) {
+        	System.out.println( e.getClass() + e.getMessage() );
+        }     
     }
     @Test
     public void test_queryOrder_validates_missing_required_method_for_queryInvoiceOrder_setOrderId() {	
@@ -302,8 +306,11 @@ public class WebPayAdminUnitTest {
 	        assertEquals(
         		"MISSING VALUE - OrderId is required, use setOrderId().\n", 
     			e.getCause().getMessage()
-    		);			
-        }			
+    		);
+        }
+        catch( Exception e ) {
+        	System.out.println( e.getClass() + e.getMessage() );
+        }   
     }
     @Test
     public void test_queryOrder_validates_missing_required_method_for_queryInvoiceOrder_setCountryCode() {	
@@ -323,7 +330,11 @@ public class WebPayAdminUnitTest {
         		"MISSING VALUE - CountryCode is required, use setCountryCode(...).\n", 
     			e.getCause().getMessage()
     		);			
-        }			
+        }	
+        catch( Exception e ) {
+        	fail();
+        	System.out.println( e.getClass() + e.getMessage() );
+        }   
     }
 	// paymentplan
 	// TODO public void test_validates_all_required_methods_for_queryOrder_queryPaymentPlanOrder() {

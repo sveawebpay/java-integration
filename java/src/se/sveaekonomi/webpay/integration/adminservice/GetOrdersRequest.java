@@ -23,7 +23,7 @@ import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
  */
 public class GetOrdersRequest {
 
-	// NOTE: validate on order level, don't validate request attributesl in itself (rationale: bad request will return error from webservice)
+	// NOTE: validates on order level, don't validate request attributesl in itself (rationale: bad request will return error from webservice)
 	
 	private String action;
 	public QueryOrderBuilder builder;
@@ -45,7 +45,7 @@ public class GetOrdersRequest {
 	}
 	
     private String validateOrderId() {
-    	return (builder.getOrderId() == null) ? "MISSING VALUE - setOrderId is required.\n" : "";
+    	return (builder.getOrderId() == null) ? "MISSING VALUE - OrderId is required, use setOrderId().\n" : "";
     }
 
     private String validateCountryCode() {
@@ -62,7 +62,7 @@ public class GetOrdersRequest {
     	// validate request and throw exception if validation fails
         String errors = validateOrder();        
         if (!errors.equals("")) {
-        	System.out.println(errors);
+        	//System.out.println(errors);
             throw new SveaWebPayException("Validation failed", new ValidationException(errors));
         }
         

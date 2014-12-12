@@ -6,7 +6,6 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import se.sveaekonomi.webpay.integration.adminservice.AdminServiceResponse;
 import se.sveaekonomi.webpay.integration.adminservice.GetOrdersResponse;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
@@ -92,7 +91,7 @@ public class WebPayAdminWebdriverTest {
         assertTrue(response.isOrderAccepted());  
         assertTrue(response instanceof AnnulTransactionResponse );
  
-    }      
+    }
 
     /// WebPayAdmin.queryOrder() ---------------------------------------------------------------------------------------
     // .queryInvoiceOrder
@@ -118,11 +117,10 @@ public class WebPayAdminWebdriverTest {
             .setCountryCode( COUNTRYCODE.SE )
         ;
         try {
-        	GetOrdersResponse response = queryOrderBuilder.queryInvoiceOrder().doRequest();         
+        	GetOrdersResponse response = queryOrderBuilder.queryInvoiceOrder().doRequest();
 
 			assertTrue( response.isOrderAccepted() );     
 	   		assertEquals( String.valueOf(order.orderId), response.getOrderId() );
-   			// TODO rest of asserts
         }
         catch( Exception e ) {
         	System.out.println( e.getClass() + e.getMessage() );

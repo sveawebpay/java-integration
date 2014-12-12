@@ -6,7 +6,7 @@ import org.w3c.dom.NodeList;
 public class GetOrdersResponse extends AdminServiceResponse {
 
 	// phpdoc attributes below takes its info from admin service api Order structure
-    /** Date when order status was changed, e.g when order was delivered. */
+    /** Date when order status was changed, e.g when order was delivered, or null if not set.*/
     public String changedDate;
     /** Id that identifies a client in sveawebpay system */
     public String clientId;
@@ -388,7 +388,6 @@ public class GetOrdersResponse extends AdminServiceResponse {
 			//TODO						<a:PendingReasons />
 			//-						<a:SveaOrderId>348629</a:SveaOrderId>
 			//-						<a:SveaWillBuy>true</a:SveaWillBuy>
-
 			//					</a:Order>
 			//				</a:Orders>
 			//			</GetOrdersResult>
@@ -398,7 +397,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
 			
 			switch (nodeName) {
 			case "a:ChangedDate":				
-				this.setChangedDate(node.getTextContent());
+				this.setChangedDate( node.getTextContent().equals("") ? null : node.getTextContent() ); // getTextContent() of <a:ChangedDate i:nil="true" /> is ""
 				break;
 			case "a:ClientId":
 				this.setClientId(node.getTextContent());
@@ -407,11 +406,11 @@ public class GetOrdersResponse extends AdminServiceResponse {
 				this.setClientOrderId(node.getTextContent());
 				break;
 			case "a:CreatedDate":
-				this.setCreatedDate(node.getTextContent());		// TODO parse date format?
+				this.setCreatedDate(node.getTextContent());
 				break;				
 			case "a:CreditReportStatus":
 				this.setCreditReportStatusAccepted(Boolean.valueOf(node.getChildNodes().item(0).getTextContent()));
-				this.setCreditReportStatusCreationDate(node.getChildNodes().item(1).getTextContent()); // TODO parse date format?				
+				this.setCreditReportStatusCreationDate(node.getChildNodes().item(1).getTextContent());			
 				break;
 			case "a:Currency":
 				this.setCurrency(node.getTextContent());
@@ -421,7 +420,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
 				this.setCustomerId(node.getTextContent());
 				break;								
 			case "a:CustomerReference":
-				this.setCustomerReference(node.getTextContent());	// TODO test what happens if not set in response?
+				this.setCustomerReference( node.getTextContent().equals("") ? null : node.getTextContent() );
 				break;		
 			// TODO deliveryaddress			
 			case "a:IsPossibleToAdminister":
@@ -431,7 +430,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
 				this.setIsPossibleToCancel(Boolean.valueOf(node.getChildNodes().item(0).getTextContent()));
 				break;	
 			case "a:Notes":
-				this.setNotes(node.getTextContent());
+				this.setNotes( node.getTextContent().equals("") ? null : node.getTextContent() );
 				break;			
 			case "a:OrderDeliveryStatus":
 				this.setOrderDeliveryStatus(node.getTextContent());
