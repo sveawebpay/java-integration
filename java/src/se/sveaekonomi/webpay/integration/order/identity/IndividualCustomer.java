@@ -2,12 +2,31 @@ package se.sveaekonomi.webpay.integration.order.identity;
 
 public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
 
+//-    public $ssn;
+//-    public $initials;
+//-    public $birthDate;
+//-    public $email;
+//-    public $phonenumber;
+//-    public $ipAddress;
+//-    public $firstname;
+//-    public $lastname;
+//-    public $street;
+//-    public $housenumber;
+//-    public $coAddress;
+//-    public $zipCode;
+//-    public $locality;	
+
     private String ssn;
     private String birthDate;
     private String firstName;
     private String lastName;
     private String initials;
     
+    // set by GetOrdersResponse
+    private String name;			// compounded fullName from webservice 
+	private String streetAddress;	// compounds street + housenumber
+    
+
     public IndividualCustomer() {
         super();
     }
@@ -60,6 +79,23 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
         
         return this;
     }
+    
+    public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+	public String getStreetAddress() {
+		return streetAddress;
+	}
+
+	public void setStreetAddress(String streetAddress) {
+		this.streetAddress = streetAddress;
+	}
+
     
     /**
      * Required for private customers in NL and DE

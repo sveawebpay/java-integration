@@ -3,6 +3,9 @@ package se.sveaekonomi.webpay.integration.adminservice;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.order.identity.CustomerIdentity;
+import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
+
 public class GetOrdersResponse extends AdminServiceResponse {
 
 	// phpdoc attributes below takes its info from admin service api Order structure
@@ -24,7 +27,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
     public String currency;
 
     /** @var CompanyCustomer|IndividualCustomer $customer -- customer identity as associated with the order by Svea, also Shipping address. */
-    //public XXX customer;
+    public CustomerIdentity customer;
 
     /** Customer id that is created by SveaWebPay system. */
     public String customerId;
@@ -100,6 +103,15 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		this.currency = currency;
 	}
 
+	public CustomerIdentity getCustomer() {
+		return customer;
+	}
+	
+	public void setCustomer( CustomerIdentity customer ) {
+		this.customer = customer;
+	}
+	
+	
 	public String getCustomerId() {
 		return customerId;
 	}
@@ -415,7 +427,74 @@ public class GetOrdersResponse extends AdminServiceResponse {
 			case "a:Currency":
 				this.setCurrency(node.getTextContent());
 				break;
-			// TODO customer			
+			//TODO					<a:Customer
+			//							xmlns:b="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">
+			//							<b:CoAddress>c/o Eriksson, Erik</b:CoAddress>
+			//							<b:CompanyIdentity i:nil="true" />
+			//							<b:CountryCode>SE</b:CountryCode>
+			//							<b:CustomerType>Individual</b:CustomerType>
+			//							<b:Email>daniel@colourpicture.se</b:Email>
+			//							<b:FullName>Persson, Tess T</b:FullName>
+			//							<b:HouseNumber i:nil="true" />
+			//							<b:IndividualIdentity>
+			//								<b:BirthDate i:nil="true" />
+			//								<b:FirstName i:nil="true" />
+			//								<b:Initials i:nil="true" />
+			//								<b:LastName i:nil="true" />
+			//							</b:IndividualIdentity>
+			//							<b:Locality>Stan</b:Locality>
+			//							<b:NationalIdNumber>194605092222</b:NationalIdNumber>
+			//							<b:PhoneNumber>08-11111111</b:PhoneNumber>
+			//							<b:PublicKey i:nil="true" />
+			//							<b:Street>Testgatan 1</b:Street>
+			//							<b:ZipCode>99999</b:ZipCode>
+			//						</a:Customer>				
+			case "a:Customer":
+				//System.out.println(node.getElementsByTagName("b:CustomerType").getLength());
+				
+				if( node.getElementsByTagName("b:CustomerType").item(0).getTextContent().endsWith("Individual") ) {
+					// build IndividualCustomer object
+					IndividualCustomer customer = new IndividualCustomer();
+					customer.setNationalIdNumber( node.getElementsByTagName("b:NationalIdNumber").item(0).getTextContent() );
+					customer.setEmail( node.getElementsByTagName("b:Email").item(0).getTextContent() );
+					customer.setPhoneNumber( node.getElementsByTagName("b:PhoneNumber").item(0).getTextContent() );
+					//--
+					//-    public $ipAddress;
+					customer.setName( node.getElementsByTagName("b:FullName").item(0).getTextContent() );
+					customer.setStreetAddress( 
+							node.getElementsByTagName("b:Street").item(0).getTextContent() + 
+							" " +  
+							node.getElementsByTagName("b:HouseNumber").item(0).getTextContent() 
+						)
+					;				
+					customer.setCoAddress( node.getElementsByTagName("b:CoAddress").item(0).getTextContent() );
+					customer.setZipCode( node.getElementsByTagName("b:ZipCode").item(0).getTextContent() );
+					customer.setLocality( node.getElementsByTagName("b:Locality").item(0).getTextContent() );
+
+					customer.setName(
+							node.getElementsByTagName("b:FirstName").item(0).getTextContent().equals("") ? null : node.getTextContent(),
+							node.getElementsByTagName("b:LastName").item(0).getTextContent().equals("") ? null : node.getTextContent()
+						)
+					;
+					customer.setInitials( node.getElementsByTagName("b:Initials").item(0).getTextContent().equals("") ? null : node.getTextContent() );
+					customer.setBirthDate( node.getElementsByTagName("b:BirthDate").item(0).getTextContent().equals("") ? null : node.getTextContent() );
+					
+//					//<b:IndividualIdentity>
+//					//	<b:BirthDate i:nil="true" />
+//					//	<b:FirstName i:nil="true" />
+//					//	<b:Initials i:nil="true" />
+//					//	<b:LastName i:nil="true" />
+//					//</b:IndividualIdentity>
+//					//-    public $firstname;
+//					//-    public $lastname;
+//					//-    public $initials;
+//					//-    public $birthDate;
+//					
+					this.setCustomer( customer );
+					
+				}
+				break;
+			
 			case "a:CustomerId":
 				this.setCustomerId(node.getTextContent());
 				break;								
