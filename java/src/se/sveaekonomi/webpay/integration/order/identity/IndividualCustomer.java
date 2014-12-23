@@ -24,7 +24,7 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
     
     // set by GetOrdersResponse
     private String name;			// compounded fullName from webservice 
-	private String streetAddress;	// compounds street + housenumber
+//	private String streetAddress;	// compounds street + housenumber
     
 
     public IndividualCustomer() {
@@ -88,13 +88,13 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
 		this.name = name;
 	}
 
-	public String getStreetAddress() {
-		return streetAddress;
-	}
-
-	public void setStreetAddress(String streetAddress) {
-		this.streetAddress = streetAddress;
-	}
+//	public String getStreetAddress() {
+//		return streetAddress;
+//	}
+//
+//	public void setStreetAddress(String streetAddress) {
+//		this.streetAddress = streetAddress;
+//	}
 
     
     /**

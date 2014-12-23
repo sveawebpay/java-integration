@@ -460,8 +460,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
 					//-    public $ipAddress;
 					customer.setName( node.getElementsByTagName("b:FullName").item(0).getTextContent() );
 					customer.setStreetAddress( 
-							node.getElementsByTagName("b:Street").item(0).getTextContent() + 
-							" " +  
+							node.getElementsByTagName("b:Street").item(0).getTextContent(), 
 							node.getElementsByTagName("b:HouseNumber").item(0).getTextContent() 
 						)
 					;				
