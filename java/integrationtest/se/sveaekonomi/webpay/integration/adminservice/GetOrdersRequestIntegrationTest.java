@@ -11,10 +11,10 @@ import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 
-public class GetOrdersRequestIntegrationTest {     
+public class GetOrdersRequestIntegrationTest {
 
     @Test
-    public void test_attributest_existing_order() {
+    public void test_attributes_existing_order() {
 
     	Long invoiceOrder = 348629L;	// existing order
     	
@@ -213,28 +213,28 @@ public class GetOrdersRequestIntegrationTest {
     
     
     
-			//<a:Customer
-			//	xmlns:b="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">
-			//	<b:CoAddress>c/o Eriksson, Erik</b:CoAddress>
-			//	<b:CompanyIdentity i:nil="true" />
-			//	<b:CountryCode>SE</b:CountryCode>
-			//	<b:CustomerType>Individual</b:CustomerType>
-			//	<b:Email>jonatan@askas.se</b:Email>
-			//	<b:FullName>Persson, Tess T</b:FullName>
-			//	<b:HouseNumber i:nil="true" />
-			//	<b:IndividualIdentity>
-			//		<b:BirthDate i:nil="true" />
-			//		<b:FirstName i:nil="true" />
-			//		<b:Initials i:nil="true" />
-			//		<b:LastName i:nil="true" />
-			//	</b:IndividualIdentity>
-			//	<b:Locality>Stan</b:Locality>
-			//	<b:NationalIdNumber>194605092222</b:NationalIdNumber>
-			//	<b:PhoneNumber />
-			//	<b:PublicKey i:nil="true" />
-			//	<b:Street>Testgatan 1</b:Street>
-			//	<b:ZipCode>99999</b:ZipCode>
-			//</a:Customer>
+	//<a:Customer
+	//	xmlns:b="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">
+	//	<b:CoAddress>c/o Eriksson, Erik</b:CoAddress>
+	//	<b:CompanyIdentity i:nil="true" />
+	//	<b:CountryCode>SE</b:CountryCode>
+	//	<b:CustomerType>Individual</b:CustomerType>
+	//	<b:Email>jonatan@askas.se</b:Email>
+	//	<b:FullName>Persson, Tess T</b:FullName>
+	//	<b:HouseNumber i:nil="true" />
+	//	<b:IndividualIdentity>
+	//		<b:BirthDate i:nil="true" />
+	//		<b:FirstName i:nil="true" />
+	//		<b:Initials i:nil="true" />
+	//		<b:LastName i:nil="true" />
+	//	</b:IndividualIdentity>
+	//	<b:Locality>Stan</b:Locality>
+	//	<b:NationalIdNumber>194605092222</b:NationalIdNumber>
+	//	<b:PhoneNumber />
+	//	<b:PublicKey i:nil="true" />
+	//	<b:Street>Testgatan 1</b:Street>
+	//	<b:ZipCode>99999</b:ZipCode>
+	//</a:Customer>
  
     @Test
     public void test_attributes_individual_customer() throws Exception {

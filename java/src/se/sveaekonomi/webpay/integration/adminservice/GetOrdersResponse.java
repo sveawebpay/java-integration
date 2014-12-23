@@ -450,8 +450,6 @@ public class GetOrdersResponse extends AdminServiceResponse {
 			//							<b:ZipCode>99999</b:ZipCode>
 			//						</a:Customer>				
 			case "a:Customer":
-				//System.out.println(node.getElementsByTagName("b:CustomerType").getLength());
-				
 				if( node.getElementsByTagName("b:CustomerType").item(0).getTextContent().endsWith("Individual") ) {
 					// build IndividualCustomer object
 					IndividualCustomer customer = new IndividualCustomer();
