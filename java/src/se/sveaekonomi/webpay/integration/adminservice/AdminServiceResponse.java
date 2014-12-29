@@ -38,23 +38,13 @@ public class AdminServiceResponse {
 	}
 
 	private void setCommonResponseAttributes(NodeList xmlResponse) {
-		int size = xmlResponse.getLength();
+		Element node = (Element) xmlResponse.item(0);
 
-		for (int i = 0; i < size; i++) {
-			Element node = (Element) xmlResponse.item(i);
-			String nodeName = node.getNodeName();
-			// System.out.println(nodeName);
+		String resultCode = node.getElementsByTagName("a:ResultCode").item(0).getTextContent();	// check what if =nil?
+		this.setResultCode(resultCode);
+		this.setOrderAccepted( (this.getResultCode().endsWith("0")) ? true : false);
 
-			switch (nodeName) {
-			case "a:ResultCode":				
-				this.setResultCode(node.getTextContent());
-				this.setOrderAccepted( (this.getResultCode().endsWith("0")) ? true : false);
-				break;
-			case "a:ErrorMessage":
-				this.setErrorMessage(node.getTextContent());
-				break;
-			}
-		}
+		String errorMessage = node.getElementsByTagName("a:ErrorMessage").item(0).getTextContent();	// check what if =nil?
+		this.setErrorMessage(errorMessage);
 	}
-
 }

@@ -147,15 +147,15 @@ public class GetOrdersRequest {
         String url = "https://partnerweb.sveaekonomi.se/WebPayAdminService_test/AdminService.svc/backward";
     	SOAPMessage soapResponse = soapConnection.call( prepareRequest(), url );
         
-        // print SOAP Response
-		//System.out.print("Response SOAP Message:");
-		//soapResponse.writeTo(System.out);
-        //System.out.println();
+        // DEBUG: print SOAP Response
+//		System.out.print("Response SOAP Message:");
+//		soapResponse.writeTo(System.out);
+//      System.out.println();
         
         soapConnection.close();
         
         // parse response
-        GetOrdersResponse response = new GetOrdersResponse( soapResponse.getSOAPPart().getEnvelope().getBody().getElementsByTagName("*") );
+        GetOrdersResponse response = new GetOrdersResponse(soapResponse.getSOAPPart().getEnvelope().getBody().getElementsByTagName("*"));
         
         return response;
 	}	

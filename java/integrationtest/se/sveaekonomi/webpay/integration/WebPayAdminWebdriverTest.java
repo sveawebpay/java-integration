@@ -113,7 +113,7 @@ public class WebPayAdminWebdriverTest {
         
         // query order
         QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
-            .setOrderId( order.orderId )
+            .setOrderId( 999999 )//order.orderId )
             .setCountryCode( COUNTRYCODE.SE )
         ;
         try {
