@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.adminservice.DeliverOrdersResponse;
 import se.sveaekonomi.webpay.integration.adminservice.GetOrdersResponse;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
@@ -24,7 +25,6 @@ import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
-
 
 /**
  * contains end-to-end integration tests of WebPayAdmin entrypoints
@@ -181,17 +181,33 @@ public class WebPayAdminWebdriverTest {
         
         assertTrue( response.isOrderAccepted() );     
    		assertEquals( order.getTransactionId(), response.getTransactionId() );
-
     }
     // directbank
     // TODO
 
-    /// WebPayAdmin.deliverOrderRows()
-    // invoice
-    // TODO
-    // paymentplan
-    // TODO
-    // card
+    /// WebPayAdmin.deliverOrderRows() -------------------------------------------------------------------------------------------	
+    //  .deliverInvoiceOrderRows
+    @Test
+    public void test_cancelOrder_deliverInvoiceOrderRows() {
+    	    	
+    	// create an order using defaults
+    	CreateOrderResponse order = TestingTool.createInvoiceTestOrder("test_cancelOrder_cancelInvoiceOrder");
+        assertTrue(order.isOrderAccepted());
+
+        // deliver first order row and assert the response
+        DeliverOrdersResponse response = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+                .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
+                .setCountryCode(TestingTool.DefaultTestCountryCode)	
+                .setInvoiceDistributionType("Post")					// TODO use enum
+                .setRowToDeliver(1)
+                .deliverInvoiceOrderRows()
+                	.doRequest();
+        
+        assertTrue(response.isOrderAccepted());        
+        assertTrue(response instanceof DeliverOrdersResponse );
+    }    
+    
+    //  .deliverCardOrderRows
     @Test
     public void test_deliverOrderRows_deliverCardOrderRows_deliver_all_rows() {
     	
