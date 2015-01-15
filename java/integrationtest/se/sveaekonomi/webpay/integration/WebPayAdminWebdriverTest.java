@@ -188,7 +188,7 @@ public class WebPayAdminWebdriverTest {
     /// WebPayAdmin.deliverOrderRows() -------------------------------------------------------------------------------------------	
     //  .deliverInvoiceOrderRows
     @Test
-    public void test_cancelOrder_deliverInvoiceOrderRows() {
+    public void test_deliverOrderRows_deliverInvoiceOrderRows() {
     	    	
     	// create an order using defaults
     	CreateOrderResponse order = TestingTool.createInvoiceTestOrder("test_cancelOrder_cancelInvoiceOrder");
