@@ -1,5 +1,7 @@
 package se.sveaekonomi.webpay.integration.adminservice;
 
+import java.util.ArrayList;
+
 import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
@@ -7,10 +9,12 @@ import org.w3c.dom.NodeList;
 import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.CustomerIdentity;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
+import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
+import se.sveaekonomi.webpay.integration.util.constant.OrderRowStatus;
 
 public class GetOrdersResponse extends AdminServiceResponse {
 
-	// phpdoc attributes below takes its info from admin service api Order structure
+	// javadoc attributes below takes its info from admin service api Order structure
     /** Date when order status was changed, e.g when order was delivered, or null if not set.*/
     public String changedDate;
     /** Id that identifies a client in sveawebpay system */
@@ -29,7 +33,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
     public String currency;
 
     /** @var CompanyCustomer|IndividualCustomer $customer -- customer identity as associated with the order by Svea, also Shipping address. */
-    public CustomerIdentity customer;
+    public CustomerIdentity<?> customer;
 
     /** Customer id that is created by SveaWebPay system. */
     public String customerId;
@@ -44,7 +48,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
     public String orderDeliveryStatus; // TODO change to enum!
 
     /** @var Svea\OrderRow[] $numberedOrderRows  array of OrderRow objects, note that invoice and payment plan order rows name attribute will be null */
-    //public YYY numberedOrderRows;
+    public ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
 
     /** one of {Created,Pending,Active,Denied,Error}*/
     public String orderStatus; // TODO change to enum!
@@ -187,6 +191,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		this.orderType = orderType;
 	}
 
+	/** null for invoice orders */
 	public String getPaymentPlanDetailsContractLengthMonths() {
 		return paymentPlanDetailsContractLengthMonths;
 	}
@@ -196,6 +201,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		this.paymentPlanDetailsContractLengthMonths = paymentPlanDetailsContractLengthMonths;
 	}
 
+	/** null for invoice orders */
 	public String getPaymentPlanDetailsContractNumber() {
 		return paymentPlanDetailsContractNumber;
 	}
@@ -236,12 +242,21 @@ public class GetOrdersResponse extends AdminServiceResponse {
 	public void setSveaWillBuy(Boolean sveaWillBuy) {
 		this.sveaWillBuy = sveaWillBuy;
 	}
+	
+	public void setNumberedOrderRows( ArrayList<NumberedOrderRowBuilder> numberedOrderRows) {
+		this.numberedOrderRows = numberedOrderRows;
+	}
+	
+	public ArrayList<NumberedOrderRowBuilder> getNumberedOrderRows() {
+		return this.numberedOrderRows;
+	}
 
 	/** @var one of {Invoice,PaymentPlan} */
     public String orderType; // TODO change to enum!
 
+    /** Contract length or null for invoice orders */
     public String paymentPlanDetailsContractLengthMonths;
-    /** Contract number of a specific contract. */
+    /** Contract number of a specific contract or null for invoice orders */
     public String paymentPlanDetailsContractNumber;
 
     /** one of {SMSOnHighAmount,UseOfDeliveryAddress} */
@@ -255,8 +270,10 @@ public class GetOrdersResponse extends AdminServiceResponse {
 
     public GetOrdersResponse(NodeList xmlResponse) {		
     	super( xmlResponse ); // handle ErrorMessage, ResultCode
-    	setGetOrdersResponseAttributes(xmlResponse);
-	}
+    	if( this.isOrderAccepted() ) {
+    		setGetOrdersResponseAttributes(xmlResponse);
+    	}
+    }
     
 	private void setGetOrdersResponseAttributes(NodeList xmlResponse) {
 	    //<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
@@ -273,14 +290,6 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		Node getOrdersResult=xmlResponse.item(1);
 		Node orders = getOrdersResult.getChildNodes().item(2);		// 0: ErrorMessage, 1: ResultCode
 		Element order = (Element) orders.getChildNodes().item(0);	// we allow queries for 1 order only, so use first result node
-//		
-//System.out.println("--");
-//int size = order.getChildNodes().getLength();
-//for (int i = 0; i < size; i++) {
-//	Element node = (Element) order.getChildNodes().item(i);
-//	String nodeName = node.getNodeName();
-//	System.out.println(nodeName);	
-//}		
 
 		//						<a:ChangedDate i:nil="true" />
 		String changedDate = order.getElementsByTagName("a:ChangedDate").item(0).getTextContent(); // getTextContent() of <a:ChangedDate i:nil="true" /> is ""
@@ -305,13 +314,22 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		//						<a:Currency>SEK</a:Currency>
 		String currency = order.getElementsByTagName("a:Currency").item(0).getTextContent();
 		this.setCurrency(currency);
+			
+		// all individual customer fields
+
 		//       				<a:Customer
 		Element c = (Element) order.getElementsByTagName("a:Customer").item(0);
 		//							xmlns:b="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">
 		//							<b:CoAddress>c/o Eriksson, Erik</b:CoAddress>
 		String cCoAddress = c.getElementsByTagName("b:CoAddress").item(0).getTextContent();
-		//							<b:CompanyIdentity i:nil="true" />
+		//	  						<b:CompanyIdentity i:nil="true" />	// iff IndividualIdentity
+		//    						<b:CompanyIdentity>
 		String cCompanyIdentity = c.getElementsByTagName("b:CompanyIdentity").item(0).getTextContent();
+		//       						<b:CompanyIdentification i:nil="true"/>
+		// NOT IN USE
+		//       						<b:CompanyVatNumber i:nil="true"/>
+		String ciCompanyVatNumber = cCompanyIdentity.equals("") ? null : c.getElementsByTagName("b:CompanyVatNumber").item(0).getTextContent();
+		//    						</b:CompanyIdentity>		
 		//							<b:CountryCode>SE</b:CountryCode>
 		String cCountryCode = c.getElementsByTagName("b:CountryCode").item(0).getTextContent();
 		//							<b:CustomerType>Individual</b:CustomerType>
@@ -321,7 +339,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		//							<b:FullName>Persson, Tess T</b:FullName>
 		String cFullName = c.getElementsByTagName("b:FullName").item(0).getTextContent();
 		//							<b:HouseNumber i:nil="true" />
-		String cHouseNumber = c.getElementsByTagName("b:HouseNumber").item(0).getTextContent();
+		String cHouseNumber = c.getElementsByTagName("b:HouseNumber").item(0).getTextContent().equals("") ? null : c.getElementsByTagName("b:HouseNumber").item(0).getTextContent();
 		//							<b:IndividualIdentity>
 		String cIndividualIdentity = c.getElementsByTagName("b:IndividualIdentity").item(0).getTextContent();
 		//								<b:BirthDate i:nil="true" />
@@ -340,19 +358,19 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		//							<b:PhoneNumber>08-11111111</b:PhoneNumber>
 		String cPhoneNumber = c.getElementsByTagName("b:PhoneNumber").item(0).getTextContent();
 		//							<b:PublicKey i:nil="true" />
-		String cPublicKey = c.getElementsByTagName("b:PublicKey").item(0).getTextContent(); //TODO not used in return
+		// NOT SUPPORTED
 		//							<b:Street>Testgatan 1</b:Street>
 		String cStreet = c.getElementsByTagName("b:Street").item(0).getTextContent();
 		//							<b:ZipCode>99999</b:ZipCode>
 		String cZipCode = c.getElementsByTagName("b:ZipCode").item(0).getTextContent();
 		//						</a:Customer>			
+
 		if( cCustomerType.endsWith("Individual") ) {
 			IndividualCustomer individualCustomer = new IndividualCustomer();
 		
 			individualCustomer.setNationalIdNumber( cNationalIdNumber );
 			individualCustomer.setEmail( cEmail );
 			individualCustomer.setPhoneNumber( cPhoneNumber );
-			//ipAddress;
 			individualCustomer.setName( cFullName ); // FullName
 			individualCustomer.setStreetAddress( cStreet, cHouseNumber );
 			individualCustomer.setCoAddress( cCoAddress );
@@ -364,15 +382,29 @@ public class GetOrdersResponse extends AdminServiceResponse {
 
 			this.setCustomer(individualCustomer);
 		}
+		
 		if( cCustomerType.endsWith("Company") ) {
-			// TODO handle companyCustomer
+			CompanyCustomer companyCustomer = new CompanyCustomer();
+			
+			companyCustomer.setNationalIdNumber( cNationalIdNumber );
+			companyCustomer.setEmail( cEmail );
+			companyCustomer.setPhoneNumber( cPhoneNumber );
+			//ipAddress;
+			companyCustomer.setCompanyName( cFullName );
+			companyCustomer.setStreetAddress( cStreet, cHouseNumber );
+			companyCustomer.setCoAddress( cCoAddress );
+			companyCustomer.setZipCode( cZipCode );
+			companyCustomer.setLocality( cLocality );
+			companyCustomer.setVatNumber(ciCompanyVatNumber);
+			
+			this.setCustomer(companyCustomer);
 		}		
 		//						<a:CustomerId>1000117</a:CustomerId>
 		String customerId = order.getElementsByTagName("a:CustomerId").item(0).getTextContent();
 		this.setCustomerId(customerId);
 		//						<a:CustomerReference />
-		String customerReference = order.getElementsByTagName("a:CustomerReference").item(0).getTextContent();			//TODO check value when <... />
-		this.setCustomerReference(customerReference.equals("") ? null : customerReference);
+		String customerReference = order.getElementsByTagName("a:CustomerReference").item(0).getTextContent();
+		this.setCustomerReference(customerReference.equals("") ? null : customerReference);	// for <a:CustomerReference /> getTextContent() returns ""
 		//						<a:DeliveryAddress i:nil="true"
 		//							xmlns:b="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
 		//not supported	
@@ -384,130 +416,115 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		this.setIsPossibleToCancel(isPossibleToCancel.equals("true") ? true : false);
 		//						<a:Notes i:nil="true" />
 		String notes = order.getElementsByTagName("a:Notes").item(0).getTextContent();	
-		this.setNotes(notes.equals("") ? null : notes);
+		this.setNotes(notes.equals("") ? null : notes); // for <a:Notes i:nil="true" /> getTextContent() returns ""
 		//						<a:OrderDeliveryStatus>Created</a:OrderDeliveryStatus>
 		String cOrderDeliveryStatus = order.getElementsByTagName("a:OrderDeliveryStatus").item(0).getTextContent();	
 		this.setOrderDeliveryStatus(cOrderDeliveryStatus);
+
 		//						<a:OrderRows>
-		// TODO handle rows
-		//							<a:NumberedOrderRow>
-		//								<ArticleNumber i:nil="true"
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
-		//								<Description
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">Dyr produkt 25%</Description>
-		//								<DiscountPercent
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">0.00</DiscountPercent>
-		//								<NumberOfUnits
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">2.00</NumberOfUnits>
-		//								<PriceIncludingVat
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">false</PriceIncludingVat>
-		//								<PricePerUnit
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">2000.00</PricePerUnit>
-		//								<Unit
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
-		//								<VatPercent
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">25.00</VatPercent>
-		//								<a:CreditInvoiceId i:nil="true" />
-		//								<a:InvoiceId i:nil="true" />
-		//								<a:RowNumber>1</a:RowNumber>
-		//								<a:Status>NotDelivered</a:Status>
-		//							</a:NumberedOrderRow>
-		//							<a:NumberedOrderRow>
-		//								<ArticleNumber i:nil="true"
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
-		//								<Description
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">Testprodukt 1kr 25%</Description>
-		//								<DiscountPercent
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">0.00</DiscountPercent>
-		//								<NumberOfUnits
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">1.00</NumberOfUnits>
-		//								<PriceIncludingVat
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">false</PriceIncludingVat>
-		//								<PricePerUnit
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">1.00</PricePerUnit>
-		//								<Unit
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
-		//								<VatPercent
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">25.00</VatPercent>
-		//								<a:CreditInvoiceId i:nil="true" />
-		//								<a:InvoiceId i:nil="true" />
-		//								<a:RowNumber>2</a:RowNumber>
-		//								<a:Status>NotDelivered</a:Status>
-		//							</a:NumberedOrderRow>
-		//							<a:NumberedOrderRow>
-		//								<ArticleNumber i:nil="true"
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
-		//								<Description
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">Fastpris (Fast fraktpris)</Description>
-		//								<DiscountPercent
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">0.00</DiscountPercent>
-		//								<NumberOfUnits
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">1.00</NumberOfUnits>
-		//								<PriceIncludingVat
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">false</PriceIncludingVat>
-		//								<PricePerUnit
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">4.00</PricePerUnit>
-		//								<Unit i:nil="true"
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
-		//								<VatPercent
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">25.00</VatPercent>
-		//								<a:CreditInvoiceId i:nil="true" />
-		//								<a:InvoiceId i:nil="true" />
-		//								<a:RowNumber>3</a:RowNumber>
-		//								<a:Status>NotDelivered</a:Status>
-		//							</a:NumberedOrderRow>
-		//							<a:NumberedOrderRow>
-		//								<ArticleNumber
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
-		//								<Description
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">Svea Fakturaavgift:: 20.00kr (SE)</Description>
-		//								<DiscountPercent
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">0.00</DiscountPercent>
-		//								<NumberOfUnits
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">1.00</NumberOfUnits>
-		//								<PriceIncludingVat
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">false</PriceIncludingVat>
-		//								<PricePerUnit
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">20.00</PricePerUnit>
-		//								<Unit i:nil="true"
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
-		//								<VatPercent
-		//									xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">0.00</VatPercent>
-		//								<a:CreditInvoiceId i:nil="true" />
-		//								<a:InvoiceId i:nil="true" />
-		//								<a:RowNumber>4</a:RowNumber>
-		//								<a:Status>NotDelivered</a:Status>
-		//							</a:NumberedOrderRow>
+		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = new ArrayList<NumberedOrderRowBuilder>();
+		NodeList orderRows = order.getElementsByTagName("a:NumberedOrderRow");
+		for( int i=0; i < orderRows.getLength(); i++ ) {
+			//						<a:NumberedOrderRow>
+			Element row = (Element) orderRows.item(i);	
+			//							<ArticleNumber i:nil="true"
+			//								xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
+			String rArticleNumber = row.getElementsByTagName("ArticleNumber").item(0).getTextContent();
+			//							<Description
+			//								xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">Dyr produkt 25%</Description>
+			String rDescription = row.getElementsByTagName("Description").item(0).getTextContent();
+			//							<DiscountPercent
+			//								xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">0.00</DiscountPercent>
+			String rDiscountPercent = row.getElementsByTagName("DiscountPercent").item(0).getTextContent();
+			//							<NumberOfUnits
+			//								xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">2.00</NumberOfUnits>
+			String rNumberOfUnits = row.getElementsByTagName("NumberOfUnits").item(0).getTextContent();
+			//							<PriceIncludingVat
+			//								xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">false</PriceIncludingVat>
+			String rPriceIncludingVat = row.getElementsByTagName("PriceIncludingVat").item(0).getTextContent();
+			//							<PricePerUnit
+			//								xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">2000.00</PricePerUnit>
+			String rPricePerUnit = row.getElementsByTagName("PricePerUnit").item(0).getTextContent();
+			//							<Unit
+			//								xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
+			String rUnit = row.getElementsByTagName("Unit").item(0).getTextContent();
+			//							<VatPercent
+			//								xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">25.00</VatPercent>
+			String rVatPercent = row.getElementsByTagName("VatPercent").item(0).getTextContent();
+			//							<a:CreditInvoiceId i:nil="true" />
+			String rCreditInvoiceId = row.getElementsByTagName("a:CreditInvoiceId").item(0).getTextContent();
+			//							<a:InvoiceId i:nil="true" />
+			String rInvoiceId = row.getElementsByTagName("a:InvoiceId").item(0).getTextContent();
+			//							<a:RowNumber>1</a:RowNumber>
+			String rRowNumber = row.getElementsByTagName("a:RowNumber").item(0).getTextContent();
+			//							<a:Status>NotDelivered</a:Status>
+			String rStatus = row.getElementsByTagName("a:Status").item(0).getTextContent();	
+			//						</a:NumberedOrderRow>
+			
+			NumberedOrderRowBuilder numberedOrderRow = new NumberedOrderRowBuilder();
+			numberedOrderRow.setArticleNumber(rArticleNumber.equals("") ? null : rArticleNumber);
+			numberedOrderRow.setDescription(rDescription);
+			numberedOrderRow.setDiscountPercent(Double.valueOf(rDiscountPercent));
+			numberedOrderRow.setQuantity(Double.valueOf(rNumberOfUnits));
+			if( rPriceIncludingVat.equals("true") ) {
+				numberedOrderRow.setAmountIncVat(Double.valueOf(rPricePerUnit));
+				numberedOrderRow.setAmountExVat( Double.NaN );
+			}
+			if( rPriceIncludingVat.equals("false") ) {
+				numberedOrderRow.setAmountIncVat(Double.NaN);
+				numberedOrderRow.setAmountExVat(Double.valueOf(rPricePerUnit));
+			}
+			numberedOrderRow.setUnit(rUnit.equals("") ? null : rUnit);
+			numberedOrderRow.setVatPercent(Double.valueOf(rVatPercent));
+			numberedOrderRow.setCreditInvoiceId(rCreditInvoiceId.equals("") ? null : rCreditInvoiceId);
+			numberedOrderRow.setInvoiceId(rInvoiceId.equals("") ? null : rInvoiceId);
+			numberedOrderRow.setRowNumber(Integer.valueOf(rRowNumber));
+			try {
+				numberedOrderRow.setStatus( OrderRowStatus.fromString(rStatus) );
+			} catch (Exception e) {
+				//ignore unknown status
+			}
+			
+			numberedOrderRows.add(numberedOrderRow);
+		}
 		//						</a:OrderRows>
+		this.setNumberedOrderRows( numberedOrderRows );
 		//						<a:OrderStatus>Active</a:OrderStatus>
 		String orderStatus = order.getElementsByTagName("a:OrderStatus").item(0).getTextContent();
 		this.setOrderStatus(orderStatus);	
 		//						<a:OrderType>Invoice</a:OrderType>
 		String orderType = order.getElementsByTagName("a:OrderType").item(0).getTextContent();
 		this.setOrderType(orderType);
-		//						<a:PaymentPlanDetails i:nil="true" />
-		Node paymentPlanDetails = order.getElementsByTagName("a:PaymentPlanDetails").item(0);
-		// TODO check paymentplandetails when querying payment plan order		
-//		String paymentPlanDetailsContractLengthMonths = paymentPlanDetails.getChildNodes().item(0).getTextContent(); 	// TODO check
-//		this.setPaymentPlanDetailsContractLengthMonths(paymentPlanDetailsContractLengthMonths);
-//		String paymentPlanDetailsContractNumber = paymentPlanDetails.getChildNodes().item(1).getTextContent(); 	// TODO check
-//		this.setPaymentPlanDetailsContractNumber(paymentPlanDetailsContractNumber);
+
+		//						<a:PaymentPlanDetails i:nil="true" />		// iff invoice order
+		//	                    <a:PaymentPlanDetails>
+		Element ppd = (Element) order.getElementsByTagName("a:PaymentPlanDetails").item(0);		
+		if( ppd.getChildNodes().getLength() > 0 ) {
+			//	                <a:CampaignCode>213060</a:CampaignCode>
+			// NOT SUPPORTED
+			//	                <a:ContractLengthMonths>3</a:ContractLengthMonths>
+			String ppdPaymentPlanDetailsContractLengthMonths = ppd.getElementsByTagName("a:ContractLengthMonths").item(0).getTextContent();
+			this.setPaymentPlanDetailsContractLengthMonths(ppdPaymentPlanDetailsContractLengthMonths.equals("") ? null : ppdPaymentPlanDetailsContractLengthMonths);
+			//                   <a:ContractNumber i:nil="true"/>
+			String ppdPaymentPlanDetailsContractNumber = ppd.getElementsByTagName("a:ContractNumber").item(0).getTextContent();
+			this.setPaymentPlanDetailsContractNumber(ppdPaymentPlanDetailsContractNumber.equals("") ? null : ppdPaymentPlanDetailsContractNumber);
+		}
+		//	                   </a:PaymentPlanDetails>
 		
 		//						<a:PendingReasons />
-		Node pendingReasons = order.getElementsByTagName("a:PendingReasons").item(0);
-		// TODO check pendingReasons when querying order		
-//		String pendingReasonsPendingType = pendingReasons.getChildNodes().item(0).getTextContent(); 	// TODO check
-//		this.setPendingReasonsPendingType(pendingReasonsPendingType);
-//		String pendingReasonsCreatedDate = paymentPlanDetails.getChildNodes().item(1).getTextContent(); 	// TODO check
-//		this.setPendingReasonsCreatedDate(pendingReasonsCreatedDate);
-		
+		Element pr = (Element) order.getElementsByTagName("a:PendingReasons").item(0);
+		if( pr.getChildNodes().getLength() > 0 ) {
+			String prPendingReasonsPendingType = pr.getElementsByTagName("a:PendingType").item(0).getTextContent();
+			this.setPendingReasonsPendingType(prPendingReasonsPendingType.equals("") ? null : prPendingReasonsPendingType);
+			String prPendingReasonsCreatedDate = pr.getElementsByTagName("a:CreatedDate").item(0).getTextContent();
+			this.setPendingReasonsCreatedDate(prPendingReasonsCreatedDate.equals("") ? null : prPendingReasonsCreatedDate);
+		}
 		//						<a:SveaOrderId>348629</a:SveaOrderId>
 		String orderId = order.getElementsByTagName("a:SveaOrderId").item(0).getTextContent();
 		this.setOrderId(orderId);
 		//						<a:SveaWillBuy>true</a:SveaWillBuy>
 		String sveaWillBuy = order.getElementsByTagName("a:SveaWillBuy").item(0).getTextContent();	
 		this.setSveaWillBuy(sveaWillBuy.equals("true") ? true : false); //	or (Boolean.valueOf(node.getChildNodes().item(0).getTextContent()));
-
 		//					</a:Order>
 		//				</a:Orders>
 		//			</GetOrdersResult>

@@ -113,7 +113,7 @@ public class WebPayAdminWebdriverTest {
         
         // query order
         QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
-            .setOrderId( 999999 )//order.orderId )
+            .setOrderId( order.orderId )
             .setCountryCode( COUNTRYCODE.SE )
         ;
         try {
@@ -121,13 +121,48 @@ public class WebPayAdminWebdriverTest {
 
 			assertTrue( response.isOrderAccepted() );     
 	   		assertEquals( String.valueOf(order.orderId), response.getOrderId() );
+	   		
+	   		// see GetOrdersIntegrationTest.java for detailed tests
         }
         catch( Exception e ) {
         	System.out.println( e.getClass() + e.getMessage() );
         }
     }
     // paymentplan
-    // TODO
+    // .queryPaymentPlanOrder
+    @Test
+    public void test_queryOrder_queryPaymentPlanOrder() {
+
+		// create order
+        CreateOrderBuilder builder = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))                
+                .addCustomerDetails(WebPayItem.individualCustomer()
+                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+                )
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setOrderDate(TestingTool.DefaultTestDate)
+    	;
+        
+        CreateOrderResponse order = builder.useInvoicePayment().doRequest();
+        assertTrue(order.isOrderAccepted());
+        
+        // query order
+        QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
+            .setOrderId( order.orderId )
+            .setCountryCode( COUNTRYCODE.SE )
+        ;
+        try {
+        	GetOrdersResponse response = queryOrderBuilder.queryInvoiceOrder().doRequest();
+
+			assertTrue( response.isOrderAccepted() );     
+	   		assertEquals( String.valueOf(order.orderId), response.getOrderId() );
+        
+	   		// see GetOrdersIntegrationTest.java for detailed tests
+        }
+        catch( Exception e ) {
+        	System.out.println( e.getClass() + e.getMessage() );
+        }
+    }
     
     // .queryCardOrder
     @Test
@@ -146,6 +181,7 @@ public class WebPayAdminWebdriverTest {
         
         assertTrue( response.isOrderAccepted() );     
    		assertEquals( order.getTransactionId(), response.getTransactionId() );
+
     }
     // directbank
     // TODO

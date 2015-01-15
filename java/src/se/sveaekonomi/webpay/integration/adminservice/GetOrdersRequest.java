@@ -16,6 +16,8 @@ import javax.xml.soap.SOAPPart;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
+import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**
  * Handles Admin Webservice GetOrdersRequest
@@ -23,7 +25,7 @@ import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
  */
 public class GetOrdersRequest {
 
-	// NOTE: validates on order level, don't validate request attributesl in itself (rationale: bad request will return error from webservice)
+	// NOTE: validates on order level, don't validate request attributes in itself (rationale: bad request will return error from webservice)
 	
 	private String action;
 	public QueryOrderBuilder builder;
@@ -113,7 +115,12 @@ public class GetOrdersRequest {
 		    				SOAPElement soapBodyElem6 = soapBodyElem5.addChildElement("ClientId", "dat");
 						    	soapBodyElem6.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
 						    SOAPElement soapBodyElem7 = soapBodyElem5.addChildElement("OrderType", "dat");
-						    	soapBodyElem7.addTextNode("Invoice");	// TODO write ORDERTYPE string constant based on this.builder.getOrderType()
+						    	if( this.builder.getOrderType() == PAYMENTTYPE.INVOICE ) {
+						    		soapBodyElem7.addTextNode("Invoice");
+						    	}
+						    	if( this.builder.getOrderType() == PAYMENTTYPE.PAYMENTPLAN ) {
+						    		soapBodyElem7.addTextNode("PaymentPlan");
+						    	}						    	
 						    SOAPElement soapBodyElem8 = soapBodyElem5.addChildElement("SveaOrderId", "dat");
 						    	soapBodyElem8.addTextNode(String.valueOf(this.builder.getOrderId()));
 						    	

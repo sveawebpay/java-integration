@@ -102,5 +102,12 @@ public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
 		GetOrdersRequest request = new GetOrdersRequest( this );
 		return request;        
     }
+    
+    public GetOrdersRequest queryPaymentPlanOrder() {
+    	this.orderType = PAYMENTTYPE.PAYMENTPLAN;
+		// validation is done in GetOrdersRequest
+		GetOrdersRequest request = new GetOrdersRequest( this );
+		return request;        
+    }
   
 }
