@@ -6,6 +6,8 @@ import java.util.HashSet;
 
 import javax.xml.bind.ValidationException;
 
+import se.sveaekonomi.webpay.integration.adminservice.DeliverOrderRowsRequest;
+import se.sveaekonomi.webpay.integration.adminservice.DeliverOrdersRequest;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
@@ -108,6 +110,20 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
     public String getCaptureDate() {
         return captureDate;
     }
+    
+    public DeliverOrderRowsRequest deliverInvoiceOrderRows() {
+    	// validate request and throw exception if validation fails
+    	String errors = validateDeliverInvoiceOrderRows();
+        if (!errors.equals("")) {
+            throw new SveaWebPayException("Validation failed", new ValidationException(errors));
+        }     	
+    	
+        return new DeliverOrderRowsRequest(this);
+    }
+    
+    
+    
+    
     
 	public ConfirmTransactionRequest deliverCardOrderRows() {
 	
