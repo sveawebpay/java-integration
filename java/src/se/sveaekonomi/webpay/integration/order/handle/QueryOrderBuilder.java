@@ -2,22 +2,28 @@ package se.sveaekonomi.webpay.integration.order.handle;
 
 import javax.xml.bind.ValidationException;
 
+import se.sveaekonomi.webpay.integration.adminservice.GetOrdersRequest;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.QueryTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHODTYPE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**
  * @author Kristian Grossman-Madsen
  */
 public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
 	
+    /** Required. */
     protected ConfigurationProvider config;
-    protected COUNTRYCODE countryCode;
-        
     /** Required. */
     private Long orderId;
+    /** Required. */
+    protected COUNTRYCODE countryCode;
+    /** Required. */
+    protected PAYMENTTYPE orderType;
 
     public ConfigurationProvider getConfig() {
         return this.config;
@@ -40,6 +46,10 @@ public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
     public Long getOrderId() {
         return orderId;
     }
+    
+	public PAYMENTTYPE getOrderType() {
+		return this.orderType;
+	} 
     
 	/**
 	 * Optional, card or direct bank only -- alias for setOrderId
@@ -85,4 +95,19 @@ public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
         return errors;    
     }
 	
+    
+    public GetOrdersRequest queryInvoiceOrder() {
+    	this.orderType = PAYMENTTYPE.INVOICE;
+		// validation is done in GetOrdersRequest
+		GetOrdersRequest request = new GetOrdersRequest( this );
+		return request;        
+    }
+    
+    public GetOrdersRequest queryPaymentPlanOrder() {
+    	this.orderType = PAYMENTTYPE.PAYMENTPLAN;
+		// validation is done in GetOrdersRequest
+		GetOrdersRequest request = new GetOrdersRequest( this );
+		return request;        
+    }
+  
 }

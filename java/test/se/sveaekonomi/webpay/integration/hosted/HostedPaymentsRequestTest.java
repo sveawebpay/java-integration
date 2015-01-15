@@ -74,41 +74,4 @@ public class HostedPaymentsRequestTest {
 //        </payment>        	
     }
     
-    @Test
-    public void test_HostedPayment_getPaymentUrl_xml() {
-    	    	
-    	OrderRowBuilder row = Item.orderRow()
-        .setArticleNumber("665")
-        .setName("Orderrow1")
-        .setDescription("Orderrow description")
-        .setAmountExVat(4.00)
-        .setQuantity(1.0)
-        .setUnit("st")
-        .setVatPercent(25);
-    	
-    	IndividualCustomer customer = Item.individualCustomer()
-		.setIpAddress("127.0.0.1");
-
-        PaymentUrl paymentUrl = null;
-		try {
-			paymentUrl = WebPay.createOrder(SveaConfig.getDefaultConfig())
-			.addOrderRow(row)
-			.addCustomerDetails(customer)
-			.setCountryCode(TestingTool.DefaultTestCountryCode)
-			.setClientOrderNumber(  new String( "test_HostedPayment_getPaymentUrl_xml#" + new java.util.Date().getTime() ) )
-			.setCurrency(CURRENCY.EUR)
-			.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
-				.setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
-				.setPayPageLanguageCode(LANGUAGECODE.sv )
-				.getPaymentUrl();
-		} catch (IllegalStateException | IOException e) {
-			e.printStackTrace();
-		}
-				
-		Assert.assertTrue(paymentUrl.isOrderAccepted());
-		Assert.assertNotNull(paymentUrl.getId());
-		Assert.assertNotNull(paymentUrl.getCreated());
-		Assert.assertEquals( "https://webpay", paymentUrl.getUrl().substring(0, 14) );  
-		Assert.assertEquals( "https://test", paymentUrl.getTestUrl().substring(0, 12) );  		
-    }
 }

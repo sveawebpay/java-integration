@@ -44,7 +44,6 @@ public class WebPayAdmin {
         return new CancelOrderBuilder(config);
 	}
 	
-	// TODO check below javadoc
 	/**
 	 * The WebPayAdmin.queryOrder entrypoint method is used to get information about an order.
      * 
@@ -57,7 +56,7 @@ public class WebPayAdmin {
      * ...
      *     request = WebPayAdmin.queryOrder(config)
      *          .setOrderId()          // required
-     *          .setTransactionId	   // optional, card or direct bank only, alias for setOrderId 
+     *          .setTransactionId()	   // optional, card or direct bank only, alias for setOrderId 
      *          .setCountryCode()      // required      
      *     ;
      *     // then select the corresponding request class and send request
@@ -119,7 +118,6 @@ public class WebPayAdmin {
 	    
 	    return new DeliverOrderRowsBuilder(config);	
     }    
-
     
 	/**
      * The WebPayAdmin.cancelOrderRows entrypoint method is used to cancel rows in an order before it has been delivered.

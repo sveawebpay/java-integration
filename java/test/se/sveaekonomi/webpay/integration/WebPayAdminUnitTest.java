@@ -8,6 +8,7 @@ import java.util.Hashtable;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.adminservice.GetOrdersRequest;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.AnnulTransactionRequest;
@@ -242,7 +243,15 @@ public class WebPayAdminUnitTest {
     /// WebPayAdmin.queryOrder() --------------------------------------------------------------------------------------------	
 	/// returned request class
 	// .queryInvoiceOrder => AdminService/GetOrdersRequest
-	// TODO
+    @Test
+    public void test_queryOrder_queryInvoiceOrder_returns_GetOrdersRequest() {
+		QueryOrderBuilder builder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+			.setOrderId( 987654L )
+			.setCountryCode( COUNTRYCODE.SE )    
+		;
+		GetOrdersRequest request = builder.queryInvoiceOrder();
+		assertThat( request, instanceOf(GetOrdersRequest.class));
+	}
 	// .queryPaymentPlanOrder => AdminService/GetOrdersRequest
 	// TODO
 	// .queryDirectBankOrder => HostedService/QueryTransactionRequest
@@ -260,7 +269,73 @@ public class WebPayAdminUnitTest {
     
     /// builder object validation
 	// invoice
-	// TODO public void test_validates_all_required_methods_for_queryOrder_queryInvoiceOrder(){
+    @Test
+    public void test_validates_all_required_methods_for_queryOrder_queryInvoiceOrder() {
+		QueryOrderBuilder builder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+			.setOrderId(123456L)													// invoice, partpayment only, required
+		    //.setTransactionId("123456")            				   				// card, direct bank only, optional -- you can also use setOrderId
+			.setCountryCode(TestingTool.DefaultTestCountryCode)						// required
+		;			
+		try {			
+			GetOrdersRequest request = builder.queryInvoiceOrder();						
+			@SuppressWarnings("unused")
+			Object soapRequest = request.prepareRequest();					
+		}
+		catch (SveaWebPayException e){			
+			// fail on validation error
+	        fail();
+        }		
+        catch( Exception e ) {
+        	System.out.println( e.getClass() + e.getMessage() );
+        }     
+    }
+    @Test
+    public void test_queryOrder_validates_missing_required_method_for_queryInvoiceOrder_setOrderId() {	
+		QueryOrderBuilder builder = new QueryOrderBuilder(SveaConfig.getDefaultConfig())
+			//.setOrderId(123456L)													// invoice, partpayment only, required
+			.setCountryCode(TestingTool.DefaultTestCountryCode)						// required
+		;
+		try {
+			GetOrdersRequest request = builder.queryInvoiceOrder();						
+			@SuppressWarnings("unused")
+			Object soapRequest = request.prepareRequest();		
+			// fail if validation passes
+	        fail();		
+		}
+		catch (SveaWebPayException e){			
+	        assertEquals(
+        		"MISSING VALUE - OrderId is required, use setOrderId().\n", 
+    			e.getCause().getMessage()
+    		);
+        }
+        catch( Exception e ) {
+        	System.out.println( e.getClass() + e.getMessage() );
+        }   
+    }
+    @Test
+    public void test_queryOrder_validates_missing_required_method_for_queryInvoiceOrder_setCountryCode() {	
+		QueryOrderBuilder builder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+			.setOrderId(123456L)													// invoice, partpayment only, required
+			//.setCountryCode(TestingTool.DefaultTestCountryCode)					// required
+		;			
+		try {
+			GetOrdersRequest request = builder.queryInvoiceOrder();						
+			@SuppressWarnings("unused")
+			Object soapRequest = request.prepareRequest();		
+			// fail if validation passes
+	        fail();		
+		}
+		catch (SveaWebPayException e){			
+	        assertEquals(
+        		"MISSING VALUE - CountryCode is required, use setCountryCode(...).\n", 
+    			e.getCause().getMessage()
+    		);			
+        }	
+        catch( Exception e ) {
+        	fail();
+        	System.out.println( e.getClass() + e.getMessage() );
+        }   
+    }
 	// paymentplan
 	// TODO public void test_validates_all_required_methods_for_queryOrder_queryPaymentPlanOrder() {
 	// directbank

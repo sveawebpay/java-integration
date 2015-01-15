@@ -77,8 +77,13 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 * @param float $AmountAsFloat
 	 * @return $this
 	 */
-	public T setAmountExVat(double dExVatAmount) {
+	public T setAmountExVat(Double dExVatAmount) {
 		this.amountExVat = dExVatAmount;
+		return (T) this;
+	}	
+	
+	public T setAmountExVat(double dExVatAmount) {
+		this.amountExVat = Double.valueOf(dExVatAmount);
 		return (T) this;
 	}
 
@@ -103,6 +108,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 		return (T) this;
 	}
 
+	/** When refering to a queried order row, may contain the value NaN if order row was originally specified ex vat. */
 	public Double getVatPercent() {
 		return vatPercent;
 	}
@@ -186,11 +192,18 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 * @param amountIncVat
 	 * @return OrderRowBuilder
 	 */
-	public T setAmountIncVat(double amountIncVat) {
+	public T setAmountIncVat(Double amountIncVat) {
 		this.amountIncVat = amountIncVat;
 		return (T) this;
 	}
+	
+	
+	public T setAmountIncVat(double amountIncVat) {
+		this.amountIncVat = Double.valueOf(amountIncVat);
+		return (T) this;
+	}
 
+	/** When refering to a queried order row, may contain the value NaN if order row was originally specified ex vat. */
 	public Double getAmountIncVat() {
 		return amountIncVat;
 	}
