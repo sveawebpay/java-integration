@@ -6,7 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
-import se.sveaekonomi.webpay.integration.adminservice.DeliverOrdersResponse;
+import se.sveaekonomi.webpay.integration.adminservice.DeliverOrderRowsResponse;
 import se.sveaekonomi.webpay.integration.adminservice.GetOrdersResponse;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
@@ -195,7 +195,7 @@ public class WebPayAdminWebdriverTest {
         assertTrue(order.isOrderAccepted());
 
         // deliver first order row and assert the response
-        DeliverOrdersResponse response = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+        DeliverOrderRowsResponse response = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
                 .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
                 .setCountryCode(TestingTool.DefaultTestCountryCode)	
                 .setInvoiceDistributionType("Post")					// TODO use enum
@@ -204,7 +204,7 @@ public class WebPayAdminWebdriverTest {
                 	.doRequest();
         
         assertTrue(response.isOrderAccepted());        
-        assertTrue(response instanceof DeliverOrdersResponse );
+        assertTrue(response instanceof DeliverOrderRowsResponse );
     }    
     
     //  .deliverCardOrderRows
