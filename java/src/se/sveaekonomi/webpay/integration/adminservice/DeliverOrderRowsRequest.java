@@ -6,6 +6,8 @@ import javax.xml.bind.ValidationException;
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
 import javax.xml.soap.SOAPBody;
+import javax.xml.soap.SOAPConnection;
+import javax.xml.soap.SOAPConnectionFactory;
 import javax.xml.soap.SOAPElement;
 import javax.xml.soap.SOAPEnvelope;
 import javax.xml.soap.SOAPException;
@@ -33,28 +35,30 @@ public class DeliverOrderRowsRequest  {
 
 	/**
 	 * validates that all required attributes needed for the request are present in the builder object
-	 * @return error string indicating which methods are missing, or empty string if no problems found
+	 * @throws ValidationException
 	 */
-	public String validateOrder() {
+	public void validateOrder() throws ValidationException {
     	String errors = "";
-        if (builder.getCountryCode() == null) {
-            errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-        }        
         if (builder.getOrderId() == null) {
             errors += "MISSING VALUE - OrderId is required, use setOrderId().\n";
-    	}        
+    	}     
+        if (builder.getCountryCode() == null) {
+            errors += "MISSING VALUE - CountryCode is required, use setCountryCode().\n";
+        }           
         if( builder.getRowIndexesToDeliver().size() == 0 ) {
         	errors += "MISSING VALUE - rowIndexesToDeliver is required for deliverInvoiceOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().\n";
     	}
         if (builder.getInvoiceDistributionType() == null) {
         	errors += "MISSING VALUE - distributionType is required, use setInvoiceDistributionType().\n";
         }
-        return errors;
+
+        if ( !errors.equals("")) {
+            throw new ValidationException(errors);
+        }
 	}
 
 	// TODO
-	public SOAPMessage prepareRequest() throws SOAPException {
-		
+	public SOAPMessage prepareRequest() throws SOAPException {		
 		// build and return inspectable request object
 		MessageFactory messageFactory = MessageFactory.newInstance();
 		SOAPMessage soapMessage = messageFactory.createMessage();
@@ -124,116 +128,59 @@ public class DeliverOrderRowsRequest  {
     	soapMessage.saveChanges();
     	
         /* Print the request message */
-		System.out.print("Request SOAP Message:");
-		try {
-			soapMessage.writeTo(System.out);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println();
+//			System.out.print("Request SOAP Message:");
+//			try {
+//				soapMessage.writeTo(System.out);
+//			} catch (IOException e) {
+//				// TODO Auto-generated catch block
+//				e.printStackTrace();
+//			}
+//			System.out.println();
 		    	
 		return soapMessage;
-	};    
-    
-//	/**
-//	 * prepares the soap request to send to admin webservice
-//	 * @throws SOAPException 
-//	 * @throws IOException 
-//	 */
-//	public SOAPMessage prepareRequest() throws Exception {
-//
 
-//        // build inspectable request object and return
-//        MessageFactory messageFactory = MessageFactory.newInstance();
-//        SOAPMessage soapMessage = messageFactory.createMessage();
-//        SOAPPart soapPart = soapMessage.getSOAPPart();
-//    
-//		//<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:tem="http://tempuri.org/" xmlns:dat="http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service">
-//		//   <soapenv:Header/>
-//		//   <soapenv:Body>
-//		//      <tem:GetOrders>
-//		//         <!--Optional:-->
-//		//         <tem:request>
-//		//            <dat:Authentication>
-//		//               <dat:Password>sverigetest</dat:Password>
-//		//               <dat:Username>sverigetest</dat:Username>
-//		//            </dat:Authentication>
-//		//            <dat:OrdersToRetrieve>
-//		//               <dat:GetOrderInformation>
-//		//                  <dat:ClientId>79021</dat:ClientId>
-//		//                  <dat:OrderType>Invoice</dat:OrderType>
-//		//                  <dat:SveaOrderId>348629</dat:SveaOrderId>
-//		//               </dat:GetOrderInformation>
-//		//            </dat:OrdersToRetrieve>
-//		//         </tem:request>
-//		//      </tem:GetOrders>
-//		//   </soapenv:Body>
-//		//</soapenv:Envelope>    	    
-//	                	
-//        // SOAP Envelope
-//        SOAPEnvelope envelope = soapPart.getEnvelope(); // adds namespace SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/
-//	    envelope.addNamespaceDeclaration("dat", "http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service");
-//	    envelope.addNamespaceDeclaration("tem", "http://tempuri.org/");	    
-//        
-//	    // SOAP Body
-//	    SOAPBody start = envelope.getBody();
-//	    SOAPElement soapBody = start.addChildElement("GetOrders", "tem");
-//		    SOAPElement soapBodyElem = soapBody.addChildElement("request", "tem");
-//		    	SOAPElement soapBodyElem1 = soapBodyElem.addChildElement("Authentication", "dat");
-//		    		SOAPElement soapBodyElem2 = soapBodyElem1.addChildElement("Password", "dat");
-//		    			soapBodyElem2.addTextNode(this.builder.getConfig().getPassword( this.builder.getOrderType(), this.builder.getCountryCode()));
-//		    		SOAPElement soapBodyElem3 = soapBodyElem1.addChildElement("Username", "dat");
-//		    			soapBodyElem3.addTextNode(this.builder.getConfig().getUsername( this.builder.getOrderType(), this.builder.getCountryCode()));
-//	    		
-//		    		SOAPElement soapBodyElem4 = soapBodyElem.addChildElement("OrdersToRetrieve", "dat");
-//		    			SOAPElement soapBodyElem5 = soapBodyElem4.addChildElement("GetOrderInformation", "dat");
-//		    				SOAPElement soapBodyElem6 = soapBodyElem5.addChildElement("ClientId", "dat");
-//						    	soapBodyElem6.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
-//						    SOAPElement soapBodyElem7 = soapBodyElem5.addChildElement("OrderType", "dat");
-//						    	if( this.builder.getOrderType() == PAYMENTTYPE.INVOICE ) {
-//						    		soapBodyElem7.addTextNode("Invoice");
-//						    	}
-//						    	if( this.builder.getOrderType() == PAYMENTTYPE.PAYMENTPLAN ) {
-//						    		soapBodyElem7.addTextNode("PaymentPlan");
-//						    	}						    	
-//						    SOAPElement soapBodyElem8 = soapBodyElem5.addChildElement("SveaOrderId", "dat");
-//						    	soapBodyElem8.addTextNode(String.valueOf(this.builder.getOrderId()));
-//						    	
-//        String soapActionPrefix = "http://tempuri.org/IAdminService/";
-//						    	
-//        MimeHeaders headers = soapMessage.getMimeHeaders();
-//        headers.addHeader("SOAPAction", soapActionPrefix + this.action);
-//					   
-//        soapMessage.saveChanges();
-//
-//        /* Print the request message */
-//		//System.out.print("Request SOAP Message:");
-//		//soapMessage.writeTo(System.out);
-//		//System.out.println();
-//
-//        return soapMessage;
-//	}
-	
-	
+	};    	
 	
 	public DeliverOrderRowsResponse doRequest() {	
 		
 		// validate builder, throw runtime exception on error
-		String errors =  this.validateOrder(); 
-        if ( !errors.equals("")) {
-//      	//System.out.println("DeliverOrderRequest.doRequest: " + errors);
-            throw new SveaWebPayException( "Validation failed", new ValidationException(errors) );
-        }     	
-		
-        // prepare and send request
-        try {
-			prepareRequest();
-		} catch (SOAPException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
+		try {
+			validateOrder(); 
 		}
-        // TODO ...
-		return new DeliverOrderRowsResponse(null);
+        catch (ValidationException e) {
+            throw new SveaWebPayException( "DeliverOrderRowsRequest: validateRequest failed.", e );
+        }
+		
+        // prepare request, throw runtime exception on error
+        try {
+        	prepareRequest();		
+		} catch (SOAPException e) {
+			throw new SveaWebPayException( "DeliverOrderRowsRequest: prepareRequest failed.", e );
+		}
+		
+        return new DeliverOrderRowsResponse(null);
+
+//    	public GetOrdersResponse doRequest() throws Exception {
+//			
+//            // Create SOAP Connection
+//            SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
+//            SOAPConnection soapConnection = soapConnectionFactory.createConnection();
+//
+//            // Send SOAP Message to SOAP Server
+//            String url = "https://partnerweb.sveaekonomi.se/WebPayAdminService_test/AdminService.svc/backward";
+//        	SOAPMessage soapResponse = soapConnection.call( prepareRequest(), url );
+//            
+//            // DEBUG: print SOAP Response
+////    		System.out.print("Response SOAP Message:");
+////    		soapResponse.writeTo(System.out);
+////          System.out.println();
+//            
+//            soapConnection.close();
+//            
+//            // parse response
+//            GetOrdersResponse response = new GetOrdersResponse(soapResponse.getSOAPPart().getEnvelope().getBody().getElementsByTagName("*"));
+//            
+//            return response;
+
 	};
 }

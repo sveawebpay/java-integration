@@ -12,7 +12,6 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
-import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
@@ -28,7 +27,6 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 
     private ArrayList<Integer> rowIndexesToDeliver;
 	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
-	private ArrayList<OrderRowBuilder> newOrderRows;	// TODO check usage
     private String orderId;
     private String captureDate;
     private String invoiceDistributionType;	// TODO move to enum
@@ -160,13 +158,12 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 			originalOrderTotal += originalRow.getAmountExVat() * (1+originalRow.getVatPercent()/100.0) * originalRow.getQuantity(); // TODO change to method, backport to php
 		}
 		
-		// calculate delivered order rows total, incvat row sum over deliveredOrderRows + newOrderRows
+		// calculate delivered order rows total, incvat row sum over deliveredOrderRows
 		double deliveredOrderTotal = 0.0;
 		for( Integer rowIndex : new HashSet<Integer>(rowIndexesToDeliver) ) {
 			NumberedOrderRowBuilder deliveredRow = numberedOrderRows.get(rowIndex-1);	// -1 as NumberedOrderRows is one-indexed
 			deliveredOrderTotal +=  deliveredRow.getAmountExVat() * (1+deliveredRow.getVatPercent()/100.0) * deliveredRow.getQuantity();
 		}			
-
 		
 		double amountToLowerOrderBy = originalOrderTotal - deliveredOrderTotal;
 				

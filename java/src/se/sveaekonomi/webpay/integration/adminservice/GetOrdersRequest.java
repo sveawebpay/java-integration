@@ -52,7 +52,7 @@ public class GetOrdersRequest {
 
     private String validateCountryCode() {
         return (builder.getCountryCode() == null) ? "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n" : "";
-    }	
+    }
 	
 	/**
 	 * prepares the soap request to send to admin webservice
