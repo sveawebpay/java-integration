@@ -7,13 +7,13 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-public class DeliverOrderRowsResponse extends AdminServiceResponse {
+public class DeliverPartialResponse extends AdminServiceResponse {
 
     /** Id that identifies a client in sveawebpay's system */	
     public String clientId;
 	
     /** The amount delivered with this request */
-    public String amount;
+    public Double amount;
 
     /** The invoice id for the delivered order (set iff accepted, orderType Invoice)*/
     public String invoiceId;
@@ -34,11 +34,11 @@ public class DeliverOrderRowsResponse extends AdminServiceResponse {
 		this.clientId = clientId;
 	}
 
-	public String getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
@@ -74,7 +74,7 @@ public class DeliverOrderRowsResponse extends AdminServiceResponse {
 		this.orderId = orderId;
 	}
 
-	public DeliverOrderRowsResponse(SOAPMessage soapResponse) throws SOAPException {
+	public DeliverPartialResponse(SOAPMessage soapResponse) throws SOAPException {
 		// set common response attributes
 		super(soapResponse.getSOAPPart().getEnvelope().getBody().getElementsByTagName("*"));
 
@@ -101,7 +101,7 @@ public class DeliverOrderRowsResponse extends AdminServiceResponse {
 		this.setClientId( clientId );
 		//                  <a:DeliveredAmount>125.00</a:DeliveredAmount>
 		String deliveredAmount = dor.getElementsByTagName("a:DeliveredAmount").item(0).getTextContent();
-		this.setAmount( deliveredAmount );
+		this.setAmount( Double.valueOf(deliveredAmount) );
 		//                  <a:DeliveryReferenceNumber>1043580</a:DeliveryReferenceNumber>
 		String deliveryReferenceNumber = dor.getElementsByTagName("a:DeliveryReferenceNumber").item(0).getTextContent();
 		//                  <a:OrderType>Invoice</a:OrderType>
@@ -122,8 +122,5 @@ public class DeliverOrderRowsResponse extends AdminServiceResponse {
 		//      </DeliverPartialResponse>
 		//   </s:Body>
 		//</s:Envelope>
-
-
 	}
-
 }

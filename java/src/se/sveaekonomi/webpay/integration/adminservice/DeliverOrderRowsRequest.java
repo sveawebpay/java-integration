@@ -140,7 +140,7 @@ public class DeliverOrderRowsRequest  {
 
 	};    	
 	
-	public DeliverOrderRowsResponse doRequest() {	
+	public DeliverPartialResponse doRequest() {	
 		
 		// validate builder, throw runtime exception on error
 		try {
@@ -184,9 +184,9 @@ public class DeliverOrderRowsRequest  {
 			throw new SveaWebPayException( "DeliverOrderRowsRequest: doRequest send request failed.", e );
 		}
 		// parse response
-		DeliverOrderRowsResponse response;
+		DeliverPartialResponse response;
 		try {
-			response = new DeliverOrderRowsResponse(soapResponse);
+			response = new DeliverPartialResponse(soapResponse);
 		} catch (SOAPException e) {
 			throw new SveaWebPayException( "DeliverOrderRowsRequest: doRequest parse response failed.", e );
 		}

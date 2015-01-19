@@ -53,7 +53,7 @@ public class DeliverOrderRowsIntegrationTest {
         assertTrue(order.isOrderAccepted());
 
         // deliver first order row and assert the response
-        DeliverOrderRowsResponse response = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+        DeliverPartialResponse response = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
             .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setInvoiceDistributionType("Post")					// TODO use enum
@@ -62,10 +62,10 @@ public class DeliverOrderRowsIntegrationTest {
             	.doRequest();
         
         assertTrue(response.isOrderAccepted());        
-        assertTrue(response instanceof DeliverOrderRowsResponse );
+        assertTrue(response instanceof DeliverPartialResponse );
         
         assertEquals(String.valueOf(order.orderId), response.getOrderId());
-        assertEquals("250.00", response.getAmount());
+        assertEquals(Double.valueOf(250.00), response.getAmount());
         assertNotNull(response.invoiceId);
         assertNull(response.contractNumber);
         assertEquals("Invoice", response.getOrderType());
@@ -110,7 +110,7 @@ public class DeliverOrderRowsIntegrationTest {
         assertTrue(order.isOrderAccepted());
 
         // deliver first order row and assert the response
-        DeliverOrderRowsResponse response = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+        DeliverPartialResponse response = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
             .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setInvoiceDistributionType("Post")					// TODO use enum
@@ -119,10 +119,10 @@ public class DeliverOrderRowsIntegrationTest {
             	.doRequest();
         
         assertTrue(response.isOrderAccepted());        
-        assertTrue(response instanceof DeliverOrderRowsResponse );
+        assertTrue(response instanceof DeliverPartialResponse );
         
         assertEquals(String.valueOf(order.orderId), response.getOrderId());
-        assertEquals("270.00", response.getAmount());
+        assertEquals(Double.valueOf(270.00), response.getAmount());
         assertNotNull(response.invoiceId);
         assertNull(response.contractNumber);
         assertEquals("Invoice", response.getOrderType());
