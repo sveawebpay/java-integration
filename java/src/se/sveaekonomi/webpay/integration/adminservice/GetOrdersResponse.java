@@ -10,7 +10,7 @@ import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.CustomerIdentity;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.OrderRowStatus;
+import se.sveaekonomi.webpay.integration.util.constant.ORDERROWSTATUS;
 
 public class GetOrdersResponse extends AdminServiceResponse {
 
@@ -279,18 +279,17 @@ public class GetOrdersResponse extends AdminServiceResponse {
 	    //<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
 		//	<s:Body>
 		//		<GetOrdersResponse xmlns="http://tempuri.org/">
+    	Node getOrdersResponse=xmlResponse.item(0);
+		Node getOrdersResult=xmlResponse.item(1);
 		//			<GetOrdersResult
 		//				xmlns:a="http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service"
 		//				xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
 		//				<a:ErrorMessage i:nil="true" />
 		//				<a:ResultCode>0</a:ResultCode>
 		//				<a:Orders>
-		//					<a:Order>
-    	Node getOrdersResponse=xmlResponse.item(0);
-		Node getOrdersResult=xmlResponse.item(1);
 		Node orders = getOrdersResult.getChildNodes().item(2);		// 0: ErrorMessage, 1: ResultCode
+		//					<a:Order>
 		Element o = (Element) orders.getChildNodes().item(0);	// we allow queries for 1 order only, so use first result node
-
 		//						<a:ChangedDate i:nil="true" />
 		String changedDate = o.getElementsByTagName("a:ChangedDate").item(0).getTextContent(); // getTextContent() of <a:ChangedDate i:nil="true" /> is ""
 		this.setChangedDate( changedDate.equals("") ? null : changedDate );
@@ -480,7 +479,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
 			numberedOrderRow.setInvoiceId(rInvoiceId.equals("") ? null : rInvoiceId);
 			numberedOrderRow.setRowNumber(Integer.valueOf(rRowNumber));
 			try {
-				numberedOrderRow.setStatus( OrderRowStatus.fromString(rStatus) );
+				numberedOrderRow.setStatus( ORDERROWSTATUS.fromString(rStatus) );
 			} catch (Exception e) {
 				//ignore unknown status
 			}

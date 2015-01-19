@@ -7,6 +7,8 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
+
 public class DeliverPartialResponse extends AdminServiceResponse {
 
     /** Id that identifies a client in sveawebpay's system */	
@@ -21,7 +23,7 @@ public class DeliverPartialResponse extends AdminServiceResponse {
     /**  The contract number for the delivered order (set iff accepted, orderType PaymentPlan)  */
     public String contractNumber;
     
-    public String orderType;	// TODO enum?
+    public ORDERTYPE orderType;
 
     /** Id that identifies an order in sveawebpay's system */
     public String orderId;   	
@@ -58,11 +60,11 @@ public class DeliverPartialResponse extends AdminServiceResponse {
 		this.contractNumber = contractNumber;
 	}
 
-	public String getOrderType() {
+	public ORDERTYPE getOrderType() {
 		return orderType;
 	}
 
-	public void setOrderType(String orderType) {
+	public void setOrderType(ORDERTYPE orderType) {
 		this.orderType = orderType;
 	}
 
@@ -106,12 +108,13 @@ public class DeliverPartialResponse extends AdminServiceResponse {
 		String deliveryReferenceNumber = dor.getElementsByTagName("a:DeliveryReferenceNumber").item(0).getTextContent();
 		//                  <a:OrderType>Invoice</a:OrderType>
 		String orderType = dor.getElementsByTagName("a:OrderType").item(0).getTextContent();
-		this.setOrderType( orderType );
-		if( orderType.equals("Invoice") ) {	// TODO enum
+		if( orderType.equals(ORDERTYPE.Invoice.toString()) ) {
 			this.setInvoiceId( deliveryReferenceNumber );
+			this.setOrderType( ORDERTYPE.Invoice );
 		}
-		if( orderType.equals("PaymentPlan") ) {	// TODO enum
-			this.setContractNumber( deliveryReferenceNumber );			
+		if( orderType.equals(ORDERTYPE.PaymentPlan.toString()) ) {
+			this.setContractNumber( deliveryReferenceNumber );		
+			this.setOrderType( ORDERTYPE.PaymentPlan );			
 		}
 		//                  <a:SveaOrderId>507018</a:SveaOrderId>
 		String sveaOrderId = dor.getElementsByTagName("a:SveaOrderId").item(0).getTextContent();

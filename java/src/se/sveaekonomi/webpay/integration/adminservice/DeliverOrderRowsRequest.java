@@ -111,7 +111,7 @@ public class DeliverOrderRowsRequest  {
 	    		SOAPElement username = authentication.addChildElement("Username", "dat");
 	    			username.addTextNode(this.builder.getConfig().getUsername( this.builder.getOrderType(), this.builder.getCountryCode()));
 	    	SOAPElement invoiceDistributionType = request.addChildElement("InvoiceDistributionType", "dat");
-	    		invoiceDistributionType.addTextNode(this.builder.getInvoiceDistributionType());
+	    		invoiceDistributionType.addTextNode(this.builder.getInvoiceDistributionType().toString());    		
 			SOAPElement orderToDeliver = request.addChildElement("OrderToDeliver", "dat");
 				SOAPElement clientId = orderToDeliver.addChildElement("ClientId", "dat");
 					clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
@@ -126,15 +126,15 @@ public class DeliverOrderRowsRequest  {
 	    	
     	soapMessage.saveChanges();
     	
-        /* Print the request message */
-			System.out.print("Request SOAP Message:");
-			try {
-				soapMessage.writeTo(System.out);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-			System.out.println();
+        // DEBUG: Print SOAP request 
+//		System.out.print("Request SOAP Message:");
+//		try {
+//			soapMessage.writeTo(System.out);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		System.out.println();
 		    	
 		return soapMessage;
 
@@ -170,13 +170,13 @@ public class DeliverOrderRowsRequest  {
 			soapResponse = soapConnection.call( soapRequest, url );
 			
 			// DEBUG: print SOAP Response
-			System.out.print("Response SOAP Message:");
-			try {
-				soapResponse.writeTo(System.out);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			System.out.println();
+//			System.out.print("Response SOAP Message:");
+//			try {
+//				soapResponse.writeTo(System.out);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			System.out.println();
 			
 			soapConnection.close();			
 		}

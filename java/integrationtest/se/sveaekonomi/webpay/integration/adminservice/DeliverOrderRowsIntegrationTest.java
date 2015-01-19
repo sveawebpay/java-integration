@@ -10,6 +10,8 @@ import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
+import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class DeliverOrderRowsIntegrationTest {
@@ -56,7 +58,7 @@ public class DeliverOrderRowsIntegrationTest {
         DeliverPartialResponse response = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
             .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
-            .setInvoiceDistributionType("Post")					// TODO use enum
+            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setRowToDeliver(1)
             .deliverInvoiceOrderRows()
             	.doRequest();
@@ -68,7 +70,7 @@ public class DeliverOrderRowsIntegrationTest {
         assertEquals(Double.valueOf(250.00), response.getAmount());
         assertNotNull(response.invoiceId);
         assertNull(response.contractNumber);
-        assertEquals("Invoice", response.getOrderType());
+        assertEquals(ORDERTYPE.Invoice, response.getOrderType());
         assertNotNull(response.invoiceId);
 	}  
 
@@ -113,7 +115,7 @@ public class DeliverOrderRowsIntegrationTest {
         DeliverPartialResponse response = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
             .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
-            .setInvoiceDistributionType("Post")					// TODO use enum
+            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setRowToDeliver(1).setRowToDeliver(2)
             .deliverInvoiceOrderRows()
             	.doRequest();
@@ -125,7 +127,7 @@ public class DeliverOrderRowsIntegrationTest {
         assertEquals(Double.valueOf(270.00), response.getAmount());
         assertNotNull(response.invoiceId);
         assertNull(response.contractNumber);
-        assertEquals("Invoice", response.getOrderType());
+        assertEquals(ORDERTYPE.Invoice, response.getOrderType());
         assertNotNull(response.invoiceId);
 	}  
 	

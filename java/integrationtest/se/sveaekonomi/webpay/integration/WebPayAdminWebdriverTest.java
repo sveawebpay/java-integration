@@ -24,6 +24,7 @@ import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.QueryTransa
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 /**
@@ -198,7 +199,7 @@ public class WebPayAdminWebdriverTest {
         DeliverPartialResponse response = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
                 .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
                 .setCountryCode(TestingTool.DefaultTestCountryCode)	
-                .setInvoiceDistributionType("Post")					// TODO use enum
+                .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
                 .setRowToDeliver(1)
                 .deliverInvoiceOrderRows()
                 	.doRequest();

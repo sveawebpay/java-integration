@@ -9,6 +9,7 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPayAdmin;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class DeliverOrderRowsTest {
@@ -24,7 +25,7 @@ public class DeliverOrderRowsTest {
         DeliverOrderRowsBuilder builder = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
             .setOrderId( "999999" ) // dummy order id
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
-            .setInvoiceDistributionType("Post")					// TODO use enum
+            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setRowToDeliver(1);
 
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
@@ -44,7 +45,7 @@ public class DeliverOrderRowsTest {
         DeliverOrderRowsBuilder builder = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
             //.setOrderId( "999999" ) // dummy order id
             //.setCountryCode(TestingTool.DefaultTestCountryCode)	
-            //.setInvoiceDistributionType("Post")					// TODO use enum
+            //.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             //.setRowToDeliver(1)
 		;
 

@@ -14,6 +14,7 @@ import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**
@@ -29,18 +30,18 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
     private String orderId;
     private String captureDate;
-    private String invoiceDistributionType;	// TODO move to enum
+    private DISTRIBUTIONTYPE invoiceDistributionType;
     protected PAYMENTTYPE orderType;
     
 	public PAYMENTTYPE getOrderType() {
 		return this.orderType;
 	} 
     
-	public String getInvoiceDistributionType() {
+	public DISTRIBUTIONTYPE getInvoiceDistributionType() {
 		return invoiceDistributionType;
 	}
 
-	public DeliverOrderRowsBuilder setInvoiceDistributionType(String invoiceDistributionType) {
+	public DeliverOrderRowsBuilder setInvoiceDistributionType(DISTRIBUTIONTYPE invoiceDistributionType) {
 		this.invoiceDistributionType = invoiceDistributionType;
 		return this;
 	}
