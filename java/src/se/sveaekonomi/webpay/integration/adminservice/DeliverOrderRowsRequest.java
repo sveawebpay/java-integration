@@ -29,7 +29,7 @@ public class DeliverOrderRowsRequest  {
 	private DeliverOrderRowsBuilder builder;
 		
 	public DeliverOrderRowsRequest( DeliverOrderRowsBuilder builder) {
-		this.action = "GetOrders";
+		this.action = "DeliverPartial";
 		this.builder = builder;
 	}
 
@@ -57,7 +57,6 @@ public class DeliverOrderRowsRequest  {
         }
 	}
 
-	// TODO
 	public SOAPMessage prepareRequest() throws SOAPException {		
 		// build and return inspectable request object
 		MessageFactory messageFactory = MessageFactory.newInstance();
@@ -98,9 +97,9 @@ public class DeliverOrderRowsRequest  {
 	    envelope.addNamespaceDeclaration("tem", "http://tempuri.org/");	    
 
 	    // SOAP Headers
-//		String soapActionPrefix = "http://tempuri.org/IAdminService/";		    	
-//		MimeHeaders headers = soapMessage.getMimeHeaders();
-//		headers.addHeader("SOAPAction", soapActionPrefix + this.action);
+		String soapActionPrefix = "http://tempuri.org/IAdminService/";		    	
+		MimeHeaders headers = soapMessage.getMimeHeaders();
+		headers.addHeader("SOAPAction", soapActionPrefix + this.action);
 			    
 	    // SOAP Body
 	    SOAPBody body = envelope.getBody();
@@ -128,14 +127,14 @@ public class DeliverOrderRowsRequest  {
     	soapMessage.saveChanges();
     	
         /* Print the request message */
-//			System.out.print("Request SOAP Message:");
-//			try {
-//				soapMessage.writeTo(System.out);
-//			} catch (IOException e) {
-//				// TODO Auto-generated catch block
-//				e.printStackTrace();
-//			}
-//			System.out.println();
+			System.out.print("Request SOAP Message:");
+			try {
+				soapMessage.writeTo(System.out);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			System.out.println();
 		    	
 		return soapMessage;
 
@@ -152,35 +151,46 @@ public class DeliverOrderRowsRequest  {
         }
 		
         // prepare request, throw runtime exception on error
-        try {
-        	prepareRequest();		
+		SOAPMessage soapRequest;
+		try {
+        	soapRequest = prepareRequest();		
 		} catch (SOAPException e) {
 			throw new SveaWebPayException( "DeliverOrderRowsRequest: prepareRequest failed.", e );
 		}
 		
-        return new DeliverOrderRowsResponse(null);
-
-//    	public GetOrdersResponse doRequest() throws Exception {
-//			
-//            // Create SOAP Connection
-//            SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
-//            SOAPConnection soapConnection = soapConnectionFactory.createConnection();
-//
-//            // Send SOAP Message to SOAP Server
-//            String url = "https://partnerweb.sveaekonomi.se/WebPayAdminService_test/AdminService.svc/backward";
-//        	SOAPMessage soapResponse = soapConnection.call( prepareRequest(), url );
-//            
-//            // DEBUG: print SOAP Response
-////    		System.out.print("Response SOAP Message:");
-////    		soapResponse.writeTo(System.out);
-////          System.out.println();
-//            
-//            soapConnection.close();
-//            
-//            // parse response
-//            GetOrdersResponse response = new GetOrdersResponse(soapResponse.getSOAPPart().getEnvelope().getBody().getElementsByTagName("*"));
-//            
-//            return response;
+		// send request and receive response
+		SOAPMessage soapResponse;
+		try {
+			// Create SOAP Connection
+			SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
+			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
+			
+			// Send SOAP Message to SOAP Server
+			String url = "https://partnerweb.sveaekonomi.se/WebPayAdminService_test/AdminService.svc/backward";	// TODO get url from config
+			soapResponse = soapConnection.call( soapRequest, url );
+			
+			// DEBUG: print SOAP Response
+			System.out.print("Response SOAP Message:");
+			try {
+				soapResponse.writeTo(System.out);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.out.println();
+			
+			soapConnection.close();			
+		}
+		catch( SOAPException e) {
+			throw new SveaWebPayException( "DeliverOrderRowsRequest: doRequest send request failed.", e );
+		}
+		// parse response
+		DeliverOrderRowsResponse response;
+		try {
+			response = new DeliverOrderRowsResponse(soapResponse);
+		} catch (SOAPException e) {
+			throw new SveaWebPayException( "DeliverOrderRowsRequest: doRequest parse response failed.", e );
+		}
+		return response;
 
 	};
 }
