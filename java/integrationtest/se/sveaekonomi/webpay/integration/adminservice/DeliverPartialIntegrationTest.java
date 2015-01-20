@@ -14,7 +14,7 @@ import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
-public class DeliverOrderRowsIntegrationTest {
+public class DeliverPartialIntegrationTest {
 
 	// invoice
 	@Test
