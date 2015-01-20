@@ -272,6 +272,29 @@ public class WebPayAdminWebdriverTest {
     }
         
     /// WebPayAdmin.cancelOrderRows() --------------------------------------------------------------------------------------------	
+    // .cancelInvoiceOrderRows
+    @Test
+    public void test_cancelOrderRows_cancelInvoiceOrderRows_cancel_all_rows() {
+    	    	
+    	// create an order using defaults
+    	CreateOrderResponse order = TestingTool.createInvoiceTestOrder("test_cancelOrderRows_cancelInvoiceOrderRows_cancel_all_rows");
+        assertTrue(order.isOrderAccepted());
+
+        // deliver first order row and assert the response
+        CancelOrderRowsResponse response = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
+            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
+            .setCountryCode(TestingTool.DefaultTestCountryCode)	
+            .setRowToCancel(1)
+            .cancelInvoiceOrderRows()
+            	.doRequest();
+        
+        assertTrue(response.isOrderAccepted());        
+        assertTrue(response instanceof CancelOrderRowsResponse );
+    }    
+        
+    // paymentplan
+    // TODO 
+    
     // card
     @Test
     public void test_cancelOrderRows_cancelCardOrderRows_cancel_all_rows() {
