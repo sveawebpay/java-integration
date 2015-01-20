@@ -151,7 +151,7 @@ public class GetOrdersRequest {
         SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 
         // Send SOAP Message to SOAP Server
-        String url = "https://partnerweb.sveaekonomi.se/WebPayAdminService_test/AdminService.svc/backward";
+        String url = "https://partnerweb.sveaekonomi.se/WebPayAdminService_test/AdminService.svc/backward";		// TODO get from config
     	SOAPMessage soapResponse = soapConnection.call( prepareRequest(), url );
         
         // DEBUG: print SOAP Response

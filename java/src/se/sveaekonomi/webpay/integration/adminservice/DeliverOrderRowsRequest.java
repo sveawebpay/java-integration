@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.adminservice;
 
 import java.io.IOException;
+import java.net.URL;
 
 import javax.xml.bind.ValidationException;
 import javax.xml.soap.MessageFactory;
@@ -166,8 +167,8 @@ public class DeliverOrderRowsRequest  {
 			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
 			
 			// Send SOAP Message to SOAP Server
-			String url = "https://partnerweb.sveaekonomi.se/WebPayAdminService_test/AdminService.svc/backward";	// TODO get url from config
-			soapResponse = soapConnection.call( soapRequest, url );
+	        URL url = builder.getConfig().getEndPoint(PAYMENTTYPE.ADMIN_TYPE);		
+			soapResponse = soapConnection.call( soapRequest, url.toString() );
 			
 			// DEBUG: print SOAP Response
 //			System.out.print("Response SOAP Message:");
