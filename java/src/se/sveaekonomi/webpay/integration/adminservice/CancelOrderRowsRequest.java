@@ -16,24 +16,20 @@ import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
-import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
+import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
-/**
- * Handles Admin Webservice DeliverPartial method
- * 
- * @author Kristian Grossman-Madsen
- */
-public class DeliverPartialRequest  {
+public class CancelOrderRowsRequest {
 
 	private String action;
-	private DeliverOrderRowsBuilder builder;
+	private CancelOrderRowsBuilder builder;
 		
-	public DeliverPartialRequest( DeliverOrderRowsBuilder builder) {
-		this.action = "DeliverPartial";
+	public CancelOrderRowsRequest( CancelOrderRowsBuilder builder) {
+		this.action = "CancelOrderRows";
 		this.builder = builder;
-	}
-
+	}	
+	
 	/**
 	 * validates that all required attributes needed for the request are present in the builder object
 	 * @throws ValidationException
@@ -46,17 +42,14 @@ public class DeliverPartialRequest  {
         if (builder.getCountryCode() == null) {
             errors += "MISSING VALUE - CountryCode is required, use setCountryCode().\n";
         }           
-        if( builder.getRowIndexesToDeliver().size() == 0 ) {
-        	errors += "MISSING VALUE - rowIndexesToDeliver is required for deliverInvoiceOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().\n";
+        if( builder.getRowsToCancel().size() == 0 ) {
+        	errors += "MISSING VALUE - rowIndexesToCancel is required for cancelInvoiceOrderRows(). Use methods setRowToCancel() or setRowsToCancel().\n";
     	}
-        if (builder.getInvoiceDistributionType() == null) {
-        	errors += "MISSING VALUE - distributionType is required, use setInvoiceDistributionType().\n";
-        }
         if ( !errors.equals("")) {
             throw new ValidationException(errors);
         }
-	}
-
+	}	
+	
 	public SOAPMessage prepareRequest() throws SOAPException {	
 
 		// validate builder, throw runtime exception on error
@@ -64,7 +57,7 @@ public class DeliverPartialRequest  {
 			validateOrder(); 
 		}
         catch (ValidationException e) {
-            throw new SveaWebPayException( "DeliverPartialRequest: validateRequest failed.", e );
+            throw new SveaWebPayException( "CancelOrderRowsRequest: validateRequest failed.", e );
         }
 				
 		// build and return inspectable request object
@@ -79,25 +72,22 @@ public class DeliverPartialRequest  {
 		//	xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
 		//   <soapenv:Header/>
 		//   <soapenv:Body>
-		//      <tem:DeliverPartial>
+		//      <tem:CancelOrderRows>
 		//         <tem:request>
 		//            <dat:Authentication>
 		//               <dat:Password>sverigetest</dat:Password>
 		//               <dat:Username>sverigetest</dat:Username>
 		//            </dat:Authentication>
-		//            <dat:InvoiceDistributionType>Post</dat:InvoiceDistributionType>
-		//            <dat:OrderToDeliver>
-		//               <dat:ClientId>79021</dat:ClientId>
-		//               <dat:OrderType>Invoice</dat:OrderType>
-		//               <dat:SveaOrderId>506791</dat:SveaOrderId>
-		//            </dat:OrderToDeliver>
-		//            <dat:RowNumbers>
-		//               <arr:long>1</arr:long>
-		//            </dat:RowNumbers>
+		//            <dat:ClientId>79021</dat:ClientId>
+		//            <dat:OrderRowNumbers>
+		//	 		<arr:long>1</arr:long>
+		//            </dat:OrderRowNumbers>
+		//            <dat:OrderType>Invoice</dat:OrderType>
+		//            <dat:SveaOrderId>508450</dat:SveaOrderId>
 		//         </tem:request>
-		//      </tem:DeliverPartial>
+		//      </tem:CancelOrderRows>
 		//   </soapenv:Body>
-		//</soapenv:Envelope>  	
+		//</soapenv:Envelope>
 		
 		// SOAP Envelope
 		SOAPEnvelope envelope = soapPart.getEnvelope(); // adds namespace SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/
@@ -112,26 +102,28 @@ public class DeliverPartialRequest  {
 			    
 	    // SOAP Body
 	    SOAPBody body = envelope.getBody();
-	    SOAPElement deliverPartial = body.addChildElement("DeliverPartial", "tem");
+	    SOAPElement deliverPartial = body.addChildElement("CancelOrderRows", "tem");
 	    SOAPElement request = deliverPartial.addChildElement("request", "tem");
 	    	SOAPElement authentication = request.addChildElement("Authentication", "dat");
 	    		SOAPElement password = authentication.addChildElement("Password", "dat");
 	    			password.addTextNode(this.builder.getConfig().getPassword( this.builder.getOrderType(), this.builder.getCountryCode()));
 	    		SOAPElement username = authentication.addChildElement("Username", "dat");
 	    			username.addTextNode(this.builder.getConfig().getUsername( this.builder.getOrderType(), this.builder.getCountryCode()));
-	    	SOAPElement invoiceDistributionType = request.addChildElement("InvoiceDistributionType", "dat");
-	    		invoiceDistributionType.addTextNode(this.builder.getInvoiceDistributionType().toString());    		
-			SOAPElement orderToDeliver = request.addChildElement("OrderToDeliver", "dat");
-				SOAPElement clientId = orderToDeliver.addChildElement("ClientId", "dat");
-					clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
-			    SOAPElement orderType = orderToDeliver.addChildElement("OrderType", "dat");
-			    	orderType.addTextNode("Invoice");
-			    SOAPElement sveaOrderId = orderToDeliver.addChildElement("SveaOrderId", "dat");
-			    	sveaOrderId.addTextNode(String.valueOf(this.builder.getOrderId()));
-	    	SOAPElement rowNumbers = request.addChildElement("RowNumbers", "dat");
-	    		for( Integer rowIndex : this.builder.getRowIndexesToDeliver() ) {
-	    			rowNumbers.addChildElement("long","arr").addTextNode( Integer.toString( rowIndex ) );
+			SOAPElement clientId = request.addChildElement("ClientId", "dat");
+				clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
+	    	SOAPElement orderRowNumbers = request.addChildElement("OrderRowNumbers", "dat");
+    		for( Integer rowIndex : this.builder.getRowsToCancel() ) {
+    			orderRowNumbers.addChildElement("long","arr").addTextNode( Integer.toString( rowIndex ) );
+    		}
+		    SOAPElement orderType = request.addChildElement("OrderType", "dat");
+		    	if( this.builder.getOrderType() == PAYMENTTYPE.INVOICE ) {
+		    		orderType.addTextNode( ORDERTYPE.Invoice.toString() );
+		    	}
+	    		if( this.builder.getOrderType() == PAYMENTTYPE.PAYMENTPLAN ) {
+	    			orderType.addTextNode( ORDERTYPE.PaymentPlan.toString() );
 	    		}
+		    SOAPElement sveaOrderId = request.addChildElement("SveaOrderId", "dat");
+		    	sveaOrderId.addTextNode(String.valueOf(this.builder.getOrderId()));
 	    	
     	soapMessage.saveChanges();
     	
@@ -146,17 +138,16 @@ public class DeliverPartialRequest  {
 //		System.out.println();
 		    	
 		return soapMessage;
-
-	};    	
+	}
 	
-	public DeliverPartialResponse doRequest() {	
+	public CancelOrderRowsResponse doRequest() {	
 		
         // validate and prepare request, throw runtime exception on error
 		SOAPMessage soapRequest;
 		try {
         	soapRequest = prepareRequest();		
 		} catch (SOAPException e) {
-			throw new SveaWebPayException( "DeliverPartialRequest: prepareRequest failed.", e );
+			throw new SveaWebPayException( "CancelOrderRowsRequest: prepareRequest failed.", e );
 		}
 		
 		// send request and receive response
@@ -182,17 +173,19 @@ public class DeliverPartialRequest  {
 			soapConnection.close();			
 		}
 		catch( SOAPException e) {
-			throw new SveaWebPayException( "DeliverPartialRequest: doRequest send request failed.", e );
+			throw new SveaWebPayException( "CancelOrderRowsRequest: doRequest send request failed.", e );
 		}
-		
+
 		// parse response
-		DeliverPartialResponse response;
+		CancelOrderRowsResponse response;
 		try {
-			response = new DeliverPartialResponse(soapResponse);
+			response = new CancelOrderRowsResponse(soapResponse);
 		} catch (SOAPException e) {
-			throw new SveaWebPayException( "DeliverPartialRequest: doRequest parse response failed.", e );
+			throw new SveaWebPayException( "CancelOrderRowsRequest: doRequest parse response failed.", e );
+
 		}
 		return response;
-
-	};
+	};	
+	
+	
 }

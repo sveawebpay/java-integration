@@ -8,26 +8,24 @@ import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPayAdmin;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
-import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
+import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
-public class DeliverPartialRequestTest {
+public class CancelOrderRowsRequestTest {
 
 	/// validation
 	// invoice
 	@Test 
-	public void test_deliverOrderRows_deliverInvoiceOrderRows_validates_all_required_methods() {
+	public void test_cancelOrderRows_cancelInvoiceOrderRows_validates_all_required_methods() {
 
-        DeliverOrderRowsBuilder builder = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+        CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
             .setOrderId( "999999" ) // dummy order id
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
-            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-            .setRowToDeliver(1);
-
+            .setRowToCancel(1)
+        ;
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
-			DeliverPartialRequest request = builder.deliverInvoiceOrderRows();
+			CancelOrderRowsRequest request = builder.cancelInvoiceOrderRows();
 			request.validateOrder();
 		}
 		catch (ValidationException e){			
@@ -39,7 +37,7 @@ public class DeliverPartialRequestTest {
 	@Test 
 	public void test_deliverOrderRows_deliverInvoiceOrderRows_validates_all_missing_required_methods() {
 
-        DeliverOrderRowsBuilder builder = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+        CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
             //.setOrderId( "999999" ) // dummy order id
             //.setCountryCode(TestingTool.DefaultTestCountryCode)	
             //.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
@@ -48,7 +46,7 @@ public class DeliverPartialRequestTest {
 
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
-			DeliverPartialRequest request = builder.deliverInvoiceOrderRows();
+			CancelOrderRowsRequest request = builder.cancelInvoiceOrderRows();
 			request.validateOrder();
 			// fail if validation passes
 	        fail();	
@@ -57,8 +55,7 @@ public class DeliverPartialRequestTest {
 			assertEquals( 
         		"MISSING VALUE - OrderId is required, use setOrderId().\n" +
         		"MISSING VALUE - CountryCode is required, use setCountryCode().\n" +
-        		"MISSING VALUE - rowIndexesToDeliver is required for deliverInvoiceOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().\n" +
-        		"MISSING VALUE - distributionType is required, use setInvoiceDistributionType().\n", 
+        		"MISSING VALUE - rowIndexesToCancel is required for cancelInvoiceOrderRows(). Use methods setRowToCancel() or setRowsToCancel().\n",
     			e.getMessage()
     		);
         }	
