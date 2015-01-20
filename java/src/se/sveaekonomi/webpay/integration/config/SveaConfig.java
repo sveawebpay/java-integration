@@ -14,6 +14,8 @@ public class SveaConfig {
     private static final String SWP_TEST_HOSTED_ADMIN_URL = "https://test.sveaekonomi.se/webpay/rest/";		// ends with "/" as we need to add request method
     private static final String SWP_PROD_HOSTED_ADMIN_URL = "https://webpay.sveaekonomi.se/webpay/rest/";   // ends with "/" as we need to add request method 
     
+    private static final String SWP_TEST_ADMIN_URL = "https://partnerweb.sveaekonomi.se/WebPayAdminService_test/AdminService.svc/backward"; // /backward => SOAP 1.1
+    private static final String SWP_PROD_ADMIN_URL = "https://partnerweb.sveaekonomi.se/WebPayAdminService/AdminService.svc/backward"; // /backward => SOAP 1.1
     
     public static URL getProdWebserviceUrl() {
         return getUrlFromString(SWP_PROD_WS_URL);
@@ -39,6 +41,13 @@ public class SveaConfig {
     	return getUrlFromString(SWP_TEST_HOSTED_ADMIN_URL);
     }
     
+    public static URL getProdAdminServiceUrl() {
+    	return getUrlFromString(SWP_PROD_ADMIN_URL);
+    }
+    
+    public static URL getTestAdminServiceUrl() {
+    	return getUrlFromString(SWP_TEST_ADMIN_URL);
+    }
     
     private static URL getUrlFromString(String swpTestWsUrl) {
         try {

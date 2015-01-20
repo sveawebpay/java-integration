@@ -1,6 +1,6 @@
 package se.sveaekonomi.webpay.integration.order.row;
 
-import se.sveaekonomi.webpay.integration.util.constant.OrderRowStatus;
+import se.sveaekonomi.webpay.integration.util.constant.ORDERROWSTATUS;
 
 public class NumberedOrderRowBuilder extends OrderRowBuilder<NumberedOrderRowBuilder> {
 
@@ -11,7 +11,7 @@ public class NumberedOrderRowBuilder extends OrderRowBuilder<NumberedOrderRowBui
     /** the order row number, starting with 1 for the first order row */
 	private int rowNumber;
     /** one of: "NotDelivered" | "Delivered" | "Cancelled" */
-	private OrderRowStatus status;
+	private ORDERROWSTATUS status;
 
 	public String getCreditInvoiceId() {
 		return creditInvoiceId;
@@ -35,10 +35,10 @@ public class NumberedOrderRowBuilder extends OrderRowBuilder<NumberedOrderRowBui
 		this.rowNumber = rowNumber;
 		return this;
 	}
-	public OrderRowStatus getStatus() {
+	public ORDERROWSTATUS getStatus() {
 		return status;
 	}
-	public NumberedOrderRowBuilder setStatus(OrderRowStatus status) {
+	public NumberedOrderRowBuilder setStatus(ORDERROWSTATUS status) {
 		this.status = status;
 		return this;
 	}	

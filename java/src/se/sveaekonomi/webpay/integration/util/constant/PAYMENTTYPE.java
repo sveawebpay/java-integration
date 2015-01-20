@@ -4,5 +4,6 @@ public enum PAYMENTTYPE {
     HOSTED,
     INVOICE,
     PAYMENTPLAN,
-    HOSTED_ADMIN
+    HOSTED_ADMIN,
+    ADMIN_TYPE
 }

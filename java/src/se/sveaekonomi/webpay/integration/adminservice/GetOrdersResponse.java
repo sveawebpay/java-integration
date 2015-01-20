@@ -10,7 +10,7 @@ import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.CustomerIdentity;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.OrderRowStatus;
+import se.sveaekonomi.webpay.integration.util.constant.ORDERROWSTATUS;
 
 public class GetOrdersResponse extends AdminServiceResponse {
 
@@ -279,32 +279,31 @@ public class GetOrdersResponse extends AdminServiceResponse {
 	    //<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
 		//	<s:Body>
 		//		<GetOrdersResponse xmlns="http://tempuri.org/">
+    	Node getOrdersResponse=xmlResponse.item(0);
+		Node getOrdersResult=xmlResponse.item(1);
 		//			<GetOrdersResult
 		//				xmlns:a="http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service"
 		//				xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
 		//				<a:ErrorMessage i:nil="true" />
 		//				<a:ResultCode>0</a:ResultCode>
 		//				<a:Orders>
-		//					<a:Order>
-    	Node getOrdersResponse=xmlResponse.item(0);
-		Node getOrdersResult=xmlResponse.item(1);
 		Node orders = getOrdersResult.getChildNodes().item(2);		// 0: ErrorMessage, 1: ResultCode
-		Element order = (Element) orders.getChildNodes().item(0);	// we allow queries for 1 order only, so use first result node
-
+		//					<a:Order>
+		Element o = (Element) orders.getChildNodes().item(0);	// we allow queries for 1 order only, so use first result node
 		//						<a:ChangedDate i:nil="true" />
-		String changedDate = order.getElementsByTagName("a:ChangedDate").item(0).getTextContent(); // getTextContent() of <a:ChangedDate i:nil="true" /> is ""
+		String changedDate = o.getElementsByTagName("a:ChangedDate").item(0).getTextContent(); // getTextContent() of <a:ChangedDate i:nil="true" /> is ""
 		this.setChangedDate( changedDate.equals("") ? null : changedDate );
 		//						<a:ClientId>79021</a:ClientId>
-		String clientId = order.getElementsByTagName("a:ClientId").item(0).getTextContent();
+		String clientId = o.getElementsByTagName("a:ClientId").item(0).getTextContent();
 		this.setClientId( clientId );
 		//						<a:ClientOrderId>449</a:ClientOrderId>
-		String clientOrderId = order.getElementsByTagName("a:ClientOrderId").item(0).getTextContent();
+		String clientOrderId = o.getElementsByTagName("a:ClientOrderId").item(0).getTextContent();
 		this.setClientOrderId(clientOrderId);
 		//						<a:CreatedDate>2014-05-19T16:04:54.787</a:CreatedDate>
-		String createdDate = order.getElementsByTagName("a:CreatedDate").item(0).getTextContent();
+		String createdDate = o.getElementsByTagName("a:CreatedDate").item(0).getTextContent();
 		this.setCreatedDate(createdDate);
 		//						<a:CreditReportStatus>		
-		Node creditReportStatus = order.getElementsByTagName("a:CreditReportStatus").item(0);
+		Node creditReportStatus = o.getElementsByTagName("a:CreditReportStatus").item(0);
 		//							<a:Accepted>true</a:Accepted>
 		Boolean creditReportStatusAccepted = Boolean.valueOf(creditReportStatus.getChildNodes().item(0).getTextContent()); 
 		this.setCreditReportStatusAccepted(creditReportStatusAccepted);		
@@ -312,13 +311,13 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		//						</a:CreditReportStatus>
 		this.setCreditReportStatusCreationDate(creditReportStatus.getChildNodes().item(1).getTextContent());			
 		//						<a:Currency>SEK</a:Currency>
-		String currency = order.getElementsByTagName("a:Currency").item(0).getTextContent();
+		String currency = o.getElementsByTagName("a:Currency").item(0).getTextContent();
 		this.setCurrency(currency);
 			
 		// all individual customer fields
 
 		//       				<a:Customer
-		Element c = (Element) order.getElementsByTagName("a:Customer").item(0);
+		Element c = (Element) o.getElementsByTagName("a:Customer").item(0);
 		//							xmlns:b="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">
 		//							<b:CoAddress>c/o Eriksson, Erik</b:CoAddress>
 		String cCoAddress = c.getElementsByTagName("b:CoAddress").item(0).getTextContent();
@@ -400,30 +399,30 @@ public class GetOrdersResponse extends AdminServiceResponse {
 			this.setCustomer(companyCustomer);
 		}		
 		//						<a:CustomerId>1000117</a:CustomerId>
-		String customerId = order.getElementsByTagName("a:CustomerId").item(0).getTextContent();
+		String customerId = o.getElementsByTagName("a:CustomerId").item(0).getTextContent();
 		this.setCustomerId(customerId);
 		//						<a:CustomerReference />
-		String customerReference = order.getElementsByTagName("a:CustomerReference").item(0).getTextContent();
+		String customerReference = o.getElementsByTagName("a:CustomerReference").item(0).getTextContent();
 		this.setCustomerReference(customerReference.equals("") ? null : customerReference);	// for <a:CustomerReference /> getTextContent() returns ""
 		//						<a:DeliveryAddress i:nil="true"
 		//							xmlns:b="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
 		//not supported	
 		//						<a:IsPossibleToAdminister>false</a:IsPossibleToAdminister>
-		String isPossibleToAdminister = order.getElementsByTagName("a:IsPossibleToAdminister").item(0).getTextContent();	
+		String isPossibleToAdminister = o.getElementsByTagName("a:IsPossibleToAdminister").item(0).getTextContent();	
 		this.setIsPossibleToAdminister(isPossibleToAdminister.equals("true") ? true : false);
 		//						<a:IsPossibleToCancel>true</a:IsPossibleToCancel>
-		String isPossibleToCancel = order.getElementsByTagName("a:IsPossibleToCancel").item(0).getTextContent();	
+		String isPossibleToCancel = o.getElementsByTagName("a:IsPossibleToCancel").item(0).getTextContent();	
 		this.setIsPossibleToCancel(isPossibleToCancel.equals("true") ? true : false);
 		//						<a:Notes i:nil="true" />
-		String notes = order.getElementsByTagName("a:Notes").item(0).getTextContent();	
+		String notes = o.getElementsByTagName("a:Notes").item(0).getTextContent();	
 		this.setNotes(notes.equals("") ? null : notes); // for <a:Notes i:nil="true" /> getTextContent() returns ""
 		//						<a:OrderDeliveryStatus>Created</a:OrderDeliveryStatus>
-		String cOrderDeliveryStatus = order.getElementsByTagName("a:OrderDeliveryStatus").item(0).getTextContent();	
+		String cOrderDeliveryStatus = o.getElementsByTagName("a:OrderDeliveryStatus").item(0).getTextContent();	
 		this.setOrderDeliveryStatus(cOrderDeliveryStatus);
 
 		//						<a:OrderRows>
 		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = new ArrayList<NumberedOrderRowBuilder>();
-		NodeList orderRows = order.getElementsByTagName("a:NumberedOrderRow");
+		NodeList orderRows = o.getElementsByTagName("a:NumberedOrderRow");
 		for( int i=0; i < orderRows.getLength(); i++ ) {
 			//						<a:NumberedOrderRow>
 			Element row = (Element) orderRows.item(i);	
@@ -480,7 +479,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
 			numberedOrderRow.setInvoiceId(rInvoiceId.equals("") ? null : rInvoiceId);
 			numberedOrderRow.setRowNumber(Integer.valueOf(rRowNumber));
 			try {
-				numberedOrderRow.setStatus( OrderRowStatus.fromString(rStatus) );
+				numberedOrderRow.setStatus( ORDERROWSTATUS.fromString(rStatus) );
 			} catch (Exception e) {
 				//ignore unknown status
 			}
@@ -490,15 +489,15 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		//						</a:OrderRows>
 		this.setNumberedOrderRows( numberedOrderRows );
 		//						<a:OrderStatus>Active</a:OrderStatus>
-		String orderStatus = order.getElementsByTagName("a:OrderStatus").item(0).getTextContent();
+		String orderStatus = o.getElementsByTagName("a:OrderStatus").item(0).getTextContent();
 		this.setOrderStatus(orderStatus);	
 		//						<a:OrderType>Invoice</a:OrderType>
-		String orderType = order.getElementsByTagName("a:OrderType").item(0).getTextContent();
+		String orderType = o.getElementsByTagName("a:OrderType").item(0).getTextContent();
 		this.setOrderType(orderType);
 
 		//						<a:PaymentPlanDetails i:nil="true" />		// iff invoice order
 		//	                    <a:PaymentPlanDetails>
-		Element ppd = (Element) order.getElementsByTagName("a:PaymentPlanDetails").item(0);		
+		Element ppd = (Element) o.getElementsByTagName("a:PaymentPlanDetails").item(0);		
 		if( ppd.getChildNodes().getLength() > 0 ) {
 			//	                <a:CampaignCode>213060</a:CampaignCode>
 			// NOT SUPPORTED
@@ -512,7 +511,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		//	                   </a:PaymentPlanDetails>
 		
 		//						<a:PendingReasons />
-		Element pr = (Element) order.getElementsByTagName("a:PendingReasons").item(0);
+		Element pr = (Element) o.getElementsByTagName("a:PendingReasons").item(0);
 		if( pr.getChildNodes().getLength() > 0 ) {
 			String prPendingReasonsPendingType = pr.getElementsByTagName("a:PendingType").item(0).getTextContent();
 			this.setPendingReasonsPendingType(prPendingReasonsPendingType.equals("") ? null : prPendingReasonsPendingType);
@@ -520,10 +519,10 @@ public class GetOrdersResponse extends AdminServiceResponse {
 			this.setPendingReasonsCreatedDate(prPendingReasonsCreatedDate.equals("") ? null : prPendingReasonsCreatedDate);
 		}
 		//						<a:SveaOrderId>348629</a:SveaOrderId>
-		String orderId = order.getElementsByTagName("a:SveaOrderId").item(0).getTextContent();
+		String orderId = o.getElementsByTagName("a:SveaOrderId").item(0).getTextContent();
 		this.setOrderId(orderId);
 		//						<a:SveaWillBuy>true</a:SveaWillBuy>
-		String sveaWillBuy = order.getElementsByTagName("a:SveaWillBuy").item(0).getTextContent();	
+		String sveaWillBuy = o.getElementsByTagName("a:SveaWillBuy").item(0).getTextContent();	
 		this.setSveaWillBuy(sveaWillBuy.equals("true") ? true : false); //	or (Boolean.valueOf(node.getChildNodes().item(0).getTextContent()));
 		//					</a:Order>
 		//				</a:Orders>

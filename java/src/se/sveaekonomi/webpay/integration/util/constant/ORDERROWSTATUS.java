@@ -1,6 +1,6 @@
 package se.sveaekonomi.webpay.integration.util.constant;
 
-public enum OrderRowStatus {	
+public enum ORDERROWSTATUS {	
 
 	DELIVERED ("Delivered"),			
 	NOTDELIVERED ("NotDelivered"),		
@@ -8,7 +8,7 @@ public enum OrderRowStatus {
 
 	private final String constantAsString;
 	
-	OrderRowStatus( String constantAsString ) {
+	ORDERROWSTATUS( String constantAsString ) {
 		this.constantAsString = constantAsString;
 	}
 	
@@ -16,8 +16,8 @@ public enum OrderRowStatus {
 		return this.constantAsString;
 	}
 	
-	public static OrderRowStatus fromString( String status ) throws Exception {
-		for( OrderRowStatus value : OrderRowStatus.values() ) {
+	public static ORDERROWSTATUS fromString( String status ) throws Exception {
+		for( ORDERROWSTATUS value : ORDERROWSTATUS.values() ) {
 			if( value.toString().equals(status) ) return value;
 		}
 		throw new Exception("Unknown OrderRowStatus");

@@ -6,14 +6,16 @@ import java.util.HashSet;
 
 import javax.xml.bind.ValidationException;
 
+import se.sveaekonomi.webpay.integration.adminservice.DeliverOrderRowsRequest;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
-import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**
  * @author Kristian Grossman-Madsen
@@ -26,9 +28,23 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 
     private ArrayList<Integer> rowIndexesToDeliver;
 	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
-	private ArrayList<OrderRowBuilder> newOrderRows;
     private String orderId;
     private String captureDate;
+    private DISTRIBUTIONTYPE invoiceDistributionType;
+    protected PAYMENTTYPE orderType;
+    
+	public PAYMENTTYPE getOrderType() {
+		return this.orderType;
+	} 
+    
+	public DISTRIBUTIONTYPE getInvoiceDistributionType() {
+		return invoiceDistributionType;
+	}
+
+	public DeliverOrderRowsBuilder setInvoiceDistributionType(DISTRIBUTIONTYPE invoiceDistributionType) {
+		this.invoiceDistributionType = invoiceDistributionType;
+		return this;
+	}
 
 	public DeliverOrderRowsBuilder( ConfigurationProvider config ) {
 		this.config = config;
@@ -46,7 +62,7 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 	}
 
 	public COUNTRYCODE getCountryCode() {
-		return countryCode;
+		return this.countryCode;
 	}
 
 	public DeliverOrderRowsBuilder setCountryCode(COUNTRYCODE countryCode) {
@@ -93,7 +109,7 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 	 */
     public DeliverOrderRowsBuilder setTransactionId( String transactionId) {        
         return setOrderId( transactionId );
-    }   
+    }
 	
 	/**
 	 * card only, optional
@@ -109,6 +125,21 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
         return captureDate;
     }
     
+	public ArrayList<Integer> getRowIndexesToDeliver() {
+		return rowIndexesToDeliver;
+	}
+
+	public void setRowIndexesToDeliver(ArrayList<Integer> rowIndexesToDeliver) {
+		this.rowIndexesToDeliver = rowIndexesToDeliver;
+	}
+
+    public DeliverOrderRowsRequest deliverInvoiceOrderRows() {
+    	this.orderType = PAYMENTTYPE.INVOICE;
+        return new DeliverOrderRowsRequest(this);
+    }
+ 
+    // TODO move setting hosted admin request attributes to request class, pass in entire builder object
+    // then move validation to request class
 	public ConfirmTransactionRequest deliverCardOrderRows() {
 	
     	// validate request and throw exception if validation fails
@@ -128,13 +159,12 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 			originalOrderTotal += originalRow.getAmountExVat() * (1+originalRow.getVatPercent()/100.0) * originalRow.getQuantity(); // TODO change to method, backport to php
 		}
 		
-		// calculate delivered order rows total, incvat row sum over deliveredOrderRows + newOrderRows
+		// calculate delivered order rows total, incvat row sum over deliveredOrderRows
 		double deliveredOrderTotal = 0.0;
 		for( Integer rowIndex : new HashSet<Integer>(rowIndexesToDeliver) ) {
 			NumberedOrderRowBuilder deliveredRow = numberedOrderRows.get(rowIndex-1);	// -1 as NumberedOrderRows is one-indexed
 			deliveredOrderTotal +=  deliveredRow.getAmountExVat() * (1+deliveredRow.getVatPercent()/100.0) * deliveredRow.getQuantity();
 		}			
-
 		
 		double amountToLowerOrderBy = originalOrderTotal - deliveredOrderTotal;
 				
@@ -147,7 +177,6 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 		return confirmTransactionRequest;				
 	}
 	
-	// validates required attributes
     public String validateDeliverCardOrderRows() {
         String errors = "";
         if (this.getCountryCode() == null) {
@@ -158,14 +187,16 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
             errors += "MISSING VALUE - OrderId is required, use setOrderId().\n";
     	}
         
-        if( this.rowIndexesToDeliver.size() == 0 ) {
+        if( this.getRowIndexesToDeliver().size() == 0 ) {
         	errors += "MISSING VALUE - rowIndexesToDeliver is required for deliverCardOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().\n";
     	}
         
-        if( this.numberedOrderRows.size() == 0 ) {
+        if( this.getNumberedOrderRows().size() == 0 ) {
         	errors += "MISSING VALUE - numberedOrderRows is required for deliverCardOrderRows(). Use setNumberedOrderRow() or setNumberedOrderRows().\n";
     	}
 
         return errors;  
     }
+
+    
 }

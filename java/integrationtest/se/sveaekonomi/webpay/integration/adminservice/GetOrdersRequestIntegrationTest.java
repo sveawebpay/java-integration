@@ -13,7 +13,7 @@ import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.OrderRowStatus;
+import se.sveaekonomi.webpay.integration.util.constant.ORDERROWSTATUS;
 
 public class GetOrdersRequestIntegrationTest {
 
@@ -237,7 +237,7 @@ public class GetOrdersRequestIntegrationTest {
 				//                    <a:RowNumber>1</a:RowNumber>
 				assertEquals( 1, orderRow.getRowNumber() );
 				//                    <a:Status>NotDelivered</a:Status>
-				assertEquals( OrderRowStatus.NOTDELIVERED, orderRow.getStatus() );
+				assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );
 				//                 </a:NumberedOrderRow>			
 			//					</a:OrderRows>
 			//              <a:OrderStatus>Active</a:OrderStatus>
@@ -365,7 +365,7 @@ public class GetOrdersRequestIntegrationTest {
 				assertEquals( null, orderRow.getCreditInvoiceId() );
 				assertEquals( null, orderRow.getInvoiceId() );
 				assertEquals( 1, orderRow.getRowNumber() );
-				assertEquals( OrderRowStatus.NOTDELIVERED, orderRow.getStatus() );
+				assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );
 
 			orderRow =  numberedOrderRows.get(1);
 				assertTrue( orderRow instanceof NumberedOrderRowBuilder );
@@ -379,7 +379,7 @@ public class GetOrdersRequestIntegrationTest {
 				assertEquals( null, orderRow.getCreditInvoiceId() );
 				assertEquals( null, orderRow.getInvoiceId() );
 				assertEquals( 2, orderRow.getRowNumber() );
-				assertEquals( OrderRowStatus.NOTDELIVERED, orderRow.getStatus() );			
+				assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );			
 				assertEquals( "Active", response.getOrderStatus() );
 				assertEquals( "Invoice", response.getOrderType() );
 //			// TODO paymentplandetails
@@ -545,7 +545,7 @@ public class GetOrdersRequestIntegrationTest {
 				assertEquals( null, orderRow.getCreditInvoiceId() );
 				assertEquals( null, orderRow.getInvoiceId() );
 				assertEquals( 1, orderRow.getRowNumber() );
-				assertEquals( OrderRowStatus.NOTDELIVERED, orderRow.getStatus() );
+				assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );
 			
 			//                  <a:OrderStatus>Active</a:OrderStatus>
 			assertEquals( "Active", response.getOrderStatus() );
@@ -672,7 +672,7 @@ public class GetOrdersRequestIntegrationTest {
 			assertEquals( null, orderRow.getCreditInvoiceId() );
 			assertEquals( null, orderRow.getInvoiceId() );
 			assertEquals( 1, orderRow.getRowNumber() );
-			assertEquals( OrderRowStatus.NOTDELIVERED, orderRow.getStatus() );
+			assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );
 			
 			orderRow = numberedOrderRows.get(1); 			
 			assertTrue( orderRow instanceof NumberedOrderRowBuilder );
@@ -686,7 +686,7 @@ public class GetOrdersRequestIntegrationTest {
 			assertEquals( null, orderRow.getCreditInvoiceId() );
 			assertEquals( null, orderRow.getInvoiceId() );
 			assertEquals( 2, orderRow.getRowNumber() );
-			assertEquals( OrderRowStatus.NOTDELIVERED, orderRow.getStatus() );			
+			assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );			
 			
 			assertEquals( "Active", response.getOrderStatus() );
 			assertEquals( "Invoice", response.getOrderType() );
@@ -862,7 +862,7 @@ public class GetOrdersRequestIntegrationTest {
 			//                        <a:RowNumber>1</a:RowNumber>
 			assertEquals( 1, orderRow.getRowNumber() );
 			//                        <a:Status>NotDelivered</a:Status>
-			assertEquals( OrderRowStatus.NOTDELIVERED, orderRow.getStatus() );
+			assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );
 			//                     </a:NumberedOrderRow>
 			//                  </a:OrderRows>
 			
@@ -965,7 +965,7 @@ public class GetOrdersRequestIntegrationTest {
 			assertEquals( null, orderRow.getCreditInvoiceId() );
 			assertEquals( null, orderRow.getInvoiceId() );
 			assertEquals( 1, orderRow.getRowNumber() );
-			assertEquals( OrderRowStatus.NOTDELIVERED, orderRow.getStatus() );
+			assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );
         }
         catch( Exception e ) {
         	System.out.println( e.getClass() + e.getMessage() );
@@ -1009,7 +1009,7 @@ public class GetOrdersRequestIntegrationTest {
 			assertEquals( null, orderRow.getCreditInvoiceId() );
 			assertEquals( null, orderRow.getInvoiceId() );
 			assertEquals( 1, orderRow.getRowNumber() );
-			assertEquals( OrderRowStatus.NOTDELIVERED, orderRow.getStatus() );
+			assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );
         }
         catch( Exception e ) {
         	System.out.println( e.getClass() + e.getMessage() );

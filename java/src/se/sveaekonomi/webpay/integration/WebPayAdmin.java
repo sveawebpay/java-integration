@@ -77,9 +77,9 @@ public class WebPayAdmin {
 
 	/**
      * The WebPayAdmin.deliverOrderRows entrypoint method is used to deliver individual order rows. 
-     * 1.6.0: Supports card orders. To deliver invoice order rows, use WebPay.deliverOrder with specified order rows.
+     * Supports invoice and card orders. (To partially deliver PaymentPlan or Direct Bank orders, please contact Svea.)
      * 
-	 * For Invoice and Payment Plan orders, the order row status is updated at Svea following each successful request.
+	 * For Invoice orders, the order row status is updated at Svea following each successful request.
 	 * 
 	 * For card orders, an order can only be delivered once, and any non-delivered order rows will be cancelled (i.e. 
 	 * the order amount will be lowered by the sum of the non-delivered order rows). A delivered card order has status 
@@ -107,7 +107,8 @@ public class WebPayAdmin {
      *          .addNumberedOrderRow()			// required for card orders, should match original row indexes 
      *     	;
      *     	// then select the corresponding request class and send request
-     *     	response = request.deliverCardOrderRows().doRequest()	// returns ConfirmTransactionResponse
+     *      response = request.deliverInvoiceOrderRows().doRequest();	// returns DeliverOrderRowsResponse
+     *     	response = request.deliverCardOrderRows().doRequest()		// returns ConfirmTransactionResponse
      * ...
      * 
      */
