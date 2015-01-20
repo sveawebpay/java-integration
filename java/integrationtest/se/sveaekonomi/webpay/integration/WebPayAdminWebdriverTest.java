@@ -6,6 +6,7 @@ import java.util.ArrayList;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.adminservice.CancelOrderRowsResponse;
 import se.sveaekonomi.webpay.integration.adminservice.DeliverPartialResponse;
 import se.sveaekonomi.webpay.integration.adminservice.GetOrdersResponse;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;

@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import javax.xml.bind.ValidationException;
 
+import se.sveaekonomi.webpay.integration.adminservice.CancelOrderRowsRequest;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.LowerTransactionRequest;
@@ -12,6 +13,7 @@ import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**
  * @author Kristian Grossman-Madsen
@@ -25,7 +27,11 @@ public class CancelOrderRowsBuilder extends OrderBuilder<CancelOrderRowsBuilder>
     private ArrayList<Integer> rowIndexesToCancel;
 	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
     private String orderId;
-
+    protected PAYMENTTYPE orderType;
+    
+	public PAYMENTTYPE getOrderType() {
+		return this.orderType;
+	} 
 	public CancelOrderRowsBuilder( ConfigurationProvider config ) {
 		this.config = config;
 		this.rowIndexesToCancel = new ArrayList<Integer>();
@@ -138,4 +144,10 @@ public class CancelOrderRowsBuilder extends OrderBuilder<CancelOrderRowsBuilder>
 
         return errors;  
     }
+
+	public CancelOrderRowsRequest cancelInvoiceOrderRows() {
+    	this.orderType = PAYMENTTYPE.INVOICE;
+		return new CancelOrderRowsRequest();
+	}
+	
 }
