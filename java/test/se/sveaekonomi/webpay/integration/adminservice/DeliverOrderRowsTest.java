@@ -30,7 +30,7 @@ public class DeliverOrderRowsTest {
 
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
-			DeliverOrderRowsRequest request = builder.deliverInvoiceOrderRows();
+			DeliverPartialRequest request = builder.deliverInvoiceOrderRows();
 			request.validateOrder();
 		}
 		catch (ValidationException e){			
@@ -51,7 +51,7 @@ public class DeliverOrderRowsTest {
 
 		// prepareRequest() validates the order and throws SveaWebPayException on validation failure
 		try {
-			DeliverOrderRowsRequest request = builder.deliverInvoiceOrderRows();
+			DeliverPartialRequest request = builder.deliverInvoiceOrderRows();
 			request.validateOrder();
 		
 			// fail if validation passes

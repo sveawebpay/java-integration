@@ -20,16 +20,16 @@ import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**
- * Handles Admin Webservice DeliverOrderRows method
+ * Handles Admin Webservice DeliverPartial method
  * 
  * @author Kristian Grossman-Madsen
  */
-public class DeliverOrderRowsRequest  {
+public class DeliverPartialRequest  {
 
 	private String action;
 	private DeliverOrderRowsBuilder builder;
 		
-	public DeliverOrderRowsRequest( DeliverOrderRowsBuilder builder) {
+	public DeliverPartialRequest( DeliverOrderRowsBuilder builder) {
 		this.action = "DeliverPartial";
 		this.builder = builder;
 	}
@@ -148,7 +148,7 @@ public class DeliverOrderRowsRequest  {
 			validateOrder(); 
 		}
         catch (ValidationException e) {
-            throw new SveaWebPayException( "DeliverOrderRowsRequest: validateRequest failed.", e );
+            throw new SveaWebPayException( "DeliverPartialRequest: validateRequest failed.", e );
         }
 		
         // prepare request, throw runtime exception on error
@@ -156,7 +156,7 @@ public class DeliverOrderRowsRequest  {
 		try {
         	soapRequest = prepareRequest();		
 		} catch (SOAPException e) {
-			throw new SveaWebPayException( "DeliverOrderRowsRequest: prepareRequest failed.", e );
+			throw new SveaWebPayException( "DeliverPartialRequest: prepareRequest failed.", e );
 		}
 		
 		// send request and receive response
@@ -182,14 +182,14 @@ public class DeliverOrderRowsRequest  {
 			soapConnection.close();			
 		}
 		catch( SOAPException e) {
-			throw new SveaWebPayException( "DeliverOrderRowsRequest: doRequest send request failed.", e );
+			throw new SveaWebPayException( "DeliverPartialRequest: doRequest send request failed.", e );
 		}
 		// parse response
 		DeliverPartialResponse response;
 		try {
 			response = new DeliverPartialResponse(soapResponse);
 		} catch (SOAPException e) {
-			throw new SveaWebPayException( "DeliverOrderRowsRequest: doRequest parse response failed.", e );
+			throw new SveaWebPayException( "DeliverPartialRequest: doRequest parse response failed.", e );
 		}
 		return response;
 
