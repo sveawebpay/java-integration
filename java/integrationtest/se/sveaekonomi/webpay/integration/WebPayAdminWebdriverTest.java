@@ -282,19 +282,34 @@ public class WebPayAdminWebdriverTest {
         assertTrue(order.isOrderAccepted());
 
         // deliver first order row and assert the response
-        CancelOrderRowsResponse response = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
+        CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
             .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setRowToCancel(1)
-            .cancelInvoiceOrderRows()
-            	.doRequest();
-        
+        ;        
+        CancelOrderRowsResponse response = builder.cancelInvoiceOrderRows().doRequest();
         assertTrue(response.isOrderAccepted());        
         assertTrue(response instanceof CancelOrderRowsResponse );
     }    
         
     // paymentplan
-    // TODO 
+    @Test
+    public void test_cancelOrderRows_cancelPaymentPlanOrderRows_cancel_all_rows() {
+    	
+    	// create an order using defaults
+    	CreateOrderResponse order = TestingTool.createPaymentPlanTestOrder("test_cancelOrderRows_cancelPaymentPlanOrderRows_cancel_all_rows");
+        assertTrue(order.isOrderAccepted());
+
+        // deliver first order row and assert the response
+        CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
+            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
+            .setCountryCode(TestingTool.DefaultTestCountryCode)	
+            .setRowToCancel(1)
+        ;
+    	CancelOrderRowsResponse response = builder.cancelPaymentPlanOrderRows().doRequest();
+        assertTrue(response.isOrderAccepted());        
+        assertTrue(response instanceof CancelOrderRowsResponse );
+    }   
     
     // card
     @Test

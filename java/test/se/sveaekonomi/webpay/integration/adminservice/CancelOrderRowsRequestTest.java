@@ -55,7 +55,7 @@ public class CancelOrderRowsRequestTest {
 			assertEquals( 
         		"MISSING VALUE - OrderId is required, use setOrderId().\n" +
         		"MISSING VALUE - CountryCode is required, use setCountryCode().\n" +
-        		"MISSING VALUE - rowIndexesToDeliver is required for deliverInvoiceOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().\n",
+        		"MISSING VALUE - rowIndexesToCancel is required for cancelInvoiceOrderRows(). Use methods setRowToCancel() or setRowsToCancel().\n",
     			e.getMessage()
     		);
         }	

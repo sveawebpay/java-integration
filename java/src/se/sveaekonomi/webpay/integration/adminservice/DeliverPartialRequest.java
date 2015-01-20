@@ -184,6 +184,7 @@ public class DeliverPartialRequest  {
 		catch( SOAPException e) {
 			throw new SveaWebPayException( "DeliverPartialRequest: doRequest send request failed.", e );
 		}
+		
 		// parse response
 		DeliverPartialResponse response;
 		try {

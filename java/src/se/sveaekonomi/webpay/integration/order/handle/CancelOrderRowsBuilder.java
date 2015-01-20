@@ -14,6 +14,7 @@ import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
+import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 
 /**
  * @author Kristian Grossman-Madsen
@@ -129,24 +130,25 @@ public class CancelOrderRowsBuilder extends OrderBuilder<CancelOrderRowsBuilder>
         if (this.getCountryCode() == null) {
             errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
         }
-        
         if (this.getOrderId() == null) {
             errors += "MISSING VALUE - OrderId is required, use setOrderId().\n";
     	}
-        
         if( this.rowIndexesToCancel.size() == 0 ) {
         	errors += "MISSING VALUE - rowIndexesToCancel is required for cancelCardOrderRows(). Use methods setRowToCancel() or setRowsToCancel().\n";
     	}
-        
         if( this.numberedOrderRows.size() == 0 ) {
         	errors += "MISSING VALUE - numberedOrderRows is required for cancelCardOrderRows(). Use setNumberedOrderRow() or setNumberedOrderRows().\n";
     	}
-
         return errors;  
     }
 
 	public CancelOrderRowsRequest cancelInvoiceOrderRows() {
     	this.orderType = PAYMENTTYPE.INVOICE;
+		return new CancelOrderRowsRequest(this);
+	}
+	
+	public CancelOrderRowsRequest cancelPaymentPlanOrderRows() {
+    	this.orderType = PAYMENTTYPE.PAYMENTPLAN;
 		return new CancelOrderRowsRequest(this);
 	}
 	
