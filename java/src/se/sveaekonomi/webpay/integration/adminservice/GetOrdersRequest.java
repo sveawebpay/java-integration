@@ -17,7 +17,6 @@ import javax.xml.soap.SOAPPart;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**
@@ -38,22 +37,20 @@ public class GetOrdersRequest {
 	
 	/**
 	 * validates that all required attributes needed for the request are present in the builder object
-	 * @return error string indicating which methods are missing, or empty string if no problems found
+	 * @throws ValidationException
 	 */
-	public String validateOrder() {
+	public void validateOrder() throws ValidationException {
 		String errors = "";		
-		errors += validateOrderId();
-		errors += validateCountryCode();
-		return errors;
+        if (builder.getOrderId() == null) {
+            errors += "MISSING VALUE - OrderId is required, use setOrderId().\n";
+    	}   
+        if (builder.getCountryCode() == null) {
+            errors += "MISSING VALUE - CountryCode is required, use setCountryCode().\n";
+        }     		
+        if ( !errors.equals("")) {
+            throw new ValidationException(errors);
+        }
 	}
-	
-    private String validateOrderId() {
-    	return (builder.getOrderId() == null) ? "MISSING VALUE - OrderId is required, use setOrderId().\n" : "";
-    }
-
-    private String validateCountryCode() {
-        return (builder.getCountryCode() == null) ? "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n" : "";
-    }
 	
 	/**
 	 * prepares the soap request to send to admin webservice
@@ -61,14 +58,7 @@ public class GetOrdersRequest {
 	 * @throws IOException 
 	 */
 	public SOAPMessage prepareRequest() throws SOAPException {
-
-    	// validate request and throw exception if validation fails
-        String errors = validateOrder();        
-        if (!errors.equals("")) {
-        	//System.out.println(errors);
-            throw new SveaWebPayException("Validation failed", new ValidationException(errors));
-        }
-        
+		
         // build inspectable request object and return
         MessageFactory messageFactory = MessageFactory.newInstance();
         SOAPMessage soapMessage = messageFactory.createMessage();
@@ -147,8 +137,13 @@ public class GetOrdersRequest {
 	 */
 	public GetOrdersResponse doRequest() {
 			
-		validateOrder();
-		
+		// validate builder, throw runtime exception on error
+		try {
+			validateOrder(); 
+		}
+        catch (ValidationException e) {
+            throw new SveaWebPayException( "GetOrdersRequest: validateRequest failed.", e );
+        }
 		
 		// prepare request, throw runtime exception on error
 		SOAPMessage soapRequest;
@@ -167,7 +162,7 @@ public class GetOrdersRequest {
 
 	        // Send SOAP Message to SOAP Server
 	        URL url = builder.getConfig().getEndPoint(PAYMENTTYPE.ADMIN_TYPE);		
-	    	soapResponse = soapConnection.call( prepareRequest(), url.toString() );
+	    	soapResponse = soapConnection.call( soapRequest, url.toString() );
         
 			// DEBUG: print SOAP Response
 //			System.out.print("Response SOAP Message:");

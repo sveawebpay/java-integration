@@ -52,13 +52,13 @@ public class DeliverOrderRowsRequest  {
         if (builder.getInvoiceDistributionType() == null) {
         	errors += "MISSING VALUE - distributionType is required, use setInvoiceDistributionType().\n";
         }
-
         if ( !errors.equals("")) {
             throw new ValidationException(errors);
         }
 	}
 
-	public SOAPMessage prepareRequest() throws SOAPException {		
+	public SOAPMessage prepareRequest() throws SOAPException {	
+		
 		// build and return inspectable request object
 		MessageFactory messageFactory = MessageFactory.newInstance();
 		SOAPMessage soapMessage = messageFactory.createMessage();
