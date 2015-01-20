@@ -147,7 +147,7 @@ public class CancelOrderRowsBuilder extends OrderBuilder<CancelOrderRowsBuilder>
 
 	public CancelOrderRowsRequest cancelInvoiceOrderRows() {
     	this.orderType = PAYMENTTYPE.INVOICE;
-		return new CancelOrderRowsRequest();
+		return new CancelOrderRowsRequest(this);
 	}
 	
 }

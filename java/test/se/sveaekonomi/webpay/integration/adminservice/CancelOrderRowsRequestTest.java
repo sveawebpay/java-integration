@@ -9,8 +9,6 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPayAdmin;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class CancelOrderRowsRequestTest {
