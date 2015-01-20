@@ -122,21 +122,23 @@ public class WebPayAdmin {
     
 	/**
      * The WebPayAdmin.cancelOrderRows entrypoint method is used to cancel rows in an order before it has been delivered.
-     * 1.6.0: Supports card orders.
+     * Supports Invoice, Payment Plan and Card orders. (Direct Bank orders are not supported, see CreditOrderRows instead.)
      * 
      * For Invoice and Payment Plan orders, the order row status is updated at Svea following each successful request.
      * 
-     * For card orders, the request can only be sent once, and if all original order rows are cancelled, the order then receives status ANNULLED at Svea.
+     * For card orders, the request can only be sent once, and if all original order rows are cancelled, the order then 
+     * receives status ANNULLED at Svea.
      * 
-     * Get an order builder instance using the WebPayAdmin.cancelOrderRows entrypoint, then provide more information about the transaction and send the 
-     * request using the CancelOrderRowsBuilder methods:
+     * Get an order builder instance using the WebPayAdmin.cancelOrderRows entrypoint, then provide more information about 
+     * the transaction and send the request using the CancelOrderRowsBuilder methods:
      * 
-     * Use setRowToCancel() or setRowsToCancel() to specify the order row(s) to cancel. The order row indexes should correspond to those returned by 
-     * i.e. WebPayAdmin.queryOrder();
+     * Use setRowToCancel() or setRowsToCancel() to specify the order row(s) to cancel. The order row indexes should 
+     * correspond to those returned by i.e. WebPayAdmin.queryOrder();
      * 
-     * For card orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass in a copy of the original order rows. The original order rows can 
-     * be retrieved using WebPayAdmin.queryOrder(); the numberedOrderRows attribute contains the serverside order rows w/indexes. Note that if a card 
-     * order has been modified (i.e. rows cancelled or credited) after the initial order creation, the returned order rows will not be accurate.
+     * For card orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass in a copy of the original order rows. 
+     * The original order rows can be retrieved using WebPayAdmin.queryOrder(); the numberedOrderRows attribute contains 
+     * the serverside order rows w/indexes. Note that if a card order has been modified (i.e. rows cancelled or credited) 
+     * after the initial order creation, the returned order rows will not be accurate.
      *
      * ...
      * 		request = WebPayAdmin.cancelOrderRows(config)
@@ -147,7 +149,9 @@ public class WebPayAdmin {
      *          .addNumberedOrderRow()			// required for card orders, should match original row indexes 
      *     	;
      *     	// then select the corresponding request class and send request
-     *     	response = request.deliverCardOrderRows().doRequest()	// returns LowerTransactionResponse
+     *     	response = request.cancelInvoiceOrderRows().doRequest();		// returns CancelOrderRowsResponse
+     *     	response = request.cancelPaymentPlanOrderRows().doRequest();	// returns CancelOrderRowsResponse
+     *     	response = request.deliverCardOrderRows().doRequest()			// returns LowerTransactionResponse
      * ...
      * 
      */    
