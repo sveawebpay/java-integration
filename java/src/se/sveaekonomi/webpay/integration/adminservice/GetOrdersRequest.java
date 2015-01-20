@@ -20,7 +20,7 @@ import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**
- * Handles Admin Webservice GetOrdersRequest
+ * Handles Admin Webservice GetOrders request
  * @author Kristian Grossman-Madsen
  */
 public class GetOrdersRequest {
@@ -58,6 +58,14 @@ public class GetOrdersRequest {
 	 * @throws IOException 
 	 */
 	public SOAPMessage prepareRequest() throws SOAPException {
+		
+		// validate builder, throw runtime exception on error
+		try {
+			validateOrder(); 
+		}
+        catch (ValidationException e) {
+            throw new SveaWebPayException( "GetOrdersRequest: validateRequest failed.", e );
+        }
 		
         // build inspectable request object and return
         MessageFactory messageFactory = MessageFactory.newInstance();
@@ -136,16 +144,8 @@ public class GetOrdersRequest {
 	 * @throws Exception 
 	 */
 	public GetOrdersResponse doRequest() {
-			
-		// validate builder, throw runtime exception on error
-		try {
-			validateOrder(); 
-		}
-        catch (ValidationException e) {
-            throw new SveaWebPayException( "GetOrdersRequest: validateRequest failed.", e );
-        }
 		
-		// prepare request, throw runtime exception on error
+		// validate and prepare request, throw runtime exception on error
 		SOAPMessage soapRequest;
     	try {
 			soapRequest = prepareRequest();

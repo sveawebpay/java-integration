@@ -12,7 +12,7 @@ import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
-public class DeliverOrderRowsTest {
+public class DeliverPartialRequestTest {
 
     // WebPay.createOrder() --------------------------------------------------------------------------------------------	
 	/// returned request class
@@ -53,7 +53,6 @@ public class DeliverOrderRowsTest {
 		try {
 			DeliverPartialRequest request = builder.deliverInvoiceOrderRows();
 			request.validateOrder();
-		
 			// fail if validation passes
 	        fail();	
         }
@@ -67,6 +66,8 @@ public class DeliverOrderRowsTest {
     		);
         }	
 	}	
+	
+	// see GetOrdersRequestTest for example of how to handle SveaWebPayException thrown when using prepareRequest() which uses validateOrder()
 
 	// card	
     // TODO!

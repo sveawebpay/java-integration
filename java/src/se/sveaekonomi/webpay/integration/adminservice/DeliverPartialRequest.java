@@ -58,7 +58,15 @@ public class DeliverPartialRequest  {
 	}
 
 	public SOAPMessage prepareRequest() throws SOAPException {	
-		
+
+		// validate builder, throw runtime exception on error
+		try {
+			validateOrder(); 
+		}
+        catch (ValidationException e) {
+            throw new SveaWebPayException( "DeliverPartialRequest: validateRequest failed.", e );
+        }
+				
 		// build and return inspectable request object
 		MessageFactory messageFactory = MessageFactory.newInstance();
 		SOAPMessage soapMessage = messageFactory.createMessage();
@@ -143,15 +151,7 @@ public class DeliverPartialRequest  {
 	
 	public DeliverPartialResponse doRequest() {	
 		
-		// validate builder, throw runtime exception on error
-		try {
-			validateOrder(); 
-		}
-        catch (ValidationException e) {
-            throw new SveaWebPayException( "DeliverPartialRequest: validateRequest failed.", e );
-        }
-		
-        // prepare request, throw runtime exception on error
+        // validate and prepare request, throw runtime exception on error
 		SOAPMessage soapRequest;
 		try {
         	soapRequest = prepareRequest();		
