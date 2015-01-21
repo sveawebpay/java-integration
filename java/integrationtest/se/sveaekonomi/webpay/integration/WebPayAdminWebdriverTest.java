@@ -285,7 +285,7 @@ public class WebPayAdminWebdriverTest {
         CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
             .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
-            .setRowToCancel(1)
+            .setRowToCancel(1) // only row
         ;        
         CancelOrderRowsResponse response = builder.cancelInvoiceOrderRows().doRequest();
         assertTrue(response.isOrderAccepted());        
@@ -390,6 +390,26 @@ public class WebPayAdminWebdriverTest {
     }    
 
     /// WebPayAdmin.creditOrderRows() --------------------------------------------------------------------------------------------	
+    // invoice
+    public void test_creditOrderRows_creditInvoiceOrderRows_credit_all_rows() {
+		    	
+		// create an order using defaults
+		CreateOrderResponse order = TestingTool.createInvoiceTestOrder("test_cancelOrderRows_cancelInvoiceOrderRows_cancel_all_rows");
+		assertTrue(order.isOrderAccepted());
+ 
+		// deliver first order row and assert the response
+        CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
+    		.setOrderId( String.valueOf(order.orderId) )
+			.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+            .setCountryCode( COUNTRYCODE.SE )
+            .setRowToCredit(1)
+		;
+        CreditOrderRowsRequest request = builder.creditInvoiceOrderRows();
+        CreditOrderRowsResponse response = request.doRequest();
+        assertTrue(response.isOrderAccepted());        				
+    }
+    // TODO cases for addCreditOrderRow, combined. in separate integration test class
+    
     // card
     @Test
     public void test_creditOrderRows_creditCardOrderRows_credit_original_order_first_and_second_rows_of_three() {
