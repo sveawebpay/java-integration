@@ -16,9 +16,7 @@ import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
-import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CreditOrderRowsBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 public class CreditOrderRowsRequest {
@@ -55,142 +53,137 @@ public class CreditOrderRowsRequest {
         }
     }
 
-//	public SOAPMessage prepareRequest() throws SOAPException {	
-//
-//		// validate builder, throw runtime exception on error
-//		try {
-//			validateOrder(); 
-//		}
-//        catch (ValidationException e) {
-//            throw new SveaWebPayException( "CancelOrderRowsRequest: validateRequest failed.", e );
-//        }
-//				
-//		// build and return inspectable request object
-//		MessageFactory messageFactory = MessageFactory.newInstance();
-//		SOAPMessage soapMessage = messageFactory.createMessage();
-//		SOAPPart soapPart = soapMessage.getSOAPPart();
-//		
-//		//<soapenv:Envelope 
-//		//	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
-//		//	xmlns:tem="http://tempuri.org/" 
-//		//	xmlns:dat="http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service" 
-//		//	xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
-//		//   <soapenv:Header/>
-//		//   <soapenv:Body>
-//		//      <tem:CancelOrderRows>
-//		//         <tem:request>
-//		//            <dat:Authentication>
-//		//               <dat:Password>sverigetest</dat:Password>
-//		//               <dat:Username>sverigetest</dat:Username>
-//		//            </dat:Authentication>
-//		//            <dat:ClientId>79021</dat:ClientId>
-//		//            <dat:OrderRowNumbers>
-//		//	 		<arr:long>1</arr:long>
-//		//            </dat:OrderRowNumbers>
-//		//            <dat:OrderType>Invoice</dat:OrderType>
-//		//            <dat:SveaOrderId>508450</dat:SveaOrderId>
-//		//         </tem:request>
-//		//      </tem:CancelOrderRows>
-//		//   </soapenv:Body>
-//		//</soapenv:Envelope>
-//		
-//		// SOAP Envelope
-//		SOAPEnvelope envelope = soapPart.getEnvelope(); // adds namespace SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/
-//	    envelope.addNamespaceDeclaration("dat", "http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service");
-//	    envelope.addNamespaceDeclaration("arr", "http://schemas.microsoft.com/2003/10/Serialization/Arrays");
-//	    envelope.addNamespaceDeclaration("tem", "http://tempuri.org/");	    
-//
-//	    // SOAP Headers
-//		String soapActionPrefix = "http://tempuri.org/IAdminService/";		    	
-//		MimeHeaders headers = soapMessage.getMimeHeaders();
-//		headers.addHeader("SOAPAction", soapActionPrefix + this.action);
-//			    
-//	    // SOAP Body
-//	    SOAPBody body = envelope.getBody();
-//	    SOAPElement deliverPartial = body.addChildElement("CancelOrderRows", "tem");
-//	    SOAPElement request = deliverPartial.addChildElement("request", "tem");
-//	    	SOAPElement authentication = request.addChildElement("Authentication", "dat");
-//	    		SOAPElement password = authentication.addChildElement("Password", "dat");
-//	    			password.addTextNode(this.builder.getConfig().getPassword( this.builder.getOrderType(), this.builder.getCountryCode()));
-//	    		SOAPElement username = authentication.addChildElement("Username", "dat");
-//	    			username.addTextNode(this.builder.getConfig().getUsername( this.builder.getOrderType(), this.builder.getCountryCode()));
-//			SOAPElement clientId = request.addChildElement("ClientId", "dat");
-//				clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
-//	    	SOAPElement orderRowNumbers = request.addChildElement("OrderRowNumbers", "dat");
-//    		for( Integer rowIndex : this.builder.getRowsToCancel() ) {
-//    			orderRowNumbers.addChildElement("long","arr").addTextNode( Integer.toString( rowIndex ) );
-//    		}
-//		    SOAPElement orderType = request.addChildElement("OrderType", "dat");
-//		    	if( this.builder.getOrderType() == PAYMENTTYPE.INVOICE ) {
-//		    		orderType.addTextNode( ORDERTYPE.Invoice.toString() );
-//		    	}
-//	    		if( this.builder.getOrderType() == PAYMENTTYPE.PAYMENTPLAN ) {
-//	    			orderType.addTextNode( ORDERTYPE.PaymentPlan.toString() );
-//	    		}
-//		    SOAPElement sveaOrderId = request.addChildElement("SveaOrderId", "dat");
-//		    	sveaOrderId.addTextNode(String.valueOf(this.builder.getOrderId()));
-//	    	
-//    	soapMessage.saveChanges();
-//    	
-//        // DEBUG: Print SOAP request 
-////		System.out.print("Request SOAP Message:");
-////		try {
-////			soapMessage.writeTo(System.out);
-////		} catch (IOException e) {
-////			// TODO Auto-generated catch block
-////			e.printStackTrace();
-////		}
-////		System.out.println();
-//		    	
-//		return soapMessage;
-//	}
-//	
-//	public CancelOrderRowsResponse doRequest() {	
-//		
-//        // validate and prepare request, throw runtime exception on error
-//		SOAPMessage soapRequest;
-//		try {
-//        	soapRequest = prepareRequest();		
-//		} catch (SOAPException e) {
-//			throw new SveaWebPayException( "CancelOrderRowsRequest: prepareRequest failed.", e );
-//		}
-//		
-//		// send request and receive response
-//		SOAPMessage soapResponse;
-//		try {
-//			// Create SOAP Connection
-//			SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
-//			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
-//			
-//			// Send SOAP Message to SOAP Server
-//	        URL url = builder.getConfig().getEndPoint(PAYMENTTYPE.ADMIN_TYPE);		
-//			soapResponse = soapConnection.call( soapRequest, url.toString() );
-//			
-//			// DEBUG: print SOAP Response
-////			System.out.print("Response SOAP Message:");
-////			try {
-////				soapResponse.writeTo(System.out);
-////			} catch (IOException e) {
-////				e.printStackTrace();
-////			}
-////			System.out.println();
-//			
-//			soapConnection.close();			
-//		}
-//		catch( SOAPException e) {
-//			throw new SveaWebPayException( "CancelOrderRowsRequest: doRequest send request failed.", e );
-//		}
-//
-//		// parse response
-//		CancelOrderRowsResponse response;
-//		try {
-//			response = new CancelOrderRowsResponse(soapResponse);
-//		} catch (SOAPException e) {
-//			throw new SveaWebPayException( "CancelOrderRowsRequest: doRequest parse response failed.", e );
-//
-//		}
-//		return response;
-//	};	
+	public SOAPMessage prepareRequest() throws SOAPException {	
+
+		// validate builder, throw runtime exception on error
+		try {
+			validateOrder(); 
+		}
+        catch (ValidationException e) {
+            throw new SveaWebPayException( "CreditOrderRowsRequest: validateRequest failed.", e );
+        }
+				
+		// build and return inspectable request object
+		MessageFactory messageFactory = MessageFactory.newInstance();
+		SOAPMessage soapMessage = messageFactory.createMessage();
+		SOAPPart soapPart = soapMessage.getSOAPPart();
+		
+		//<soapenv:Envelope 
+		//	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
+		//	xmlns:tem="http://tempuri.org/" 
+		//	xmlns:dat="http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service" 
+		//	xmlns:dat1="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" 
+		//	xmlns:arr="http://schemas.microsoft.com/2003/10/Serialization/Arrays">
+		//   <soapenv:Header/>
+		//   <soapenv:Body>
+		//      <tem:CreditInvoiceRows>
+		//         <tem:request>
+		//            <dat:Authentication>
+		//               <dat:Password>sverigetest</dat:Password>
+		//               <dat:Username>sverigetest</dat:Username>
+		//            </dat:Authentication>
+		//            <dat:ClientId>79021</dat:ClientId>
+		//            <dat:InvoiceDistributionType>Post</dat:InvoiceDistributionType>
+		//            <dat:InvoiceId>1043819</dat:InvoiceId>
+		//            <dat:RowNumbers>
+		//               <arr:long>1</arr:long>
+		//            </dat:RowNumbers>
+		//         </tem:request>
+		//      </tem:CreditInvoiceRows>
+		//   </soapenv:Body>
+		//</soapenv:Envelope>
+		
+		// SOAP Envelope
+		SOAPEnvelope envelope = soapPart.getEnvelope(); // adds namespace SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/
+	    envelope.addNamespaceDeclaration("dat", "http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service");
+		envelope.addNamespaceDeclaration("dat1", "http://schemas.datacontract.org/2004/07/DataObjects.Webservice");	    
+	    envelope.addNamespaceDeclaration("arr", "http://schemas.microsoft.com/2003/10/Serialization/Arrays");
+	    envelope.addNamespaceDeclaration("tem", "http://tempuri.org/");	    
+
+	    // SOAP Headers
+		String soapActionPrefix = "http://tempuri.org/IAdminService/";		    	
+		MimeHeaders headers = soapMessage.getMimeHeaders();
+		headers.addHeader("SOAPAction", soapActionPrefix + this.action);
+			    
+	    // SOAP Body
+	    SOAPBody body = envelope.getBody();
+	    SOAPElement deliverPartial = body.addChildElement("CreditInvoiceRows", "tem");
+	    SOAPElement request = deliverPartial.addChildElement("request", "tem");
+	    	SOAPElement authentication = request.addChildElement("Authentication", "dat");
+	    		SOAPElement password = authentication.addChildElement("Password", "dat");
+	    			password.addTextNode(this.builder.getConfig().getPassword( this.builder.getOrderType(), this.builder.getCountryCode()));
+	    		SOAPElement username = authentication.addChildElement("Username", "dat");
+	    			username.addTextNode(this.builder.getConfig().getUsername( this.builder.getOrderType(), this.builder.getCountryCode()));
+			SOAPElement clientId = request.addChildElement("ClientId", "dat");
+				clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
+	    	SOAPElement invoiceDistributionType = request.addChildElement("InvoiceDistributionType", "dat");
+    			invoiceDistributionType.addTextNode(this.builder.getInvoiceDistributionType().toString());
+		    SOAPElement invoiceId = request.addChildElement("InvoiceId", "dat");
+		    	invoiceId.addTextNode(String.valueOf(this.builder.getInvoiceId()));
+	    	SOAPElement rowNumbers = request.addChildElement("RowNumbers", "dat");
+    		for( Integer rowIndex : this.builder.getRowsToCredit() ) {
+    			rowNumbers.addChildElement("long","arr").addTextNode( Integer.toString( rowIndex ) );
+    		}
+	    	
+    	soapMessage.saveChanges();
+    	
+        // DEBUG: Print SOAP request 
+		System.out.print("Request SOAP Message:");
+		try {
+			soapMessage.writeTo(System.out);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println();
+		    	
+		return soapMessage;
+	}
 	
-	
+	public CreditOrderRowsResponse doRequest() {	
+		
+        // validate and prepare request, throw runtime exception on error
+		SOAPMessage soapRequest;
+		try {
+        	soapRequest = prepareRequest();		
+		} catch (SOAPException e) {
+			throw new SveaWebPayException( "CreditOrderRowsRequest: prepareRequest failed.", e );
+		}
+		
+		// send request and receive response
+		SOAPMessage soapResponse;
+		try {
+			// Create SOAP Connection
+			SOAPConnectionFactory soapConnectionFactory = SOAPConnectionFactory.newInstance();
+			SOAPConnection soapConnection = soapConnectionFactory.createConnection();
+			
+			// Send SOAP Message to SOAP Server
+	        URL url = builder.getConfig().getEndPoint(PAYMENTTYPE.ADMIN_TYPE);		
+			soapResponse = soapConnection.call( soapRequest, url.toString() );
+			
+			// DEBUG: print SOAP Response
+			System.out.print("Response SOAP Message:");
+			try {
+				soapResponse.writeTo(System.out);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.out.println();
+			
+			soapConnection.close();			
+		}
+		catch( SOAPException e) {
+			throw new SveaWebPayException( "CreditOrderRowsRequest: doRequest send request failed.", e );
+		}
+
+		// parse response
+		CreditOrderRowsResponse response;
+		try {
+			response = new CreditOrderRowsResponse(soapResponse);
+		} catch (SOAPException e) {
+			throw new SveaWebPayException( "CreditOrderRowsRequest: doRequest parse response failed.", e );
+
+		}
+		return response;
+	};	
 }

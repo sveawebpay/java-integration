@@ -15,6 +15,7 @@ import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>{ 
 	
@@ -24,7 +25,12 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
 
     private ConfigurationProvider config;
     private COUNTRYCODE countryCode;
-
+    protected PAYMENTTYPE orderType;
+    
+	public PAYMENTTYPE getOrderType() {
+		return this.orderType;
+	} 
+	
     private ArrayList<Integer> rowIndexesToCredit;
 	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
 	@SuppressWarnings("rawtypes")
@@ -138,6 +144,7 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
 	
 
 	public CreditTransactionRequest creditCardOrderRows() {
+		this.orderType = PAYMENTTYPE.HOSTED_ADMIN;
 	
     	// validate request and throw exception if validation fails
         String errors = validateCreditCardOrderRows(); 
@@ -180,6 +187,7 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
     }	
     
     public CreditTransactionRequest creditDirectBankOrderRows() {
+		this.orderType = PAYMENTTYPE.HOSTED_ADMIN;
     	
     	// validate request and throw exception if validation fails
         String errors = validateCreditDirectBankOrderRows(); 
@@ -236,6 +244,7 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
 	}
 
 	public CreditOrderRowsRequest creditInvoiceOrderRows() {
+		this.orderType = PAYMENTTYPE.INVOICE;
 		return new CreditOrderRowsRequest(this);
 	}
 

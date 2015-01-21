@@ -7,6 +7,8 @@ import java.util.ArrayList;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.adminservice.CancelOrderRowsResponse;
+import se.sveaekonomi.webpay.integration.adminservice.CreditOrderRowsRequest;
+import se.sveaekonomi.webpay.integration.adminservice.CreditOrderRowsResponse;
 import se.sveaekonomi.webpay.integration.adminservice.DeliverPartialResponse;
 import se.sveaekonomi.webpay.integration.adminservice.GetOrdersResponse;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
@@ -408,7 +410,6 @@ public class WebPayAdminWebdriverTest {
         CreditOrderRowsResponse response = request.doRequest();
         assertTrue(response.isOrderAccepted());        				
     }
-    // TODO cases for addCreditOrderRow, combined. in s integration test class
     
     // card
     @Test
