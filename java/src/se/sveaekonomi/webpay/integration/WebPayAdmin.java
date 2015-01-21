@@ -165,7 +165,23 @@ public class WebPayAdmin {
 
     /**
      * The WebPayAdmin.creditOrderRows entrypoint method is used to credit rows in an order after it has been delivered.
-     * 1.6.0: Supports card and direct bank orders.
+     * Supports invoice, card and direct bank orders. (To credit a payment plan order, please contact Svea customer service.)
+     * 
+     * If you wish to credit an amount not present in the original order, use addCreditOrderRow() or addCreditOrderRows() 
+     * and supply a new order row for the amount to credit. This is the recommended way to credit a card or direct bank order.
+     * 
+     * If you wish to credit an invoice order row in full, you can specify the index of the order row to credit using setRowToCredit(). 
+     * The corresponding order row at Svea will then be credited. (For card or direct bank orders you need to first query and then 
+     * supply the corresponding numbered order rows using the addNumberedOrderRows() method.)
+     * 
+     * Following the request Svea will issue a credit invoice including the original order rows specified using setRowToCredit(), 
+     * as well as any new credit order rows specified using addCreditOrderRow(). For card or direct bank orders, the order row amount
+     * will be credited to the customer. 
+     * 
+     * Note: when using addCreditOrderRows, you may only use WebPayItem::orderRow with price specified as amountExVat and vatPercent.
+     * 
+     * Get an order builder instance using the WebPayAdmin.creditOrderRows entrypoint, then provide more information about the 
+     * transaction and send the request using the creditOrderRowsBuilder methods:     
      * 
      * ...
      *     request = WebPay.creditOrder(config)
@@ -181,6 +197,7 @@ public class WebPayAdmin {
      *         .addNumberedOrderRows()        // card and direct bank only, optional
      *     ;
      *     // then select the corresponding request class and send request
+     *     response = request.creditInvoiceOrderRows().doRequest();    // returns CreditInvoiceRowsResponse
      *     response = request.creditCardOrderRows().doRequest();       // returns CreditTransactionResponse
      *     response = request.creditDirectBankOrderRows().doRequest(); // returns CreditTransactionResponse
      * ...
