@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import javax.xml.bind.ValidationException;
 
+import se.sveaekonomi.webpay.integration.adminservice.CreditOrderRowsRequest;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.CreditTransactionRequest;
@@ -13,6 +14,7 @@ import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 
 public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>{ 
 	
@@ -27,7 +29,37 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
 	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
 	@SuppressWarnings("rawtypes")
 	private ArrayList<OrderRowBuilder> newCreditOrderRows;
-    private String orderId;
+	
+    public ArrayList<OrderRowBuilder> getNewCreditOrderRows() {
+		return newCreditOrderRows;
+	}
+
+	public void setNewCreditOrderRows(ArrayList<OrderRowBuilder> newCreditOrderRows) {
+		this.newCreditOrderRows = newCreditOrderRows;
+	}
+
+	private String invoiceId;
+	public CreditOrderRowsBuilder setInvoiceId(String invoiceId) {
+		this.invoiceId = invoiceId;
+		return this;
+	}
+	public String getInvoiceId() {
+		return this.invoiceId;
+	}	
+		
+	private String orderId;
+    private DISTRIBUTIONTYPE invoiceDistributionType;
+    
+	public DISTRIBUTIONTYPE getInvoiceDistributionType() {
+		return invoiceDistributionType;
+	}
+
+	public CreditOrderRowsBuilder setInvoiceDistributionType(DISTRIBUTIONTYPE invoiceDistributionType) {
+		this.invoiceDistributionType = invoiceDistributionType;
+		return this;
+	}
+    
+    
     
 	@SuppressWarnings("rawtypes")
 	public CreditOrderRowsBuilder( ConfigurationProvider config ) {
@@ -202,5 +234,9 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
 		}
 		return creditedOrderTotal;
 	}
-    
+
+	public CreditOrderRowsRequest creditInvoiceOrderRows() {
+		return new CreditOrderRowsRequest(this);
+	}
+
 }

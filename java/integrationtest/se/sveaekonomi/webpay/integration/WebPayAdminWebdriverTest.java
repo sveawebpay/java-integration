@@ -408,7 +408,7 @@ public class WebPayAdminWebdriverTest {
         CreditOrderRowsResponse response = request.doRequest();
         assertTrue(response.isOrderAccepted());        				
     }
-    // TODO cases for addCreditOrderRow, combined. in separate integration test class
+    // TODO cases for addCreditOrderRow, combined. in s integration test class
     
     // card
     @Test

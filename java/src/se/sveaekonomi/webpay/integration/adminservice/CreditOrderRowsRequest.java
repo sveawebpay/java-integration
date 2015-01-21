@@ -17,39 +17,44 @@ import javax.xml.soap.SOAPPart;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.CreditOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 public class CreditOrderRowsRequest {
 
-//	private String action;
-//	private CancelOrderRowsBuilder builder;
-//		
-//	public CreditOrderRowsRequest( CancelOrderRowsBuilder builder) {
-//		this.action = "CancelOrderRows";
-//		this.builder = builder;
-//	}	
-//	
-//	/**
-//	 * validates that all required attributes needed for the request are present in the builder object
-//	 * @throws ValidationException
-//	 */
-//	public void validateOrder() throws ValidationException {
-//    	String errors = "";
-//        if (builder.getOrderId() == null) {
-//            errors += "MISSING VALUE - OrderId is required, use setOrderId().\n";
-//    	}     
-//        if (builder.getCountryCode() == null) {
-//            errors += "MISSING VALUE - CountryCode is required, use setCountryCode().\n";
-//        }           
-//        if( builder.getRowsToCancel().size() == 0 ) {
-//        	errors += "MISSING VALUE - rowIndexesToCancel is required for cancelInvoiceOrderRows(). Use methods setRowToCancel() or setRowsToCancel().\n";
-//    	}
-//        if ( !errors.equals("")) {
-//            throw new ValidationException(errors);
-//        }
-//	}	
-//	
+	private String action;
+	private CreditOrderRowsBuilder builder;
+		
+	public CreditOrderRowsRequest( CreditOrderRowsBuilder builder) {
+		this.action = "CreditInvoiceRows";
+		this.builder = builder;
+	}
+	
+	/**
+	 * validates that all required attributes needed for the request are present in the builder object
+	 * @throws ValidationException
+	 */	
+    public void validateOrder() throws ValidationException {
+        String errors = "";
+        if (builder.getInvoiceId() == null) {
+            errors += "MISSING VALUE - InvoiceId is required, use setInvoiceId().\n";
+    	}
+        if (builder.getCountryCode() == null) {
+            errors += "MISSING VALUE - CountryCode is required, use setCountryCode().\n";
+        }
+        if (builder.getInvoiceDistributionType() == null) {
+        	errors += "MISSING VALUE - distributionType is required, use setInvoiceDistributionType().\n";
+        }
+        // need either row indexes or new credit rows to calculate amount to credit
+        if( builder.getRowsToCredit().size() == 0 && builder.getNewCreditOrderRows().size() == 0 ) {
+        	errors += "MISSING VALUE - rowIndexesToCredit or newCreditOrderRows is required for creditDirectBankOrderRows(). Use methods setRowToCredit()/setRowsToCredit() or addCreditOrderRow()/addCreditOrderRows().\n";
+    	}
+        if ( !errors.equals("")) {
+            throw new ValidationException(errors);
+        }
+    }
+
 //	public SOAPMessage prepareRequest() throws SOAPException {	
 //
 //		// validate builder, throw runtime exception on error
