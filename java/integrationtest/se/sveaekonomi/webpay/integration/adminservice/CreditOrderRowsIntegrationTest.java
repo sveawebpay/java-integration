@@ -4,8 +4,11 @@ import static org.junit.Assert.*;
 
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.WebPayAdmin;
+import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
+import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CreditOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
@@ -34,8 +37,9 @@ public class CreditOrderRowsIntegrationTest {
 	} 
 	
 	// invoice	
+	// using setRowToCredit
 	@Test
-    public void test_creditOrderRows_creditInvoiceOrderRows_credit_all_rows() {
+    public void test_creditOrderRows_creditInvoiceOrderRows_using_setRowToCredit() {
 		    	
 		// create an order using defaults
 		CreateOrderResponse order = TestingTool.createInvoiceTestOrder("test_creditOrderRows_creditInvoiceOrderRows_credit_all_rows");
@@ -68,134 +72,79 @@ public class CreditOrderRowsIntegrationTest {
         assertEquals("79021", response.getClientId());
     }
 	
-//	@Test
-//    public void test_credit_single_invoice_orderRow_returns_accepted() {
-//    	
-//    	// create an order using defaults
-//        CreateOrderBuilder orderRequest = WebPay.createOrder(SveaConfig.getDefaultConfig())
-//                .addCustomerDetails(WebPayItem.individualCustomer()
-//                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
-//                )
-//                .setCountryCode(TestingTool.DefaultTestCountryCode)
-//                .setOrderDate(TestingTool.DefaultTestDate)
-//
-//	            .addOrderRow( WebPayItem.orderRow()		// row total 250.00
-//	            	.setArticleNumber("1")
-//	            	.setQuantity(2.0)	            	
-//	        		.setAmountExVat(100.00)
-//	        		.setDescription("Specification")
-//	        		.setName("Product")
-//	        		.setUnit("st")
-//	        		.setVatPercent(25)
-//	        		.setDiscountPercent(0.0)
-//	    		)
-//                .addOrderRow( WebPayItem.orderRow()		// row total 20.00
-//            		.setDescription("second row")
-//            		.setQuantity(1.0)
-//            		.setAmountExVat(16.00)
-//            		.setVatPercent(25)
-//        		)    
-//        		.addOrderRow( WebPayItem.orderRow()		// row total 30.00
-//            		.setDescription("third row")
-//            		.setQuantity(1.0)
-//            		.setAmountExVat(24.00)
-//            		.setVatPercent(25)
-//        		)  										// order total 300.00
-//    	;    	
-//        CreateOrderResponse order = orderRequest.useInvoicePayment().doRequest();
-//        assertTrue(order.isOrderAccepted());
-//
-//        // deliver first and second order row and assert the response
-//        DeliverPartialResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
-//            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
-//            .setCountryCode(TestingTool.DefaultTestCountryCode)	
-//            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-//            .setRowToDeliver(1).setRowToDeliver(2)
-//            .deliverInvoiceOrderRows()
-//            	.doRequest();
-//        
-//        assertTrue(deliver.isOrderAccepted());        
-//        assertTrue(deliver instanceof DeliverPartialResponse );
-//        
-//        // credit first order row and assert the response
-//        CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-//            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
-//            .setCountryCode(TestingTool.DefaultTestCountryCode)	
-//            .setRowToCredit(1)
-//        ;
-//        CreditOrderRowsResponse response = builder.creditInvoiceOrderRows().doRequest();
-//        
-//        assertTrue(response.isOrderAccepted());        
-//        assertTrue(response instanceof CreditOrderRowsResponse );
-//	}   
-//
-//	@Test
-//    public void test_deliver_multiple_invoice_orderRows_returns_accepted_with_invoiceId() {
-//
-//    	// create an order using defaults
-//        CreateOrderBuilder orderRequest = WebPay.createOrder(SveaConfig.getDefaultConfig())
-//                .addCustomerDetails(WebPayItem.individualCustomer()
-//                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
-//                )
-//                .setCountryCode(TestingTool.DefaultTestCountryCode)
-//                .setOrderDate(TestingTool.DefaultTestDate)
-//
-//	            .addOrderRow( WebPayItem.orderRow()		// row total 250.00
-//	            	.setArticleNumber("1")
-//	            	.setQuantity(2.0)	            	
-//	        		.setAmountExVat(100.00)
-//	        		.setDescription("Specification")
-//	        		.setName("Product")
-//	        		.setUnit("st")
-//	        		.setVatPercent(25)
-//	        		.setDiscountPercent(0.0)
-//	    		)
-//                .addOrderRow( WebPayItem.orderRow()		// row total 20.00
-//            		.setDescription("second row")
-//            		.setQuantity(1.0)
-//            		.setAmountExVat(16.00)
-//            		.setVatPercent(25)
-//        		)    
-//        		.addOrderRow( WebPayItem.orderRow()		// row total 30.00
-//            		.setDescription("third row")
-//            		.setQuantity(1.0)
-//            		.setAmountExVat(24.00)
-//            		.setVatPercent(25)
-//        		)  										// order total 300.00
-//    	;    	
-//        CreateOrderResponse order = orderRequest.useInvoicePayment().doRequest();
-//        assertTrue(order.isOrderAccepted());
-//
-//        // credit first order row and assert the response
-//        CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-//            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
-//            .setCountryCode(TestingTool.DefaultTestCountryCode)	
-//            .setRowToCredit(1).setRowToCredit(2)
-//        ;
-//        CreditOrderRowsResponse response = builder.creditInvoiceOrderRows().doRequest();
-//        
-//        assertTrue(response.isOrderAccepted());        
-//        assertTrue(response instanceof CreditOrderRowsResponse );
-//	}  
-//	
-//	// paymentplan 
-//    @Test
-//    public void test_credit_single_paymentPlan_orderRow_returns_accepted() {
-//    	
-//    	// create an order using defaults
-//    	CreateOrderResponse order = TestingTool.createPaymentPlanTestOrder("test_creditOrderRows_creditPaymentPlanOrderRows_credit_all_rows");
-//        assertTrue(order.isOrderAccepted());
-//
-//        // deliver first order row and assert the response
-//        CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-//            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
-//            .setCountryCode(TestingTool.DefaultTestCountryCode)	
-//            .setRowToCredit(1)
-//        ;
-//    	CreditOrderRowsResponse response = builder.creditPaymentPlanOrderRows().doRequest();
-//        assertTrue(response.isOrderAccepted());        
-//        assertTrue(response instanceof CreditOrderRowsResponse );
-//    }   	
+	// using addCreditOrderRow
+	// 
+	@Test
+    public void test_creditOrderRows_creditInvoiceOrderRows_using_addCreditOrderRow_original_exvat_credit_exvat() {
+		    	
+		// create an order using defaults
+        CreateOrderBuilder orderBuilder = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                .addOrderRow( 
+            		WebPayItem.orderRow()
+                        .setArticleNumber("original")
+                        .setName("Prod")
+                        .setDescription("Specification")
+                        .setAmountExVat(99.99)	// 79.99ex @24% = 123.9876 => 123.99inc
+                        .setQuantity(1.0)
+                        .setUnit("st")
+                        .setVatPercent(24)
+                        .setVatDiscount(0)
+        		)
+                .addCustomerDetails(WebPayItem.individualCustomer()
+                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+                )
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setOrderDate(TestingTool.DefaultTestDate)
+    	;
+        CreateOrderResponse order = orderBuilder.useInvoicePayment().doRequest();
+        assertTrue(order.isOrderAccepted());
+ 
+        // deliver first order row and assert the response
+        DeliverPartialResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
+            .setCountryCode(TestingTool.DefaultTestCountryCode)	
+            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+            .setRowToDeliver(1)
+            .deliverInvoiceOrderRows()
+            	.doRequest();        
+        assertTrue(deliver.isOrderAccepted());                		
+		
+        
+        
+		// credit order row and assert the response
+        CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
+    		.setInvoiceId( String.valueOf(deliver.getInvoiceId()) )
+			.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+            .setCountryCode( COUNTRYCODE.SE )
+            .addCreditOrderRow(
+	    		WebPayItem.orderRow()
+	                .setArticleNumber("credit")
+                    .setName("Prod")
+                    .setDescription("Specification")
+	                .setAmountExVat(80.64)	// 99.99inc = 80.637096 @24% => 80.64ex @24% = 99.9936 => 99.99inc
+	                .setQuantity(1.0)
+	                .setUnit("st")
+	                .setVatPercent(24)
+	                .setVatDiscount(0)
+            )
+		;
+        CreditOrderRowsRequest request = builder.creditInvoiceOrderRows();
+        CreditOrderRowsResponse response = request.doRequest();
+        assertTrue(response.isOrderAccepted());    
+        
+        assertEquals(Double.valueOf(80.64), response.getAmount());
+        assertEquals(String.valueOf(order.orderId), response.getOrderId());		// TODO refactor to order.getOrderId() returning String!
+        assertNotNull(response.getCreditInvoiceId());        
+        // TODO package currently does not support QueryInvoice to get actual credit invoice 
+        System.out.println(
+    		"\ntest_creditOrderRows_creditInvoiceOrderRows_using_addCreditOrderRow_original_exvat_credit_exvat :" + 
+			response.getCreditInvoiceId()
+		);        
+    }	
+ 
+	
+	// paymentplan 
+	// NOT SUPPORTED
     
 	// card	
     //TODO
