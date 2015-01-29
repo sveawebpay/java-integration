@@ -2,6 +2,7 @@ package se.sveaekonomi.webpay.integration.adminservice;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 
 import javax.xml.bind.ValidationException;
 import javax.xml.soap.MessageFactory;
@@ -17,6 +18,7 @@ import javax.xml.soap.SOAPPart;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.CreditOrderRowsBuilder;
+import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 public class CreditOrderRowsRequest {
@@ -53,6 +55,20 @@ public class CreditOrderRowsRequest {
         }
     }
 
+    /** @returns false iff any order row is specified using amountExVat and vatPercent, and the flipPriceIncludingVat flag is false */
+    public boolean determinePriceIncludingVat( ArrayList<OrderRowBuilder> orderRows, boolean flipPriceIncludingVat) {
+    	boolean exVatRowSeen = false;
+    	for( OrderRowBuilder row : orderRows ) {
+    		if( row.getAmountExVat() != null && row.getVatPercent() != null ) { // row specified without incvat, should send as exvat
+    			exVatRowSeen = true;
+    			break;
+    		}
+    	}
+    	boolean usePriceIncludingVat = exVatRowSeen ? false : true;
+    	
+    	return flipPriceIncludingVat ? !usePriceIncludingVat : usePriceIncludingVat;
+    }    
+    
 	public SOAPMessage prepareRequest() throws SOAPException {	
 
 		// validate builder, throw runtime exception on error
@@ -62,7 +78,10 @@ public class CreditOrderRowsRequest {
         catch (ValidationException e) {
             throw new SveaWebPayException( "CreditOrderRowsRequest: validateRequest failed.", e );
         }
-				
+
+		// determine if we can send the order as incvat, by using the priceIncludingVat = true flag in request
+		boolean usePriceIncludingVat = determinePriceIncludingVat(this.builder.getNewCreditOrderRows(), false);
+		
 		// build and return inspectable request object
 		MessageFactory messageFactory = MessageFactory.newInstance();
 		SOAPMessage soapMessage = messageFactory.createMessage();

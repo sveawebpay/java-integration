@@ -73,7 +73,7 @@ public class CreditOrderRowsIntegrationTest {
     }
 	
 	// using addCreditOrderRow
-	// 
+	// exvat/exvat
 	@Test
     public void test_creditOrderRows_creditInvoiceOrderRows_using_addCreditOrderRow_original_exvat_credit_exvat() {
 		    	
@@ -109,8 +109,6 @@ public class CreditOrderRowsIntegrationTest {
             	.doRequest();        
         assertTrue(deliver.isOrderAccepted());                		
 		
-        
-        
 		// credit order row and assert the response
         CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
     		.setInvoiceId( String.valueOf(deliver.getInvoiceId()) )
@@ -133,6 +131,7 @@ public class CreditOrderRowsIntegrationTest {
         assertTrue(response.isOrderAccepted());    
         
         assertEquals(Double.valueOf(80.64), response.getAmount());
+        // TODO -- should response use getAmountExVat and getAmountIncVat instead, or should it use getAmount and getPriceIncludingVat for flag ??        
         assertEquals(String.valueOf(order.orderId), response.getOrderId());		// TODO refactor to order.getOrderId() returning String!
         assertNotNull(response.getCreditInvoiceId());        
         // TODO package currently does not support QueryInvoice to get actual credit invoice 
@@ -142,7 +141,73 @@ public class CreditOrderRowsIntegrationTest {
 		);        
     }	
  
-	
+	// exvat/incvat
+	@Test
+    public void test_creditOrderRows_creditInvoiceOrderRows_using_addCreditOrderRow_original_exvat_credit_incvat() {
+		    	
+		// create an order using defaults
+        CreateOrderBuilder orderBuilder = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                .addOrderRow( 
+            		WebPayItem.orderRow()
+                        .setArticleNumber("original")
+                        .setName("Prod")
+                        .setDescription("Specification")
+                        .setAmountExVat(99.99)	// 79.99ex @24% = 123.9876 => 123.99inc
+                        .setQuantity(1.0)
+                        .setUnit("st")
+                        .setVatPercent(24)
+                        .setVatDiscount(0)
+        		)
+                .addCustomerDetails(WebPayItem.individualCustomer()
+                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+                )
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setOrderDate(TestingTool.DefaultTestDate)
+    	;
+        CreateOrderResponse order = orderBuilder.useInvoicePayment().doRequest();
+        assertTrue(order.isOrderAccepted());
+ 
+        // deliver first order row and assert the response
+        DeliverPartialResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
+            .setCountryCode(TestingTool.DefaultTestCountryCode)	
+            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+            .setRowToDeliver(1)
+            .deliverInvoiceOrderRows()
+            	.doRequest();        
+        assertTrue(deliver.isOrderAccepted());                		
+		
+		// credit order row and assert the response
+        CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
+    		.setInvoiceId( String.valueOf(deliver.getInvoiceId()) )
+			.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+            .setCountryCode( COUNTRYCODE.SE )
+            .addCreditOrderRow(
+	    		WebPayItem.orderRow()
+	                .setArticleNumber("credit")
+                    .setName("Prod")
+                    .setDescription("Specification")
+	                .setAmountIncVat(99.99)	// 99.99inc = 80.637096 @24% => 80.64ex @24% = 99.9936 => 99.99inc
+	                .setQuantity(1.0)
+	                .setUnit("st")
+	                .setVatPercent(24)
+	                .setVatDiscount(0)
+            )
+		;
+        CreditOrderRowsRequest request = builder.creditInvoiceOrderRows();
+        CreditOrderRowsResponse response = request.doRequest();
+        assertTrue(response.isOrderAccepted());    
+        
+        assertEquals(Double.valueOf(80.64), response.getAmount());				// response	
+        // TODO -- should response use getAmountExVat and getAmountIncVat instead, or should it use getAmount and getPriceIncludingVat for flag ??
+        assertEquals(String.valueOf(order.orderId), response.getOrderId());		// TODO refactor to order.getOrderId() returning String!
+        assertNotNull(response.getCreditInvoiceId());        
+        // TODO package currently does not support QueryInvoice to get actual credit invoice 
+        System.out.println(
+    		"\ntest_creditOrderRows_creditInvoiceOrderRows_using_addCreditOrderRow_original_exvat_credit_exvat :" + 
+			response.getCreditInvoiceId()
+		);        
+    }	
 	// paymentplan 
 	// NOT SUPPORTED
     

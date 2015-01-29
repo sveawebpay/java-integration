@@ -27,7 +27,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setArticleNumber(String articleNumber) {
 		this.articleNumber = articleNumber;
-		return (T) this;
+		return getGenericThis();
 	}
 	public String getArticleNumber() {
 		return articleNumber;
@@ -42,7 +42,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setName(String name) {
 		this.name = name;
-		return (T) this;
+		return getGenericThis();
 	}
 
 	public String getName() {
@@ -58,7 +58,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setDescription(String description) {
 		this.description = description;
-		return (T) this;
+		return getGenericThis();
 	}
 
 	public String getDescription() {
@@ -79,12 +79,12 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setAmountExVat(Double dExVatAmount) {
 		this.amountExVat = dExVatAmount;
-		return (T) this;
+		return getGenericThis();
 	}	
 	
 	public T setAmountExVat(double dExVatAmount) {
 		this.amountExVat = Double.valueOf(dExVatAmount);
-		return (T) this;
+		return getGenericThis();
 	}
 
 	public Double getAmountExVat() {
@@ -105,7 +105,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setVatPercent(double vatPercent) {
 		this.vatPercent = vatPercent;
-		return (T) this;
+		return getGenericThis();
 	}
 
 	/** When refering to a queried order row, may contain the value NaN if order row was originally specified ex vat. */
@@ -124,7 +124,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setQuantity(Double quantity) {
 		this.quantity = quantity;
-		return (T) this;
+		return getGenericThis();
 	}
 
 	public Double getQuantity() {
@@ -139,7 +139,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setUnit(String unit) {
 		this.unit = unit;
-		return (T) this;
+		return getGenericThis();
 	}
 	
 	public String getUnit() {
@@ -155,7 +155,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	// TODO investigate this, not used in php package (defaults to 0)??
 	public T setVatDiscount(int vatDiscount) {
 		this.vatDiscount = vatDiscount;
-		return (T) this;
+		return getGenericThis();
 	}
 	
 	public int getVatDiscount() {
@@ -170,7 +170,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setDiscountPercent(Double discountPercent) {
 		this.discountPercent = discountPercent;
-		return (T) this;
+		return getGenericThis();
 	}
 	
 	public double getDiscountPercent() {
@@ -190,21 +190,26 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 * setAmountIncVat() or setVatPercent()
 	 * 
 	 * @param amountIncVat
-	 * @return OrderRowBuilder
 	 */
 	public T setAmountIncVat(Double amountIncVat) {
 		this.amountIncVat = amountIncVat;
-		return (T) this;
+		return getGenericThis();
 	}
 	
 	
 	public T setAmountIncVat(double amountIncVat) {
 		this.amountIncVat = Double.valueOf(amountIncVat);
-		return (T) this;
+		return getGenericThis();
 	}
 
 	/** When refering to a queried order row, may contain the value NaN if order row was originally specified ex vat. */
 	public Double getAmountIncVat() {
 		return amountIncVat;
+	}
+	
+	// used to return correct type for fluent methods in this and descendant classes
+	@SuppressWarnings("unchecked")
+	protected T getGenericThis() {
+		return (T) this;
 	}
 }
