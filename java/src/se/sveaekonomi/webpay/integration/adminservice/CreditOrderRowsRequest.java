@@ -80,7 +80,7 @@ public class CreditOrderRowsRequest {
         }
 
 		// determine if we can send the order as incvat, by using the priceIncludingVat = true flag in request
-		boolean usePriceIncludingVat = determinePriceIncludingVat(this.builder.getNewCreditOrderRows(), false);
+		boolean usePriceIncludingVatFlag = determinePriceIncludingVat(this.builder.getNewCreditOrderRows(), false);		
 		
 		// build and return inspectable request object
 		MessageFactory messageFactory = MessageFactory.newInstance();
@@ -104,6 +104,19 @@ public class CreditOrderRowsRequest {
 		//            <dat:ClientId>79021</dat:ClientId>
 		//            <dat:InvoiceDistributionType>Post</dat:InvoiceDistributionType>
 		//            <dat:InvoiceId>1043819</dat:InvoiceId>
+
+					//<dat:NewCreditInvoiceRows>
+					//    <dat1:OrderRow>
+					//       <dat1:ArticleNumber>k1</dat1:ArticleNumber>
+					//       <dat1:Description>CreditRow Name: CreditRow Specification</dat1:Description>
+					//       <dat1:DiscountPercent>0</dat1:DiscountPercent>
+					//       <dat1:NumberOfUnits>1</dat1:NumberOfUnits>
+					//       <dat1:PricePerUnit>1</dat1:PricePerUnit>
+					//       <dat1:Unit>st</dat1:Unit>
+					//       <dat1:VatPercent>25</dat1:VatPercent>
+					//    </dat1:OrderRow>
+					//</dat:NewCreditInvoiceRows>
+		
 		//            <dat:RowNumbers>
 		//               <arr:long>1</arr:long>
 		//            </dat:RowNumbers>
@@ -139,26 +152,123 @@ public class CreditOrderRowsRequest {
     			invoiceDistributionType.addTextNode(this.builder.getInvoiceDistributionType().toString());
 		    SOAPElement invoiceId = request.addChildElement("InvoiceId", "dat");
 		    	invoiceId.addTextNode(String.valueOf(this.builder.getInvoiceId()));
+		    		
+				//<dat:NewCreditInvoiceRows>
+				//    <dat1:OrderRow>
+				//       <dat1:ArticleNumber>k1</dat1:ArticleNumber>
+				//       <dat1:Description>CreditRow Name: CreditRow Specification</dat1:Description>
+				//       <dat1:DiscountPercent>0</dat1:DiscountPercent>
+				//       <dat1:NumberOfUnits>1</dat1:NumberOfUnits>
+				//       <dat1:PricePerUnit>1</dat1:PricePerUnit>
+				//       <dat1:Unit>st</dat1:Unit>
+				//       <dat1:VatPercent>25</dat1:VatPercent>
+				//    </dat1:OrderRow>
+				//</dat:NewCreditInvoiceRows>
+
+    		if( this.builder.getNewCreditOrderRows().size() > 0 ) {
+			    SOAPElement newCreditInvoiceRows = request.addChildElement("NewCreditInvoiceRows", "dat");
+			    for( OrderRowBuilder row : this.builder.getNewCreditOrderRows() ) {
+			    	SOAPElement orderRow = newCreditInvoiceRows.addChildElement("OrderRow", "dat1");
+			    		// TODO check what happens if fields not set in row -- add to integration test
+			    		SOAPElement articleNumber = orderRow.addChildElement("ArticleNumber", "dat1");
+			    			articleNumber.addTextNode( row.getArticleNumber() );
+		    			SOAPElement description = orderRow.addChildElement("Description", "dat1");
+		    				description.addTextNode( row.getName()+": "+row.getDescription() );
+	    				SOAPElement discountPercent = orderRow.addChildElement("DiscountPercent", "dat1");
+    						discountPercent.addTextNode( String.valueOf(row.getDiscountPercent()) );
+	    				SOAPElement numberOfUnits = orderRow.addChildElement("NumberOfUnits", "dat1");
+	    					numberOfUnits.addTextNode( String.valueOf(row.getQuantity()) );
+						SOAPElement priceIncludingVat = orderRow.addChildElement("PriceIncludingVat", "dat1");
+							priceIncludingVat.addTextNode( usePriceIncludingVatFlag ? "true" : "false" );
+    					SOAPElement pricePerUnit = orderRow.addChildElement("PricePerUnit", "dat1");
+    						pricePerUnit.addTextNode( String.valueOf( 
+    	    					// calculate the correct amount to send based on the builder order row and usePriceIncludingVat flag
+								getPricePerUnitFromBuilderOrderRowAndPriceIncludingVatFlag( row, usePriceIncludingVatFlag) ) 
+							);
+	    				SOAPElement unit = orderRow.addChildElement("Unit", "dat1");
+	    					unit.addTextNode( String.valueOf(row.getUnit()) ); 
+	    				SOAPElement vatPercent = orderRow.addChildElement("VatPercent", "dat1");
+	    					vatPercent.addTextNode( String.valueOf( 
+    	    					// get vat percent to send based on the builder order row (i.e. if specified exvat + incvat)
+								getVatPercentFromBuilderOrderRowAndPriceIncludingVatFlag( row) ) 
+							); 					
+			    }
+    		}
 	    	SOAPElement rowNumbers = request.addChildElement("RowNumbers", "dat");
-    		for( Integer rowIndex : this.builder.getRowsToCredit() ) {
-    			rowNumbers.addChildElement("long","arr").addTextNode( Integer.toString( rowIndex ) );
+    		if( this.builder.getRowsToCredit().size() > 0 ) {		    	
+	    		for( Integer rowIndex : this.builder.getRowsToCredit() ) {
+	    			rowNumbers.addChildElement("long","arr").addTextNode( Integer.toString( rowIndex ) );
+	    		}
     		}
 	    	
     	soapMessage.saveChanges();
     	
         // DEBUG: Print SOAP request 
-//		System.out.print("Request SOAP Message:");
-//		try {
-//			soapMessage.writeTo(System.out);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		System.out.println();
+		System.out.print("Request SOAP Message:");
+		try {
+			soapMessage.writeTo(System.out);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println();
 		    	
 		return soapMessage;
 	}
+
 	
+	protected Double getPricePerUnitFromBuilderOrderRowAndPriceIncludingVatFlag( OrderRowBuilder row, boolean usePriceIncludingVatFlag) {
+
+		Double amount = 0.0;
+		
+		// row: exvat + vatpercent 
+		if( row.getAmountExVat() != null && row.getVatPercent() != null ) {
+			if( usePriceIncludingVatFlag  ) {
+				amount = OrderRowBuilder.convertExVatToIncVat( row.getAmountExVat(), row.getVatPercent() );
+			}
+			else {
+				amount = row.getAmountExVat();
+			}
+		}
+		// row: incvat + vatpercent 
+		if( row.getAmountIncVat() != null && row.getVatPercent() != null ) {
+			if( usePriceIncludingVatFlag  ) {
+				amount = row.getAmountIncVat();
+			}
+			else {
+				amount = OrderRowBuilder.convertIncVatToExVat( row.getAmountIncVat(), row.getVatPercent() );
+			}
+		}		
+		// row: incvat + exvat 
+		if( row.getAmountIncVat() != null && row.getAmountExVat() != null ) {
+			if( usePriceIncludingVatFlag  ) {
+				amount = row.getAmountIncVat();
+			}
+			else {
+				amount = row.getAmountExVat();
+			}
+		}        
+		return amount;
+	}
+	
+	protected Double getVatPercentFromBuilderOrderRowAndPriceIncludingVatFlag( OrderRowBuilder row ) {
+
+		Double vatPercent = 0.0;
+		// row: exvat + vatpercent 
+		if( row.getAmountExVat() != null && row.getVatPercent() != null ) {
+			vatPercent = row.getVatPercent();
+		}
+		// row: incvat + vatpercent 
+		if( row.getAmountExVat() != null && row.getVatPercent() != null ) {
+			vatPercent = row.getVatPercent();
+		}		
+		// row: incvat + exvat 
+		if( row.getAmountIncVat() != null && row.getAmountExVat() != null ) {
+			vatPercent = OrderRowBuilder.calculateVatPercentFromAmountExVatAndAmountIncVat( row.getAmountExVat(), row.getAmountIncVat() );
+		}        
+		return vatPercent;
+	}	
+
 	public CreditOrderRowsResponse doRequest() {	
 		
         // validate and prepare request, throw runtime exception on error
@@ -181,13 +291,13 @@ public class CreditOrderRowsRequest {
 			soapResponse = soapConnection.call( soapRequest, url.toString() );
 			
 			// DEBUG: print SOAP Response
-//			System.out.print("Response SOAP Message:");
-//			try {
-//				soapResponse.writeTo(System.out);
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//			System.out.println();
+			System.out.print("Response SOAP Message:");
+			try {
+				soapResponse.writeTo(System.out);
+			} catch (IOException e) {
+				e.printStackTrace();
+			}
+			System.out.println();
 			
 			soapConnection.close();			
 		}

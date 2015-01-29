@@ -190,6 +190,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 * setAmountIncVat() or setVatPercent()
 	 * 
 	 * @param amountIncVat
+	 * @return OrderRowBuilder
 	 */
 	public T setAmountIncVat(Double amountIncVat) {
 		this.amountIncVat = amountIncVat;
@@ -205,6 +206,42 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	/** When refering to a queried order row, may contain the value NaN if order row was originally specified ex vat. */
 	public Double getAmountIncVat() {
 		return amountIncVat;
+	}
+	
+	public void convertVat() {		
+		// inc + ex.
+		if( this.vatPercent == null && this.amountIncVat != null && this.amountExVat != null ) {
+			this.vatPercent = calculateVatPercentFromAmountExVatAndAmountIncVat( this.amountExVat, this.amountIncVat );			
+		}	
+		// % + inc
+		else if( this.vatPercent != null && this.amountIncVat != null ) {
+			this.amountExVat = convertIncVatToExVat(this.amountIncVat, this.vatPercent);
+		}
+		// % + ex, no need to do anything
+	}   
+	
+    /**
+     * Helper function, calculates vat percentage as int from prices with and without vat.
+     * Note: this function will drop any vat rate fractions, i.e. it only handles vat rates that can be expressed as integers.
+     */
+	public static Double calculateVatPercentFromAmountExVatAndAmountIncVat( Double exVat, Double incVat ) {
+		if( exVat == 0.0 || incVat == 0.0) {
+			return 0.0;
+		}
+		else {
+			return ((incVat/exVat) -1.0) *100.0;
+		}
+	}
+	
+	/** Converts an amount including vat to amount excluding vat, given a vat rate in percent. */
+	public static Double convertIncVatToExVat( Double amountIncVat, Double vatPercent ) {
+		Double reverseVatPercent = (1-(1/(1+vatPercent/100))); // calculate "reverse vat", i.e. 25% => 20%
+		return  amountIncVat - amountIncVat*reverseVatPercent;
+	}
+
+    /** Converts an amount excluding vat to amount including vat, given a vat rate in percent. */
+	public static Double convertExVatToIncVat( Double amountExVat, Double vatPercent) {
+        return  (amountExVat * (1+vatPercent/100));
 	}
 	
 	// used to return correct type for fluent methods in this and descendant classes

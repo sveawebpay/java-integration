@@ -130,7 +130,7 @@ public class CreditOrderRowsIntegrationTest {
         CreditOrderRowsResponse response = request.doRequest();
         assertTrue(response.isOrderAccepted());    
         
-        assertEquals(Double.valueOf(80.64), response.getAmount());
+        assertEquals(Double.valueOf(99.99), response.getAmount());
         // TODO -- should response use getAmountExVat and getAmountIncVat instead, or should it use getAmount and getPriceIncludingVat for flag ??        
         assertEquals(String.valueOf(order.orderId), response.getOrderId());		// TODO refactor to order.getOrderId() returning String!
         assertNotNull(response.getCreditInvoiceId());        
@@ -198,7 +198,7 @@ public class CreditOrderRowsIntegrationTest {
         CreditOrderRowsResponse response = request.doRequest();
         assertTrue(response.isOrderAccepted());    
         
-        assertEquals(Double.valueOf(80.64), response.getAmount());				// response	
+        assertEquals(Double.valueOf(99.99), response.getAmount());				// response	
         // TODO -- should response use getAmountExVat and getAmountIncVat instead, or should it use getAmount and getPriceIncludingVat for flag ??
         assertEquals(String.valueOf(order.orderId), response.getOrderId());		// TODO refactor to order.getOrderId() returning String!
         assertNotNull(response.getCreditInvoiceId());        
