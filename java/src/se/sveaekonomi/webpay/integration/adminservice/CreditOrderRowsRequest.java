@@ -16,10 +16,16 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 
+import org.w3c.dom.NodeList;
+
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.CreditOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
+import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrder;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public class CreditOrderRowsRequest {
 
@@ -69,7 +75,7 @@ public class CreditOrderRowsRequest {
     	return flipPriceIncludingVat ? !usePriceIncludingVat : usePriceIncludingVat;
     }    
     
-	public SOAPMessage prepareRequest() throws SOAPException {	
+	public SOAPMessage prepareRequest( boolean resendOrderWithFlippedPriceIncludingVat ) throws SOAPException {	
 
 		// validate builder, throw runtime exception on error
 		try {
@@ -80,7 +86,7 @@ public class CreditOrderRowsRequest {
         }
 
 		// determine if we can send the order as incvat, by using the priceIncludingVat = true flag in request
-		boolean usePriceIncludingVatFlag = determinePriceIncludingVat(this.builder.getNewCreditOrderRows(), false);		
+		boolean usePriceIncludingVatFlag = determinePriceIncludingVat(this.builder.getNewCreditOrderRows(), resendOrderWithFlippedPriceIncludingVat);		
 		
 		// build and return inspectable request object
 		MessageFactory messageFactory = MessageFactory.newInstance();
@@ -104,7 +110,6 @@ public class CreditOrderRowsRequest {
 		//            <dat:ClientId>79021</dat:ClientId>
 		//            <dat:InvoiceDistributionType>Post</dat:InvoiceDistributionType>
 		//            <dat:InvoiceId>1043819</dat:InvoiceId>
-
 					//<dat:NewCreditInvoiceRows>
 					//    <dat1:OrderRow>
 					//       <dat1:ArticleNumber>k1</dat1:ArticleNumber>
@@ -115,8 +120,7 @@ public class CreditOrderRowsRequest {
 					//       <dat1:Unit>st</dat1:Unit>
 					//       <dat1:VatPercent>25</dat1:VatPercent>
 					//    </dat1:OrderRow>
-					//</dat:NewCreditInvoiceRows>
-		
+					//</dat:NewCreditInvoiceRows>	
 		//            <dat:RowNumbers>
 		//               <arr:long>1</arr:long>
 		//            </dat:RowNumbers>
@@ -152,18 +156,6 @@ public class CreditOrderRowsRequest {
     			invoiceDistributionType.addTextNode(this.builder.getInvoiceDistributionType().toString());
 		    SOAPElement invoiceId = request.addChildElement("InvoiceId", "dat");
 		    	invoiceId.addTextNode(String.valueOf(this.builder.getInvoiceId()));
-		    		
-				//<dat:NewCreditInvoiceRows>
-				//    <dat1:OrderRow>
-				//       <dat1:ArticleNumber>k1</dat1:ArticleNumber>
-				//       <dat1:Description>CreditRow Name: CreditRow Specification</dat1:Description>
-				//       <dat1:DiscountPercent>0</dat1:DiscountPercent>
-				//       <dat1:NumberOfUnits>1</dat1:NumberOfUnits>
-				//       <dat1:PricePerUnit>1</dat1:PricePerUnit>
-				//       <dat1:Unit>st</dat1:Unit>
-				//       <dat1:VatPercent>25</dat1:VatPercent>
-				//    </dat1:OrderRow>
-				//</dat:NewCreditInvoiceRows>
 
     		if( this.builder.getNewCreditOrderRows().size() > 0 ) {
 			    SOAPElement newCreditInvoiceRows = request.addChildElement("NewCreditInvoiceRows", "dat");
@@ -190,7 +182,7 @@ public class CreditOrderRowsRequest {
 	    				SOAPElement vatPercent = orderRow.addChildElement("VatPercent", "dat1");
 	    					vatPercent.addTextNode( String.valueOf( 
     	    					// get vat percent to send based on the builder order row (i.e. if specified exvat + incvat)
-								getVatPercentFromBuilderOrderRowAndPriceIncludingVatFlag( row) ) 
+								getVatPercentFromBuilderOrderRow( row) ) 
 							); 					
 			    }
     		}
@@ -204,14 +196,14 @@ public class CreditOrderRowsRequest {
     	soapMessage.saveChanges();
     	
         // DEBUG: Print SOAP request 
-		System.out.print("Request SOAP Message:");
-		try {
-			soapMessage.writeTo(System.out);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println();
+//		System.out.print("Request SOAP Message:");
+//		try {
+//			soapMessage.writeTo(System.out);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		System.out.println();
 		    	
 		return soapMessage;
 	}
@@ -251,7 +243,7 @@ public class CreditOrderRowsRequest {
 		return amount;
 	}
 	
-	protected Double getVatPercentFromBuilderOrderRowAndPriceIncludingVatFlag( OrderRowBuilder row ) {
+	protected Double getVatPercentFromBuilderOrderRow( OrderRowBuilder row ) {
 
 		Double vatPercent = 0.0;
 		// row: exvat + vatpercent 
@@ -259,7 +251,7 @@ public class CreditOrderRowsRequest {
 			vatPercent = row.getVatPercent();
 		}
 		// row: incvat + vatpercent 
-		if( row.getAmountExVat() != null && row.getVatPercent() != null ) {
+		if( row.getAmountIncVat() != null && row.getVatPercent() != null ) {
 			vatPercent = row.getVatPercent();
 		}		
 		// row: incvat + exvat 
@@ -269,12 +261,15 @@ public class CreditOrderRowsRequest {
 		return vatPercent;
 	}	
 
-	public CreditOrderRowsResponse doRequest() {	
+	public CreditOrderRowsResponse doRequest() {
+		return doRequest( false );
+	}
+	private CreditOrderRowsResponse doRequest( boolean resendOrderWithFlippedPriceIncludingVat ) {	
 		
         // validate and prepare request, throw runtime exception on error
 		SOAPMessage soapRequest;
 		try {
-        	soapRequest = prepareRequest();		
+        	soapRequest = prepareRequest( resendOrderWithFlippedPriceIncludingVat );		
 		} catch (SOAPException e) {
 			throw new SveaWebPayException( "CreditOrderRowsRequest: prepareRequest failed.", e );
 		}
@@ -291,13 +286,13 @@ public class CreditOrderRowsRequest {
 			soapResponse = soapConnection.call( soapRequest, url.toString() );
 			
 			// DEBUG: print SOAP Response
-			System.out.print("Response SOAP Message:");
-			try {
-				soapResponse.writeTo(System.out);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			System.out.println();
+//			System.out.print("Response SOAP Message:");
+//			try {
+//				soapResponse.writeTo(System.out);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			System.out.println();
 			
 			soapConnection.close();			
 		}
@@ -313,6 +308,12 @@ public class CreditOrderRowsRequest {
 			throw new SveaWebPayException( "CreditOrderRowsRequest: doRequest parse response failed.", e );
 
 		}
+		
+        // if we received error 50036 from webservice , resend request with flipPriceIncludingVat set to true
+		if( response.getResultCode().equals("50036") ) {         				
+			response = this.doRequest( true ); 
+        }
+
 		return response;
 	};	
 }

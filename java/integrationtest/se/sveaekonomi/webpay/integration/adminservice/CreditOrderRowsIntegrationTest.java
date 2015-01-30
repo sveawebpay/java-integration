@@ -128,17 +128,15 @@ public class CreditOrderRowsIntegrationTest {
 		;
         CreditOrderRowsRequest request = builder.creditInvoiceOrderRows();
         CreditOrderRowsResponse response = request.doRequest();
-        assertTrue(response.isOrderAccepted());    
-        
-        assertEquals(Double.valueOf(99.99), response.getAmount());
-        // TODO -- should response use getAmountExVat and getAmountIncVat instead, or should it use getAmount and getPriceIncludingVat for flag ??        
+        assertTrue(response.isOrderAccepted());            
+        assertEquals(Double.valueOf(99.99), response.getAmount());				// response	receives amount as incvat
         assertEquals(String.valueOf(order.orderId), response.getOrderId());		// TODO refactor to order.getOrderId() returning String!
         assertNotNull(response.getCreditInvoiceId());        
         // TODO package currently does not support QueryInvoice to get actual credit invoice 
-        System.out.println(
-    		"\ntest_creditOrderRows_creditInvoiceOrderRows_using_addCreditOrderRow_original_exvat_credit_exvat :" + 
-			response.getCreditInvoiceId()
-		);        
+//        System.out.println(
+//    		"\ntest_creditOrderRows_creditInvoiceOrderRows_using_addCreditOrderRow_original_exvat_credit_exvat :" + 
+//			response.getCreditInvoiceId()
+//		);        
     }	
  
 	// exvat/incvat
@@ -197,16 +195,14 @@ public class CreditOrderRowsIntegrationTest {
         CreditOrderRowsRequest request = builder.creditInvoiceOrderRows();
         CreditOrderRowsResponse response = request.doRequest();
         assertTrue(response.isOrderAccepted());    
-        
-        assertEquals(Double.valueOf(99.99), response.getAmount());				// response	
-        // TODO -- should response use getAmountExVat and getAmountIncVat instead, or should it use getAmount and getPriceIncludingVat for flag ??
+        assertEquals(Double.valueOf(99.99), response.getAmount());				// response	receives amount as incvat
         assertEquals(String.valueOf(order.orderId), response.getOrderId());		// TODO refactor to order.getOrderId() returning String!
         assertNotNull(response.getCreditInvoiceId());        
         // TODO package currently does not support QueryInvoice to get actual credit invoice 
-        System.out.println(
-    		"\ntest_creditOrderRows_creditInvoiceOrderRows_using_addCreditOrderRow_original_exvat_credit_exvat :" + 
-			response.getCreditInvoiceId()
-		);        
+//        System.out.println(
+//    		"\ntest_creditOrderRows_creditInvoiceOrderRows_using_addCreditOrderRow_original_exvat_credit_incvat :" + 
+//			response.getCreditInvoiceId()
+//		);        
     }	
 	// paymentplan 
 	// NOT SUPPORTED
