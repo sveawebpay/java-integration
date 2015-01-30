@@ -211,4 +211,42 @@ public class WebPayAdmin {
 	    
 	    return new CreditOrderRowsBuilder(config);	    	
     }
+
+    /**
+     * WebPayAdmin.updateOrderRows() method is used to update individual order rows in non-delivered invoice and 
+     * payment plan orders. Supports invoice and payment plan orders.
+	 *
+	 * The order row status of the order is updated at Svea to reflect the updated order rows. If the updated rows' 
+	 * order total amount exceeds the original order total amount, an error is returned by the service.
+	 * 
+	 * Get an order builder instance using the WebPayAdmin.updateOrderRows() entrypoint, then provide more information 
+     * about the transaction and send the request using the UpdateOrderRowsBuilder methods:   
+	 * 
+	 * Use setCountryCode() to specify the country code matching the original create order request.
+	 * 
+	 * Use updateOrderRow() with a new WebPayItem.numberedOrderRow() object to pass in the updated order row. Use the
+	 * NumberedOrderRowBuilder member functions to specifiy the updated order row contents. Notably, the setRowNumber() 
+	 * method specifies which original order row contents is to be replaced, in full, by the NumberedOrderRow contents. 
+	 * 
+	 * Then use either updateInvoiceOrderRows() or updatePaymentPlanOrderRows() to get a request object, which ever 
+	 * matches the payment method used in the original order.
+	 * 
+	 * Calling doRequest() on the request object will send the request to Svea and return UpdateOrderRowsResponse.
+	 * 
+     * ...
+     *     request = WebPayAdmin.updateOrderRows(config)
+     *         .setOrderId()                  // required
+     *         .setCountryCode()              // required
+     *         .updateOrderRow()              // required, NumberedOrderRow matching row index of original order row
+     *     ;
+     *     // then select the corresponding request class and send request
+     *     response = request.updateInvoiceOrderRows().doRequest();     // returns UpdateOrderRowsResponse
+     *     response = request.updatePaymentPlanOrderRows().doRequest(); // returns UpdateOrderRowsResponse
+     * ...
+     * 
+     * @author Kristian Grossman-Madsen
+     */        
+    public static UpdateOrderRowsBuilder updateOrderRows( ConfigurationProvider config ) {
+    	// TODO
+    }
 }
