@@ -42,7 +42,7 @@ public class AdminServiceResponse {
 
 		String resultCode = node.getElementsByTagName("a:ResultCode").item(0).getTextContent();	// check what if =nil?
 		this.setResultCode(resultCode);
-		this.setOrderAccepted( (this.getResultCode().endsWith("0")) ? true : false);
+		this.setOrderAccepted( (this.getResultCode().equals("0")) ? true : false);
 
 		String errorMessage = node.getElementsByTagName("a:ErrorMessage").item(0).getTextContent();	// check what if =nil?
 		this.setErrorMessage(errorMessage);

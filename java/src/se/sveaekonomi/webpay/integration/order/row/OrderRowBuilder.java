@@ -27,7 +27,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setArticleNumber(String articleNumber) {
 		this.articleNumber = articleNumber;
-		return (T) this;
+		return getGenericThis();
 	}
 	public String getArticleNumber() {
 		return articleNumber;
@@ -42,7 +42,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setName(String name) {
 		this.name = name;
-		return (T) this;
+		return getGenericThis();
 	}
 
 	public String getName() {
@@ -58,7 +58,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setDescription(String description) {
 		this.description = description;
-		return (T) this;
+		return getGenericThis();
 	}
 
 	public String getDescription() {
@@ -79,12 +79,12 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setAmountExVat(Double dExVatAmount) {
 		this.amountExVat = dExVatAmount;
-		return (T) this;
+		return getGenericThis();
 	}	
 	
 	public T setAmountExVat(double dExVatAmount) {
 		this.amountExVat = Double.valueOf(dExVatAmount);
-		return (T) this;
+		return getGenericThis();
 	}
 
 	public Double getAmountExVat() {
@@ -105,7 +105,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setVatPercent(double vatPercent) {
 		this.vatPercent = vatPercent;
-		return (T) this;
+		return getGenericThis();
 	}
 
 	/** When refering to a queried order row, may contain the value NaN if order row was originally specified ex vat. */
@@ -124,7 +124,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setQuantity(Double quantity) {
 		this.quantity = quantity;
-		return (T) this;
+		return getGenericThis();
 	}
 
 	public Double getQuantity() {
@@ -139,7 +139,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setUnit(String unit) {
 		this.unit = unit;
-		return (T) this;
+		return getGenericThis();
 	}
 	
 	public String getUnit() {
@@ -155,7 +155,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	// TODO investigate this, not used in php package (defaults to 0)??
 	public T setVatDiscount(int vatDiscount) {
 		this.vatDiscount = vatDiscount;
-		return (T) this;
+		return getGenericThis();
 	}
 	
 	public int getVatDiscount() {
@@ -170,7 +170,7 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setDiscountPercent(Double discountPercent) {
 		this.discountPercent = discountPercent;
-		return (T) this;
+		return getGenericThis();
 	}
 	
 	public double getDiscountPercent() {
@@ -194,17 +194,59 @@ public class OrderRowBuilder<T extends OrderRowBuilder<T>> extends RowBuilder {
 	 */
 	public T setAmountIncVat(Double amountIncVat) {
 		this.amountIncVat = amountIncVat;
-		return (T) this;
+		return getGenericThis();
 	}
 	
 	
 	public T setAmountIncVat(double amountIncVat) {
 		this.amountIncVat = Double.valueOf(amountIncVat);
-		return (T) this;
+		return getGenericThis();
 	}
 
 	/** When refering to a queried order row, may contain the value NaN if order row was originally specified ex vat. */
 	public Double getAmountIncVat() {
 		return amountIncVat;
+	}
+	
+	public void convertVat() {		
+		// inc + ex.
+		if( this.vatPercent == null && this.amountIncVat != null && this.amountExVat != null ) {
+			this.vatPercent = calculateVatPercentFromAmountExVatAndAmountIncVat( this.amountExVat, this.amountIncVat );			
+		}	
+		// % + inc
+		else if( this.vatPercent != null && this.amountIncVat != null ) {
+			this.amountExVat = convertIncVatToExVat(this.amountIncVat, this.vatPercent);
+		}
+		// % + ex, no need to do anything
+	}   
+	
+    /**
+     * Helper function, calculates vat percentage as int from prices with and without vat.
+     * Note: this function will drop any vat rate fractions, i.e. it only handles vat rates that can be expressed as integers.
+     */
+	public static Double calculateVatPercentFromAmountExVatAndAmountIncVat( Double exVat, Double incVat ) {
+		if( exVat == 0.0 || incVat == 0.0) {
+			return 0.0;
+		}
+		else {
+			return ((incVat/exVat) -1.0) *100.0;
+		}
+	}
+	
+	/** Converts an amount including vat to amount excluding vat, given a vat rate in percent. */
+	public static Double convertIncVatToExVat( Double amountIncVat, Double vatPercent ) {
+		Double reverseVatPercent = (1-(1/(1+vatPercent/100))); // calculate "reverse vat", i.e. 25% => 20%
+		return  amountIncVat - amountIncVat*reverseVatPercent;
+	}
+
+    /** Converts an amount excluding vat to amount including vat, given a vat rate in percent. */
+	public static Double convertExVatToIncVat( Double amountExVat, Double vatPercent) {
+        return  (amountExVat * (1+vatPercent/100));
+	}
+	
+	// used to return correct type for fluent methods in this and descendant classes
+	@SuppressWarnings("unchecked")
+	protected T getGenericThis() {
+		return (T) this;
 	}
 }
