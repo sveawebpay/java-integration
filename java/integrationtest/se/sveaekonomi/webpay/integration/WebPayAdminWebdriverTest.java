@@ -644,4 +644,21 @@ public class WebPayAdminWebdriverTest {
         assertEquals( (Long)(Long.valueOf(originalOrder.getCreditedAmount())+11000), (Long)Long.valueOf(creditedOrder.getCreditedAmount()));
     	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());    	
 	}
+
+    /// WebPayAdmin.updateOrderRows() --------------------------------------------------------------------------------------------	
+    // invoice
+    public void test_updateInvoiceOrderRows_updateInvoiceOrderRows_original_order_row_not_found() {
+    	// TODO
+    }
+    public void test_updateInvoiceOrderRows_updateInvoiceOrderRows_single_order_row() {    	
+    	// TODO
+    }
+    public void test_updateInvoiceOrderRows_updateInvoiceOrderRows_multiple_order_rows() {    	
+    	// TODO
+    }
+    // paymentplan
+    public void test_updateInvoiceOrderRows_updatePaymentPlanOrderRows_single_order_row() {    	
+    	// TODO
+    }
 }
+

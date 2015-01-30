@@ -7,13 +7,13 @@ import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CreditOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.UpdateOrderRowsBuilder;
 
 /**
  * @author Kristian Grossman-Madsen
  */
 public class WebPayAdmin {
 	
-
     /**
      * The WebPayAdmin.cancelOrder() entrypoint method is used to cancel an order with Svea, 
      * that has not yet been delivered (invoice, payment plan) or confirmed (card).
@@ -37,10 +37,7 @@ public class WebPayAdmin {
      * 
 	 */
 	public static CancelOrderBuilder cancelOrder(ConfigurationProvider config) {
-        if (config == null) {
-            throw new SveaWebPayException("A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()");
-        }    	
-        
+    	verifyConfig( config ); 		
         return new CancelOrderBuilder(config);
 	}
 	
@@ -68,10 +65,7 @@ public class WebPayAdmin {
      * 
 	 */
 	public static QueryOrderBuilder queryOrder(ConfigurationProvider config) {
-        if (config == null) {
-            throw new SveaWebPayException("A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()");
-        }    	
-        
+    	verifyConfig( config ); 	
         return new QueryOrderBuilder(config);		
 	}
 
@@ -113,10 +107,7 @@ public class WebPayAdmin {
      * 
      */
     public static DeliverOrderRowsBuilder deliverOrderRows( ConfigurationProvider config ) {
-        if (config == null) {
-        	throw new SveaWebPayException("A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()");
-	    }    	
-	    
+    	verifyConfig( config ); 	
 	    return new DeliverOrderRowsBuilder(config);	
     }    
     
@@ -156,10 +147,7 @@ public class WebPayAdmin {
      * 
      */    
     public static CancelOrderRowsBuilder cancelOrderRows( ConfigurationProvider config ) {
-        if (config == null) {
-        	throw new SveaWebPayException("A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()");
-	    }    	
-	    
+    	verifyConfig( config ); 	
 	    return new CancelOrderRowsBuilder(config);	    	
     }
 
@@ -205,10 +193,7 @@ public class WebPayAdmin {
      * @author Kristian Grossman-Madsen
      */
     public static CreditOrderRowsBuilder creditOrderRows( ConfigurationProvider config ) {
-        if (config == null) {
-        	throw new SveaWebPayException("A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()");
-	    }    	
-	    
+    	verifyConfig( config );		    
 	    return new CreditOrderRowsBuilder(config);	    	
     }
 
@@ -224,7 +209,7 @@ public class WebPayAdmin {
 	 * 
 	 * Use setCountryCode() to specify the country code matching the original create order request.
 	 * 
-	 * Use updateOrderRow() with a new WebPayItem.numberedOrderRow() object to pass in the updated order row. Use the
+	 * Use addUpdateOrderRow() with a new WebPayItem.numberedOrderRow() object to pass in the updated order row. Use the
 	 * NumberedOrderRowBuilder member functions to specifiy the updated order row contents. Notably, the setRowNumber() 
 	 * method specifies which original order row contents is to be replaced, in full, by the NumberedOrderRow contents. 
 	 * 
@@ -237,7 +222,7 @@ public class WebPayAdmin {
      *     request = WebPayAdmin.updateOrderRows(config)
      *         .setOrderId()                  // required
      *         .setCountryCode()              // required
-     *         .updateOrderRow()              // required, NumberedOrderRow matching row index of original order row
+     *         .addUpdateOrderRow()           // required, NumberedOrderRow matching row index of original order row
      *     ;
      *     // then select the corresponding request class and send request
      *     response = request.updateInvoiceOrderRows().doRequest();     // returns UpdateOrderRowsResponse
@@ -247,6 +232,13 @@ public class WebPayAdmin {
      * @author Kristian Grossman-Madsen
      */        
     public static UpdateOrderRowsBuilder updateOrderRows( ConfigurationProvider config ) {
-    	// TODO
+    	verifyConfig( config );
+    	return new UpdateOrderRowsBuilder( config );
+    }
+    
+    private static void verifyConfig( ConfigurationProvider config) throws SveaWebPayException {
+	    if (config == null) {
+	    	throw new SveaWebPayException("A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()");
+	    }    	
     }
 }
