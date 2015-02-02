@@ -1,21 +1,13 @@
 package se.sveaekonomi.webpay.integration.order.handle;
 
 import java.util.ArrayList;
-import java.util.HashSet;
 
-import javax.xml.bind.ValidationException;
-
-import se.sveaekonomi.webpay.integration.adminservice.CancelOrderRowsRequest;
 import se.sveaekonomi.webpay.integration.adminservice.UpdateOrderRowsRequest;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
-import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
-import se.sveaekonomi.webpay.integration.hosted.hostedadmin.LowerTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
-import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
-import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 
 /**
  * @author Kristian Grossman-Madsen

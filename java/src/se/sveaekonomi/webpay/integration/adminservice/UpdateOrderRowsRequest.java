@@ -202,14 +202,14 @@ public class UpdateOrderRowsRequest {
     	soapMessage.saveChanges();
     	
         // DEBUG: Print SOAP request 
-		System.out.print("Request SOAP Message:");
-		try {
-			soapMessage.writeTo(System.out);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println();
+//		System.out.print("Request SOAP Message:");
+//		try {
+//			soapMessage.writeTo(System.out);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		System.out.println();
 		    	
 		return soapMessage;
 	}
@@ -290,13 +290,13 @@ public class UpdateOrderRowsRequest {
 			soapResponse = soapConnection.call( soapRequest, url.toString() );
 			
 			// DEBUG: print SOAP Response
-			System.out.print("Response SOAP Message:");
-			try {
-				soapResponse.writeTo(System.out);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			System.out.println();
+//			System.out.print("Response SOAP Message:");
+//			try {
+//				soapResponse.writeTo(System.out);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			System.out.println();
 			
 			soapConnection.close();			
 		}
