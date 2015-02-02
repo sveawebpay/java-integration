@@ -36,7 +36,7 @@ public class UpdateOrderRowsRequestTest {
 		    .addUpdateOrderRow( 
 	    		WebPayItem.numberedOrderRow()	// dummy, so no attributes set -- we only validate presence
     		)
-		;        
+		;
 		try {
 			UpdateOrderRowsRequest request = builder.updateInvoiceOrderRows();
 			request.validateOrder();

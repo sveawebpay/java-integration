@@ -85,5 +85,9 @@ public class UpdateOrderRowsBuilder extends OrderBuilder<UpdateOrderRowsBuilder>
     	this.orderType = PAYMENTTYPE.PAYMENTPLAN;
 		return new UpdateOrderRowsRequest(this);
 	}
+
+	public PAYMENTTYPE getOrderType() {
+		return this.orderType;
+	}
 	
 }
