@@ -77,10 +77,9 @@ public class WebPayAdminWebdriverTest {
         assertTrue(response.isOrderAccepted());        
         assertTrue(response instanceof CloseOrderResponse );
     }       
-    // card
+    // card (uses webdriver)
     @Test
-    public void test_cancelOrder_cancelCardOrder() {
-    	    	
+    public void test_cancelOrder_cancelCardOrder() {    	    	
     	// create an order using defaults
     	HostedPaymentResponse order = (HostedPaymentResponse)TestingTool.createCardTestOrder("test_cancelOrder_cancelCardOrder");
         assertTrue(order.isOrderAccepted());
@@ -90,11 +89,9 @@ public class WebPayAdminWebdriverTest {
 	        .setTransactionId(order.getTransactionId())
 	        .setCountryCode(TestingTool.DefaultTestCountryCode)
 	        .cancelCardOrder()
-        		.doRequest();
-    
+        		.doRequest();    
         assertTrue(response.isOrderAccepted());  
-        assertTrue(response instanceof AnnulTransactionResponse );
- 
+        assertTrue(response instanceof AnnulTransactionResponse ); 
     }
 
     /// WebPayAdmin.queryOrder() ---------------------------------------------------------------------------------------
@@ -132,7 +129,6 @@ public class WebPayAdminWebdriverTest {
         	System.out.println( e.getClass() + e.getMessage() );
         }
     }
-    // paymentplan
     // .queryPaymentPlanOrder
     @Test
     public void test_queryOrder_queryPaymentPlanOrder() {
@@ -167,8 +163,7 @@ public class WebPayAdminWebdriverTest {
         	System.out.println( e.getClass() + e.getMessage() );
         }
     }
-    
-    // .queryCardOrder
+    // .queryCardOrder (uses webdriver)
     @Test
     public void test_queryOrder_queryCardOrder() {
 
@@ -210,8 +205,7 @@ public class WebPayAdminWebdriverTest {
         assertTrue(response.isOrderAccepted());        
         assertTrue(response instanceof DeliverPartialResponse );
     }    
-    
-    //  .deliverCardOrderRows
+    //  .deliverCardOrderRows (uses webdriver)
     @Test
     public void test_deliverOrderRows_deliverCardOrderRows_deliver_all_rows() {
     	
@@ -235,7 +229,6 @@ public class WebPayAdminWebdriverTest {
         ConfirmTransactionResponse response = deliverRequest.deliverCardOrderRows().doRequest();
         assertTrue(response.isOrderAccepted());        
     } 
-    
     @Test
     public void test_deliverOrderRows_deliverCardOrderRows_deliver_first_and_second_row_of_three() {
     	
@@ -293,7 +286,6 @@ public class WebPayAdminWebdriverTest {
         assertTrue(response.isOrderAccepted());        
         assertTrue(response instanceof CancelOrderRowsResponse );
     }    
-        
     // paymentplan
     @Test
     public void test_cancelOrderRows_cancelPaymentPlanOrderRows_cancel_all_rows() {
@@ -312,8 +304,7 @@ public class WebPayAdminWebdriverTest {
         assertTrue(response.isOrderAccepted());        
         assertTrue(response instanceof CancelOrderRowsResponse );
     }   
-    
-    // card
+    // card (uses webdriver)
     @Test
     public void test_cancelOrderRows_cancelCardOrderRows_cancel_all_rows() {
     	
@@ -350,7 +341,6 @@ public class WebPayAdminWebdriverTest {
         assertEquals( "0", cancelledOrder.getAuthorizedAmount());
         assertEquals( "ANNULLED", cancelledOrder.getStatus()); // i.e. loweredamount caused order authorizedamount = 0        
     }
-    
     @Test
     public void test_cancelOrderRows_cancelCardOrderRows_cancel_first_and_second_row_of_three() {
     	
@@ -409,9 +399,8 @@ public class WebPayAdminWebdriverTest {
         CreditOrderRowsRequest request = builder.creditInvoiceOrderRows();
         CreditOrderRowsResponse response = request.doRequest();
         assertTrue(response.isOrderAccepted());        				
-    }
-    
-    // card
+    }    
+    // card (uses webdriver)
     @Test
     public void test_creditOrderRows_creditCardOrderRows_credit_original_order_first_and_second_rows_of_three() {
     	
@@ -452,7 +441,6 @@ public class WebPayAdminWebdriverTest {
         assertEquals( (Long)(Long.valueOf(originalOrder.getCreditedAmount())+25000+25000), (Long)Long.valueOf(creditedOrder.getCreditedAmount()));
     	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());
     }    
-
     @Test
     public void test_creditOrderRows_creditCardOrderRows_credit_original_order_row_and_new_custom_order_row() {
     	
@@ -496,7 +484,6 @@ public class WebPayAdminWebdriverTest {
         assertEquals( (Long)(Long.valueOf(originalOrder.getCreditedAmount())+25000+11000), (Long)Long.valueOf(creditedOrder.getCreditedAmount()));
     	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());    	
 	}
-    
     @Test
     public void test_creditOrderRows_creditCardOrderRows_credit_only_new_custom_order_row() {
     	
@@ -538,8 +525,7 @@ public class WebPayAdminWebdriverTest {
         assertEquals( (Long)(Long.valueOf(originalOrder.getCreditedAmount())+11000), (Long)Long.valueOf(creditedOrder.getCreditedAmount()));
     	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());    	
 	}
-
-    // direct bank
+    // direct bank (uses webdriver)
     @Test
     public void test_creditOrderRows_creditDirectBankOrderRows_credit_original_order_first_and_second_rows_of_three() {    	
     	String capturedOrderId = "590801";
@@ -578,7 +564,6 @@ public class WebPayAdminWebdriverTest {
         assertEquals( (Long)(Long.valueOf(originalOrder.getCreditedAmount())+25000+25000), (Long)Long.valueOf(creditedOrder.getCreditedAmount()));
     	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());
     }    
-
     @Test
     public void test_creditOrderRows_creditDirectBankOrderRows_credit_original_order_row_and_new_custom_order_row() {
     	String capturedOrderId = "590801";
@@ -620,7 +605,6 @@ public class WebPayAdminWebdriverTest {
         assertEquals( (Long)(Long.valueOf(originalOrder.getCreditedAmount())+25000+11000), (Long)Long.valueOf(creditedOrder.getCreditedAmount()));
     	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());    	
 	}
-    
     @Test
     public void test_creditOrderRows_creditDirectBankOrderRows_credit_only_new_custom_order_row() {
     	String capturedOrderId = "590801";
@@ -660,4 +644,21 @@ public class WebPayAdminWebdriverTest {
         assertEquals( (Long)(Long.valueOf(originalOrder.getCreditedAmount())+11000), (Long)Long.valueOf(creditedOrder.getCreditedAmount()));
     	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());    	
 	}
+
+    /// WebPayAdmin.updateOrderRows() --------------------------------------------------------------------------------------------	
+    // invoice
+    public void test_updateInvoiceOrderRows_updateInvoiceOrderRows_original_order_row_not_found() {
+    	// TODO
+    }
+    public void test_updateInvoiceOrderRows_updateInvoiceOrderRows_single_order_row() {    	
+    	// TODO
+    }
+    public void test_updateInvoiceOrderRows_updateInvoiceOrderRows_multiple_order_rows() {    	
+    	// TODO
+    }
+    // paymentplan
+    public void test_updateInvoiceOrderRows_updatePaymentPlanOrderRows_single_order_row() {    	
+    	// TODO
+    }
 }
+

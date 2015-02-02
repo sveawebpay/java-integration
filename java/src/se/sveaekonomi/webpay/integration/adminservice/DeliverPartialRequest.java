@@ -125,7 +125,7 @@ public class DeliverPartialRequest  {
 				SOAPElement clientId = orderToDeliver.addChildElement("ClientId", "dat");
 					clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
 			    SOAPElement orderType = orderToDeliver.addChildElement("OrderType", "dat");
-			    	orderType.addTextNode("Invoice");
+			    	orderType.addTextNode("Invoice"); // deliverPartial only applies to Invoice orders
 			    SOAPElement sveaOrderId = orderToDeliver.addChildElement("SveaOrderId", "dat");
 			    	sveaOrderId.addTextNode(String.valueOf(this.builder.getOrderId()));
 	    	SOAPElement rowNumbers = request.addChildElement("RowNumbers", "dat");
