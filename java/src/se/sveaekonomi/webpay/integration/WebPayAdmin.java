@@ -198,7 +198,7 @@ public class WebPayAdmin {
     }
 
     /**
-     * WebPayAdmin.updateOrderRows() method is used to update individual order rows in non-delivered invoice and 
+     * The WebPayAdmin.updateOrderRows() method is used to update individual order rows in non-delivered invoice and 
      * payment plan orders. Supports invoice and payment plan orders.
 	 *
 	 * The order row status of the order is updated at Svea to reflect the updated order rows. If the updated rows' 
@@ -209,20 +209,20 @@ public class WebPayAdmin {
 	 * 
 	 * Use setCountryCode() to specify the country code matching the original create order request.
 	 * 
-	 * Use addUpdateOrderRow() with a new WebPayItem.numberedOrderRow() object to pass in the updated order row. Use the
-	 * NumberedOrderRowBuilder member functions to specifiy the updated order row contents. Notably, the setRowNumber() 
-	 * method specifies which original order row contents is to be replaced, in full, by the NumberedOrderRow contents. 
+	 * Use addUpdateOrderRow() with a new WebPayItem.numberedOrderRow() object. Add the updated order row attributes 
+	 * using the NumberedOrderRowBuilder member functions. Notably, the setRowNumber() method specifies which of the 
+	 * original order rows will be replaced, in full, with the new NumberedOrderRow. 
 	 * 
 	 * Then use either updateInvoiceOrderRows() or updatePaymentPlanOrderRows() to get a request object, which ever 
 	 * matches the payment method used in the original order.
 	 * 
-	 * Calling doRequest() on the request object will send the request to Svea and return UpdateOrderRowsResponse.
+	 * Calling doRequest() on the request object will send the request to Svea and return an UpdateOrderRowsResponse.
 	 * 
      * ...
      *     request = WebPayAdmin.updateOrderRows(config)
      *         .setOrderId()                  // required
      *         .setCountryCode()              // required
-     *         .addUpdateOrderRow()           // required, NumberedOrderRow matching row index of original order row
+     *         .addUpdateOrderRow()           // required, NumberedOrderRowBuilder w/RowNumber attribute matching row index of original order row
      *     ;
      *     // then select the corresponding request class and send request
      *     response = request.updateInvoiceOrderRows().doRequest();     // returns UpdateOrderRowsResponse
@@ -236,6 +236,51 @@ public class WebPayAdmin {
     	return new UpdateOrderRowsBuilder( config );
     }
     
+    /**
+     * The WebPayAdmin.addOrderRows() method is used to add individual order rows to non-delivered invoice and 
+     * payment plan orders. Supports invoice and payment plan orders.
+	 *
+	 * The order row status of the order will be updated at Svea to reflect the added order rows following a successful
+	 * request. If the new order total amount exceeds the original order total amount, a new credit control is first 
+	 * made, which may result in the request being denied. For payment plan orders, the unew order total amount must be
+	 * within the original order campaign limits, or the request will be denied.
+	 * 
+	 * Get an order builder instance using the WebPayAdmin.addOrderRows() entrypoint, then provide more information 
+     * about the transaction and send the request using the AddOrderRowsBuilder methods:   
+	 * 
+	 * Use setCountryCode() to specify the country code matching the original create order request.
+	 * 
+	 * Use addUpdateOrderRow() with a new WebPayItem.orderRow() object, add the new order row attributes using the
+	 * OrderRowBuilder member functions. Notably, the setRowNumber() method specifies which of the original order rows 
+	 * to update. That order row will be replaced in full by the new NumberedOrderRow. 
+	 * 
+	 * Use addOrderRow() with a new WebPayItem.orderRow() object. Add the new order row attributes using the 
+	 * OrderRowBuilder member functions.
+	 * 
+	 * Then use either addInvoiceOrderRows() or addPaymentPlanOrderRows() to get a request object, which ever 
+	 * matches the payment method used in the original order.
+	 * 
+	 * Calling doRequest() on the request object will send the request to Svea and return an AddOrderRowsResponse.
+	 * 
+     * ...
+     *     request = WebPayAdmin.addOrderRows(config)
+     *         .setOrderId()                // required
+     *         .setCountryCode()            // required
+     *         .addOrderRow()           	// required, OrderRowBuilder containing the new order row data
+     *     ;
+     *     // then select the corresponding request class and send request
+     *     response = request.addInvoiceOrderRows().doRequest();     // returns AddOrderRowsResponse
+     *     response = request.addPaymentPlanOrderRows().doRequest(); // returns AddOrderRowsResponse
+     * ...
+     * 
+     * @author Kristian Grossman-Madsen
+     */        
+    public static AddOrderRowsBuilder addOrderRows( ConfigurationProvider config ) {
+    	verifyConfig( config );
+    	return new AddOrderRowsBuilder( config );
+    }
+   
+
     private static void verifyConfig( ConfigurationProvider config) throws SveaWebPayException {
 	    if (config == null) {
 	    	throw new SveaWebPayException("A configuration must be provided. For testing purposes use SveaConfig.GetDefaultConfig()");
