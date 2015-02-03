@@ -152,7 +152,7 @@ public class AddOrderRowsRequest {
 		    	
 		    SOAPElement orderRows = request.addChildElement("OrderRows", "dat");
 		    for( OrderRowBuilder row : this.builder.getOrderRows() ) {
-		    	SOAPElement orderRow = orderRows.addChildElement("OrderRow", "dat");
+		    	SOAPElement orderRow = orderRows.addChildElement("OrderRow", "dat1");
 		    		SOAPElement articleNumber = orderRow.addChildElement("ArticleNumber", "dat1");
 		    			articleNumber.addTextNode( row.getArticleNumber() );
 	    			SOAPElement description = orderRow.addChildElement("Description", "dat1");
@@ -193,14 +193,14 @@ public class AddOrderRowsRequest {
     	soapMessage.saveChanges();
     	
         // DEBUG: Print SOAP request 
-		System.out.print("Request SOAP Message:");
-		try {
-			soapMessage.writeTo(System.out);
-		} catch (IOException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-		System.out.println();
+//		System.out.print("Request SOAP Message:");
+//		try {
+//			soapMessage.writeTo(System.out);
+//		} catch (IOException e) {
+//			// TODO Auto-generated catch block
+//			e.printStackTrace();
+//		}
+//		System.out.println();
 		    	
 		return soapMessage;
 	}
@@ -281,15 +281,15 @@ public class AddOrderRowsRequest {
 			soapResponse = soapConnection.call( soapRequest, url.toString() );
 			
 			// DEBUG: print SOAP Response
-			System.out.print("Response SOAP Message:");
-			try {
-				soapResponse.writeTo(System.out);
-			} catch (IOException e) {
-				e.printStackTrace();
-			}
-			System.out.println();
-			
-			soapConnection.close();			
+//			System.out.print("Response SOAP Message:");
+//			try {
+//				soapResponse.writeTo(System.out);
+//			} catch (IOException e) {
+//				e.printStackTrace();
+//			}
+//			System.out.println();
+//			
+//			soapConnection.close();			
 		}
 		catch( SOAPException e) {
 			throw new SveaWebPayException( "AddOrderRowsRequest: doRequest send request failed.", e );

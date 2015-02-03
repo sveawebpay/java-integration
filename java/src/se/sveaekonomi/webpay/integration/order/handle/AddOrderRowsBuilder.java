@@ -3,10 +3,8 @@ package se.sveaekonomi.webpay.integration.order.handle;
 import java.util.ArrayList;
 
 import se.sveaekonomi.webpay.integration.adminservice.AddOrderRowsRequest;
-import se.sveaekonomi.webpay.integration.adminservice.UpdateOrderRowsRequest;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
-import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
