@@ -238,8 +238,8 @@ public class WebPayAdmin {
     }
     
     /**
-     * The WebPayAdmin.addOrderRows() method is used to add individual order rows to non-delivered invoice and 
-     * payment plan orders. Supports invoice and payment plan orders.
+     * The WebPayAdmin.addOrderRows() method is used to add individual order rows to undelivered or partially delivered
+     * invoice and payment plan orders. Supports invoice and payment plan orders.
 	 *
 	 * The order row status of the order will be updated at Svea to reflect the added order rows following a successful
 	 * request. If the new order total amount exceeds the original order total amount, a new credit control is first 
