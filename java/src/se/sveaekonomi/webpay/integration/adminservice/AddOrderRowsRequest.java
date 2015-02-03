@@ -19,6 +19,7 @@ import javax.xml.soap.SOAPPart;
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+import se.sveaekonomi.webpay.integration.order.handle.AddOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CreditOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.UpdateOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
@@ -30,14 +31,14 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
-public class UpdateOrderRowsRequest {
+public class AddOrderRowsRequest {
 
 	private String action;
-	private UpdateOrderRowsBuilder builder;
+	private AddOrderRowsBuilder builder;
 		
-	public UpdateOrderRowsRequest( UpdateOrderRowsBuilder updateOrderRowsBuilder) {
-		this.action = "UpdateOrderRows";
-		this.builder = updateOrderRowsBuilder;
+	public AddOrderRowsRequest( AddOrderRowsBuilder addOrderRowsBuilder) {
+		this.action = "AddOrderRows";
+		this.builder = addOrderRowsBuilder;
 	}
 	
 	/**
@@ -53,8 +54,8 @@ public class UpdateOrderRowsRequest {
             errors += "MISSING VALUE - CountryCode is required, use setCountryCode().\n";
         }
         // need either row indexes or new credit rows to calculate amount to credit
-        if( builder.getUpdateOrderRows().size() == 0 ) {
-        	errors += "MISSING VALUE - updateOrderRows is required, use method addUpdateOrderRow()/addUpdateOrderRows().\n";
+        if( builder.getOrderRows().size() == 0 ) {
+        	errors += "MISSING VALUE - orderRows is required, use method addOrderRow()/addOrderRows().\n";
     	}
         if ( !errors.equals("")) {
             throw new ValidationException(errors);
@@ -62,9 +63,9 @@ public class UpdateOrderRowsRequest {
     }
 
     /** @returns false iff any order row is specified using amountExVat and vatPercent, and the flipPriceIncludingVat flag is false */
-    public boolean determinePriceIncludingVat( ArrayList<NumberedOrderRowBuilder> orderRows, boolean flipPriceIncludingVat) {
+    public boolean determinePriceIncludingVat( ArrayList<OrderRowBuilder> orderRows, boolean flipPriceIncludingVat) {
     	boolean exVatRowSeen = false;
-    	for( NumberedOrderRowBuilder row : orderRows ) {
+    	for( OrderRowBuilder row : orderRows ) {
     		if( row.getAmountExVat() != null && row.getVatPercent() != null ) { // row specified without incvat, should send as exvat
     			exVatRowSeen = true;
     			break;
@@ -82,11 +83,11 @@ public class UpdateOrderRowsRequest {
 			validateOrder(); 
 		}
         catch (ValidationException e) {
-            throw new SveaWebPayException( "UpdateOrderRowsRequest: validateRequest failed.", e );
+            throw new SveaWebPayException( "AddOrderRowsRequest: validateRequest failed.", e );
         }
 
 		// determine if we can send the order as incvat, by using the priceIncludingVat = true flag in request
-		boolean usePriceIncludingVatFlag = determinePriceIncludingVat(this.builder.getUpdateOrderRows(), resendOrderWithFlippedPriceIncludingVat);		
+		boolean usePriceIncludingVatFlag = determinePriceIncludingVat(this.builder.getOrderRows(), resendOrderWithFlippedPriceIncludingVat);		
 		
 		// build and return inspectable request object
 		MessageFactory messageFactory = MessageFactory.newInstance();
@@ -94,40 +95,7 @@ public class UpdateOrderRowsRequest {
 		SOAPPart soapPart = soapMessage.getSOAPPart();
 		
 		//<soapenv:Envelope 
-		//xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
-		//xmlns:tem="http://tempuri.org/" 
-		//xmlns:dat="http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service" 
-		//xmlns:dat1="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">
-		//   <soapenv:Header/>
-		//   <soapenv:Body>
-		//      <tem:UpdateOrderRows>
-		//         <tem:request>
-		//            <dat:Authentication>
-		//               <dat:Password>sverigetest</dat:Password>
-		//               <dat:Username>sverigetest</dat:Username>
-		//            </dat:Authentication>
-		//            <dat:ClientId>79021</dat:ClientId>
-		//            <dat:OrderType>Invoice</dat:OrderType>
-		//            <dat:SveaOrderId>478232</dat:SveaOrderId>
-		//            <dat:UpdatedOrderRows>
-		//               <dat:NumberedOrderRow>
-		//                  <dat1:ArticleNumber>2</dat1:ArticleNumber>
-		//                  <dat1:Description>2Name: 2Specification</dat1:Description>
-		//                  <dat1:DiscountPercent>1</dat1:DiscountPercent>
-		//                  <dat1:NumberOfUnits>2</dat1:NumberOfUnits>
-		//                  <dat1:PricePerUnit>2</dat1:PricePerUnit>
-		//                  <dat1:Unit>2st</dat1:Unit>
-		//                  <dat1:VatPercent>26</dat1:VatPercent>
-		//                  <dat:CreditInvoiceId></dat:CreditInvoiceId>
-		//                  <dat:InvoiceId></dat:InvoiceId>
-		//                  <dat:RowNumber>1</dat:RowNumber>
-		//                  <dat:Status>NotDelivered</dat:Status>
-		//               </dat:NumberedOrderRow>
-		//            </dat:UpdatedOrderRows>
-		//         </tem:request>
-		//      </tem:UpdateOrderRows>
-		//   </soapenv:Body>
-		//</soapenv:Envelope>
+		// ...
 		
 		// SOAP Envelope
 		SOAPEnvelope envelope = soapPart.getEnvelope(); // adds namespace SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/
@@ -165,7 +133,7 @@ public class UpdateOrderRowsRequest {
 		    	sveaOrderId.addTextNode(String.valueOf(this.builder.getOrderId()));	
 		    	
 		    SOAPElement updatedOrderRows = request.addChildElement("UpdatedOrderRows", "dat");
-		    for( NumberedOrderRowBuilder row : this.builder.getUpdateOrderRows() ) {
+		    for( OrderRowBuilder row : this.builder.getOrderRows() ) {
 		    	SOAPElement orderRow = updatedOrderRows.addChildElement("NumberedOrderRow", "dat");
 		    		SOAPElement articleNumber = orderRow.addChildElement("ArticleNumber", "dat1");
 		    			articleNumber.addTextNode( row.getArticleNumber() );
@@ -189,27 +157,19 @@ public class UpdateOrderRowsRequest {
 	    					// get vat percent to send based on the builder order row (i.e. if specified exvat + incvat)
 							getVatPercentFromBuilderOrderRow( row) ) 
 						); 
-					SOAPElement creditInvoiceId = orderRow.addChildElement("CreditInvoiceId","dat");
-						creditInvoiceId.addTextNode( row.getCreditInvoiceId() == null ? "" : row.getCreditInvoiceId() );
-					SOAPElement invoiceId = orderRow.addChildElement("InvoiceId","dat");
-						invoiceId.addTextNode( row.getInvoiceId() == null ? "" : row.getInvoiceId() );
-    				SOAPElement rowNumber = orderRow.addChildElement("RowNumber", "dat");
-    					rowNumber.addTextNode( String.valueOf(row.getRowNumber()) );  
-    				SOAPElement status = orderRow.addChildElement("Status", "dat");
-    					status.addTextNode( String.valueOf(row.getStatus().toString()) );  
-    		}
+			}
 	    	
     	soapMessage.saveChanges();
     	
         // DEBUG: Print SOAP request 
-//		System.out.print("Request SOAP Message:");
-//		try {
-//			soapMessage.writeTo(System.out);
-//		} catch (IOException e) {
-//			// TODO Auto-generated catch block
-//			e.printStackTrace();
-//		}
-//		System.out.println();
+		System.out.print("Request SOAP Message:");
+		try {
+			soapMessage.writeTo(System.out);
+		} catch (IOException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		System.out.println();
 		    	
 		return soapMessage;
 	}
@@ -275,7 +235,7 @@ public class UpdateOrderRowsRequest {
 		try {
         	soapRequest = prepareRequest( resendOrderWithFlippedPriceIncludingVat );		
 		} catch (SOAPException e) {
-			throw new SveaWebPayException( "UpdateOrderRowsRequest: prepareRequest failed.", e );
+			throw new SveaWebPayException( "AddOrderRowsRequest: prepareRequest failed.", e );
 		}
 		
 		// send request and receive response
@@ -301,7 +261,7 @@ public class UpdateOrderRowsRequest {
 			soapConnection.close();			
 		}
 		catch( SOAPException e) {
-			throw new SveaWebPayException( "UpdateOrderRowsRequest: doRequest send request failed.", e );
+			throw new SveaWebPayException( "AddOrderRowsRequest: doRequest send request failed.", e );
 		}
 
 		// parse response
@@ -309,7 +269,7 @@ public class UpdateOrderRowsRequest {
 		try {
 			response = new UpdateOrderRowsResponse(soapResponse);
 		} catch (SOAPException e) {
-			throw new SveaWebPayException( "UpdateOrderRowsRequest: doRequest parse response failed.", e );
+			throw new SveaWebPayException( "AddOrderRowsRequest: doRequest parse response failed.", e );
 
 		}
 		

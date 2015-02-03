@@ -2,27 +2,15 @@ package se.sveaekonomi.webpay.integration.adminservice;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-import java.util.Hashtable;
-
 import javax.xml.bind.ValidationException;
 
 import org.junit.Test;
 
-import se.sveaekonomi.webpay.integration.adminservice.CreditOrderRowsRequest;
 import se.sveaekonomi.webpay.integration.WebPayAdmin;
 import se.sveaekonomi.webpay.integration.WebPayItem;
-import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
-import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
-import se.sveaekonomi.webpay.integration.hosted.hostedadmin.CreditTransactionRequest;
-import se.sveaekonomi.webpay.integration.order.handle.CreditOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.UpdateOrderRowsBuilder;
-import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
-import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
-import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class UpdateOrderRowsRequestTest {
 
@@ -34,7 +22,7 @@ public class UpdateOrderRowsRequestTest {
 		    .setOrderId( "999999")              
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addUpdateOrderRow( 
-	    		WebPayItem.numberedOrderRow()	// dummy, so no attributes set -- we only validate presence
+	    		WebPayItem.numberedOrderRow()	// dummy, so no attributes set -- we only validate presence of numberedOrderRow objects
     		)
 		;
 		try {
@@ -48,7 +36,7 @@ public class UpdateOrderRowsRequestTest {
     }
 	
 	@Test
-	public void test_validates_missing_required_methods_for_creditOrderRows_creditInvoiceOrderRows() {
+	public void test_validates_missing_required_methods_for_updatOrderRows_updateInvoiceOrderRows() {
 
 		UpdateOrderRowsBuilder builder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
 			//.setOrderId( "999999")              

@@ -2,6 +2,7 @@ package se.sveaekonomi.webpay.integration;
 
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+import se.sveaekonomi.webpay.integration.order.handle.AddOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CreditOrderRowsBuilder;
