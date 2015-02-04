@@ -720,9 +720,568 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( Double.valueOf(24.00), Double.valueOf(addedOrderRow.getVatPercent()) );	
 		assertEquals( 5, addedOrderRow.getRowNumber() );					
 	}
-
 	
 	/// payment plan
+	public void test_addOrderRows_addPaymentPlanOrderRows_original_exvat_added_exvat_sent_as_exvat() {
+
+    	// get payment plan params
+		PaymentPlanParamsResponse paymentPlanParams = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
+				.setCountryCode(TestingTool.DefaultTestCountryCode)
+				.doRequest();
+		String campaign = paymentPlanParams.getCampaignCodes().get(0).getCampaignCode();
+					
+		CreateOrderBuilder orderBuilder = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addOrderRow( 
+				WebPayItem.orderRow()
+			        .setArticleNumber("original")
+			        .setName("Prod")
+			        .setDescription("Specification")
+			        .setAmountExVat(1099.99)	// 1099.99ex @24% = 1363.9876 => 1363.99inc
+			        .setQuantity(1.0)
+			        .setUnit("st")
+			        .setVatPercent(24)
+			        .setVatDiscount(0)
+				)
+			.addCustomerDetails(WebPayItem.individualCustomer()
+			    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+			)
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(TestingTool.DefaultTestDate)
+		;		
+		CreateOrderResponse order = orderBuilder.usePaymentPlanPayment(campaign).doRequest();
+		assertTrue(order.isOrderAccepted());		
+		
+		// query and assert original order row
+		QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+		        .setOrderId(order.orderId)
+		        .setCountryCode(COUNTRYCODE.SE)
+		;
+		GetOrdersResponse queryOriginal = queryOrderBuilder.queryPaymentPlanOrder().doRequest();       
+		assertTrue(queryOriginal.isOrderAccepted());			
+		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = queryOriginal.getNumberedOrderRows();
+		assertEquals( 1, numberedOrderRows.size() );		
+		NumberedOrderRowBuilder orderRow = numberedOrderRows.get(0); 			
+		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
+		assertEquals( Double.valueOf(1099.99), Double.valueOf(orderRow.getAmountExVat()) );
+		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
+		assertEquals( 1, orderRow.getRowNumber() );	
+
+		// add order row
+		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
+		    .setOrderId( String.valueOf(order.orderId) ) 
+		    .setCountryCode( COUNTRYCODE.SE ) 
+		    .addOrderRow( 
+	    		WebPayItem.orderRow()
+	    			// OrderRow attributes:
+	                .setArticleNumber("addedRow")
+                    .setName("Prod")
+                    .setDescription("Specification")
+	                .setAmountExVat(1079.99)	// 1079.99ex @24% = 1339.1876 => 1339.19 inc
+	                .setQuantity(1.0)
+	                .setUnit("st")
+	                .setVatPercent(24)
+	                .setVatDiscount(0)
+			)
+		;
+		AddOrderRowsResponse add = addBuilder.addPaymentPlanOrderRows().doRequest();        
+        assertTrue(add.isOrderAccepted());        
+
+		// query and assert updated order row
+		QueryOrderBuilder queryAddBuilder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+		        .setOrderId(order.orderId)
+		        .setCountryCode(COUNTRYCODE.SE)
+		;
+		GetOrdersResponse queryAdd = queryAddBuilder.queryPaymentPlanOrder().doRequest();       
+		assertTrue(queryAdd.isOrderAccepted());			
+		ArrayList<NumberedOrderRowBuilder> addOrderRows = queryAdd.getNumberedOrderRows();
+		assertEquals( 2, addOrderRows.size() );		
+		NumberedOrderRowBuilder updateOrderRow = addOrderRows.get(1); 			
+		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountIncVat()) );
+		assertEquals( Double.valueOf(1079.99), Double.valueOf(updateOrderRow.getAmountExVat()) );
+		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
+		assertEquals( 2, updateOrderRow.getRowNumber() );			
+	}
+
+	@Test
+	public void test_addOrderRows_addPaymentPlanOrderRows_original_incvat_added_incvat_sent_as_incvat() {
+
+    	// get payment plan params
+		PaymentPlanParamsResponse paymentPlanParams = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
+				.setCountryCode(TestingTool.DefaultTestCountryCode)
+				.doRequest();
+		String campaign = paymentPlanParams.getCampaignCodes().get(0).getCampaignCode();
+			
+		CreateOrderBuilder orderBuilder = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addOrderRow( 
+				WebPayItem.orderRow()
+			        .setArticleNumber("original")
+			        .setName("Prod")
+			        .setDescription("Specification")
+			        .setAmountIncVat(1363.99)	// 1099.99ex @24% = 1363.9876 => 1363.99inc
+			        .setQuantity(1.0)
+			        .setUnit("st")
+			        .setVatPercent(24)
+			        .setVatDiscount(0)
+				)
+			.addCustomerDetails(WebPayItem.individualCustomer()
+			    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+			)
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(TestingTool.DefaultTestDate)
+		;		
+		CreateOrderResponse order = orderBuilder.usePaymentPlanPayment(campaign).doRequest();
+		assertTrue(order.isOrderAccepted());		
+		
+		// query and assert original order row
+		QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+		        .setOrderId(order.orderId)
+		        .setCountryCode(COUNTRYCODE.SE)
+		;
+		GetOrdersResponse queryOriginal = queryOrderBuilder.queryPaymentPlanOrder().doRequest();       
+		assertTrue(queryOriginal.isOrderAccepted());			
+		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = queryOriginal.getNumberedOrderRows();
+		assertEquals( 1, numberedOrderRows.size() );		
+		NumberedOrderRowBuilder orderRow = numberedOrderRows.get(0); 			
+		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
+		assertEquals( Double.valueOf(1363.99), Double.valueOf(orderRow.getAmountIncVat()) );
+		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
+		assertEquals( 1, orderRow.getRowNumber() );	
+
+		// add order row
+		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
+		    .setOrderId( String.valueOf(order.orderId) ) 
+		    .setCountryCode( COUNTRYCODE.SE ) 
+		    .addOrderRow( 
+	    		WebPayItem.orderRow()
+	    			// OrderRow attributes:
+	                .setArticleNumber("addedRow")
+                    .setName("Prod")
+                    .setDescription("Specification")
+	                .setAmountIncVat(1339.19)	// 1079.99ex @24% = 1339.1876 => 1339.19 inc
+	                .setQuantity(1.0)
+	                .setUnit("st")
+	                .setVatPercent(24)
+	                .setVatDiscount(0)
+			)
+		;
+		AddOrderRowsResponse add = addBuilder.addPaymentPlanOrderRows().doRequest();        
+        assertTrue(add.isOrderAccepted());        
+
+		// query and assert updated order row
+		QueryOrderBuilder queryAddBuilder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+		        .setOrderId(order.orderId)
+		        .setCountryCode(COUNTRYCODE.SE)
+		;
+		GetOrdersResponse queryAdd = queryAddBuilder.queryPaymentPlanOrder().doRequest();       
+		assertTrue(queryAdd.isOrderAccepted());			
+		ArrayList<NumberedOrderRowBuilder> addOrderRows = queryAdd.getNumberedOrderRows();
+		assertEquals( 2, addOrderRows.size() );		
+		NumberedOrderRowBuilder updateOrderRow = addOrderRows.get(1); 			
+		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
+		assertEquals( Double.valueOf(1339.19), Double.valueOf(updateOrderRow.getAmountIncVat()) );
+		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
+		assertEquals( 2, updateOrderRow.getRowNumber() );			
+	}	
 	
+	// different priceIncludingVat on orders
+	@Test
+	public void test_addOrderRows_addPaymentPlanOrderRows_original_exvat_added_incvat_sent_as_exvat() {
+    	// get payment plan params
+		PaymentPlanParamsResponse paymentPlanParams = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
+				.setCountryCode(TestingTool.DefaultTestCountryCode)
+				.doRequest();
+		String campaign = paymentPlanParams.getCampaignCodes().get(0).getCampaignCode();
+			
+		CreateOrderBuilder orderBuilder = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addOrderRow( 
+				WebPayItem.orderRow()
+			        .setArticleNumber("original")
+			        .setName("Prod")
+			        .setDescription("Specification")
+			        .setAmountExVat(1099.99)	// 1099.99ex @24% = 1363.9876 => 1363.99inc
+			        .setQuantity(1.0)
+			        .setUnit("st")
+			        .setVatPercent(24)
+			        .setVatDiscount(0)
+				)
+			.addCustomerDetails(WebPayItem.individualCustomer()
+			    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+			)
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(TestingTool.DefaultTestDate)
+		;		
+		CreateOrderResponse order = orderBuilder.usePaymentPlanPayment(campaign).doRequest();
+		assertTrue(order.isOrderAccepted());		
+		
+		// query and assert original order row
+		QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+		        .setOrderId(order.orderId)
+		        .setCountryCode(COUNTRYCODE.SE)
+		;
+		GetOrdersResponse queryOriginal = queryOrderBuilder.queryPaymentPlanOrder().doRequest();       
+		assertTrue(queryOriginal.isOrderAccepted());			
+		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = queryOriginal.getNumberedOrderRows();
+		assertEquals( 1, numberedOrderRows.size() );		
+		NumberedOrderRowBuilder orderRow = numberedOrderRows.get(0); 			
+		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
+		assertEquals( Double.valueOf(1099.99), Double.valueOf(orderRow.getAmountExVat()) );
+		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
+		assertEquals( 1, orderRow.getRowNumber() );	
+
+		// add order row
+		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
+		    .setOrderId( String.valueOf(order.orderId) ) 
+		    .setCountryCode( COUNTRYCODE.SE ) 
+		    .addOrderRow( 
+	    		WebPayItem.orderRow()
+	    			// OrderRow attributes:
+	                .setArticleNumber("addedRow")
+                    .setName("Prod")
+                    .setDescription("Specification")
+	                .setAmountIncVat(1339.19)	// 1079.99ex @24% = 1339.1876 => 1339.19 inc
+	                .setQuantity(1.0)
+	                .setUnit("st")
+	                .setVatPercent(24)
+	                .setVatDiscount(0)
+			)
+		;
+		AddOrderRowsResponse add = addBuilder.addPaymentPlanOrderRows().doRequest();        
+        assertTrue(add.isOrderAccepted());        
+
+		// query and assert updated order row
+		QueryOrderBuilder queryAddBuilder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+		        .setOrderId(order.orderId)
+		        .setCountryCode(COUNTRYCODE.SE)
+		;
+		GetOrdersResponse queryAdd = queryAddBuilder.queryPaymentPlanOrder().doRequest();       
+		assertTrue(queryAdd.isOrderAccepted());			
+		ArrayList<NumberedOrderRowBuilder> addOrderRows = queryAdd.getNumberedOrderRows();
+		assertEquals( 2, addOrderRows.size() );		
+		NumberedOrderRowBuilder updateOrderRow = addOrderRows.get(1); 			
+		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountIncVat()) );
+		assertEquals( Double.valueOf(1079.99), Double.valueOf(updateOrderRow.getAmountExVat()) );
+		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
+		assertEquals( 2, updateOrderRow.getRowNumber() );			
+	}	
 	
+	@Test
+	public void test_addOrderRows_addPaymentPlanOrderRows_original_incvat_added_exvat_sent_as_incvat() {
+    	// get payment plan params
+		PaymentPlanParamsResponse paymentPlanParams = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
+				.setCountryCode(TestingTool.DefaultTestCountryCode)
+				.doRequest();
+		String campaign = paymentPlanParams.getCampaignCodes().get(0).getCampaignCode();
+			
+		CreateOrderBuilder orderBuilder = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addOrderRow( 
+				WebPayItem.orderRow()
+			        .setArticleNumber("original")
+			        .setName("Prod")
+			        .setDescription("Specification")
+			        .setAmountIncVat(1363.99)	// 1099.99ex @24% = 1363.9876 => 1363.99inc
+			        .setQuantity(1.0)
+			        .setUnit("st")
+			        .setVatPercent(24)
+			        .setVatDiscount(0)
+				)
+			.addCustomerDetails(WebPayItem.individualCustomer()
+			    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+			)
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(TestingTool.DefaultTestDate)
+		;		
+		CreateOrderResponse order = orderBuilder.usePaymentPlanPayment(campaign).doRequest();
+		assertTrue(order.isOrderAccepted());		
+		
+		// query and assert original order row
+		QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+		        .setOrderId(order.orderId)
+		        .setCountryCode(COUNTRYCODE.SE)
+		;
+		GetOrdersResponse queryOriginal = queryOrderBuilder.queryPaymentPlanOrder().doRequest();       
+		assertTrue(queryOriginal.isOrderAccepted());			
+		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = queryOriginal.getNumberedOrderRows();
+		assertEquals( 1, numberedOrderRows.size() );		
+		NumberedOrderRowBuilder orderRow = numberedOrderRows.get(0); 			
+		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
+		assertEquals( Double.valueOf(1363.99), Double.valueOf(orderRow.getAmountIncVat()) );
+		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
+		assertEquals( 1, orderRow.getRowNumber() );	
+
+		// add order row
+		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
+		    .setOrderId( String.valueOf(order.orderId) ) 
+		    .setCountryCode( COUNTRYCODE.SE ) 
+		    .addOrderRow( 
+	    		WebPayItem.orderRow()
+	    			// OrderRow attributes:
+	                .setArticleNumber("addedRow")
+                    .setName("Prod")
+                    .setDescription("Specification")
+	                .setAmountExVat(1079.99)	// 1079.99ex @24% = 1339.1876 => 1339.19 inc
+	                .setQuantity(1.0)
+	                .setUnit("st")
+	                .setVatPercent(24)
+	                .setVatDiscount(0)
+			)
+		;
+		AddOrderRowsResponse add = addBuilder.addPaymentPlanOrderRows().doRequest();        
+        assertTrue(add.isOrderAccepted());        
+
+		// query and assert updated order row
+		QueryOrderBuilder queryAddBuilder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+		        .setOrderId(order.orderId)
+		        .setCountryCode(COUNTRYCODE.SE)
+		;
+		GetOrdersResponse queryAdd = queryAddBuilder.queryPaymentPlanOrder().doRequest();       
+		assertTrue(queryAdd.isOrderAccepted());			
+		ArrayList<NumberedOrderRowBuilder> addOrderRows = queryAdd.getNumberedOrderRows();
+		assertEquals( 2, addOrderRows.size() );		
+		NumberedOrderRowBuilder updateOrderRow = addOrderRows.get(1); 			
+		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
+		assertEquals( Double.valueOf(1339.19), Double.valueOf(updateOrderRow.getAmountIncVat()) );
+		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
+		assertEquals( 2, updateOrderRow.getRowNumber() );			
+	}	
+	
+	// orderRows specified exvat + incvat 
+	@Test
+	public void test_addOrderRows_addPaymentPlanOrderRows_original_exvatincvat_added_incvatvatpercent_sent_as_incvat() {
+    	// get payment plan params
+		PaymentPlanParamsResponse paymentPlanParams = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
+				.setCountryCode(TestingTool.DefaultTestCountryCode)
+				.doRequest();
+		String campaign = paymentPlanParams.getCampaignCodes().get(0).getCampaignCode();
+			
+		CreateOrderBuilder orderBuilder = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addOrderRow( 
+				WebPayItem.orderRow()
+			        .setArticleNumber("original")
+			        .setName("Prod")
+			        .setDescription("Specification")
+			        .setAmountExVat(1099.99)	// 1099.99ex @24% = 1363.9876 => 1363.99inc
+			        .setAmountIncVat(1363.99)	// 1099.99ex @24% = 1363.9876 => 1363.99inc
+			        .setQuantity(1.0)
+			        .setUnit("st")
+			        .setVatDiscount(0)
+				)
+			.addCustomerDetails(WebPayItem.individualCustomer()
+			    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+			)
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(TestingTool.DefaultTestDate)
+		;		
+		CreateOrderResponse order = orderBuilder.usePaymentPlanPayment(campaign).doRequest();
+		assertTrue(order.isOrderAccepted());		
+		
+		// query and assert original order row
+		QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+		        .setOrderId(order.orderId)
+		        .setCountryCode(COUNTRYCODE.SE)
+		;
+		GetOrdersResponse queryOriginal = queryOrderBuilder.queryPaymentPlanOrder().doRequest();       
+		assertTrue(queryOriginal.isOrderAccepted());			
+		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = queryOriginal.getNumberedOrderRows();
+		assertEquals( 1, numberedOrderRows.size() );		
+		NumberedOrderRowBuilder orderRow = numberedOrderRows.get(0); 			
+		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
+		assertEquals( Double.valueOf(1363.99), Double.valueOf(orderRow.getAmountIncVat()) );
+		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
+		assertEquals( 1, orderRow.getRowNumber() );	
+
+		// add order row
+		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
+		    .setOrderId( String.valueOf(order.orderId) ) 
+		    .setCountryCode( COUNTRYCODE.SE ) 
+		    .addOrderRow( 
+	    		WebPayItem.orderRow()
+	    			// OrderRow attributes:
+	                .setArticleNumber("addedRow")
+                    .setName("Prod")
+                    .setDescription("Specification")
+	                .setAmountIncVat(1339.19)	// 1079.99ex @24% = 1339.1876 => 1339.19 inc
+	                .setQuantity(1.0)
+	                .setUnit("st")
+	                .setVatPercent(24)
+	                .setVatDiscount(0)
+			)
+		;
+		AddOrderRowsResponse add = addBuilder.addPaymentPlanOrderRows().doRequest();        
+        assertTrue(add.isOrderAccepted());        
+
+		// query and assert updated order row
+		QueryOrderBuilder queryAddBuilder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+		        .setOrderId(order.orderId)
+		        .setCountryCode(COUNTRYCODE.SE)
+		;
+		GetOrdersResponse queryAdd = queryAddBuilder.queryPaymentPlanOrder().doRequest();       
+		assertTrue(queryAdd.isOrderAccepted());			
+		ArrayList<NumberedOrderRowBuilder> addOrderRows = queryAdd.getNumberedOrderRows();
+		assertEquals( 2, addOrderRows.size() );		
+		NumberedOrderRowBuilder updateOrderRow = addOrderRows.get(1); 			
+		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
+		assertEquals( Double.valueOf(1339.19), Double.valueOf(updateOrderRow.getAmountIncVat()) );
+		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
+		assertEquals( 2, updateOrderRow.getRowNumber() );			
+	}	
+	
+	@Test
+	public void test_addOrderRows_addPaymentPlanOrderRows_original_exvatincvat_added_exvatvatpercent_sent_as_incvat() {
+    	// get payment plan params
+		PaymentPlanParamsResponse paymentPlanParams = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
+				.setCountryCode(TestingTool.DefaultTestCountryCode)
+				.doRequest();
+		String campaign = paymentPlanParams.getCampaignCodes().get(0).getCampaignCode();
+			
+		CreateOrderBuilder orderBuilder = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addOrderRow( 
+				WebPayItem.orderRow()
+			        .setArticleNumber("original")
+			        .setName("Prod")
+			        .setDescription("Specification")
+			        .setAmountExVat(1099.99)	// 1099.99ex @24% = 1363.9876 => 1363.99inc
+			        .setAmountIncVat(1363.99)	// 1099.99ex @24% = 1363.9876 => 1363.99inc
+			        .setQuantity(1.0)
+			        .setUnit("st")
+			        .setVatDiscount(0)
+				)
+			.addCustomerDetails(WebPayItem.individualCustomer()
+			    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+			)
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(TestingTool.DefaultTestDate)
+		;		
+		CreateOrderResponse order = orderBuilder.usePaymentPlanPayment(campaign).doRequest();
+		assertTrue(order.isOrderAccepted());		
+		
+		// query and assert original order row
+		QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+		        .setOrderId(order.orderId)
+		        .setCountryCode(COUNTRYCODE.SE)
+		;
+		GetOrdersResponse queryOriginal = queryOrderBuilder.queryPaymentPlanOrder().doRequest();       
+		assertTrue(queryOriginal.isOrderAccepted());			
+		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = queryOriginal.getNumberedOrderRows();
+		assertEquals( 1, numberedOrderRows.size() );		
+		NumberedOrderRowBuilder orderRow = numberedOrderRows.get(0); 			
+		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
+		assertEquals( Double.valueOf(1363.99), Double.valueOf(orderRow.getAmountIncVat()) );
+		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
+		assertEquals( 1, orderRow.getRowNumber() );	
+
+		// add order row
+		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
+		    .setOrderId( String.valueOf(order.orderId) ) 
+		    .setCountryCode( COUNTRYCODE.SE ) 
+		    .addOrderRow( 
+	    		WebPayItem.orderRow()
+	    			// OrderRow attributes:
+	                .setArticleNumber("addedRow")
+                    .setName("Prod")
+                    .setDescription("Specification")
+	                .setAmountExVat(1079.99)	// 1079.99ex @24% = 1339.1876 => 1339.19 inc
+	                .setQuantity(1.0)
+	                .setUnit("st")
+	                .setVatPercent(24)
+	                .setVatDiscount(0)
+			)
+		;
+		AddOrderRowsResponse add = addBuilder.addPaymentPlanOrderRows().doRequest();        
+        assertTrue(add.isOrderAccepted());        
+
+		// query and assert updated order row
+		QueryOrderBuilder queryAddBuilder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+		        .setOrderId(order.orderId)
+		        .setCountryCode(COUNTRYCODE.SE)
+		;
+		GetOrdersResponse queryAdd = queryAddBuilder.queryPaymentPlanOrder().doRequest();       
+		assertTrue(queryAdd.isOrderAccepted());			
+		ArrayList<NumberedOrderRowBuilder> addOrderRows = queryAdd.getNumberedOrderRows();
+		assertEquals( 2, addOrderRows.size() );		
+		NumberedOrderRowBuilder updateOrderRow = addOrderRows.get(1); 			
+		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
+		assertEquals( Double.valueOf(1339.19), Double.valueOf(updateOrderRow.getAmountIncVat()) );
+		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
+		assertEquals( 2, updateOrderRow.getRowNumber() );			
+	}	
+	
+	@Test
+	public void test_addOrderRows_addPaymentPlanOrderRows_original_exvatvatpercent_added_exvatincvat_sent_as_exvat() {
+    	// get payment plan params
+		PaymentPlanParamsResponse paymentPlanParams = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
+				.setCountryCode(TestingTool.DefaultTestCountryCode)
+				.doRequest();
+		String campaign = paymentPlanParams.getCampaignCodes().get(0).getCampaignCode();
+			
+		CreateOrderBuilder orderBuilder = WebPay.createOrder(SveaConfig.getDefaultConfig())
+			.addOrderRow( 
+				WebPayItem.orderRow()
+			        .setArticleNumber("original")
+			        .setName("Prod")
+			        .setDescription("Specification")
+			        .setAmountExVat(1099.99)	// 1099.99ex @24% = 1363.9876 => 1363.99inc
+			        .setQuantity(1.0)
+			        .setUnit("st")
+			        .setVatPercent(24)
+			        .setVatDiscount(0)
+			)
+			.addCustomerDetails(WebPayItem.individualCustomer()
+			    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
+			)
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderDate(TestingTool.DefaultTestDate)
+		;		
+		CreateOrderResponse order = orderBuilder.usePaymentPlanPayment(campaign).doRequest();
+		assertTrue(order.isOrderAccepted());		
+		
+		// query and assert original order row
+		QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+		        .setOrderId(order.orderId)
+		        .setCountryCode(COUNTRYCODE.SE)
+		;
+		GetOrdersResponse queryOriginal = queryOrderBuilder.queryPaymentPlanOrder().doRequest();       
+		assertTrue(queryOriginal.isOrderAccepted());			
+		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = queryOriginal.getNumberedOrderRows();
+		assertEquals( 1, numberedOrderRows.size() );		
+		NumberedOrderRowBuilder orderRow = numberedOrderRows.get(0); 			
+		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
+		assertEquals( Double.valueOf(1099.99), Double.valueOf(orderRow.getAmountExVat()) );
+		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
+		assertEquals( 1, orderRow.getRowNumber() );	
+
+		// add order row
+		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
+		    .setOrderId( String.valueOf(order.orderId) ) 
+		    .setCountryCode( COUNTRYCODE.SE ) 
+		    .addOrderRow( 
+	    		WebPayItem.orderRow()
+	    			// OrderRow attributes:
+	                .setArticleNumber("addedRow")
+                    .setName("Prod")
+                    .setDescription("Specification")
+	                .setAmountExVat(1079.99)	// 1079.99ex @24% = 1339.1876 => 1339.19 inc
+	                .setAmountIncVat(1339.19)
+	                .setQuantity(1.0)
+	                .setUnit("st")
+	                .setVatDiscount(0)
+			)
+		;
+		AddOrderRowsResponse add = addBuilder.addPaymentPlanOrderRows().doRequest();        
+        assertTrue(add.isOrderAccepted());        
+
+		// query and assert updated order row
+		QueryOrderBuilder queryAddBuilder = WebPayAdmin.queryOrder(SveaConfig.getDefaultConfig())
+		        .setOrderId(order.orderId)
+		        .setCountryCode(COUNTRYCODE.SE)
+		;
+		GetOrdersResponse queryAdd = queryAddBuilder.queryPaymentPlanOrder().doRequest();       
+		assertTrue(queryAdd.isOrderAccepted());			
+		ArrayList<NumberedOrderRowBuilder> addOrderRows = queryAdd.getNumberedOrderRows();
+		assertEquals( 2, addOrderRows.size() );		
+		NumberedOrderRowBuilder updateOrderRow = addOrderRows.get(1); 			
+		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountIncVat()) );
+		assertEquals( Double.valueOf(1079.99), Double.valueOf(updateOrderRow.getAmountExVat()) );
+		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
+		assertEquals( 2, updateOrderRow.getRowNumber() );			
+	}	
 }
