@@ -63,7 +63,7 @@ public class WebPay {
      *          .addCustomerDetails()    			// required for invoice and payment plan payments, see WebPayItem for individual, company customer
      *          .setCountryCode()               	// required
      *          .setOrderDate()            			// required for invoice and payment plan payments
-     *          .setCurrency()                 		// required for card payment, direct bank & PayPage payments. Ignored for invoice and payment plan.
+     *          .setCurrency()                 		// required for card payment, direct bank & PayPage payments only. Ignored for invoice and payment plan.
      *          .setClientOrderNumber()    			// required for card payment, direct payment, PaymentMethod & PayPage payments, max length 30 chars.
      *          .setCustomerReference()    			// optional, ignored for card & direct bank orders, max length 30 chars.
      *      ;

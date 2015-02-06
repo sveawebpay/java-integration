@@ -58,7 +58,12 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  * @author klar-sar
  * *****************************************************************************/
 public abstract class HostedPayment<T extends HostedPayment<T>> {
-
+    
+	final static String RECURRINGCAPTURE = "RECURRINGCAPTURE";	// TODO move to constant class
+	final static String ONECLICKCAPTURE = "ONECLICKCAPTURE";
+    final static String RECURRING = "RECURRING";
+    final static String ONECLICK = "ONECLICK";
+	
 	protected CreateOrderBuilder createOrderBuilder;
 	protected ArrayList<HostedOrderRowBuilder> rowBuilder;
 	protected List<String> excludedPaymentMethods;
@@ -69,6 +74,8 @@ public abstract class HostedPayment<T extends HostedPayment<T>> {
 	protected String callbackUrl;
 	protected ExcludePayments excluded;
 	protected String languageCode;
+	
+	protected String subscriptionType;	// TODO replace with constant
 
 	public HostedPayment(CreateOrderBuilder createOrderBuilder) {
 		this.createOrderBuilder = createOrderBuilder;
@@ -102,12 +109,12 @@ public abstract class HostedPayment<T extends HostedPayment<T>> {
 		return returnUrl;
 	}
 
-	/**
-	 * Required
-	 * 
-	 * @param returnUrl
-	 * @return HostedPayment
-	 */
+	public T setSubscriptionType( String subscriptionType ) {
+		this.subscriptionType = subscriptionType;
+		return getGenericThis();
+	}
+	
+	
 	public T setReturnUrl(String url) {
 		returnUrl = url;
 		return getGenericThis();
