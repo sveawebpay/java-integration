@@ -28,7 +28,6 @@ import org.apache.http.impl.client.HttpClients;
 import org.apache.http.message.BasicNameValuePair;
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -40,10 +39,12 @@ import se.sveaekonomi.webpay.integration.hosted.helper.HostedRowFormatter;
 import se.sveaekonomi.webpay.integration.hosted.helper.HostedXmlBuilder;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentUrl;
+import se.sveaekonomi.webpay.integration.hosted.hostedadmin.RecurTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HostedOrderValidator;
 import se.sveaekonomi.webpay.integration.order.validator.IdentityValidator;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.PreparePaymentResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.RecurTransactionResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
@@ -72,6 +73,7 @@ public abstract class HostedPayment<T extends HostedPayment<T>> {
 	protected String languageCode;
 	
 	protected SUBSCRIPTIONTYPE subscriptionType;
+	protected String subscriptionId;
 
 	public HostedPayment(CreateOrderBuilder createOrderBuilder) {
 		this.createOrderBuilder = createOrderBuilder;
@@ -114,6 +116,14 @@ public abstract class HostedPayment<T extends HostedPayment<T>> {
 		return subscriptionType;
 	}
 	
+	public T setSubscriptionId( String subscriptionId ) {
+		this.subscriptionId = subscriptionId;
+		return getGenericThis();
+	}
+	
+	public String getSubscriptionId() {
+		return subscriptionId;
+	}
 	
 	public T setReturnUrl(String url) {
 		returnUrl = url;
@@ -188,6 +198,21 @@ public abstract class HostedPayment<T extends HostedPayment<T>> {
 		configureExcludedPaymentMethods();
 	}
 
+	public RecurTransactionResponse doRecur() {
+		calculateRequestValues();
+		
+		RecurTransactionRequest recurRequest = new RecurTransactionRequest(this.createOrderBuilder.getConfig())
+			.setCountryCode(this.createOrderBuilder.getCountryCode())
+			.setAmount(String.valueOf(this.getAmount()))
+			.setCustomerRefNo(this.createOrderBuilder.getClientOrderNumber())
+			.setSubscriptionId(this.getSubscriptionId())
+			.setCurrency(this.createOrderBuilder.getCurrency())
+		;
+		RecurTransactionResponse recurResponse = recurRequest.doRequest();			
+
+		return recurResponse;
+	}
+	
 	public PaymentForm getPaymentForm() {
 		calculateRequestValues();
 		HostedXmlBuilder xmlBuilder = new HostedXmlBuilder();
@@ -214,6 +239,7 @@ public abstract class HostedPayment<T extends HostedPayment<T>> {
 
 		return form;
 	}
+	
    /**
      * getPaymentURL returns a PaymentUrl object containing the URL to a prepared hosted payment.
      * Use this to to get a link which the customer can use to confirm a prepared payment at a later
