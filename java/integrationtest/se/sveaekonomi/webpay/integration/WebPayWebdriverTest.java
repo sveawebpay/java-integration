@@ -16,6 +16,7 @@ import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
+import se.sveaekonomi.webpay.integration.hosted.payment.PaymentMethodPayment;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.hosted.HostedPaymentResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
@@ -40,11 +41,14 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
  */
 public class WebPayWebdriverTest {    
 
+	public HostedPaymentResponse createCardOrder() {
+		return createCardOrder( false );
+	}
 	/**
 	 * Creates an order using the KORTCERT payment method and picks up the response via the CardOrder example landing page.
 	 * @return the processed card order response
 	 */
-	public HostedPaymentResponse createCardOrder() {
+	public HostedPaymentResponse createCardOrder( boolean subscription ) {
 		// create order
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
@@ -56,10 +60,17 @@ public class WebPayWebdriverTest {
         ;
                 
         // choose payment method and do request
-        PaymentForm form = order.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
-                	.setReturnUrl("http://localhost:8080/CardOrder/landingpage")	// http => handle alert below
-                	.getPaymentForm()
+        PaymentMethodPayment request = (PaymentMethodPayment) order.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
+            	.setReturnUrl("http://localhost:8080/CardOrder/landingpage")	// http => handle alert below                	
     	;
+        
+        // check subscription true, setSubscriptionType!
+        if( subscription == true ) {
+        	request.setSubscriptionType(SUBSCRIPTIONTYPE.RECURRING);
+        }
+        
+        PaymentForm form = request.getPaymentForm();
+
         
         // insert form in empty page
         FirefoxDriver driver = new FirefoxDriver();
@@ -163,6 +174,22 @@ public class WebPayWebdriverTest {
 	// TODO
 	// payment method (i.e. invoice) via paypage
 	// TODO	
+	
+	// set up recurring card order subscription
+	@Test 
+	public void test_createOrder_usePaymentMethodPayment_KORTCERT_with_setSubscriptionType() {          
+    	// create an order using defaults
+		boolean useSetSubscriptionType = true;
+    	HostedPaymentResponse createCardOrderResponse = createCardOrder( useSetSubscriptionType );
+    	assertTrue(createCardOrderResponse.isOrderAccepted());
+    	assertNotNull( createCardOrderResponse.getSubscriptionId() );
+
+    	
+    	
+	}	
+	
+	// perform recurring card order request
+	
 	
 	/// WebPay.closeOrder
 	// invoice

@@ -10,15 +10,9 @@ import javax.xml.stream.XMLOutputFactory;
 import javax.xml.stream.XMLStreamException;
 import javax.xml.stream.XMLStreamWriter;
 
-
-
-
-
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
-import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.AnnulTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.RecurTransactionResponse;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 import se.sveaekonomi.webpay.integration.util.security.HashUtil;
@@ -47,7 +41,7 @@ public class RecurTransactionRequest extends HostedAdminRequest<RecurTransaction
 		return this.amount;
 	}
 	
-	public RecurTransactionRequest setCustomerRefNo(String customerRefNo) {	// TODO name clientOrderId??
+	public RecurTransactionRequest setCustomerRefNo(String customerRefNo) {
 		this.customerRefNo = customerRefNo;
 		return this;
 	}
@@ -169,7 +163,7 @@ public class RecurTransactionRequest extends HostedAdminRequest<RecurTransaction
     
 	/**
 	 * validate, prepare and do request
-	 * @return AnnulTransactionResponse
+	 * @return RecurTransactionResponse
 	 * @throws SveaWebPayException
 	 */
 	public RecurTransactionResponse doRequest() throws SveaWebPayException {
