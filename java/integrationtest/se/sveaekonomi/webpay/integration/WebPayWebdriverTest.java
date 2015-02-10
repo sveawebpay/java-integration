@@ -19,6 +19,7 @@ import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.hosted.payment.PaymentMethodPayment;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.hosted.HostedPaymentResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.RecurTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
@@ -173,23 +174,38 @@ public class WebPayWebdriverTest {
 	// directbank
 	// TODO
 	// payment method (i.e. invoice) via paypage
-	// TODO	
+	// TODO		
 	
-	// set up recurring card order subscription
+	// recur
+	// set up recurring card order subscription and then perform recur order request
 	@Test 
-	public void test_createOrder_usePaymentMethodPayment_KORTCERT_with_setSubscriptionType() {          
-    	// create an order using defaults
+	public void test_createOrder_perform_recurring_card_order_request() {          
+    	// set up subscription card order
 		boolean useSetSubscriptionType = true;
     	HostedPaymentResponse createCardOrderResponse = createCardOrder( useSetSubscriptionType );
     	assertTrue(createCardOrderResponse.isOrderAccepted());
-    	assertNotNull( createCardOrderResponse.getSubscriptionId() );
+    	assertNotNull( createCardOrderResponse.getSubscriptionId() );    	    	
 
-    	
-    	
+    	// create recur order
+        CreateOrderBuilder recurOrder = WebPay.createOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            //.setOrderDate(TestingTool.DefaultTestDate)
+            .setClientOrderNumber("recur" + Long.toString((new Date()).getTime()))
+            .setCurrency(TestingTool.DefaultTestCurrency)
+        ;
+                
+        // set up request and perform recur call
+        PaymentMethodPayment recurRequest = (PaymentMethodPayment) recurOrder.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
+        	.setReturnUrl("http://localhost:8080/CardOrder/landingpage")  
+        	.setSubscriptionId( createCardOrderResponse.getSubscriptionId() )
+    	;
+        
+        RecurTransactionResponse recurResponse = recurRequest.doRecur();
+    	assertTrue(recurResponse.isOrderAccepted());    	
 	}	
-	
-	// perform recurring card order request
-	
+
 	
 	/// WebPay.closeOrder
 	// invoice
@@ -212,75 +228,6 @@ public class WebPayWebdriverTest {
     // paymentplan
     // TODO
     
-    // recur
-    // setSubscriptionType()
-    @Test
-	public void createCardOrder_with_setSubscriptionType_returns_subscriptionId() {
-		// create order
-        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-                .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-                .addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
-                .setCountryCode(TestingTool.DefaultTestCountryCode)
-                //.setOrderDate(TestingTool.DefaultTestDate)
-                .setClientOrderNumber("test_createCardOrder" + Long.toString((new Date()).getTime()))
-                .setCurrency(TestingTool.DefaultTestCurrency)
-        ;
-                
-        // choose payment method and do request
-        PaymentForm form = order.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
-            	.setReturnUrl("http://localhost:8080/CardOrder/landingpage")	// http => handle alert below
-            	.setSubscriptionType(SUBSCRIPTIONTYPE.RECURRING)
-				//.setSubscriptionType(SUBSCRIPTIONTYPE.RECURRINGCAPTURE)
-				//.setSubscriptionType(SUBSCRIPTIONTYPE.ONECLICK)
-				//.setSubscriptionType(SUBSCRIPTIONTYPE.ONECLICKCAPTURE)
-				.getPaymentForm()
-    	;
-        
-        // insert form in empty page
-        FirefoxDriver driver = new FirefoxDriver();
-        driver.get("about:blank");
-        String script = "document.body.innerHTML = '" + form.getCompleteForm() + "'";
-        driver.executeScript(script);
-        
-        // post form
-        driver.findElementById("paymentForm").submit();
-
-        // wait for certitrade page to load
-        (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("paymeth-list")));
-        
-        // fill in credentials form
-        WebElement cardno = driver.findElementById("cardno");
-        cardno.sendKeys("4444333322221100");       
-
-        WebElement cvc = driver.findElementById("cvc"); 	       
-    	cvc.sendKeys("123");
-
-        Select month = new Select(driver.findElementById("month"));
-        month.selectByValue("01");
-
-        Select year = new Select(driver.findElementById("year"));
-        year.selectByValue("17");
-        
-        // submit credentials form, triggering redirect to returnurl
-        driver.findElementById("perform-payment").click();        
-        
-        // as our localhost landingpage is a http site, we get a popup
-        Alert alert = driver.switchTo().alert();
-        alert.accept();
-
-        // wait for landing page to load and then create a HostedPaymentResponse from the response xml message
-        (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));                
-        String raw_response = driver.findElementById("rawresponse").getText();                        
-
-        HostedPaymentResponse cardOrderResponse = new HostedPaymentResponse( raw_response, SveaConfig.getDefaultConfig().getSecretWord(PAYMENTTYPE.HOSTED, COUNTRYCODE.SE) );
-             
-        // close window
-        driver.quit();
-        
-        assertTrue(cardOrderResponse.isOrderAccepted() );  	
-        assertNotNull(cardOrderResponse.getSubscriptionId());	// TODO check is numeric instead
-        //assertEquals(SUBSCRIPTIONTYPE.RECURRING.toString(), cardOrderResponse.getSubscriptionType()); // TODO not returned by service?!
-	}
 
     
     

@@ -15,17 +15,44 @@ import org.xml.sax.SAXException;
 
 import se.sveaekonomi.webpay.integration.Respondable;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
 /**
- * Handles annul request response from hosted admin webservice
+ * RecurTransactionResponse handles the recur transaction response
  * 
  * @author Kristian Grossman-Madsen
  */
 public class RecurTransactionResponse extends HostedAdminResponse implements Respondable {
 
 	private String rawResponse;
-//	private String transactionid;
-//	private String clientOrderNumber;
+
+    /** the order id at Svea */
+    public String transactionId;
+    /** the customer reference number, i.e. order number */
+    public String clientOrderNumber;
+    /** paymentMethod */
+    public String paymentMethod;	// TODO use PAYMENTMETHOD
+    /** the merchant id */
+    public String merchantId;    
+    /** the total amount in minor currency (e.g. SEK 10.50 => 1050) */
+    public String amount;
+    /** currency -- ISO 4217 alphabetic, e.g. SEK */
+    public String currency;
+    /** cardType */
+    public String cardType;
+    /** maskedCardNumber */
+    public String maskedCardNumber;
+    /**  expiryMonth -- Expire month of the month */
+    public String expiryMonth;
+    /** expiryYear -- Expire year of the card */
+    public String expiryYear;
+    /** EDB authorization code */
+    public String authCode; 
+    /** subscriptionId */
+    public String subscriptionId;
+    /** decimalamount The total amount including VAT, presented as a decimal number. */
+    public Double decimalamount;	
+	
 
 	public RecurTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
@@ -40,6 +67,24 @@ public class RecurTransactionResponse extends HostedAdminResponse implements Res
 				
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
 
+		//<?xml version='1.0' encoding='UTF-8'?>
+		//<response>
+		//	<transaction id="593951">
+		//		<paymentmethod>CARD</paymentmethod>
+		//		<merchantid>1130</merchantid>
+		//		<customerrefno>recur1423569086456</customerrefno>
+		//		<amount>25000</amount>
+		//		<currency>SEK</currency>
+		//		<subscriptionid>3188</subscriptionid>
+		//		<cardtype>VISA</cardtype>
+		//		<maskedcardno>444433xxxxxx1100</maskedcardno>
+		//		<expirymonth>01</expirymonth>
+		//		<expiryyear>17</expiryyear>
+		//		<authcode>491419</authcode>
+		//	</transaction>
+		//	<statuscode>0</statuscode>
+		//</response>
+				
 		try {
 			DocumentBuilder builder = factory.newDocumentBuilder();
 			Document d1 = builder.parse(new InputSource(new StringReader(xml)));
@@ -59,9 +104,19 @@ public class RecurTransactionResponse extends HostedAdminResponse implements Res
 				}
 				
 				if( this.isOrderAccepted() ) {	// don't attempt to parse a bad response
-//
-//					this.transactionid = getTagAttribute(element, "transaction", "id");
-//					this.clientOrderNumber = getTagValue(element, "customerrefno");
+					this.transactionId = getTagAttribute(element, "transaction", "id");
+					this.clientOrderNumber = getTagValue(element, "customerrefno");
+					this.paymentMethod = getTagValue(element, "paymentmethod");
+					this.merchantId = getTagValue(element, "merchantid");
+					this.amount = getTagValue(element, "amount");
+					this.currency = getTagValue(element, "currency");
+					this.cardType = getTagValue(element, "cardtype");
+					this.maskedCardNumber = getTagValue(element, "maskedcardno");
+					this.expiryMonth = getTagValue(element, "expirymonth");
+					this.expiryYear = getTagValue(element, "expiryyear");
+					this.authCode = getTagValue(element, "authcode");
+					this.subscriptionId = getTagValue(element, "subscriptionid");
+					this.decimalamount = Double.valueOf(getTagValue(element, "amount"))/100.00;
 				}
 			}
 		} catch (ParserConfigurationException e) {
@@ -75,16 +130,7 @@ public class RecurTransactionResponse extends HostedAdminResponse implements Res
 	
     public String getRawResponse() {
 		return rawResponse;
-	}
-
-//    public String getTransactionId() {
-//		return transactionid;
-//	}
-//
-//	public String getClientOrderNumber() {
-//		return clientOrderNumber;
-//	}
-//    
+	} 
 
 }
 
