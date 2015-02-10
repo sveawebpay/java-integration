@@ -49,7 +49,7 @@ public class WebPayWebdriverTest {
 	 * Creates an order using the KORTCERT payment method and picks up the response via the CardOrder example landing page.
 	 * @return the processed card order response
 	 */
-	public HostedPaymentResponse createCardOrder( boolean subscription ) {
+	public HostedPaymentResponse createCardOrder( boolean useSetSubscriptionType ) {
 		// create order
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
@@ -66,7 +66,7 @@ public class WebPayWebdriverTest {
     	;
         
         // check subscription true, setSubscriptionType!
-        if( subscription == true ) {
+        if( useSetSubscriptionType == true ) {
         	request.setSubscriptionType(SUBSCRIPTIONTYPE.RECURRING);
         }
         
@@ -205,9 +205,55 @@ public class WebPayWebdriverTest {
         RecurTransactionResponse recurResponse = recurRequest.doRecur();
     	assertTrue(recurResponse.isOrderAccepted());    	
 	}	
-
 	
-	/// WebPay.closeOrder
+	
+    // WebPay.deliverOrder() -------------------------------------------------------------------------------------------
+    // deliver invoice order
+	// w/o order rows
+	@Test
+    public void test_deliverOrder_deliverInvoiceOrder() {
+    	    	
+    	// create an order using defaults
+    	CreateOrderResponse order = createInvoiceOrder();
+        assertTrue(order.isOrderAccepted());
+
+        Respondable response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+                .setOrderId(order.orderId)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .deliverInvoiceOrder()
+                .doRequest();
+        
+        assertTrue(response.isOrderAccepted());
+    }
+	// w/order rows
+	// TODO
+	
+    // deliver paymentplan orders
+	// w/o order rows
+
+	// w/order rows
+	
+    // TODO
+    // deliver card order    
+    @Test
+    public void test_deliverOrder_deliverCardOrder() {
+    	    	
+    	// create an order using defaults
+    	HostedPaymentResponse order = createCardOrder();    	
+    	assertTrue(order.isOrderAccepted());
+    	
+    	// deliver order
+        Respondable response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+                .setTransactionId( order.getTransactionId() )
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .deliverCardOrder()
+                .doRequest();
+        
+        assertTrue(response.isOrderAccepted());
+    }
+
+
+	// WebPay.closeOrder() ---------------------------------------------------------------------------------------------
 	// invoice
     @Test
     public void test_closeOrder_closeInvoiceOrder() {
@@ -227,44 +273,14 @@ public class WebPayWebdriverTest {
     }
     // paymentplan
     // TODO
+ 
+    // WebPay.getPaymentPlanPricePerMonth()
+    // see integration tests
     
-
+    // WebPay.getPaymentPlanParams()
+    // see integration tests
     
+    // WebPay.getAddresses()
+    // see integration tests
     
-    // WebPay.deliverOrder() -------------------------------------------------------------------------------------------
-    // deliver invoice order
-    @Test
-    public void test_deliverOrder_deliverInvoiceOrder() {
-    	    	
-    	// create an order using defaults
-    	CreateOrderResponse order = createInvoiceOrder();
-        assertTrue(order.isOrderAccepted());
-
-        Respondable response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
-                .setOrderId(order.orderId)
-                .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .deliverInvoiceOrder()
-                .doRequest();
-        
-        assertTrue(response.isOrderAccepted());
-    }
-    // deliver paymentplan order
-    // TODO
-    // deliver card order    
-    @Test
-    public void test_deliverOrder_deliverCardOrder() {
-    	    	
-    	// create an order using defaults
-    	HostedPaymentResponse order = createCardOrder();    	
-    	assertTrue(order.isOrderAccepted());
-    	
-    	// deliver order
-        Respondable response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
-                .setTransactionId( order.getTransactionId() )
-                .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .deliverCardOrder()
-                .doRequest();
-        
-        assertTrue(response.isOrderAccepted());
-    }
 }

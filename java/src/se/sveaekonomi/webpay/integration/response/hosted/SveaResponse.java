@@ -35,7 +35,6 @@ public class SveaResponse extends Response {
     private double amount;
     private String currency;
     private String subscriptionId;
-    private String subscriptionType;
     private String cardType;
     private String maskedCardNumber;
     private String expiryMonth;
@@ -78,7 +77,6 @@ public class SveaResponse extends Response {
                 this.amount = minorAmount * 0.01;
                 this.currency = getTagValue(element, "currency");
                 this.setSubscriptionId(getTagValue(element, "subscriptionid"));
-                this.setSubscriptionType(getTagValue(element, "subscriptiontype"));
                 this.setCardType(getTagValue(element, "cardtype"));
                 this.setMaskedCardNumber(getTagValue(element, "maskedcardno"));
                 this.setExpiryMonth(getTagValue(element, "expirymonth"));
@@ -147,14 +145,6 @@ public class SveaResponse extends Response {
 
     public void setSubscriptionId(String subscriptionId) {
         this.subscriptionId = subscriptionId;
-    }
-
-    public String getSubscriptionType() {
-        return subscriptionType;
-    }
-
-    public void setSubscriptionType(String subscriptionType) {
-        this.subscriptionType = subscriptionType;
     }
 
     public String getCardType() {
