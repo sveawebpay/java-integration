@@ -42,7 +42,7 @@ public class DeliverOrdersRequestTest {
 	        fail();
         }		  
     }
-     
+
     @Test
     public void test_deliverOrder_deliverInvoiceOrder_without_orderrows_return_DeliverOrdersResponse_validates_missing_methods() {
 		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())

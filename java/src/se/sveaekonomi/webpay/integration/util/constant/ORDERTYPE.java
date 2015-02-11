@@ -13,11 +13,12 @@ public enum ORDERTYPE {
 	public String toString() {
 		return this.constantAsString;
 	}
-	
+
 	public static ORDERTYPE fromString( String orderType ) throws Exception {
 		for( ORDERTYPE value : ORDERTYPE.values() ) {
 			if( value.toString().equals(orderType) ) return value;
 		}
 		throw new Exception("Unknown ordertype.");
 	}
+	
 }

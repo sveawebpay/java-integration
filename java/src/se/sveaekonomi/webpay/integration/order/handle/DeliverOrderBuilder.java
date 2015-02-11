@@ -13,6 +13,7 @@ import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRe
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
+import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 
@@ -24,7 +25,8 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
     private HandleOrderValidator validator;
     
     private Long orderId;
-    private String orderType;
+//    private String orderType;
+    private ORDERTYPE orderType;
     private String distributionType;
     private String invoiceIdToCredit;
     private Integer numberOfCreditDays;
@@ -55,13 +57,31 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         return this;
     }
     
-    public String getOrderType() {
+//    public String getOrderType() {
+//        return orderType;
+//    }
+    public ORDERTYPE getOrderType() {
         return orderType;
     }
     
+//    public void setOrderType(String orderType) {
+//        this.orderType = orderType;
+//    }
+    /** @deprecated */
     public void setOrderType(String orderType) {
-        this.orderType = orderType;
+    	if( orderType.equals("Invoice") ) {
+    		this.orderType = ORDERTYPE.Invoice;
+    	}
+    	else if( orderType.equals("PaymentPlan") ) {
+    		this.orderType = ORDERTYPE.PaymentPlan;
+    	}
+    	else {
+    		throw new IllegalArgumentException( "OrderType must be one of 'Invoice' or 'PaymentPlan' when given as String" );
+    	}    		
     }
+    public void setOrderType(ORDERTYPE orderType) {
+    	this.orderType = orderType;
+    }    
     
     public String getInvoiceDistributionType() {
         return distributionType;
@@ -126,11 +146,11 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
 	public <T extends Requestable> T deliverInvoiceOrder() {
 
     	if( this.orderRows.isEmpty() ) {
-	    	this.orderType = "Invoice";		// TODO use enumeration instead
+	    	this.setOrderType("Invoice");		// TODO use enumeration instead
     		return (T) new DeliverOrdersRequest(this);
     	}
 	    else {
-	    	this.orderType = "Invoice";
+	    	this.setOrderType("Invoice");
 	        return (T) new HandleOrder(this);
 	    }
     }
@@ -140,7 +160,7 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
      * @return HandleOrder
      */
     public DeliverOrdersRequest deliverPaymentPlanOrder() {
-    	this.orderType = "PaymentPlan";		// TODO use enumeration instead
+    	this.setOrderType("PaymentPlan");		// TODO use enumeration instead
 		return new DeliverOrdersRequest(this);
     }
 
@@ -155,7 +175,7 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
      * @return DeliverPaymentPlan
      */    
 	public ConfirmTransactionRequest deliverCardOrder() {
-		this.orderType = "HOSTED_ADMIN"; // TODO use enumeration instead, 
+//		this.orderType = "HOSTED_ADMIN"; // TODO use enumeration instead, 
 		
     	// validate request and throw exception if validation fails
         String errors = validateDeliverCardOrder(); 

@@ -11,15 +11,15 @@ import se.sveaekonomi.webpay.integration.Respondable;
  */
 public interface Requestable {
 
-	// TODO add validateOrder()
-	
-	/**
-	 * prepareRequest() validates the order and returns an inspectable representation of the soap request data
-	 */
-	public <T> T prepareRequest();
-	
-	/**
-	 * doRequest() performs a soap request and returns the corresponding response class
-	 */
-	public <T extends Respondable> T doRequest();
+//	// TODO add validateOrder()
+//	
+//	/**
+//	 * prepareRequest() validates the order and returns an inspectable representation of the soap request data
+//	 */
+//	public <T> T prepareRequest();
+//	
+//	/**
+//	 * doRequest() performs a soap request and returns the corresponding response class
+//	 */
+//	public <T extends Respondable> T doRequest();
 }

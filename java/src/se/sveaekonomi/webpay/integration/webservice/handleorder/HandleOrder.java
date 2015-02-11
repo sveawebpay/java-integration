@@ -33,7 +33,7 @@ public class HandleOrder implements Requestable {
     
     protected SveaAuth getStoreAuthorization() {
          SveaAuth auth = new SveaAuth();
-         PAYMENTTYPE type = (order.getOrderType().equals("Invoice") ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
+         PAYMENTTYPE type = (order.getOrderType().toString().equals("Invoice") ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
          auth.Username = order.getConfig().getUsername(type, order.getCountryCode());
          auth.Password = order.getConfig().getPassword(type, order.getCountryCode());
          auth.ClientNumber = order.getConfig().getClientNumber(type, order.getCountryCode());
@@ -63,11 +63,11 @@ public class HandleOrder implements Requestable {
         
         sveaDeliverOrder = new SveaDeliverOrder();
         sveaDeliverOrder.auth = getStoreAuthorization(); 
-        orderInformation = new SveaDeliverOrderInformation(order.getOrderType());
+        orderInformation = new SveaDeliverOrderInformation(order.getOrderType().toString());
         orderInformation.setOrderId(String.valueOf(order.getOrderId()));
-        orderInformation.setOrderType(order.getOrderType());
+        orderInformation.setOrderType(order.getOrderType().toString());
         
-        if (order.getOrderType().equals("Invoice")) {
+        if (order.getOrderType().toString().equals("Invoice")) {
             SveaDeliverInvoiceDetails invoiceDetails = new SveaDeliverInvoiceDetails();
             invoiceDetails.InvoiceDistributionType = order.getInvoiceDistributionType();
             invoiceDetails.IsCreditInvoice = (order.getCreditInvoice()!=null ? true : false);
@@ -91,10 +91,13 @@ public class HandleOrder implements Requestable {
     public DeliverOrderResponse doRequest() {
         URL url = order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE);
         
+        // prepare request xml
         SveaRequest<SveaDeliverOrder> request = this.prepareRequest();
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml = xmlBuilder.getDeliverOrderEuXml(request.request);
+        //System.out.println( xml ); // debug, print xml
         
+        // send soap request
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("DeliverOrderEu", xml);
         NodeList soapResponse = soapBuilder.deliverOrderEuRequest(soapMessage, url.toString());
