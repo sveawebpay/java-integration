@@ -39,11 +39,11 @@ public class HandleOrderValidator {
     
     private void validateInvoiceDetails(DeliverOrderBuilder order) {
         if (	(order.getOrderId() != null) &&
-                order.getOrderType().equals("Invoice") &&
+                order.getOrderType().toString().equals("Invoice") &&
                 order.getInvoiceDistributionType() == null
             ) 
         {
-            this.errors += "MISSING VALUE - setInvoiceDistributionType is requred for deliverInvoiceOrder.\n";
+            this.errors += "MISSING VALUE - setInvoiceDistributionType is required for deliverInvoiceOrder.\n";
         }
     }    
 }
