@@ -1,5 +1,6 @@
 package se.sveaekonomi.webpay.integration;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
 import java.util.Date;
@@ -14,19 +15,25 @@ import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.adminservice.DeliverOrdersRequest;
+import se.sveaekonomi.webpay.integration.adminservice.DeliverOrdersResponse;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.hosted.payment.PaymentMethodPayment;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.hosted.HostedPaymentResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.RecurTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
+import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.SUBSCRIPTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
+import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
@@ -208,30 +215,65 @@ public class WebPayWebdriverTest {
 	
 	
     // WebPay.deliverOrder() -------------------------------------------------------------------------------------------
-    // deliver invoice order
-	// w/o order rows
-	@Test
-    public void test_deliverOrder_deliverInvoiceOrder() {
-    	    	
-    	// create an order using defaults
-    	CreateOrderResponse order = createInvoiceOrder();
-        assertTrue(order.isOrderAccepted());
-
-        Respondable response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
-                .setOrderId(order.orderId)
-                .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .deliverInvoiceOrder()
-                .doRequest();
-        
-        assertTrue(response.isOrderAccepted());
-    }
-	// w/order rows
-	// TODO
 	
-    // deliver paymentplan orders
-	// w/o order rows
+	// .deliverInvoiceOrder() with orderrows => WebService/HandleOrder request, DeliverOrderResponse response
+    @Test
+    public void test_deliverOrder_deliverInvoicePayment_with_orderrows_return_DeliverOrderResponse() {	
+		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			.addOrderRow(
+					WebPayItem.orderRow()
+			            .setQuantity(1.0)
+			            .setAmountExVat(4)
+			            .setAmountIncVat(5)
+			)
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderId( 123456L )
+			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
+		;
+			
+		HandleOrder request = builder.deliverInvoiceOrder();
+		assertThat( request, instanceOf(HandleOrder.class) );
+	
+		DeliverOrderResponse response = request.doRequest();
+		assertThat( response, instanceOf(DeliverOrderResponse.class) );
+		assertEquals(false, response.isOrderAccepted());
+		assertEquals("20004", response.getResultCode());
+		assertEquals("An order with the provided id does not exist.", response.getErrorMessage());	
+    }    
+    
+    // .deliverInvoiceOrder() without orderrows => AdminService/DeliverOrdersRequest request, DeliverOrdersResponse response
+    @Test
+    public void test_deliverOrder_deliverInvoiceOrder_without_orderrows_return_DeliverOrdersResponse() {	
+		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			//.addOrderRow()
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderId( 123456L )
+			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
+		;
+			
+		DeliverOrdersRequest request = builder.deliverInvoiceOrder();
+		assertThat( request, instanceOf(DeliverOrdersRequest.class) );
+		
+		DeliverOrdersResponse response = request.doRequest();
+		assertThat( response, instanceOf(DeliverOrdersResponse.class) );
+		assertEquals(false, response.isOrderAccepted());
+		assertEquals("20004", response.getResultCode());
+		assertEquals("An order with the provided id does not exist.", response.getErrorMessage());			
+    }
+//	// .deliverPaymentPlanOrder() with orderrows => validation error + other validation tests
+//    // TODO
+//    // .deliverPaymentPlanOrder() without orderrows => AdminService/DeliverOrdersRequest
+//    @Test
+//    public void test_deliverOrder_deliverPaymentPlanOrder_returns_DeliverOrdersRequest() {
+//		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+//			.setCountryCode(TestingTool.DefaultTestCountryCode)
+//			.setOrderId( 123456L )
+//		;
+//			
+//		DeliverOrdersRequest request = builder.deliverPaymentPlanOrder();
+//		assertThat( request, instanceOf(DeliverOrdersRequest.class) );
+//    }	
 
-	// w/order rows
 	
     // TODO
     // deliver card order    

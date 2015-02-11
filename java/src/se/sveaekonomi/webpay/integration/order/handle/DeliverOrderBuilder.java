@@ -121,9 +121,8 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
     /**
      * Updates the order builder with additional information and passes the
      * order builder to the correct request class.
-     * @return Requestable
+     * @return DeliverOrdersRequest (extends Requestable) or HandleOrder (extends Requestable)
      */
-    @SuppressWarnings("unchecked")
 	public <T extends Requestable> T deliverInvoiceOrder() {
 
     	if( this.orderRows.isEmpty() ) {
@@ -140,7 +139,7 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
      * Prepares the PaymentPlan order for delivery.
      * @return HandleOrder
      */
-    public Requestable deliverPaymentPlanOrder() {
+    public DeliverOrdersRequest deliverPaymentPlanOrder() {
     	this.orderType = "PaymentPlan";		// TODO use enumeration instead
 		return new DeliverOrdersRequest(this);
     }
