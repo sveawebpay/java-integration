@@ -219,8 +219,30 @@ public class WebPayWebdriverTest {
 	}	
 	
 	
-    // WebPay.deliverOrder() -------------------------------------------------------------------------------------------
-	
+    // WebPay.deliverOrder() -------------------------------------------------------------------------------------------   
+    
+    // .deliverInvoiceOrder() without orderrows => AdminService/DeliverOrdersRequest request, DeliverOrdersResponse response
+    @Test
+    public void test_deliverOrder_deliverInvoiceOrder_without_orderrows_return_DeliverOrdersResponse() {	
+		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			//.addOrderRow()
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderId( 123456L )
+			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
+		;
+			
+		DeliverOrdersRequest request = builder.deliverInvoiceOrder();
+		assertTrue( request instanceof Requestable );        
+		assertThat( request, instanceOf(DeliverOrdersRequest.class) );
+		
+		DeliverOrdersResponse response = request.doRequest();
+		assertThat( response, instanceOf(DeliverOrdersResponse.class) );
+		assertEquals(false, response.isOrderAccepted());
+		assertEquals("1000", response.getResultCode());	// probably a bug, ought to be 20004
+		//assertEquals("20004", response.getResultCode());
+		//assertEquals("An order with the provided id does not exist.", response.getErrorMessage());			
+    }
+
 	// .deliverInvoiceOrder() with orderrows => WebService/HandleOrder request, DeliverOrderResponse response
     @Test
     public void test_deliverOrder_deliverInvoicePayment_with_orderrows_return_DeliverOrderResponse() {	
@@ -245,29 +267,57 @@ public class WebPayWebdriverTest {
 		assertEquals(false, response.isOrderAccepted());
 		assertEquals("20004", response.getResultCode());
 		assertEquals("An order with the provided id does not exist.", response.getErrorMessage());	
-    }    
+    }   
     
-    // .deliverInvoiceOrder() without orderrows => AdminService/DeliverOrdersRequest request, DeliverOrdersResponse response
+	// .deliverInvoiceOrder() with orderrows and setCreditInvoice
     @Test
-    public void test_deliverOrder_deliverInvoiceOrder_without_orderrows_return_DeliverOrdersResponse() {	
-		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
-			//.addOrderRow()
+    public void test_deliverOrder_deliverInvoicePayment_with_orderrows_and_setCreditInvoice() {	
+    	
+    	// create order
+    	CreateOrderBuilder builder = WebPay.createOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .addCustomerDetails(WebPayItem.individualCustomer()
+                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+            .setOrderDate(TestingTool.DefaultTestDate)
+            .setCurrency(TestingTool.DefaultTestCurrency)
+        ;
+        CreateOrderResponse order = builder.useInvoicePayment().doRequest();
+		assertTrue(order.isOrderAccepted());
+			
+		// deliver order
+		DeliverOrderBuilder deliverBuilder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			.addOrderRow(
+					WebPayItem.orderRow()
+			            .setQuantity(1.0)
+			            .setAmountExVat(4)
+			            .setAmountIncVat(5)
+			)
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
-			.setOrderId( 123456L )
+			.setOrderId( order.orderId )
 			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
 		;
-			
-		DeliverOrdersRequest request = builder.deliverInvoiceOrder();
-		assertTrue( request instanceof Requestable );        
-		assertThat( request, instanceOf(DeliverOrdersRequest.class) );
-		
-		DeliverOrdersResponse response = request.doRequest();
-		assertThat( response, instanceOf(DeliverOrdersResponse.class) );
-		assertEquals(false, response.isOrderAccepted());
-		assertEquals("1000", response.getResultCode());	// probably a bug, ought to be 20004
-//		assertEquals("20004", response.getResultCode());
-//		assertEquals("An order with the provided id does not exist.", response.getErrorMessage());			
-    }
+		DeliverOrderResponse deliverResponse = deliverBuilder.deliverInvoiceOrder().doRequest();
+		assertTrue(deliverResponse.isOrderAccepted());
+
+		// credit order
+		DeliverOrderBuilder creditBuilder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			.addOrderRow(
+					WebPayItem.orderRow()
+			            .setQuantity(1.0)
+			            .setAmountExVat(4)
+			            .setAmountIncVat(5)
+			)
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderId( order.orderId )
+			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
+			.setCreditInvoice( String.valueOf(deliverResponse.getInvoiceId()) )
+		;
+		DeliverOrderResponse creditResponse = creditBuilder.deliverInvoiceOrder().doRequest();
+		assertTrue(creditResponse.isOrderAccepted());		
+    } 
+    
     
 //	// .deliverPaymentPlanOrder() with orderrows => validation error + other validation tests
 //    // TODO
