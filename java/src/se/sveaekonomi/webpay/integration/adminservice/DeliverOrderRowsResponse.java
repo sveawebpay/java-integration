@@ -9,7 +9,7 @@ import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 
-public class DeliverPartialResponse extends AdminServiceResponse {
+public class DeliverOrderRowsResponse extends AdminServiceResponse {
 
     /** Id that identifies a client in sveawebpay's system */	
     public String clientId;
@@ -76,7 +76,7 @@ public class DeliverPartialResponse extends AdminServiceResponse {
 		this.orderId = orderId;
 	}
 
-	public DeliverPartialResponse(SOAPMessage soapResponse) throws SOAPException {
+	public DeliverOrderRowsResponse(SOAPMessage soapResponse) throws SOAPException {
 		// set common response attributes
 		super(soapResponse.getSOAPPart().getEnvelope().getBody().getElementsByTagName("*"));
 

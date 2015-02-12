@@ -46,7 +46,7 @@ public class CreditOrderRowsIntegrationTest {
 		assertTrue(order.isOrderAccepted());
  
         // deliver first order row and assert the response
-        DeliverPartialResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+        DeliverOrderRowsResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
             .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
@@ -100,7 +100,7 @@ public class CreditOrderRowsIntegrationTest {
         assertTrue(order.isOrderAccepted());
  
         // deliver first order row and assert the response
-        DeliverPartialResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+        DeliverOrderRowsResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
             .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
@@ -166,7 +166,7 @@ public class CreditOrderRowsIntegrationTest {
         assertTrue(order.isOrderAccepted());
  
         // deliver first order row and assert the response
-        DeliverPartialResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+        DeliverOrderRowsResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
             .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)

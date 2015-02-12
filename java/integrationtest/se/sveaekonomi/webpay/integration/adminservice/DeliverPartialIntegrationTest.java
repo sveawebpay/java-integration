@@ -55,7 +55,7 @@ public class DeliverPartialIntegrationTest {
         assertTrue(order.isOrderAccepted());
 
         // deliver first order row and assert the response
-        DeliverPartialResponse response = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+        DeliverOrderRowsResponse response = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
             .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
@@ -64,7 +64,7 @@ public class DeliverPartialIntegrationTest {
             	.doRequest();
         
         assertTrue(response.isOrderAccepted());        
-        assertTrue(response instanceof DeliverPartialResponse );
+        assertTrue(response instanceof DeliverOrderRowsResponse );
         
         assertEquals(String.valueOf(order.orderId), response.getOrderId());
         assertEquals(Double.valueOf(250.00), response.getAmount());
@@ -112,7 +112,7 @@ public class DeliverPartialIntegrationTest {
         assertTrue(order.isOrderAccepted());
 
         // deliver first order row and assert the response
-        DeliverPartialResponse response = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+        DeliverOrderRowsResponse response = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
             .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
@@ -121,7 +121,7 @@ public class DeliverPartialIntegrationTest {
             	.doRequest();
         
         assertTrue(response.isOrderAccepted());        
-        assertTrue(response instanceof DeliverPartialResponse );
+        assertTrue(response instanceof DeliverOrderRowsResponse );
         
         assertEquals(String.valueOf(order.orderId), response.getOrderId());
         assertEquals(Double.valueOf(270.00), response.getAmount());

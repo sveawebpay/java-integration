@@ -24,12 +24,12 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  * 
  * @author Kristian Grossman-Madsen
  */
-public class DeliverPartialRequest  {
+public class DeliverOrderRowsRequest  {
 
 	private String action;
 	private DeliverOrderRowsBuilder builder;
 		
-	public DeliverPartialRequest( DeliverOrderRowsBuilder builder) {
+	public DeliverOrderRowsRequest( DeliverOrderRowsBuilder builder) {
 		this.action = "DeliverPartial";
 		this.builder = builder;
 	}
@@ -149,7 +149,7 @@ public class DeliverPartialRequest  {
 
 	};    	
 	
-	public DeliverPartialResponse doRequest() {	
+	public DeliverOrderRowsResponse doRequest() {	
 		
         // validate and prepare request, throw runtime exception on error
 		SOAPMessage soapRequest;
@@ -186,9 +186,9 @@ public class DeliverPartialRequest  {
 		}
 		
 		// parse response
-		DeliverPartialResponse response;
+		DeliverOrderRowsResponse response;
 		try {
-			response = new DeliverPartialResponse(soapResponse);
+			response = new DeliverOrderRowsResponse(soapResponse);
 		} catch (SOAPException e) {
 			throw new SveaWebPayException( "DeliverPartialRequest: doRequest parse response failed.", e );
 		}

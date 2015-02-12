@@ -642,7 +642,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( 3, orderRow.getRowNumber() );					
 				
         // deliver first, second order rows and assert the response
-        DeliverPartialResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+        DeliverOrderRowsResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
             .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
