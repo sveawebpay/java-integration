@@ -134,16 +134,7 @@ public class WebPayAdminWebdriverTest {
     public void test_queryOrder_queryPaymentPlanOrder() {
 
 		// create order
-        CreateOrderBuilder builder = WebPay.createOrder(SveaConfig.getDefaultConfig())
-                .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))                
-                .addCustomerDetails(WebPayItem.individualCustomer()
-                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)
-                )
-                .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .setOrderDate(TestingTool.DefaultTestDate)
-    	;
-        
-        CreateOrderResponse order = builder.useInvoicePayment().doRequest();
+    	CreateOrderResponse order = TestingTool.createPaymentPlanTestOrder("test_queryOrder_queryPaymentPlanOrder");
         assertTrue(order.isOrderAccepted());
         
         // query order
@@ -152,7 +143,7 @@ public class WebPayAdminWebdriverTest {
             .setCountryCode( COUNTRYCODE.SE )
         ;
         try {
-        	GetOrdersResponse response = queryOrderBuilder.queryInvoiceOrder().doRequest();
+        	GetOrdersResponse response = queryOrderBuilder.queryPaymentPlanOrder().doRequest();
 
 			assertTrue( response.isOrderAccepted() );     
 	   		assertEquals( String.valueOf(order.orderId), response.getOrderId() );
