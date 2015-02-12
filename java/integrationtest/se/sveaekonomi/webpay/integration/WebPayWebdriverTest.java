@@ -13,7 +13,6 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.adminservice.DeliverOrdersRequest;
 import se.sveaekonomi.webpay.integration.adminservice.DeliverOrdersResponse;
@@ -37,10 +36,6 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.SUBSCRIPTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
-import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 /**
  * contains end-to-end integration tests of WebPay entrypoints
@@ -129,36 +124,6 @@ public class WebPayWebdriverTest {
         return cardOrderResponse;
 	}	
 	
-	/**
-	 *  Creates an invoice order and returns the response.
-	 * @return the invoice order response
-	 */
-	public CreateOrderResponse createInvoiceOrder() {
-
-		SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
-        
-        SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
-                .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-                .addCustomerDetails(WebPayItem.individualCustomer()
-                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
-                .setCountryCode(TestingTool.DefaultTestCountryCode)
-                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-                .setOrderDate(TestingTool.DefaultTestDate)
-                .setCurrency(TestingTool.DefaultTestCurrency)
-                .useInvoicePayment()
-                .prepareRequest();
-        
-        WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
-        
-        String xml = xmlBuilder.getCreateOrderEuXml(request.request);
-        String url = SveaConfig.getTestWebserviceUrl().toString();
-        String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
-        NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
-        CreateOrderResponse response = new CreateOrderResponse(soapResponse);
-        
-        return response;
-	}
-
     // WebPay.createOrder() --------------------------------------------------------------------------------------------
 	// invoice
 	@Test 
@@ -406,50 +371,7 @@ public class WebPayWebdriverTest {
     		assertEquals(true, response.isOrderAccepted());
             assertEquals(Double.valueOf(order.amount), Double.valueOf(response.getAmount()));
         }  
-    
-//    @Test
-//    public void test_deliverOrder_deliverPaymentPlanOrder_without_orderrows_order_found() {	
-//    	
-//    	// create an order using defaults
-//    	CreateOrderResponse order = TestingTool.createPaymentPlanTestOrder("test_deliverOrder_deliverPaymentPlanOrder_without_orderrows_order_found");
-//        assertTrue(order.isOrderAccepted());
-//    	
-//		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
-//			//.addOrderRow()
-//			.setCountryCode(TestingTool.DefaultTestCountryCode)
-//			.setOrderId( order.orderId )
-//			//.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )				// TODO should validate this is not set!
-//		;
-//			
-//		DeliverOrdersRequest request = builder.deliverPaymentPlanOrder();
-//		assertTrue( request instanceof Requestable );        
-//		assertThat( request, instanceOf(DeliverOrdersRequest.class) );
-//		
-//		DeliverOrdersResponse response = request.doRequest();
-//		assertThat( response, instanceOf(DeliverOrdersResponse.class) );
-//		assertEquals(true, response.isOrderAccepted());
-//		assertEquals( String.valueOf(order.orderId), response.getOrderId() );					// TODO fix return value!	
-//    }
-      
-
-    
-    
-//    @Test
-//    public void test_deliverOrder_deliverPaymentPlanOrder_returns_DeliverOrdersRequest() {
-//		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
-//			.setCountryCode(TestingTool.DefaultTestCountryCode)
-//			.setOrderId( 123456L )
-//		;
-//			
-//		DeliverOrdersRequest request = builder.deliverPaymentPlanOrder();
-//		assertThat( request, instanceOf(DeliverOrdersRequest.class) );
-//    }
-    
-  
-    
-    
-	
-    // TODO
+        
     // deliver card order    
     @Test
     public void test_deliverOrder_deliverCardOrder() {
@@ -471,18 +393,16 @@ public class WebPayWebdriverTest {
 	    ConfirmTransactionResponse response = request.doRequest();
 		assertTrue( response instanceof Respondable );        
 		assertThat( response, instanceOf(ConfirmTransactionResponse.class) );        
-        assertTrue(response.isOrderAccepted());
-        
+        assertTrue(response.isOrderAccepted());        
     }
-
 
 	// WebPay.closeOrder() ---------------------------------------------------------------------------------------------
 	// invoice
     @Test
-    public void test_closeOrder_closeInvoiceOrder() {
+    public void test_closeOrder_closeInvoicyeOrder() {
     	    	
     	// create an order using defaults
-    	CreateOrderResponse order = createInvoiceOrder();
+    	CreateOrderResponse order = TestingTool.createInvoiceTestOrder();
         assertTrue(order.isOrderAccepted());
 
         // test WebPay::closeOrder
@@ -495,7 +415,22 @@ public class WebPayWebdriverTest {
         assertTrue(closeResponse.isOrderAccepted());
     }
     // paymentplan
-    // TODO
+    @Test
+    public void test_closeOrder_closePaymentPlanOrder() {
+    	    	
+    	// create an order using defaults
+    	CreateOrderResponse order = TestingTool.createPaymentPlanTestOrder("test_closeOrder_closePaymentPlanOrder");
+        assertTrue(order.isOrderAccepted());
+
+        // test WebPay::closeOrder
+        CloseOrderResponse closeResponse = WebPay.closeOrder(SveaConfig.getDefaultConfig())
+                .setOrderId(order.orderId)
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .closePaymentPlanOrder()
+                .doRequest();
+        
+        assertTrue(closeResponse.isOrderAccepted());
+    }
  
     // WebPay.getPaymentPlanPricePerMonth()
     // see integration tests
