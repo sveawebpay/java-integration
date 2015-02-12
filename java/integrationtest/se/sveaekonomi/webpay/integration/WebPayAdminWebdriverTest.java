@@ -157,7 +157,6 @@ public class WebPayAdminWebdriverTest {
     // .queryCardOrder (uses webdriver)
     @Test
     public void test_queryOrder_queryCardOrder() {
-
     	// create an order using defaults
     	HostedPaymentResponse order = (HostedPaymentResponse)TestingTool.createCardTestOrder("test_cancelOrder_cancelCardOrder");
         assertTrue(order.isOrderAccepted());
@@ -173,7 +172,22 @@ public class WebPayAdminWebdriverTest {
    		assertEquals( order.getTransactionId(), response.getTransactionId() );
     }
     // directbank
-    // TODO
+    @Test
+    public void test_queryOrder_queryDirectBankOrder() {
+
+    	// TODO set up webdriver create direct bank order, uses existing direct bank order below
+    	String directOrderId = "594206";
+    	
+        // query order
+        QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
+            .setTransactionId( directOrderId )
+            .setCountryCode( COUNTRYCODE.SE )
+        ;                
+        QueryTransactionResponse response = queryOrderBuilder.queryDirectBankOrder().doRequest();         
+        
+        assertTrue( response.isOrderAccepted() );     
+   		assertEquals( directOrderId, response.getTransactionId() );
+    }
 
     /// WebPayAdmin.deliverOrderRows() -------------------------------------------------------------------------------------------	
     //  .deliverInvoiceOrderRows

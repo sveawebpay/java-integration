@@ -8,7 +8,6 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.QueryTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHODTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**
@@ -59,6 +58,7 @@ public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
     public QueryOrderBuilder setTransactionId( String transactionId) {        
         return setOrderId( Long.parseLong(transactionId) );
     }   
+
     public Long getTransactionId() {
         return getOrderId();
     }
@@ -67,10 +67,23 @@ public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
 		this.config = config;
 	}
         
-	public QueryTransactionRequest queryCardOrder() {	
-		
+	public QueryTransactionRequest queryCardOrder() {			
 		// validate request and throw exception if validation fails
         String errors = validateQueryCardOrder();        
+        if (!errors.equals("")) {
+            throw new SveaWebPayException("Validation failed", new ValidationException(errors));
+        } 
+				
+		QueryTransactionRequest request = (QueryTransactionRequest) new QueryTransactionRequest(this.getConfig())
+			.setTransactionId( Long.toString(this.getOrderId()) )
+			.setCountryCode( this.getCountryCode() )
+		;
+		return request;
+	}	
+	
+	public QueryTransactionRequest queryDirectBankOrder() {			
+		// validate request and throw exception if validation fails
+        String errors = validateQueryDirectBankOrder();        
         if (!errors.equals("")) {
             throw new SveaWebPayException("Validation failed", new ValidationException(errors));
         } 
@@ -93,6 +106,11 @@ public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
             errors += "MISSING VALUE - OrderId is required, use setOrderId().\n";
     	}
         return errors;    
+    }
+    
+	// validates  queryDirectBankOrder (querytransactionid) required attributes
+    public String validateQueryDirectBankOrder() {
+    	return validateQueryCardOrder();	// identical
     }
 	
     
