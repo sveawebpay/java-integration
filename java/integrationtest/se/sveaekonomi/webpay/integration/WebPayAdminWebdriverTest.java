@@ -1,5 +1,6 @@
 package se.sveaekonomi.webpay.integration;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.*;
 
 import java.util.ArrayList;
@@ -10,11 +11,14 @@ import se.sveaekonomi.webpay.integration.adminservice.CancelOrderRowsResponse;
 import se.sveaekonomi.webpay.integration.adminservice.CreditOrderRowsRequest;
 import se.sveaekonomi.webpay.integration.adminservice.CreditOrderRowsResponse;
 import se.sveaekonomi.webpay.integration.adminservice.DeliverOrderRowsResponse;
+import se.sveaekonomi.webpay.integration.adminservice.DeliverOrdersRequest;
+import se.sveaekonomi.webpay.integration.adminservice.DeliverOrdersResponse;
 import se.sveaekonomi.webpay.integration.adminservice.GetOrdersResponse;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CreditOrderRowsBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
@@ -388,22 +392,34 @@ public class WebPayAdminWebdriverTest {
 
     /// WebPayAdmin.creditOrderRows() --------------------------------------------------------------------------------------------	
     // invoice
+    @Test
     public void test_creditOrderRows_creditInvoiceOrderRows_credit_all_rows() {
 		    	
 		// create an order using defaults
 		CreateOrderResponse order = TestingTool.createInvoiceTestOrder("test_cancelOrderRows_cancelInvoiceOrderRows_cancel_all_rows");
 		assertTrue(order.isOrderAccepted());
+		
+		DeliverOrderBuilder deliverBuilder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+			//.addOrderRow()
+			.setCountryCode(TestingTool.DefaultTestCountryCode)
+			.setOrderId( order.orderId )
+			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
+		;
+			
+		DeliverOrdersResponse deliverResponse = deliverBuilder.deliverInvoiceOrder().doRequest();
+		assertTrue(deliverResponse.isOrderAccepted());
  
-		// deliver first order row and assert the response
-        CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
+		// credit first order row and assert the response
+        CreditOrderRowsBuilder creditBuilder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
     		.setOrderId( String.valueOf(order.orderId) )
 			.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setCountryCode( COUNTRYCODE.SE )
+            .setInvoiceId( deliverResponse.getInvoiceId() )
             .setRowToCredit(1)
 		;
-        CreditOrderRowsRequest request = builder.creditInvoiceOrderRows();
-        CreditOrderRowsResponse response = request.doRequest();
-        assertTrue(response.isOrderAccepted());        				
+        CreditOrderRowsRequest creditRequest = creditBuilder.creditInvoiceOrderRows();
+        CreditOrderRowsResponse creditResponse = creditRequest.doRequest();
+        assertTrue(creditResponse.isOrderAccepted());        				
     }    
     // card (uses webdriver)
     @Test

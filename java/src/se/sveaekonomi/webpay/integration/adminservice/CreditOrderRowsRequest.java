@@ -82,7 +82,7 @@ public class CreditOrderRowsRequest {
 			validateOrder(); 
 		}
         catch (ValidationException e) {
-            throw new SveaWebPayException( "CreditOrderRowsRequest: validateRequest failed.", e );
+            throw new SveaWebPayException( "CreditOrderRowsRequest: validateRequest failed: " + e.getMessage() , e );
         }
 
 		// determine if we can send the order as incvat, by using the priceIncludingVat = true flag in request
