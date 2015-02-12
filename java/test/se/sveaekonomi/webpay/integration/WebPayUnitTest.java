@@ -257,6 +257,7 @@ public class WebPayUnitTest {
 		assertThat( request, instanceOf(DeliverOrdersRequest.class) );
     }
 	// .deliverPaymentPlanOrder() with orderrows => validation error + other validation tests
+    // see se.sveaejibinu,webpay.integration.webservice.handleorder/DeliverOrderTest
     // TODO
     // .deliverPaymentPlanOrder() without orderrows => AdminService/DeliverOrdersRequest
     @Test
@@ -266,8 +267,8 @@ public class WebPayUnitTest {
 			.setOrderId( 123456L )
 		;
 			
-		DeliverOrdersRequest request = builder.deliverPaymentPlanOrder();
-		assertThat( request, instanceOf(DeliverOrdersRequest.class) );
+		HandleOrder request = builder.deliverPaymentPlanOrder();
+		assertThat( request, instanceOf(HandleOrder.class) );
     }
 	// .deliverCardOrder => HostedService/ConfirmTransactionRequest	
     @Test

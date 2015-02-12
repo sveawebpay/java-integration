@@ -353,7 +353,7 @@ public class WebServiceOrderValidatorTest {
         
         try {
             WebPay.createOrder(SveaConfig.getDefaultConfig())
-                .addOrderRow(TestingTool.createPaymentPlanOrderRow())
+                .addOrderRow(TestingTool.createPaymentPlanOrderRow("1"))
                 .addCustomerDetails(TestingTool.createCompanyCustomer())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setOrderDate(TestingTool.DefaultTestDate)

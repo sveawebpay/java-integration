@@ -1,11 +1,14 @@
 package se.sveaekonomi.webpay.integration.webservice.handleorder;
 
+import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.Requestable;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
@@ -16,6 +19,8 @@ import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RelativeDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
+import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
+import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
@@ -937,4 +942,31 @@ public class DeliverOrderTest {
   		assertEquals( (Object)10.0, (Object)soapRequest.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(5).VatPercent  ); // cast avoids deprecation		
   		assertEquals( true, soapRequest.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(5).PriceIncludingVat );	
   	}		
+  	
+  	// validation
+	// .deliverPaymentPlanOrder() with orderrows fails if try to deliver part of order  // TODO => validation error + other validation tests
+//    public void test_deliverOrder_deliverPaymentPlanOrder_with_orderrows() {	
+//    	
+//    	// create an order using defaults
+//    	CreateOrderResponse order = TestingTool.createPaymentPlanTestOrder("test_deliverOrder_deliverPaymentPlanOrder_with_orderrows_passes_iff_all_order_rows_match");
+//        assertTrue(order.isOrderAccepted());
+//    	
+//		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+//            //.addOrderRow(TestingTool.createPaymentPlanOrderRow("1"))			// TODO should validate this is not set!
+//			.setCountryCode(TestingTool.DefaultTestCountryCode)
+//			.setOrderId( order.orderId )
+//			//.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )				// TODO should validate this is not set!			
+//		;
+//			
+//		HandleOrder request = builder.deliverPaymentPlanOrder();
+//		assertTrue( request instanceof Requestable );        
+//		assertThat( request, instanceOf(HandleOrder.class) );
+//		
+//		DeliverOrderResponse response = request.doRequest();
+//		assertThat( response, instanceOf(DeliverOrderResponse.class) );
+//		assertEquals(true, response.isOrderAccepted());
+//    }   
+  	
+  	
+  	
 }

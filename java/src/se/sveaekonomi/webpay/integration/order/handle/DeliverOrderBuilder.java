@@ -159,11 +159,10 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
      * Prepares the PaymentPlan order for delivery.
      * @return HandleOrder
      */
-    public DeliverOrdersRequest deliverPaymentPlanOrder() {
+    public <T extends Requestable> T deliverPaymentPlanOrder() {
     	this.setOrderType("PaymentPlan");		// TODO use enumeration instead
-		return new DeliverOrdersRequest(this);
+		return (T) new HandleOrder(this);
     }
-
     
     /**
      * deliverCardOrder() is used to set the status of a card order to CONFIRMED
