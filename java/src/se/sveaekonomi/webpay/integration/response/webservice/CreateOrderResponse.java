@@ -5,22 +5,114 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.response.Response;
+import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 
 public class CreateOrderResponse extends Response {
     
+	// public for backwards compatibility. From 2.0 on respective getters/setters use the prefered argument type */	
+	/** long representation of String Svea OrderId */
     public long orderId;
+    /** string representation of ORDERTYPE ORDERTYPE.Invoice or ORDERTYPE.PaymentPlan */
     public String orderType;
+    /** boolean representation of Boolean sveaWillBuyOrder */
     public boolean sveaWillBuyOrder;
+    /** double representation of Double amount */
     public double amount;
     public CustomerIdentityResponse customerIdentity;
     public String expirationDate;
-    public String clientOrderNumber;
+	public String clientOrderNumber;
+	/** derived from customerIdentity customerType */
     public boolean isIndividualIdentity;
+    
+    // getters and setters use same types as php package, non-fluent return type
+    public String getOrderId() {
+    	return String.valueOf(this.orderId);
+    }
+    public void setOrderId( String orderId ) {
+    	this.orderId = Long.valueOf(orderId); // will auto-unbox orderId
+    }
+    
+    public ORDERTYPE getOrderType() {
+    	if( this.orderType.equals("Invoice") ) {
+    		return ORDERTYPE.Invoice;
+    	}
+    	else if( this.orderType.equals("PaymentPlan") ) {
+    		return ORDERTYPE.PaymentPlan;
+    	}
+    	else {
+    		throw new IllegalArgumentException("Unknown OrderType");
+    	}
+    }    
+    public void setOrderType( ORDERTYPE orderType ) {
+    	if( orderType == ORDERTYPE.Invoice ) {
+    		this.orderType = ORDERTYPE.Invoice.toString();
+    	}
+    	else if( orderType == ORDERTYPE.PaymentPlan ) {
+    		this.orderType =  ORDERTYPE.PaymentPlan.toString();
+    	}
+    	else {
+    		throw new IllegalArgumentException("Unknown OrderType");
+    	}    	
+    }   
+    /** @deprecated */
+    public void setOrderType( String orderTypeAsString ) {
+    	if( orderTypeAsString.equals("Invoice") ) {
+    		this.orderType = ORDERTYPE.Invoice.toString();
+    	}
+    	else if( this.orderType.equals("PaymentPlan") ) {
+    		this.orderType =  ORDERTYPE.PaymentPlan.toString();
+    	}
+    	else {
+    		throw new IllegalArgumentException("Unknown OrderType");
+    	}    	
+    }
+    
+    public Boolean getSveaWillBuyOrder() {
+    	return Boolean.valueOf(this.sveaWillBuyOrder);
+    }
+    public void setSveaWillBuyOrder( Boolean sveaWillBuyOrder ) {
+    	this.sveaWillBuyOrder = sveaWillBuyOrder;
+    }
+
+    public Double getAmount() {
+    	return Double.valueOf(this.amount);
+    }
+    public void setAmount( Double amount ) {
+    	this.amount = amount;
+    }
+    
+    public CustomerIdentityResponse getCustomerIdentity() {
+		return customerIdentity;
+	}
+	public void setCustomerIdentity(CustomerIdentityResponse customerIdentity) {
+		this.customerIdentity = customerIdentity;
+	}
+	
+	public String getExpirationDate() {
+		return expirationDate;
+	}
+	public void setExpirationDate(String expirationDate) {
+		this.expirationDate = expirationDate;
+	}
+	
+	public String getClientOrderNumber() {
+		return clientOrderNumber;
+	}
+	public void setClientOrderNumber(String clientOrderNumber) {
+		this.clientOrderNumber = clientOrderNumber;
+	}
+	
+	public Boolean isIndividualIdentity() {
+		return Boolean.valueOf(isIndividualIdentity);
+	}
+	public void setIndividualIdentity(Boolean isIndividualIdentity) {
+		this.isIndividualIdentity = isIndividualIdentity;
+	}
     
     public CreateOrderResponse(NodeList soapMessage) {
         super(soapMessage);
-        isIndividualIdentity = false;
-        customerIdentity = new CustomerIdentityResponse();
+        this.isIndividualIdentity = false;
+        this.customerIdentity = new CustomerIdentityResponse();
         this.setValues(soapMessage);
     }
     

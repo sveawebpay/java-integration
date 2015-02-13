@@ -124,10 +124,10 @@ public class SveaResponse extends Response {
         this.merchantId = merchantId;
     }
     
-    public double getAmount() {
+    public Double getAmount() {
         return amount;
     }
-    public void setAmount(double amount) {
+    public void setAmount(Double amount) {
         this.amount = amount;
     }
     
