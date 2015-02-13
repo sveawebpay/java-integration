@@ -1,4 +1,4 @@
-package se.sveaekonomi.webpay.integration.adminservice;
+package se.sveaekonomi.webpay.integration.response.adminservice;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
@@ -40,11 +40,11 @@ public class AdminServiceResponse {
 	private void setCommonResponseAttributes(NodeList xmlResponse) {
 		Element node = (Element) xmlResponse.item(0);
 
-		String resultCode = node.getElementsByTagName("a:ResultCode").item(0).getTextContent();	// check what if =nil?
+		String resultCode = node.getElementsByTagName("a:ResultCode").item(0).getTextContent();
 		this.setResultCode(resultCode);
 		this.setOrderAccepted( (this.getResultCode().equals("0")) ? true : false);
 
-		String errorMessage = node.getElementsByTagName("a:ErrorMessage").item(0).getTextContent();	// check what if =nil?
+		String errorMessage = node.getElementsByTagName("a:ErrorMessage").item(0).getTextContent();
 		this.setErrorMessage(errorMessage);
 	}
 }

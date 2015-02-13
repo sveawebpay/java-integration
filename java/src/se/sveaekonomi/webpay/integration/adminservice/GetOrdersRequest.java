@@ -17,6 +17,7 @@ import javax.xml.soap.SOAPPart;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
+import se.sveaekonomi.webpay.integration.response.adminservice.GetOrdersResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**

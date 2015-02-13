@@ -1,4 +1,4 @@
-package se.sveaekonomi.webpay.integration.adminservice;
+package se.sveaekonomi.webpay.integration.response.adminservice;
 
 import java.util.ArrayList;
 
@@ -276,93 +276,49 @@ public class GetOrdersResponse extends AdminServiceResponse {
     }
     
 	private void setGetOrdersResponseAttributes(NodeList xmlResponse) {
-	    //<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-		//	<s:Body>
-		//		<GetOrdersResponse xmlns="http://tempuri.org/">
     	Node getOrdersResponse=xmlResponse.item(0);
 		Node getOrdersResult=xmlResponse.item(1);
-		//			<GetOrdersResult
-		//				xmlns:a="http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service"
-		//				xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-		//				<a:ErrorMessage i:nil="true" />
-		//				<a:ResultCode>0</a:ResultCode>
-		//				<a:Orders>
 		Node orders = getOrdersResult.getChildNodes().item(2);		// 0: ErrorMessage, 1: ResultCode
-		//					<a:Order>
 		Element o = (Element) orders.getChildNodes().item(0);	// we allow queries for 1 order only, so use first result node
-		//						<a:ChangedDate i:nil="true" />
 		String changedDate = o.getElementsByTagName("a:ChangedDate").item(0).getTextContent(); // getTextContent() of <a:ChangedDate i:nil="true" /> is ""
 		this.setChangedDate( changedDate.equals("") ? null : changedDate );
-		//						<a:ClientId>79021</a:ClientId>
 		String clientId = o.getElementsByTagName("a:ClientId").item(0).getTextContent();
 		this.setClientId( clientId );
-		//						<a:ClientOrderId>449</a:ClientOrderId>
 		String clientOrderId = o.getElementsByTagName("a:ClientOrderId").item(0).getTextContent();
 		this.setClientOrderId(clientOrderId);
-		//						<a:CreatedDate>2014-05-19T16:04:54.787</a:CreatedDate>
 		String createdDate = o.getElementsByTagName("a:CreatedDate").item(0).getTextContent();
 		this.setCreatedDate(createdDate);
-		//						<a:CreditReportStatus>		
 		Node creditReportStatus = o.getElementsByTagName("a:CreditReportStatus").item(0);
-		//							<a:Accepted>true</a:Accepted>
 		Boolean creditReportStatusAccepted = Boolean.valueOf(creditReportStatus.getChildNodes().item(0).getTextContent()); 
 		this.setCreditReportStatusAccepted(creditReportStatusAccepted);		
-		//							<a:CreationDate>2014-05-19T16:04:54.893</a:CreationDate>
-		//						</a:CreditReportStatus>
 		this.setCreditReportStatusCreationDate(creditReportStatus.getChildNodes().item(1).getTextContent());			
-		//						<a:Currency>SEK</a:Currency>
 		String currency = o.getElementsByTagName("a:Currency").item(0).getTextContent();
 		this.setCurrency(currency);
 			
 		// all individual customer fields
-
-		//       				<a:Customer
 		Element c = (Element) o.getElementsByTagName("a:Customer").item(0);
-		//							xmlns:b="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">
-		//							<b:CoAddress>c/o Eriksson, Erik</b:CoAddress>
 		String cCoAddress = c.getElementsByTagName("b:CoAddress").item(0).getTextContent();
-		//	  						<b:CompanyIdentity i:nil="true" />	// iff IndividualIdentity
-		//    						<b:CompanyIdentity>
 		String cCompanyIdentity = c.getElementsByTagName("b:CompanyIdentity").item(0).getTextContent();
 		//       						<b:CompanyIdentification i:nil="true"/>
 		// NOT IN USE
-		//       						<b:CompanyVatNumber i:nil="true"/>
 		String ciCompanyVatNumber = cCompanyIdentity.equals("") ? null : c.getElementsByTagName("b:CompanyVatNumber").item(0).getTextContent();
-		//    						</b:CompanyIdentity>		
-		//							<b:CountryCode>SE</b:CountryCode>
 		String cCountryCode = c.getElementsByTagName("b:CountryCode").item(0).getTextContent();
-		//							<b:CustomerType>Individual</b:CustomerType>
 		String cCustomerType = c.getElementsByTagName("b:CustomerType").item(0).getTextContent();
-		//							<b:Email>daniel@colourpicture.se</b:Email>
 		String cEmail = c.getElementsByTagName("b:Email").item(0).getTextContent();
-		//							<b:FullName>Persson, Tess T</b:FullName>
 		String cFullName = c.getElementsByTagName("b:FullName").item(0).getTextContent();
-		//							<b:HouseNumber i:nil="true" />
 		String cHouseNumber = c.getElementsByTagName("b:HouseNumber").item(0).getTextContent().equals("") ? null : c.getElementsByTagName("b:HouseNumber").item(0).getTextContent();
-		//							<b:IndividualIdentity>
 		String cIndividualIdentity = c.getElementsByTagName("b:IndividualIdentity").item(0).getTextContent();
-		//								<b:BirthDate i:nil="true" />
 		String iiBirthDate = cIndividualIdentity.equals("") ? null : c.getElementsByTagName("b:BirthDate").item(0).getTextContent();
-		//								<b:FirstName i:nil="true" />
 		String iiFirstName = cIndividualIdentity.equals("") ? null : c.getElementsByTagName("b:FirstName").item(0).getTextContent();
-		//								<b:Initials i:nil="true" />
 		String iiInitials = cIndividualIdentity.equals("") ? null : c.getElementsByTagName("b:Initials").item(0).getTextContent();
-		//								<b:LastName i:nil="true" />
 		String iiLastName = cIndividualIdentity.equals("") ? null : c.getElementsByTagName("b:LastName").item(0).getTextContent();
-		//							</b:IndividualIdentity>
-		//							<b:Locality>Stan</b:Locality>
 		String cLocality = c.getElementsByTagName("b:Locality").item(0).getTextContent();
-		//							<b:NationalIdNumber>194605092222</b:NationalIdNumber>
 		String cNationalIdNumber = c.getElementsByTagName("b:NationalIdNumber").item(0).getTextContent();
-		//							<b:PhoneNumber>08-11111111</b:PhoneNumber>
 		String cPhoneNumber = c.getElementsByTagName("b:PhoneNumber").item(0).getTextContent();
 		//							<b:PublicKey i:nil="true" />
 		// NOT SUPPORTED
-		//							<b:Street>Testgatan 1</b:Street>
 		String cStreet = c.getElementsByTagName("b:Street").item(0).getTextContent();
-		//							<b:ZipCode>99999</b:ZipCode>
 		String cZipCode = c.getElementsByTagName("b:ZipCode").item(0).getTextContent();
-		//						</a:Customer>			
 
 		if( cCustomerType.endsWith("Individual") ) {
 			IndividualCustomer individualCustomer = new IndividualCustomer();
@@ -389,6 +345,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
 			companyCustomer.setEmail( cEmail );
 			companyCustomer.setPhoneNumber( cPhoneNumber );
 			//ipAddress;
+			//NOT IN USE
 			companyCustomer.setCompanyName( cFullName );
 			companyCustomer.setStreetAddress( cStreet, cHouseNumber );
 			companyCustomer.setCoAddress( cCoAddress );
@@ -398,67 +355,39 @@ public class GetOrdersResponse extends AdminServiceResponse {
 			
 			this.setCustomer(companyCustomer);
 		}		
-		//						<a:CustomerId>1000117</a:CustomerId>
 		String customerId = o.getElementsByTagName("a:CustomerId").item(0).getTextContent();
 		this.setCustomerId(customerId);
-		//						<a:CustomerReference />
 		String customerReference = o.getElementsByTagName("a:CustomerReference").item(0).getTextContent();
 		this.setCustomerReference(customerReference.equals("") ? null : customerReference);	// for <a:CustomerReference /> getTextContent() returns ""
 		//						<a:DeliveryAddress i:nil="true"
 		//							xmlns:b="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
 		//not supported	
-		//						<a:IsPossibleToAdminister>false</a:IsPossibleToAdminister>
 		String isPossibleToAdminister = o.getElementsByTagName("a:IsPossibleToAdminister").item(0).getTextContent();	
 		this.setIsPossibleToAdminister(isPossibleToAdminister.equals("true") ? true : false);
-		//						<a:IsPossibleToCancel>true</a:IsPossibleToCancel>
 		String isPossibleToCancel = o.getElementsByTagName("a:IsPossibleToCancel").item(0).getTextContent();	
 		this.setIsPossibleToCancel(isPossibleToCancel.equals("true") ? true : false);
-		//						<a:Notes i:nil="true" />
 		String notes = o.getElementsByTagName("a:Notes").item(0).getTextContent();	
 		this.setNotes(notes.equals("") ? null : notes); // for <a:Notes i:nil="true" /> getTextContent() returns ""
-		//						<a:OrderDeliveryStatus>Created</a:OrderDeliveryStatus>
 		String cOrderDeliveryStatus = o.getElementsByTagName("a:OrderDeliveryStatus").item(0).getTextContent();	
 		this.setOrderDeliveryStatus(cOrderDeliveryStatus);
 
-		//						<a:OrderRows>
+		// all order rows
 		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = new ArrayList<NumberedOrderRowBuilder>();
 		NodeList orderRows = o.getElementsByTagName("a:NumberedOrderRow");
 		for( int i=0; i < orderRows.getLength(); i++ ) {
-			//						<a:NumberedOrderRow>
 			Element row = (Element) orderRows.item(i);	
-			//							<ArticleNumber i:nil="true"
-			//								xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
 			String rArticleNumber = row.getElementsByTagName("ArticleNumber").item(0).getTextContent();
-			//							<Description
-			//								xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">Dyr produkt 25%</Description>
 			String rDescription = row.getElementsByTagName("Description").item(0).getTextContent();
-			//							<DiscountPercent
-			//								xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">0.00</DiscountPercent>
 			String rDiscountPercent = row.getElementsByTagName("DiscountPercent").item(0).getTextContent();
-			//							<NumberOfUnits
-			//								xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">2.00</NumberOfUnits>
 			String rNumberOfUnits = row.getElementsByTagName("NumberOfUnits").item(0).getTextContent();
-			//							<PriceIncludingVat
-			//								xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">false</PriceIncludingVat>
 			String rPriceIncludingVat = row.getElementsByTagName("PriceIncludingVat").item(0).getTextContent();
-			//							<PricePerUnit
-			//								xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">2000.00</PricePerUnit>
 			String rPricePerUnit = row.getElementsByTagName("PricePerUnit").item(0).getTextContent();
-			//							<Unit
-			//								xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
 			String rUnit = row.getElementsByTagName("Unit").item(0).getTextContent();
-			//							<VatPercent
-			//								xmlns="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">25.00</VatPercent>
 			String rVatPercent = row.getElementsByTagName("VatPercent").item(0).getTextContent();
-			//							<a:CreditInvoiceId i:nil="true" />
 			String rCreditInvoiceId = row.getElementsByTagName("a:CreditInvoiceId").item(0).getTextContent();
-			//							<a:InvoiceId i:nil="true" />
 			String rInvoiceId = row.getElementsByTagName("a:InvoiceId").item(0).getTextContent();
-			//							<a:RowNumber>1</a:RowNumber>
 			String rRowNumber = row.getElementsByTagName("a:RowNumber").item(0).getTextContent();
-			//							<a:Status>NotDelivered</a:Status>
 			String rStatus = row.getElementsByTagName("a:Status").item(0).getTextContent();	
-			//						</a:NumberedOrderRow>
 			
 			NumberedOrderRowBuilder numberedOrderRow = new NumberedOrderRowBuilder();
 			numberedOrderRow.setArticleNumber(rArticleNumber.equals("") ? null : rArticleNumber);
@@ -486,31 +415,20 @@ public class GetOrdersResponse extends AdminServiceResponse {
 			
 			numberedOrderRows.add(numberedOrderRow);
 		}
-		//						</a:OrderRows>
 		this.setNumberedOrderRows( numberedOrderRows );
-		//						<a:OrderStatus>Active</a:OrderStatus>
 		String orderStatus = o.getElementsByTagName("a:OrderStatus").item(0).getTextContent();
 		this.setOrderStatus(orderStatus);	
-		//						<a:OrderType>Invoice</a:OrderType>
 		String orderType = o.getElementsByTagName("a:OrderType").item(0).getTextContent();
 		this.setOrderType(orderType);
-
-		//						<a:PaymentPlanDetails i:nil="true" />		// iff invoice order
-		//	                    <a:PaymentPlanDetails>
 		Element ppd = (Element) o.getElementsByTagName("a:PaymentPlanDetails").item(0);		
 		if( ppd.getChildNodes().getLength() > 0 ) {
 			//	                <a:CampaignCode>213060</a:CampaignCode>
 			// NOT SUPPORTED
-			//	                <a:ContractLengthMonths>3</a:ContractLengthMonths>
 			String ppdPaymentPlanDetailsContractLengthMonths = ppd.getElementsByTagName("a:ContractLengthMonths").item(0).getTextContent();
 			this.setPaymentPlanDetailsContractLengthMonths(ppdPaymentPlanDetailsContractLengthMonths.equals("") ? null : ppdPaymentPlanDetailsContractLengthMonths);
-			//                   <a:ContractNumber i:nil="true"/>
 			String ppdPaymentPlanDetailsContractNumber = ppd.getElementsByTagName("a:ContractNumber").item(0).getTextContent();
 			this.setPaymentPlanDetailsContractNumber(ppdPaymentPlanDetailsContractNumber.equals("") ? null : ppdPaymentPlanDetailsContractNumber);
 		}
-		//	                   </a:PaymentPlanDetails>
-		
-		//						<a:PendingReasons />
 		Element pr = (Element) o.getElementsByTagName("a:PendingReasons").item(0);
 		if( pr.getChildNodes().getLength() > 0 ) {
 			String prPendingReasonsPendingType = pr.getElementsByTagName("a:PendingType").item(0).getTextContent();
@@ -518,17 +436,9 @@ public class GetOrdersResponse extends AdminServiceResponse {
 			String prPendingReasonsCreatedDate = pr.getElementsByTagName("a:CreatedDate").item(0).getTextContent();
 			this.setPendingReasonsCreatedDate(prPendingReasonsCreatedDate.equals("") ? null : prPendingReasonsCreatedDate);
 		}
-		//						<a:SveaOrderId>348629</a:SveaOrderId>
 		String orderId = o.getElementsByTagName("a:SveaOrderId").item(0).getTextContent();
 		this.setOrderId(orderId);
-		//						<a:SveaWillBuy>true</a:SveaWillBuy>
 		String sveaWillBuy = o.getElementsByTagName("a:SveaWillBuy").item(0).getTextContent();	
 		this.setSveaWillBuy(sveaWillBuy.equals("true") ? true : false); //	or (Boolean.valueOf(node.getChildNodes().item(0).getTextContent()));
-		//					</a:Order>
-		//				</a:Orders>
-		//			</GetOrdersResult>
-		//		</GetOrdersResponse>
-		//	</s:Body>
-		//</s:Envelope>
 	}
 }

@@ -2,18 +2,11 @@ package se.sveaekonomi.webpay.integration;
 
 import static org.junit.Assert.*;
 
-import java.util.ArrayList;
-
 import org.junit.Test;
 
-import se.sveaekonomi.webpay.integration.adminservice.AddOrderRowsResponse;
-import se.sveaekonomi.webpay.integration.adminservice.CancelOrderRowsResponse;
+import java.util.ArrayList;
+
 import se.sveaekonomi.webpay.integration.adminservice.CreditOrderRowsRequest;
-import se.sveaekonomi.webpay.integration.adminservice.CreditOrderRowsResponse;
-import se.sveaekonomi.webpay.integration.adminservice.DeliverOrderRowsResponse;
-import se.sveaekonomi.webpay.integration.adminservice.DeliverOrdersResponse;
-import se.sveaekonomi.webpay.integration.adminservice.GetOrdersResponse;
-import se.sveaekonomi.webpay.integration.adminservice.UpdateOrderRowsResponse;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.AddOrderRowsBuilder;
@@ -25,6 +18,13 @@ import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.UpdateOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
+import se.sveaekonomi.webpay.integration.response.adminservice.AddOrderRowsResponse;
+import se.sveaekonomi.webpay.integration.response.adminservice.CancelOrderRowsResponse;
+import se.sveaekonomi.webpay.integration.response.adminservice.CreditOrderRowsResponse;
+import se.sveaekonomi.webpay.integration.response.adminservice.DeliverOrderRowsResponse;
+import se.sveaekonomi.webpay.integration.response.adminservice.DeliverOrdersResponse;
+import se.sveaekonomi.webpay.integration.response.adminservice.GetOrdersResponse;
+import se.sveaekonomi.webpay.integration.response.adminservice.UpdateOrderRowsResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.HostedPaymentResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.AnnulTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.ConfirmTransactionResponse;

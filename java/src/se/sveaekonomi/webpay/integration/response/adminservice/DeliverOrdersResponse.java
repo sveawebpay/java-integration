@@ -1,4 +1,4 @@
-package se.sveaekonomi.webpay.integration.adminservice;
+package se.sveaekonomi.webpay.integration.response.adminservice;
 
 import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
@@ -78,7 +78,6 @@ public class DeliverOrdersResponse extends AdminServiceResponse implements Respo
 	}
 
 	public DeliverOrdersResponse(SOAPMessage soapResponse) throws SOAPException {
-		// set common response attributes
 		super(soapResponse.getSOAPPart().getEnvelope().getBody().getElementsByTagName("*"));
 
     	if( this.isOrderAccepted() ) {
@@ -87,28 +86,14 @@ public class DeliverOrdersResponse extends AdminServiceResponse implements Respo
     }
 
 	private void setDeliverOrdersResponseAttributes(NodeList xmlResponse) {
-		
-		//<s:Envelope xmlns:s="http://schemas.xmlsoap.org/soap/envelope/">
-		//   <s:Body>
-		//      <DeliverOrdersResponse xmlns="http://tempuri.org/">
-		//         <DeliverOrdersResult xmlns:a="http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service" xmlns:i="http://www.w3.org/2001/XMLSchema-instance">
-    	Node deliverOrdersResponse=xmlResponse.item(0);
 		Node deliverOrdersResult=xmlResponse.item(1);
-		//            <a:ErrorMessage i:nil="true"/>
-		//            <a:ResultCode>0</a:ResultCode>
-		//            <a:OrdersDelivered>
 		Node ordersDelivered = deliverOrdersResult.getChildNodes().item(2);		// 0: ErrorMessage, 1: ResultCode
-		//               <a:DeliverOrderResult>
 		Element dor = (Element) ordersDelivered.getChildNodes().item(0);	// we allow deliveries of 1 order only, so use first result node		
-		//                  <a:ClientId>79021</a:ClientId>
 		String clientId = dor.getElementsByTagName("a:ClientId").item(0).getTextContent();
 		this.setClientId( clientId );
-		//                  <a:DeliveredAmount>468.75</a:DeliveredAmount>
 		String deliveredAmount = dor.getElementsByTagName("a:DeliveredAmount").item(0).getTextContent();
 		this.setAmount( Double.valueOf(deliveredAmount) );
-		//                  <a:DeliveryReferenceNumber>1045545</a:DeliveryReferenceNumber>
 		String deliveryReferenceNumber = dor.getElementsByTagName("a:DeliveryReferenceNumber").item(0).getTextContent();
-		//                  <a:OrderType>Invoice</a:OrderType>
 		String orderType = dor.getElementsByTagName("a:OrderType").item(0).getTextContent();
 		if( orderType.equals(ORDERTYPE.Invoice.toString()) ) {
 			this.setInvoiceId( deliveryReferenceNumber );
@@ -118,14 +103,7 @@ public class DeliverOrdersResponse extends AdminServiceResponse implements Respo
 			this.setContractNumber( deliveryReferenceNumber );		
 			this.setOrderType( ORDERTYPE.PaymentPlan );			
 		}
-		//                  <a:SveaOrderId>523579</a:SveaOrderId>
 		String sveaOrderId = dor.getElementsByTagName("a:SveaOrderId").item(0).getTextContent();
 		this.setOrderId( sveaOrderId );
-		//               </a:DeliverOrderResult>
-		//            </a:OrdersDelivered>
-		//         </DeliverPartialResult>
-		//      </DeliverPartialResponse>
-		//   </s:Body>
-		//</s:Envelope>
 	}	
 }
