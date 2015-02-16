@@ -4,10 +4,9 @@ import org.w3c.dom.Element;
 import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
-import se.sveaekonomi.webpay.integration.response.Response;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 
-public class CreateOrderResponse extends Response {
+public class CreateOrderResponse extends WebServiceResponse {
     
 	// public for backwards compatibility. From 2.0 on respective getters/setters use the prefered argument type */	
 	/** long representation of String Svea OrderId */

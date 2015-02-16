@@ -6,9 +6,7 @@ import java.util.List;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import se.sveaekonomi.webpay.integration.response.Response;
-
-public class PaymentPlanParamsResponse extends Response {
+public class PaymentPlanParamsResponse extends WebServiceResponse {
     
     private List<CampaignCode> campaignCodes;
     

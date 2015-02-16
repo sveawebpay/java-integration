@@ -1,7 +1,5 @@
 package se.sveaekonomi.webpay.integration.hosted.payment;
 
-import static org.junit.Assert.assertEquals;
-
 import java.io.IOException;
 
 import junit.framework.Assert;
@@ -11,9 +9,9 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
-import se.sveaekonomi.webpay.integration.hosted.helper.PaymentUrl;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
+import se.sveaekonomi.webpay.integration.response.hosted.PaymentUrl;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;

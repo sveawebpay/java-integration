@@ -1,10 +1,40 @@
-package se.sveaekonomi.webpay.integration.hosted.helper;
+package se.sveaekonomi.webpay.integration.response.hosted;
 
 import se.sveaekonomi.webpay.integration.response.Response;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.PreparePaymentResponse;
+import se.sveaekonomi.webpay.integration.response.webservice.WebServiceResponse;
 
-public class PaymentUrl extends Response {
+public class PaymentUrl implements Response {
 
+    private boolean isOrderAccepted;
+    private String resultCode;
+    private String errorMessage;
+    
+    public boolean isOrderAccepted() {
+        return isOrderAccepted;
+    }
+
+    public void setOrderAccepted(boolean isOrderAccepted) {
+        this.isOrderAccepted = isOrderAccepted;
+    }
+
+    public String getResultCode() {
+        return resultCode;
+    }
+
+    public void setResultCode(String resultCode) {
+        this.resultCode = resultCode;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }	
+	
+	
 	// passed on from preparepayment request response
 	private String rawResponse;
 	private String id;
@@ -14,7 +44,6 @@ public class PaymentUrl extends Response {
 	private String testUrl;
 	
 	public PaymentUrl( PreparePaymentResponse response ) {
-		super( null ); // null as we're no soap message
 				
 		this.setOrderAccepted( response.isOrderAccepted() );
 		this.setResultCode( response.getResultCode() );
@@ -47,5 +76,5 @@ public class PaymentUrl extends Response {
 	
 	public String getTestUrl() {
 		return testUrl;
-	}    
+	} 
 }
