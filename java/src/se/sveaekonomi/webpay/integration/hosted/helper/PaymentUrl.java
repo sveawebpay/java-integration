@@ -1,9 +1,9 @@
 package se.sveaekonomi.webpay.integration.hosted.helper;
 
-import se.sveaekonomi.webpay.integration.response.Response;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.PreparePaymentResponse;
+import se.sveaekonomi.webpay.integration.response.webservice.WebServiceResponse;
 
-public class PaymentUrl extends Response {
+public class PaymentUrl extends WebServiceResponse {
 
 	// passed on from preparepayment request response
 	private String rawResponse;
@@ -47,5 +47,5 @@ public class PaymentUrl extends Response {
 	
 	public String getTestUrl() {
 		return testUrl;
-	}    
+	} 
 }

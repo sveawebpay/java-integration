@@ -3,7 +3,9 @@ package se.sveaekonomi.webpay.integration.response.adminservice;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-public class AdminServiceResponse {
+import se.sveaekonomi.webpay.integration.response.Response;
+
+public class AdminServiceResponse implements Response {
 
 	private boolean isOrderAccepted;
 	private String resultCode;
