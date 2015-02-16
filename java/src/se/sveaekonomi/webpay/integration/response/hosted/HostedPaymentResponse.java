@@ -22,7 +22,7 @@ import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 
 /**
  * Handles the asynchronous response from the hosted payment solution 
- * @author klar-sar
+ * @author klar-sar, Kristian Grossman-Madsen
  */
 public class HostedPaymentResponse extends ResponseHelper implements Response {
 
