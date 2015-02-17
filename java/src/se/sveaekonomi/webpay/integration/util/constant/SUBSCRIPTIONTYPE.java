@@ -1,5 +1,7 @@
 package se.sveaekonomi.webpay.integration.util.constant;
 
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+
 public enum SUBSCRIPTIONTYPE {	
 
 	RECURRING ("RECURRING"),
@@ -17,10 +19,10 @@ public enum SUBSCRIPTIONTYPE {
 		return this.constantAsString;
 	}
 	
-	public static SUBSCRIPTIONTYPE fromString( String status ) throws Exception {
+	public static SUBSCRIPTIONTYPE fromString( String status ) throws SveaWebPayException {
 		for( SUBSCRIPTIONTYPE value : SUBSCRIPTIONTYPE.values() ) {
 			if( value.toString().equals(status) ) return value;
 		}
-		throw new Exception("Unknown SubscriptionType");
+		throw new SveaWebPayException("Unknown subscription type");
 	}
 }

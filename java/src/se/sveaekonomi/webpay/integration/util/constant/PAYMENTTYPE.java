@@ -1,5 +1,7 @@
 package se.sveaekonomi.webpay.integration.util.constant;
 
+import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+
 public enum PAYMENTTYPE {
     HOSTED,
     INVOICE,
@@ -7,7 +9,7 @@ public enum PAYMENTTYPE {
     HOSTED_ADMIN,
     ADMIN_TYPE;
 
-	public static PAYMENTTYPE fromOrderType( ORDERTYPE orderType ) {
+	public static PAYMENTTYPE fromOrderType( ORDERTYPE orderType ) throws SveaWebPayException {
 		if( orderType == ORDERTYPE.Invoice ) {
 			return PAYMENTTYPE.INVOICE;
 		}
@@ -15,7 +17,7 @@ public enum PAYMENTTYPE {
 			return PAYMENTTYPE.PAYMENTPLAN;
 		}
 		else {
-			throw new RuntimeException("Unknown ordertype.");	// TODO not very nice, but shouldn't happen...
+			throw new SveaWebPayException("Unknown ordertype.");
 		}
 	}
 }
