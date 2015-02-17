@@ -23,11 +23,11 @@ public class CreateOrderResponse extends WebServiceResponse {
     public boolean isIndividualIdentity;
     
     // getters and setters use same types as php package, non-fluent return type
-    public String getOrderId() {
-    	return String.valueOf(this.orderId);
+    public long getOrderId() {
+    	return this.orderId;
     }
-    public void setOrderId( String orderId ) {
-    	this.orderId = Long.valueOf(orderId); // will auto-unbox orderId
+    public void setOrderId( long orderId ) {
+    	this.orderId = orderId;
     }
     
     public ORDERTYPE getOrderType() {

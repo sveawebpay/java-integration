@@ -17,11 +17,10 @@ import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
+/**
+ * @author Kristian Grossman-Madsen
+ */
 public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>{ 
-	
-	/**
-	 * @author Kristian Grossman-Madsen
-	 */
 
     private ConfigurationProvider config;
     private COUNTRYCODE countryCode;
@@ -44,12 +43,12 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
 		this.newCreditOrderRows = newCreditOrderRows;
 	}
 
-	private String invoiceId;
-	public CreditOrderRowsBuilder setInvoiceId(String invoiceId) {
+	private int invoiceId;
+	public CreditOrderRowsBuilder setInvoiceId(int invoiceId) {
 		this.invoiceId = invoiceId;
 		return this;
 	}
-	public String getInvoiceId() {
+	public int getInvoiceId() {
 		return this.invoiceId;
 	}	
 		

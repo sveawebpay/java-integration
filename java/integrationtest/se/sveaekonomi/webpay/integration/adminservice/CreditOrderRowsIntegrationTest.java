@@ -26,7 +26,7 @@ public class CreditOrderRowsIntegrationTest {
     	
         // credit first order row and assert the response
         CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-            .setInvoiceId( "999999" )
+            .setInvoiceId( 999999 )
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setRowToCredit(1)
@@ -59,7 +59,7 @@ public class CreditOrderRowsIntegrationTest {
 		
 		// credit first order row and assert the response
         CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-    		.setInvoiceId( String.valueOf(deliver.getInvoiceId()) )
+    		.setInvoiceId( deliver.getInvoiceId() )
 			.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setCountryCode( COUNTRYCODE.SE )
             .setRowToCredit(1)
@@ -67,8 +67,8 @@ public class CreditOrderRowsIntegrationTest {
         CreditOrderRowsRequest request = builder.creditInvoiceOrderRows();
         CreditOrderRowsResponse response = request.doRequest();
         assertTrue(response.isOrderAccepted());    
-        assertEquals(Double.valueOf(250.00), response.getAmount());
-        assertEquals(String.valueOf(order.orderId), response.getOrderId());		// TODO refactor to order.getOrderId() returning String!
+        assertEquals(250.00, response.getAmount());
+        assertEquals(order.getOrderId(), response.getOrderId());
         assertNotNull(response.getCreditInvoiceId());
         assertEquals(ORDERTYPE.Invoice, response.getOrderType());
         assertEquals("79021", response.getClientId());
