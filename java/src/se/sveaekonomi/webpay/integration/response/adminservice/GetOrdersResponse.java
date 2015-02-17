@@ -16,16 +16,16 @@ public class GetOrdersResponse extends AdminServiceResponse {
 
 	// javadoc attributes below takes its info from admin service api Order structure
     /** Date when order status was changed, e.g when order was delivered, or null if not set.*/
-    public String changedDate;
+    public String changedDate;	// TODO change to Date
     /** Id that identifies a client in sveawebpay system */
-    public String clientId;
+    public int clientId;
     /** Order number from client's ordersystem */
-    public String clientOrderId;
+    public int clientOrderId;
     /** Date when order was first created. */
     public String createdDate;
 
     /** Tells if credit decision is accepted or not */
-    public Boolean creditReportStatusAccepted;
+    public boolean creditReportStatusAccepted;
     /** Date of order credit decision. */
     public String creditReportStatusCreationDate;
 
@@ -36,12 +36,12 @@ public class GetOrdersResponse extends AdminServiceResponse {
     public CustomerIdentity<?> customer;
 
     /** Customer id that is created by SveaWebPay system. */
-    public String customerId;
+    public int customerId;
     /** Customer Reference. (Gets printed on the invoice.)*/
     public String customerReference;
-    public Boolean isPossibleToAdminister;
+    public boolean isPossibleToAdminister;
     /** Tells if order can be cancelled or not */
-    public Boolean isPossibleToCancel;
+    public boolean isPossibleToCancel;
     /** Text on order created by client */
     public String notes;
     /** one of {Created,PartiallyDelivered,Delivered,Cancelled} */
@@ -60,19 +60,19 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		this.changedDate = changedDate;
 	}
 
-	public String getClientId() {
+	public int getClientId() {
 		return clientId;
 	}
 
-	public void setClientId(String clientId) {
+	public void setClientId(int clientId) {
 		this.clientId = clientId;
 	}
 
-	public String getClientOrderId() {
+	public int getClientOrderId() {
 		return clientOrderId;
 	}
 
-	public void setClientOrderId(String clientOrderId) {
+	public void setClientOrderId(int clientOrderId) {
 		this.clientOrderId = clientOrderId;
 	}
 
@@ -84,11 +84,11 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		this.createdDate = createdDate;
 	}
 
-	public Boolean getCreditReportStatusAccepted() {
+	public boolean getCreditReportStatusAccepted() {
 		return creditReportStatusAccepted;
 	}
 
-	public void setCreditReportStatusAccepted(Boolean creditReportStatusAccepted) {
+	public void setCreditReportStatusAccepted(boolean creditReportStatusAccepted) {
 		this.creditReportStatusAccepted = creditReportStatusAccepted;
 	}
 
@@ -127,11 +127,11 @@ public class GetOrdersResponse extends AdminServiceResponse {
 	}
 	
 	
-	public String getCustomerId() {
+	public int getCustomerId() {
 		return customerId;
 	}
 
-	public void setCustomerId(String customerId) {
+	public void setCustomerId(int customerId) {
 		this.customerId = customerId;
 	}
 
@@ -143,19 +143,19 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		this.customerReference = customerReference;
 	}
 
-	public Boolean getIsPossibleToAdminister() {
+	public boolean getIsPossibleToAdminister() {
 		return isPossibleToAdminister;
 	}
 
-	public void setIsPossibleToAdminister(Boolean isPossibleToAdminister) {
+	public void setIsPossibleToAdminister(boolean isPossibleToAdminister) {
 		this.isPossibleToAdminister = isPossibleToAdminister;
 	}
 
-	public Boolean getIsPossibleToCancel() {
+	public boolean getIsPossibleToCancel() {
 		return isPossibleToCancel;
 	}
 
-	public void setIsPossibleToCancel(Boolean isPossibleToCancel) {
+	public void setIsPossibleToCancel(boolean isPossibleToCancel) {
 		this.isPossibleToCancel = isPossibleToCancel;
 	}
 
@@ -235,11 +235,11 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		this.orderId = orderId;
 	}
 
-	public Boolean getSveaWillBuy() {
+	public boolean getSveaWillBuy() {
 		return sveaWillBuy;
 	}
 
-	public void setSveaWillBuy(Boolean sveaWillBuy) {
+	public void setSveaWillBuy(boolean sveaWillBuy) {
 		this.sveaWillBuy = sveaWillBuy;
 	}
 	
@@ -266,7 +266,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
     /** Unique Id for the created order. Used for any further order webservice requests. */
     public String orderId;
     /** Describes whether SveaWebPay will buy the order or just administrate it */
-    public Boolean sveaWillBuy;	
+    public boolean sveaWillBuy;	
 
     public GetOrdersResponse(NodeList xmlResponse) {		
     	super( xmlResponse ); // handle ErrorMessage, ResultCode
@@ -278,18 +278,18 @@ public class GetOrdersResponse extends AdminServiceResponse {
 	private void setGetOrdersResponseAttributes(NodeList xmlResponse) {
     	Node getOrdersResponse=xmlResponse.item(0);
 		Node getOrdersResult=xmlResponse.item(1);
-		Node orders = getOrdersResult.getChildNodes().item(2);		// 0: ErrorMessage, 1: ResultCode
-		Element o = (Element) orders.getChildNodes().item(0);	// we allow queries for 1 order only, so use first result node
+		Node orders = getOrdersResult.getChildNodes().item(2);
+		Element o = (Element) orders.getChildNodes().item(0);
 		String changedDate = o.getElementsByTagName("a:ChangedDate").item(0).getTextContent(); // getTextContent() of <a:ChangedDate i:nil="true" /> is ""
 		this.setChangedDate( changedDate.equals("") ? null : changedDate );
 		String clientId = o.getElementsByTagName("a:ClientId").item(0).getTextContent();
-		this.setClientId( clientId );
+		this.setClientId( Integer.parseInt(clientId) );
 		String clientOrderId = o.getElementsByTagName("a:ClientOrderId").item(0).getTextContent();
-		this.setClientOrderId(clientOrderId);
+		this.setClientOrderId( Integer.parseInt(clientOrderId));
 		String createdDate = o.getElementsByTagName("a:CreatedDate").item(0).getTextContent();
 		this.setCreatedDate(createdDate);
 		Node creditReportStatus = o.getElementsByTagName("a:CreditReportStatus").item(0);
-		Boolean creditReportStatusAccepted = Boolean.valueOf(creditReportStatus.getChildNodes().item(0).getTextContent()); 
+		boolean creditReportStatusAccepted = Boolean.parseBoolean((creditReportStatus.getChildNodes().item(0).getTextContent())); 
 		this.setCreditReportStatusAccepted(creditReportStatusAccepted);		
 		this.setCreditReportStatusCreationDate(creditReportStatus.getChildNodes().item(1).getTextContent());			
 		String currency = o.getElementsByTagName("a:Currency").item(0).getTextContent();
@@ -356,7 +356,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
 			this.setCustomer(companyCustomer);
 		}		
 		String customerId = o.getElementsByTagName("a:CustomerId").item(0).getTextContent();
-		this.setCustomerId(customerId);
+		this.setCustomerId(Integer.parseInt(customerId));
 		String customerReference = o.getElementsByTagName("a:CustomerReference").item(0).getTextContent();
 		this.setCustomerReference(customerReference.equals("") ? null : customerReference);	// for <a:CustomerReference /> getTextContent() returns ""
 		//						<a:DeliveryAddress i:nil="true"
@@ -439,6 +439,6 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		String orderId = o.getElementsByTagName("a:SveaOrderId").item(0).getTextContent();
 		this.setOrderId(orderId);
 		String sveaWillBuy = o.getElementsByTagName("a:SveaWillBuy").item(0).getTextContent();	
-		this.setSveaWillBuy(sveaWillBuy.equals("true") ? true : false); //	or (Boolean.valueOf(node.getChildNodes().item(0).getTextContent()));
+		this.setSveaWillBuy(sveaWillBuy.equals("true") ? true : false);
 	}
 }

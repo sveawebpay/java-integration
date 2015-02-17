@@ -11,52 +11,46 @@ import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 
 public class DeliverOrderRowsResponse extends AdminServiceResponse {
 
-    /** Id that identifies a client in sveawebpay's system */	
-    public String clientId;
-	
-    /** The amount delivered with this request */
-    public Double amount;
-
-    /** The invoice id for the delivered order (set iff accepted, orderType Invoice)*/
-    public String invoiceId;
-
-    /**  The contract number for the delivered order (set iff accepted, orderType PaymentPlan)  */
-    public String contractNumber;
-    
-    public ORDERTYPE orderType;
-
     /** Id that identifies an order in sveawebpay's system */
-    public String orderId;   	
-	
-	public String getClientId() {
+    public long orderId; 
+    /** The amount delivered with this request */
+    public double amount;
+    public ORDERTYPE orderType;
+    /** The invoice id (set iff accepted, orderType Invoice, else 0)*/
+    public int invoiceId;
+    /**  The contract number for the delivered order (set iff accepted, orderType PaymentPlan, else 0)  */
+    public int contractNumber;
+    /** Id that identifies a client in sveawebpay's system */	
+    public int clientId;	
+    		
+    public int getClientId() {
 		return clientId;
 	}
-
-	public void setClientId(String clientId) {
+	public void setClientId(int clientId) {
 		this.clientId = clientId;
 	}
 
-	public Double getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Double amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 
-	public String getInvoiceId() {
+	public  int getInvoiceId() {
 		return invoiceId;
 	}
 
-	public void setInvoiceId(String invoiceId) {
+	public void setInvoiceId(int invoiceId) {
 		this.invoiceId = invoiceId;
 	}
 
-	public String getContractNumber() {
+	public  int getContractNumber() {
 		return contractNumber;
 	}
 
-	public void setContractNumber(String contractNumber) {
+	public void setContractNumber(int contractNumber) {
 		this.contractNumber = contractNumber;
 	}
 
@@ -68,11 +62,11 @@ public class DeliverOrderRowsResponse extends AdminServiceResponse {
 		this.orderType = orderType;
 	}
 
-	public String getOrderId() {
+	public long getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(String orderId) {
+	public void setOrderId(long orderId) {
 		this.orderId = orderId;
 	}
 
@@ -86,23 +80,23 @@ public class DeliverOrderRowsResponse extends AdminServiceResponse {
     
 	private void setDeliverOrderRowsResponseAttributes(NodeList xmlResponse) {
 		Node deliverPartialResult=xmlResponse.item(1);
-		Node ordersDelivered = deliverPartialResult.getChildNodes().item(2);		// 0: ErrorMessage, 1: ResultCode
-		Element dor = (Element) ordersDelivered.getChildNodes().item(0);	// we allow deliveries of 1 order only, so use first result node		
+		Node ordersDelivered = deliverPartialResult.getChildNodes().item(2);
+		Element dor = (Element) ordersDelivered.getChildNodes().item(0);		
 		String clientId = dor.getElementsByTagName("a:ClientId").item(0).getTextContent();
-		this.setClientId( clientId );
+		this.setClientId( Integer.parseInt(clientId) );
 		String deliveredAmount = dor.getElementsByTagName("a:DeliveredAmount").item(0).getTextContent();
 		this.setAmount( Double.valueOf(deliveredAmount) );
 		String deliveryReferenceNumber = dor.getElementsByTagName("a:DeliveryReferenceNumber").item(0).getTextContent();
 		String orderType = dor.getElementsByTagName("a:OrderType").item(0).getTextContent();
 		if( orderType.equals(ORDERTYPE.Invoice.toString()) ) {
-			this.setInvoiceId( deliveryReferenceNumber );
+			this.setInvoiceId( Integer.parseInt(deliveryReferenceNumber) );
 			this.setOrderType( ORDERTYPE.Invoice );
 		}
 		if( orderType.equals(ORDERTYPE.PaymentPlan.toString()) ) {
-			this.setContractNumber( deliveryReferenceNumber );		
+			this.setContractNumber( Integer.parseInt(deliveryReferenceNumber) );		
 			this.setOrderType( ORDERTYPE.PaymentPlan );			
 		}
 		String sveaOrderId = dor.getElementsByTagName("a:SveaOrderId").item(0).getTextContent();
-		this.setOrderId( sveaOrderId );
+		this.setOrderId( Long.parseLong(sveaOrderId) );
 	}
 }

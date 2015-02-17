@@ -8,7 +8,6 @@ import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 
 public class CreateOrderResponse extends WebServiceResponse {
     
-	// public for backwards compatibility. From 2.0 on respective getters/setters use the prefered argument type */	
 	/** long representation of String Svea OrderId */
     public long orderId;
     /** string representation of ORDERTYPE ORDERTYPE.Invoice or ORDERTYPE.PaymentPlan */

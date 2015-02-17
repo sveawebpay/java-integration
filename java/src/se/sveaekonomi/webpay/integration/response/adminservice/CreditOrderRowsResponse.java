@@ -11,37 +11,37 @@ import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 
 public class CreditOrderRowsResponse extends AdminServiceResponse {
 
-	private String orderId;
-	
-	private Double amount;	
-	
+    /** Id that identifies an order in sveawebpay's system */
+	private long orderId;
+    /** The amount credited with this request */
+	private double amount;	
 	private ORDERTYPE orderType;
-
-	public String creditInvoiceId;
-	
-    public String clientId;
-	
-	public String getOrderId() {
+    /** The credit invoice id (set iff accepted, orderType Invoice, else 0)*/
+	private int creditInvoiceId;
+  	/** Id that identifies a client in sveawebpay's system */	
+    private int clientId;
+    
+	public long getOrderId() {
 		return orderId;
 	}
 
-	public void setOrderId(String orderId) {
+	public void setOrderId(long orderId) {
 		this.orderId = orderId;
 	}
 
-	public Double getAmount() {
+	public double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(Double amount) {
+	public void setAmount(double amount) {
 		this.amount = amount;
 	}
 
-	public String getCreditInvoiceId() {
+	public  int getCreditInvoiceId() {
 		return creditInvoiceId;
 	}
 
-	public void setCreditInvoiceId(String creditInvoiceId) {
+	public void setCreditInvoiceId(int creditInvoiceId) {
 		this.creditInvoiceId = creditInvoiceId;
 	}
 
@@ -53,11 +53,11 @@ public class CreditOrderRowsResponse extends AdminServiceResponse {
 		this.orderType = orderType;
 	}
 
-	public String getClientId() {
+	public int getClientId() {
 		return clientId;
 	}
 
-	public void setClientId(String clientId) {
+	public void setClientId(int clientId) {
 		this.clientId = clientId;
 	}
 	
@@ -73,18 +73,18 @@ public class CreditOrderRowsResponse extends AdminServiceResponse {
 		NodeList xmlResponse = soapResponse.getSOAPPart().getEnvelope().getBody().getElementsByTagName("*");
 		Node creditInvoiceRowsResult=xmlResponse.item(1);
 		Node ordersDelivered = creditInvoiceRowsResult.getChildNodes().item(2);
-		Element dor = (Element) ordersDelivered.getChildNodes().item(0);	// we allow deliveries of 1 order only, so use first result node		
+		Element dor = (Element) ordersDelivered.getChildNodes().item(0);		
 		String clientId = dor.getElementsByTagName("a:ClientId").item(0).getTextContent();
-		this.setClientId( clientId );
+		this.setClientId(Integer.parseInt(clientId));
 		String deliveredAmount = dor.getElementsByTagName("a:DeliveredAmount").item(0).getTextContent();
-		this.setAmount( Double.valueOf(deliveredAmount) );
+		this.setAmount( Double.parseDouble(deliveredAmount) );
 		String deliveryReferenceNumber = dor.getElementsByTagName("a:DeliveryReferenceNumber").item(0).getTextContent();
 		String orderType = dor.getElementsByTagName("a:OrderType").item(0).getTextContent();
 		if( orderType.equals(ORDERTYPE.Invoice.toString()) ) {
-			this.setCreditInvoiceId( deliveryReferenceNumber );
+			this.setCreditInvoiceId( Integer.parseInt(deliveryReferenceNumber) );
 			this.setOrderType( ORDERTYPE.Invoice );
 		}
 		String sveaOrderId = dor.getElementsByTagName("a:SveaOrderId").item(0).getTextContent();
-		this.setOrderId( sveaOrderId );
+		this.setOrderId( Long.parseLong(sveaOrderId) );
 	}
 }
