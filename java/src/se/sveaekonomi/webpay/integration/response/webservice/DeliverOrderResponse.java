@@ -5,6 +5,7 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.Respondable;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 
 public class DeliverOrderResponse extends WebServiceResponse implements Respondable {
@@ -14,7 +15,7 @@ public class DeliverOrderResponse extends WebServiceResponse implements Responda
     private int invoiceId;
     private String dueDate;
     private String invoiceDate;
-    private String invoiceDistributionType;
+    private DISTRIBUTIONTYPE invoiceDistributionType;
     private String ocr;
     private double lowestAmountToPay;
     private int contractNumber;  
@@ -83,7 +84,7 @@ public class DeliverOrderResponse extends WebServiceResponse implements Responda
         } else if (tagName.equals("InvoiceDate")) {
             this.setInvoiceDate(tagValue);
         } else if (tagName.equals("InvoiceDistributionType")) {
-            this.setInvoiceDistributionType(tagValue);
+            this.setInvoiceDistributionType( DISTRIBUTIONTYPE.fromString(tagName) );
         } else if (tagName.equals("ContractNumber")) {
             this.setContractNumber(Integer.valueOf(tagValue));
         } else if (tagName.equals("Ocr")) {
@@ -133,11 +134,11 @@ public class DeliverOrderResponse extends WebServiceResponse implements Responda
         this.invoiceDate = invoiceDate;
     }
     
-    public String getInvoiceDistributionType() {
+    public DISTRIBUTIONTYPE getInvoiceDistributionType() {
         return invoiceDistributionType;
     }
     
-    public void setInvoiceDistributionType(String invoiceDistributionType) {
+    public void setInvoiceDistributionType(DISTRIBUTIONTYPE invoiceDistributionType) {
         this.invoiceDistributionType = invoiceDistributionType;
     }
     
