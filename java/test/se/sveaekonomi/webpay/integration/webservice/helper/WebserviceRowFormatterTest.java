@@ -259,6 +259,19 @@ public class WebserviceRowFormatterTest {
         assertEquals(6, newRow.VatPercent, 0);
         assertEquals(0, newRow.DiscountPercent, 0);
         assertEquals(1, newRow.NumberOfUnits, 0);
+
+        // check order total        
+        double total = 
+        		convertExVatToIncVat( newRows.get(0).PricePerUnit, newRows.get(0).VatPercent ) * newRows.get(0).NumberOfUnits  +	// 250.00
+        		convertExVatToIncVat( newRows.get(1).PricePerUnit, newRows.get(1).VatPercent ) * newRows.get(1).NumberOfUnits  +	// 106.00
+        		convertExVatToIncVat( newRows.get(2).PricePerUnit, newRows.get(2).VatPercent ) * newRows.get(2).NumberOfUnits  +	// 53.00
+        		convertExVatToIncVat( newRows.get(3).PricePerUnit, newRows.get(3).VatPercent ) * newRows.get(3).NumberOfUnits  +	// 29.00
+        		convertExVatToIncVat( newRows.get(4).PricePerUnit, newRows.get(4).VatPercent ) * newRows.get(4).NumberOfUnits  +	// -70.22
+        		convertExVatToIncVat( newRows.get(5).PricePerUnit, newRows.get(5).VatPercent ) * newRows.get(5).NumberOfUnits 		// -29.78
+		;
+        
+        assertEquals( 338.00, total, 0.001 );    
+    
     }    
     
     @Test

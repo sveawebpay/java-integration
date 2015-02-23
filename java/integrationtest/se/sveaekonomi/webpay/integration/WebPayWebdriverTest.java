@@ -2,13 +2,9 @@ package se.sveaekonomi.webpay.integration;
 
 import static org.junit.Assert.*;
 
-import java.io.IOException;
-import java.io.StringReader;
+import java.util.ArrayList;
 import java.util.Date;
 
-import javax.xml.parsers.DocumentBuilder;
-import javax.xml.parsers.DocumentBuilderFactory;
-import javax.xml.parsers.ParserConfigurationException;
 
 import org.junit.Test;
 import org.openqa.selenium.Alert;
@@ -18,28 +14,21 @@ import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.w3c.dom.Document;
-import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
-import org.xml.sax.InputSource;
-import org.xml.sax.SAXException;
-
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
-import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.response.hosted.HostedPaymentResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
-import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
-import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
+import se.sveaekonomi.webpay.integration.webservice.helper.WebserviceRowFormatter;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrderRow;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
@@ -130,7 +119,7 @@ public class WebPayWebdriverTest {
         
         SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig())
                 .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-                .addCustomerDetails(Item.individualCustomer()
+                .addCustomerDetails(WebPayItem.individualCustomer()
                     .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
@@ -234,4 +223,100 @@ public class WebPayWebdriverTest {
         
         assertTrue(response.isOrderAccepted());
     }
+
+    // test fixed discount is sent correctly to service
+    @Test
+    public void testFormatFixedDiscountRowsAmountIncVatWithDifferentVatRatesPresentCalculatedFromOrderItemRowsOnly() {
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                                                   .addOrderRow(WebPayItem.orderRow()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(25)
+                                                                    .setQuantity(2.0))
+                                                   .addOrderRow(WebPayItem.orderRow()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(6)
+                                                                    .setQuantity(1.0))
+                                                   .addFee(WebPayItem.shippingFee()	// fee row should be ignored by discount calculation
+                                                		   			.setAmountExVat(50.00)
+                                                		   			.setVatPercent(6))
+                                                   .addFee(WebPayItem.invoiceFee()	// fee row be ignored by discount calculation
+                                                		   			.setAmountExVat(23.20)
+                                                		   			.setVatPercent(25))
+                                		   		   .addDiscount(WebPayItem.fixedDiscount()
+                                                                    .setDiscountId("42")
+                                                                    .setName(".setAmountIncVat(100)")
+                                                                    .setDescription("testFormatFixedDiscountRowsAmountIncVatWithDifferentVatRatesPresentCalculatedFromOrderItemRowsOnly")
+                                                                    .setAmountIncVat(100)
+                                                                    .setUnit("st"))
+                                                    .addCustomerDetails(WebPayItem.individualCustomer()
+                                                    				.setNationalIdNumber("4605092222")
+                                    				)
+                                    				.setCountryCode(COUNTRYCODE.SE)
+                                    				.setOrderDate(java.sql.Date.valueOf("2015-02-23"))
+        ;        									
+
+        ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
+
+        // first order row
+        SveaOrderRow newRow = newRows.get(0);
+        assertEquals(100.00, newRow.PricePerUnit, 0);
+        assertEquals(25, newRow.VatPercent, 0);
+        assertEquals(2, newRow.NumberOfUnits, 0);
+        
+        // second order row 
+        newRow = newRows.get(1);
+        assertEquals(100.00, newRow.PricePerUnit, 0);
+        assertEquals(6, newRow.VatPercent, 0);
+        assertEquals(1, newRow.NumberOfUnits, 0);        
+        
+        // shipping fee row
+        newRow = newRows.get(2);
+        assertEquals(50.00, newRow.PricePerUnit, 0);
+        assertEquals(6, newRow.VatPercent, 0);
+        assertEquals(1, newRow.NumberOfUnits, 0);
+        
+        // invoice fee row 
+        newRow = newRows.get(3);
+        assertEquals(23.20, newRow.PricePerUnit, 0);
+        assertEquals(25, newRow.VatPercent, 0);
+        assertEquals(1, newRow.NumberOfUnits, 0);  
+        
+        // discount row @25%          
+        // 100*250/356 = 70.22 incl. 25% vat => 14.04 vat as amount 
+        newRow = newRows.get(4);
+        assertEquals(-56.18, newRow.PricePerUnit, 0);
+        assertEquals(25, newRow.VatPercent, 0);
+        assertEquals(0, newRow.DiscountPercent, 0);
+        assertEquals(1, newRow.NumberOfUnits, 0);
+
+        // discount row @6%        
+        // 100*106/356 = 29.78 incl. 6% vat => 1.69 vat as amount 
+        newRow = newRows.get(5);
+        assertEquals(-28.09, newRow.PricePerUnit, 0);
+        assertEquals(6, newRow.VatPercent, 0);
+        assertEquals(0, newRow.DiscountPercent, 0);
+        assertEquals(1, newRow.NumberOfUnits, 0);
+        
+        // check order total        
+        double total = 
+        		convertExVatToIncVat( newRows.get(0).PricePerUnit, newRows.get(0).VatPercent ) * newRows.get(0).NumberOfUnits  +	// 250.00
+        		convertExVatToIncVat( newRows.get(1).PricePerUnit, newRows.get(1).VatPercent ) * newRows.get(1).NumberOfUnits  +	// 106.00
+        		convertExVatToIncVat( newRows.get(2).PricePerUnit, newRows.get(2).VatPercent ) * newRows.get(2).NumberOfUnits  +	// 53.00
+        		convertExVatToIncVat( newRows.get(3).PricePerUnit, newRows.get(3).VatPercent ) * newRows.get(3).NumberOfUnits  +	// 29.00
+        		convertExVatToIncVat( newRows.get(4).PricePerUnit, newRows.get(4).VatPercent ) * newRows.get(4).NumberOfUnits  +	// -70.22
+        		convertExVatToIncVat( newRows.get(5).PricePerUnit, newRows.get(5).VatPercent ) * newRows.get(5).NumberOfUnits 		// -29.78
+		;
+        
+        assertEquals( 338.00, total, 0.001 );
+                
+    	CreateOrderResponse response = order.useInvoicePayment().doRequest();
+        
+    	assertTrue( response.isOrderAccepted() );
+    	assertEquals( response.amount, total, 0.001);    	
+    }
+    
+    private double convertExVatToIncVat(double amountExVat, double vatPercent) {
+    	return amountExVat * (1+vatPercent/100);
+    }
+
 }
