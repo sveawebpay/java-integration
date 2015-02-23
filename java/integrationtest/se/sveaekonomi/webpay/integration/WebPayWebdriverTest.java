@@ -331,6 +331,7 @@ public class WebPayWebdriverTest {
                                                                     .setVatPercent(6)
                                                                     .setQuantity(1.0))
                                                    .addFee(WebPayItem.shippingFee()	// fee row should be ignored by discount calculation
+                                                		   			//.setShippingId("not_a_sku")
                                                 		   			.setAmountExVat(50.00)
                                                 		   			.setVatPercent(6))
                                                    .addFee(WebPayItem.invoiceFee()	// fee row be ignored by discount calculation

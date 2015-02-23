@@ -6,6 +6,7 @@ import se.sveaekonomi.webpay.integration.hosted.HostedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.FixedDiscountBuilder;
+import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RelativeDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RowBuilder;
@@ -20,6 +21,9 @@ public class HostedRowFormatter {
 	private double totalShippingAmount;
 	private double totalShippingVat;
 
+	private double totalInvoiceAmount;
+	private double totalInvoiceVat;	
+	
 	private ArrayList<HostedOrderRowBuilder> newRows;
 
 	public HostedRowFormatter() {
@@ -35,6 +39,7 @@ public class HostedRowFormatter {
 	public ArrayList<HostedOrderRowBuilder> formatRows(CreateOrderBuilder order) {
 		formatOrderRows(order);
 		formatShippingFeeRows(order);
+		formatInvoiceFeeRows(order);
 		formatFixedDiscountRows(order);
 		formatRelativeDiscountRows(order);
 
@@ -121,6 +126,51 @@ public class HostedRowFormatter {
 			newRows.add(tempRow);
 		}
 	}
+	
+	private <T extends OrderBuilder<T>> void formatInvoiceFeeRows(OrderBuilder<T> orderBuilder) {
+		if (orderBuilder.getInvoiceFeeRows() == null) {
+			return;
+		}
+
+		for (InvoiceFeeBuilder row : orderBuilder.getInvoiceFeeRows()) {
+			HostedOrderRowBuilder tempRow = getNewTempRow(row, null);
+
+			double plusVatCounter = row.getVatPercent() != null ? (row.getVatPercent() * 0.01) + 1 : 0;
+
+			double amountExVat = row.getAmountExVat() != null ? row.getAmountExVat() : 0;
+			double amountIncVat = row.getAmountIncVat() != null ? row.getAmountIncVat() : 0;
+
+			double tempAmount;
+			double tempVat;
+			double quantity = row.getQuantity();
+
+			if (row.getAmountExVat() != null && row.getVatPercent() != null) {
+				tempAmount = amountExVat * plusVatCounter;
+				tempVat = tempAmount - amountExVat;
+			}
+			else if (row.getAmountIncVat() != null && row.getVatPercent() != null) {
+				tempAmount = amountIncVat;
+				tempVat = tempAmount - (tempAmount / plusVatCounter);
+			}
+			else {
+				tempAmount = amountIncVat;
+				tempVat = amountIncVat - amountExVat;
+			}
+
+			tempRow.setAmount(MathUtil.convertFromDecimalToCentesimal(tempAmount));
+			tempRow.setVat(MathUtil.convertFromDecimalToCentesimal(tempVat));
+			tempRow.setQuantity(quantity);
+
+			totalInvoiceAmount = tempAmount * quantity;
+			totalInvoiceVat = tempVat * quantity;
+
+			totalAmount += totalInvoiceAmount;
+			totalVat += totalInvoiceVat;
+
+			newRows.add(tempRow);
+		}
+	}
+	
 
 	private void formatFixedDiscountRows(CreateOrderBuilder orderBuilder) {
 		if (orderBuilder.getFixedDiscountRows() == null) {
