@@ -9,17 +9,14 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
-import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.FixedDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RelativeDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
@@ -783,11 +780,11 @@ public class DeliverOrderTest {
   		assertEquals( (Object)10.0, (Object)soapRequest.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(3).VatPercent  ); // cast avoids deprecation				
   		assertEquals( true, soapRequest.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(3).PriceIncludingVat );
         // all discount rows
-        // expected: fixedDiscount: 10 off exvat, order row amount are 66% at 20% vat, 33% at 10% vat => 6.6666ex @20% = 8.00 inc and 3.3333ex @10% = 3.67inc 
+        // expected: fixedDiscount: 10 off exvat, order row amount are 66% at 20% vat, 33% at 10% vat => 6.67ex @20% = 8.00 inc and 3.33ex @10% = 3.66inc 
   		assertEquals( (Object)(-8.00), (Object)soapRequest.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(4).PricePerUnit  ); // cast avoids deprecation
   		assertEquals( (Object)20.0, (Object)soapRequest.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(4).VatPercent  ); // cast avoids deprecation							
   		assertEquals( true, soapRequest.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(4).PriceIncludingVat );
-  		assertEquals( (Object)(-3.67), (Object)soapRequest.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(5).PricePerUnit  ); // cast avoids deprecation
+  		assertEquals( (Object)(-3.66), (Object)soapRequest.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(5).PricePerUnit  ); // cast avoids deprecation
   		assertEquals( (Object)10.0, (Object)soapRequest.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(5).VatPercent  ); // cast avoids deprecation		
   		assertEquals( true, soapRequest.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(5).PriceIncludingVat );
   	}		
