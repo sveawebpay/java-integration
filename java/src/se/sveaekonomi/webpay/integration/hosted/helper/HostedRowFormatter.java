@@ -220,8 +220,9 @@ public class HostedRowFormatter {
 			// no vatpercent given
 			// incvat only
 			else if (row.getVatPercent() == null && row.getAmountIncVat() != null ) {
+				double meanVatRate = getOrderMeanVatRateBasedOnPriceIncVat(totalOrderAmount, totalOrderVat);				
+				tempVat = amountIncVat - (amountIncVat/(1+(meanVatRate/100)) );
 				tempAmount = amountIncVat;
-				tempVat = totalAmount * totalVat == 0 ? amountIncVat : amountIncVat / totalAmount * totalVat;
 			}
 			
 			// exvat only
@@ -245,10 +246,13 @@ public class HostedRowFormatter {
 		}
 	}
 	
-	Double getOrderMeanVatRateBasedOnPriceIncVat( Double inc, Double vat ) {	
-		
-		// algorithm: 100=inc (20=vat) => (inc-vat) * 1.v = inc => 1.v = inc/(inc-vat) = vatrate = round((1.v-1*100),2)
-		return MathUtil.bankersRound(((inc/(inc-vat))-1.0)*100);		
+	Double getOrderMeanVatRateBasedOnPriceIncVat( Double inc, Double vat ) {			
+		Double meanVatRate = 0.0;
+		if( inc > 0.0 && vat > 0.0 ) {
+			// algorithm: 100=inc (20=vat) => (inc-vat) * 1.v = inc => 1.v = inc/(inc-vat) = vatrate = round((1.v-1*100),2)
+			meanVatRate = MathUtil.bankersRound(((inc/(inc-vat))-1.0)*100);
+		}
+		return meanVatRate;		
 	}
 
 	private void formatRelativeDiscountRows(CreateOrderBuilder orderBuilder) {

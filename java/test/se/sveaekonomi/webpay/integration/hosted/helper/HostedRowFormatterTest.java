@@ -953,6 +953,20 @@ public class HostedRowFormatterTest {
 		assertEquals( 18.67, meanVatRate, 0.0001 );
 	} 
     
+    @Test
+	public void test_getOrderMeanVatRateBasedOnPriceIncVat_with_zero_totals() {
+    
+    	HostedRowFormatter hrf = new HostedRowFormatter();
+    	Double totalOrderAmount = 0.00;
+    	Double totalOrderVat = 0.00;
+    	
+    	Double meanVatRate = hrf.getOrderMeanVatRateBasedOnPriceIncVat( totalOrderAmount, totalOrderVat );	
+		
+		// 100=inc (20=vat) => (inc-vat) * 1.v = inc => 1.v = inc/(inc-vat) = vatrate = round((1.v-1*100),2 => vatrate = 25.00)
+		assertEquals( 0.00, meanVatRate, 0.0001 );
+	} 
+    
+    
 
     // helper
     private double convertExVatToIncVat(double amountExVat, double vatPercent) {
