@@ -340,7 +340,7 @@ public class WebPayWebdriverTest {
                                 		   		   .addDiscount(WebPayItem.fixedDiscount()
                                                                     .setDiscountId("42")
                                                                     .setName(".setAmountIncVat(100)")
-                                                                    .setDescription("testFormatFixedDiscountRowsAmountIncVatWithDifferentVatRatesPresentCalculatedFromOrderItemRowsOnly")
+                                                                    .setDescription("testFormatFixedDiscountRows_sent_correctly_using_card_payment")
                                                                     .setAmountIncVat(100)
                                                                     .setUnit("st"))
                                                     .addCustomerDetails(WebPayItem.individualCustomer()
@@ -455,7 +455,26 @@ public class WebPayWebdriverTest {
         driver.quit();
         
         assertTrue(cardOrderResponse.isOrderAccepted() );  	
-    	assertEquals( 338.00, cardOrderResponse.getAmount(), 0.001);    	
+    	assertEquals( 338.00, cardOrderResponse.getAmount(), 0.001); 
+    	// TODO looking at the actual request xml, the order is sent with this discount vat, which is incorrect:
+		//<row>
+		//	<sku>42</sku>
+		//	<name>.setAmountIncVat(100)</name>
+		//	<description>testFormatFixedDiscountRowsAmountIncVatWithDifferentVatRatesPresentCalculatedFromOrderItemRowsOnly
+		//	</description>
+		//	<amount>-10000</amount>
+		//	<vat>-1479</vat>
+		//	<quantity>1.0</quantity>
+		//	<unit>st</unit>
+		//</row>
+    	
+    	// This is due to the discount vat ratios being based on all order rows, that is, including shipping and invoice rows.
+    	// the correct discount should have <vat>-1573</vat>
+    	
+    	
+    	
+    	
+    	
     }
     
     
