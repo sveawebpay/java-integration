@@ -340,7 +340,7 @@ public class WebPayWebdriverTest {
                                 		   		   .addDiscount(WebPayItem.fixedDiscount()
                                                                     .setDiscountId("42")
                                                                     .setName(".setAmountIncVat(100)")
-                                                                    .setDescription("testFormatFixedDiscountRowsAmountIncVatWithDifferentVatRatesPresentCalculatedFromOrderItemRowsOnly")
+                                                                    .setDescription("testFormatFixedDiscountRows_sent_correctly_using_card_payment")
                                                                     .setAmountIncVat(100)
                                                                     .setUnit("st"))
                                                     .addCustomerDetails(WebPayItem.individualCustomer()
