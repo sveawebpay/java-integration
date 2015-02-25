@@ -746,36 +746,28 @@ public class HostedRowFormatterTest {
 		    	System.out.println( e.getCause().getMessage() );	// show validation errors et al.
 		    }
     }    
-      
+        
     @Test
-    public void test_RelativeDiscount_in_order_with_single_vat_rate_having_only_rows_specified_inc_vat() {
-    	CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-	        .addOrderRow(WebPayItem.orderRow()
-	                .setAmountIncVat(50.00)
-	                .setVatPercent(25)
-	                .setQuantity(2.0))
-	        .addOrderRow(WebPayItem.orderRow()
-	                .setAmountIncVat(50.00)
-	                .setVatPercent(25)
-	                .setQuantity(1.0))
-	        .addOrderRow(WebPayItem.orderRow()
-	                .setAmountExVat(40.00)
-	                .setAmountIncVat(50.00)
-	                .setQuantity(1.0))
-	       .addDiscount(WebPayItem.relativeDiscount()
-	                   .setDiscountId("r10%i")
-	                   .setDiscountPercent(10.0)
-	                   .setUnit("kr"));
-    
-	    ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
+    public void test_RelativeDiscount_in_order_with_multiple_vat_rates() {
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                                                   .addOrderRow(WebPayItem.orderRow()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(25)
+                                                                    .setQuantity(2.0))
+                                                    .addOrderRow(WebPayItem.orderRow()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(6)
+                                                                    .setQuantity(1.0))
+                                                   .addDiscount(WebPayItem.relativeDiscount()
+                                                                    .setDiscountPercent(10.0));
 
-        // 10% of (80ex + 40ex + 40ex =) 160ex @25% => -16ex @25% => -20 (-4)
-	    HostedOrderRowBuilder newRow = newRows.get(3);                        
-	    assertEquals("r10%i", newRow.getSku());
-	    assertEquals(-2000, (long)newRow.getAmount(), 0.0001);
-	    assertEquals(-400, (long)newRow.getVat(), 0.0001);
+	    ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
+	    
+	    // 10% of (250 (50) + 106 (6)) = 356 (56) => -35.6 (5.6)	    
+	    HostedOrderRowBuilder newRow = newRows.get(2);                        
+	    assertEquals(-3560, (long)newRow.getAmount(), 0.0001);
+	    assertEquals(-560, (long)newRow.getVat(), 0.0001);
 	    assertEquals(1, newRow.getQuantity(), 0);
-	    assertEquals("kr", newRow.getUnit());    
  
 	    try {		    	
 	    	// check order total        
@@ -789,122 +781,69 @@ public class HostedRowFormatterTest {
                 		.getPaymentForm()
             				.getXmlMessage();
 
-	    	// 100 (20) + 50 (10) + 50 (10) -20 (-4) => 180 (36)
-	    	Assert.assertThat(paymentXml, CoreMatchers.containsString("<amount>18000</amount>"));
-		    Assert.assertThat(paymentXml, CoreMatchers.containsString("<vat>3600</vat>"));
+		    // 250 (50) + 106 (6) -35.6 (-5.6) => 320.4 (50.4)	    
+	    	Assert.assertThat(paymentXml, CoreMatchers.containsString("<amount>32040</amount>"));
+		    Assert.assertThat(paymentXml, CoreMatchers.containsString("<vat>5040</vat>"));
 	    }
 	    catch( Exception e ) {
 	    	System.out.println( e.getCause().getMessage() );	// show validation errors et al.
 	    }
-    }    
-//        
-//    // if we have two orders items with different vat rate, we need to create two discount order rows, one for each vat rate
-//    @Test
-//    public void test_RelativeDiscount_in_order_with_multiple_vat_rates_having_rows_specified_ex_vat_is_specified_ex_vat() {
-//        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-//                                                   .addOrderRow(WebPayItem.orderRow()
-//                                                                    .setAmountExVat(100.00)
-//                                                                    .setVatPercent(25)
-//                                                                    .setQuantity(2.0))
-//                                                   .addOrderRow(WebPayItem.orderRow()
-//                                                                    .setAmountExVat(100.00)
-//                                                                    .setVatPercent(12)
-//                                                                    .setQuantity(1.0))
-//                                                    .addOrderRow(WebPayItem.orderRow()
-//                                                                    .setAmountExVat(100.00)
-//                                                                    .setVatPercent(6)
-//                                                                    .setQuantity(1.0))
-//                                                   .addDiscount(WebPayItem.relativeDiscount()
-//                                                                    .setDiscountId("r10%i")
-//                                                                    .setName("couponName")
-//                                                                    .setDescription("couponDesc")
-//                                                                    .setDiscountPercent(10.0));
-//
-//        ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
-//
-//        // 10% of 200ex @25%, 100ex @12%, 100ex @6% => -20ex @25%, -10ex @12%, -10ex @6% 
-//        SveaOrderRow newRow = newRows.get(3);
-//        assertEquals("r10%i", newRow.ArticleNumber);
-//        assertEquals("couponName: couponDesc (25%)", newRow.Description);
-//        assertEquals(-20.00, newRow.PricePerUnit, 0);
-//        assertFalse( newRow.PriceIncludingVat );
-//        assertEquals(25, newRow.VatPercent, 0);
-//        assertEquals(0, newRow.DiscountPercent, 0); // not the same thing as in our WebPayItem...
-//        assertEquals(1, newRow.NumberOfUnits, 0); // 1 "discount unit"
-//
-//        newRow = newRows.get(4);
-//        assertEquals("r10%i", newRow.ArticleNumber);
-//        assertEquals("couponName: couponDesc (12%)", newRow.Description);
-//        assertEquals(-10.00, newRow.PricePerUnit, 0);
-//        assertFalse( newRow.PriceIncludingVat );
-//        assertEquals(12, newRow.VatPercent, 0);
-//        assertEquals(0, newRow.DiscountPercent, 0); // not the same thing as in our WebPayItem...
-//        assertEquals(1, newRow.NumberOfUnits, 0); // 1 "discount unit"
-//
-//        newRow = newRows.get(5);
-//        assertEquals("r10%i", newRow.ArticleNumber);
-//        assertEquals("couponName: couponDesc (6%)", newRow.Description);
-//        assertEquals(-10.00, newRow.PricePerUnit, 0);
-//        assertFalse( newRow.PriceIncludingVat );
-//        assertEquals(6, newRow.VatPercent, 0);
-//        assertEquals(0, newRow.DiscountPercent, 0); // not the same thing as in our WebPayItem...
-//        assertEquals(1, newRow.NumberOfUnits, 0); // 1 "discount unit"        
-//    }    
-//    @Test
-//    public void test_RelativeDiscount_in_order_with_multiple_vat_rates_having_only_rows_specified_inc_vat_is_specified_inc_vat() {
-//        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-//                                                   .addOrderRow(WebPayItem.orderRow()
-//                                                                    .setAmountIncVat(125.00)
-//                                                                    .setVatPercent(25)
-//                                                                    .setQuantity(2.0))
-//                                                   .addOrderRow(WebPayItem.orderRow()
-//                                                                    .setAmountIncVat(112.00)
-//                                                                    .setVatPercent(12)
-//                                                                    .setQuantity(1.0))
-//                                                    .addOrderRow(WebPayItem.orderRow()
-//                                                                    .setAmountIncVat(106.00)
-//                                                                    .setVatPercent(6)
-//                                                                    .setQuantity(1.0))
-//                                                   .addDiscount(WebPayItem.relativeDiscount()
-//                                                                    .setDiscountId("r10%i")
-//                                                                    .setName("couponName")
-//                                                                    .setDescription("couponDesc")
-//                                                                    .setDiscountPercent(10.0));
-//
-//        ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
-//
-//        // 10% of 250inc @25%, 112inc @12%, 106inc @6% => -25inc @25%, -11,20inc @12%, -10,6inc @6% 
-//        SveaOrderRow newRow = newRows.get(3);
-//        assertEquals("r10%i", newRow.ArticleNumber);
-//        assertEquals("couponName: couponDesc (25%)", newRow.Description);
-//        assertEquals(-25.00, newRow.PricePerUnit, 0);
-//        assertTrue( newRow.PriceIncludingVat );
-//        assertEquals(25, newRow.VatPercent, 0);
-//        assertEquals(0, newRow.DiscountPercent, 0); // not the same thing as in our WebPayItem...
-//        assertEquals(1, newRow.NumberOfUnits, 0); // 1 "discount unit"
-//
-//        newRow = newRows.get(4);
-//        assertEquals("r10%i", newRow.ArticleNumber);
-//        assertEquals("couponName: couponDesc (12%)", newRow.Description);
-//        assertEquals(-11.20, newRow.PricePerUnit, 0);
-//        assertTrue( newRow.PriceIncludingVat );
-//        assertEquals(12, newRow.VatPercent, 0);
-//        assertEquals(0, newRow.DiscountPercent, 0); // not the same thing as in our WebPayItem...
-//        assertEquals(1, newRow.NumberOfUnits, 0); // 1 "discount unit"
-//
-//        newRow = newRows.get(5);
-//        assertEquals("r10%i", newRow.ArticleNumber);
-//        assertEquals("couponName: couponDesc (6%)", newRow.Description);
-//        assertEquals(-10.60, newRow.PricePerUnit, 0);
-//        assertTrue( newRow.PriceIncludingVat );
-//        assertEquals(6, newRow.VatPercent, 0);
-//        assertEquals(0, newRow.DiscountPercent, 0); // not the same thing as in our WebPayItem...
-//        assertEquals(1, newRow.NumberOfUnits, 0); // 1 "discount unit"        
-//    }
-//    
-//    // check that relative discount split over vat rates ratios are present based on order item rows only, not shipping or invoice fees
-//    @Test
-//    public void test_RelativeDiscount_is_calculated_from_order_item_rows_only() {
+    }
+
+    // check that relative discount split over vat rates ratios are present based on order item rows only, not shipping or invoice fees
+    @Test
+    public void test_RelativeDiscount_is_calculated_from_order_item_rows_only() {
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                                                   .addOrderRow(WebPayItem.orderRow()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(25)
+                                                                    .setQuantity(2.0))
+                                                    .addOrderRow(WebPayItem.orderRow()
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(6)
+                                                                    .setQuantity(1.0))
+                                                    .addFee(WebPayItem.shippingFee()	// fee row should be ignored by discount calculation
+													   			.setAmountIncVat(53.00)
+													   			.setVatPercent(6))
+										   			.addFee(WebPayItem.invoiceFee()		// fee row should be ignored by discount calculation
+													   			.setAmountIncVat(29.00)
+													   			.setVatPercent(25))
+                                                   .addDiscount(WebPayItem.relativeDiscount()
+                                                                    .setDiscountPercent(10.0));
+
+	    ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
+	    
+	    // 10% of (250 (50) + 106 (6)) = 356 (56) => -35.6 (5.6)	    
+	    HostedOrderRowBuilder newRow = newRows.get(4);                        
+	    assertEquals(-3560, (long)newRow.getAmount(), 0.0001);
+	    assertEquals(-560, (long)newRow.getVat(), 0.0001);
+	    assertEquals(1, newRow.getQuantity(), 0);
+ 
+	    try {		    	
+	    	// check order total        
+	    	String paymentXml = order
+                    .setCountryCode(COUNTRYCODE.SE)
+    				.setOrderDate(java.sql.Date.valueOf("2015-02-23"))
+				    .setClientOrderNumber(Long.toString((new Date()).getTime()))
+			    	.setCurrency(CURRENCY.SEK)
+		    		.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
+                		.setReturnUrl("http://localhost:8080/CardOrder/landingpage")	// http => handle alert below
+                		.getPaymentForm()
+            				.getXmlMessage();
+
+		    // 250 (50) + 106 (6) +53 (3) + 29 (5.8) -35.6 (-5.6) => 402.4 (59.2)	    
+	    	Assert.assertThat(paymentXml, CoreMatchers.containsString("<amount>40240</amount>"));
+		    Assert.assertThat(paymentXml, CoreMatchers.containsString("<vat>5920</vat>"));
+	    }
+	    catch( Exception e ) {
+	    	System.out.println( e.getCause().getMessage() );	// show validation errors et al.
+	    }
+    }
+
+    
+    
+    
+    //    public void test_RelativeDiscount_is_calculated_from_order_item_rows_only() {
 //        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 //                                                   .addOrderRow(WebPayItem.orderRow()
 //                                                                    .setAmountIncVat(125.00)

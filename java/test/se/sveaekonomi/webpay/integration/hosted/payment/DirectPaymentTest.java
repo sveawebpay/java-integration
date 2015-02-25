@@ -57,7 +57,7 @@ public class DirectPaymentTest {
         String html = Base64Util.decodeBase64String(base64Payment);
         String amount = html.substring(html.indexOf("<amount>") + 8, html.indexOf("</amount>"));
         
-        assertEquals("21875", amount);
+        assertEquals("25000", amount);
     }
     
     @Test
@@ -80,6 +80,6 @@ public class DirectPaymentTest {
         String html = Base64Util.decodeBase64String(base64Payment);
         String amount = html.substring(html.indexOf("<amount>") + 8, html.indexOf("</amount>"));
         
-        assertEquals("21875", amount);
+        assertEquals("25000", amount);
     }
 }

@@ -265,13 +265,13 @@ public class HostedRowFormatter {
 
 			double discountFactor = row.getDiscountPercent() / 100;
 
-			double discountAmount = (totalAmount - totalShippingAmount) * discountFactor;
+			double discountAmount = (totalOrderAmount) * discountFactor;
 			double discountVat = 0;
 
 			totalAmount = totalAmount - discountAmount;
 
 			if (totalVat > 0) {
-				discountVat = (totalVat - totalShippingVat) * discountFactor;
+				discountVat = (totalOrderVat) * discountFactor;
 				totalVat = totalVat - discountVat;
 			}
 
