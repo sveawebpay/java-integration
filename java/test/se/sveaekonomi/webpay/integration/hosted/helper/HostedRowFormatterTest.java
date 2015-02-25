@@ -558,88 +558,140 @@ public class HostedRowFormatterTest {
 	    	System.out.println( e.getCause().getMessage() );	// show validation errors et al.
 	    }    	
     }
-    
-//    
-//    // check that fixed discount split over vat rates ratios are present based on order item rows only, not shipping or invoice fees
-//    // TODO 	test_FixedDiscount_specified_using_amountExVat_is_calculated_from_order_item_rows_only
-//    @Test
-//    public void test_FixedDiscount_specified_using_amountIncVat_is_calculated_from_order_item_rows_only() {
-//        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
-//                                                   .addOrderRow(WebPayItem.orderRow()
-//                                                                    .setAmountExVat(100.00)
-//                                                                    .setVatPercent(25)
-//                                                                    .setQuantity(2.0))
-//                                                   .addOrderRow(WebPayItem.orderRow()
-//                                                                    .setAmountExVat(100.00)
-//                                                                    .setVatPercent(6)
-//                                                                    .setQuantity(1.0))
-//                                                   .addFee(WebPayItem.shippingFee()	// fee row should be ignored by discount calculation
-//                                                           			.setName("shipping with price 50 @6% = 53")
-//                                                		   			.setAmountExVat(50.00)
-//                                                		   			.setVatPercent(6))
-//                                                   .addFee(WebPayItem.invoiceFee()	// fee row be ignored by discount calculation
-//                                                		   			.setAmountExVat(23.20)
-//                                                		   			.setVatPercent(25))
-//                                		   		   .addDiscount(WebPayItem.fixedDiscount()
-//                                                                    .setDiscountId("f100i")
-//                                                                    .setName("couponName")
-//                                                                    .setDescription("couponDesc")
-//                                                                    .setAmountIncVat(100)
-//                                                                    .setUnit("st"));
-//        
-//        ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
-//
-//        // first order row
-//        SveaOrderRow newRow = newRows.get(0);
-//        assertEquals(100.00, newRow.PricePerUnit, 0);
-//        assertEquals(25, newRow.VatPercent, 0);
-//        assertEquals(2, newRow.NumberOfUnits, 0);
-//        
-//        // second order row 
-//        newRow = newRows.get(1);
-//        assertEquals(100.00, newRow.PricePerUnit, 0);
-//        assertEquals(6, newRow.VatPercent, 0);
-//        assertEquals(1, newRow.NumberOfUnits, 0);        
-//        
-//        // shipping fee row
-//        newRow = newRows.get(2);
-//        assertEquals(50.00, newRow.PricePerUnit, 0);
-//        assertEquals(6, newRow.VatPercent, 0);
-//        assertEquals(1, newRow.NumberOfUnits, 0);
-//        
-//        // invoice fee row 
-//        newRow = newRows.get(3);
-//        assertEquals(23.20, newRow.PricePerUnit, 0);
-//        assertEquals(25, newRow.VatPercent, 0);
-//        assertEquals(1, newRow.NumberOfUnits, 0);  
-//        
-//        // discount row @25%          
-//        // 100*250/356 = 70.22 incl. 25% vat => 14.04 vat as amount 
-//        newRow = newRows.get(4);
-//        assertEquals(-56.18, newRow.PricePerUnit, 0);
-//        assertEquals(25, newRow.VatPercent, 0);
-//        assertEquals(0, newRow.DiscountPercent, 0);
-//        assertEquals(1, newRow.NumberOfUnits, 0);
-//
-//        // discount row @6%        
-//        // 100*106/356 = 29.78 incl. 6% vat => 1.69 vat as amount 
-//        newRow = newRows.get(5);
-//        assertEquals(-28.09, newRow.PricePerUnit, 0);
-//        assertEquals(6, newRow.VatPercent, 0);
-//        assertEquals(0, newRow.DiscountPercent, 0);
-//        assertEquals(1, newRow.NumberOfUnits, 0);
-//
-//        // check order total        
-//        double total = 
-//        		convertExVatToIncVat( newRows.get(0).PricePerUnit, newRows.get(0).VatPercent ) * newRows.get(0).NumberOfUnits  +	// 250.00
-//        		convertExVatToIncVat( newRows.get(1).PricePerUnit, newRows.get(1).VatPercent ) * newRows.get(1).NumberOfUnits  +	// 106.00
-//        		convertExVatToIncVat( newRows.get(2).PricePerUnit, newRows.get(2).VatPercent ) * newRows.get(2).NumberOfUnits  +	// 53.00
-//        		convertExVatToIncVat( newRows.get(3).PricePerUnit, newRows.get(3).VatPercent ) * newRows.get(3).NumberOfUnits  +	// 29.00
-//        		convertExVatToIncVat( newRows.get(4).PricePerUnit, newRows.get(4).VatPercent ) * newRows.get(4).NumberOfUnits  +	// -70.22
-//        		convertExVatToIncVat( newRows.get(5).PricePerUnit, newRows.get(5).VatPercent ) * newRows.get(5).NumberOfUnits 		// -29.78
-//		;
-//        assertEquals( 338.00, Double.valueOf(String.format(Locale.ENGLISH,"%.2f",total)), 0.001 );    
-//    }    
+        
+    // check that fixed discount split over vat rates ratios are present based on order item rows only, not shipping or invoice fees
+    @Test
+    public void test_FixedDiscount_specified_using_amountExVat_is_calculated_from_order_item_rows_only() {
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                                                   .addOrderRow(WebPayItem.orderRow()
+                                                		   			.setName("product with price 100 @25% = 125")
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(25)
+                                                                    .setQuantity(2.0))
+                                                   .addOrderRow(WebPayItem.orderRow()
+                                                		   			.setName("product with price 100 @6% = 106")
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(6)
+                                                                    .setQuantity(1.0))
+                                                   .addFee(WebPayItem.shippingFee()	// fee row should be ignored by discount calculation
+                                                           			.setName("shipping with price 50 @6% = 53")
+                                                		   			.setAmountExVat(50.00)
+                                                		   			.setVatPercent(6))
+                                                   .addFee(WebPayItem.invoiceFee()	// fee row be ignored by discount calculation
+                                                		   			.setAmountExVat(23.20)
+                                                		   			.setVatPercent(25))
+                                                    .addDiscount(WebPayItem.fixedDiscount()
+                                                                    .setDiscountId("f100e")
+                                                                    .setName("couponName")
+                                                                    .setDescription("couponDesc")
+                                                                    .setAmountExVat(100.00)
+                                                                    .setUnit("st"));
+        
+		    ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
+
+	        // 100*200/300 = 66.67 ex. 25% vat => discount 83.34 (incl. 16.67 vat @25%)
+	        // 100*100/300 = 33.33 ex. 6% vat => discount 35.33 (incl 2.00 vat @6%)
+		    // => total discount is 118.67 (incl 18.67 vat @18.67%)
+		    HostedOrderRowBuilder newRow = newRows.get(4);                        
+		    assertEquals("f100e", newRow.getSku());
+		    assertEquals("couponName", newRow.getName());
+		    assertEquals("couponDesc", newRow.getDescription());        
+		    //assertEquals("couponName: couponDesc", newRow.getDescription());
+		    assertEquals(-11867, (long)newRow.getAmount(), 0.0001);
+		    assertEquals(-1867, (long)newRow.getVat(), 0.0001);
+		    assertEquals(1, newRow.getQuantity(), 0);
+		    assertEquals("st", newRow.getUnit());    
+     
+		    try {		    	
+		    	// check order total        
+		    	String paymentXml = order
+                        .setCountryCode(COUNTRYCODE.SE)
+        				.setOrderDate(java.sql.Date.valueOf("2015-02-23"))
+    				    .setClientOrderNumber(Long.toString((new Date()).getTime()))
+				    	.setCurrency(CURRENCY.SEK)
+			    		.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
+	                		.setReturnUrl("http://localhost:8080/CardOrder/landingpage")	// http => handle alert below
+	                		.getPaymentForm()
+                				.getXmlMessage();
+	    		// 250.00 (50.00)
+	    		// 106.00 (6.00)
+	    		// 53.00 (3.00)
+	    		// 29.00 (5.80)
+		    	// -118.67 (-18.67)
+		    	// => 319.33 (46.13)
+		    	Assert.assertThat(paymentXml, CoreMatchers.containsString("<amount>31933</amount>"));
+			    Assert.assertThat(paymentXml, CoreMatchers.containsString("<vat>4613</vat>"));
+		    }
+		    catch( Exception e ) {
+		    	System.out.println( e.getCause().getMessage() );	// show validation errors et al.
+		    }
+    }    
+    @Test
+    public void test_FixedDiscount_specified_using_amountIncVat_is_calculated_from_order_item_rows_only() {
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+                                                   .addOrderRow(WebPayItem.orderRow()
+                                                		   			.setName("product with price 100 @25% = 125")
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(25)
+                                                                    .setQuantity(2.0))
+                                                   .addOrderRow(WebPayItem.orderRow()
+                                                		   			.setName("product with price 100 @6% = 106")
+                                                                    .setAmountExVat(100.00)
+                                                                    .setVatPercent(6)
+                                                                    .setQuantity(1.0))
+                                                   .addFee(WebPayItem.shippingFee()	// fee row should be ignored by discount calculation
+                                                           			.setName("shipping with price 50 @6% = 53")
+                                                		   			.setAmountExVat(50.00)
+                                                		   			.setVatPercent(6))
+                                                   .addFee(WebPayItem.invoiceFee()	// fee row be ignored by discount calculation
+                                                		   			.setAmountExVat(23.20)
+                                                		   			.setVatPercent(25))
+                                                    .addDiscount(WebPayItem.fixedDiscount()
+                                                                    .setDiscountId("f100e")
+                                                                    .setName("couponName")
+                                                                    .setDescription("couponDesc")
+                                                                    .setAmountIncVat(100.00)
+                                                                    .setUnit("st"));
+        
+		    ArrayList<HostedOrderRowBuilder> newRows = new HostedRowFormatter().formatRows(order);
+
+	        // 100*250/356 = 70.22 incl. 25% vat => 14.04 vat as amount 
+	        // 100*106/356 = 29.78 incl. 6% vat => 1.69 vat as amount 
+		    // => total discount is 100.00 (incl 15.73 vat)
+		    HostedOrderRowBuilder newRow = newRows.get(4);                        
+		    assertEquals("f100e", newRow.getSku());
+		    assertEquals("couponName", newRow.getName());
+		    assertEquals("couponDesc", newRow.getDescription());        
+		    //assertEquals("couponName: couponDesc", newRow.getDescription());
+		    assertEquals(-10000, (long)newRow.getAmount(), 0.0001);
+		    assertEquals(-1573, (long)newRow.getVat(), 0.0001);
+		    assertEquals(1, newRow.getQuantity(), 0);
+		    assertEquals("st", newRow.getUnit());    
+     
+		    try {		    	
+		    	// check order total        
+		    	String paymentXml = order
+                        .setCountryCode(COUNTRYCODE.SE)
+        				.setOrderDate(java.sql.Date.valueOf("2015-02-23"))
+    				    .setClientOrderNumber(Long.toString((new Date()).getTime()))
+				    	.setCurrency(CURRENCY.SEK)
+			    		.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
+	                		.setReturnUrl("http://localhost:8080/CardOrder/landingpage")	// http => handle alert below
+	                		.getPaymentForm()
+                				.getXmlMessage();
+	    		// 250.00 (50.00)
+	    		// 106.00 (6.00)
+	    		// 53.00 (3.00)
+	    		// 29.00 (5.80)
+	    		// -70.22 (14.04) + 29.78 (1.69) = -100.00 (-15.73)
+		    	// => 338.00 (49.07)
+		    	Assert.assertThat(paymentXml, CoreMatchers.containsString("<amount>33800</amount>"));
+			    Assert.assertThat(paymentXml, CoreMatchers.containsString("<vat>4907</vat>"));
+		    }
+		    catch( Exception e ) {
+		    	System.out.println( e.getCause().getMessage() );	// show validation errors et al.
+		    }
+        }
 //    
 //    
 //    /// relative discount    
