@@ -80,4 +80,31 @@ public class GetAddressesTest {
         assertEquals("Testveien 1", response.getAddressLine2());
         assertEquals("Oslo", response.getPostarea());
     }
+    
+    // new tests for hotfix 1.6.1 (intg-578)
+    @Test
+    public void test_SE_individual_194605092222_returns_single_address()
+    {
+    	GetAddresses builder = WebPay.getAddresses(SveaConfig.getDefaultConfig())
+											.setCountryCode(COUNTRYCODE.SE)
+											.setOrderTypeInvoice()
+											.setIndividual("194605092222")
+		;
+    	GetAddressesResponse response = builder.doRequest();
+    }
+    
+    @Test
+    public void test_SE_company_194608142222_returns_all_two_addresses()
+    {
+    	GetAddresses builder = WebPay.getAddresses(SveaConfig.getDefaultConfig())
+											.setCountryCode(COUNTRYCODE.SE)
+											.setOrderTypeInvoice()
+											.setCompany("194608142222")
+		;
+    	GetAddressesResponse response = builder.doRequest();
+    	
+        assertTrue(response.isOrderAccepted());
+    }
+    
+    
 }
