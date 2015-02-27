@@ -81,21 +81,7 @@ public class WebServiceOrderValidatorTest {
         }
     }
     
-    @Test
-    public void testFailOnMissingValuesForGetAddresses() {
-        String expectedMessage ="MISSING VALUE - CountryCode is required, use setCountryCode(...).\n"
-                +"MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
-        try {
-            WebPay.getAddresses(SveaConfig.getDefaultConfig())
-                .doRequest();
-            
-            //Fail on no exception
-            fail();
-        } catch (Exception e) {
-            assertEquals(expectedMessage, e.getCause().getMessage());
-        }
-    }
-    
+
     @Test
     public void testFailOnMissingCustomerIdentity() {
         String expectedMessage = "MISSING VALUE - National number(ssn) is required for individual customers when countrycode is SE, NO, DK or FI. Use setNationalIdNumber(...).\n"

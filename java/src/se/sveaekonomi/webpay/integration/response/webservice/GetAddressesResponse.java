@@ -175,11 +175,11 @@ public class GetAddressesResponse extends Response {
 		return (T) this.customerAddresses;
 	}
 	
-	public ArrayList<IndividualCustomer> getIndividualAddresses() {
+	public ArrayList<IndividualCustomer> getIndividualCustomers() {
 		return getAddresses();
 	}
 	
-	public ArrayList<CompanyCustomer> getCompanyAddresses() {
+	public ArrayList<CompanyCustomer> getCompanyCustomers() {
 		return getAddresses();
 	}
 	    

@@ -3,6 +3,7 @@ package se.sveaekonomi.webpay.integration.webservice.getaddresses;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
+import static org.junit.Assert.fail;
 
 import org.junit.Test;
 
@@ -59,12 +60,12 @@ public class GetAddressesTest {
     @Test
     public void testResultGetIndividualAddressesNO()
     {
-    	GetAddressesResponse response = WebPay.getAddresses(SveaConfig.getDefaultConfig())
+    	GetAddresses request = WebPay.getAddresses(SveaConfig.getDefaultConfig())
                                                          .setCountryCode(COUNTRYCODE.NO)
                                                          .setOrderTypeInvoice() 
                                                          .setIndividual("17054512066")
-                                                         .doRequest();
-
+        ;
+    	GetAddressesResponse response = request.doRequest();
     	assertFalse(response.isOrderAccepted());
     	assertEquals("CountryCode: Supported countries are SE, DK", response.getErrorMessage());
     }
@@ -84,9 +85,10 @@ public class GetAddressesTest {
         assertEquals("Oslo", response.getPostarea());
     }
     
-    // new tests for hotfix 1.6.1 (intg-578)
+    // new tests for hotfix 1.6.1 (intg-578)    
+    // legacy request style
     @Test
-    public void test_SE_individual_194605092222_returns_single_address()
+    public void test_SE_individual_194605092222_returns_single_address_legacy_request_style()
     {
     	GetAddresses builder = WebPay.getAddresses(SveaConfig.getDefaultConfig())
 											.setCountryCode(COUNTRYCODE.SE)
@@ -123,9 +125,9 @@ public class GetAddressesTest {
     	GetAddressesResponse response = builder.doRequest();
     	
         assertTrue(response.isOrderAccepted());
-        assertEquals(1, response.getIndividualAddresses().size());
+        assertEquals(1, response.getIndividualCustomers().size());
 
-        IndividualCustomer address = response.getIndividualAddresses().get(0);
+        IndividualCustomer address = response.getIndividualCustomers().get(0);
         assertEquals("Testgatan 1", address.getStreetAddress() );
         assertEquals("c/o Eriksson, Erik", address.getCoAddress() );
         assertEquals( "99999", address.getZipCode() );
@@ -149,7 +151,7 @@ public class GetAddressesTest {
     }
 
     @Test
-    public void test_SE_company_194608142222_returns_all_two_addresses()
+    public void test_SE_company_194608142222_returns_all_two_addresses_legacy_request_style()
     {
     	GetAddresses builder = WebPay.getAddresses(SveaConfig.getDefaultConfig())
 											.setCountryCode(COUNTRYCODE.SE)
@@ -199,9 +201,9 @@ public class GetAddressesTest {
     	GetAddressesResponse response = builder.doRequest();
     	
         assertTrue(response.isOrderAccepted());
-        assertEquals(2, response.getCompanyAddresses().size());
+        assertEquals(2, response.getCompanyCustomers().size());
 
-        CompanyCustomer address = response.getCompanyAddresses().get(0);
+        CompanyCustomer address = response.getCompanyCustomers().get(0);
         assertEquals("Testgatan 1", address.getStreetAddress() );
         assertEquals("c/o Eriksson, Erik", address.getCoAddress() );
         assertEquals( "99999", address.getZipCode() );
@@ -222,7 +224,159 @@ public class GetAddressesTest {
 		// <FirstName>Tess T</FirstName>
 		// <LastName>Persson</LastName>
 
-        CompanyCustomer address2 = response.getCompanyAddresses().get(1);
+        CompanyCustomer address2 = response.getCompanyCustomers().get(1);
+        assertEquals("Testgatan 1, 2", address2.getStreetAddress() );
+        assertEquals("c/o Eriksson, Erik", address2.getCoAddress() );
+        assertEquals( "99999", address2.getZipCode() );
+        assertEquals( "Stan", address2.getLocality() );
+        assertEquals( "08 - 111 111 11", address2.getPhoneNumber() );
+        assertEquals( "Persson, Tess T", address2.getCompanyName() );
+        assertEquals( "4608142222", address2.getNationalIdNumber() );
+        assertEquals( "F09E3CC5AFB627CACBE22A7BC371DE0047222F7F", address2.getAddressSelector() );
+        assertEquals( null, address2.getIpAddress() );
+        assertEquals( null, address2.getEmail() );
+        assertEquals( null, address.getHouseNumber() );
+        assertEquals( null, address2.getVatNumber() );
+    }  
+    
+    // new request style
+    @Test
+    public void test_SE_individual_194605092222_returns_single_address()
+    {
+    	GetAddresses request = WebPay.getAddresses(SveaConfig.getDefaultConfig())
+				.setCountryCode(COUNTRYCODE.SE)
+				.setCustomerIdentifier("194605092222")
+				.getIndividualAddresses()
+		;
+
+		//<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		//   <soap:Body>
+		//      <GetAddressesResponse xmlns="https://webservices.sveaekonomi.se/webpay">
+		//         <GetAddressesResult>
+		//            <Accepted>true</Accepted>
+		//            <RejectionCode>Accepted</RejectionCode>
+		//            <Addresses>
+		//               <CustomerAddress>
+		//                  <LegalName>Persson, Tess T</LegalName>
+		//                  <SecurityNumber>4605092222</SecurityNumber>
+		//                  <PhoneNumber>08 - 111 111 11</PhoneNumber>
+		//                  <AddressLine1>c/o Eriksson, Erik</AddressLine1>
+		//                  <AddressLine2>Testgatan 1</AddressLine2>
+		//                  <Postcode>99999</Postcode>
+		//                  <Postarea>Stan</Postarea>
+		//                  <BusinessType>Person</BusinessType>
+		//                  <AddressSelector>5F445B19E8C87954904FB7531A51AEE57C5E9413</AddressSelector>
+		//                  <FirstName>Tess T</FirstName>
+		//                  <LastName>Persson</LastName>
+		//               </CustomerAddress>
+		//            </Addresses>
+		//         </GetAddressesResult>
+		//      </GetAddressesResponse>
+		//   </soap:Body>
+		//</soap:Envelope>
+    	
+    	GetAddressesResponse response = request.doRequest();
+    	
+        assertTrue(response.isOrderAccepted());
+        assertEquals(1, response.getIndividualCustomers().size());
+
+        IndividualCustomer address = response.getIndividualCustomers().get(0);
+        assertEquals("Testgatan 1", address.getStreetAddress() );
+        assertEquals("c/o Eriksson, Erik", address.getCoAddress() );
+        assertEquals( "99999", address.getZipCode() );
+        assertEquals( "Stan", address.getLocality() );
+        assertEquals( "08 - 111 111 11", address.getPhoneNumber() );
+        assertEquals( "4605092222", address.getNationalIdNumber() );
+        assertEquals( "Tess T", address.getFirstName() );
+        assertEquals( "Persson", address.getLastName() );        
+        // Fields in  IndividualCustomer that are not available in GetAddresses request response
+        // from CustomerIdentity
+        assertEquals( null, address.getIpAddress() );
+        assertEquals( null, address.getEmail() );
+        // from IndividualIdentity
+        assertEquals( null, address.getHouseNumber() );
+        assertEquals( null, address.getInitials() );
+        assertEquals( null, address.getBirthDate() );
+        // Fields in GetAddresses request response that have no counterpart in IndividualCustomer, FYI:
+        // <LegalName>Persson, Tess T</LegalName>
+        // <BusinessType>Person</BusinessType>
+		// <AddressSelector>5F445B19E8C87954904FB7531A51AEE57C5E9413</AddressSelector>
+    }
+
+    @Test
+    public void test_SE_company_194608142222_returns_all_two_addresses() {
+    	GetAddresses request = WebPay.getAddresses(SveaConfig.getDefaultConfig())
+				.setCountryCode(COUNTRYCODE.SE)
+				.setCustomerIdentifier("194608142222")
+				.getCompanyAddresses()
+		;
+    
+		//<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+		//   <soap:Body>
+		//      <GetAddressesResponse xmlns="https://webservices.sveaekonomi.se/webpay">
+		//         <GetAddressesResult>
+		//            <Accepted>true</Accepted>
+		//            <RejectionCode>Accepted</RejectionCode>
+		//            <Addresses>
+		//               <CustomerAddress>
+		//                  <LegalName>Persson, Tess T</LegalName>
+		//                  <SecurityNumber>4608142222</SecurityNumber>
+		//                  <PhoneNumber>08 - 111 111 11</PhoneNumber>
+		//                  <AddressLine1>c/o Eriksson, Erik</AddressLine1>
+		//                  <AddressLine2>Testgatan 1</AddressLine2>
+		//                  <Postcode>99999</Postcode>
+		//                  <Postarea>Stan</Postarea>
+		//                  <BusinessType>Business</BusinessType>
+		//                  <AddressSelector>5F445B19E8C87954904FB7531A51AEE57C5E9413</AddressSelector>
+		//                  <FirstName>Tess T</FirstName>
+		//                  <LastName>Persson</LastName>
+		//               </CustomerAddress>
+		//               <CustomerAddress>
+		//                  <LegalName>Persson, Tess T</LegalName>
+		//                  <SecurityNumber>4608142222</SecurityNumber>
+		//                  <PhoneNumber>08 - 111 111 11</PhoneNumber>
+		//                  <AddressLine1>c/o Eriksson, Erik</AddressLine1>
+		//                  <AddressLine2>Testgatan 1, 2</AddressLine2>
+		//                  <Postcode>99999</Postcode>
+		//                  <Postarea>Stan</Postarea>
+		//                  <BusinessType>Business</BusinessType>
+		//                  <AddressSelector>F09E3CC5AFB627CACBE22A7BC371DE0047222F7F</AddressSelector>
+		//                  <FirstName>Tess T</FirstName>
+		//                  <LastName>Persson</LastName>
+		//               </CustomerAddress>
+		//            </Addresses>
+		//         </GetAddressesResult>
+		//      </GetAddressesResponse>
+		//   </soap:Body>
+		//</soap:Envelope>
+    	    	
+    	GetAddressesResponse response = request.doRequest();
+    	
+        assertTrue(response.isOrderAccepted());
+        assertEquals(2, response.getCompanyCustomers().size());
+
+        CompanyCustomer address = response.getCompanyCustomers().get(0);
+        assertEquals("Testgatan 1", address.getStreetAddress() );
+        assertEquals("c/o Eriksson, Erik", address.getCoAddress() );
+        assertEquals( "99999", address.getZipCode() );
+        assertEquals( "Stan", address.getLocality() );
+        assertEquals( "08 - 111 111 11", address.getPhoneNumber() );
+        assertEquals( "Persson, Tess T", address.getCompanyName() );
+        assertEquals( "4608142222", address.getNationalIdNumber() );
+        assertEquals( "5F445B19E8C87954904FB7531A51AEE57C5E9413", address.getAddressSelector() );
+        // Fields in  CompanyCustomer that are not available in GetAddresses request response
+        // from CustomerIdentity
+        assertEquals( null, address.getIpAddress() );
+        assertEquals( null, address.getEmail() );
+        assertEquals( null, address.getHouseNumber() );
+        // from CompanyCustomer
+        assertEquals( null, address.getVatNumber() );
+        // Fields in GetAddresses request response that have no counterpart in CompanyCustomer, FYI:
+        // <BusinessType>Business</BusinessType>
+		// <FirstName>Tess T</FirstName>
+		// <LastName>Persson</LastName>
+
+        CompanyCustomer address2 = response.getCompanyCustomers().get(1);
         assertEquals("Testgatan 1, 2", address2.getStreetAddress() );
         assertEquals("c/o Eriksson, Erik", address2.getCoAddress() );
         assertEquals( "99999", address2.getZipCode() );
@@ -240,11 +394,11 @@ public class GetAddressesTest {
     @Test
     public void test_NO_company_923313850_returns_all_two_addresses()
     {
-    	GetAddresses builder = WebPay.getAddresses(SveaConfig.getDefaultConfig())
-											.setCountryCode(COUNTRYCODE.NO)
-											.setOrderTypeInvoice()
-											.setCompany("923313850")
-		;
+    	GetAddresses request = WebPay.getAddresses(SveaConfig.getDefaultConfig())
+				.setCountryCode(COUNTRYCODE.NO)
+				.setCustomerIdentifier("923313850")
+				.getCompanyAddresses()
+		;    	    	
 		//<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 		//    <soap:Body>
 		//       <GetAddressesResponse xmlns="https://webservices.sveaekonomi.se/webpay">
@@ -278,12 +432,12 @@ public class GetAddressesTest {
 		//    </soap:Body>
 		// </soap:Envelope>
     
-    	GetAddressesResponse response = builder.doRequest();
+    	GetAddressesResponse response = request.doRequest();
     	
         assertTrue(response.isOrderAccepted());
-        assertEquals(2, response.getCompanyAddresses().size());
+        assertEquals(2, response.getCompanyCustomers().size());
 
-        CompanyCustomer address = response.getCompanyAddresses().get(0);
+        CompanyCustomer address = response.getCompanyCustomers().get(0);
         assertEquals("Testveien 1", address.getStreetAddress() );
         assertEquals( null, address.getCoAddress() );
         assertEquals( "259", address.getZipCode() );
@@ -304,7 +458,7 @@ public class GetAddressesTest {
 		// <FirstName>Tess T</FirstName>
 		// <LastName>Persson</LastName>
 
-        CompanyCustomer address2 = response.getCompanyAddresses().get(1);
+        CompanyCustomer address2 = response.getCompanyCustomers().get(1);
         assertEquals("Testveien 1, 2", address2.getStreetAddress() );
         assertEquals( null, address2.getCoAddress() );
         assertEquals( "259", address2.getZipCode() );
@@ -322,12 +476,12 @@ public class GetAddressesTest {
     @Test
     public void test_DK_individual_2603692503_returns_single_address()
     {
-    	GetAddresses builder = WebPay.getAddresses(SveaConfig.getDefaultConfig())
-											.setCountryCode(COUNTRYCODE.DK)
-											.setOrderTypeInvoice()
-											.setIndividual("2603692503")
-		;
-
+    	GetAddresses request = WebPay.getAddresses(SveaConfig.getDefaultConfig())
+				.setCountryCode(COUNTRYCODE.DK)
+				.setCustomerIdentifier("2603692503")
+				.getIndividualAddresses()
+		;        	
+    	
 		//<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
 		//   <soap:Body>
 		//      <GetAddressesResponse xmlns="https://webservices.sveaekonomi.se/webpay">
@@ -354,12 +508,12 @@ public class GetAddressesTest {
 		//   </soap:Body>
 		//</soap:Envelope>
     	
-    	GetAddressesResponse response = builder.doRequest();
+    	GetAddressesResponse response = request.doRequest();
     	
         assertTrue(response.isOrderAccepted());
-        assertEquals(1, response.getIndividualAddresses().size());
+        assertEquals(1, response.getIndividualCustomers().size());
 
-        IndividualCustomer address = response.getIndividualAddresses().get(0);
+        IndividualCustomer address = response.getIndividualCustomers().get(0);
         assertEquals("Testvejen 42", address.getStreetAddress() );
         assertEquals("c/o Test A/S", address.getCoAddress() );
         assertEquals( "2100", address.getZipCode() );
@@ -385,12 +539,12 @@ public class GetAddressesTest {
     @Test
     public void test_DK_company_99999993_returns_all_two_addresses()
     {
-    	GetAddresses builder = WebPay.getAddresses(SveaConfig.getDefaultConfig())
-											.setCountryCode(COUNTRYCODE.DK)
-											.setOrderTypeInvoice()
-											.setCompany("99999993_")
-		;
-		
+    	GetAddresses request = WebPay.getAddresses(SveaConfig.getDefaultConfig())
+				.setCountryCode(COUNTRYCODE.DK)
+				.setCustomerIdentifier("99999993_")
+				.getCompanyAddresses()
+		;   
+    	
     	//<soap:Envelope xmlns:soap="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
     	//    <soap:Body>
     	//       <GetAddressesResponse xmlns="https://webservices.sveaekonomi.se/webpay">
@@ -424,12 +578,12 @@ public class GetAddressesTest {
     	//    </soap:Body>
     	// </soap:Envelope> 
     
-    	GetAddressesResponse response = builder.doRequest();
+    	GetAddressesResponse response = request.doRequest();
     	
         assertTrue(response.isOrderAccepted());
-        assertEquals(2, response.getCompanyAddresses().size());
+        assertEquals(2, response.getCompanyCustomers().size());
 
-        CompanyCustomer address = response.getCompanyAddresses().get(0);
+        CompanyCustomer address = response.getCompanyCustomers().get(0);
         assertEquals("Testvejen 42", address.getStreetAddress() );
         assertEquals( null, address.getCoAddress() );
         assertEquals( "2100", address.getZipCode() );
@@ -450,7 +604,7 @@ public class GetAddressesTest {
 		// <FirstName>Tess T</FirstName>
 		// <LastName>Persson</LastName>
 
-        CompanyCustomer address2 = response.getCompanyAddresses().get(1);
+        CompanyCustomer address2 = response.getCompanyCustomers().get(1);
         assertEquals("Testvejen 42, 2", address2.getStreetAddress() );
         assertEquals( null, address2.getCoAddress() );
         assertEquals( "2100", address2.getZipCode() );
@@ -464,7 +618,23 @@ public class GetAddressesTest {
         assertEquals( null, address2.getHouseNumber() );
         assertEquals( null, address2.getVatNumber() );
     }    
-   
-    
+ 
+    // validation
+    @Test
+    public void testFailOnMissingValuesForGetAddresses() {
+        String expectedMessage =
+        		"MISSING VALUE - CountryCode is required, use setCountryCode(...).\n" +
+                "MISSING VALUE - customerIdentifer is required. Use: setCustomerIdentifier().\n"
+		;
+        try {
+            WebPay.getAddresses(SveaConfig.getDefaultConfig())
+                .doRequest();
+            
+            //Fail on no exception
+            fail();
+        } catch (Exception e) {
+            assertEquals(expectedMessage, e.getCause().getMessage());
+        }
+    }
     
 }
