@@ -60,7 +60,7 @@ public abstract class CustomerIdentity <T extends CustomerIdentity<T>> {
     }
     
     /**
-     * Required for company customers in NL and DE
+     * Required for customers in NL and DE
      * @param type streetAddress
      * @param type houseNumber
      * @return CustomerIdentity
@@ -69,6 +69,11 @@ public abstract class CustomerIdentity <T extends CustomerIdentity<T>> {
         this.streetAddress = streetAddress;
         this.housenumber = houseNumber;
         return getGenericThis();
+    }
+    
+    /** Use for streetAddresses without separate HouseNumber */
+    public T setStreetAddress(String streetAddress) {
+        return setStreetAddress(streetAddress, null);
     }
     
     public String getCoAddress() {

@@ -7,6 +7,9 @@ import java.util.Date;
 
 
 
+
+
+
 import org.junit.Test;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
@@ -20,14 +23,17 @@ import org.w3c.dom.NodeList;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.response.hosted.HostedPaymentResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
+import se.sveaekonomi.webpay.integration.response.webservice.GetAddressesResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
+import se.sveaekonomi.webpay.integration.webservice.getaddresses.GetAddresses;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebserviceRowFormatter;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
@@ -485,4 +491,52 @@ public class WebPayWebdriverTest {
     	return amountExVat * (1+vatPercent/100);
     }
 
+    @Test
+    public void test_getAddresses_getIndividualAddresses_old_style() {
+    	GetAddresses request = WebPay.getAddresses(SveaConfig.getDefaultConfig())
+    			.setCountryCode(COUNTRYCODE.SE)
+    			.setIndividual("194605092222")
+    			.setOrderTypeInvoice()
+		;
+    	GetAddressesResponse response = request.doRequest();
+    }
+
+    @Test
+    public void test_getAddresses_getIndividualAddresses_new_style() {
+    	GetAddresses request = WebPay.getAddresses(SveaConfig.getDefaultConfig())
+    			.setCountryCode(COUNTRYCODE.SE)
+    			.setCustomerIdentifier("194605092222")
+    			.getIndividualAddresses()
+		;
+    	GetAddressesResponse response = request.doRequest();
+    
+    	assertTrue( response.isOrderAccepted() );    	
+    	assertTrue( response.getIndividualCustomers().get(0) instanceof IndividualCustomer );    	
+    }
+    
+    
+    @Test
+    public void test_getAddresses_getCompanyAddresses_old_style() {
+    	GetAddresses request = WebPay.getAddresses(SveaConfig.getDefaultConfig())
+    			.setCountryCode(COUNTRYCODE.SE)
+    			.setCompany("194608142222")
+    			.setOrderTypeInvoice()
+		;
+    	GetAddressesResponse response = request.doRequest();
+    }
+    
+//    @Test
+//    public void test_getAddresses_getCompanyAddresses_new_style() {
+//    	GetAddresses request = WebPay.getAddresses(SveaConfig.getDefaultConfig())
+//    			.setCountryCode(COUNTRYCODE.SE)
+//    			.setCustomerIdentifier("194608142222")
+//    			.getCompanyAddresses()
+//		;
+//    	GetAddressesResponse response = request.doRequest();
+//    }
+    
+//    @Test
+//    public void test_getAddresses_getCompanyAddresses() {
+//    	
+//    }
 }
