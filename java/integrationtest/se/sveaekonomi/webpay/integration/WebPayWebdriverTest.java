@@ -22,6 +22,7 @@ import se.sveaekonomi.webpay.integration.hosted.payment.PaymentMethodPayment;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.adminservice.DeliverOrdersResponse;
+import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.response.hosted.HostedPaymentResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.ConfirmTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.RecurTransactionResponse;
@@ -29,6 +30,7 @@ import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
+import se.sveaekonomi.webpay.integration.response.webservice.GetAddressesResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
@@ -36,6 +38,13 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.SUBSCRIPTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.HandleOrder;
+import se.sveaekonomi.webpay.integration.webservice.getaddresses.GetAddresses;
+import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
+import se.sveaekonomi.webpay.integration.webservice.helper.WebserviceRowFormatter;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaOrderRow;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
+import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 /**
  * contains end-to-end integration tests of WebPay entrypoints
@@ -440,5 +449,43 @@ public class WebPayWebdriverTest {
     
     // WebPay.getAddresses()
     // see integration tests
+    
+    private double convertExVatToIncVat(double amountExVat, double vatPercent) {
+    	return amountExVat * (1+vatPercent/100);
+    }
+
+    @Test
+    public void test_getAddresses_getIndividualAddresses_old_style() {
+    	GetAddresses request = WebPay.getAddresses(SveaConfig.getDefaultConfig())
+    			.setCountryCode(COUNTRYCODE.SE)
+    			.setIndividual("194605092222")
+    			.setOrderTypeInvoice()
+		;
+    	GetAddressesResponse response = request.doRequest();
+    }
+
+    @Test
+    public void test_getAddresses_getIndividualAddresses_new_style() {
+    	GetAddresses request = WebPay.getAddresses(SveaConfig.getDefaultConfig())
+    			.setCountryCode(COUNTRYCODE.SE)
+    			.setCustomerIdentifier("194605092222")
+    			.getIndividualAddresses()
+		;
+    	GetAddressesResponse response = request.doRequest();
+    
+    	assertTrue( response.isOrderAccepted() );    	
+    	assertTrue( response.getIndividualCustomers().get(0) instanceof IndividualCustomer );    	
+    }
+    
+    
+    @Test
+    public void test_getAddresses_getCompanyAddresses_old_style() {
+    	GetAddresses request = WebPay.getAddresses(SveaConfig.getDefaultConfig())
+    			.setCountryCode(COUNTRYCODE.SE)
+    			.setCompany("194608142222")
+    			.setOrderTypeInvoice()
+		;
+    	GetAddressesResponse response = request.doRequest();
+    }
     
 }
