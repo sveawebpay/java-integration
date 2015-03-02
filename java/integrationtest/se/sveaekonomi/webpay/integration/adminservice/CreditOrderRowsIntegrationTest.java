@@ -26,7 +26,7 @@ public class CreditOrderRowsIntegrationTest {
     	
         // credit first order row and assert the response
         CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-            .setInvoiceId( 999999 )
+            .setInvoiceId( 999999L )
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setRowToCredit(1)
@@ -49,7 +49,7 @@ public class CreditOrderRowsIntegrationTest {
  
         // deliver first order row and assert the response
         DeliverOrderRowsResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
-            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
+            .setOrderId( order.getOrderId() )			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setRowToDeliver(1)
@@ -67,11 +67,11 @@ public class CreditOrderRowsIntegrationTest {
         CreditOrderRowsRequest request = builder.creditInvoiceOrderRows();
         CreditOrderRowsResponse response = request.doRequest();
         assertTrue(response.isOrderAccepted());    
-        assertEquals(250.00, response.getAmount());
+        assertEquals(250.00, response.getAmount(), 0.0001);
         assertEquals(order.getOrderId(), response.getOrderId());
         assertNotNull(response.getCreditInvoiceId());
         assertEquals(ORDERTYPE.Invoice, response.getOrderType());
-        assertEquals("79021", response.getClientId());
+        assertEquals((Long)79021L, response.getClientId());
     }
 	
 	// using addCreditOrderRow
@@ -103,7 +103,7 @@ public class CreditOrderRowsIntegrationTest {
  
         // deliver first order row and assert the response
         DeliverOrderRowsResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
-            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
+            .setOrderId( order.getOrderId() )	
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setRowToDeliver(1)
@@ -113,7 +113,7 @@ public class CreditOrderRowsIntegrationTest {
 		
 		// credit order row and assert the response
         CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-    		.setInvoiceId( String.valueOf(deliver.getInvoiceId()) )
+    		.setInvoiceId( deliver.getInvoiceId() )
 			.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setCountryCode( COUNTRYCODE.SE )
             .addCreditOrderRow(
@@ -131,8 +131,8 @@ public class CreditOrderRowsIntegrationTest {
         CreditOrderRowsRequest request = builder.creditInvoiceOrderRows();
         CreditOrderRowsResponse response = request.doRequest();
         assertTrue(response.isOrderAccepted());            
-        assertEquals(Double.valueOf(99.99), response.getAmount());				// response	receives amount as incvat
-        assertEquals(String.valueOf(order.orderId), response.getOrderId());		// TODO refactor to order.getOrderId() returning String!
+        assertEquals(99.99, response.getAmount(), 0.0001);				// response	receives amount as incvat
+        assertEquals(order.getOrderId(), response.getOrderId());
         assertNotNull(response.getCreditInvoiceId());        
         // TODO package currently does not support QueryInvoice to get actual credit invoice 
 //        System.out.println(
@@ -169,7 +169,7 @@ public class CreditOrderRowsIntegrationTest {
  
         // deliver first order row and assert the response
         DeliverOrderRowsResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
-            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
+            .setOrderId( order.getOrderId()) 			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setRowToDeliver(1)
@@ -179,7 +179,7 @@ public class CreditOrderRowsIntegrationTest {
 		
 		// credit order row and assert the response
         CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-    		.setInvoiceId( String.valueOf(deliver.getInvoiceId()) )
+    		.setInvoiceId( deliver.getInvoiceId() )
 			.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setCountryCode( COUNTRYCODE.SE )
             .addCreditOrderRow(
@@ -197,14 +197,9 @@ public class CreditOrderRowsIntegrationTest {
         CreditOrderRowsRequest request = builder.creditInvoiceOrderRows();
         CreditOrderRowsResponse response = request.doRequest();
         assertTrue(response.isOrderAccepted());    
-        assertEquals(Double.valueOf(99.99), response.getAmount());				// response	receives amount as incvat
-        assertEquals(String.valueOf(order.orderId), response.getOrderId());		// TODO refactor to order.getOrderId() returning String!
-        assertNotNull(response.getCreditInvoiceId());        
-        // TODO package currently does not support QueryInvoice to get actual credit invoice 
-//        System.out.println(
-//    		"\ntest_creditOrderRows_creditInvoiceOrderRows_using_addCreditOrderRow_original_exvat_credit_incvat :" + 
-//			response.getCreditInvoiceId()
-//		);        
+        assertEquals(99.99, response.getAmount(), 0.0001);				// response	receives amount as incvat
+        assertEquals( order.getOrderId(), response.getOrderId());
+        assertNotNull(response.getCreditInvoiceId());          
     }	
 	// paymentplan 
 	// NOT SUPPORTED

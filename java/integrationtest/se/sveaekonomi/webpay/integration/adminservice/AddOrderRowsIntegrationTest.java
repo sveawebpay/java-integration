@@ -21,7 +21,6 @@ import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
-import se.sveaekonomi.webpay.integration.util.constant.ORDERROWSTATUS;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class AddOrderRowsIntegrationTest {
@@ -646,7 +645,7 @@ public class AddOrderRowsIntegrationTest {
 				
         // deliver first, second order rows and assert the response
         DeliverOrderRowsResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
-            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
+            .setOrderId( order.getOrderId() )
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setRowToDeliver(1).setRowToDeliver(2)

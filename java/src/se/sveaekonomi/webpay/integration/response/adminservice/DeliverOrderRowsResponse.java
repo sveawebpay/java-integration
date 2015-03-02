@@ -10,64 +10,55 @@ import org.w3c.dom.NodeList;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 
 public class DeliverOrderRowsResponse extends AdminServiceResponse {
-
-    /** Id that identifies an order in sveawebpay's system */
-    public long orderId; 
-    /** The amount delivered with this request */
-    public double amount;
-    public ORDERTYPE orderType;
+																				// see AS/DeliverOrderResult	
+	/** Id that identifies an order in sveawebpay's system */
+	private Long orderId;														// SveaOrderId		
+	// N/A																		// ClientOrderId	
+  	/** Id that identifies a client in sveawebpay's system */	
+    private Long clientId;														// ClientId
+	private ORDERTYPE orderType;												// OrderType
     /** The invoice id (set iff accepted, orderType Invoice, else 0)*/
-    public int invoiceId;
+    public Long invoiceId;														// DeliveryReferenceNumber
     /**  The contract number for the delivered order (set iff accepted, orderType PaymentPlan, else 0)  */
-    public int contractNumber;
-    /** Id that identifies a client in sveawebpay's system */	
-    public int clientId;	
-    		
-    public int getClientId() {
+    public Long contractNumber;													// DeliveryReferenceNumber
+	/** The amount delivered with this request */
+	private Double amount;														// DeliveredAmount
+ 	   		
+	public Long getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+    public Long getClientId() {
 		return clientId;
 	}
-	public void setClientId(int clientId) {
+	public void setClientId(Long clientId) {
 		this.clientId = clientId;
 	}
-
-	public double getAmount() {
-		return amount;
-	}
-
-	public void setAmount(double amount) {
-		this.amount = amount;
-	}
-
-	public  int getInvoiceId() {
-		return invoiceId;
-	}
-
-	public void setInvoiceId(int invoiceId) {
-		this.invoiceId = invoiceId;
-	}
-
-	public  int getContractNumber() {
-		return contractNumber;
-	}
-
-	public void setContractNumber(int contractNumber) {
-		this.contractNumber = contractNumber;
-	}
-
 	public ORDERTYPE getOrderType() {
 		return orderType;
 	}
-
 	public void setOrderType(ORDERTYPE orderType) {
 		this.orderType = orderType;
 	}
-
-	public long getOrderId() {
-		return orderId;
+	public Long getInvoiceId() {
+		return invoiceId;
 	}
-
-	public void setOrderId(long orderId) {
-		this.orderId = orderId;
+	public void setInvoiceId(Long invoiceId) {
+		this.invoiceId = invoiceId;
+	}
+	public Long getContractNumber() {
+		return contractNumber;
+	}
+	public void setContractNumber(Long contractNumber) {
+		this.contractNumber = contractNumber;
+	}
+	public Double getAmount() {
+		return amount;
+	}
+	public void setAmount(Double amount) {
+		this.amount = amount;
 	}
 
 	public DeliverOrderRowsResponse(SOAPMessage soapResponse) throws SOAPException {
@@ -83,17 +74,17 @@ public class DeliverOrderRowsResponse extends AdminServiceResponse {
 		Node ordersDelivered = deliverPartialResult.getChildNodes().item(2);
 		Element dor = (Element) ordersDelivered.getChildNodes().item(0);		
 		String clientId = dor.getElementsByTagName("a:ClientId").item(0).getTextContent();
-		this.setClientId( Integer.parseInt(clientId) );
+		this.setClientId( Long.valueOf(clientId) );
 		String deliveredAmount = dor.getElementsByTagName("a:DeliveredAmount").item(0).getTextContent();
 		this.setAmount( Double.valueOf(deliveredAmount) );
 		String deliveryReferenceNumber = dor.getElementsByTagName("a:DeliveryReferenceNumber").item(0).getTextContent();
 		String orderType = dor.getElementsByTagName("a:OrderType").item(0).getTextContent();
 		if( orderType.equals(ORDERTYPE.Invoice.toString()) ) {
-			this.setInvoiceId( Integer.parseInt(deliveryReferenceNumber) );
+			this.setInvoiceId( Long.valueOf(deliveryReferenceNumber) );
 			this.setOrderType( ORDERTYPE.Invoice );
 		}
 		if( orderType.equals(ORDERTYPE.PaymentPlan.toString()) ) {
-			this.setContractNumber( Integer.parseInt(deliveryReferenceNumber) );		
+			this.setContractNumber( Long.valueOf(deliveryReferenceNumber) );		
 			this.setOrderType( ORDERTYPE.PaymentPlan );			
 		}
 		String sveaOrderId = dor.getElementsByTagName("a:SveaOrderId").item(0).getTextContent();

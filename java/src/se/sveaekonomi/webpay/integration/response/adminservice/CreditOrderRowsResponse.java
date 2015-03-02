@@ -10,57 +10,48 @@ import org.w3c.dom.NodeList;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 
 public class CreditOrderRowsResponse extends AdminServiceResponse {
-
-    /** Id that identifies an order in sveawebpay's system */
-	private long orderId;
-    /** The amount credited with this request */
-	private double amount;	
-	private ORDERTYPE orderType;
-    /** The credit invoice id (set iff accepted, orderType Invoice, else 0)*/
-	private int creditInvoiceId;
+																				// see AS/DeliverOrderResult	
+	/** Id that identifies an order in sveawebpay's system */
+	private Long orderId;														// SveaOrderId		
   	/** Id that identifies a client in sveawebpay's system */	
-    private int clientId;
-    
-	public long getOrderId() {
+    private Long clientId;														// ClientId
+	private ORDERTYPE orderType;												// OrderType
+    /** The credit invoice id (set iff accepted, orderType Invoice, else 0)*/
+	private Long creditInvoiceId;												// DeliveryReferenceNumber
+    /** The amount credited with this request */
+	private Double amount;														// DeliveredAmount
+ 
+	public Long getOrderId() {
 		return orderId;
 	}
-
-	public void setOrderId(long orderId) {
+	public void setOrderId(Long orderId) {
 		this.orderId = orderId;
 	}
-
-	public double getAmount() {
-		return amount;
+	public Long getClientId() {
+		return clientId;
 	}
-
-	public void setAmount(double amount) {
-		this.amount = amount;
+	public void setClientId(Long clientId) {
+		this.clientId = clientId;
 	}
-
-	public  int getCreditInvoiceId() {
-		return creditInvoiceId;
-	}
-
-	public void setCreditInvoiceId(int creditInvoiceId) {
-		this.creditInvoiceId = creditInvoiceId;
-	}
-
 	public ORDERTYPE getOrderType() {
 		return orderType;
 	}
-
 	public void setOrderType(ORDERTYPE orderType) {
 		this.orderType = orderType;
 	}
-
-	public int getClientId() {
-		return clientId;
+	public  Long getCreditInvoiceId() {
+		return creditInvoiceId;
+	}
+	public void setCreditInvoiceId(Long creditInvoiceId) {
+		this.creditInvoiceId = creditInvoiceId;
+	}
+	public Double getAmount() {
+		return amount;
+	}
+	public void setAmount(Double amount) {
+		this.amount = amount;
 	}
 
-	public void setClientId(int clientId) {
-		this.clientId = clientId;
-	}
-	
 	public CreditOrderRowsResponse(SOAPMessage soapResponse) throws SOAPException {
 		super(soapResponse.getSOAPPart().getEnvelope().getBody().getElementsByTagName("*"));
 
@@ -75,16 +66,16 @@ public class CreditOrderRowsResponse extends AdminServiceResponse {
 		Node ordersDelivered = creditInvoiceRowsResult.getChildNodes().item(2);
 		Element dor = (Element) ordersDelivered.getChildNodes().item(0);		
 		String clientId = dor.getElementsByTagName("a:ClientId").item(0).getTextContent();
-		this.setClientId(Integer.parseInt(clientId));
+		this.setClientId(Long.valueOf(clientId));
 		String deliveredAmount = dor.getElementsByTagName("a:DeliveredAmount").item(0).getTextContent();
 		this.setAmount( Double.parseDouble(deliveredAmount) );
 		String deliveryReferenceNumber = dor.getElementsByTagName("a:DeliveryReferenceNumber").item(0).getTextContent();
 		String orderType = dor.getElementsByTagName("a:OrderType").item(0).getTextContent();
 		if( orderType.equals(ORDERTYPE.Invoice.toString()) ) {
-			this.setCreditInvoiceId( Integer.parseInt(deliveryReferenceNumber) );
+			this.setCreditInvoiceId( Long.valueOf(deliveryReferenceNumber) );
 			this.setOrderType( ORDERTYPE.Invoice );
 		}
 		String sveaOrderId = dor.getElementsByTagName("a:SveaOrderId").item(0).getTextContent();
-		this.setOrderId( Long.parseLong(sveaOrderId) );
+		this.setOrderId( Long.valueOf(sveaOrderId) );
 	}
 }

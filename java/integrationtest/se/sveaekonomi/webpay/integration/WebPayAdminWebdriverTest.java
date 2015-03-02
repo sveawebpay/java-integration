@@ -130,7 +130,7 @@ public class WebPayAdminWebdriverTest {
         	GetOrdersResponse response = queryOrderBuilder.queryInvoiceOrder().doRequest();
 
 			assertTrue( response.isOrderAccepted() );     
-	   		assertEquals( String.valueOf(order.orderId), response.getOrderId() );
+	   		assertEquals( order.getOrderId(), response.getOrderId() );
 	   		
 	   		// see GetOrdersIntegrationTest.java for detailed tests
         }
@@ -209,7 +209,7 @@ public class WebPayAdminWebdriverTest {
 
         // deliver first order row and assert the response
         DeliverOrderRowsResponse response = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
-                .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
+                .setOrderId( order.getOrderId() )
                 .setCountryCode(TestingTool.DefaultTestCountryCode)	
                 .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
                 .setRowToDeliver(1)
@@ -416,7 +416,7 @@ public class WebPayAdminWebdriverTest {
  
 		// credit first order row and assert the response
         CreditOrderRowsBuilder creditBuilder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-    		.setOrderId( String.valueOf(order.orderId) )
+    		.setOrderId( order.getOrderId() )
 			.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setCountryCode( COUNTRYCODE.SE )
             .setInvoiceId( deliverResponse.getInvoiceId() )
@@ -447,7 +447,7 @@ public class WebPayAdminWebdriverTest {
         indexes.add(1);
         indexes.add(2);    
         CreditOrderRowsBuilder creditRequest = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-    		.setOrderId( originalOrder.getTransactionId() )
+    		.setTransactionId( originalOrder.getTransactionId() )
             .setCountryCode( COUNTRYCODE.SE )
             //.setRowToCredit(1)
             //.setRowToCredit(2) // => 1,2
@@ -571,7 +571,7 @@ public class WebPayAdminWebdriverTest {
         ArrayList<Integer> indexes2 = new ArrayList<Integer>();
         indexes2.add(2);    
         CreditOrderRowsBuilder creditRequest = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-    		.setOrderId( originalOrder.getTransactionId() )
+    		.setTransactionId( originalOrder.getTransactionId() )
             .setCountryCode( COUNTRYCODE.SE )
 		    .setRowsToCredit( indexes )
 		    .setRowsToCredit( indexes2 ) // test adds upp to 1,2
