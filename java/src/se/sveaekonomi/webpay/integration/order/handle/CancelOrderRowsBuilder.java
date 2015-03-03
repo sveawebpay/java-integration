@@ -14,7 +14,6 @@ import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
-import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 
 /**
  * @author Kristian Grossman-Madsen
@@ -27,12 +26,9 @@ public class CancelOrderRowsBuilder extends OrderBuilder<CancelOrderRowsBuilder>
 
     private ArrayList<Integer> rowIndexesToCancel;
 	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
-    private String orderId;
-    protected PAYMENTTYPE orderType;
+    private Long orderId;
+    private PAYMENTTYPE orderType;
     
-	public PAYMENTTYPE getOrderType() {
-		return this.orderType;
-	} 
 	public CancelOrderRowsBuilder( ConfigurationProvider config ) {
 		this.config = config;
 		this.rowIndexesToCancel = new ArrayList<Integer>();
@@ -80,11 +76,11 @@ public class CancelOrderRowsBuilder extends OrderBuilder<CancelOrderRowsBuilder>
 		return this;
 	}
 
-	public String getOrderId() {
+	public Long getOrderId() {
 		return orderId;
 	}
 
-	public CancelOrderRowsBuilder setOrderId(String orderId) {
+	public CancelOrderRowsBuilder setOrderId(Long orderId) {
 		this.orderId = orderId;
 		return this;
 	}
@@ -95,7 +91,7 @@ public class CancelOrderRowsBuilder extends OrderBuilder<CancelOrderRowsBuilder>
 	 * @return DeliverOrderRowsBuilder
 	 */
     public CancelOrderRowsBuilder setTransactionId( String transactionId) {        
-        return setOrderId( transactionId );
+        return setOrderId( Long.valueOf(transactionId) );
     }   
 	
 
@@ -118,7 +114,7 @@ public class CancelOrderRowsBuilder extends OrderBuilder<CancelOrderRowsBuilder>
 				
 		LowerTransactionRequest lowerTransactionRequest = new LowerTransactionRequest( this.getConfig() );
 		lowerTransactionRequest.setCountryCode( this.getCountryCode() );
-		lowerTransactionRequest.setTransactionId( this.getOrderId() );
+		lowerTransactionRequest.setTransactionId( String.valueOf(this.getOrderId()) );
 		lowerTransactionRequest.setAmountToLower( (int)MathUtil.bankersRound(amountToLowerOrderBy) * 100 ); // request uses minor currency );
 		
 		return lowerTransactionRequest;				
@@ -152,4 +148,7 @@ public class CancelOrderRowsBuilder extends OrderBuilder<CancelOrderRowsBuilder>
 		return new CancelOrderRowsRequest(this);
 	}
 	
+	public PAYMENTTYPE getOrderType() {
+		return this.orderType;
+	} 
 }
