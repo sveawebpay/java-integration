@@ -2,15 +2,16 @@ package se.sveaekonomi.webpay.integration.util.constant;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 
-public enum ORDERROWSTATUS {	
+public enum ORDERDELIVERYSTATUS {	
 
+	CREATED("Created"),
+	PARTIALLYDELIVERED ("PartiallyDelivered"),		
 	DELIVERED ("Delivered"),			
-	NOTDELIVERED ("NotDelivered"),		
 	CANCELLED ("Cancelled");			
 
 	private final String constantAsString;
 	
-	ORDERROWSTATUS( String constantAsString ) {
+	ORDERDELIVERYSTATUS( String constantAsString ) {
 		this.constantAsString = constantAsString;
 	}
 	
@@ -18,10 +19,10 @@ public enum ORDERROWSTATUS {
 		return this.constantAsString;
 	}
 	
-	public static ORDERROWSTATUS fromString( String status ) throws SveaWebPayException {
-		for( ORDERROWSTATUS value : ORDERROWSTATUS.values() ) {
+	public static ORDERDELIVERYSTATUS fromString( String status ) throws SveaWebPayException {
+		for( ORDERDELIVERYSTATUS value : ORDERDELIVERYSTATUS.values() ) {
 			if( value.toString().equals(status) ) return value;
 		}
-		throw new SveaWebPayException("Unknown OrderRowStatus: "+status);
+		throw new SveaWebPayException("Unknown OrderDeliveryStatus: "+status);
 	}
 }

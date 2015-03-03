@@ -26,10 +26,8 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  */
 public class GetOrdersRequest {
 
-	// NOTE: validates on order level, don't validate request attributes in itself (rationale: bad request will return error from webservice)
-	
 	private String action;
-	public QueryOrderBuilder builder;
+	private QueryOrderBuilder builder;
 		
 	public GetOrdersRequest( QueryOrderBuilder builder) {
 		this.action = "GetOrders";

@@ -16,10 +16,10 @@ public enum DISTRIBUTIONTYPE {
 		return this.constantAsString;
 	}
 	
-	public static DISTRIBUTIONTYPE fromString( String orderType ) throws SveaWebPayException {
+	public static DISTRIBUTIONTYPE fromString( String distributionType ) throws SveaWebPayException {
 		for( DISTRIBUTIONTYPE value : DISTRIBUTIONTYPE.values() ) {
-			if( value.toString().equals(orderType) ) return value;
+			if( value.toString().equals(distributionType) ) return value;
 		}
-		throw new SveaWebPayException("Unknown distributiontype.");
+		throw new SveaWebPayException("Unknown DistributionType: "+distributionType);
 	}
 }

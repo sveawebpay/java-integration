@@ -10,263 +10,202 @@ import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.CustomerIdentity;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
+import se.sveaekonomi.webpay.integration.util.constant.ORDERDELIVERYSTATUS;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERROWSTATUS;
+import se.sveaekonomi.webpay.integration.util.constant.ORDERSTATUS;
+import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
+import se.sveaekonomi.webpay.integration.util.constant.PENDINGTYPE;
 
 public class GetOrdersResponse extends AdminServiceResponse {
-
-	// javadoc attributes below takes its info from admin service api Order structure
-    /** Date when order status was changed, e.g when order was delivered, or null if not set.*/
-    public String changedDate;	// TODO change to Date
-    /** Id that identifies a client in sveawebpay system */
-    public int clientId;
+																							// see AS/Order structure:
     /** Order number from client's ordersystem */
-    public int clientOrderId;
+    public String clientOrderId;															// ClientOrderId	
+    /** Unique Id for the created order. Used for any further order webservice requests. */
+    public Long orderId;																	// SveaOrderId		
+    public ORDERDELIVERYSTATUS orderDeliveryStatus;											// OrderDeliveryStatus
+    public ORDERTYPE orderType; 															// OrderType
+    public ORDERSTATUS orderStatus;															// OrderStatus    
     /** Date when order was first created. */
-    public String createdDate;
-
-    /** Tells if credit decision is accepted or not */
-    public boolean creditReportStatusAccepted;
-    /** Date of order credit decision. */
-    public String creditReportStatusCreationDate;
-
-    /** Country currency */
-    public String currency;
-
+    public String createdDate;																// CreatedDate    
     /** @var CompanyCustomer|IndividualCustomer $customer -- customer identity as associated with the order by Svea, also Shipping address. */
-    public CustomerIdentity<?> customer;
-
+    public CustomerIdentity<?> customer;													// Customer
     /** Customer id that is created by SveaWebPay system. */
-    public int customerId;
+    public Long customerId;    																// CustomerId
     /** Customer Reference. (Gets printed on the invoice.)*/
-    public String customerReference;
-    public boolean isPossibleToAdminister;
-    /** Tells if order can be cancelled or not */
-    public boolean isPossibleToCancel;
+    public String customerReference;    													// CustomerReference
+	/** Date when order status was changed, e.g when order was delivered, or null if not set.*/
+    public String changeDate;																// ChangeDate
+    /** Country currency */																	
+    public String currency;																	// Currency
+    /** Describes whether SveaWebPay will buy the order or just administrate it */
+    public Boolean sveaWillBuy;																// SveaWillBuy
     /** Text on order created by client */
-    public String notes;
-    /** one of {Created,PartiallyDelivered,Delivered,Cancelled} */
-    public String orderDeliveryStatus; // TODO change to enum!
-
+    public String notes;																	// Notes
+    /** Id that identifies a client in sveawebpay system */
+    public Long clientId;																	// ClientId
+    /** Contract length or null for invoice orders */
+    public Integer paymentPlanDetailsContractLengthMonths;									// PaymentPlanDetails.ContractLengthMonths
+    /** Contract number of a specific contract or null for invoice orders */
+    public Long paymentPlanDetailsContractNumber;											// PaymentPlanDetails.ContractNumber
+    public Boolean isPossibleToAdminister;													// IsPossibleToAdminister
+    /** Date of order credit decision. */
+    public String creditReportStatusCreationDate;											// CreditReportStatus.CreationDate
+    /** Tells if credit decision is accepted or not */
+    public Boolean creditReportStatusAccepted;												// CreditReportStatus.Accepted
     /** @var Svea\OrderRow[] $numberedOrderRows  array of OrderRow objects, note that invoice and payment plan order rows name attribute will be null */
-    public ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
+    public ArrayList<NumberedOrderRowBuilder> numberedOrderRows;							// OrderRows
+    /** Tells if order can be cancelled or not */
+    public Boolean isPossibleToCancel;														// IsPossibleToCancel
+    public PENDINGTYPE pendingReasonsPendingType; 											// PendingReasons.PendingType
+    public String pendingReasonsCreatedDate;												// PendingReasons.CreatedDate
 
-    /** one of {Created,Pending,Active,Denied,Error}*/
-    public String orderStatus; // TODO change to enum!
-    public String getChangedDate() {
-		return changedDate;
-	}
-
-	public void setChangedDate(String changedDate) {
-		this.changedDate = changedDate;
-	}
-
-	public int getClientId() {
-		return clientId;
-	}
-
-	public void setClientId(int clientId) {
-		this.clientId = clientId;
-	}
-
-	public int getClientOrderId() {
+	public String getClientOrderId() {
 		return clientOrderId;
 	}
-
-	public void setClientOrderId(int clientOrderId) {
+	public void setClientOrderId(String clientOrderId) {
 		this.clientOrderId = clientOrderId;
 	}
-
+    public Long getOrderId() {
+		return orderId;
+	}
+	public void setOrderId(Long orderId) {
+		this.orderId = orderId;
+	}
+	public ORDERDELIVERYSTATUS getOrderDeliveryStatus() {
+		return orderDeliveryStatus;
+	}
+	public void setOrderDeliveryStatus(ORDERDELIVERYSTATUS orderDeliveryStatus) {
+		this.orderDeliveryStatus = orderDeliveryStatus;
+	}    
+	public ORDERTYPE getOrderType() {
+		return orderType;
+	}
+	public void setOrderType(ORDERTYPE orderType) {
+		this.orderType = orderType;
+	}
+	public ORDERSTATUS getOrderStatus() {
+		return orderStatus;
+	}
+	public void setOrderStatus(ORDERSTATUS orderStatus) {
+		this.orderStatus = orderStatus;
+	}	
 	public String getCreatedDate() {
 		return createdDate;
 	}
-
 	public void setCreatedDate(String createdDate) {
 		this.createdDate = createdDate;
-	}
-
-	public boolean getCreditReportStatusAccepted() {
-		return creditReportStatusAccepted;
-	}
-
-	public void setCreditReportStatusAccepted(boolean creditReportStatusAccepted) {
-		this.creditReportStatusAccepted = creditReportStatusAccepted;
-	}
-
-	public String getCreditReportStatusCreationDate() {
-		return creditReportStatusCreationDate;
-	}
-
-	public void setCreditReportStatusCreationDate(
-			String creditReportStatusCreationDate) {
-		this.creditReportStatusCreationDate = creditReportStatusCreationDate;
-	}
-
-	public String getCurrency() {
-		return currency;
-	}
-
-	public void setCurrency(String currency) {
-		this.currency = currency;
-	}
-
-	public IndividualCustomer getIndividualCustomer() {
-		return (IndividualCustomer) getCustomer();
-	}
-	
-	public CompanyCustomer getCompanyCustomer() {
-		return (CompanyCustomer) getCustomer();
-	}
-
-	
+	}	
 	private CustomerIdentity getCustomer() {
 		return customer;
 	}	
-	
 	public void setCustomer( CustomerIdentity customer ) {
 		this.customer = customer;
+	}	
+	public IndividualCustomer getIndividualCustomer() {
+		return (IndividualCustomer) getCustomer();
 	}
-	
-	
-	public int getCustomerId() {
+	public CompanyCustomer getCompanyCustomer() {
+		return (CompanyCustomer) getCustomer();
+	}
+	public Long getCustomerId() {
 		return customerId;
 	}
-
-	public void setCustomerId(int customerId) {
+	public void setCustomerId(Long customerId) {
 		this.customerId = customerId;
 	}
-
 	public String getCustomerReference() {
 		return customerReference;
 	}
-
 	public void setCustomerReference(String customerReference) {
 		this.customerReference = customerReference;
 	}
-
-	public boolean getIsPossibleToAdminister() {
-		return isPossibleToAdminister;
+    public String getChangeDate() {
+		return changeDate;
 	}
-
-	public void setIsPossibleToAdminister(boolean isPossibleToAdminister) {
-		this.isPossibleToAdminister = isPossibleToAdminister;
+	public void setChangeDate(String changeDate) {
+		this.changeDate = changeDate;
 	}
-
-	public boolean getIsPossibleToCancel() {
-		return isPossibleToCancel;
+	public String getCurrency() {
+		return currency;
 	}
-
-	public void setIsPossibleToCancel(boolean isPossibleToCancel) {
-		this.isPossibleToCancel = isPossibleToCancel;
+	public void setCurrency(String currency) {
+		this.currency = currency;
+	}	
+	public Boolean getSveaWillBuy() {
+		return sveaWillBuy;
 	}
-
+	public void setSveaWillBuy(Boolean sveaWillBuy) {
+		this.sveaWillBuy = sveaWillBuy;
+	}
 	public String getNotes() {
 		return notes;
 	}
-
 	public void setNotes(String notes) {
 		this.notes = notes;
 	}
-
-	public String getOrderDeliveryStatus() {
-		return orderDeliveryStatus;
+	public Long getClientId() {
+		return clientId;
 	}
-
-	public void setOrderDeliveryStatus(String orderDeliveryStatus) {
-		this.orderDeliveryStatus = orderDeliveryStatus;
+	public void setClientId(Long clientId) {
+		this.clientId = clientId;
 	}
-
-	public String getOrderStatus() {
-		return orderStatus;
-	}
-
-	public void setOrderStatus(String orderStatus) {
-		this.orderStatus = orderStatus;
-	}
-
-	public String getOrderType() {
-		return orderType;
-	}
-
-	public void setOrderType(String orderType) {
-		this.orderType = orderType;
-	}
-
 	/** null for invoice orders */
-	public String getPaymentPlanDetailsContractLengthMonths() {
+	public Integer getPaymentPlanDetailsContractLengthMonths() {
 		return paymentPlanDetailsContractLengthMonths;
 	}
-
-	public void setPaymentPlanDetailsContractLengthMonths(
-			String paymentPlanDetailsContractLengthMonths) {
+	public void setPaymentPlanDetailsContractLengthMonths( Integer paymentPlanDetailsContractLengthMonths) {
 		this.paymentPlanDetailsContractLengthMonths = paymentPlanDetailsContractLengthMonths;
 	}
-
 	/** null for invoice orders */
-	public String getPaymentPlanDetailsContractNumber() {
+	public Long getPaymentPlanDetailsContractNumber() {
 		return paymentPlanDetailsContractNumber;
 	}
-
-	public void setPaymentPlanDetailsContractNumber(
-			String paymentPlanDetailsContractNumber) {
+	public void setPaymentPlanDetailsContractNumber( Long paymentPlanDetailsContractNumber) {
 		this.paymentPlanDetailsContractNumber = paymentPlanDetailsContractNumber;
 	}
-
-	public String getPendingReasonsPendingType() {
+	public Boolean getIsPossibleToAdminister() {
+		return isPossibleToAdminister;
+	}
+	public void setIsPossibleToAdminister(Boolean isPossibleToAdminister) {
+		this.isPossibleToAdminister = isPossibleToAdminister;
+	}
+	public Boolean getCreditReportStatusAccepted() {
+		return creditReportStatusAccepted;
+	}
+	public void setCreditReportStatusAccepted(Boolean creditReportStatusAccepted) {
+		this.creditReportStatusAccepted = creditReportStatusAccepted;
+	}
+	public String getCreditReportStatusCreationDate() {
+		return creditReportStatusCreationDate;
+	}
+	public void setCreditReportStatusCreationDate(String creditReportStatusCreationDate) {
+		this.creditReportStatusCreationDate = creditReportStatusCreationDate;
+	}
+	public ArrayList<NumberedOrderRowBuilder> getNumberedOrderRows() {
+		return this.numberedOrderRows;
+	}	
+	public void setNumberedOrderRows( ArrayList<NumberedOrderRowBuilder> numberedOrderRows) {
+		this.numberedOrderRows = numberedOrderRows;
+	}
+	public Boolean getIsPossibleToCancel() {
+		return isPossibleToCancel;
+	}
+	public void setIsPossibleToCancel(Boolean isPossibleToCancel) {
+		this.isPossibleToCancel = isPossibleToCancel;
+	}
+	public PENDINGTYPE getPendingReasonsPendingType() {
 		return pendingReasonsPendingType;
 	}
-
-	public void setPendingReasonsPendingType(String pendingReasonsPendingType) {
+	public void setPendingReasonsPendingType(PENDINGTYPE pendingReasonsPendingType) {
 		this.pendingReasonsPendingType = pendingReasonsPendingType;
 	}
-
 	public String getPendingReasonsCreatedDate() {
 		return pendingReasonsCreatedDate;
 	}
-
 	public void setPendingReasonsCreatedDate(String pendingReasonsCreatedDate) {
 		this.pendingReasonsCreatedDate = pendingReasonsCreatedDate;
 	}
 
-	public String getOrderId() {
-		return orderId;
-	}
-
-	public void setOrderId(String orderId) {
-		this.orderId = orderId;
-	}
-
-	public boolean getSveaWillBuy() {
-		return sveaWillBuy;
-	}
-
-	public void setSveaWillBuy(boolean sveaWillBuy) {
-		this.sveaWillBuy = sveaWillBuy;
-	}
-	
-	public void setNumberedOrderRows( ArrayList<NumberedOrderRowBuilder> numberedOrderRows) {
-		this.numberedOrderRows = numberedOrderRows;
-	}
-	
-	public ArrayList<NumberedOrderRowBuilder> getNumberedOrderRows() {
-		return this.numberedOrderRows;
-	}
-
-	/** @var one of {Invoice,PaymentPlan} */
-    public String orderType; // TODO change to enum!
-
-    /** Contract length or null for invoice orders */
-    public String paymentPlanDetailsContractLengthMonths;
-    /** Contract number of a specific contract or null for invoice orders */
-    public String paymentPlanDetailsContractNumber;
-
-    /** one of {SMSOnHighAmount,UseOfDeliveryAddress} */
-    public String pendingReasonsPendingType;  // TODO change to enum!
-    public String pendingReasonsCreatedDate;
-
-    /** Unique Id for the created order. Used for any further order webservice requests. */
-    public String orderId;
-    /** Describes whether SveaWebPay will buy the order or just administrate it */
-    public boolean sveaWillBuy;	
 
     public GetOrdersResponse(NodeList xmlResponse) {		
     	super( xmlResponse ); // handle ErrorMessage, ResultCode
@@ -281,26 +220,24 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		Node orders = getOrdersResult.getChildNodes().item(2);
 		Element o = (Element) orders.getChildNodes().item(0);
 		String changedDate = o.getElementsByTagName("a:ChangedDate").item(0).getTextContent(); // getTextContent() of <a:ChangedDate i:nil="true" /> is ""
-		this.setChangedDate( changedDate.equals("") ? null : changedDate );
+		this.setChangeDate( changedDate.equals("") ? null : changedDate );
 		String clientId = o.getElementsByTagName("a:ClientId").item(0).getTextContent();
-		this.setClientId( Integer.parseInt(clientId) );
+		this.setClientId( clientId.equals("") ? null : Long.valueOf(clientId) );
 		String clientOrderId = o.getElementsByTagName("a:ClientOrderId").item(0).getTextContent();
-		this.setClientOrderId( Integer.parseInt(clientOrderId));
+		this.setClientOrderId( clientOrderId) ;
 		String createdDate = o.getElementsByTagName("a:CreatedDate").item(0).getTextContent();
 		this.setCreatedDate(createdDate);
 		Node creditReportStatus = o.getElementsByTagName("a:CreditReportStatus").item(0);
-		boolean creditReportStatusAccepted = Boolean.parseBoolean((creditReportStatus.getChildNodes().item(0).getTextContent())); 
+		Boolean creditReportStatusAccepted = Boolean.parseBoolean((creditReportStatus.getChildNodes().item(0).getTextContent())); 
 		this.setCreditReportStatusAccepted(creditReportStatusAccepted);		
 		this.setCreditReportStatusCreationDate(creditReportStatus.getChildNodes().item(1).getTextContent());			
 		String currency = o.getElementsByTagName("a:Currency").item(0).getTextContent();
-		this.setCurrency(currency);
-			
-		// all individual customer fields
+		this.setCurrency(currency);		
+		
 		Element c = (Element) o.getElementsByTagName("a:Customer").item(0);
 		String cCoAddress = c.getElementsByTagName("b:CoAddress").item(0).getTextContent();
 		String cCompanyIdentity = c.getElementsByTagName("b:CompanyIdentity").item(0).getTextContent();
-		//       						<b:CompanyIdentification i:nil="true"/>
-		// NOT IN USE
+		// NOT IN USE					<b:CompanyIdentification i:nil="true"/>
 		String ciCompanyVatNumber = cCompanyIdentity.equals("") ? null : c.getElementsByTagName("b:CompanyVatNumber").item(0).getTextContent();
 		String cCountryCode = c.getElementsByTagName("b:CountryCode").item(0).getTextContent();
 		String cCustomerType = c.getElementsByTagName("b:CustomerType").item(0).getTextContent();
@@ -315,8 +252,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		String cLocality = c.getElementsByTagName("b:Locality").item(0).getTextContent();
 		String cNationalIdNumber = c.getElementsByTagName("b:NationalIdNumber").item(0).getTextContent();
 		String cPhoneNumber = c.getElementsByTagName("b:PhoneNumber").item(0).getTextContent();
-		//							<b:PublicKey i:nil="true" />
-		// NOT SUPPORTED
+		// NOT SUPPORTED			<b:PublicKey i:nil="true" />
 		String cStreet = c.getElementsByTagName("b:Street").item(0).getTextContent();
 		String cZipCode = c.getElementsByTagName("b:ZipCode").item(0).getTextContent();
 
@@ -356,12 +292,10 @@ public class GetOrdersResponse extends AdminServiceResponse {
 			this.setCustomer(companyCustomer);
 		}		
 		String customerId = o.getElementsByTagName("a:CustomerId").item(0).getTextContent();
-		this.setCustomerId(Integer.parseInt(customerId));
+		this.setCustomerId( Long.valueOf(customerId) );
 		String customerReference = o.getElementsByTagName("a:CustomerReference").item(0).getTextContent();
-		this.setCustomerReference(customerReference.equals("") ? null : customerReference);	// for <a:CustomerReference /> getTextContent() returns ""
-		//						<a:DeliveryAddress i:nil="true"
-		//							xmlns:b="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
-		//not supported	
+		this.setCustomerReference(customerReference.equals("") ? null : customerReference);	
+		//NOT SUPPORTED			<a:DeliveryAddress i:nil="true" xmlns:b="http://schemas.datacontract.org/2004/07/DataObjects.Webservice" />
 		String isPossibleToAdminister = o.getElementsByTagName("a:IsPossibleToAdminister").item(0).getTextContent();	
 		this.setIsPossibleToAdminister(isPossibleToAdminister.equals("true") ? true : false);
 		String isPossibleToCancel = o.getElementsByTagName("a:IsPossibleToCancel").item(0).getTextContent();	
@@ -369,7 +303,7 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		String notes = o.getElementsByTagName("a:Notes").item(0).getTextContent();	
 		this.setNotes(notes.equals("") ? null : notes); // for <a:Notes i:nil="true" /> getTextContent() returns ""
 		String cOrderDeliveryStatus = o.getElementsByTagName("a:OrderDeliveryStatus").item(0).getTextContent();	
-		this.setOrderDeliveryStatus(cOrderDeliveryStatus);
+		this.setOrderDeliveryStatus(ORDERDELIVERYSTATUS.fromString(cOrderDeliveryStatus));
 
 		// all order rows
 		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = new ArrayList<NumberedOrderRowBuilder>();
@@ -417,27 +351,26 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		}
 		this.setNumberedOrderRows( numberedOrderRows );
 		String orderStatus = o.getElementsByTagName("a:OrderStatus").item(0).getTextContent();
-		this.setOrderStatus(orderStatus);	
+		this.setOrderStatus(ORDERSTATUS.fromString(orderStatus));	
 		String orderType = o.getElementsByTagName("a:OrderType").item(0).getTextContent();
-		this.setOrderType(orderType);
+		this.setOrderType( ORDERTYPE.fromString(orderType) );
 		Element ppd = (Element) o.getElementsByTagName("a:PaymentPlanDetails").item(0);		
 		if( ppd.getChildNodes().getLength() > 0 ) {
-			//	                <a:CampaignCode>213060</a:CampaignCode>
-			// NOT SUPPORTED
+			// NOT SUPPORTED     <a:CampaignCode>213060</a:CampaignCode>
 			String ppdPaymentPlanDetailsContractLengthMonths = ppd.getElementsByTagName("a:ContractLengthMonths").item(0).getTextContent();
-			this.setPaymentPlanDetailsContractLengthMonths(ppdPaymentPlanDetailsContractLengthMonths.equals("") ? null : ppdPaymentPlanDetailsContractLengthMonths);
+			this.setPaymentPlanDetailsContractLengthMonths(ppdPaymentPlanDetailsContractLengthMonths.equals("") ? null : Integer.valueOf(ppdPaymentPlanDetailsContractLengthMonths));
 			String ppdPaymentPlanDetailsContractNumber = ppd.getElementsByTagName("a:ContractNumber").item(0).getTextContent();
-			this.setPaymentPlanDetailsContractNumber(ppdPaymentPlanDetailsContractNumber.equals("") ? null : ppdPaymentPlanDetailsContractNumber);
+			this.setPaymentPlanDetailsContractNumber(ppdPaymentPlanDetailsContractNumber.equals("") ? null : Long.valueOf(ppdPaymentPlanDetailsContractNumber));
 		}
 		Element pr = (Element) o.getElementsByTagName("a:PendingReasons").item(0);
 		if( pr.getChildNodes().getLength() > 0 ) {
 			String prPendingReasonsPendingType = pr.getElementsByTagName("a:PendingType").item(0).getTextContent();
-			this.setPendingReasonsPendingType(prPendingReasonsPendingType.equals("") ? null : prPendingReasonsPendingType);
+			this.setPendingReasonsPendingType(prPendingReasonsPendingType.equals("") ? null : PENDINGTYPE.fromString(prPendingReasonsPendingType));
 			String prPendingReasonsCreatedDate = pr.getElementsByTagName("a:CreatedDate").item(0).getTextContent();
 			this.setPendingReasonsCreatedDate(prPendingReasonsCreatedDate.equals("") ? null : prPendingReasonsCreatedDate);
 		}
 		String orderId = o.getElementsByTagName("a:SveaOrderId").item(0).getTextContent();
-		this.setOrderId(orderId);
+		this.setOrderId( Long.valueOf(orderId) );
 		String sveaWillBuy = o.getElementsByTagName("a:SveaWillBuy").item(0).getTextContent();	
 		this.setSveaWillBuy(sveaWillBuy.equals("true") ? true : false);
 	}
