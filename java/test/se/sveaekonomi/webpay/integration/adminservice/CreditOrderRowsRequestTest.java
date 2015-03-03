@@ -30,7 +30,7 @@ public class CreditOrderRowsRequestTest {
     public void test_validates_all_required_methods_for_creditOrderRows_creditInvoiceOrderRows_with_setRowToCredit() {
     	
         CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-    		.setInvoiceId( "999999" )
+    		.setInvoiceId( 999999L )
 			.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setCountryCode( COUNTRYCODE.SE )
             .setRowToCredit(1)
@@ -56,7 +56,7 @@ public class CreditOrderRowsRequestTest {
 		;
 
         CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-    		.setInvoiceId( "999999" )
+    		.setInvoiceId( 999999L )
 			.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setCountryCode( COUNTRYCODE.SE )
     		.addCreditOrderRow(customAmountRow)            
@@ -76,7 +76,7 @@ public class CreditOrderRowsRequestTest {
 	public void test_validates_missing_required_methods_for_creditOrderRows_creditInvoiceOrderRows() {
 
 	    CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-			//.setInvoiceId( "999999" )
+			//.setInvoiceId( 999999L )
 			//.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
 	        //.setCountryCode( COUNTRYCODE.SE )
 	        //.setRowToCredit(1)
@@ -109,7 +109,7 @@ public class CreditOrderRowsRequestTest {
 		rows.add( TestingTool.createNumberedOrderRow(1) );
 		
 	    CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-	    	.setOrderId( "123456" )
+	    	.setOrderId( 123456L )
 	    	.setCountryCode( COUNTRYCODE.SE )
 	    	.setRowToCredit( 1 )
 	    	.addNumberedOrderRows( rows )
@@ -136,7 +136,7 @@ public class CreditOrderRowsRequestTest {
 		;
 		
 	    CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-	    	.setOrderId( "123456" )
+	    	.setOrderId( 123456L )
 	    	.setCountryCode( COUNTRYCODE.SE )
 	    	//.setRowToCredit( 1 )
 	    	//.addNumberedOrderRows( rows )
@@ -159,7 +159,7 @@ public class CreditOrderRowsRequestTest {
 		rows.add( TestingTool.createNumberedOrderRow(1) );
 		
 	    CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-	    	//.setOrderId( "123456" )
+	    	//.setOrderId( 123456L )
 	    	//.setCountryCode( COUNTRYCODE.SE )
 	    	//.setRowToCredit( 1 )
 	    	//.addNumberedOrderRows( rows )
@@ -193,7 +193,7 @@ public class CreditOrderRowsRequestTest {
 		;
 		
 	    CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-	    	.setOrderId( "123456" )
+	    	.setOrderId( 123456L )
 	    	.setCountryCode( COUNTRYCODE.SE )
 	    	.setRowToCredit( 1 )
 	    	//.addNumberedOrderRows( rows )
@@ -222,7 +222,7 @@ public class CreditOrderRowsRequestTest {
 		rows.add( TestingTool.createNumberedOrderRow(1) );
 		
 	    CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-	    	.setOrderId( "123456" )
+	    	.setOrderId( 123456L )
 	    	.setCountryCode( COUNTRYCODE.SE )
 	    	.setRowToCredit( 1 )
 	    	.addNumberedOrderRows( rows )
@@ -249,7 +249,7 @@ public class CreditOrderRowsRequestTest {
 		;
 		
 	    CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-	    	.setOrderId( "123456" )
+	    	.setOrderId( 123456L )
 	    	.setCountryCode( COUNTRYCODE.SE )
 	    	//.setRowToCredit( 1 )
 	    	//.addNumberedOrderRows( rows )
@@ -272,7 +272,7 @@ public class CreditOrderRowsRequestTest {
 		rows.add( TestingTool.createNumberedOrderRow(1) );
 		
 	    CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-	    	//.setOrderId( "123456" )
+	    	//.setOrderId( 123456L )
 	    	//.setCountryCode( COUNTRYCODE.SE )
 	    	//.setRowToCredit( 1 )
 	    	//.addNumberedOrderRows( rows )
@@ -306,7 +306,7 @@ public class CreditOrderRowsRequestTest {
 		;
 		
 	    CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-	    	.setOrderId( "123456" )
+	    	.setOrderId( 123456L )
 	    	.setCountryCode( COUNTRYCODE.SE )
 	    	.setRowToCredit( 1 )
 	    	//.addNumberedOrderRows( rows )
