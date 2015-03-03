@@ -20,7 +20,6 @@ import se.sveaekonomi.webpay.integration.order.handle.UpdateOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.response.adminservice.UpdateOrderRowsResponse;
-import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 public class UpdateOrderRowsRequest {
@@ -145,15 +144,7 @@ public class UpdateOrderRowsRequest {
 			SOAPElement clientId = request.addChildElement("ClientId", "dat");
 				clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
 		    SOAPElement orderType = request.addChildElement("OrderType", "dat");
-				// TODO try and fix this properly, conversion method in OrderType perhaps?
-				ORDERTYPE orderTypeAsOrderType = null;
-				if( this.builder.getOrderType() == PAYMENTTYPE.INVOICE ) {
-					orderTypeAsOrderType = ORDERTYPE.Invoice;
-				}
-				if( this.builder.getOrderType() == PAYMENTTYPE.PAYMENTPLAN ) {
-					orderTypeAsOrderType = ORDERTYPE.PaymentPlan;
-				}
-		    	orderType.addTextNode( orderTypeAsOrderType.toString() );				
+		    	orderType.addTextNode( this.builder.getOrderType().toString() );				
 		    SOAPElement sveaOrderId = request.addChildElement("SveaOrderId", "dat");
 		    	sveaOrderId.addTextNode(String.valueOf(this.builder.getOrderId()));	
 		    	
@@ -199,7 +190,6 @@ public class UpdateOrderRowsRequest {
 //		try {
 //			soapMessage.writeTo(System.out);
 //		} catch (IOException e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 //		System.out.println();

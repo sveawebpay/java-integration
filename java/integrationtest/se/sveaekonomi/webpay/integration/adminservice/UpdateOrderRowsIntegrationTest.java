@@ -1,20 +1,15 @@
 package se.sveaekonomi.webpay.integration.adminservice;
 
 import static org.junit.Assert.*;
+import org.junit.Test;
 
 import java.util.ArrayList;
 
-import org.junit.Test;
-
-import se.sveaekonomi.webpay.integration.Respondable;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.WebPayAdmin;
 import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.CreditOrderRowsBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.UpdateOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
@@ -23,12 +18,8 @@ import se.sveaekonomi.webpay.integration.response.adminservice.UpdateOrderRowsRe
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
-import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERROWSTATUS;
-import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class UpdateOrderRowsIntegrationTest {
 
@@ -37,7 +28,7 @@ public class UpdateOrderRowsIntegrationTest {
     public void test_update_nonexistant_orderid_returns_error() {
     	
 		UpdateOrderRowsBuilder builder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( "999999")              
+		    .setOrderId( 999999L)              
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addUpdateOrderRow( 
 	    		WebPayItem.numberedOrderRow()
@@ -52,7 +43,7 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			// TODO check w/Robin re: status of these if not set in request?
+	                .setInvoiceId("9999999")			
 	                .setCreditInvoiceId("9999999")
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
@@ -105,7 +96,7 @@ public class UpdateOrderRowsIntegrationTest {
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+		    .setOrderId( order.getOrderId() ) 
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addUpdateOrderRow( 
 	    		WebPayItem.numberedOrderRow()
@@ -120,7 +111,7 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			// TODO check w/Robin re: status of these if not set in request?
+	                .setInvoiceId("9999999")
 	                .setCreditInvoiceId("9999999")
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
@@ -185,7 +176,7 @@ public class UpdateOrderRowsIntegrationTest {
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+		    .setOrderId( order.getOrderId() ) 
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addUpdateOrderRow( 
 	    		WebPayItem.numberedOrderRow()
@@ -200,7 +191,7 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			// TODO check w/Robin re: status of these if not set in request?
+	                .setInvoiceId("9999999")			
 	                .setCreditInvoiceId("9999999")
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
@@ -264,7 +255,7 @@ public class UpdateOrderRowsIntegrationTest {
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+		    .setOrderId( order.getOrderId() ) 
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addUpdateOrderRow( 
 	    		WebPayItem.numberedOrderRow()
@@ -279,7 +270,7 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			// TODO check w/Robin re: status of these if not set in request?
+	                .setInvoiceId("9999999")			
 	                .setCreditInvoiceId("9999999")
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
@@ -344,7 +335,7 @@ public class UpdateOrderRowsIntegrationTest {
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+		    .setOrderId( order.getOrderId() ) 
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addUpdateOrderRow( 
 	    		WebPayItem.numberedOrderRow()
@@ -359,7 +350,7 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			// TODO check w/Robin re: status of these if not set in request?
+	                .setInvoiceId("9999999")			
 	                .setCreditInvoiceId("9999999")
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
@@ -431,7 +422,7 @@ public class UpdateOrderRowsIntegrationTest {
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+		    .setOrderId( order.getOrderId() ) 
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addUpdateOrderRow( 
 	    		WebPayItem.numberedOrderRow()
@@ -446,7 +437,7 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			// TODO check w/Robin re: status of these if not set in request?
+	                .setInvoiceId("9999999")			
 	                .setCreditInvoiceId("9999999")
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
@@ -517,7 +508,7 @@ public class UpdateOrderRowsIntegrationTest {
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+		    .setOrderId( order.getOrderId() ) 
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addUpdateOrderRow( 
 	    		WebPayItem.numberedOrderRow()
@@ -532,7 +523,7 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			// TODO check w/Robin re: status of these if not set in request?
+	                .setInvoiceId("9999999")			
 	                .setCreditInvoiceId("9999999")
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
@@ -602,7 +593,7 @@ public class UpdateOrderRowsIntegrationTest {
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+		    .setOrderId( order.getOrderId() ) 
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addUpdateOrderRow( 
 	    		WebPayItem.numberedOrderRow()
@@ -617,7 +608,7 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			// TODO check w/Robin re: status of these if not set in request?
+	                .setInvoiceId("9999999")			
 	                .setCreditInvoiceId("9999999")
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
@@ -688,7 +679,7 @@ public class UpdateOrderRowsIntegrationTest {
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+		    .setOrderId( order.getOrderId() ) 
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addUpdateOrderRow( 
 	    		WebPayItem.numberedOrderRow()
@@ -703,7 +694,7 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			// TODO check w/Robin re: status of these if not set in request?
+	                .setInvoiceId("9999999")
 	                .setCreditInvoiceId("9999999")
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)

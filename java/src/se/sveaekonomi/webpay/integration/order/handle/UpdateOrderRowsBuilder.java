@@ -19,7 +19,7 @@ public class UpdateOrderRowsBuilder extends OrderBuilder<UpdateOrderRowsBuilder>
     private COUNTRYCODE countryCode;
 
 	private ArrayList<NumberedOrderRowBuilder> updateOrderRows;
-    private String orderId;
+    private Long orderId;
 	private PAYMENTTYPE orderType;
 
 	public UpdateOrderRowsBuilder( ConfigurationProvider config ) {
@@ -45,11 +45,11 @@ public class UpdateOrderRowsBuilder extends OrderBuilder<UpdateOrderRowsBuilder>
 		return this;
 	}
 
-	public String getOrderId() {
+	public Long getOrderId() {
 		return orderId;
 	}
 
-	public UpdateOrderRowsBuilder setOrderId(String orderId) {
+	public UpdateOrderRowsBuilder setOrderId(Long orderId) {
 		this.orderId = orderId;
 		return this;
 	}		
