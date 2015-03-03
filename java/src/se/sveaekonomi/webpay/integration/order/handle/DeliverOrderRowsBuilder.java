@@ -20,27 +20,22 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 /**
  * @author Kristian Grossman-Madsen
  */
-
 public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilder> {
 	
     private ConfigurationProvider config;
     private COUNTRYCODE countryCode;
+    private PAYMENTTYPE orderType;
 
-    private ArrayList<Integer> rowIndexesToDeliver;
-	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
-    private String orderId;
+    private Long orderId;
     private String captureDate;
     private DISTRIBUTIONTYPE invoiceDistributionType;
-    protected PAYMENTTYPE orderType;
     
-	public PAYMENTTYPE getOrderType() {
-		return this.orderType;
-	} 
+    private ArrayList<Integer> rowIndexesToDeliver;
+	private ArrayList<NumberedOrderRowBuilder> addedDeliverOrderRows;
     
 	public DISTRIBUTIONTYPE getInvoiceDistributionType() {
 		return invoiceDistributionType;
 	}
-
 	public DeliverOrderRowsBuilder setInvoiceDistributionType(DISTRIBUTIONTYPE invoiceDistributionType) {
 		this.invoiceDistributionType = invoiceDistributionType;
 		return this;
@@ -49,7 +44,7 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 	public DeliverOrderRowsBuilder( ConfigurationProvider config ) {
 		this.config = config;
 		this.rowIndexesToDeliver = new ArrayList<Integer>();
-		this.numberedOrderRows = new ArrayList<NumberedOrderRowBuilder>();
+		this.addedDeliverOrderRows = new ArrayList<NumberedOrderRowBuilder>();
 	}
 
 	public ConfigurationProvider getConfig() {
@@ -85,19 +80,19 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 	}
 
 	public ArrayList<NumberedOrderRowBuilder> getNumberedOrderRows() {
-		return numberedOrderRows;
+		return addedDeliverOrderRows;
 	}
 
 	public DeliverOrderRowsBuilder addNumberedOrderRows(ArrayList<NumberedOrderRowBuilder> numberedOrderRows) {
-		this.numberedOrderRows.addAll(numberedOrderRows);
+		this.addedDeliverOrderRows.addAll(numberedOrderRows);
 		return this;
 	}
 
-	public String getOrderId() {
+	public Long getOrderId() {
 		return orderId;
 	}
 
-	public DeliverOrderRowsBuilder setOrderId(String orderId) {
+	public DeliverOrderRowsBuilder setOrderId(Long orderId) {
 		this.orderId = orderId;
 		return this;
 	}
@@ -108,7 +103,7 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 	 * @return DeliverOrderRowsBuilder
 	 */
     public DeliverOrderRowsBuilder setTransactionId( String transactionId) {        
-        return setOrderId( transactionId );
+        return setOrderId( Long.valueOf(transactionId) );
     }
 	
 	/**
@@ -155,14 +150,14 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 		
 		// calculate original order rows total, incvat row sum over numberedOrderRows
 		double originalOrderTotal = 0.0;
-		for( NumberedOrderRowBuilder originalRow : numberedOrderRows ) {
+		for( NumberedOrderRowBuilder originalRow : addedDeliverOrderRows ) {
 			originalOrderTotal += originalRow.getAmountExVat() * (1+originalRow.getVatPercent()/100.0) * originalRow.getQuantity(); // TODO change to method, backport to php
 		}
 		
 		// calculate delivered order rows total, incvat row sum over deliveredOrderRows
 		double deliveredOrderTotal = 0.0;
 		for( Integer rowIndex : new HashSet<Integer>(rowIndexesToDeliver) ) {
-			NumberedOrderRowBuilder deliveredRow = numberedOrderRows.get(rowIndex-1);	// -1 as NumberedOrderRows is one-indexed
+			NumberedOrderRowBuilder deliveredRow = addedDeliverOrderRows.get(rowIndex-1);	// -1 as NumberedOrderRows is one-indexed
 			deliveredOrderTotal +=  deliveredRow.getAmountExVat() * (1+deliveredRow.getVatPercent()/100.0) * deliveredRow.getQuantity();
 		}			
 		
@@ -171,7 +166,7 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
 		ConfirmTransactionRequest confirmTransactionRequest = new ConfirmTransactionRequest( this.getConfig() );
 		confirmTransactionRequest.setCaptureDate(this.getCaptureDate());
 		confirmTransactionRequest.setCountryCode( this.getCountryCode() );
-		confirmTransactionRequest.setTransactionId( this.getOrderId() );
+		confirmTransactionRequest.setTransactionId( String.valueOf(this.getOrderId()) );
 		confirmTransactionRequest.setAlsoDoLowerAmount( (int)MathUtil.bankersRound(amountToLowerOrderBy) * 100 ); // request uses minor currency );
 		
 		return confirmTransactionRequest;				
@@ -198,5 +193,8 @@ public class DeliverOrderRowsBuilder extends OrderBuilder<DeliverOrderRowsBuilde
         return errors;  
     }
 
+	public PAYMENTTYPE getOrderType() {
+		return this.orderType;
+	}
     
 }
