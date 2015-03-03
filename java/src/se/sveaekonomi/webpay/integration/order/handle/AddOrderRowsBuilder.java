@@ -7,6 +7,7 @@ import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**
@@ -19,7 +20,7 @@ public class AddOrderRowsBuilder extends OrderBuilder<AddOrderRowsBuilder> {
     private COUNTRYCODE countryCode;
 
 	private ArrayList<OrderRowBuilder> addedOrderRows;
-    private String orderId;
+    private Long orderId;
 	private PAYMENTTYPE orderType;
 
 	public AddOrderRowsBuilder( ConfigurationProvider config ) {
@@ -45,11 +46,11 @@ public class AddOrderRowsBuilder extends OrderBuilder<AddOrderRowsBuilder> {
 		return this;
 	}
 
-	public String getOrderId() {
+	public Long getOrderId() {
 		return orderId;
 	}
 
-	public AddOrderRowsBuilder setOrderId(String orderId) {
+	public AddOrderRowsBuilder setOrderId(Long orderId) {
 		this.orderId = orderId;
 		return this;
 	}		
