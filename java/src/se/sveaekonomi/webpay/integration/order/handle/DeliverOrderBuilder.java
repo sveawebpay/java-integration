@@ -8,7 +8,6 @@ import se.sveaekonomi.webpay.integration.Requestable;
 import se.sveaekonomi.webpay.integration.adminservice.DeliverOrdersRequest;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
-import se.sveaekonomi.webpay.integration.hosted.hostedadmin.AnnulTransactionRequest;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.ConfirmTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.HandleOrderValidator;
@@ -25,10 +24,9 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
     private HandleOrderValidator validator;
     
     private Long orderId;
-//    private String orderType;
     private ORDERTYPE orderType;
-    private String distributionType;
-    private String invoiceIdToCredit;
+    private DISTRIBUTIONTYPE distributionType;
+    private Long invoiceIdToCredit;
     private Integer numberOfCreditDays;
     private String captureDate;
     
@@ -57,54 +55,55 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
         return this;
     }
     
-//    public String getOrderType() {
-//        return orderType;
-//    }
     public ORDERTYPE getOrderType() {
         return orderType;
     }
-    
-//    public void setOrderType(String orderType) {
-//        this.orderType = orderType;
-//    }
+    public void setOrderType(ORDERTYPE orderType) {
+    	this.orderType = orderType;
+    }        
     /** @deprecated */
     public void setOrderType(String orderType) {
-    	if( orderType.equals("Invoice") ) {
+    	if( orderType.equals(ORDERTYPE.Invoice.toString()) ) {
     		this.orderType = ORDERTYPE.Invoice;
     	}
-    	else if( orderType.equals("PaymentPlan") ) {
+    	else if( orderType.equals(ORDERTYPE.PaymentPlan.toString()) ) {
     		this.orderType = ORDERTYPE.PaymentPlan;
     	}
     	else {
     		throw new IllegalArgumentException( "OrderType must be one of 'Invoice' or 'PaymentPlan' when given as String" );
     	}    		
     }
-    public void setOrderType(ORDERTYPE orderType) {
-    	this.orderType = orderType;
-    }    
-    
-    public String getInvoiceDistributionType() {
+
+    public DISTRIBUTIONTYPE getInvoiceDistributionType() {
         return distributionType;
     }
     
     public DeliverOrderBuilder setInvoiceDistributionType(DISTRIBUTIONTYPE type) {
-        this.distributionType = type.toString();	// TODO use enum instead
+        this.distributionType = type;
         return this;
     }
     
-    public String getCreditInvoice() {
+    public Long getCreditInvoice() {
         return invoiceIdToCredit;
     }
-    
-    public DeliverOrderBuilder setCreditInvoice(String invoiceId) {
+    public DeliverOrderBuilder setCreditInvoice(Long invoiceId) {
         this.invoiceIdToCredit = invoiceId;
+        return this;
+    }
+    /** @deprecated */
+    public DeliverOrderBuilder setCreditInvoice(String invoiceId) {
+        this.invoiceIdToCredit = Long.valueOf(invoiceId);
         return this;
     }
     
     public Integer getNumberOfCreditDays() {
         return numberOfCreditDays;
+    }  
+    public DeliverOrderBuilder setNumberOfCreditDays(Integer numberOfCreditDays) {
+        this.numberOfCreditDays = numberOfCreditDays;
+        return this;
     }
-    
+    /** @deprecated */
     public DeliverOrderBuilder setNumberOfCreditDays(int numberOfCreditDays) {
         this.numberOfCreditDays = numberOfCreditDays;
         return this;
@@ -146,11 +145,11 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
 	public <T extends Requestable> T deliverInvoiceOrder() {
 
     	if( this.orderRows.isEmpty() ) {
-	    	this.setOrderType("Invoice");		// TODO use enumeration instead
+	    	this.setOrderType(ORDERTYPE.Invoice);
     		return (T) new DeliverOrdersRequest(this);
     	}
 	    else {
-	    	this.setOrderType("Invoice");
+	    	this.setOrderType(ORDERTYPE.Invoice);
 	        return (T) new HandleOrder(this);
 	    }
     }
@@ -160,7 +159,7 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
      * @return HandleOrder
      */
     public <T extends Requestable> T deliverPaymentPlanOrder() {
-    	this.setOrderType("PaymentPlan");		// TODO use enumeration instead
+    	this.setOrderType(ORDERTYPE.PaymentPlan);
 		return (T) new HandleOrder(this);
     }
     
@@ -174,9 +173,9 @@ public class DeliverOrderBuilder extends OrderBuilder<DeliverOrderBuilder> {
      * @return DeliverPaymentPlan
      */    
 	public ConfirmTransactionRequest deliverCardOrder() {
-//		this.orderType = "HOSTED_ADMIN"; // TODO use enumeration instead, 
-		
-    	// validate request and throw exception if validation fails
+		// no need to .setOrderType(), as ConfirmTransactionRequest ignores it
+
+		// validate request and throw exception if validation fails
         String errors = validateDeliverCardOrder(); 
         if (!errors.equals("")) {
             throw new SveaWebPayException("Validation failed", new ValidationException(errors));

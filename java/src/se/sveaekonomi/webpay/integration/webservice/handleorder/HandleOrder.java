@@ -69,10 +69,10 @@ public class HandleOrder implements Requestable {
         
         if (order.getOrderType().toString().equals("Invoice")) {
             SveaDeliverInvoiceDetails invoiceDetails = new SveaDeliverInvoiceDetails();
-            invoiceDetails.InvoiceDistributionType = order.getInvoiceDistributionType();
+            invoiceDetails.InvoiceDistributionType = order.getInvoiceDistributionType().toString();
             invoiceDetails.IsCreditInvoice = (order.getCreditInvoice()!=null ? true : false);
             if (order.getCreditInvoice()!=null)
-                invoiceDetails.InvoiceIdToCredit = order.getCreditInvoice();
+                invoiceDetails.InvoiceIdToCredit = String.valueOf(order.getCreditInvoice());
             invoiceDetails.NumberofCreditDays = (order.getNumberOfCreditDays()!=null 
                     ? order.getNumberOfCreditDays() : 0);
             

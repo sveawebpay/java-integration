@@ -1,30 +1,22 @@
 package se.sveaekonomi.webpay.integration.webservice.handleorder;
 
-import static org.hamcrest.CoreMatchers.instanceOf;
 import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertThat;
 import static org.junit.Assert.assertTrue;
 
 import org.junit.Before;
 import org.junit.Test;
 
-import se.sveaekonomi.webpay.integration.Requestable;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
-import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.FixedDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.InvoiceFeeBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.RelativeDiscountBuilder;
 import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
-import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
-import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
@@ -54,7 +46,7 @@ public class DeliverOrderTest {
         .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
         .setOrderId(54086L)
         .setNumberOfCreditDays(1)
-        .setCreditInvoice("id")
+        .setCreditInvoice("123456")
         .setCountryCode(TestingTool.DefaultTestCountryCode)
         .deliverInvoiceOrder()
         .prepareRequest();
@@ -83,7 +75,7 @@ public class DeliverOrderTest {
         assertEquals(1, request.request.deliverOrderInformation.deliverInvoiceDetails.NumberofCreditDays);
         assertEquals("Post", request.request.deliverOrderInformation.deliverInvoiceDetails.InvoiceDistributionType);
         assertTrue(request.request.deliverOrderInformation.deliverInvoiceDetails.IsCreditInvoice);
-        assertEquals("id", request.request.deliverOrderInformation.deliverInvoiceDetails.InvoiceIdToCredit);
+        assertEquals("123456", request.request.deliverOrderInformation.deliverInvoiceDetails.InvoiceIdToCredit);
         assertEquals("54086", request.request.deliverOrderInformation.sveaOrderId);
         assertEquals("Invoice", request.request.deliverOrderInformation.orderType);
     }
