@@ -73,7 +73,6 @@ public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
 	
 	/**
 	 * optional, card only -- alias for setOrderId
-     * @deprecated
      * @param orderId
      * @return CancelOrderBuilder
      */
@@ -83,6 +82,7 @@ public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
 	
 	/**
 	 * optional, card only -- alias for setOrderId
+     * @deprecated
 	 * @param transactionId as string, i.e. as transactionId is returned in HostedPaymentResponse
 	 * @return DeliverOrderRowsBuilder
 	 */
@@ -91,6 +91,7 @@ public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
     } 	
 	
 	public CloseOrder cancelInvoiceOrder() {
+	    // TODO remove dependency on deprecated CloseOrder
 		CloseOrderBuilder closeOrderBuilder = new CloseOrderBuilder(this.config);
 		closeOrderBuilder.setCountryCode(this.countryCode);
 		closeOrderBuilder.setOrderId(this.orderId);		
@@ -99,6 +100,7 @@ public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
 	}
 	
 	public CloseOrder cancelPaymentPlanOrder() {
+	    // TODO remove dependency on deprecated CloseOrder
 		CloseOrderBuilder closeOrderBuilder = new CloseOrderBuilder(this.config);
 		closeOrderBuilder.setCountryCode(this.countryCode);
 		closeOrderBuilder.setOrderId(this.orderId);		
