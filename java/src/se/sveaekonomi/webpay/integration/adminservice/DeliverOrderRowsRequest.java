@@ -46,7 +46,7 @@ public class DeliverOrderRowsRequest  {
         if (builder.getCountryCode() == null) {
             errors += "MISSING VALUE - CountryCode is required, use setCountryCode().\n";
         }           
-        if( builder.getRowIndexesToDeliver().size() == 0 ) {
+        if( builder.getRowsToDeliver().size() == 0 ) {
         	errors += "MISSING VALUE - rowIndexesToDeliver is required for deliverInvoiceOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().\n";
     	}
         if (builder.getInvoiceDistributionType() == null) {
@@ -129,7 +129,7 @@ public class DeliverOrderRowsRequest  {
 			    SOAPElement sveaOrderId = orderToDeliver.addChildElement("SveaOrderId", "dat");
 			    	sveaOrderId.addTextNode(String.valueOf(this.builder.getOrderId()));
 	    	SOAPElement rowNumbers = request.addChildElement("RowNumbers", "dat");
-	    		for( Integer rowIndex : this.builder.getRowIndexesToDeliver() ) {
+	    		for( Integer rowIndex : this.builder.getRowsToDeliver() ) {
 	    			rowNumbers.addChildElement("long","arr").addTextNode( Integer.toString( rowIndex ) );
 	    		}
 	    	
