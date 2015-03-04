@@ -1,4 +1,4 @@
-package se.sveaekonomi.webpay.integration.webservice.payment;
+package se.sveaekonomi.webpay.integration;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertFalse;
@@ -23,6 +23,7 @@ import se.sveaekonomi.webpay.integration.config.ConfigurationProviderTestData;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
+import se.sveaekonomi.webpay.integration.response.hosted.SveaResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CustomerIdentityResponse;
@@ -31,6 +32,7 @@ import se.sveaekonomi.webpay.integration.response.webservice.GetAddressesRespons
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
+import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
@@ -38,7 +40,7 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
-public class LegacyTypeCompatibilityUnitTest {
+public class LegacyTypeCompatibilityIntegrationTest {
 	
 	//// legacy WebPay entrypoints	
   	/// legacy (<2.0) CreateOrderBuilder.setXX() type compatibility -- note that getters are not backwards compatible.  	    
@@ -65,24 +67,6 @@ public class LegacyTypeCompatibilityUnitTest {
 		assertEquals("SE", response.customerIdentity.getCountryCode());
 	}
 	@Test
-	public void testInvoiceRequestFailing() {
-		CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig()).addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-				.addCustomerDetails(Item.individualCustomer().setNationalIdNumber("")).setCountryCode(TestingTool.DefaultTestCountryCode).setOrderDate(TestingTool.DefaultTestDate)
-				.setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setCurrency(TestingTool.DefaultTestCurrency).useInvoicePayment().doRequest();
-
-		assertFalse(response.isOrderAccepted());
-	}
-	@Test
-	public void testFormationOfDecimalsInCalculation() {
-		CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
-				.addOrderRow(Item.orderRow().setArticleNumber("1").setQuantity(2.0).setAmountExVat(22.68).setDescription("Specification").setName("Prod").setVatPercent(6.0).setDiscountPercent(0.0))
-				.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
-				.setOrderDate(TestingTool.DefaultTestDate).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setCurrency(TestingTool.DefaultTestCurrency).useInvoicePayment().doRequest();
-
-		assertTrue(response.isOrderAccepted());
-		assertEquals(48.08, response.amount, 0);
-	}
-	@Test
 	public void testInvoiceCompanySe() {
 		CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig()).setCountryCode(TestingTool.DefaultTestCountryCode).setOrderDate(TestingTool.DefaultTestDate)
 				.setCurrency(TestingTool.DefaultTestCurrency).addCustomerDetails(TestingTool.createMiniCompanyCustomer()).addOrderRow(TestingTool.createExVatBasedOrderRow("1")).useInvoicePayment()
@@ -91,134 +75,6 @@ public class LegacyTypeCompatibilityUnitTest {
 		assertTrue(response.isOrderAccepted());
 		assertTrue(response.sveaWillBuyOrder);
 		assertEquals("SE", response.customerIdentity.getCountryCode());
-	}
-	@Test
-	public void testInvoiceForIndividualFromNl() {
-		CreateOrderResponse response = WebPay
-				.createOrder(SveaConfig.getDefaultConfig())
-				.addOrderRow(TestingTool.createOrderRowNl())
-				.addCustomerDetails(
-						Item.individualCustomer().setBirthDate(1955, 03, 07).setInitials("SB").setName("Sneider", "Boasman").setStreetAddress("Gate", "42").setLocality("BARENDRECHT")
-								.setZipCode("1102 HG").setCoAddress("138")).setCountryCode(COUNTRYCODE.NL).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-				.setOrderDate(TestingTool.DefaultTestDate).setCurrency(CURRENCY.EUR).useInvoicePayment().doRequest();
-
-		assertTrue(response.isOrderAccepted());
-		assertTrue(response.sveaWillBuyOrder);
-		assertEquals(212.00, response.amount, 0);
-		assertEquals("0", response.getResultCode());
-		assertEquals("Invoice", response.orderType);
-
-		// CustomerIdentity
-		assertEquals("Individual", response.customerIdentity.getCustomerType());
-		assertEquals("Sneider Boasman", response.customerIdentity.getFullName());
-		assertNull(response.customerIdentity.getPhoneNumber());
-		assertNull(response.customerIdentity.getEmail());
-		assertNull(response.customerIdentity.getIpAddress());
-		assertEquals("Gate 42", response.customerIdentity.getStreet());
-		assertEquals("138", response.customerIdentity.getCoAddress());
-		assertEquals("23", response.customerIdentity.getHouseNumber());
-		assertEquals("1102 HG", response.customerIdentity.getZipCode());
-		assertEquals("BARENDRECHT", response.customerIdentity.getCity());
-		assertEquals("NL", response.customerIdentity.getCountryCode());
-	}
-	@Test
-	public void testInvoiceDoRequestWithIpAddressSetSE() {
-		CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig()).addOrderRow(TestingTool.createExVatBasedOrderRow("1")).addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
-				.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber).setIpAddress("123.123.123"))
-				.setCountryCode(TestingTool.DefaultTestCountryCode).setOrderDate(TestingTool.DefaultTestDate).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-				.setCurrency(TestingTool.DefaultTestCurrency).useInvoicePayment().doRequest();
-
-		assertTrue(response.isOrderAccepted());
-	}
-	@Test
-	public void testInvoiceRequestUsingAmountIncVatWithZeroVatPercent() {
-		CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig()).addOrderRow(TestingTool.createExVatBasedOrderRow("1")).addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
-				.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
-				.setOrderDate(TestingTool.DefaultTestDate).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setCurrency(TestingTool.DefaultTestCurrency)
-				.setCustomerReference(TestingTool.DefaultTestCustomerReferenceNumber).useInvoicePayment().doRequest();
-
-		assertTrue(response.isOrderAccepted());
-	}
-	@Test
-	public void testFailOnMissingCountryCodeOfCloseOrder() {
-		Long orderId = 0L;
-		SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
-
-		SveaRequest<SveaCreateOrder> request = WebPay.createOrder(SveaConfig.getDefaultConfig()).addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-				.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
-				.setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setOrderDate(TestingTool.DefaultTestDate).setCurrency(TestingTool.DefaultTestCurrency).useInvoicePayment()
-				.prepareRequest();
-
-		WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
-
-		String xml = xmlBuilder.getCreateOrderEuXml(request.request);
-		String url = SveaConfig.getTestWebserviceUrl().toString();
-		String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
-		NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
-		CreateOrderResponse response = new CreateOrderResponse(soapResponse);
-		orderId = response.orderId;
-
-		assertTrue(response.isOrderAccepted());
-
-		CloseOrder closeRequest = WebPay.closeOrder(SveaConfig.getDefaultConfig()).setOrderId(orderId).closeInvoiceOrder();
-
-		String expectedMsg = "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-
-		assertEquals(expectedMsg, closeRequest.validateRequest());
-	}
-	@Test
-	public void testConfiguration() {
-		ConfigurationProviderTestData conf = new ConfigurationProviderTestData();
-		CreateOrderResponse response = WebPay.createOrder(conf).addOrderRow(TestingTool.createExVatBasedOrderRow("1")).addOrderRow(TestingTool.createExVatBasedOrderRow("2"))
-				.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber).setIpAddress("123.123.123"))
-				.setCountryCode(TestingTool.DefaultTestCountryCode).setOrderDate(TestingTool.DefaultTestDate).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-				.setCurrency(TestingTool.DefaultTestCurrency).useInvoicePayment().doRequest();
-
-		assertTrue(response.isOrderAccepted());
-	}
-	@Test
-	public void testFormatShippingFeeRowsZero() {
-		CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig()).addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-				.addFee(Item.shippingFee().setShippingId("0").setName("Tess").setDescription("Tester").setAmountExVat(0).setVatPercent(0).setUnit("st"))
-				.addCustomerDetails(Item.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
-				.setOrderDate(TestingTool.DefaultTestDate).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setCurrency(TestingTool.DefaultTestCurrency)
-				.setCustomerReference(TestingTool.DefaultTestCustomerReferenceNumber).useInvoicePayment().doRequest();
-
-		assertTrue(response.isOrderAccepted());
-	}
-	@Test
-	public void testCompanyIdResponse() {
-		CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig()).addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-				.addCustomerDetails(Item.companyCustomer().setNationalIdNumber(TestingTool.DefaultTestCompanyNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
-				.setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setOrderDate(TestingTool.DefaultTestDate).setCurrency(TestingTool.DefaultTestCurrency).useInvoicePayment().doRequest();
-
-		assertFalse(response.isIndividualIdentity);
-		assertTrue(response.isOrderAccepted());
-	}
-	@Test
-	public void testInvoiceCompanyDe() {
-		CreateOrderResponse response = WebPay
-				.createOrder(SveaConfig.getDefaultConfig())
-				.addOrderRow(TestingTool.createOrderRowDe())
-				.addCustomerDetails(Item.companyCustomer().setNationalIdNumber("12345").setVatNumber("DE123456789").setStreetAddress("Adalbertsteinweg", "1").setZipCode("52070").setLocality("AACHEN"))
-				.setCountryCode(COUNTRYCODE.DE).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setOrderDate(TestingTool.DefaultTestDate).setCurrency(CURRENCY.EUR).useInvoicePayment()
-				.doRequest();
-
-		assertFalse(response.isIndividualIdentity);
-		assertTrue(response.isOrderAccepted());
-	}
-	@Test
-	public void testInvoiceCompanyNl() {
-		CreateOrderResponse response = WebPay
-				.createOrder(SveaConfig.getDefaultConfig())
-				.addOrderRow(TestingTool.createOrderRowNl())
-				.addCustomerDetails(
-						Item.companyCustomer().setCompanyName("Svea bakkerij 123").setVatNumber("NL123456789A12").setStreetAddress("broodstraat", "1").setZipCode("1111 CD").setLocality("BARENDRECHT"))
-				.setCountryCode(COUNTRYCODE.NL).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setOrderDate(TestingTool.DefaultTestDate).setCurrency(CURRENCY.EUR).useInvoicePayment()
-				.doRequest();
-
-		assertFalse(response.isIndividualIdentity);
-		assertTrue(response.isOrderAccepted());
 	}
 	
   	/// legacy (<2.0) DeliverOrderBuilder.setXX() type compatibility -- note that getters are not backwards compatible.  	
@@ -239,8 +95,7 @@ public class LegacyTypeCompatibilityUnitTest {
     	builder.setNumberOfCreditDays(numberOfCreditDays);
     	
 		
-    }
-	
+    }	
     // v1.4 tests: public class DeliverInvoiceOrderTest {    
     @Test
     public void testDeliverInvoiceOrderDoRequest() {
@@ -254,39 +109,6 @@ public class LegacyTypeCompatibilityUnitTest {
         
         response.getErrorMessage();
     }    
-    @Test
-    public void testDeliverInvoiceOrderResult() {
-        long orderId = createInvoiceAndReturnOrderId();
-        
-        DeliverOrderResponse response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
-            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-            .setOrderId(orderId)
-            .setNumberOfCreditDays(1)
-            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
-            .setCountryCode(TestingTool.DefaultTestCountryCode)
-            .deliverInvoiceOrder()
-            .doRequest();
-        
-        assertTrue(response.isOrderAccepted());
-        assertEquals("Post", response.getInvoiceDistributionType());
-        assertNotNull(response.getOcr());
-        assertTrue(0 < response.getOcr().length());
-        assertEquals(0.0, response.getLowestAmountToPay(), 0);
-    }
-    private long createInvoiceAndReturnOrderId() {
-        CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig())
-            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
-            .addCustomerDetails(Item.individualCustomer()
-                .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
-            .setCountryCode(TestingTool.DefaultTestCountryCode)
-            .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
-            .setOrderDate(TestingTool.DefaultTestDate)
-            .setCurrency(TestingTool.DefaultTestCurrency)
-            .useInvoicePayment()
-            .doRequest();
-        
-        return response.orderId;
-    }
 	
     /// legacy (<2.0) CloseOrderBuilder compatibility
     // v1.4 tests: public class CloseOrderTest {        
@@ -327,18 +149,7 @@ public class LegacyTypeCompatibilityUnitTest {
     }
     
     /// legacy (<2.0) GetAddresses compatibility
-    // v1.4 tests: public class GetAddressesTest {     
-    @Test
-    public void testGetAddresses() {
-        GetAddressesResponse response = WebPay.getAddresses(SveaConfig.getDefaultConfig())
-            .setCountryCode(TestingTool.DefaultTestCountryCode)
-            .setIndividual("460509-2222")
-            .setOrderTypeInvoice()
-            .doRequest();
-        
-        assertTrue(response.isOrderAccepted());
-        assertEquals("Persson, Tess T", response.getLegalName());
-    }      
+    // v1.4 tests: public class GetAddressesTest {           
     @Test
     public void testResultGetAddresses() {
         GetAddressesResponse response = WebPay.getAddresses(SveaConfig.getDefaultConfig())
@@ -380,13 +191,8 @@ public class LegacyTypeCompatibilityUnitTest {
         assertEquals("Testveien 1", response.getAddressLine2());
         assertEquals("Oslo", response.getPostarea());
     }
-    
-    
-    
-    
-	
+  
 	/// Legacy (<2.0) CreateOrderResponse attribute access -- public attributes
-    // OK
 	@SuppressWarnings("unused")
 	@Test
 	public void test_CreateOrderResponse_attributes_visible_and_having_legacy_return_types() throws SOAPException, IOException {
@@ -425,7 +231,6 @@ public class LegacyTypeCompatibilityUnitTest {
 	}
 
 	/// Legacy (<2.0) CustomerIdentityResponse attribute access -- getXX() methods	
-	// OK
 	@Test
 	public void test_CreateOrderResponse_individual_CustomerIdentityResponse_attributes_visible_and_having_legacy_return_types() throws SOAPException, IOException {
 
@@ -467,11 +272,56 @@ public class LegacyTypeCompatibilityUnitTest {
 		String myIpAddress       =  myCustomerIdentity.getIpAddress();    	
 		assertEquals( null, myIpAddress);		
 	}
+	
+	/// Legacy (<2.0) SveaResponse (HostedPaymentResponse) attribute access -- getXX() methods	
+	@Test
+	public void test_SveaResponse_attributes_visible_and_having_legacy_return_types() {
 
-	/// Legacy (<2.0) DeliverOrderResponse attribute access
-	// TODO
+    	// sample order using default test merchant 1130 credentials
+    	String responseXmlBase64 = "PD94bWwgdmVyc2lvbj0nMS4wJyBlbmNvZGluZz0nVVRGLTgnPz48cmVzcG9uc2U+PHRyYW5zYWN0aW9uIGlkPSI1OTU1NDQiPjxwYXltZW50bWV0aG9kPktPUlRDRVJUPC9wYXltZW50bWV0aG9kPjxtZXJjaGFudGlkPjExMzA8L21lcmNoYW50aWQ+PGN1c3RvbWVycmVmbm8+dGVzdF9jcmVhdGVDYXJkT3JkZXIxNDI1Mzc5OTU2ODEzPC9jdXN0b21lcnJlZm5vPjxhbW91bnQ+MjUwMDA8L2Ftb3VudD48Y3VycmVuY3k+U0VLPC9jdXJyZW5jeT48Y2FyZHR5cGU+VklTQTwvY2FyZHR5cGU+PG1hc2tlZGNhcmRubz40NDQ0MzN4eHh4eHgxMTAwPC9tYXNrZWRjYXJkbm8+PGV4cGlyeW1vbnRoPjAxPC9leHBpcnltb250aD48ZXhwaXJ5eWVhcj4xNzwvZXhwaXJ5eWVhcj48YXV0aGNvZGU+Mjg0NjMxPC9hdXRoY29kZT48Y3VzdG9tZXI+PGZpcnN0bmFtZT5UZXNzPC9maXJzdG5hbWU+PGxhc3RuYW1lPlBlcnNzb248L2xhc3RuYW1lPjxpbml0aWFscz5TQjwvaW5pdGlhbHM+PGVtYWlsPnRlc3RAc3ZlYS5jb208L2VtYWlsPjxzc24+MTk0NjA1MDkyMjIyPC9zc24+PGFkZHJlc3M+VGVzdGdhdGFuPC9hZGRyZXNzPjxhZGRyZXNzMj5jL28gRXJpa3Nzb24sIEVyaWs8L2FkZHJlc3MyPjxjaXR5PlN0YW48L2NpdHk+PGNvdW50cnk+U0U8L2NvdW50cnk+PHppcD45OTk5OTwvemlwPjxwaG9uZT4wODExMTExMTExPC9waG9uZT48dmF0bnVtYmVyLz48aG91c2VudW1iZXI+MTwvaG91c2VudW1iZXI+PGNvbXBhbnluYW1lLz48ZnVsbG5hbWUvPjwvY3VzdG9tZXI+PC90cmFuc2FjdGlvbj48c3RhdHVzY29kZT4wPC9zdGF0dXNjb2RlPjwvcmVzcG9uc2U+";
+    	String secretWord = "8a9cece566e808da63c6f07ff415ff9e127909d000d259aba24daa2fed6d9e3f8b0b62e8ad1fa91c7d7cd6fc3352deaae66cdb533123edf127ad7d1f4c77e7a3"; 
 
-	/// Legacy (<2.0) CloseOrderResponse attribute access
-	// TODO
+    	SveaResponse response = new SveaResponse(responseXmlBase64, secretWord);
+
+		String transactionId = response.getTransactionId();
+	    String clientOrderNumber = response.getClientOrderNumber();
+		String paymentMethod = response.getPaymentMethod();
+		String merchantId = response.getMerchantId();
+		double amount = response.getAmount();    
+		String currency = response.getCurrency();
+		String subscriptionId = response.getSubscriptionId();
+		String subscriptionType = response.getSubscriptionType();
+		String cardType = response.getCardType();
+		String maskedCardNumber = response.getMaskedCardNumber();
+		String expiryMonth = response.getExpiryMonth();	
+		String expiryYear = response.getExpiryYear();
+		String authCode = response.getAuthCode();
+    }
+
+    /// Legacy (<2.0) DeliverOrderResponse attribute access -- getXX() methods	
+    @Test
+    public void test_DeliverOrderResponse_getters_having_legacy_return_types() {
+        DeliverOrderResponse response = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+            .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+            .setOrderId(54086L)
+            .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .deliverInvoiceOrder()
+            .doRequest();
+        
+        response.getErrorMessage();
+        
+        ORDERTYPE orderType = response.getOrderType();    	
+        double amount = response.getAmount();
+        int invoiceId = response.getInvoiceId();
+        String dueDate = response.getDueDate();
+        String invoiceDate = response.getInvoiceDate();
+        String getInvoiceDistributionType = response.getInvoiceDistributionType();
+        String ocr = response.getOcr();
+        double lowestAmountToPay = response.getLowestAmountToPay();
+        int contractNumber = response.getContractNumber();
+    }
+    
+    
 }
 
