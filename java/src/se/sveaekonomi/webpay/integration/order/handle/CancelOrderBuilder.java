@@ -9,8 +9,6 @@ import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCloseOrder;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 /**
  * CancelOrderBuilder is the class used to cancel an order with Svea, that has
