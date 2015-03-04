@@ -42,17 +42,6 @@ import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
 	private Long orderId;
 
-
-//    /**
-//     * Required
-//     * @param countryCode
-//     * @return CancelOrderBuilder
-//     */
-//	public CancelOrderBuilder setCountryCode(COUNTRYCODE countryCode) {
-//		this.countryCode = countryCode;
-//		return this;
-//	}
-
     /**
      * Required
      * @param orderId
