@@ -292,7 +292,7 @@ public class WebPayAdminWebdriverTest {
 
         // deliver first order row and assert the response
         CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
-            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
+            	.setOrderId(order.getOrderId())
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setRowToCancel(1) // only row
         ;        
@@ -310,7 +310,7 @@ public class WebPayAdminWebdriverTest {
 
         // deliver first order row and assert the response
         CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
-            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
+            	.setOrderId(order.getOrderId())
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setRowToCancel(1)
         ;
@@ -718,7 +718,7 @@ public class WebPayAdminWebdriverTest {
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addUpdateOrderRow( 
 	    		WebPayItem.numberedOrderRow()
@@ -807,7 +807,7 @@ public class WebPayAdminWebdriverTest {
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addUpdateOrderRow( 
 	    		WebPayItem.numberedOrderRow()
@@ -889,7 +889,7 @@ public class WebPayAdminWebdriverTest {
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
@@ -969,7 +969,7 @@ public class WebPayAdminWebdriverTest {
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
