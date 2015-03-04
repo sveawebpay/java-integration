@@ -1,6 +1,5 @@
 package se.sveaekonomi.webpay.integration.adminservice;
 
-import java.io.IOException;
 import java.net.URL;
 
 import javax.xml.bind.ValidationException;
@@ -51,11 +50,6 @@ public class GetOrdersRequest {
         }
 	}
 	
-	/**
-	 * prepares the soap request to send to admin webservice
-	 * @throws SOAPException 
-	 * @throws IOException 
-	 */
 	public SOAPMessage prepareRequest() throws SOAPException {
 		
 		// validate builder, throw runtime exception on error
@@ -129,19 +123,14 @@ public class GetOrdersRequest {
 					   
         soapMessage.saveChanges();
 
-        /* Print the request message */
-		//System.out.print("Request SOAP Message:");
-		//soapMessage.writeTo(System.out);
-		//System.out.println();
+		// DEBUG: print SOAP Request
+//		System.out.print("Request SOAP Message:");
+//		soapMessage.writeTo(System.out);
+//		System.out.println();
 
         return soapMessage;
 	}
 
-	/**
-	 * 
-	 * @return GetOrdersResponse
-	 * @throws Exception 
-	 */
 	public GetOrdersResponse doRequest() {
 		
 		// validate and prepare request, throw runtime exception on error
