@@ -178,14 +178,14 @@ public class WebPayAdminWebdriverTest {
         QueryTransactionResponse response = queryOrderBuilder.queryCardOrder().doRequest();         
         
         assertTrue( response.isOrderAccepted() );     
-   		assertEquals( order.getTransactionId(), response.getTransactionId() );
+   		assertEquals( Long.valueOf(order.getTransactionId()), response.getTransactionId() );
     }
     // directbank
     @Test
     public void test_queryOrder_queryDirectBankOrder() {
 
     	// TODO set up webdriver create direct bank order, uses existing direct bank order below
-    	String directOrderId = "594206";
+    	Long directOrderId = 594206L;
     	
         // query order
         QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
@@ -277,8 +277,8 @@ public class WebPayAdminWebdriverTest {
         ;             
         QueryTransactionResponse deliveredOrder = queryDeliveredOrder.queryCardOrder().doRequest();                
         assertTrue( deliveredOrder.isOrderAccepted() );        
-		assertEquals("75000", deliveredOrder.getAmount());	
-		assertEquals("50000", deliveredOrder.getAuthorizedAmount());    
+		assertEquals((Double)750.00, deliveredOrder.getAmount());	
+		assertEquals((Double)500.00, deliveredOrder.getAuthorizedAmount());    
     }
         
     /// WebPayAdmin.cancelOrderRows() ----------------------------------------------------------------------------------
@@ -352,7 +352,7 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse cancelledOrder = queryCancelledOrder.queryCardOrder().doRequest();                 
         assertTrue(cancelledOrder.isOrderAccepted());
-        assertEquals( "0", cancelledOrder.getAuthorizedAmount());
+        assertEquals( (Double)0.0, cancelledOrder.getAuthorizedAmount());
         assertEquals( "ANNULLED", cancelledOrder.getStatus()); // i.e. loweredamount caused order authorizedamount = 0        
     }
     @Test
@@ -391,8 +391,8 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse cancelledOrder = queryCancelledOrder.queryCardOrder().doRequest();                 
         assertTrue(cancelledOrder.isOrderAccepted());
-		assertEquals("75000", cancelledOrder.getAmount());	
-		assertEquals("25000", cancelledOrder.getAuthorizedAmount());    
+		assertEquals((Double)750.00, cancelledOrder.getAmount());	
+		assertEquals((Double)250.00, cancelledOrder.getAuthorizedAmount());    
     }    
 
     /// WebPayAdmin.creditOrderRows() ----------------------------------------------------------------------------------	
@@ -464,7 +464,7 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse creditedOrder = queryCancelledOrder.queryCardOrder().doRequest();                 
         assertTrue(creditedOrder.isOrderAccepted());
-        assertEquals( (Long)(Long.valueOf(originalOrder.getCreditedAmount())+25000+25000), (Long)Long.valueOf(creditedOrder.getCreditedAmount()));
+        assertEquals( (Double)(originalOrder.getCreditedAmount()+250.00+250.00), creditedOrder.getCreditedAmount());
     	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());
     }    
     @Test
@@ -507,7 +507,7 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse creditedOrder = queryCreditedOrder.queryCardOrder().doRequest();                 
         assertTrue(creditedOrder.isOrderAccepted());
-        assertEquals( (Long)(Long.valueOf(originalOrder.getCreditedAmount())+25000+11000), (Long)Long.valueOf(creditedOrder.getCreditedAmount()));
+        assertEquals( (Double)(originalOrder.getCreditedAmount()+250.00+110.00), creditedOrder.getCreditedAmount());
     	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());    	
 	}
     @Test
@@ -548,7 +548,7 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse creditedOrder = queryCreditedOrder.queryCardOrder().doRequest();                 
         assertTrue(creditedOrder.isOrderAccepted());
-        assertEquals( (Long)(Long.valueOf(originalOrder.getCreditedAmount())+11000), (Long)Long.valueOf(creditedOrder.getCreditedAmount()));
+        assertEquals( (Double)(originalOrder.getCreditedAmount()+110.00), creditedOrder.getCreditedAmount());
     	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());    	
 	}
     // direct bank (uses webdriver)
@@ -587,7 +587,7 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse creditedOrder = queryCancelledOrder.queryCardOrder().doRequest();                 
         assertTrue(creditedOrder.isOrderAccepted());
-        assertEquals( (Long)(Long.valueOf(originalOrder.getCreditedAmount())+25000+25000), (Long)Long.valueOf(creditedOrder.getCreditedAmount()));
+        assertEquals( (Double)(originalOrder.getCreditedAmount()+250.00+250.00), creditedOrder.getCreditedAmount());
     	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());
     }    
     @Test
@@ -628,7 +628,7 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse creditedOrder = queryCreditedOrder.queryCardOrder().doRequest();                 
         assertTrue(creditedOrder.isOrderAccepted());
-        assertEquals( (Long)(Long.valueOf(originalOrder.getCreditedAmount())+25000+11000), (Long)Long.valueOf(creditedOrder.getCreditedAmount()));
+        assertEquals( (Double)(originalOrder.getCreditedAmount()+250.00+110.00), creditedOrder.getCreditedAmount());
     	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());    	
 	}
     @Test
@@ -667,7 +667,7 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse creditedOrder = queryCreditedOrder.queryCardOrder().doRequest();                 
         assertTrue(creditedOrder.isOrderAccepted());
-        assertEquals( (Long)(Long.valueOf(originalOrder.getCreditedAmount())+11000), (Long)Long.valueOf(creditedOrder.getCreditedAmount()));
+        assertEquals( (Double)(originalOrder.getCreditedAmount()+110.00), creditedOrder.getCreditedAmount());
     	assertEquals( "CREDSUCCESS", creditedOrder.getCreditstatus());    	
 	}
 

@@ -22,8 +22,11 @@ import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProviderTestData;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
+import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.Item;
+import se.sveaekonomi.webpay.integration.response.hosted.HostedPaymentResponse;
 import se.sveaekonomi.webpay.integration.response.hosted.SveaResponse;
+import se.sveaekonomi.webpay.integration.response.hosted.hostedadmin.QueryTransactionResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CloseOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CustomerIdentityResponse;
@@ -297,7 +300,23 @@ public class LegacyTypeCompatibilityIntegrationTest {
 		String expiryYear = response.getExpiryYear();
 		String authCode = response.getAuthCode();
     }
-
+    @Test
+    public void test_queryOrder_queryCardOrder() {
+    	// create an order using defaults
+    	HostedPaymentResponse order = (HostedPaymentResponse)TestingTool.createCardTestOrder("test_cancelOrder_cancelCardOrder");
+        assertTrue(order.isOrderAccepted());
+        
+        // query order
+        QueryOrderBuilder queryOrderBuilder = WebPayAdmin.queryOrder( SveaConfig.getDefaultConfig() )
+            .setTransactionId( order.getTransactionId() )
+            .setCountryCode( COUNTRYCODE.SE )
+        ;                
+        QueryTransactionResponse response = queryOrderBuilder.queryCardOrder().doRequest();         
+        
+        assertTrue( response.isOrderAccepted() );     
+   		assertTrue( order.getTransactionId() instanceof String );
+    }	
+	
     /// Legacy (<2.0) DeliverOrderResponse attribute access -- getXX() methods	
     @Test
     public void test_DeliverOrderResponse_getters_having_legacy_return_types() {
