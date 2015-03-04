@@ -7,7 +7,6 @@ import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.QueryTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**
@@ -15,54 +14,34 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  */
 public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
 	
-    /** Required. */
-    protected ConfigurationProvider config;
-    /** Required. */
-    private Long orderId;
-    /** Required. */
-    protected COUNTRYCODE countryCode;
-    /** Required. */
     protected PAYMENTTYPE orderType;
+    private Long orderId;
 
-    public ConfigurationProvider getConfig() {
-        return this.config;
+    public Long getOrderId() {
+        return orderId;
     }
-
-    /** Required */	
-    public QueryOrderBuilder setCountryCode(COUNTRYCODE countryCode) {
-        this.countryCode = countryCode;
-        return this;
-    }
-    public COUNTRYCODE getCountryCode() {
-        return this.countryCode;
-    } 
-    
     /** Required, invoice or payment plan only, order to get details for */
     public QueryOrderBuilder setOrderId(long orderId) {
         this.orderId = orderId;
         return this;
     }
-    public Long getOrderId() {
-        return orderId;
-    }
-    
+	/** Optional, card or direct bank only -- alias for setOrderId */
+	public QueryOrderBuilder setTransactionId( Long transactionId) {        
+	  return setOrderId( transactionId );
+	}   
+	/**
+	 * Optional, card or direct bank only -- alias for setOrderId
+	 * @param transactionId as string, i.e. as transactionId is returned in HostedPaymentResponse
+	 * @deprecated
+	 */
+	public QueryOrderBuilder setTransactionId( String transactionId) {        
+	  return setOrderId( Long.parseLong(transactionId) );
+	}   
+	
 	public PAYMENTTYPE getOrderType() {
 		return this.orderType;
 	} 
     
-	/**
-	 * Optional, card or direct bank only -- alias for setOrderId
-	 * @param transactionId as string, i.e. as transactionId is returned in HostedPaymentResponse
-	 * @return QueryOrderBuilder
-	 */
-    public QueryOrderBuilder setTransactionId( String transactionId) {        
-        return setOrderId( Long.parseLong(transactionId) );
-    }   
-
-    public Long getTransactionId() {
-        return getOrderId();
-    }
-
 	public QueryOrderBuilder(ConfigurationProvider config) {
 		this.config = config;
 	}
@@ -113,7 +92,6 @@ public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
     	return validateQueryCardOrder();	// identical
     }
 	
-    
     public GetOrdersRequest queryInvoiceOrder() {
     	this.orderType = PAYMENTTYPE.INVOICE;
 		// validation is done in GetOrdersRequest
@@ -126,6 +104,5 @@ public class QueryOrderBuilder extends OrderBuilder<QueryOrderBuilder>{
 		// validation is done in GetOrdersRequest
 		GetOrdersRequest request = new GetOrdersRequest( this );
 		return request;        
-    }
-  
+    } 
 }
