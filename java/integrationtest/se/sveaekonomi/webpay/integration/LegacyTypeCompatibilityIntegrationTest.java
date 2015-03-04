@@ -290,7 +290,7 @@ public class LegacyTypeCompatibilityIntegrationTest {
 		double amount = response.getAmount();    
 		String currency = response.getCurrency();
 		String subscriptionId = response.getSubscriptionId();
-		String subscriptionType = response.getSubscriptionType();
+		String subscriptionType = response.getSubscriptionType();	// removed from 2.0, as never returned by HostedService
 		String cardType = response.getCardType();
 		String maskedCardNumber = response.getMaskedCardNumber();
 		String expiryMonth = response.getExpiryMonth();	
@@ -316,7 +316,7 @@ public class LegacyTypeCompatibilityIntegrationTest {
         int invoiceId = response.getInvoiceId();
         String dueDate = response.getDueDate();
         String invoiceDate = response.getInvoiceDate();
-        String getInvoiceDistributionType = response.getInvoiceDistributionType();
+        String getInvoiceDistributionType = response.getInvoiceDistributionType();		// returned as DISTRIBUTIONTYPE in 2.0
         String ocr = response.getOcr();
         double lowestAmountToPay = response.getLowestAmountToPay();
         int contractNumber = response.getContractNumber();

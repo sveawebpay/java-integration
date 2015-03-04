@@ -226,7 +226,7 @@ public class WebPayWebdriverTest {
 		DeliverOrdersResponse response = request.doRequest();
 		assertThat( response, instanceOf(DeliverOrdersResponse.class) );
 		assertEquals(true, response.isOrderAccepted());
-		assertEquals( String.valueOf(order.orderId), response.getOrderId() );					// TODO fix return value!	
+		assertEquals( order.getOrderId(), response.getOrderId() );
     }
 
 	// .deliverInvoiceOrder() with orderrows => WebService/HandleOrder request, DeliverOrderResponse response

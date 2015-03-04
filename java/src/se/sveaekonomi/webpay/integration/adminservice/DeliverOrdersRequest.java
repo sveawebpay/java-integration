@@ -80,7 +80,6 @@ public class DeliverOrdersRequest implements Requestable {
 			messageFactory = MessageFactory.newInstance();
 			soapMessage = messageFactory.createMessage();
 			soapPart = soapMessage.getSOAPPart();
-
     
 			//<soapenv:Envelope 
 			//	xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" 
@@ -128,12 +127,7 @@ public class DeliverOrdersRequest implements Requestable {
 			    				SOAPElement soapBodyElem6 = soapBodyElem5.addChildElement("ClientId", "dat");
 							    	soapBodyElem6.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(PAYMENTTYPE.fromOrderType(this.builder.getOrderType()), this.builder.getCountryCode())));
 							    SOAPElement soapBodyElem7 = soapBodyElem5.addChildElement("OrderType", "dat");
-							    	if( this.builder.getOrderType().toString().equals("Invoice") ) {		// TODO PAYMENTTYPE.INVOICE
-							    		soapBodyElem7.addTextNode("Invoice");
-							    	}
-							    	if( this.builder.getOrderType().toString().equals("PaymentPlan") ) {	// TODO PAYMENTTYPE.PAYMENTPLAN
-							    		soapBodyElem7.addTextNode("PaymentPlan");
-							    	}						    	
+						    		soapBodyElem7.addTextNode(this.builder.getOrderType().toString());							    	
 							    SOAPElement soapBodyElem8 = soapBodyElem5.addChildElement("SveaOrderId", "dat");
 							    	soapBodyElem8.addTextNode(String.valueOf(this.builder.getOrderId()));
 							    	

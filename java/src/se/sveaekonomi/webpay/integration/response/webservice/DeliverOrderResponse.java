@@ -10,9 +10,9 @@ import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 
 public class DeliverOrderResponse extends WebServiceResponse implements Respondable {
 
-    private double amount;
+    private Double amount;
     private ORDERTYPE orderType;
-    private int invoiceId;
+    private Long invoiceId;
     private String dueDate;
     private String invoiceDate;
     private DISTRIBUTIONTYPE invoiceDistributionType;
@@ -84,7 +84,7 @@ public class DeliverOrderResponse extends WebServiceResponse implements Responda
         } else if (tagName.equals("InvoiceDate")) {
             this.setInvoiceDate(tagValue);
         } else if (tagName.equals("InvoiceDistributionType")) {
-            this.setInvoiceDistributionType( DISTRIBUTIONTYPE.fromString(tagName) );
+            this.setInvoiceDistributionType( DISTRIBUTIONTYPE.fromString(tagValue) );
         } else if (tagName.equals("ContractNumber")) {
             this.setContractNumber(Integer.valueOf(tagValue));
         } else if (tagName.equals("Ocr")) {

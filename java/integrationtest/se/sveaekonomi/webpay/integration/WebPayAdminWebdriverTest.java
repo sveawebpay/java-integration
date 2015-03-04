@@ -155,7 +155,7 @@ public class WebPayAdminWebdriverTest {
         	GetOrdersResponse response = queryOrderBuilder.queryPaymentPlanOrder().doRequest();
 
 			assertTrue( response.isOrderAccepted() );     
-	   		assertEquals( String.valueOf(order.orderId), response.getOrderId() );
+	   		assertEquals( order.getOrderId(), response.getOrderId() );
         
 	   		// see GetOrdersIntegrationTest.java for detailed tests
         }
