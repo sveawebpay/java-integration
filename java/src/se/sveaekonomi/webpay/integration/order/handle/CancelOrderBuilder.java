@@ -6,7 +6,6 @@ import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.AnnulTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 
@@ -43,19 +42,16 @@ import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
 	private Long orderId;
 
-	public CancelOrderBuilder(ConfigurationProvider config) {
-        this.config = config;
-	}
-	
-    /**
-     * Required
-     * @param countryCode
-     * @return CancelOrderBuilder
-     */
-	public CancelOrderBuilder setCountryCode(COUNTRYCODE countryCode) {
-		this.countryCode = countryCode;
-		return this;
-	}
+
+//    /**
+//     * Required
+//     * @param countryCode
+//     * @return CancelOrderBuilder
+//     */
+//	public CancelOrderBuilder setCountryCode(COUNTRYCODE countryCode) {
+//		this.countryCode = countryCode;
+//		return this;
+//	}
 
     /**
      * Required
@@ -78,7 +74,7 @@ public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
      */
 	public CancelOrderBuilder setTransactionId( Long transactionId ) {
 		return this.setOrderId(transactionId);
-	}	
+	}
 	
 	/**
 	 * optional, card only -- alias for setOrderId
@@ -106,6 +102,11 @@ public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
 		closeOrderBuilder.setOrderId(this.orderId);		
 		closeOrderBuilder.setOrderType(ORDERTYPE.PaymentPlan.toString());
 		return new CloseOrder(closeOrderBuilder);
+	}
+	
+	
+	public CancelOrderBuilder(ConfigurationProvider config) {
+        this.config = config;
 	}
 	
 	public AnnulTransactionRequest cancelCardOrder() {
