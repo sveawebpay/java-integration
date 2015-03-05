@@ -24,9 +24,23 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 public class LowerTransactionResponse extends HostedAdminResponse implements Respondable {
 
 	private String rawResponse;
-	private String transactionid;
+	private Long transactionid;
 	private String clientOrderNumber;
 
+	
+    public String getRawResponse() {
+		return rawResponse;
+	}
+
+    public Long getTransactionId() {
+		return transactionid;
+	}
+
+	public String getClientOrderNumber() {
+		return clientOrderNumber;
+	}
+    
+	
 	public LowerTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
 		this.rawResponse = this.xml;		
@@ -57,7 +71,7 @@ public class LowerTransactionResponse extends HostedAdminResponse implements Res
 				
 				if( this.isOrderAccepted() ) {	// don't attempt to parse a bad response
 
-					this.transactionid = getTagAttribute(element, "transaction", "id");
+					this.transactionid = Long.valueOf(getTagAttribute(element, "transaction", "id"));
 					this.clientOrderNumber = getTagValue(element, "customerrefno");
 				}
 			}
@@ -69,19 +83,5 @@ public class LowerTransactionResponse extends HostedAdminResponse implements Res
 			throw new SveaWebPayException("IOException", e);
 		}
 	}
-	
-    public String getRawResponse() {
-		return rawResponse;
-	}
-
-    public String getTransactionId() {
-		return transactionid;
-	}
-
-	public String getClientOrderNumber() {
-		return clientOrderNumber;
-	}
-    
-
 }
 
