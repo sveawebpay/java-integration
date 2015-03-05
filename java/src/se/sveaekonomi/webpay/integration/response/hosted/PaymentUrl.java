@@ -10,11 +10,11 @@ public class PaymentUrl implements Response {
     private String resultCode;
     private String errorMessage;
     
-    public boolean isOrderAccepted() {
+    public Boolean isOrderAccepted() {
         return isOrderAccepted;
     }
 
-    public void setOrderAccepted(boolean isOrderAccepted) {
+    public void setOrderAccepted(Boolean isOrderAccepted) {
         this.isOrderAccepted = isOrderAccepted;
     }
 

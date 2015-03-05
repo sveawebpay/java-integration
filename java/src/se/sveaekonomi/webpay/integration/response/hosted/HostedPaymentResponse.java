@@ -26,15 +26,15 @@ import se.sveaekonomi.webpay.integration.util.security.Base64Util;
  */
 public class HostedPaymentResponse extends ResponseHelper implements Response {
 
-    private boolean isOrderAccepted;
+    private Boolean isOrderAccepted;
     private String resultCode;
     private String errorMessage;
     
-    public boolean isOrderAccepted() {
+    public Boolean isOrderAccepted() {
         return isOrderAccepted;
     }
 
-    public void setOrderAccepted(boolean isOrderAccepted) {
+    public void setOrderAccepted(Boolean isOrderAccepted) {
         this.isOrderAccepted = isOrderAccepted;
     }
 
