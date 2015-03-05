@@ -88,18 +88,18 @@ public class QueryTransactionTest {
 		//        <statuscode>0</statuscode>
 		//      </response>
                
-		assertEquals("587673", response.getTransactionId() );
+		assertEquals((Long)587673L, response.getTransactionId() );
 		assertEquals("test_cancelOrder_cancelCardOrder1413208130564", response.getClientOrderNumber() );
 		assertEquals("1130", response.getMerchantId());
 		assertEquals("SUCCESS", response.getStatus());
-		assertEquals("12500", response.getAmount());
+		assertEquals((Double)125.00, response.getAmount());
 		assertEquals("SEK", response.getCurrency());
-		assertEquals("2500", response.getVat());
-		assertEquals("12500", response.getCapturedAmount());
-		assertEquals("12500", response.getAuthorizedAmount());									
+		assertEquals((Double)25.00, response.getVat());
+		assertEquals((Double)125.00, response.getCapturedAmount());
+		assertEquals((Double)125.00, response.getAuthorizedAmount());									
 		assertEquals("2014-10-13 15:48:56.487", response.getCreated());					
 		assertEquals("CREDNONE", response.getCreditstatus());
-		assertEquals("0", response.getCreditedAmount());
+		assertEquals((Double)0.0, response.getCreditedAmount());
 		assertEquals("0", response.getMerchantResponseCode());					
 		assertEquals("KORTCERT", response.getPaymentMethod());
 		assertEquals(null, response.getCallbackUrl());

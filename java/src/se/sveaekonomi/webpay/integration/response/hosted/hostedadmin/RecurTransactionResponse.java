@@ -15,7 +15,6 @@ import org.xml.sax.SAXException;
 
 import se.sveaekonomi.webpay.integration.Respondable;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
-import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 
 /**
  * RecurTransactionResponse handles the recur transaction response
@@ -27,42 +26,138 @@ public class RecurTransactionResponse extends HostedAdminResponse implements Res
 	private String rawResponse;
 
     /** the order id at Svea */
-    public String transactionId;
+    private Long transactionId;
     /** the customer reference number, i.e. order number */
-    public String clientOrderNumber;
+    private String clientOrderNumber;
     /** paymentMethod */
-    public String paymentMethod;	// TODO use PAYMENTMETHOD
+    private String paymentMethod;
     /** the merchant id */
-    public String merchantId;    
-    /** the total amount in minor currency (e.g. SEK 10.50 => 1050) */
-    public String amount;
+    private String merchantId;    
+    /** the total amount */
+    private Double amount;
     /** currency -- ISO 4217 alphabetic, e.g. SEK */
-    public String currency;
+    private String currency;
     /** cardType */
-    public String cardType;
+    private String cardType;
     /** maskedCardNumber */
-    public String maskedCardNumber;
+    private String maskedCardNumber;
     /**  expiryMonth -- Expire month of the month */
-    public String expiryMonth;
+    private String expiryMonth;
     /** expiryYear -- Expire year of the card */
-    public String expiryYear;
+    private String expiryYear;
     /** EDB authorization code */
-    public String authCode; 
+    private String authCode; 
     /** subscriptionId */
-    public String subscriptionId;
-    /** decimalamount The total amount including VAT, presented as a decimal number. */
-    public Double decimalamount;	
-	
+    private Long subscriptionId;	
 
+    
+    public String getRawResponse() {
+ 		return rawResponse;
+ 	}
+
+ 	public Long getTransactionId() {
+ 		return transactionId;
+ 	}
+
+ 	public void setTransactionId(Long transactionId) {
+ 		this.transactionId = transactionId;
+ 	}
+
+ 	public String getClientOrderNumber() {
+ 		return clientOrderNumber;
+ 	}
+
+ 	public void setClientOrderNumber(String clientOrderNumber) {
+ 		this.clientOrderNumber = clientOrderNumber;
+ 	}
+
+ 	public String getPaymentMethod() {
+ 		return paymentMethod;
+ 	}
+
+ 	public void setPaymentMethod(String paymentMethod) {
+ 		this.paymentMethod = paymentMethod;
+ 	}
+
+ 	public String getMerchantId() {
+ 		return merchantId;
+ 	}
+
+ 	public void setMerchantId(String merchantId) {
+ 		this.merchantId = merchantId;
+ 	}
+
+ 	public Double getAmount() {
+ 		return amount;
+ 	}
+
+ 	public void setAmount(Double amount) {
+ 		this.amount = amount;
+ 	}
+
+ 	public String getCurrency() {
+ 		return currency;
+ 	}
+
+ 	public void setCurrency(String currency) {
+ 		this.currency = currency;
+ 	}
+
+ 	public String getCardType() {
+ 		return cardType;
+ 	}
+
+ 	public void setCardType(String cardType) {
+ 		this.cardType = cardType;
+ 	}
+
+ 	public String getMaskedCardNumber() {
+ 		return maskedCardNumber;
+ 	}
+
+ 	public void setMaskedCardNumber(String maskedCardNumber) {
+ 		this.maskedCardNumber = maskedCardNumber;
+ 	}
+
+ 	public String getExpiryMonth() {
+ 		return expiryMonth;
+ 	}
+
+ 	public void setExpiryMonth(String expiryMonth) {
+ 		this.expiryMonth = expiryMonth;
+ 	}
+
+ 	public String getExpiryYear() {
+ 		return expiryYear;
+ 	}
+
+ 	public void setExpiryYear(String expiryYear) {
+ 		this.expiryYear = expiryYear;
+ 	}
+
+ 	public String getAuthCode() {
+ 		return authCode;
+ 	}
+
+ 	public void setAuthCode(String authCode) {
+ 		this.authCode = authCode;
+ 	}
+
+ 	public Long getSubscriptionId() {
+ 		return subscriptionId;
+ 	}
+
+ 	public void setSubscriptionId(Long subscriptionId) {
+ 		this.subscriptionId = subscriptionId;
+ 	} 
+
+    
 	public RecurTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
 		this.rawResponse = this.xml;		
 		this.setValues();
 	}
 
-	/** 
-	 * implement this to parse xml and set attributes according to response attributes 
-	 */
 	void setValues() {		
 				
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -104,19 +199,18 @@ public class RecurTransactionResponse extends HostedAdminResponse implements Res
 				}
 				
 				if( this.isOrderAccepted() ) {	// don't attempt to parse a bad response
-					this.transactionId = getTagAttribute(element, "transaction", "id");
+					this.transactionId = Long.valueOf(getTagAttribute(element, "transaction", "id"));
 					this.clientOrderNumber = getTagValue(element, "customerrefno");
 					this.paymentMethod = getTagValue(element, "paymentmethod");
 					this.merchantId = getTagValue(element, "merchantid");
-					this.amount = getTagValue(element, "amount");
+					this.amount = Double.valueOf(getTagValue(element, "amount"))/100.00;
 					this.currency = getTagValue(element, "currency");
 					this.cardType = getTagValue(element, "cardtype");
 					this.maskedCardNumber = getTagValue(element, "maskedcardno");
 					this.expiryMonth = getTagValue(element, "expirymonth");
 					this.expiryYear = getTagValue(element, "expiryyear");
 					this.authCode = getTagValue(element, "authcode");
-					this.subscriptionId = getTagValue(element, "subscriptionid");
-					this.decimalamount = Double.valueOf(getTagValue(element, "amount"))/100.00;
+					this.subscriptionId = Long.valueOf(getTagValue(element, "subscriptionid"));
 				}
 			}
 		} catch (ParserConfigurationException e) {
@@ -127,10 +221,5 @@ public class RecurTransactionResponse extends HostedAdminResponse implements Res
 			throw new SveaWebPayException("IOException", e);
 		}
 	}
-	
-    public String getRawResponse() {
-		return rawResponse;
-	} 
-
 }
 
