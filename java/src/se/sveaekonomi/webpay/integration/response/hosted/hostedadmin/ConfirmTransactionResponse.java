@@ -19,9 +19,23 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 public class ConfirmTransactionResponse extends HostedAdminResponse implements Respondable {
 		
 	private String rawResponse;
-	private String transactionid;
+	private Long transactionid;
 	private String customerrefno;
 
+	
+    public String getRawResponse() {
+		return rawResponse;
+	}
+
+    public Long getTransactionId() {
+		return transactionid;
+	}
+
+	public String getCustomerRefNo() {
+		return customerrefno;
+	}
+
+	
 	public ConfirmTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
 		this.rawResponse = this.xml;		
@@ -30,9 +44,6 @@ public class ConfirmTransactionResponse extends HostedAdminResponse implements R
 		}
 	}	
 	
-	/** 
-	 * parses response xml and sets response attributes 
-	 */
 	void setValues() {		
 				
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -57,7 +68,7 @@ public class ConfirmTransactionResponse extends HostedAdminResponse implements R
 				
 				if( this.isOrderAccepted() ) {	// don't attempt to parse a bad response
 
-					this.transactionid = getTagAttribute(element, "transaction", "id");
+					this.transactionid = Long.valueOf( getTagAttribute(element, "transaction", "id") );
 					this.customerrefno = getTagValue(element, "customerrefno");
 				}
 			}
@@ -68,17 +79,5 @@ public class ConfirmTransactionResponse extends HostedAdminResponse implements R
 		} catch (IOException e) {
 			throw new SveaWebPayException("IOException", e);
 		}
-	}
-	
-    public String getRawResponse() {
-		return rawResponse;
-	}
-
-    public String getTransactionId() {
-		return transactionid;
-	}
-
-	public String getCustomerRefNo() {
-		return customerrefno;
 	}
 }

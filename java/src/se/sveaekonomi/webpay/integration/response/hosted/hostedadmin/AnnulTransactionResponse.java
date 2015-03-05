@@ -24,8 +24,22 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 public class AnnulTransactionResponse extends HostedAdminResponse implements Respondable {
 
 	private String rawResponse;
-	private String transactionid;
+	private Long transactionid;
 	private String clientOrderNumber;
+
+	
+    public String getRawResponse() {
+		return rawResponse;
+	}
+
+    public Long getTransactionId() {
+		return transactionid;
+	}
+
+	public String getClientOrderNumber() {
+		return clientOrderNumber;
+	}
+    
 
 	public AnnulTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
@@ -33,9 +47,6 @@ public class AnnulTransactionResponse extends HostedAdminResponse implements Res
 		this.setValues();
 	}
 
-	/** 
-	 * implement this to parse xml and set attributes according to response attributes 
-	 */
 	void setValues() {		
 				
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -60,7 +71,7 @@ public class AnnulTransactionResponse extends HostedAdminResponse implements Res
 				
 				if( this.isOrderAccepted() ) {	// don't attempt to parse a bad response
 
-					this.transactionid = getTagAttribute(element, "transaction", "id");
+					this.transactionid = Long.valueOf( getTagAttribute(element, "transaction", "id") );
 					this.clientOrderNumber = getTagValue(element, "customerrefno");
 				}
 			}
@@ -72,19 +83,5 @@ public class AnnulTransactionResponse extends HostedAdminResponse implements Res
 			throw new SveaWebPayException("IOException", e);
 		}
 	}
-	
-    public String getRawResponse() {
-		return rawResponse;
-	}
-
-    public String getTransactionId() {
-		return transactionid;
-	}
-
-	public String getClientOrderNumber() {
-		return clientOrderNumber;
-	}
-    
-
 }
 
