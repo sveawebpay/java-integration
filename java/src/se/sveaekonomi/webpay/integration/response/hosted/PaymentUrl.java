@@ -6,7 +6,7 @@ import se.sveaekonomi.webpay.integration.response.webservice.WebServiceResponse;
 
 public class PaymentUrl implements Response {
 
-    private boolean isOrderAccepted;
+    private Boolean isOrderAccepted;
     private String resultCode;
     private String errorMessage;
     
@@ -37,7 +37,7 @@ public class PaymentUrl implements Response {
 	
 	// passed on from preparepayment request response
 	private String rawResponse;
-	private String id;
+	private Long id;
 	private String created;
 	// convenience methods providing the final url
 	private String url;
@@ -53,8 +53,8 @@ public class PaymentUrl implements Response {
 		if( response.isOrderAccepted() ) {
 			this.id = response.getId();
 			this.created = response.getCreated();
-			this.url = "https://webpay.sveaekonomi.se/webpay/preparedpayment/".concat(this.id);
-			this.testUrl = "https://test.sveaekonomi.se/webpay/preparedpayment/".concat(this.id);		
+			this.url = "https://webpay.sveaekonomi.se/webpay/preparedpayment/".concat(String.valueOf(this.id));
+			this.testUrl = "https://test.sveaekonomi.se/webpay/preparedpayment/".concat(String.valueOf(this.id));		
 		}
 	}
 
@@ -62,7 +62,7 @@ public class PaymentUrl implements Response {
 		return rawResponse;
 	}
 
-	public String getId() {
+	public Long getId() {
 		return id;
 	}
 
