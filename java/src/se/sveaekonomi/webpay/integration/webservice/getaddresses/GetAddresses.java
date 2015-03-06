@@ -27,8 +27,10 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
  */
 public class GetAddresses {
     
-    private String nationalNumber;
-    private String companyId;
+	private String companyId;			// also set to !null if getCompanyAddresses()
+	private String nationalNumber;		// also set to !null if getIndividualAddresses()
+	private String customerIdentifier;
+
     private COUNTRYCODE countryCode;
     private String orderType;
     private ConfigurationProvider config;
@@ -36,40 +38,64 @@ public class GetAddresses {
     public GetAddresses(ConfigurationProvider config) {
         this.config = config;
     }
-    
+
+    /** @deprecated */
     public String getIndividual() {
-        return nationalNumber;
+        return this.nationalNumber;
     }
     
+    /** @deprecated */
+    public GetAddresses setIndividual(String nationalNumber) {
+    	this.nationalNumber = nationalNumber;
+        this.customerIdentifier = this.nationalNumber;
+    	return this;
+    }
+    
+    /** @deprecated */
+    public String getCompany() {
+        return this.companyId;
+    }
+    
+    /** deprecated */
+    public GetAddresses setCompany(String companyId) {
+    	this.companyId = companyId;
+        this.customerIdentifier = this.companyId;
+    	return this;
+    }
+    
+    
+    public GetAddresses getCompanyAddresses() {
+    	this.companyId = getCustomerIdentifier();
+    	return this;
+    }    
+    
+    public GetAddresses getIndividualAddresses() {
+    	this.nationalNumber = getCustomerIdentifier();
+    	return this;
+    }
+    
+    public String getCustomerIdentifier() {
+    	return this.customerIdentifier;
+    }
+        
     /**
-     * Required if customer is Individual
-     * @param type nationalNumber
+     * @param id
+     * Required if customer is Individual:
      * Sweden: Personnummer,
      * Norway: Personalnumber,
      * Denmark: CPR
-     * @return GetAddresses
-     */
-    public GetAddresses setIndividual(String nationalNumber) {
-        this.nationalNumber = nationalNumber;
-        return this;
-    }
-    
-    public String getCompanyId() {
-        return companyId;
-    }
-    
-    /**
-     * Required if customer is Company
-     * @param companyId
+     * 
+     * Required if customer is Company:
      * Sweden: Organisationsnummer,
      * Norway: Vat number,
      * Denmark: CVR
-     * @returnGetAddresses
+     * 
+     * @return GetAddresses
      */
-    public GetAddresses setCompany(String companyId) {
-        this.companyId = companyId;
+    public GetAddresses setCustomerIdentifier( String id ) {
+        this.customerIdentifier = id;
         return this;
-    }
+    }    
     
     /**
      * Required
@@ -84,19 +110,13 @@ public class GetAddresses {
         return this;
     }
     
-    /**
-     * Required for PaymentPlan type
-     * @return GetAddresses
-     */
+    /** @deprecated */
     public GetAddresses setOrderTypePaymentPlan() {
         this.orderType = "PaymentPlan";
         return this;
     }
     
-    /**
-     * Required for Invoice type
-     * @return GetAddresses
-     */
+    /** @deprecated */
     public GetAddresses setOrderTypeInvoice() {
         this.orderType = "Invoice";
         return this;
@@ -119,8 +139,8 @@ public class GetAddresses {
         String errors ="";
         if (countryCode == null)
             errors += "MISSING VALUE - CountryCode is required, use setCountryCode(...).\n";
-        if (this.nationalNumber==null && this.companyId==null)
-            errors += "MISSING VALUE - either nationalNumber or companyId is required. Use: setCompany(...) or setIndividual(...).\n";
+        if (this.customerIdentifier == null)
+            errors += "MISSING VALUE - customerIdentifer is required. Use: setCustomerIdentifier().\n";
         return errors;
     }
     
@@ -136,7 +156,7 @@ public class GetAddresses {
         sveaAddress.Auth = getStoreAuthorization();
         sveaAddress.IsCompany = (companyId != null ? true : false);
         sveaAddress.CountryCode = countryCode.toString();
-        sveaAddress.SecurityNumber = companyId != null ? companyId : nationalNumber;
+        sveaAddress.SecurityNumber = customerIdentifier;
         
         SveaRequest<SveaGetAddresses> request = new SveaRequest<SveaGetAddresses>();
         request.request = sveaAddress;
@@ -150,7 +170,14 @@ public class GetAddresses {
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml = xmlBuilder.getGetAddressesXml(request.request);
         
-        URL url = config.getEndPoint((orderType != null && orderType.equals("Invoice")) ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
+        URL url;
+        try {
+        	url = config.getEndPoint( PAYMENTTYPE.INVOICE );		// first try invoice credentials
+        }
+        catch( Exception e) {
+        	url = config.getEndPoint( PAYMENTTYPE.PAYMENTPLAN );	// will throw Exception if no credentials found
+        }
+        
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("GetAddresses", xml);
         NodeList soapResponse = soapBuilder.createGetAddressesEuRequest(soapMessage, url.toString());

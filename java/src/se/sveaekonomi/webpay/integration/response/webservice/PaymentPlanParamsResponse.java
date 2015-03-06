@@ -10,18 +10,19 @@ public class PaymentPlanParamsResponse extends WebServiceResponse {
     
     private List<CampaignCode> campaignCodes;
     
-    public PaymentPlanParamsResponse(NodeList soapMessage) {
-        super(soapMessage);
-        campaignCodes = new ArrayList<CampaignCode>();
-        setValues(soapMessage);
-    }
     
     public List<CampaignCode> getCampaignCodes() {
         return campaignCodes;
     }
-    
     public void setCampaignCodes(List<CampaignCode> campaignCodes) {
         this.campaignCodes = campaignCodes;
+    }
+    
+    
+    public PaymentPlanParamsResponse(NodeList soapMessage) {
+        super(soapMessage);
+        campaignCodes = new ArrayList<CampaignCode>();
+        setValues(soapMessage);
     }
     
     private void setValues(NodeList soapMessage) {
@@ -29,9 +30,7 @@ public class PaymentPlanParamsResponse extends WebServiceResponse {
         
         for (int i = 0; i < size; i++) {
             Element node = (Element)soapMessage.item(i);
-            
-            // mandatory
-            
+             
             if (this.isOrderAccepted()) {
                 NodeList campaigns = node.getElementsByTagName("CampaignCodeInfo");
                 int numberOfCampaigns = campaigns.getLength();
