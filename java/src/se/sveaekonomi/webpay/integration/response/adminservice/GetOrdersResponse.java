@@ -257,37 +257,115 @@ public class GetOrdersResponse extends AdminServiceResponse {
 		String cZipCode = c.getElementsByTagName("b:ZipCode").item(0).getTextContent();
 
 		if( cCustomerType.endsWith("Individual") ) {
+			
+			//<a:Customer xmlns:b="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">
+			//    <b:CoAddress>c/o Eriksson, Erik</b:CoAddress>
+			//    <b:CompanyIdentity i:nil="true"/>
+			//    <b:CountryCode>SE</b:CountryCode>
+			//    <b:CustomerType>Individual</b:CustomerType>
+			//    <b:Email i:nil="true"/>
+			//    <b:FullName>Persson, Tess T</b:FullName>
+			//    <b:HouseNumber i:nil="true"/>
+			//    <b:IndividualIdentity>
+			//       <b:BirthDate i:nil="true"/>
+			//       <b:FirstName i:nil="true"/>
+			//       <b:Initials i:nil="true"/>
+			//       <b:LastName i:nil="true"/>
+			//    </b:IndividualIdentity>
+			//    <b:Locality>Stan</b:Locality>
+			//    <b:NationalIdNumber>194605092222</b:NationalIdNumber>
+			//    <b:PhoneNumber i:nil="true"/>
+			//    <b:PublicKey i:nil="true"/>
+			//    <b:Street>Testgatan 1</b:Street>
+			//    <b:ZipCode>99999</b:ZipCode>
+			// </a:Customer>
+
+			//  //ci
+			//  private String phoneNumber;
+			//  private String email;
+			//  private String ipAddress;
+			//  private String coAddress;
+			//  private String streetAddress;
+			//  private String housenumber;
+			//  private String zipCode;
+			//  private String locality;    	
+			//  //ic
+			//  private String ssn;
+			//  private String birthDate;
+			//  private String firstName;
+			//  private String lastName;
+			//  private String initials;
+			//  private String name;
+			
 			IndividualCustomer individualCustomer = new IndividualCustomer();
 		
-			individualCustomer.setNationalIdNumber( cNationalIdNumber );
-			individualCustomer.setEmail( cEmail );
 			individualCustomer.setPhoneNumber( cPhoneNumber );
-			individualCustomer.setName( cFullName ); // FullName
-			individualCustomer.setStreetAddress( cStreet, cHouseNumber );
+			individualCustomer.setEmail( cEmail );
+			individualCustomer.setIpAddress( null );
 			individualCustomer.setCoAddress( cCoAddress );
+			individualCustomer.setStreetAddress( cStreet, cHouseNumber );
 			individualCustomer.setZipCode( cZipCode );
 			individualCustomer.setLocality( cLocality );
+			individualCustomer.setNationalIdNumber( cNationalIdNumber );
 			individualCustomer.setName( iiFirstName, iiLastName ); // FirstName, LastName
-			individualCustomer.setInitials( iiInitials );
 			individualCustomer.setBirthDate( iiBirthDate );
+			individualCustomer.setInitials( iiInitials );
+			individualCustomer.setName( cFullName ); // FullName
 
 			this.setCustomer(individualCustomer);
 		}
 		
 		if( cCustomerType.endsWith("Company") ) {
+			
+			//<a:Customer xmlns:b="http://schemas.datacontract.org/2004/07/DataObjects.Webservice">
+			//    <b:CoAddress>c/o Eriksson, Erik</b:CoAddress>
+			//    <b:CompanyIdentity>
+			//       <b:CompanyIdentification i:nil="true"/>
+			//       <b:CompanyVatNumber i:nil="true"/>
+			//    </b:CompanyIdentity>
+			//    <b:CountryCode>SE</b:CountryCode>
+			//    <b:CustomerType>Company</b:CustomerType>
+			//    <b:Email/>
+			//    <b:FullName>Persson, Tess T</b:FullName>
+			//    <b:HouseNumber i:nil="true"/>
+			//    <b:IndividualIdentity i:nil="true"/>
+			//    <b:Locality>Stan</b:Locality>
+			//    <b:NationalIdNumber>164608142222</b:NationalIdNumber>
+			//    <b:PhoneNumber/>
+			//    <b:PublicKey i:nil="true"/>
+			//    <b:Street>Testgatan 1</b:Street>
+			//    <b:ZipCode>99999</b:ZipCode>
+			// </a:Customer>
+			
+			//  //ci
+			//  private String phoneNumber;
+			//  private String email;
+			//  private String ipAddress;
+			//  private String coAddress;
+			//  private String streetAddress;
+			//  private String housenumber;
+			//  private String zipCode;
+			//  private String locality;    		
+			//  //cc
+			//  private String companyName;
+			//  private String orgNumber;
+			//  private String companyVatNumber;
+			//  private String addressSelector;    	
+			
 			CompanyCustomer companyCustomer = new CompanyCustomer();
 			
-			companyCustomer.setNationalIdNumber( cNationalIdNumber );
-			companyCustomer.setEmail( cEmail );
 			companyCustomer.setPhoneNumber( cPhoneNumber );
-			//ipAddress;
-			//NOT IN USE
-			companyCustomer.setCompanyName( cFullName );
-			companyCustomer.setStreetAddress( cStreet, cHouseNumber );
+			companyCustomer.setEmail( cEmail );
+			companyCustomer.setIpAddress( null );
 			companyCustomer.setCoAddress( cCoAddress );
+			companyCustomer.setStreetAddress( cStreet, cHouseNumber );
 			companyCustomer.setZipCode( cZipCode );
 			companyCustomer.setLocality( cLocality );
+			companyCustomer.setCompanyName( cFullName );
+			companyCustomer.setNationalIdNumber( cNationalIdNumber );
 			companyCustomer.setVatNumber(ciCompanyVatNumber);
+			companyCustomer.setAddressSelector( null );
+			
 			
 			this.setCustomer(companyCustomer);
 		}		

@@ -23,6 +23,8 @@
 //import se.sveaekonomi.webpay.integration.config.SveaConfig;
 //import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 //import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
+//import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
+//import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
 //import se.sveaekonomi.webpay.integration.order.row.Item;
 //import se.sveaekonomi.webpay.integration.response.hosted.HostedPaymentResponse;
 //import se.sveaekonomi.webpay.integration.response.hosted.SveaResponse;
@@ -341,6 +343,132 @@
 //        int contractNumber = response.getContractNumber();
 //    }
 //    
+//	// 2.0 on adds getIndividualCustomer(), getCompanyCustomer() with the information from getCustomerIdentityResponse in a CustomerIdentity
+//
+//	@Test
+//	public void test_CreateOrderResponse_Individual_SE() {
+//		CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig()).addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+//				.addCustomerDetails(WebPayItem.individualCustomer().setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
+//				.setOrderDate(TestingTool.DefaultTestDate).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setCurrency(TestingTool.DefaultTestCurrency).useInvoicePayment().doRequest();
+//
+//		assertEquals("Invoice", response.orderType);
+//		assertTrue(response.isOrderAccepted());
+//		assertTrue(response.sveaWillBuyOrder);
+//		assertEquals(250.00, response.amount, 0);
+//
+//		
+//		// legacy, CustomerIdentityResponse
+//		assertTrue( response.isIndividualIdentity() );
+//		assertTrue( response.customerIdentity instanceof CustomerIdentityResponse );
+//		assertEquals("Individual", response.customerIdentity.getCustomerType());
+//		assertEquals("194605092222", response.customerIdentity.getNationalIdNumber());
+//		assertEquals("Persson, Tess T", response.customerIdentity.getFullName());
+//		assertEquals("Testgatan 1", response.customerIdentity.getStreet());
+//		assertEquals("c/o Eriksson, Erik", response.customerIdentity.getCoAddress());
+//		assertEquals("99999", response.customerIdentity.getZipCode());
+//		assertEquals("Stan", response.customerIdentity.getCity());
+//		assertEquals("SE", response.customerIdentity.getCountryCode());
+//		
+//		
+//		// new, IndividualCustomer (CustomerIdentity<IndividualCustomer>)
+//		IndividualCustomer c = response.getIndividualCustomer();
+//
+//		assertTrue( response.isIndividualIdentity() );
+//		assertTrue( c instanceof IndividualCustomer );
+//		
+////    //ci
+////      private String phoneNumber;
+////      private String email;
+////      private String ipAddress;
+////      private String coAddress;
+////      private String streetAddress;
+////      private String housenumber;
+////      private String zipCode;
+////      private String locality;    	
+////    //ic
+////      private String ssn;
+////      private String birthDate;
+////      private String firstName;
+////      private String lastName;
+////      private String initials;
+////      private String name;
+//		
+//		//ci
+//		assertEquals( null, c.getPhoneNumber() );
+//		assertEquals( null, c.getEmail() );
+//		assertEquals( null, c.getIpAddress() );
+//		assertEquals( "Testgatan 1", c.getStreetAddress() );
+//		assertEquals( "c/o Eriksson, Erik", c.getCoAddress() );
+//		assertEquals("99999", c.getZipCode());
+//		assertEquals("Stan", c.getLocality());
+//		assertEquals( null, c.getHouseNumber() );
+//		assertEquals( "Persson, Tess T", c.getName() );
+//		//ic
+//		assertEquals( "194605092222", c.getNationalIdNumber() );
+//		assertEquals( null, c.getBirthDate() );
+//		assertEquals( null, c.getFirstName() );
+//		assertEquals( null, c.getLastName() );
+//		assertEquals( null, c.getInitials() );
+//	}
+//	
+//	@Test
+//	public void test_CreateOrderResponse_Company_SE() {
+//		CreateOrderResponse response = WebPay.createOrder(SveaConfig.getDefaultConfig()).addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
+//				.addCustomerDetails(WebPayItem.companyCustomer().setNationalIdNumber(TestingTool.DefaultTestCompanyNationalIdNumber)).setCountryCode(TestingTool.DefaultTestCountryCode)
+//				.setOrderDate(TestingTool.DefaultTestDate).setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber).setCurrency(TestingTool.DefaultTestCurrency).useInvoicePayment().doRequest();
+//
+//		assertEquals("Invoice", response.orderType);
+//		assertTrue(response.isOrderAccepted());
+//		assertTrue(response.sveaWillBuyOrder);
+//		assertEquals(250.00, response.amount, 0);
+//
+//		
+//		// legacy, CustomerIdentityResponse
+//		assertFalse( response.isIndividualIdentity() );
+//		assertTrue( response.customerIdentity instanceof CustomerIdentityResponse );
+//		assertEquals("Company", response.customerIdentity.getCustomerType());
+//		assertEquals("164608142222", response.customerIdentity.getNationalIdNumber());
+//		assertEquals("Persson, Tess T", response.customerIdentity.getFullName());
+//		assertEquals("Testgatan 1", response.customerIdentity.getStreet());
+//		assertEquals("c/o Eriksson, Erik", response.customerIdentity.getCoAddress());
+//		assertEquals("99999", response.customerIdentity.getZipCode());
+//		assertEquals("Stan", response.customerIdentity.getCity());
+//		assertEquals("SE", response.customerIdentity.getCountryCode());
+//				
+//		
+//		// new, CompanyCustomer (CustomerIdentity<CompanyCustomer>)
+//		CompanyCustomer c = response.getCompanyCustomer();
+//	
+////    	//ci
+////      private String phoneNumber;
+////      private String email;
+////      private String ipAddress;
+////      private String coAddress;
+////      private String streetAddress;
+////      private String housenumber;
+////      private String zipCode;
+////      private String locality;    		
+////		//cc
+////      private String companyName;
+////      private String orgNumber;
+////      private String companyVatNumber;
+////      private String addressSelector;    		
+//
+//		//ci
+//		assertEquals( null, c.getPhoneNumber() );
+//		assertEquals( null, c.getEmail() );
+//		assertEquals( null, c.getIpAddress() );
+//		assertEquals( "c/o Eriksson, Erik", c.getCoAddress() );
+//		assertEquals( "Testgatan 1", c.getStreetAddress() );
+//		assertEquals( null, c.getHouseNumber() );
+//		assertEquals("99999", c.getZipCode());
+//		assertEquals("Stan", c.getLocality());
+//		//cc
+//		assertEquals( "Persson, Tess T", c.getCompanyName() );
+//		assertEquals( "164608142222", c.getNationalIdNumber() );
+//		assertEquals( null, c.getVatNumber() );
+//		assertEquals( null, c.getAddressSelector() );		
+//	}
 //    
 //}
 //

@@ -9,7 +9,6 @@ import org.w3c.dom.NodeList;
 import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.CustomerIdentity;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
-import se.sveaekonomi.webpay.integration.response.Response;
 
 /**
  *	// The following CompanyCustomer fields are set for GetAddresses, company customer:
@@ -222,16 +221,46 @@ public class GetAddressesResponse extends WebServiceResponse {
 			//           </CustomerAddress>
 
 			if( caBusinessType.equals("Business") ) {
+
+				// Company, SE
+				//   <CustomerAddress>
+				//      <LegalName>Persson, Tess T</LegalName>
+				//      <SecurityNumber>4608142222</SecurityNumber>
+				//      <PhoneNumber>08 - 111 111 11</PhoneNumber>
+				//      <AddressLine1>c/o Eriksson, Erik</AddressLine1>
+				//      <AddressLine2>Testgatan 1</AddressLine2>
+				//      <Postcode>99999</Postcode>
+				//      <Postarea>Stan</Postarea>
+				//      <BusinessType>Business</BusinessType>
+				//      <AddressSelector>5F445B19E8C87954904FB7531A51AEE57C5E9413</AddressSelector>
+				//      <FirstName>Tess T</FirstName>
+				//      <LastName>Persson</LastName>
+				//   </CustomerAddress>
+				
+				//  //ci
+				//  private String phoneNumber;
+				//  private String email;
+				//  private String ipAddress;
+				//  private String coAddress;
+				//  private String streetAddress;
+				//  private String housenumber;
+				//  private String zipCode;
+				//  private String locality;    		
+				//  //cc
+				//  private String companyName;
+				//  private String orgNumber;
+				//  private String companyVatNumber;
+				//  private String addressSelector;    	
 				
 				CompanyCustomer companyCustomer = new CompanyCustomer()
 					//CustomerIdentity
-					.setStreetAddress(caAddressLine2, null )
+					.setPhoneNumber(caPhoneNumber)
+					.setEmail( null )
+					.setIpAddress( null )
 					.setCoAddress( caAddressLine1 )
+					.setStreetAddress(caAddressLine2, null )	// sets HouseNumber to null
 					.setZipCode(caPostcode)
 					.setLocality(caPostarea)
-					.setPhoneNumber(caPhoneNumber)
-					.setIpAddress( null )
-					.setEmail( null )
 					//CompanyCustomer
 					.setCompanyName(caLegalName)
 					.setNationalIdNumber( caSecurityNumber )
@@ -242,20 +271,55 @@ public class GetAddressesResponse extends WebServiceResponse {
 				this.customerAddresses.add( companyCustomer );
 			}
 			
+			
+
+			
 			if( caBusinessType.equals("Person") ) {
+				
+				// Individual, SE
+				//<CustomerAddress>
+				//    <LegalName>Persson, Tess T</LegalName>
+				//    <SecurityNumber>4605092222</SecurityNumber>
+				//    <PhoneNumber>08 - 111 111 11</PhoneNumber>
+				//    <AddressLine1>c/o Eriksson, Erik</AddressLine1>
+				//    <AddressLine2>Testgatan 1</AddressLine2>
+				//    <Postcode>99999</Postcode>
+				//    <Postarea>Stan</Postarea>
+				//    <BusinessType>Person</BusinessType>
+				//    <AddressSelector>5F445B19E8C87954904FB7531A51AEE57C5E9413</AddressSelector>
+				//    <FirstName>Tess T</FirstName>
+				//    <LastName>Persson</LastName>
+				// </CustomerAddress>
+				
+				//  //ci
+				//  private String phoneNumber;
+				//  private String email;
+				//  private String ipAddress;
+				//  private String coAddress;
+				//  private String streetAddress;
+				//  private String housenumber;
+				//  private String zipCode;
+				//  private String locality;    	
+				//  //ic
+				//  private String ssn;
+				//  private String birthDate;
+				//  private String firstName;
+				//  private String lastName;
+				//  private String initials;
+				//  private String name;
+				
 				IndividualCustomer individualCustomer = new IndividualCustomer()
-					//CustomerIdentity
-					.setStreetAddress(caAddressLine2, null )
+					.setPhoneNumber(caPhoneNumber)
+					.setEmail( null )
+					.setIpAddress( null )
 					.setCoAddress( caAddressLine1 )
+					.setStreetAddress(caAddressLine2, null )	// sets HouseNumber to null
 					.setZipCode(caPostcode)
 					.setLocality(caPostarea)
-					.setPhoneNumber(caPhoneNumber)
-					.setIpAddress( null )
-					.setEmail( null )
 					//IndividualCustomer
 					.setNationalIdNumber(caSecurityNumber)
 					.setBirthDate( null )
-					.setName(caFirstName, caLastName)
+					.setName(caFirstName, caLastName)			// sets firstName, lastName, name stays =null
 					.setInitials( null )
 				;
 				
