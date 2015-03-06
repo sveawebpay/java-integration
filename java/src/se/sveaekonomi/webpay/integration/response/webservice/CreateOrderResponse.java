@@ -32,7 +32,6 @@ public class CreateOrderResponse extends WebServiceResponse {
 
 	// 2.0 on
     private CustomerIdentity<?> customer;    
-
     private CustomerIdentity<?> getCustomer() {
     	return this.customer;
     }
@@ -196,6 +195,8 @@ public class CreateOrderResponse extends WebServiceResponse {
     private void setCustomer( Node node ) {
     	if( isIndividualIdentity() == true ) {
 			
+    		IndividualCustomer individualCustomer = new IndividualCustomer();
+    		
     		//<CustomerIdentity>
 			//    <NationalIdNumber>194605092222</NationalIdNumber>
 			//    <FullName>Persson, Tess T</FullName>
@@ -206,25 +207,23 @@ public class CreateOrderResponse extends WebServiceResponse {
 			//    <CountryCode>SE</CountryCode>
 			//    <CustomerType>Individual</CustomerType>
 			//</CustomerIdentity>    	
-			
-    		IndividualCustomer individualCustomer = new IndividualCustomer();
-	    	
-//        	//ci
-//          private String phoneNumber;
-//          private String email;
-//          private String ipAddress;
-//          private String coAddress;
-//          private String streetAddress;
-//          private String housenumber;
-//          private String zipCode;
-//          private String locality;    	
-//        //ic
-//          private String ssn;
-//          private String birthDate;
-//          private String firstName;
-//          private String lastName;
-//          private String initials;
-//          private String name;
+				    	
+			//  //ci
+			//  private String phoneNumber;
+			//  private String email;
+			//  private String ipAddress;
+			//  private String coAddress;
+			//  private String streetAddress;
+			//  private String housenumber;
+			//  private String zipCode;
+			//  private String locality;    	
+			//  //ic
+			//  private String ssn;
+			//  private String birthDate;
+			//  private String firstName;
+			//  private String lastName;
+			//  private String initials;
+			//  private String name;
     		    		
     		// TODO remove null refs, if returned, set values!     		
     		
@@ -235,7 +234,6 @@ public class CreateOrderResponse extends WebServiceResponse {
 			individualCustomer.setCoAddress( returnChildNodeValue(node, "CoAddress") );
 			individualCustomer.setZipCode( returnChildNodeValue(node, "ZipCode") );
 			individualCustomer.setLocality( returnChildNodeValue(node, "Locality") );
-	    	// this.customer.setCountryCode( returnChildNodeValue(node, "Street") ); // TODO not implemented...
 			individualCustomer.setName( returnChildNodeValue(node, "FullName") ); // one argument version sets name field
 			individualCustomer.setNationalIdNumber( returnChildNodeValue(node, "NationalIdNumber") );
 			individualCustomer.setBirthDate( null );
@@ -247,6 +245,8 @@ public class CreateOrderResponse extends WebServiceResponse {
     	
     	if( isIndividualIdentity() == false ) {
 			
+    		CompanyCustomer companyCustomer = new CompanyCustomer();
+	    	
 			//<CustomerIdentity>
 			//    <NationalIdNumber>164608142222</NationalIdNumber>
 			//    <FullName>Persson, Tess T</FullName>
@@ -258,22 +258,20 @@ public class CreateOrderResponse extends WebServiceResponse {
 			//    <CustomerType>Company</CustomerType>
 			//</CustomerIdentity>
 				
-    		CompanyCustomer companyCustomer = new CompanyCustomer();
-	    	
-//        	//ci
-//          private String phoneNumber;
-//          private String email;
-//          private String ipAddress;
-//          private String coAddress;
-//          private String streetAddress;
-//          private String housenumber;
-//          private String zipCode;
-//          private String locality;    		
-//  		//cc
-//          private String companyName;
-//          private String orgNumber;
-//          private String companyVatNumber;
-//          private String addressSelector;    		
+    		//  //ci
+			//  private String phoneNumber;
+			//  private String email;
+			//  private String ipAddress;
+			//  private String coAddress;
+			//  private String streetAddress;
+			//  private String housenumber;
+			//  private String zipCode;
+			//  private String locality;    		
+			//  //cc
+			//  private String companyName;
+			//  private String orgNumber;
+			//  private String companyVatNumber;
+			//  private String addressSelector;    		
     		
     		// TODO remove null refs, if returned, set values! 
     		

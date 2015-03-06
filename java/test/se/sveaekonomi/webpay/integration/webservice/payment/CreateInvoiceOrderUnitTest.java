@@ -1439,22 +1439,22 @@ public class CreateInvoiceOrderUnitTest {
 		assertTrue( response.isIndividualIdentity() );
 		assertTrue( c instanceof IndividualCustomer );
 		
-//    //ci
-//      private String phoneNumber;
-//      private String email;
-//      private String ipAddress;
-//      private String coAddress;
-//      private String streetAddress;
-//      private String housenumber;
-//      private String zipCode;
-//      private String locality;    	
-//    //ic
-//      private String ssn;
-//      private String birthDate;
-//      private String firstName;
-//      private String lastName;
-//      private String initials;
-//      private String name;
+		//  //ci
+		//  private String phoneNumber;
+		//  private String email;
+		//  private String ipAddress;
+		//  private String coAddress;
+		//  private String streetAddress;
+		//  private String housenumber;
+		//  private String zipCode;
+		//  private String locality;    	
+		//  //ic
+		//  private String ssn;
+		//  private String birthDate;
+		//  private String firstName;
+		//  private String lastName;
+		//  private String initials;
+		//  private String name;
 		
 		//ci
 		assertEquals( null, c.getPhoneNumber() );
@@ -1502,7 +1502,7 @@ public class CreateInvoiceOrderUnitTest {
 		// new, CompanyCustomer (CustomerIdentity<CompanyCustomer>)
 		CompanyCustomer c = response.getCompanyCustomer();
 	
-//    	//ci
+//    //ci
 //      private String phoneNumber;
 //      private String email;
 //      private String ipAddress;
@@ -1511,7 +1511,7 @@ public class CreateInvoiceOrderUnitTest {
 //      private String housenumber;
 //      private String zipCode;
 //      private String locality;    		
-//		//cc
+//	//cc
 //      private String companyName;
 //      private String orgNumber;
 //      private String companyVatNumber;
