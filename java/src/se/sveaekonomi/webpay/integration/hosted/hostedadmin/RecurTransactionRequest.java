@@ -123,10 +123,10 @@ public class RecurTransactionRequest extends HostedAdminRequest<RecurTransaction
             errors += "MISSING VALUE - amount is required. Use function setAmount().\n";
     	}           
         if (this.getCustomerRefNo() == null) {
-            errors += "MISSING VALUE - customerRefNo is required. Use function setCustomerRefNo (also check setClientOrderNumber in order builder).\n";		// TODO correct message?
+            errors += "MISSING VALUE - customerRefNo is required. Use function setCustomerRefNo (also check setClientOrderNumber in order builder).\n";
     	}        
         if (this.getSubscriptionId() == null) {
-            errors += "MISSING VALUE - subscriptionId is required. Use function setSubscriptionId() with the subscriptionId from the createOrder response.\n";		// TODO correct message?
+            errors += "MISSING VALUE - subscriptionId is required. Use function setSubscriptionId() with the subscriptionId from the createOrder response.\n";
     	}
         return errors;    
     }

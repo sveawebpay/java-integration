@@ -155,7 +155,6 @@ public class CreditOrderRowsRequest {
 			    SOAPElement newCreditInvoiceRows = request.addChildElement("NewCreditInvoiceRows", "dat");
 			    for( OrderRowBuilder row : this.builder.getNewCreditOrderRows() ) {
 			    	SOAPElement orderRow = newCreditInvoiceRows.addChildElement("OrderRow", "dat1");
-			    		// TODO check what happens if fields not set in row -- add to integration test
 			    		SOAPElement articleNumber = orderRow.addChildElement("ArticleNumber", "dat1");
 			    			articleNumber.addTextNode( row.getArticleNumber() );
 		    			SOAPElement description = orderRow.addChildElement("Description", "dat1");
@@ -194,7 +193,6 @@ public class CreditOrderRowsRequest {
 //		try {
 //			soapMessage.writeTo(System.out);
 //		} catch (IOException e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 //		System.out.println();

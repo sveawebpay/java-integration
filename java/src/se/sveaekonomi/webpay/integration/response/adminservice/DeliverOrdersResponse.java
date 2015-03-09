@@ -14,7 +14,7 @@ public class DeliverOrdersResponse extends AdminServiceResponse implements Respo
 																							// see AS/DeliverOrderResult:
     /** Id that identifies an order in sveawebpay's system */
     private Long orderId;   	    														// SveaOrderId (Long)
-    // private String ClientOrderId															// ? ClientOrderId (String) -- not returned? TODO check
+    // N/A																					// ClientOrderId (String)
   	/** Id that identifies a client in sveawebpay's system */	
     private Long clientId;																	// ClientId (Long)
     private ORDERTYPE orderType;															// OrderType (Enum{Invoice|PaymentPlan})
