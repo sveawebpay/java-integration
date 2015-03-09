@@ -340,7 +340,7 @@ public class WebPayAdminUnitTest {
 		rows.add( TestingTool.createNumberedOrderRow(1) );
 		
 		DeliverOrderRowsBuilder builder = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
-	    	.setOrderId( "123456" )
+	    	.setTransactionId( "123456" )
 	    	.setCountryCode( COUNTRYCODE.SE )
 	    	.setRowToDeliver( 1 )
 	    	.addNumberedOrderRows( rows )
@@ -357,7 +357,7 @@ public class WebPayAdminUnitTest {
 		rows.add( TestingTool.createNumberedOrderRow(1) );
 		
 	    DeliverOrderRowsBuilder builder = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
-	    	.setOrderId( "123456" )
+	    	.setTransactionId( "123456" )
 	    	.setCountryCode( COUNTRYCODE.SE )
 	    	.setRowToDeliver( 1 )
 	    	.addNumberedOrderRows( rows )
@@ -413,7 +413,7 @@ public class WebPayAdminUnitTest {
 		rows.add( TestingTool.createNumberedOrderRow(1) );
 		
 	    CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
-	    	.setOrderId( "123456" )
+	    	.setTransactionId( "123456" )
 	    	.setCountryCode( COUNTRYCODE.SE )
 	    	.setRowToCancel( 1 )
 	    	.addNumberedOrderRows( rows )
@@ -430,7 +430,7 @@ public class WebPayAdminUnitTest {
 		rows.add( TestingTool.createNumberedOrderRow(1) );
 		
 	    CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
-	    	.setOrderId( "123456" )
+		   	.setTransactionId( "123456" )
 	    	.setCountryCode( COUNTRYCODE.SE )
 	    	.setRowToCancel( 1 )
 	    	.addNumberedOrderRows( rows )
@@ -486,7 +486,7 @@ public class WebPayAdminUnitTest {
 		rows.add( TestingTool.createNumberedOrderRow(1) );
 		
 	    CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
-	    	.setOrderId( "123456" )
+	    	.setTransactionId( "123456" )
 	    	.setCountryCode( COUNTRYCODE.SE )
 	    	.setRowToCredit( 1 )
 	    	.addNumberedOrderRows( rows )

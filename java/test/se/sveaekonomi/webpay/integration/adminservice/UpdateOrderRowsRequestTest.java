@@ -19,7 +19,7 @@ public class UpdateOrderRowsRequestTest {
     public void test_validates_all_required_methods_for_updateOrderRows_updateInvoiceOrderRows_single_row() {
     	
 		UpdateOrderRowsBuilder builder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( "999999")              
+		    .setOrderId( 999999L)              
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addUpdateOrderRow( 
 	    		WebPayItem.numberedOrderRow()	// dummy, so no attributes set -- we only validate presence of numberedOrderRow objects
@@ -39,7 +39,7 @@ public class UpdateOrderRowsRequestTest {
 	public void test_validates_missing_required_methods_for_updatOrderRows_updateInvoiceOrderRows() {
 
 		UpdateOrderRowsBuilder builder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
-			//.setOrderId( "999999")              
+			//.setOrderId( 999999L)              
 			//.setCountryCode( COUNTRYCODE.SE ) 
 			//.addUpdateOrderRow( 
 			//	WebPayItem.numberedOrderRow()	// dummy, so no attributes set -- we only validate presence

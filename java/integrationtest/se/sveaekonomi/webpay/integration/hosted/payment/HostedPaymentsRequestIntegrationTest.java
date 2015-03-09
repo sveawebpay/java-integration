@@ -1,6 +1,4 @@
-package se.sveaekonomi.webpay.integration.hosted;
-
-import static org.junit.Assert.assertEquals;
+package se.sveaekonomi.webpay.integration.hosted.payment;
 
 import java.io.IOException;
 
@@ -9,12 +7,11 @@ import junit.framework.Assert;
 import org.junit.Test;
 
 import se.sveaekonomi.webpay.integration.WebPay;
+import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
-import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
-import se.sveaekonomi.webpay.integration.hosted.helper.PaymentUrl;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
-import se.sveaekonomi.webpay.integration.order.row.Item;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
+import se.sveaekonomi.webpay.integration.response.hosted.PaymentUrl;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.LANGUAGECODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
@@ -25,7 +22,7 @@ public class HostedPaymentsRequestIntegrationTest {
     @Test
     public void test_HostedPayment_getPaymentUrl_xml() {
     	    	
-    	OrderRowBuilder row = Item.orderRow()
+    	OrderRowBuilder row = WebPayItem.orderRow()
         .setArticleNumber("665")
         .setName("Orderrow1")
         .setDescription("Orderrow description")
@@ -34,7 +31,7 @@ public class HostedPaymentsRequestIntegrationTest {
         .setUnit("st")
         .setVatPercent(25);
     	
-    	IndividualCustomer customer = Item.individualCustomer()
+    	IndividualCustomer customer = WebPayItem.individualCustomer()
 		.setIpAddress("127.0.0.1");
 
         PaymentUrl paymentUrl = null;
@@ -57,6 +54,6 @@ public class HostedPaymentsRequestIntegrationTest {
 		Assert.assertNotNull(paymentUrl.getId());
 		Assert.assertNotNull(paymentUrl.getCreated());
 		Assert.assertEquals( "https://webpay", paymentUrl.getUrl().substring(0, 14) );  
-		Assert.assertEquals( "https://test", paymentUrl.getTestUrl().substring(0, 12) );  		
+		Assert.assertEquals( "https://test", paymentUrl.getTestUrl().substring(0, 12) );		
     }
 }

@@ -1,6 +1,5 @@
 package se.sveaekonomi.webpay.integration.adminservice;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -16,20 +15,11 @@ import javax.xml.soap.SOAPException;
 import javax.xml.soap.SOAPMessage;
 import javax.xml.soap.SOAPPart;
 
-import org.w3c.dom.NodeList;
-
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.AddOrderRowsBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.CreditOrderRowsBuilder;
-import se.sveaekonomi.webpay.integration.order.handle.UpdateOrderRowsBuilder;
-import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
-import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
-import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
+import se.sveaekonomi.webpay.integration.response.adminservice.AddOrderRowsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaDeliverOrder;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaSoapBuilder;
 
 public class AddOrderRowsRequest {
 
@@ -143,12 +133,12 @@ public class AddOrderRowsRequest {
 	    SOAPElement updateOrderRows = body.addChildElement("AddOrderRows", "tem");
 	    SOAPElement request = updateOrderRows.addChildElement("request", "tem");
 	    	SOAPElement authentication = request.addChildElement("Authentication", "dat");
-	    		SOAPElement password = authentication.addChildElement("Password", "dat");
+	    		SOAPElement password = authentication.addChildElement("Password", "dat");	    			
 	    			password.addTextNode(this.builder.getConfig().getPassword( this.builder.getOrderType(), this.builder.getCountryCode()));
 	    		SOAPElement username = authentication.addChildElement("Username", "dat");
 	    			username.addTextNode(this.builder.getConfig().getUsername( this.builder.getOrderType(), this.builder.getCountryCode()));
 			SOAPElement clientId = request.addChildElement("ClientId", "dat");
-				clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
+				clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber( this.builder.getOrderType(), this.builder.getCountryCode() )));
 		    	
 		    SOAPElement orderRows = request.addChildElement("OrderRows", "dat");
 		    for( OrderRowBuilder row : this.builder.getOrderRows() ) {
@@ -175,18 +165,9 @@ public class AddOrderRowsRequest {
 	    					// get vat percent to send based on the builder order row (i.e. if specified exvat + incvat)
 							getVatPercentFromBuilderOrderRow(row) ) 
 						); 
-			}
-		    
+			}		    
 		    SOAPElement orderType = request.addChildElement("OrderType", "dat");
-				// TODO try and fix this properly, conversion method in OrderType perhaps?
-				ORDERTYPE orderTypeAsOrderType = null;
-				if( this.builder.getOrderType() == PAYMENTTYPE.INVOICE ) {
-					orderTypeAsOrderType = ORDERTYPE.Invoice;
-				}
-				if( this.builder.getOrderType() == PAYMENTTYPE.PAYMENTPLAN ) {
-					orderTypeAsOrderType = ORDERTYPE.PaymentPlan;
-				}
-		    	orderType.addTextNode( orderTypeAsOrderType.toString() );				
+		    	orderType.addTextNode( this.builder.getOrderType().toString() );				
 		    SOAPElement sveaOrderId = request.addChildElement("SveaOrderId", "dat");
 		    	sveaOrderId.addTextNode(String.valueOf(this.builder.getOrderId()));	
 	    	
@@ -197,7 +178,6 @@ public class AddOrderRowsRequest {
 //		try {
 //			soapMessage.writeTo(System.out);
 //		} catch (IOException e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 //		System.out.println();

@@ -143,7 +143,7 @@ public class WebPayAdmin {
      *     	// then select the corresponding request class and send request
      *     	response = request.cancelInvoiceOrderRows().doRequest();		// returns CancelOrderRowsResponse
      *     	response = request.cancelPaymentPlanOrderRows().doRequest();	// returns CancelOrderRowsResponse
-     *     	response = request.deliverCardOrderRows().doRequest()			// returns LowerTransactionResponse
+     *     	response = request.cancelCardOrderRows().doRequest()			// returns LowerTransactionResponse
      * ...
      * 
      */    

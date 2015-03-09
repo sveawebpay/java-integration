@@ -14,11 +14,13 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.AddOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
+import se.sveaekonomi.webpay.integration.response.adminservice.AddOrderRowsResponse;
+import se.sveaekonomi.webpay.integration.response.adminservice.DeliverOrderRowsResponse;
+import se.sveaekonomi.webpay.integration.response.adminservice.GetOrdersResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
-import se.sveaekonomi.webpay.integration.util.constant.ORDERROWSTATUS;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class AddOrderRowsIntegrationTest {
@@ -28,7 +30,7 @@ public class AddOrderRowsIntegrationTest {
     public void test_add_to_nonexistant_orderid_returns_error() {
     	
 		AddOrderRowsBuilder builder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( "999999")              
+		    .setOrderId( 999999L )              
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
@@ -91,7 +93,7 @@ public class AddOrderRowsIntegrationTest {
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
@@ -166,7 +168,7 @@ public class AddOrderRowsIntegrationTest {
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
@@ -242,7 +244,7 @@ public class AddOrderRowsIntegrationTest {
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
@@ -317,7 +319,7 @@ public class AddOrderRowsIntegrationTest {
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
@@ -393,7 +395,7 @@ public class AddOrderRowsIntegrationTest {
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
@@ -468,7 +470,7 @@ public class AddOrderRowsIntegrationTest {
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
@@ -543,7 +545,7 @@ public class AddOrderRowsIntegrationTest {
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
@@ -642,8 +644,8 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( 3, orderRow.getRowNumber() );					
 				
         // deliver first, second order rows and assert the response
-        DeliverPartialResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
-            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
+        DeliverOrderRowsResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
+            .setOrderId( order.getOrderId() )
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
             .setRowToDeliver(1).setRowToDeliver(2)
@@ -652,7 +654,7 @@ public class AddOrderRowsIntegrationTest {
 
         // add two rows to order
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
@@ -768,7 +770,7 @@ public class AddOrderRowsIntegrationTest {
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
@@ -849,7 +851,7 @@ public class AddOrderRowsIntegrationTest {
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
@@ -930,7 +932,7 @@ public class AddOrderRowsIntegrationTest {
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
@@ -1010,7 +1012,7 @@ public class AddOrderRowsIntegrationTest {
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
@@ -1091,7 +1093,7 @@ public class AddOrderRowsIntegrationTest {
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
@@ -1171,7 +1173,7 @@ public class AddOrderRowsIntegrationTest {
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()
@@ -1251,7 +1253,7 @@ public class AddOrderRowsIntegrationTest {
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
-		    .setOrderId( String.valueOf(order.orderId) ) 
+	        	.setOrderId(order.getOrderId())
 		    .setCountryCode( COUNTRYCODE.SE ) 
 		    .addOrderRow( 
 	    		WebPayItem.orderRow()

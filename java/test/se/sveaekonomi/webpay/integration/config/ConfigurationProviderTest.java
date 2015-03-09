@@ -9,8 +9,11 @@ import java.net.URL;
 import org.junit.Before;
 import org.junit.Test;
 
+import se.sveaekonomi.webpay.integration.Requestable;
+import se.sveaekonomi.webpay.integration.Respondable;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
@@ -144,13 +147,13 @@ public class ConfigurationProviderTest {
         }
     }
 
-    @Test
+    @Test 
     public void testConnectionDeliverOrderFailsIfNoConfigurationIsProvided()
     {
         try {
-        	WebPay.deliverOrder(null)
-            	  .deliverInvoiceOrder()
-            	  .doRequest();
+        	DeliverOrderBuilder builder = WebPay.deliverOrder(null);
+        	Requestable request = builder.deliverInvoiceOrder();        	
+      	  	Respondable response = request.doRequest();
             
             //Fail on no exception
             fail();

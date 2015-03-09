@@ -2,6 +2,7 @@ package se.sveaekonomi.webpay.integration.response.hosted.hostedadmin;
 
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.Response;
+import se.sveaekonomi.webpay.integration.response.ResponseHelper;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
 
 /**
@@ -10,8 +11,36 @@ import se.sveaekonomi.webpay.integration.util.security.Base64Util;
  * @author klar-sar
  * @author Kristian Grossman-Madsen
  */
-public abstract class HostedAdminResponse extends Response {
+public abstract class HostedAdminResponse extends ResponseHelper implements Response {
 
+    private Boolean isOrderAccepted;
+    private String resultCode;
+    private String errorMessage;
+    
+    public Boolean isOrderAccepted() {
+        return isOrderAccepted;
+    }
+
+    public void setOrderAccepted(Boolean isOrderAccepted) {
+        this.isOrderAccepted = isOrderAccepted;
+    }
+
+    public String getResultCode() {
+        return resultCode;
+    }
+
+    public void setResultCode(String resultCode) {
+        this.resultCode = resultCode;
+    }
+
+    public String getErrorMessage() {
+        return errorMessage;
+    }
+
+    public void setErrorMessage(String errorMessage) {
+        this.errorMessage = errorMessage;
+    }
+    	
 	public final SveaConfig config = new SveaConfig();
 
 	protected String xml;
@@ -29,7 +58,6 @@ public abstract class HostedAdminResponse extends Response {
 	 * depending on what response we should
 	 */
 	public HostedAdminResponse(String responseXmlBase64, String secretWord) {
-		super(null);
 		String xml = Base64Util.decodeBase64String(responseXmlBase64);
 		this.setXml(xml);
 	}

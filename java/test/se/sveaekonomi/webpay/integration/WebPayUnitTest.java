@@ -241,7 +241,7 @@ public class WebPayUnitTest {
 			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
 		;
 			
-		Requestable request = builder.deliverInvoiceOrder();
+		HandleOrder request = builder.deliverInvoiceOrder();
 		assertThat( request, instanceOf(HandleOrder.class) );
     }
     // .deliverInvoiceOrder() without orderrows => AdminService/DeliverOrdersRequest
@@ -253,10 +253,12 @@ public class WebPayUnitTest {
 			.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )
 		;
 			
-		Requestable request = builder.deliverInvoiceOrder();
+		DeliverOrdersRequest request = builder.deliverInvoiceOrder();
 		assertThat( request, instanceOf(DeliverOrdersRequest.class) );
     }
-	// TODO .deliverPaymentPlanOrder() with orderrows => validation error + other validation tests
+	// .deliverPaymentPlanOrder() with orderrows => validation error + other validation tests
+    // see se.sveaejibinu,webpay.integration.webservice.handleorder/DeliverOrderTest
+    // TODO
     // .deliverPaymentPlanOrder() without orderrows => AdminService/DeliverOrdersRequest
     @Test
     public void test_deliverOrder_deliverPaymentPlanOrder_returns_DeliverOrdersRequest() {
@@ -265,8 +267,8 @@ public class WebPayUnitTest {
 			.setOrderId( 123456L )
 		;
 			
-		Requestable request = builder.deliverPaymentPlanOrder();
-		assertThat( request, instanceOf(DeliverOrdersRequest.class) );
+		HandleOrder request = builder.deliverPaymentPlanOrder();
+		assertThat( request, instanceOf(HandleOrder.class) );
     }
 	// .deliverCardOrder => HostedService/ConfirmTransactionRequest	
     @Test

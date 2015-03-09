@@ -11,7 +11,6 @@ import se.sveaekonomi.webpay.integration.hosted.payment.DirectPayment;
 import se.sveaekonomi.webpay.integration.hosted.payment.HostedPayment;
 import se.sveaekonomi.webpay.integration.hosted.payment.PayPagePayment;
 import se.sveaekonomi.webpay.integration.hosted.payment.PaymentMethodPayment;
-import se.sveaekonomi.webpay.integration.order.CreateBuilderCommand;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.CustomerIdentity;
@@ -235,9 +234,5 @@ public class CreateOrderBuilder extends OrderBuilder<CreateOrderBuilder> {
     public CreateOrderBuilder build() {
         validator.validate(this);
         return this;
-    }
-    
-    public <T> T run(CreateBuilderCommand<T> runner) {
-        return runner.run(this);
     }
 }

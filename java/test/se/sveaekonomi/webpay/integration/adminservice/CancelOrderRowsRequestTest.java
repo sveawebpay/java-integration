@@ -19,7 +19,7 @@ public class CancelOrderRowsRequestTest {
 	public void test_cancelOrderRows_cancelInvoiceOrderRows_validates_all_required_methods() {
 
         CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
-            .setOrderId( "999999" ) // dummy order id
+            .setOrderId( 999999L ) // dummy order id
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setRowToCancel(1)
         ;

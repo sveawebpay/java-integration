@@ -1,6 +1,5 @@
 package se.sveaekonomi.webpay.integration.adminservice;
 
-import java.io.IOException;
 import java.net.URL;
 
 import javax.xml.bind.ValidationException;
@@ -17,7 +16,7 @@ import javax.xml.soap.SOAPPart;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
+import se.sveaekonomi.webpay.integration.response.adminservice.CancelOrderRowsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 public class CancelOrderRowsRequest {
@@ -105,23 +104,20 @@ public class CancelOrderRowsRequest {
 	    SOAPElement deliverPartial = body.addChildElement("CancelOrderRows", "tem");
 	    SOAPElement request = deliverPartial.addChildElement("request", "tem");
 	    	SOAPElement authentication = request.addChildElement("Authentication", "dat");
-	    		SOAPElement password = authentication.addChildElement("Password", "dat");
-	    			password.addTextNode(this.builder.getConfig().getPassword( this.builder.getOrderType(), this.builder.getCountryCode()));
-	    		SOAPElement username = authentication.addChildElement("Username", "dat");
-	    			username.addTextNode(this.builder.getConfig().getUsername( this.builder.getOrderType(), this.builder.getCountryCode()));
-			SOAPElement clientId = request.addChildElement("ClientId", "dat");
-				clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
-	    	SOAPElement orderRowNumbers = request.addChildElement("OrderRowNumbers", "dat");
+			SOAPElement password = authentication.addChildElement("Password", "dat");	    			
+				password.addTextNode(this.builder.getConfig().getPassword( this.builder.getOrderType(), this.builder.getCountryCode()));
+			SOAPElement username = authentication.addChildElement("Username", "dat");
+				username.addTextNode(this.builder.getConfig().getUsername( this.builder.getOrderType(), this.builder.getCountryCode()));
+		SOAPElement clientId = request.addChildElement("ClientId", "dat");
+			clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber( this.builder.getOrderType(), this.builder.getCountryCode() )));
+	  
+			SOAPElement orderRowNumbers = request.addChildElement("OrderRowNumbers", "dat");
     		for( Integer rowIndex : this.builder.getRowsToCancel() ) {
     			orderRowNumbers.addChildElement("long","arr").addTextNode( Integer.toString( rowIndex ) );
     		}
+    		
 		    SOAPElement orderType = request.addChildElement("OrderType", "dat");
-		    	if( this.builder.getOrderType() == PAYMENTTYPE.INVOICE ) {
-		    		orderType.addTextNode( ORDERTYPE.Invoice.toString() );
-		    	}
-	    		if( this.builder.getOrderType() == PAYMENTTYPE.PAYMENTPLAN ) {
-	    			orderType.addTextNode( ORDERTYPE.PaymentPlan.toString() );
-	    		}
+	    		orderType.addTextNode( this.builder.getOrderType().toString() );
 		    SOAPElement sveaOrderId = request.addChildElement("SveaOrderId", "dat");
 		    	sveaOrderId.addTextNode(String.valueOf(this.builder.getOrderId()));
 	    	
@@ -132,7 +128,6 @@ public class CancelOrderRowsRequest {
 //		try {
 //			soapMessage.writeTo(System.out);
 //		} catch (IOException e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 //		System.out.println();

@@ -1,6 +1,5 @@
 package se.sveaekonomi.webpay.integration.adminservice;
 
-import java.io.IOException;
 import java.net.URL;
 
 import javax.xml.bind.ValidationException;
@@ -17,6 +16,7 @@ import javax.xml.soap.SOAPPart;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.QueryOrderBuilder;
+import se.sveaekonomi.webpay.integration.response.adminservice.GetOrdersResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**
@@ -25,10 +25,8 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  */
 public class GetOrdersRequest {
 
-	// NOTE: validates on order level, don't validate request attributes in itself (rationale: bad request will return error from webservice)
-	
 	private String action;
-	public QueryOrderBuilder builder;
+	private QueryOrderBuilder builder;
 		
 	public GetOrdersRequest( QueryOrderBuilder builder) {
 		this.action = "GetOrders";
@@ -52,11 +50,6 @@ public class GetOrdersRequest {
         }
 	}
 	
-	/**
-	 * prepares the soap request to send to admin webservice
-	 * @throws SOAPException 
-	 * @throws IOException 
-	 */
 	public SOAPMessage prepareRequest() throws SOAPException {
 		
 		// validate builder, throw runtime exception on error
@@ -130,19 +123,14 @@ public class GetOrdersRequest {
 					   
         soapMessage.saveChanges();
 
-        /* Print the request message */
-		//System.out.print("Request SOAP Message:");
-		//soapMessage.writeTo(System.out);
-		//System.out.println();
+		// DEBUG: print SOAP Request
+//		System.out.print("Request SOAP Message:");
+//		soapMessage.writeTo(System.out);
+//		System.out.println();
 
         return soapMessage;
 	}
 
-	/**
-	 * 
-	 * @return GetOrdersResponse
-	 * @throws Exception 
-	 */
 	public GetOrdersResponse doRequest() {
 		
 		// validate and prepare request, throw runtime exception on error

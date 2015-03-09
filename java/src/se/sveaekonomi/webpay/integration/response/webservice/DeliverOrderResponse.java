@@ -5,20 +5,79 @@ import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 
 import se.sveaekonomi.webpay.integration.Respondable;
-import se.sveaekonomi.webpay.integration.response.Response;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 
-public class DeliverOrderResponse extends Response implements Respondable {
-
-    private double amount;
-    private ORDERTYPE orderType;
-    private int invoiceId;
-    private String dueDate;
-    private String invoiceDate;
-    private String invoiceDistributionType;
-    private String ocr;
-    private double lowestAmountToPay;
-    private int contractNumber;  
+public class DeliverOrderResponse extends WebServiceResponse implements Respondable {
+																			// see WS/DeliverOrdderResult:
+    private Double amount;													// Amount (Decimal)
+    private ORDERTYPE orderType;											// OrderType (Enum {Invoice|PaymentPlan})
+    // below if OrderType = Invoice
+    private Long invoiceId;													// InvoiceResultDetails.InvoiceId (Long)
+    private String dueDate;													// InvoiceResultDetails.DueDate (DateTime)
+    private String invoiceDate;												// InvoiceResultDetails.InvoiceDate (DateTime)
+    private DISTRIBUTIONTYPE invoiceDistributionType;						// InvoiceResultDetails.InvoiceDistributionType (Enum {..})
+    private String ocr;														// InvoiceResultDetails.Ocr (?)					// TODO check types
+    private Double lowestAmountToPay;										// InvoiceResultDetails.LowestAmountToPay (?)
+    // below if OrderType = PaymentPlan
+    private Long contractNumber;  											// PaymentPlanResultDetails.ContractNumber (Long)		
+    
+        
+    public Double getAmount() {
+        return amount;
+    }
+    public void setAmount(Double amount) {
+        this.amount = amount;
+    }
+    public ORDERTYPE getOrderType() {
+        return orderType;
+    }    
+    public void setOrderType(ORDERTYPE orderType) {
+        this.orderType = orderType;
+    }
+    public Long getInvoiceId() {
+        return invoiceId;
+    } 
+    public void setInvoiceId(Long invoiceId) {
+        this.invoiceId = invoiceId;
+    }
+    public String getDueDate() {
+        return dueDate;
+    }
+    public void setDueDate(String dueDate) {
+        this.dueDate = dueDate;
+    }
+    public String getInvoiceDate() {
+        return invoiceDate;
+    }
+    public void setInvoiceDate(String invoiceDate) {
+        this.invoiceDate = invoiceDate;
+    }
+    public DISTRIBUTIONTYPE getInvoiceDistributionType() {
+        return invoiceDistributionType;
+    }
+    public void setInvoiceDistributionType(DISTRIBUTIONTYPE invoiceDistributionType) {
+        this.invoiceDistributionType = invoiceDistributionType;
+    }
+    public String getOcr() {
+        return ocr;
+    }
+    public void setOcr(String ocr) {
+        this.ocr = ocr;
+    }
+    public Double getLowestAmountToPay() {
+        return lowestAmountToPay;
+    }
+    public void setLowestAmountToPay(Double lowestAmountToPay) {
+        this.lowestAmountToPay = lowestAmountToPay;
+    }
+    public Long getContractNumber() {
+        return contractNumber;
+    }
+    public void setContractNumber(Long contractNumber) {
+        this.contractNumber = contractNumber;
+    }
+    
     
     public DeliverOrderResponse(NodeList soapMessage) {
         super(soapMessage);
@@ -78,91 +137,19 @@ public class DeliverOrderResponse extends Response implements Respondable {
     
     private void setValue(String tagName, String tagValue) {
         if (tagName.equals("InvoiceId")) {
-            this.setInvoiceId(Integer.valueOf(tagValue));
+            this.setInvoiceId(Long.valueOf(tagValue));
         } else if (tagName.equals("DueDate")) {
             this.setDueDate(tagValue);
         } else if (tagName.equals("InvoiceDate")) {
             this.setInvoiceDate(tagValue);
         } else if (tagName.equals("InvoiceDistributionType")) {
-            this.setInvoiceDistributionType(tagValue);
+            this.setInvoiceDistributionType( DISTRIBUTIONTYPE.fromString(tagValue) );
         } else if (tagName.equals("ContractNumber")) {
-            this.setContractNumber(Integer.valueOf(tagValue));
+            this.setContractNumber(Long.valueOf(tagValue));
         } else if (tagName.equals("Ocr")) {
             this.setOcr(tagValue);
         } else if (tagName.equals("LowestAmountToPay")) {
             this.setLowestAmountToPay(Double.valueOf(tagValue));
         }
-    }
-    
-    public ORDERTYPE getOrderType() {
-        return orderType;
-    }
-    
-    public void setOrderType(ORDERTYPE orderType) {
-        this.orderType = orderType;
-    }
-    
-    public double getAmount() {
-        return amount;
-    }
-    
-    public void setAmount(double amount) {
-        this.amount = amount;
-    }
-    
-    public int getInvoiceId() {
-        return invoiceId;
-    }
-    
-    public void setInvoiceId(int invoiceId) {
-        this.invoiceId = invoiceId;
-    }
-    
-    public String getDueDate() {
-        return dueDate;
-    }
-    
-    public void setDueDate(String dueDate) {
-        this.dueDate = dueDate;
-    }
-    
-    public String getInvoiceDate() {
-        return invoiceDate;
-    }
-    
-    public void setInvoiceDate(String invoiceDate) {
-        this.invoiceDate = invoiceDate;
-    }
-    
-    public String getInvoiceDistributionType() {
-        return invoiceDistributionType;
-    }
-    
-    public void setInvoiceDistributionType(String invoiceDistributionType) {
-        this.invoiceDistributionType = invoiceDistributionType;
-    }
-    
-    public String getOcr() {
-        return ocr;
-    }
-    
-    public void setOcr(String ocr) {
-        this.ocr = ocr;
-    }
-    
-    public double getLowestAmountToPay() {
-        return lowestAmountToPay;
-    }
-    
-    public void setLowestAmountToPay(double lowestAmountToPay) {
-        this.lowestAmountToPay = lowestAmountToPay;
-    }
-    
-    public int getContractNumber() {
-        return contractNumber;
-    }
-    
-    public void setContractNumber(int contractNumber) {
-        this.contractNumber = contractNumber;
     }
 }

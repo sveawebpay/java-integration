@@ -6,11 +6,8 @@ import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.AnnulTransactionRequest;
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.ORDERTYPE;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCloseOrder;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 /**
  * CancelOrderBuilder is the class used to cancel an order with Svea, that has
@@ -45,20 +42,6 @@ import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
 	private Long orderId;
 
-	public CancelOrderBuilder(ConfigurationProvider config) {
-        this.config = config;
-	}
-	
-    /**
-     * Required
-     * @param countryCode
-     * @return CancelOrderBuilder
-     */
-	public CancelOrderBuilder setCountryCode(COUNTRYCODE countryCode) {
-		this.countryCode = countryCode;
-		return this;
-	}
-
     /**
      * Required
      * @param orderId
@@ -75,16 +58,16 @@ public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
 	
 	/**
 	 * optional, card only -- alias for setOrderId
-     * @deprecated
      * @param orderId
      * @return CancelOrderBuilder
      */
 	public CancelOrderBuilder setTransactionId( Long transactionId ) {
 		return this.setOrderId(transactionId);
-	}	
+	}
 	
 	/**
 	 * optional, card only -- alias for setOrderId
+     * @deprecated
 	 * @param transactionId as string, i.e. as transactionId is returned in HostedPaymentResponse
 	 * @return DeliverOrderRowsBuilder
 	 */
@@ -93,6 +76,7 @@ public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
     } 	
 	
 	public CloseOrder cancelInvoiceOrder() {
+	    // TODO remove dependency on deprecated CloseOrder
 		CloseOrderBuilder closeOrderBuilder = new CloseOrderBuilder(this.config);
 		closeOrderBuilder.setCountryCode(this.countryCode);
 		closeOrderBuilder.setOrderId(this.orderId);		
@@ -101,11 +85,17 @@ public class CancelOrderBuilder extends OrderBuilder<CancelOrderBuilder>{
 	}
 	
 	public CloseOrder cancelPaymentPlanOrder() {
+	    // TODO remove dependency on deprecated CloseOrder
 		CloseOrderBuilder closeOrderBuilder = new CloseOrderBuilder(this.config);
 		closeOrderBuilder.setCountryCode(this.countryCode);
 		closeOrderBuilder.setOrderId(this.orderId);		
 		closeOrderBuilder.setOrderType(ORDERTYPE.PaymentPlan.toString());
 		return new CloseOrder(closeOrderBuilder);
+	}
+	
+	
+	public CancelOrderBuilder(ConfigurationProvider config) {
+        this.config = config;
 	}
 	
 	public AnnulTransactionRequest cancelCardOrder() {

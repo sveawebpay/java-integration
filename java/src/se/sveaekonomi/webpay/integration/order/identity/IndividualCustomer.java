@@ -2,6 +2,23 @@ package se.sveaekonomi.webpay.integration.order.identity;
 
 public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
 
+	//  //ci
+	//  private String phoneNumber;
+	//  private String email;
+	//  private String ipAddress;
+	//  private String coAddress;
+	//  private String streetAddress;
+	//  private String housenumber;
+	//  private String zipCode;
+	//  private String locality;    	
+	//  //ic
+	//  private String ssn;
+	//  private String birthDate;
+	//  private String firstName;
+	//  private String lastName;
+	//  private String initials;
+	//  private String name;
+	
     private String ssn;
     private String birthDate;
     private String firstName;

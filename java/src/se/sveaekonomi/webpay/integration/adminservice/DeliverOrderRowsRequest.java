@@ -1,6 +1,5 @@
 package se.sveaekonomi.webpay.integration.adminservice;
 
-import java.io.IOException;
 import java.net.URL;
 
 import javax.xml.bind.ValidationException;
@@ -17,6 +16,7 @@ import javax.xml.soap.SOAPPart;
 
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderRowsBuilder;
+import se.sveaekonomi.webpay.integration.response.adminservice.DeliverOrderRowsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 /**
@@ -24,12 +24,12 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  * 
  * @author Kristian Grossman-Madsen
  */
-public class DeliverPartialRequest  {
+public class DeliverOrderRowsRequest  {
 
 	private String action;
 	private DeliverOrderRowsBuilder builder;
 		
-	public DeliverPartialRequest( DeliverOrderRowsBuilder builder) {
+	public DeliverOrderRowsRequest( DeliverOrderRowsBuilder builder) {
 		this.action = "DeliverPartial";
 		this.builder = builder;
 	}
@@ -46,7 +46,7 @@ public class DeliverPartialRequest  {
         if (builder.getCountryCode() == null) {
             errors += "MISSING VALUE - CountryCode is required, use setCountryCode().\n";
         }           
-        if( builder.getRowIndexesToDeliver().size() == 0 ) {
+        if( builder.getRowsToDeliver().size() == 0 ) {
         	errors += "MISSING VALUE - rowIndexesToDeliver is required for deliverInvoiceOrderRows(). Use methods setRowToDeliver() or setRowsToDeliver().\n";
     	}
         if (builder.getInvoiceDistributionType() == null) {
@@ -129,7 +129,7 @@ public class DeliverPartialRequest  {
 			    SOAPElement sveaOrderId = orderToDeliver.addChildElement("SveaOrderId", "dat");
 			    	sveaOrderId.addTextNode(String.valueOf(this.builder.getOrderId()));
 	    	SOAPElement rowNumbers = request.addChildElement("RowNumbers", "dat");
-	    		for( Integer rowIndex : this.builder.getRowIndexesToDeliver() ) {
+	    		for( Integer rowIndex : this.builder.getRowsToDeliver() ) {
 	    			rowNumbers.addChildElement("long","arr").addTextNode( Integer.toString( rowIndex ) );
 	    		}
 	    	
@@ -140,7 +140,6 @@ public class DeliverPartialRequest  {
 //		try {
 //			soapMessage.writeTo(System.out);
 //		} catch (IOException e) {
-//			// TODO Auto-generated catch block
 //			e.printStackTrace();
 //		}
 //		System.out.println();
@@ -149,7 +148,7 @@ public class DeliverPartialRequest  {
 
 	};    	
 	
-	public DeliverPartialResponse doRequest() {	
+	public DeliverOrderRowsResponse doRequest() {	
 		
         // validate and prepare request, throw runtime exception on error
 		SOAPMessage soapRequest;
@@ -186,9 +185,9 @@ public class DeliverPartialRequest  {
 		}
 		
 		// parse response
-		DeliverPartialResponse response;
+		DeliverOrderRowsResponse response;
 		try {
-			response = new DeliverPartialResponse(soapResponse);
+			response = new DeliverOrderRowsResponse(soapResponse);
 		} catch (SOAPException e) {
 			throw new SveaWebPayException( "DeliverPartialRequest: doRequest parse response failed.", e );
 		}

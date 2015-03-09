@@ -84,8 +84,11 @@ public class TestingTool {
     }
     
     public static OrderRowBuilder createPaymentPlanOrderRow() {
+    	return createPaymentPlanOrderRow("1");
+    }    
+    public static OrderRowBuilder createPaymentPlanOrderRow(String articleNumber) {
         return WebPayItem.orderRow()
-                   .setArticleNumber("1")
+                   .setArticleNumber(articleNumber)
                    .setName("Prod")
                    .setDescription("Specification")
                    .setAmountExVat(1000.00)
@@ -451,7 +454,7 @@ public class TestingTool {
 		// create order
         CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
         		// add order rows with sufficiently large total amount to allow payment plan to be used
-                .addOrderRow(TestingTool.createPaymentPlanOrderRow())
+                .addOrderRow(TestingTool.createPaymentPlanOrderRow("1"))
                 .addCustomerDetails(WebPayItem.individualCustomer()
                     .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -477,6 +480,47 @@ public class TestingTool {
         
         return response;
 	}	
+	
+	/**
+	 * returns a payment plan test order response from Svea. 
+	 * 
+	 * @param nameOfOriginatingTest
+	 * @return
+	 */
+	public static CreateOrderResponse createPaymentPlanTestOrderWithMultipleRows( String nameOfOriginatingTest ) {
+        		
+		// create order
+        CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
+        		// add order rows with sufficiently large total amount to allow payment plan to be used
+                .addOrderRow(TestingTool.createPaymentPlanOrderRow("1"))
+                .addOrderRow(TestingTool.createPaymentPlanOrderRow("2"))
+                .addOrderRow(TestingTool.createPaymentPlanOrderRow("3"))
+                .addCustomerDetails(WebPayItem.individualCustomer()
+                    .setNationalIdNumber(TestingTool.DefaultTestIndividualNationalIdNumber))
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .setClientOrderNumber(TestingTool.DefaultTestClientOrderNumber)
+                .setOrderDate(TestingTool.DefaultTestDate)
+                .setCurrency(TestingTool.DefaultTestCurrency)
+    	;
+
+        if( nameOfOriginatingTest != null ) {
+            order.setCustomerReference(nameOfOriginatingTest.substring(0, Math.min(nameOfOriginatingTest.length(),30)));
+        }
+        
+    	// get payment plan params
+        PaymentPlanParamsResponse paymentPlanParam = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
+                .setCountryCode(TestingTool.DefaultTestCountryCode)
+                .doRequest();
+        String code = paymentPlanParam.getCampaignCodes().get(0).getCampaignCode();
+
+        // choose payment method and do request
+        SveaRequest<SveaCreateOrder> soap_request = order.usePaymentPlanPayment(code).prepareRequest(); // break and inspect here, if needed
+        
+        CreateOrderResponse response = order.usePaymentPlanPayment(code).doRequest();
+        
+        return response;
+	}	
+	
 
 	/**
 	 * returns a card test order response from Svea 

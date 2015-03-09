@@ -10,6 +10,7 @@ import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
+import se.sveaekonomi.webpay.integration.response.adminservice.CancelOrderRowsResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
@@ -21,7 +22,7 @@ public class CancelOrderRowsIntegrationTest {
     	
         // cancel first order row and assert the response
         CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
-            .setOrderId( "999999" )
+            .setOrderId( 999999L )
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setRowToCancel(1)
         ;
@@ -74,7 +75,7 @@ public class CancelOrderRowsIntegrationTest {
 
         // cancel first order row and assert the response
         CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
-            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
+        	.setOrderId(order.getOrderId())
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setRowToCancel(1)
         ;
@@ -123,7 +124,7 @@ public class CancelOrderRowsIntegrationTest {
 
         // cancel first order row and assert the response
         CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
-            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
+        	.setOrderId(order.getOrderId())
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setRowToCancel(1).setRowToCancel(2)
         ;
@@ -143,7 +144,7 @@ public class CancelOrderRowsIntegrationTest {
 
         // deliver first order row and assert the response
         CancelOrderRowsBuilder builder = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
-            .setOrderId(String.valueOf(order.orderId))			// TODO add getters/setters to CreateOrderResponse, return orderId as String!
+        	.setOrderId(order.getOrderId())
             .setCountryCode(TestingTool.DefaultTestCountryCode)	
             .setRowToCancel(1)
         ;

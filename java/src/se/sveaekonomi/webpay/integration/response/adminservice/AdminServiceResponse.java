@@ -1,19 +1,21 @@
-package se.sveaekonomi.webpay.integration.adminservice;
+package se.sveaekonomi.webpay.integration.response.adminservice;
 
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-public class AdminServiceResponse {
+import se.sveaekonomi.webpay.integration.response.Response;
 
-	private boolean isOrderAccepted;
+public class AdminServiceResponse implements Response {
+
+	private Boolean isOrderAccepted;
 	private String resultCode;
 	private String errorMessage;
 
-	public boolean isOrderAccepted() {
+	public Boolean isOrderAccepted() {
 		return isOrderAccepted;
 	}
 
-	public void setOrderAccepted(boolean isOrderAccepted) {
+	public void setOrderAccepted(Boolean isOrderAccepted) {
 		this.isOrderAccepted = isOrderAccepted;
 	}
 
@@ -40,11 +42,11 @@ public class AdminServiceResponse {
 	private void setCommonResponseAttributes(NodeList xmlResponse) {
 		Element node = (Element) xmlResponse.item(0);
 
-		String resultCode = node.getElementsByTagName("a:ResultCode").item(0).getTextContent();	// check what if =nil?
+		String resultCode = node.getElementsByTagName("a:ResultCode").item(0).getTextContent();
 		this.setResultCode(resultCode);
 		this.setOrderAccepted( (this.getResultCode().equals("0")) ? true : false);
 
-		String errorMessage = node.getElementsByTagName("a:ErrorMessage").item(0).getTextContent();	// check what if =nil?
+		String errorMessage = node.getElementsByTagName("a:ErrorMessage").item(0).getTextContent();
 		this.setErrorMessage(errorMessage);
 	}
 }

@@ -12,9 +12,7 @@ import se.sveaekonomi.webpay.integration.hosted.hostedadmin.LowerTransactionRequ
 import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
-import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 
 /**
  * @author Kristian Grossman-Madsen
@@ -22,83 +20,56 @@ import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 
 public class CancelOrderRowsBuilder extends OrderBuilder<CancelOrderRowsBuilder> {
 	
-    private ConfigurationProvider config;
-    private COUNTRYCODE countryCode;
+    private PAYMENTTYPE orderType;
 
+    private Long orderId;
     private ArrayList<Integer> rowIndexesToCancel;
 	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
-    private String orderId;
-    protected PAYMENTTYPE orderType;
     
+	
 	public PAYMENTTYPE getOrderType() {
 		return this.orderType;
 	} 
-	public CancelOrderRowsBuilder( ConfigurationProvider config ) {
-		this.config = config;
-		this.rowIndexesToCancel = new ArrayList<Integer>();
-		this.numberedOrderRows = new ArrayList<NumberedOrderRowBuilder>();
-	}
-
-	public ConfigurationProvider getConfig() {
-		return config;
-	}
-
-	public CancelOrderRowsBuilder setConfig(ConfigurationProvider config) {
-		this.config = config;
-		return this;
-	}
-
-	public COUNTRYCODE getCountryCode() {
-		return countryCode;
-	}
-
-	public CancelOrderRowsBuilder setCountryCode(COUNTRYCODE countryCode) {
-		this.countryCode = countryCode;
-		return this;
-	}
 
 	public ArrayList<Integer> getRowsToCancel() {
 		return rowIndexesToCancel;
 	}
-
 	public CancelOrderRowsBuilder setRowToCancel( int rowIndexToCancel ) {
 		this.rowIndexesToCancel.add(rowIndexToCancel);
 		return this;
 	}
-
 	public CancelOrderRowsBuilder setRowsToCancel(ArrayList<Integer> rowIndexesToCancel) {
 		this.rowIndexesToCancel.addAll(rowIndexesToCancel);
 		return this;
 	}
-
 	public ArrayList<NumberedOrderRowBuilder> getNumberedOrderRows() {
 		return numberedOrderRows;
 	}
-
 	public CancelOrderRowsBuilder addNumberedOrderRows(ArrayList<NumberedOrderRowBuilder> numberedOrderRows) {
 		this.numberedOrderRows.addAll(numberedOrderRows);
 		return this;
 	}
 
-	public String getOrderId() {
+	public Long getOrderId() {
 		return orderId;
 	}
-
-	public CancelOrderRowsBuilder setOrderId(String orderId) {
+	public CancelOrderRowsBuilder setOrderId(Long orderId) {
 		this.orderId = orderId;
 		return this;
-	}
-	
+	}	
 	/**
 	 * optional, card only -- alias for setOrderId
 	 * @param transactionId as string, i.e. as transactionId is returned in HostedPaymentResponse
 	 * @return DeliverOrderRowsBuilder
 	 */
-    public CancelOrderRowsBuilder setTransactionId( String transactionId) {        
+    public CancelOrderRowsBuilder setTransactionId( Long transactionId) {        
         return setOrderId( transactionId );
+    } 	
+    /** @deprecated */
+    public CancelOrderRowsBuilder setTransactionId( String transactionId) {        
+        return setOrderId( Long.valueOf(transactionId) );
     }   
 	
-
 	public LowerTransactionRequest cancelCardOrderRows() {
 	
     	// validate request and throw exception if validation fails
@@ -118,13 +89,19 @@ public class CancelOrderRowsBuilder extends OrderBuilder<CancelOrderRowsBuilder>
 				
 		LowerTransactionRequest lowerTransactionRequest = new LowerTransactionRequest( this.getConfig() );
 		lowerTransactionRequest.setCountryCode( this.getCountryCode() );
-		lowerTransactionRequest.setTransactionId( this.getOrderId() );
+		lowerTransactionRequest.setTransactionId( String.valueOf(this.getOrderId()) );
 		lowerTransactionRequest.setAmountToLower( (int)MathUtil.bankersRound(amountToLowerOrderBy) * 100 ); // request uses minor currency );
 		
 		return lowerTransactionRequest;				
 	}
+
 	
-	// validates required attributes
+	public CancelOrderRowsBuilder( ConfigurationProvider config ) {
+		this.config = config;
+		this.rowIndexesToCancel = new ArrayList<Integer>();
+		this.numberedOrderRows = new ArrayList<NumberedOrderRowBuilder>();
+	}
+
     public String validateCancelCardOrderRows() {
         String errors = "";
         if (this.getCountryCode() == null) {
@@ -151,5 +128,5 @@ public class CancelOrderRowsBuilder extends OrderBuilder<CancelOrderRowsBuilder>
     	this.orderType = PAYMENTTYPE.PAYMENTPLAN;
 		return new CancelOrderRowsRequest(this);
 	}
-	
+
 }
