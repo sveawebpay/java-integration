@@ -70,48 +70,7 @@ public class WebPayAdmin {
         return new QueryOrderBuilder(config);		
 	}
 
-	/**
-     * The WebPayAdmin.deliverOrderRows entrypoint method is used to deliver individual order rows. 
-     * Supports invoice and card orders. (To partially deliver PaymentPlan or Direct Bank orders, please contact Svea.)
-     * 
-	 * For Invoice orders, the order row status is updated at Svea following each successful request.
-	 * 
-	 * For card orders, an order can only be delivered once, and any non-delivered order rows will be cancelled (i.e. 
-	 * the order amount will be lowered by the sum of the non-delivered order rows). A delivered card order has status 
-	 * CONFIRMED at Svea.
-	 * 
-     * Get an order builder instance using the WebPayAdmin.deliverOrderRows entrypoint,
-     * then provide more information about the transaction and send the request using
-     * the DeliverOrderRowsBuilder methods:
-	 * 
-	 * Use setRowToDeliver() or setRowsToDeliver() to specify the order row(s) to deliver. The order row indexes should 
-	 * correspond to those returned by i.e. WebPayAdmin.queryOrder();
-	 * 
-	 * For card orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass in a copy of the original order 
-	 * rows. The original order rows can be retrieved using WebPayAdmin.queryOrder(); the numberedOrderRows attribute 
-	 * contains the serverside order rows w/indexes. Note that if a card order has been modified (i.e. rows cancelled 
-	 * or credited) after the initial order creation, the returned order rows will not be accurate.
-	 *
-     * ...
-     * 		request = WebPayAdmin.deliverOrderRows(config)
-     *          .setOrderId()          			// required
-     *          .setTransactionId()	   			// optional, card only, alias for setOrderId 
-     *          .setCountryCode()      			// required    	
-     *          .setInvoiceDistributionType()	// required, invoice only
-     *          .setRowToDeliver()	   			// required, index of original order rows you wish to deliver 
-     *          .addNumberedOrderRow()			// required for card orders, should match original row indexes 
-     *     	;
-     *     	// then select the corresponding request class and send request
-     *      response = request.deliverInvoiceOrderRows().doRequest();	// returns DeliverOrderRowsResponse
-     *     	response = request.deliverCardOrderRows().doRequest()		// returns ConfirmTransactionResponse
-     * ...
-     * 
-     */
-    public static DeliverOrderRowsBuilder deliverOrderRows( ConfigurationProvider config ) {
-    	verifyConfig( config ); 	
-	    return new DeliverOrderRowsBuilder(config);	
-    }    
-    
+	
 	/**
      * The WebPayAdmin.cancelOrderRows entrypoint method is used to cancel rows in an order before it has been delivered.
      * Supports Invoice, Payment Plan and Card orders. (Direct Bank orders are not supported, see CreditOrderRows instead.)
@@ -167,13 +126,13 @@ public class WebPayAdmin {
      * as well as any new credit order rows specified using addCreditOrderRow(). For card or direct bank orders, the order row amount
      * will be credited to the customer. 
      * 
-     * Note: when using addCreditOrderRows, you may only use WebPayItem::orderRow with price specified as amountExVat and vatPercent.
+     * Note: when using addCreditOrderRows, you may only use WebPayItem.orderRow with price specified as amountExVat and vatPercent.
      * 
      * Get an order builder instance using the WebPayAdmin.creditOrderRows entrypoint, then provide more information about the 
      * transaction and send the request using the creditOrderRowsBuilder methods:     
      * 
      * ...
-     *     request = WebPay.creditOrder(config)
+     *     request = WebPay.creditOrderRows(config)
      *         .setInvoiceId()                // invoice only, required
      *         .setInvoiceDistributionType()  // invoice only, required
      *         .setOrderId()                  // card and direct bank only, required
@@ -196,45 +155,6 @@ public class WebPayAdmin {
     public static CreditOrderRowsBuilder creditOrderRows( ConfigurationProvider config ) {
     	verifyConfig( config );		    
 	    return new CreditOrderRowsBuilder(config);	    	
-    }
-
-    /**
-     * The WebPayAdmin.updateOrderRows() method is used to update individual order rows in non-delivered invoice and 
-     * payment plan orders. Supports invoice and payment plan orders.
-	 *
-	 * The order row status of the order is updated at Svea to reflect the updated order rows. If the updated rows' 
-	 * order total amount exceeds the original order total amount, an error is returned by the service.
-	 * 
-	 * Get an order builder instance using the WebPayAdmin.updateOrderRows() entrypoint, then provide more information 
-     * about the transaction and send the request using the UpdateOrderRowsBuilder methods:   
-	 * 
-	 * Use setCountryCode() to specify the country code matching the original create order request.
-	 * 
-	 * Use addUpdateOrderRow() with a new WebPayItem.numberedOrderRow() object. Add the updated order row attributes 
-	 * using the NumberedOrderRowBuilder member functions. Notably, the setRowNumber() method specifies which of the 
-	 * original order rows will be replaced, in full, with the new NumberedOrderRow. 
-	 * 
-	 * Then use either updateInvoiceOrderRows() or updatePaymentPlanOrderRows() to get a request object, which ever 
-	 * matches the payment method used in the original order.
-	 * 
-	 * Calling doRequest() on the request object will send the request to Svea and return an UpdateOrderRowsResponse.
-	 * 
-     * ...
-     *     request = WebPayAdmin.updateOrderRows(config)
-     *         .setOrderId()                  // required
-     *         .setCountryCode()              // required
-     *         .addUpdateOrderRow()           // required, NumberedOrderRowBuilder w/RowNumber attribute matching row index of original order row
-     *     ;
-     *     // then select the corresponding request class and send request
-     *     response = request.updateInvoiceOrderRows().doRequest();     // returns UpdateOrderRowsResponse
-     *     response = request.updatePaymentPlanOrderRows().doRequest(); // returns UpdateOrderRowsResponse
-     * ...
-     * 
-     * @author Kristian Grossman-Madsen
-     */        
-    public static UpdateOrderRowsBuilder updateOrderRows( ConfigurationProvider config ) {
-    	verifyConfig( config );
-    	return new UpdateOrderRowsBuilder( config );
     }
     
     /**
@@ -280,7 +200,88 @@ public class WebPayAdmin {
     	verifyConfig( config );
     	return new AddOrderRowsBuilder( config );
     }
-   
+	
+    /**
+     * The WebPayAdmin.updateOrderRows() method is used to update individual order rows in non-delivered invoice and 
+     * payment plan orders. Supports invoice and payment plan orders.
+	 *
+	 * The order row status of the order is updated at Svea to reflect the updated order rows. If the updated rows' 
+	 * order total amount exceeds the original order total amount, an error is returned by the service.
+	 * 
+	 * Get an order builder instance using the WebPayAdmin.updateOrderRows() entrypoint, then provide more information 
+     * about the transaction and send the request using the UpdateOrderRowsBuilder methods:   
+	 * 
+	 * Use setCountryCode() to specify the country code matching the original create order request.
+	 * 
+	 * Use addUpdateOrderRow() with a new WebPayItem.numberedOrderRow() object. Add the updated order row attributes 
+	 * using the NumberedOrderRowBuilder member functions. Notably, the setRowNumber() method specifies which of the 
+	 * original order rows will be replaced, in full, with the new NumberedOrderRow. 
+	 * 
+	 * Then use either updateInvoiceOrderRows() or updatePaymentPlanOrderRows() to get a request object, which ever 
+	 * matches the payment method used in the original order.
+	 * 
+	 * Calling doRequest() on the request object will send the request to Svea and return an UpdateOrderRowsResponse.
+	 * 
+     * ...
+     *     request = WebPayAdmin.updateOrderRows(config)
+     *         .setOrderId()                  // required
+     *         .setCountryCode()              // required
+     *         .addUpdateOrderRow()           // required, NumberedOrderRowBuilder w/RowNumber attribute matching row index of original order row
+     *     ;
+     *     // then select the corresponding request class and send request
+     *     response = request.updateInvoiceOrderRows().doRequest();     // returns UpdateOrderRowsResponse
+     *     response = request.updatePaymentPlanOrderRows().doRequest(); // returns UpdateOrderRowsResponse
+     * ...
+     * 
+     * @author Kristian Grossman-Madsen
+     */        
+    public static UpdateOrderRowsBuilder updateOrderRows( ConfigurationProvider config ) {
+    	verifyConfig( config );
+    	return new UpdateOrderRowsBuilder( config );
+    }
+    
+    
+	/**
+     * The WebPayAdmin.deliverOrderRows entrypoint method is used to deliver individual order rows. 
+     * Supports invoice and card orders. (To partially deliver PaymentPlan or Direct Bank orders, please contact Svea.)
+     * 
+	 * For Invoice orders, the order row status is updated at Svea following each successful request.
+	 * 
+	 * For card orders, an order can only be delivered once, and any non-delivered order rows will be cancelled (i.e. 
+	 * the order amount will be lowered by the sum of the non-delivered order rows). A delivered card order has status 
+	 * CONFIRMED at Svea.
+	 * 
+     * Get an order builder instance using the WebPayAdmin.deliverOrderRows entrypoint,
+     * then provide more information about the transaction and send the request using
+     * the DeliverOrderRowsBuilder methods:
+	 * 
+	 * Use setRowToDeliver() or setRowsToDeliver() to specify the order row(s) to deliver. The order row indexes should 
+	 * correspond to those returned by i.e. WebPayAdmin.queryOrder();
+	 * 
+	 * For card orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass in a copy of the original order 
+	 * rows. The original order rows can be retrieved using WebPayAdmin.queryOrder(); the numberedOrderRows attribute 
+	 * contains the serverside order rows w/indexes. Note that if a card order has been modified (i.e. rows cancelled 
+	 * or credited) after the initial order creation, the returned order rows will not be accurate.
+	 *
+     * ...
+     * 		request = WebPayAdmin.deliverOrderRows(config)
+     *          .setOrderId()          			// required
+     *          .setTransactionId()	   			// optional, card only, alias for setOrderId 
+     *          .setCountryCode()      			// required    	
+     *          .setInvoiceDistributionType()	// required, invoice only
+     *          .setRowToDeliver()	   			// required, index of original order rows you wish to deliver 
+     *          .addNumberedOrderRow()			// required for card orders, should match original row indexes 
+     *     	;
+     *     	// then select the corresponding request class and send request
+     *      response = request.deliverInvoiceOrderRows().doRequest();	// returns DeliverOrderRowsResponse
+     *     	response = request.deliverCardOrderRows().doRequest()		// returns ConfirmTransactionResponse
+     * ...
+     * 
+     */
+    public static DeliverOrderRowsBuilder deliverOrderRows( ConfigurationProvider config ) {
+    	verifyConfig( config ); 	
+	    return new DeliverOrderRowsBuilder(config);	
+    }       
 
     private static void verifyConfig( ConfigurationProvider config) throws SveaWebPayException {
 	    if (config == null) {
