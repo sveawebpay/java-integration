@@ -650,7 +650,7 @@ Specify the item price using precisely two of these methods in order to specify 
 	    .setName()              // String	// optional, note that invoice & payment plan orders will merge "name" with "description" 
 	    .setDescription() 		// String	// optional, note that invoice & payment plan orders will merge "name" with "description" 
 	    .setArticleNumber()     // String	// optional
-	    .setDiscountPercent()   // Double 	// optional
+	    .setDiscountPercent()   // double 	// optional
 	);
 ...
 ```
@@ -673,7 +673,7 @@ Specify the item price using precisely two of these methods in order to specify 
          ->setName()            // String	// optional
          ->setDescription() 	// String	// optional
          ->setShippingId()      // String   // optional
-         ->setDiscountPercent() // Double 	// optional
+         ->setDiscountPercent() // double 	// optional
      );
 ...
 ```
@@ -696,7 +696,7 @@ Specify the item price using precisely two of these methods in order to specify 
         ->setUnit()             // String	// optional
         ->setName()             // String	// optional
         ->setDescription() 		// String	// optional
-        ->setDiscountPercent()  // Double 	// optional
+        ->setDiscountPercent()  // double 	// optional
     );
 ...
 ```	
@@ -742,7 +742,7 @@ Specify the discount using RelativeDiscountBuilder methods:
 ```java
 ...
      RelativeDiscountBuilder relativeDiscount = WebPayItem.relativeDiscount()
-         .setDiscountPercent()  // Double	// recommended, see info above
+         .setDiscountPercent()  // double	// recommended, see info above
          .setAmountExVat()		// Double	// optional, see info above
          .setUnit()             // String	// optional
          .setName()             // String	// optional
@@ -817,6 +817,11 @@ Note that "required" below as a requirement only when using the invoice payment 
 Various service requests such as the WebPay .createOrder() and .getAddresses() methods along with the WebPayAdmin .queryOrder() et al methods may return a CompanyCustomer object as (part) of the request response. 
 
 Note that not all responses define the same attributes. Also, what attributes are returned may vary between different countries and payment methods. In general, you should inspect the received response object attributes before relying on them for further requests.
+
+
+
+
+
 
 ## 6. WebPay entrypoint method reference <a name="i6"></a>
 The WebPay class methods contains the functions needed to create orders and perform payment requests using Svea payment methods. It contains entrypoint methods used to define order contents, send order requests, as well as various support methods needed to do this.

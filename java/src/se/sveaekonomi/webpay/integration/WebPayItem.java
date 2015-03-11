@@ -32,7 +32,7 @@ public class WebPayItem {
      *         .setName()               // String	// optional, note that invoice & payment plan orders will merge "name" with "description" 
      *         .setDescription() 		// String	// optional, note that invoice & payment plan orders will merge "name" with "description" 
      *         .setArticleNumber()     	// String	// optional
-     *         .setDiscountPercent()    // Double 	// optional
+     *         .setDiscountPercent()    // double 	// optional
      *     );
      */	
 	public static OrderRowBuilder orderRow() {
@@ -54,7 +54,7 @@ public class WebPayItem {
      *         ->setName()              // String	// optional
      *         ->setDescription() 		// String	// optional
      *         ->setShippingId()        // String   // optional
-     *         ->setDiscountPercent()   // Double 	// optional
+     *         ->setDiscountPercent()   // double 	// optional
      *     );  
 	 */	
 	public static ShippingFeeBuilder shippingFee() {
@@ -73,7 +73,7 @@ public class WebPayItem {
      *         ->setUnit()             	// String	// optional
      *         ->setName()             	// String	// optional
      *         ->setDescription() 		// String	// optional
-     *         ->setDiscountPercent()  	// Double 	// optional
+     *         ->setDiscountPercent()  	// double 	// optional
      *     );
 	 */	
 	public static InvoiceFeeBuilder invoiceFee() {
@@ -113,7 +113,7 @@ public class WebPayItem {
 	 * Specify the discount using RelativeDiscountBuilder methods:
      * 
 	 *      RelativeDiscountBuilder relativeDiscount = WebPayItem.relativeDiscount()
-	 *          .setDiscountPercent()  	// Double	// recommended, see info above
+	 *          .setDiscountPercent()  	// double	// recommended, see info above
 	 *          .setAmountExVat()		// Double	// optional, see info above
 	 *          .setUnit()             	// String	// optional
 	 *          .setName()             	// String	// optional
@@ -174,7 +174,6 @@ public class WebPayItem {
 	}
 	
 	
-	// TODO check this with test
     /**
      * This is an extension of the orderRow class, used in the WebPayAdmin.queryOrder() response and methods that adminster individual order rows.
      * 
