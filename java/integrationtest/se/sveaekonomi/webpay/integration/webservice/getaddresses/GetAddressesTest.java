@@ -517,7 +517,7 @@ public class GetAddressesTest {
         assertEquals("Testvejen 42", address.getStreetAddress() );
         assertEquals("c/o Test A/S", address.getCoAddress() );
         assertEquals( "2100", address.getZipCode() );
-        assertEquals( "KÃ˜BENHVN Ã˜", address.getLocality() );
+        assertEquals( "KØBENHVN Ø", address.getLocality() );
         assertEquals( "22222222", address.getPhoneNumber() );
         assertEquals( "2603692503", address.getNationalIdNumber() );
         assertEquals( "Hanne", address.getFirstName() );
@@ -587,7 +587,7 @@ public class GetAddressesTest {
         assertEquals("Testvejen 42", address.getStreetAddress() );
         assertEquals( null, address.getCoAddress() );
         assertEquals( "2100", address.getZipCode() );
-        assertEquals( "KÃ˜BENHVN Ã˜", address.getLocality() );
+        assertEquals( "KØBENHVN Ø", address.getLocality() );
         assertEquals( "22222222", address.getPhoneNumber() );
         assertEquals( "Test A/S", address.getCompanyName() );
         assertEquals( "99999993", address.getNationalIdNumber() );
@@ -608,7 +608,7 @@ public class GetAddressesTest {
         assertEquals("Testvejen 42, 2", address2.getStreetAddress() );
         assertEquals( null, address2.getCoAddress() );
         assertEquals( "2100", address2.getZipCode() );
-        assertEquals( "KÃ˜BENHVN Ã˜", address2.getLocality() );
+        assertEquals( "KØBENHVN Ø", address2.getLocality() );
         assertEquals( "22222222", address2.getPhoneNumber() );
         assertEquals( "Test A/S", address2.getCompanyName() );
         assertEquals( "99999993", address2.getNationalIdNumber() );
