@@ -61,7 +61,6 @@ layout: index
     * [11.1 Running the examples](http://sveawebpay.github.io/java-integration#i111)
     * [11.2 Svea invoice order](http://sveawebpay.github.io/java-integration#i112)
     * [11.3 Card order](http://sveawebpay.github.io/java-integration#i113)
-* [APPENDIX](http://sveawebpay.github.io/java-integration#appendix)
 
 ## I. Introduction <a name="introduction"></a>
 
@@ -616,7 +615,7 @@ Send user to PayPage to select from the available payment methods, specifying wh
 
 Use the WebPay.listPaymentMethods() entrypoint method to find out which payment methods are configured for your specific merchant id.
 
-All defined payment methods are listed in the PAYMENTMETHOD enum as well as in the [Appendix](http://sveawebpay.github.io/java-integration#appendix). 
+All defined payment methods are listed in the PAYMENTMETHOD enum.
 
 ### 4.6 Examples <a name="i46"></a>
 
@@ -1562,23 +1561,4 @@ An example of a synchronous (invoice) order can be found in the example/invoiceo
 ### 11.3 Card order <a name="i113"></a>
 An example of an asynchronous card order can be found in the example/cardorder folder.
 
-## APPENDIX <a name="appendix"></a>
-
-### PaymentMethods
-Used in usePaymentMethod($paymentMethod) and in usePayPage()->includePaymentMethods(..., ..., ...) et al.
-```
-| Payment method                    | Description                                   |
-|-----------------------------------|-----------------------------------------------|
-| PaymentMethod.BANKAXESS          | Direct bank payments, Norway                  |
-| PaymentMethod.NORDEA_SE          | Direct bank payment, Nordea, Sweden.          |
-| PaymentMethod.SEB_SE             | Direct bank payment, private, SEB, Sweden.    |
-| PaymentMethod.SEBFTG_SE          | Direct bank payment, company, SEB, Sweden.    |
-| PaymentMethod.SHB_SE             | Direct bank payment, Handelsbanken, Sweden.   |
-| PaymentMethod.SWEDBANK_SE        | Direct bank payment, Swedbank, Sweden.        |
-| PaymentMethod.KORTCERT           | Card payments, Certitrade.                    |
-| PaymentMethod.PAYPAL             | Paypal                                        |
-| PaymentMethod.SKRILL             | Card payment with Dankort, Skrill.            |
-| PaymentMethod.INVOICE            | Invoice by PayPage.                           |
-| PaymentMethod.PAYMENTPLAN        | PaymentPlan by PayPage.                       |
-```
 [<< To top](http://sveawebpay.github.io/java-integration#index)
