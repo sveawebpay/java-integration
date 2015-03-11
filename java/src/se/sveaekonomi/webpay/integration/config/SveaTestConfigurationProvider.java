@@ -132,6 +132,10 @@ public class SveaTestConfigurationProvider implements ConfigurationProvider{
             return SveaConfig.getTestHostedAdminUrl();
         }
         
+        if (PAYMENTTYPE.ADMIN_TYPE == type) {
+            return SveaConfig.getTestAdminServiceUrl();
+        }        
+        
         return SveaConfig.getTestWebserviceUrl();
     }
 }

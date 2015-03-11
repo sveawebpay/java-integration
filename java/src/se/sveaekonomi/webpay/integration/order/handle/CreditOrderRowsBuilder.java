@@ -5,6 +5,7 @@ import java.util.HashSet;
 
 import javax.xml.bind.ValidationException;
 
+import se.sveaekonomi.webpay.integration.adminservice.CreditOrderRowsRequest;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.hostedadmin.CreditTransactionRequest;
@@ -12,72 +13,75 @@ import se.sveaekonomi.webpay.integration.order.OrderBuilder;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
-import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
+import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
+/**
+ * @author Kristian Grossman-Madsen
+ */
 public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>{ 
-	
-	/**
-	 * @author Kristian Grossman-Madsen
-	 */
 
-    private ConfigurationProvider config;
-    private COUNTRYCODE countryCode;
-
+    private PAYMENTTYPE orderType;
+    
+	private Long orderId;
+	private Long invoiceId;
+	private DISTRIBUTIONTYPE invoiceDistributionType;
+    
     private ArrayList<Integer> rowIndexesToCredit;
-	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
+	private ArrayList<NumberedOrderRowBuilder> addedCreditOrderRows;
 	@SuppressWarnings("rawtypes")
 	private ArrayList<OrderRowBuilder> newCreditOrderRows;
-    private String orderId;
+
+	
+	public PAYMENTTYPE getOrderType() {
+		return this.orderType;
+	} 	
+	
+	public Long getOrderId() {
+		return orderId;
+	}
+	public CreditOrderRowsBuilder setOrderId(Long orderId) {
+		this.orderId = orderId;
+		return this;
+	}
+	/** optional, card only -- alias for setOrderId */
+    public CreditOrderRowsBuilder setTransactionId( Long transactionId) {        
+        return setOrderId( transactionId );
+    } 
+    /** @deprecated	*/
+    public CreditOrderRowsBuilder setTransactionId( String transactionId) {        
+        return setOrderId( Long.valueOf(transactionId) );
+    } 
     
-	@SuppressWarnings("rawtypes")
-	public CreditOrderRowsBuilder( ConfigurationProvider config ) {
-		this.config = config;
-		this.rowIndexesToCredit = new ArrayList<Integer>();
-		this.numberedOrderRows = new ArrayList<NumberedOrderRowBuilder>();
-		this.newCreditOrderRows = new ArrayList<OrderRowBuilder>();
-	}
-
-	public ConfigurationProvider getConfig() {
-		return config;
-	}
-
-	public CreditOrderRowsBuilder setConfig(ConfigurationProvider config) {
-		this.config = config;
+	public CreditOrderRowsBuilder setInvoiceId(Long invoiceId) {
+		this.invoiceId = invoiceId;
 		return this;
 	}
-
-	public COUNTRYCODE getCountryCode() {
-		return countryCode;
+	public Long getInvoiceId() {
+		return this.invoiceId;
+	}	
+	public DISTRIBUTIONTYPE getInvoiceDistributionType() {
+		return invoiceDistributionType;
 	}
-
-	public CreditOrderRowsBuilder setCountryCode(COUNTRYCODE countryCode) {
-		this.countryCode = countryCode;
+	public CreditOrderRowsBuilder setInvoiceDistributionType(DISTRIBUTIONTYPE invoiceDistributionType) {
+		this.invoiceDistributionType = invoiceDistributionType;
 		return this;
 	}
-
 	public ArrayList<Integer> getRowsToCredit() {
 		return rowIndexesToCredit;
 	}
-
-	public CreditOrderRowsBuilder setRowToCredit( int rowIndexToCredit ) {
+	public CreditOrderRowsBuilder setRowToCredit( Integer rowIndexToCredit ) {
 		this.rowIndexesToCredit.add(rowIndexToCredit);
 		return this;
 	}
-
 	public CreditOrderRowsBuilder setRowsToCredit(ArrayList<Integer> rowIndexesToCredit) {
 		this.rowIndexesToCredit.addAll(rowIndexesToCredit);
 		return this;
 	}
-
-	public ArrayList<NumberedOrderRowBuilder> getNumberedOrderRows() {
-		return numberedOrderRows;
+	@SuppressWarnings("rawtypes")
+	public ArrayList<OrderRowBuilder> getNewCreditOrderRows() {
+		return newCreditOrderRows;
 	}
-
-	public CreditOrderRowsBuilder addNumberedOrderRows(ArrayList<NumberedOrderRowBuilder> numberedOrderRows) {
-		this.numberedOrderRows.addAll(numberedOrderRows);
-		return this;
-	}
-
 	public CreditOrderRowsBuilder addCreditOrderRow(@SuppressWarnings("rawtypes") OrderRowBuilder customAmountRow) {
 		this.newCreditOrderRows.add(customAmountRow);
 		return this;
@@ -85,28 +89,27 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
 	public CreditOrderRowsBuilder addCreditOrderRows(@SuppressWarnings("rawtypes") ArrayList<OrderRowBuilder> customAmountRows) {
 		this.newCreditOrderRows.addAll(customAmountRows);
 		return this;
-	}		
-	
-	public String getOrderId() {
-		return orderId;
 	}
-
-	public CreditOrderRowsBuilder setOrderId(String orderId) {
-		this.orderId = orderId;
+	public ArrayList<NumberedOrderRowBuilder> getNumberedOrderRows() {
+		return addedCreditOrderRows;
+	}
+	public CreditOrderRowsBuilder addNumberedOrderRows(ArrayList<NumberedOrderRowBuilder> numberedOrderRows) {
+		this.addedCreditOrderRows.addAll(numberedOrderRows);
 		return this;
 	}
 	
-	/**
-	 * optional, card only -- alias for setOrderId
-	 * @param transactionId as string, i.e. as transactionId is returned in HostedPaymentResponse
-	 */
-    public CreditOrderRowsBuilder setTransactionId( String transactionId) {        
-        return setOrderId( transactionId );
-    }   
-	
+	@SuppressWarnings("rawtypes")
+	public CreditOrderRowsBuilder( ConfigurationProvider config ) {
+		this.config = config;
+		this.rowIndexesToCredit = new ArrayList<Integer>();
+		this.addedCreditOrderRows = new ArrayList<NumberedOrderRowBuilder>();
+		this.newCreditOrderRows = new ArrayList<OrderRowBuilder>();
+	}
 
-	public CreditTransactionRequest creditCardOrderRows() {
 	
+	public CreditTransactionRequest creditCardOrderRows() {
+		// CreditTransactionRequest does not use .orderType
+		
     	// validate request and throw exception if validation fails
         String errors = validateCreditCardOrderRows(); 
         if (!errors.equals("")) {
@@ -117,13 +120,12 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
 		
 		CreditTransactionRequest creditTransactionRequest = new CreditTransactionRequest( this.getConfig() );
 		creditTransactionRequest.setCountryCode( this.getCountryCode() );
-		creditTransactionRequest.setTransactionId( this.getOrderId() );
+		creditTransactionRequest.setTransactionId( String.valueOf(this.getOrderId()) );
 		creditTransactionRequest.setCreditAmount((int)MathUtil.bankersRound(creditedOrderTotal) * 100);
 		
 		return creditTransactionRequest;				
 	}
 	
-	// validates required attributes
     public String validateCreditCardOrderRows() {
         String errors = "";
         if (this.getCountryCode() == null) {
@@ -140,7 +142,7 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
     	}
         
         // iff specified row indexes, need to pass in the order rows as well for orders
-        if( this.rowIndexesToCredit.size() > 0 && this.numberedOrderRows.size() == 0 ) {
+        if( this.rowIndexesToCredit.size() > 0 && this.addedCreditOrderRows.size() == 0 ) {
         	errors += "MISSING VALUE - numberedOrderRows is required for creditCardOrderRows(). Use setNumberedOrderRow() or setNumberedOrderRows().\n";
     	}
 
@@ -148,6 +150,7 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
     }	
     
     public CreditTransactionRequest creditDirectBankOrderRows() {
+		// CreditTransactionRequest does not use .orderType
     	
     	// validate request and throw exception if validation fails
         String errors = validateCreditDirectBankOrderRows(); 
@@ -160,13 +163,12 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
 		
 		CreditTransactionRequest creditTransactionRequest = new CreditTransactionRequest( this.getConfig() );
 		creditTransactionRequest.setCountryCode( this.getCountryCode() );
-		creditTransactionRequest.setTransactionId( this.getOrderId() );
+		creditTransactionRequest.setTransactionId( String.valueOf(this.getOrderId()) );
 		creditTransactionRequest.setCreditAmount((int)MathUtil.bankersRound(creditedOrderTotal) * 100);
 		
 		return creditTransactionRequest;				
 	}
 	
-	// validates required attributes
     public String validateCreditDirectBankOrderRows() {
         String errors = "";
         if (this.getCountryCode() == null) {
@@ -183,7 +185,7 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
     	}
         
         // iff specified row indexes, need to pass in the order rows as well for orders
-        if( this.rowIndexesToCredit.size() > 0 && this.numberedOrderRows.size() == 0 ) {
+        if( this.rowIndexesToCredit.size() > 0 && this.addedCreditOrderRows.size() == 0 ) {
         	errors += "MISSING VALUE - numberedOrderRows is required for creditDirectBankOrderRows(). Use setNumberedOrderRow() or setNumberedOrderRows().\n";
     	}
 
@@ -193,7 +195,7 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
 	private double calculateCreditAmount() {
 		double creditedOrderTotal = 0.0;
 		for( Integer rowIndex : new HashSet<Integer>(rowIndexesToCredit) ) {
-			NumberedOrderRowBuilder creditedRow = numberedOrderRows.get(rowIndex-1);	// -1 as NumberedOrderRows is one-indexed
+			NumberedOrderRowBuilder creditedRow = addedCreditOrderRows.get(rowIndex-1);	// -1 as NumberedOrderRows is one-indexed
 			creditedOrderTotal +=  creditedRow.getAmountExVat() * (1+creditedRow.getVatPercent()/100.0) * creditedRow.getQuantity();
 		}			
 
@@ -202,5 +204,9 @@ public class CreditOrderRowsBuilder extends OrderBuilder<CreditOrderRowsBuilder>
 		}
 		return creditedOrderTotal;
 	}
-    
+
+	public CreditOrderRowsRequest creditInvoiceOrderRows() {
+		this.orderType = PAYMENTTYPE.INVOICE;
+		return new CreditOrderRowsRequest(this);
+	}
 }

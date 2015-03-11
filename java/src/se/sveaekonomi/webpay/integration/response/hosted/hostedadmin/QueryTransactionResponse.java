@@ -10,7 +10,6 @@ import javax.xml.parsers.ParserConfigurationException;
 
 import org.w3c.dom.Document;
 import org.w3c.dom.Element;
-import org.w3c.dom.Node;
 import org.w3c.dom.NodeList;
 import org.xml.sax.InputSource;
 import org.xml.sax.SAXException;
@@ -18,86 +17,70 @@ import org.xml.sax.SAXException;
 import se.sveaekonomi.webpay.integration.Respondable;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.row.NumberedOrderRowBuilder;
-import se.sveaekonomi.webpay.integration.util.constant.OrderRowStatus;
 
-public class QueryTransactionResponse extends HostedAdminResponse implements
-		Respondable {
-
+public class QueryTransactionResponse extends HostedAdminResponse implements Respondable {
+																						// see HostedService/query response:
 	private String rawResponse;
 	/** transactionId -- the order id at Svea */
-	private String transactionid;
-	/** clientOrderNumber -- the customer reference number, i.e. order number */
-	private String clientOrderNumber;
+	private Long transactionid;															// transaction attribute id (Numeric, N)
+	/** clientOrderNumber -- the customer reference number, i.e. order number */			
+	private String clientOrderNumber;													// customerrefno (AN(64))
 	/** merchantId -- the merchant id */
-	private String merchantId;
-	/**
-	 * status -- Latest transaction status, one of {AUTHORIZED, CONFIRMED,
-	 * SUCCESS}
-	 */
-	private String status;
-	/**
-	 * amount -- Total amount including VAT, in minor currency (e.g. SEK 10.50 =
-	 * 1050)
-	 */
-	private String amount;
+	private String merchantId;															// merchantid (N)				
+	/** status -- Latest transaction status, one of {AUTHORIZED, CONFIRMED, SUCCESS} */
+	private String status;																// status (AN(32))
+	/** amount -- Total amount including VAT */						
+	private Double amount;																// amount (minor currency), N
 	/** currency -- ISO 4217 alphabetic, e.g. SEK */
-	private String currency;
-	/** vat -- VAT, in minor currency */
-	private String vat;
+	private String currency;															// currency, (AN(3))
+	/** vat -- VAT amount */
+	private Double vat;																	// vat (minor currency), N
 	/** capturedamount -- Captured amount */
-	private String capturedamount;
+	private Double capturedamount;														// capturedamount (minor currency), N
 	/** authorizedamount -- Authorized amount */
-	private String authorizedamount;
-	/**
-	 * created -- Timestamp when transaction was created in Sveas' system, e.g.
-	 * 2011-09-27 16:55:01.21
-	 */
-	private String created;
+	private Double authorizedamount;													// authorizedamount (minor currency), N
+	/** created -- Timestamp when transaction was created in Sveas' system, e.g. 2011-09-27 16:55:01.21 */
+	private String created;																// created, timestamp (AN?)
 	/** creditstatus -- Status of the last credit attempt */
-	private String creditstatus;
-	/** creditedamount -- Total amount that has been credited, in minor currency */
-	private String creditedamount;
+	private String creditstatus;														// creditstatus, (AN(32))
+	/** creditedamount -- Total amount that has been credited */
+	private Double creditedamount;														// creditedamount (minor currency), N	
 	/** merchantresponsecode -- Last statuscode response returned to merchant */
-	private String merchantresponsecode;
+	private String merchantresponsecode;												// merchantresponsecode (N)
 	/** paymentMethod */
-	private String paymentMethod;
+	private String paymentMethod;														// paymentmethod (AN(32))	
 	/**
 	 * NumberedOrderRows w/set Name, Description, ArticleNumber, AmountExVat,
 	 * VatPercent, Quantity and Unit, rowNumber. May be null if no order rows 
 	 * specified when order was created.
 	 */
-	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;
+	private ArrayList<NumberedOrderRowBuilder> numberedOrderRows;						// orderrows (complex type)		
 	/** callbackurl */
-	private String callbackurl;
-	/**
-	 * capturedate -- The date the transaction was captured, e.g. 2011-09-2716:55:01.21
-	 */
-	private String capturedate;
+	private String callbackurl;															// callbackurl (AN?)
+	/** capturedate -- The date the transaction was captured, e.g. 2011-09-2716:55:01.21 */
+	private String capturedate;															// capturedate, timestamp (AN?)
 	/** subscriptionId */
-	private String subscriptionId;
-	/** subscriptiontype */
-	private String subscriptiontype;
+	private Long subscriptionId;														// iff subscription set in payment request, ? (?)
+	/** subscriptiontype */															
+	private String subscriptiontype;													// iff subscription set in payment request, ? (?)
 	/** cardType */
-	private String cardType;
+	private String cardType;															// ?
 	/** maskedCardNumber */
-	private String maskedCardNumber;
-	/**
-	 * eci -- Enrollment status from MPI. If the card is 3Dsecure enabled or
-	 * not.
-	 */
-	private String eci;
+	private String maskedCardNumber;													// ?
+	/** eci -- Enrollment status from MPI. If the card is 3Dsecure enabled or not. */
+	private String eci;																	// eci (?)
 	/** mdstatus -- Value calculated from eci as requested by acquiring bank. */
-	private String mdstatus;
+	private String mdstatus;															// mdstatus (?)
 	/** expiryYear -- Expire year of the card */
-	private String expiryYear;
+	private String expiryYear;															// expiryyear (?)	
 	/** expiryMonth -- Expire month of the month */
-	private String expiryMonth;
+	private String expiryMonth;															// expirymonth (?)
 	/** chname -- Cardholder name as entered by cardholder */
-	private String chname;
+	private String chname;																// chname (?)
 	/** authCode -- EDB authorization code */
-	private String authCode;
+	private String authCode;															// authcode (?)
 
-	public void setTransactionId(String transactionid) {
+	public void setTransactionId(Long transactionid) {
 		this.transactionid = transactionid;
 	}
 
@@ -124,8 +107,7 @@ public class QueryTransactionResponse extends HostedAdminResponse implements
 			for (int i = 0; i < size; i++) {
 				Element element = (Element) nodeList.item(i);
 
-				int status = Integer
-						.parseInt(getTagValue(element, "statuscode"));
+				int status = Integer.parseInt(getTagValue(element, "statuscode"));
 				if (status == 0) {
 					this.setOrderAccepted(true);
 					this.setResultCode("0 (ORDER_ACCEPTED)");
@@ -134,46 +116,44 @@ public class QueryTransactionResponse extends HostedAdminResponse implements
 					setErrorParams(status);
 				}
 
-				if (this.isOrderAccepted()) { // don't attempt to parse a bad
-												// response
+				if (this.isOrderAccepted()) { // don't attempt to parse a bad response
 
-					this.setTransactionId(getTagAttribute(element,
-							"transaction", "id"));
-					this.setClientOrderNumber(getTagValue(element,
-							"customerrefno"));
+					this.setTransactionId( Long.valueOf( getTagAttribute(element,"transaction", "id")) );
+					this.setClientOrderNumber(getTagValue(element,"customerrefno"));
 					this.setMerchantId(getTagValue(element, "merchantid"));
 					this.setStatus(getTagValue(element, "status"));
-					this.setAmount(getTagValue(element, "amount"));
+					
+					String strAmount = getTagValue(element, "amount");					
+					this.setAmount(minorAmountToDouble(strAmount));
 					this.setCurrency(getTagValue(element, "currency"));
-					this.setVat(getTagValue(element, "vat"));
-					this.setCapturedamount(getTagValue(element,
-							"capturedamount"));
-					this.setAuthorizedamount(getTagValue(element,
-							"authorizedamount"));
+					
+					String strVat = getTagValue(element, "vat");
+					this.setVat(minorAmountToDouble(strVat));
+					
+					String strCapturedAmount = getTagValue(element, "capturedamount");
+					this.setCapturedamount(minorAmountToDouble(strCapturedAmount));
+					
+					String strAuthorizedAmount = getTagValue(element, "authorizedamount");
+					this.setAuthorizedamount(minorAmountToDouble(strAuthorizedAmount));
 					this.setCreated(getTagValue(element, "created"));
 					this.setCreditstatus(getTagValue(element, "creditstatus"));
-					this.setCreditedamount(getTagValue(element,
-							"creditedamount"));
-					this.setMerchantresponsecode(getTagValue(element,
-							"merchantresponsecode"));
+					
+					String strCreditedAmount = getTagValue(element, "creditedamount");
+					this.setCreditedamount(minorAmountToDouble(strCreditedAmount));
+					this.setMerchantresponsecode(getTagValue(element,"merchantresponsecode"));
 					this.setPaymentMethod(getTagValue(element, "paymentmethod"));
 					this.setCallbackUrl(getTagValue(element, "callbackurl"));
 					this.setCapturedate(getTagValue(element, "capturedate"));
-					this.setSubscriptionId(getTagValue(element,
-							"subscriptionid"));
-					this.setSubscriptiontype(getTagValue(element,
-							"subscriptiontype"));
+					this.setSubscriptionId(getTagValue(element,"subscriptionid")==null ? null : Long.valueOf(getTagValue(element,"subscriptionid")));
+					this.setSubscriptiontype(getTagValue(element,"subscriptiontype"));
 					this.setCardType(getTagValue(element, "cardType"));
-					this.setMaskedCardNumber(getTagValue(element,
-							"maskedcardno"));
+					this.setMaskedCardNumber(getTagValue(element,"maskedcardno"));
 					this.setEci(getTagValue(element, "eci"));
 					this.setMdstatus(getTagValue(element, "mdstatus"));
 					this.setExpiryYear(getTagValue(element, "expiryyear"));
 					this.setExpiryMonth(getTagValue(element, "expirymonth"));
 					this.setChname(getTagValue(element, "chname"));
 					this.setAuthCode(getTagValue(element, "authCode"));
-
-
 
 					NodeList orderrows = getTagNodes(element, "orderrows");
 					try {
@@ -221,7 +201,7 @@ public class QueryTransactionResponse extends HostedAdminResponse implements
 		return rawResponse;
 	}
 
-	public String getTransactionId() {
+	public Long getTransactionId() {
 		return transactionid;
 	}
 
@@ -249,11 +229,11 @@ public class QueryTransactionResponse extends HostedAdminResponse implements
 		this.status = status;
 	}
 
-	public String getAmount() {
+	public Double getAmount() {
 		return amount;
 	}
 
-	public void setAmount(String amount) {
+	public void setAmount(Double amount) {
 		this.amount = amount;
 	}
 
@@ -265,27 +245,27 @@ public class QueryTransactionResponse extends HostedAdminResponse implements
 		this.currency = currency;
 	}
 
-	public String getVat() {
+	public Double getVat() {
 		return vat;
 	}
 
-	public void setVat(String vat) {
+	public void setVat(Double vat) {
 		this.vat = vat;
 	}
 
-	public String getCapturedAmount() {
+	public Double getCapturedAmount() {
 		return capturedamount;
 	}
 
-	public void setCapturedamount(String capturedamount) {
+	public void setCapturedamount(Double capturedamount) {
 		this.capturedamount = capturedamount;
 	}
 
-	public String getAuthorizedAmount() {
+	public Double getAuthorizedAmount() {
 		return authorizedamount;
 	}
 
-	public void setAuthorizedamount(String authorizedamount) {
+	public void setAuthorizedamount(Double authorizedamount) {
 		this.authorizedamount = authorizedamount;
 	}
 
@@ -305,11 +285,11 @@ public class QueryTransactionResponse extends HostedAdminResponse implements
 		this.creditstatus = creditstatus;
 	}
 
-	public String getCreditedAmount() {
+	public Double getCreditedAmount() {
 		return creditedamount;
 	}
 
-	public void setCreditedamount(String creditedamount) {
+	public void setCreditedamount(Double creditedamount) {
 		this.creditedamount = creditedamount;
 	}
 
@@ -345,11 +325,11 @@ public class QueryTransactionResponse extends HostedAdminResponse implements
 		this.capturedate = capturedate;
 	}
 
-	public String getSubscriptionId() {
+	public Long getSubscriptionId() {
 		return subscriptionId;
 	}
 
-	public void setSubscriptionId(String subscriptionId) {
+	public void setSubscriptionId(Long subscriptionId) {
 		this.subscriptionId = subscriptionId;
 	}
 
@@ -432,6 +412,10 @@ public class QueryTransactionResponse extends HostedAdminResponse implements
 	public void setNumberedOrderRows(
 			ArrayList<NumberedOrderRowBuilder> numberedOrderRows) {
 		this.numberedOrderRows = numberedOrderRows;
+	}
+	
+	private Double minorAmountToDouble(String amount) {		
+		return (amount == null) ? 0.0 : Double.valueOf(amount)/100.0;
 	}
 
 }

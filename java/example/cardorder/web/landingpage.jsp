@@ -31,7 +31,6 @@ Your card order payment request response:
 	out.println( "    amount: <span id='amount'>" + cardOrderResponse.getAmount() +"</span>" );
 	out.println( "    currency: <span id='currency'>" + cardOrderResponse.getCurrency() +"</span>" );
 	out.println( "    subscriptionId: <span id='subscriptionId'>" + cardOrderResponse.getSubscriptionId() +"</span>" );
-	out.println( "    subscriptionType: <span id='subscriptionType'>" + cardOrderResponse.getSubscriptionType() +"</span>" );
 	out.println( "    cardtype: <span id='cardtype'>" + cardOrderResponse.getCardType() +"</span>" );
 	out.println( "    maskedCardNumber: <span id='maskedCardNumber'>" + cardOrderResponse.getMaskedCardNumber() +"</span>" );
 	out.println( "    expiryMonth: <span id='expiryMonth'>" + cardOrderResponse.getExpiryMonth() +"</span>" );

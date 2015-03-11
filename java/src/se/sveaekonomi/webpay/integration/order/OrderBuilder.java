@@ -69,10 +69,6 @@ public abstract class OrderBuilder<T extends OrderBuilder<T>> {
         return this;
     }
     
-    public T run(BuilderCommand<T> runner) {
-        return runner.run(this);
-    }
-    
     public T addOrderRow(OrderRowBuilder itemOrderRow) {
         this.orderRows.add(itemOrderRow);
         return getGenericThis();

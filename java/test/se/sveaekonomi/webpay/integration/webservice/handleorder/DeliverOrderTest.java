@@ -46,7 +46,7 @@ public class DeliverOrderTest {
         .setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
         .setOrderId(54086L)
         .setNumberOfCreditDays(1)
-        .setCreditInvoice("id")
+        .setCreditInvoice("123456")
         .setCountryCode(TestingTool.DefaultTestCountryCode)
         .deliverInvoiceOrder()
         .prepareRequest();
@@ -75,7 +75,7 @@ public class DeliverOrderTest {
         assertEquals(1, request.request.deliverOrderInformation.deliverInvoiceDetails.NumberofCreditDays);
         assertEquals("Post", request.request.deliverOrderInformation.deliverInvoiceDetails.InvoiceDistributionType);
         assertTrue(request.request.deliverOrderInformation.deliverInvoiceDetails.IsCreditInvoice);
-        assertEquals("id", request.request.deliverOrderInformation.deliverInvoiceDetails.InvoiceIdToCredit);
+        assertEquals("123456", request.request.deliverOrderInformation.deliverInvoiceDetails.InvoiceIdToCredit);
         assertEquals("54086", request.request.deliverOrderInformation.sveaOrderId);
         assertEquals("Invoice", request.request.deliverOrderInformation.orderType);
     }
@@ -934,4 +934,31 @@ public class DeliverOrderTest {
   		assertEquals( (Object)10.0, (Object)soapRequest.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(5).VatPercent  ); // cast avoids deprecation		
   		assertEquals( true, soapRequest.request.deliverOrderInformation.deliverInvoiceDetails.OrderRows.get(5).PriceIncludingVat );	
   	}		
+  	
+  	// validation
+	// .deliverPaymentPlanOrder() with orderrows fails if try to deliver part of order  // TODO => validation error + other validation tests
+//    public void test_deliverOrder_deliverPaymentPlanOrder_with_orderrows() {	
+//    	
+//    	// create an order using defaults
+//    	CreateOrderResponse order = TestingTool.createPaymentPlanTestOrder("test_deliverOrder_deliverPaymentPlanOrder_with_orderrows_passes_iff_all_order_rows_match");
+//        assertTrue(order.isOrderAccepted());
+//    	
+//		DeliverOrderBuilder builder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
+//            //.addOrderRow(TestingTool.createPaymentPlanOrderRow("1"))			// TODO should validate this is not set!
+//			.setCountryCode(TestingTool.DefaultTestCountryCode)
+//			.setOrderId( order.orderId )
+//			//.setInvoiceDistributionType( DISTRIBUTIONTYPE.Post )				// TODO should validate this is not set!			
+//		;
+//			
+//		HandleOrder request = builder.deliverPaymentPlanOrder();
+//		assertTrue( request instanceof Requestable );        
+//		assertThat( request, instanceOf(HandleOrder.class) );
+//		
+//		DeliverOrderResponse response = request.doRequest();
+//		assertThat( response, instanceOf(DeliverOrderResponse.class) );
+//		assertEquals(true, response.isOrderAccepted());
+//    }   
+  	
+  	
+  	
 }

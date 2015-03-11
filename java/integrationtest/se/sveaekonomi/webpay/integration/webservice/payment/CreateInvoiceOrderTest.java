@@ -519,6 +519,7 @@ public class CreateInvoiceOrderTest {
 		assertTrue( response.isOrderAccepted() );
 		assertEquals( (Object)159.01, response.amount );		
 	}		
+
 	@Test
 	public void test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false_exvat_many_decimals_wrong() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
@@ -583,8 +584,7 @@ public class CreateInvoiceOrderTest {
 		
 		order.addOrderRow(incvatRow);
 		order.addOrderRow(incvatRow2);
-		order.addOrderRow(incvatRow3);
-	
+		order.addOrderRow(incvatRow3);	
 
 		CreateOrderResponse response = order.useInvoicePayment().doRequest();
 

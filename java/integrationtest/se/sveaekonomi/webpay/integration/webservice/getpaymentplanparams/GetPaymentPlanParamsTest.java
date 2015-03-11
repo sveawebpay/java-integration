@@ -39,7 +39,7 @@ public class GetPaymentPlanParamsTest {
         
         assertTrue(response.isOrderAccepted());
         assertEquals("213060", response.getCampaignCodes().get(0).getCampaignCode());
-        assertEquals("KÃ¶p nu betala om 3 mÃ¥nader (rÃ¤ntefritt)", response.getCampaignCodes().get(0).getDescription());
+        assertEquals("Köp nu betala om 3 månader (räntefritt)", response.getCampaignCodes().get(0).getDescription());
         assertEquals("InterestAndAmortizationFree", response.getCampaignCodes().get(0).getPaymentPlanType());
         assertEquals("3", response.getCampaignCodes().get(0).getContractLengthInMonths());
         assertEquals("100", response.getCampaignCodes().get(0).getInitialFee());

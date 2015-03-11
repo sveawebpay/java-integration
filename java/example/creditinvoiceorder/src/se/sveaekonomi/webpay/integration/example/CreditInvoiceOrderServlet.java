@@ -2,18 +2,12 @@ package se.sveaekonomi.webpay.integration.example;
 
 import java.io.IOException;
 
-
-
-
 // import servlet classes (provided in /lib/servlet-api.jar)
 import javax.servlet.Servlet;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-
-
-
 
 // import Svea integration package (provided in /lib/sveawebpay.jar)
 import se.sveaekonomi.webpay.integration.WebPay;
@@ -22,7 +16,7 @@ import se.sveaekonomi.webpay.integration.config.SveaTestConfigurationProvider;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
-import se.sveaekonomi.webpay.integration.order.row.Item;
+import se.sveaekonomi.webpay.integration.WebPayItem;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderResponse;
@@ -53,7 +47,7 @@ public class CreditInvoiceOrderServlet extends HttpServlet implements Servlet {
 		String customerHouseNumber = "1";
 		String customerZipCode = "99999";
 		String customerCity = "Stan";
-		String customerCountry = "Sverige";
+		String customerCountry = "Sverige";		// => we'll use the ConfigurationProvider credentials (clientid/password) for Sweden (SE)
 
 		// The customer has bought three items, one "Billy" which cost 700,99 kr excluding vat (25%) and two hotdogs for 5 kr (incl. vat).
 
@@ -69,7 +63,7 @@ public class CreditInvoiceOrderServlet extends HttpServlet implements Servlet {
 		myOrder.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
 		
 		// To add the cart contents to the order we first create and specify a new orderRow item using methods from the Svea\OrderRow class:
-		OrderRowBuilder boughtItem = Item.orderRow();
+		OrderRowBuilder boughtItem = WebPayItem.orderRow();
 		boughtItem.setDescription("Billy");
 		boughtItem.setAmountExVat(700.99);
 		boughtItem.setVatPercent(25);
@@ -81,7 +75,7 @@ public class CreditInvoiceOrderServlet extends HttpServlet implements Servlet {
 		// Add a second item in a fluent fashion 
 		myOrder
 			.addOrderRow( 
-				Item.orderRow()
+				WebPayItem.orderRow()
 					.setAmountIncVat(5.00)
 					.setVatPercent(12.00)
 					.setQuantity(2.0)
@@ -90,7 +84,7 @@ public class CreditInvoiceOrderServlet extends HttpServlet implements Servlet {
 		;		
 		
 		// Next, we create a customer identity object, note that for invoice orders Svea overrides any given address w/verified credit report address in the response.
-		IndividualCustomer customerInformation = Item.individualCustomer();	// there's also a companyCustomer() method, used for non-person entities
+		IndividualCustomer customerInformation = WebPayItem.individualCustomer();	// there's also a companyCustomer() method, used for non-person entities
 		customerInformation.setNationalIdNumber("194605092222");			// sole required field for an invoice order
 		
 		// Also, for card orders addCustomerDetails() is optional, but recommended -- we'll just add what info we have, but do remember to check the response address!		
@@ -121,7 +115,7 @@ public class CreditInvoiceOrderServlet extends HttpServlet implements Servlet {
 		// The second order row has to be rebuilt, making sure all information matches the item from original order.
 		myDeliverInvoiceOrder
 			.addOrderRow( 
-				Item.orderRow()
+				WebPayItem.orderRow()
 					.setAmountIncVat(5.00)
 					.setVatPercent(12.00)
 					.setQuantity(2.0)
@@ -148,7 +142,7 @@ public class CreditInvoiceOrderServlet extends HttpServlet implements Servlet {
 		// The add an order row to the credit invoice.
 		myCreditInvoiceOrder
 			.addOrderRow( 
-				Item.orderRow()
+				WebPayItem.orderRow()
 					.setAmountIncVat(100.00)
 					.setVatPercent(25.00)
 					.setQuantity(1.0)
@@ -160,7 +154,7 @@ public class CreditInvoiceOrderServlet extends HttpServlet implements Servlet {
 		myCreditInvoiceOrder.setOrderId( createOrderResponse.orderId );
 		myCreditInvoiceOrder.setCountryCode(COUNTRYCODE.SE);
 		myCreditInvoiceOrder.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post);
-		myCreditInvoiceOrder.setCreditInvoice( Integer.toString( deliverOrderResponse.getInvoiceId() )  ); // the invoice to credit
+		myCreditInvoiceOrder.setCreditInvoice( deliverOrderResponse.getInvoiceId() ); // the invoice to credit
 		
 		// Send the credit order request
 		DeliverOrderResponse creditOrderResponse = myCreditInvoiceOrder.deliverInvoiceOrder().doRequest();

@@ -3,9 +3,7 @@ package se.sveaekonomi.webpay.integration.response.webservice;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import se.sveaekonomi.webpay.integration.response.Response;
-
-public class CloseOrderResponse extends Response{
+public class CloseOrderResponse extends WebServiceResponse{
     
     public String orderType;
     

@@ -46,7 +46,7 @@ public class CloseOrder {
         return errors;    
     }
     
-    public SveaRequest<SveaCloseOrder> prepareRequest() { // TODO throws SveaWebPayException ??
+    public SveaRequest<SveaCloseOrder> prepareRequest() {
     	
     	// validate request and throw exception if validation fails
         String errors = validateRequest();
@@ -68,7 +68,7 @@ public class CloseOrder {
         return object;
     }
     
-    public CloseOrderResponse doRequest() {	// TODO may throw SveaWebPayException in SveaSoapBuilder.sendSoapMessage, see HostedAdminRequest ?? ask DB
+    public CloseOrderResponse doRequest() {
         URL url = order.getOrderType().equals("Invoice") ? 
                 order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE) 
                 : order.getConfig().getEndPoint(PAYMENTTYPE.PAYMENTPLAN);
