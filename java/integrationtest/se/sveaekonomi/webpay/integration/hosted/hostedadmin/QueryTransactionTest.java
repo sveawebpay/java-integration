@@ -115,7 +115,7 @@ public class QueryTransactionTest {
 		assertEquals(null, response.getChname());
 		assertEquals(null, response.getAuthCode());			        
 
-        assertEquals( 1, response.getNumberedOrderRows().get(0).getRowNumber() );
+        assertEquals( (Integer)1, response.getNumberedOrderRows().get(0).getRowNumber() );
         assertEquals( Double.valueOf(1.00), response.getNumberedOrderRows().get(0).getQuantity() ); // first Double.valueOf disambiguates double/Double
         assertEquals( Double.valueOf(100.00), response.getNumberedOrderRows().get(0).getAmountExVat() );
         assertEquals( Double.valueOf(25.00), response.getNumberedOrderRows().get(0).getVatPercent() ); 
@@ -136,14 +136,14 @@ public class QueryTransactionTest {
         
         assertTrue( response.isOrderAccepted() );     
            
-		assertEquals( 1, response.getNumberedOrderRows().get(0).getRowNumber() );
+		assertEquals( (Integer)1, response.getNumberedOrderRows().get(0).getRowNumber() );
         assertEquals( Double.valueOf(1.00), response.getNumberedOrderRows().get(0).getQuantity() ); // first Double.valueOf disambiguates double/Double
         assertEquals( Double.valueOf(100.00), response.getNumberedOrderRows().get(0).getAmountExVat() );
         assertEquals( Double.valueOf(25.00), response.getNumberedOrderRows().get(0).getVatPercent() ); 
         assertEquals( "orderrow 1", response.getNumberedOrderRows().get(0).getName() );
         assertEquals( "description 1", response.getNumberedOrderRows().get(0).getDescription() );        	
 
-		assertEquals( 2, response.getNumberedOrderRows().get(1).getRowNumber() );
+		assertEquals( (Integer)2, response.getNumberedOrderRows().get(1).getRowNumber() );
         assertEquals( Double.valueOf(1.00), response.getNumberedOrderRows().get(1).getQuantity() ); // first Double.valueOf disambiguates double/Double
         assertEquals( Double.valueOf(100.00), response.getNumberedOrderRows().get(1).getAmountExVat() );
         assertEquals( Double.valueOf(25.00), response.getNumberedOrderRows().get(1).getVatPercent() ); 

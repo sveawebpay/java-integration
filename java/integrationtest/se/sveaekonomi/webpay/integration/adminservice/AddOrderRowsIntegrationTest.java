@@ -89,7 +89,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(99.99), Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
@@ -124,7 +124,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(79.99), Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 2, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, updateOrderRow.getRowNumber() );			
 	}
 
 	@Test
@@ -164,7 +164,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(123.99), Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
@@ -199,7 +199,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(99.19), Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 2, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, updateOrderRow.getRowNumber() );			
 	}	
 	
 	// different priceIncludingVat on orders
@@ -240,7 +240,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(99.99), Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
@@ -275,7 +275,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(79.99), Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 2, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, updateOrderRow.getRowNumber() );			
 	}	
 	
 	@Test
@@ -315,7 +315,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(123.99), Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
@@ -350,7 +350,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(99.19), Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 2, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, updateOrderRow.getRowNumber() );			
 	}	
 	
 	// orderRows specified exvat + incvat 
@@ -391,7 +391,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(123.99), Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
@@ -426,7 +426,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(99.19), Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 2, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, updateOrderRow.getRowNumber() );			
 	}	
 	
 	@Test
@@ -466,7 +466,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(123.99), Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
@@ -501,7 +501,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(99.19), Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 2, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, updateOrderRow.getRowNumber() );			
 	}	
 	
 	@Test
@@ -541,7 +541,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(99.99), Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
@@ -576,7 +576,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(79.99), Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 2, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, updateOrderRow.getRowNumber() );			
 	}	
 	
 	// test add rows to partially delivered order
@@ -631,17 +631,17 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(99.99), Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );			
+		assertEquals( (Integer)1, orderRow.getRowNumber() );			
 		orderRow = originalOrderRows.get(1); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(16.00), Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(25.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 2, orderRow.getRowNumber() );			
+		assertEquals( (Integer)2, orderRow.getRowNumber() );			
 		orderRow = originalOrderRows.get(2); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(25.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 3, orderRow.getRowNumber() );					
+		assertEquals( (Integer)3, orderRow.getRowNumber() );					
 				
         // deliver first, second order rows and assert the response
         DeliverOrderRowsResponse deliver = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
@@ -699,28 +699,28 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(addedOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(99.99), Double.valueOf(addedOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(addedOrderRow.getVatPercent()) );	
-		assertEquals( 1, addedOrderRow.getRowNumber() );			
+		assertEquals( (Integer)1, addedOrderRow.getRowNumber() );			
 		addedOrderRow = addedOrderRows.get(1); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(addedOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(16.00), Double.valueOf(addedOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(25.00), Double.valueOf(addedOrderRow.getVatPercent()) );	
-		assertEquals( 2, addedOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, addedOrderRow.getRowNumber() );			
 		addedOrderRow = addedOrderRows.get(2); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(addedOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(addedOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(25.00), Double.valueOf(addedOrderRow.getVatPercent()) );	
-		assertEquals( 3, addedOrderRow.getRowNumber() );			
+		assertEquals( (Integer)3, addedOrderRow.getRowNumber() );			
 		// new rows sent as incvat, but original order exvat => new rows sent rows exvat?
 		addedOrderRow = addedOrderRows.get(3); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(addedOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(79.99), Double.valueOf(addedOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(addedOrderRow.getVatPercent()) );	
-		assertEquals( 4, addedOrderRow.getRowNumber() );			
+		assertEquals( (Integer)4, addedOrderRow.getRowNumber() );			
 		addedOrderRow = addedOrderRows.get(4); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(addedOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(99.99), Double.valueOf(addedOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(addedOrderRow.getVatPercent()) );	
-		assertEquals( 5, addedOrderRow.getRowNumber() );					
+		assertEquals( (Integer)5, addedOrderRow.getRowNumber() );					
 	}
 	
 	/// payment plan
@@ -766,7 +766,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(1099.99), Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
@@ -801,7 +801,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(1079.99), Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 2, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, updateOrderRow.getRowNumber() );			
 	}
 
 	@Test
@@ -847,7 +847,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(1363.99), Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
@@ -882,7 +882,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(1339.19), Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 2, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, updateOrderRow.getRowNumber() );			
 	}	
 	
 	// different priceIncludingVat on orders
@@ -928,7 +928,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(1099.99), Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
@@ -963,7 +963,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(1079.99), Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 2, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, updateOrderRow.getRowNumber() );			
 	}	
 	
 	@Test
@@ -1008,7 +1008,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(1363.99), Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
@@ -1043,7 +1043,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(1339.19), Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 2, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, updateOrderRow.getRowNumber() );			
 	}	
 	
 	// orderRows specified exvat + incvat 
@@ -1089,7 +1089,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(1363.99), Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
@@ -1124,7 +1124,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(1339.19), Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 2, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, updateOrderRow.getRowNumber() );			
 	}	
 	
 	@Test
@@ -1169,7 +1169,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(1363.99), Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
@@ -1204,7 +1204,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(1339.19), Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 2, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, updateOrderRow.getRowNumber() );			
 	}	
 	
 	@Test
@@ -1249,7 +1249,7 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(1099.99), Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
@@ -1284,6 +1284,6 @@ public class AddOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(1079.99), Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 2, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, updateOrderRow.getRowNumber() );			
 	}	
 }

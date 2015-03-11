@@ -241,7 +241,7 @@ public class GetOrdersRequestIntegrationTest {
 				//                    <a:InvoiceId i:nil="true"/>
 				assertEquals( null, orderRow.getInvoiceId() );
 				//                    <a:RowNumber>1</a:RowNumber>
-				assertEquals( 1, orderRow.getRowNumber() );
+				assertEquals( (Integer)1, orderRow.getRowNumber() );
 				//                    <a:Status>NotDelivered</a:Status>
 				assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );
 				//                 </a:NumberedOrderRow>			
@@ -370,7 +370,7 @@ public class GetOrdersRequestIntegrationTest {
 				assertEquals( Double.valueOf(25.00), Double.valueOf(orderRow.getVatPercent()) );
 				assertEquals( null, orderRow.getCreditInvoiceId() );
 				assertEquals( null, orderRow.getInvoiceId() );
-				assertEquals( 1, orderRow.getRowNumber() );
+				assertEquals( (Integer)1, orderRow.getRowNumber() );
 				assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );
 
 			orderRow =  numberedOrderRows.get(1);
@@ -384,7 +384,7 @@ public class GetOrdersRequestIntegrationTest {
 				assertEquals( Double.valueOf(25.00), Double.valueOf(orderRow.getVatPercent()) );
 				assertEquals( null, orderRow.getCreditInvoiceId() );
 				assertEquals( null, orderRow.getInvoiceId() );
-				assertEquals( 2, orderRow.getRowNumber() );
+				assertEquals( (Integer)2, orderRow.getRowNumber() );
 				assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );			
 				assertEquals( ORDERSTATUS.ACTIVE,response.getOrderStatus() );
 				assertEquals( ORDERTYPE.Invoice, response.getOrderType() );
@@ -504,7 +504,7 @@ public class GetOrdersRequestIntegrationTest {
 			//                     <b:Street>Testgatan 1</b:Street>
 			assertEquals( "Testgatan 1", response.getCompanyCustomer().getStreetAddress());			
 			//                     <b:ZipCode>99999</b:ZipCode>
-			assertEquals( "99999", response.getCompanyCustomer().getZipCode());		//TODO		
+			assertEquals( "99999", response.getCompanyCustomer().getZipCode());	
 			//                  </a:Customer>
 			//                  <a:CustomerId>1000119</a:CustomerId>
 			assertEquals( (Long)1000119L, response.getCustomerId() );
@@ -552,7 +552,7 @@ public class GetOrdersRequestIntegrationTest {
 				assertEquals( Double.valueOf(25.00), Double.valueOf(orderRow.getVatPercent()) );
 				assertEquals( null, orderRow.getCreditInvoiceId() );
 				assertEquals( null, orderRow.getInvoiceId() );
-				assertEquals( 1, orderRow.getRowNumber() );
+				assertEquals( (Integer)1, orderRow.getRowNumber() );
 				assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );
 			
 			//                  <a:OrderStatus>Active</a:OrderStatus>
@@ -681,7 +681,7 @@ public class GetOrdersRequestIntegrationTest {
 			assertEquals( Double.valueOf(25.00), Double.valueOf(orderRow.getVatPercent()) );
 			assertEquals( null, orderRow.getCreditInvoiceId() );
 			assertEquals( null, orderRow.getInvoiceId() );
-			assertEquals( 1, orderRow.getRowNumber() );
+			assertEquals( (Integer)1, orderRow.getRowNumber() );
 			assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );
 			
 			orderRow = numberedOrderRows.get(1); 			
@@ -695,7 +695,7 @@ public class GetOrdersRequestIntegrationTest {
 			assertEquals( Double.valueOf(25.00), Double.valueOf(orderRow.getVatPercent()) );
 			assertEquals( null, orderRow.getCreditInvoiceId() );
 			assertEquals( null, orderRow.getInvoiceId() );
-			assertEquals( 2, orderRow.getRowNumber() );
+			assertEquals( (Integer)2, orderRow.getRowNumber() );
 			assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );			
 			
 			assertEquals( ORDERSTATUS.ACTIVE,response.getOrderStatus() );
@@ -870,7 +870,7 @@ public class GetOrdersRequestIntegrationTest {
 			//                        <a:InvoiceId i:nil="true"/>
 			assertEquals( null, orderRow.getInvoiceId() );
 			//                        <a:RowNumber>1</a:RowNumber>
-			assertEquals( 1, orderRow.getRowNumber() );
+			assertEquals( (Integer)1, orderRow.getRowNumber() );
 			//                        <a:Status>NotDelivered</a:Status>
 			assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );
 			//                     </a:NumberedOrderRow>
@@ -975,7 +975,7 @@ public class GetOrdersRequestIntegrationTest {
 			assertEquals( Double.valueOf(25.00), Double.valueOf(orderRow.getVatPercent()) );
 			assertEquals( null, orderRow.getCreditInvoiceId() );
 			assertEquals( null, orderRow.getInvoiceId() );
-			assertEquals( 1, orderRow.getRowNumber() );
+			assertEquals( (Integer)1, orderRow.getRowNumber() );
 			assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );
         }
         catch( Exception e ) {
@@ -1019,7 +1019,7 @@ public class GetOrdersRequestIntegrationTest {
 			assertEquals( Double.valueOf(25.00), Double.valueOf(orderRow.getVatPercent()) );
 			assertEquals( null, orderRow.getCreditInvoiceId() );
 			assertEquals( null, orderRow.getInvoiceId() );
-			assertEquals( 1, orderRow.getRowNumber() );
+			assertEquals( (Integer)1, orderRow.getRowNumber() );
 			assertEquals( ORDERROWSTATUS.NOTDELIVERED, orderRow.getStatus() );
         }
         catch( Exception e ) {

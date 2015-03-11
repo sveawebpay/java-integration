@@ -416,8 +416,8 @@ public class GetOrdersResponse extends AdminServiceResponse {
 			}
 			numberedOrderRow.setUnit(rUnit.equals("") ? null : rUnit);
 			numberedOrderRow.setVatPercent(Double.valueOf(rVatPercent));
-			numberedOrderRow.setCreditInvoiceId(rCreditInvoiceId.equals("") ? null : rCreditInvoiceId);
-			numberedOrderRow.setInvoiceId(rInvoiceId.equals("") ? null : rInvoiceId);
+			numberedOrderRow.setCreditInvoiceId(rCreditInvoiceId.equals("") ? null : Long.valueOf(rCreditInvoiceId));
+			numberedOrderRow.setInvoiceId(rInvoiceId.equals("") ? null : Long.valueOf(rInvoiceId));
 			numberedOrderRow.setRowNumber(Integer.valueOf(rRowNumber));
 			try {
 				numberedOrderRow.setStatus( ORDERROWSTATUS.fromString(rStatus) );
