@@ -8,7 +8,7 @@ layout: index
 ## Index <a name="index"></a>
 
 * [I. Introduction](http://sveawebpay.github.io/java-integration#introduction)
-
+* [II. 2.0.0 release notes](http://sveawebpay.github.io/java-integration#200releasenotes)
 * [1. Installing and configuration](http://sveawebpay.github.io/java-integration#i1)
 * [2. "Hello World"](http://sveawebpay.github.io/java-integration#i2)
 * [3. Building an order](http://sveawebpay.github.io/java-integration#i3)
@@ -57,6 +57,10 @@ layout: index
     * [9.2 Inspect prepareRequest(), validateOrder() methods](http://sveawebpay.github.io/java-integration#i92)
 * [10. Frequently Asked Questions](http://sveawebpay.github.io/java-integration#i10)
     * [10.1 Supported currencies](http://sveawebpay.github.io/java-integration#i101)
+* [11. Example servlets](http://sveawebpay.github.io/java-integration#i11)
+    * [11.1 Running the examples](http://sveawebpay.github.io/java-integration#i111)
+    * [11.2 Svea invoice order](http://sveawebpay.github.io/java-integration#i112)
+    * [11.3 Card order](http://sveawebpay.github.io/java-integration#i113)
 * [APPENDIX](http://sveawebpay.github.io/java-integration#appendix)
 
 ## I. Introduction <a name="introduction"></a>
@@ -86,9 +90,18 @@ Most service requests are synchronous and return a response immediately. For asy
 ### Package structure
 The package is roughly organised as around the underlying Svea web-, admin- and hosted services, along with the integration package order builder abstraction class.
 
-<!---
-the above section 1.x text is taken from the WebPay/WebPayAdmin class docblock
- -->
+## II. 2.0.0 release notes <a name="200releasenotes"></a>
+
+### New in 2.0.0
+Release 2.0.0 introduces the WebPayAdmin class, which contains entrypoint methods used to administrate orders placed with Svea.
+There has also been an effort to consolidate the various request and response class method types.
+
+### Compatibility
+Every effort has been made to keep this release backwards compatible with existing integrations based on 1.x of the Java integration package.
+For existing response classes any public attributes stay visible, though in several cases new getter/setter methods have been added that are the recommended way of accesing the returned data for new integrations.
+For existing request classes overloaded setters have been provided that accept the previously returned attribute types, these are deprecated for new integrations.
+In case your existing integration depend on primitive types being returned by response class setters, you may have to do some casting to i.e. (int), and check for null value attributes being returned.
+A few unused or meaningless methods have removed, but these should serve no purpose in existing integrations.
 
 [To index](http://sveawebpay.github.io/java-integration#index)
 
@@ -350,7 +363,6 @@ The service response received is sent as a base64 encoded XML message. Feed this
 
 [<< To index](http://sveawebpay.github.io/java-integration#index)
 
-
 ## 4. Payment method reference <a name="i4"></a>
 First, make sure that you have added all required information to your order builder instance, see WebPay.createOrder below:
 
@@ -371,7 +383,6 @@ First, make sure that you have added all required information to your order buil
 ```
 
 Select payment method to use with the CreateOrderBuilder class useXX() methods, which return an instance of the appropriate payment request class.
-
 
 ### 4.1 Svea Invoice payment <a name="i41"></a>
 To perform an invoice payment, select .useInvoicePayment(). This will return an instance of the InvoicePayment request class. Then send the request using .doRequest(). You will receive an instance of the CreateOrderResponse response class in return.
@@ -512,7 +523,6 @@ For the subsequent recurring payment requests, you build an order and again sele
 ##### 4.3.3.1 Recurring card order example, with initial subscription setup and subsequent .doRecur() request
 An example of an recurring card order, both the setup transaction and a recurring payment, can be found in the example/cardorder_recur folder.
 
-
 ### 4.4 Direct bank payment <a name="i44"></a>
 Select i.e. .usePaymentMethod(PAYMENTMETHOD.NORDEA_SE) to perform a direct bank transfer payment using the Swedish bank Nordea.
 
@@ -538,7 +548,6 @@ Select i.e. .usePaymentMethod(PAYMENTMETHOD.NORDEA_SE) to perform a direct bank 
     PaymentForm form = request.getPaymentForm();        
 ...	
 ```
-
 
 ### 4.5 Using the Svea PayPage <a name="i45"></a>
 The Svea PayPage presents all or a subset of a merchant's configured payment methods to the customer to select from when performing a payment.
@@ -604,7 +613,6 @@ Use the WebPay.listPaymentMethods() entrypoint method to find out which payment 
 
 All defined payment methods are listed in the PAYMENTMETHOD enum as well as in the [Appendix](http://sveawebpay.github.io/java-integration#appendix). 
 
-
 ### 4.6 Examples <a name="i46"></a>
 
 #### 4.6.1 Svea invoice order
@@ -616,12 +624,10 @@ An example of an asynchronous card order can be found in the example/cardorder f
 #### 4.6.3 Recurring card order
 An example of an recurring card order, both the setup transaction and a recurring payment, can be found in the example/cardorder_recur folder.
 
-
 ## 5. WebPayItem reference <a name="i5"></a>
 The WebPayItem class provides entrypoint methods to the different row items that make up an order, as well as the customer identity information items.
 
 See the class WebPayItem class for available order row items.
-
 
 ### 5.1 Specifying item price <a name="i51"></a>
 Specify item price using precisely two of these methods in order to specify the item price and tax rate: `setAmountIncVat()`, `setVatPercent()` and `setAmountExVat()`.
@@ -631,7 +637,6 @@ The recommended way to specify an item price is by using the `setAmountIncVat()`
 When using `setAmountExVat()` and `setVatPercent()`, the service will work with less accuracy and may accumulate rounding errors, resulting in order totals differing from total of the amount and vat specified in the row items. It is not recommended to specify price using the setAmountExVat() method.
 
 When using `setAmountIncVat() with `setAmountExVat()` to specify an item price, the package converts the price to amount including vat and vat percent, in an effort to maintain maximum accuracy.
-
 
 ### 5.2 WebPayItem.orderRow() <a name="i52"></a>
 <!-- WebPayItem.orderRow() docbloc below, replace @see with apidoc links -->
@@ -656,7 +661,6 @@ Specify the item price using precisely two of these methods in order to specify 
 ```
 See the OrderRowBuilder class methods for details on how to specify the item.
 
-
 ### 5.3 WebPayItem.shippingFee() <a name="i53"></a>
 <!-- WebPayItem.shippingFee() docbloc below, replace @see with apidoc links -->
 The WebPayItem.shippingFee() entrypoint method is used to specify order shipping fee rows. It is not required to have a shipping fee row in an order.
@@ -679,13 +683,11 @@ Specify the item price using precisely two of these methods in order to specify 
 ```
 See the ShippingFeeBuilder class methods for details on how to specify the item.
 
-
 ### 5.4 WebPayItem.invoiceFee() <a name="i54"></a>
 <!-- WebPayItem.invoiceFee() docbloc below, replace @see with apidoc links -->
 The WebPayItem.invoiceFee() entrypoint method is used to specify fees associated with a payment method (i.e. invoice fee). It is not required to have an invoice fee row in an order.
 
 Specify the item price using precisely two of these methods in order to specify the item price and tax rate: setAmountIncVat(), setVatPercent() and setAmountExVat(). We recommend using setAmountIncVat() and setVatPercentage().
-
 
 ```java
 ...
@@ -701,7 +703,6 @@ Specify the item price using precisely two of these methods in order to specify 
 ...
 ```	
 See the InvoiceFeeBuilder class methods for details on how to specify the item.
-
 
 ### 5.5 WebPayItem.fixedDiscount() <a name="i55"></a>
 <!-- WebPayItem.fixedDiscount() docbloc below, replace @see with apidoc links -->
@@ -728,7 +729,6 @@ Specify the discount using setAmountIncVat(), setVatPercent() and setAmountExVat
 ```
 See the FixedDiscountBuilder class methods for details on how to specify the item.
 
-
 ### 5.6 WebPayItem.relativeDiscount() <a name="i56"></a>
 <!-- WebPayItem.relativeDiscount() docbloc below, replace @see with apidoc links -->
 Use WebPayItem.relativeDiscount() when the discount or coupon is expressed as a percentage of the total product amount.
@@ -752,7 +752,6 @@ Specify the discount using RelativeDiscountBuilder methods:
 ...
 ```
 See the RelativeDiscountBuilder class methods for details on how to specify the item.
-
 
 ### 5.7 WebPayItem.individualCustomer() <a name="i57"></a>
 <!-- WebPayItem.individualCustomer() docbloc below, replace @see with apidoc links -->
@@ -787,7 +786,6 @@ Various service requests such as the WebPay .createOrder() and .getAddresses() m
 
 Note that not all responses define the same attributes. Also, what attributes are returned may vary between different countries and payment methods. In general, you should inspect the received response object attributes before relying on them for further requests.
 
-
 ### 5.8 WebPayItem.companyCustomer() <a name="i58"></a>
 <!-- WebPayItem.companyCustomer() docbloc below, replace @see with apidoc links -->
 Use WebPayItem.companyCustomer() to add customer information to an order.
@@ -818,7 +816,6 @@ Various service requests such as the WebPay .createOrder() and .getAddresses() m
 
 Note that not all responses define the same attributes. Also, what attributes are returned may vary between different countries and payment methods. In general, you should inspect the received response object attributes before relying on them for further requests.
 
-
 ### 5.9 WebPayItem.numberedOrderRow() <a name="i59"></a>
 NumberedOrderRow extends the orderRow class, providing fields used by when i.e. administrating an invoice or payment plan order.
 It is returned in the various WebPayAdmin.queryOrder() responses, and used as input data in to methods that adminster individual order rows.
@@ -847,7 +844,6 @@ It is returned in the various WebPayAdmin.queryOrder() responses, and used as in
 ```
 
 See the NumberedOrderRowclass methods for details.
-
 
 ## 6. WebPay entrypoint method reference <a name="i6"></a>
 The WebPay class methods contains the functions needed to create orders and perform payment requests using Svea payment methods. It contains entrypoint methods used to define order contents, send order requests, as well as various support methods needed to do this.
@@ -936,6 +932,9 @@ For card orders, the deliver order request confirms the card transaction, which 
 
 To deliver an invoice, partpayment or card order in full, you do not need to specify order rows. To partially deliver an order, the recommended way is to
 use WebPayAdmin.deliverOrderRows().
+
+For more information on using deliverOrder to partially deliver and/or credit
+an order, see 6.2.3 below.
  
 Get an order builder instance using the WebPay.deliverOrder entrypoint, then provide more information about the transaction using DeliverOrderBuilder methods: 
 
@@ -996,7 +995,7 @@ Example:
 1. cResponse = WebPay.createOrder().addOrderRows(A).addOrderRows(B).addOrderRows(C) ... .doRequest();
 2. dResponse = WebPay.deliverOrder().addOrderRows(A) ... .doRequest(); // A matches A
 Will result in the order having status
-A: delivered	// found on invoice in dResponse.getInvoiceId()
+A: delivered	// found on invoice # dResponse.getInvoiceId()
 B: undelivered  // may be delivered later
 C: undelivered  // may be delivered later
 ```
@@ -1341,7 +1340,6 @@ See class AddOrderRowsBuilder.
 See class AddOrderRowsResponse.
 See class NumberedOrderRows.
 
-
 ### 7.6 WebPayAdmin.updateOrderRows() <a name="i76"></a>
 <!-- WebPayAdmin.updateOrderRows() docblock below, replace @see with apidoc links -->
 
@@ -1379,7 +1377,6 @@ See class NumberedOrderRows.
 
 ### 7.7 WebPayAdmin.deliverOrderRows() <a name="i77"></a>
 <!-- WebPayAdmin.deliverOrderRows() docblock below, replace @see with apidoc links -->
-
 The WebPayAdmin.deliverOrderRows entrypoint method is used to deliver individual order rows. Supports invoice and card orders. (To partially deliver PaymentPlan or Direct Bank orders, please contact Svea.)
 
 For Invoice orders, the order row status is updated at Svea following each successful request.
@@ -1419,9 +1416,7 @@ See class ConfirmTransactionResponse for method details.
 
 [<< To index](http://sveawebpay.github.io/java-integration#index)
 
-
 ## 8. HostedPaymentResponse and response classes <a name="i8"></a>
-
 ### 8.1. Parsing an asynchronous service response <a name="i81"></a>
 All synchronous service request responses are immediately structured into response objects by the request method itself.
 
@@ -1459,7 +1454,6 @@ See the respective response classes for further information on response attribut
 [<< To index](http://sveawebpay.github.io/java-integration#index)
 
 ## 9. Additional Developer Resources and notes <a name="i9"></a>
-
 ### 9.1 Helper class methods <a name="i91"></a>
 This space intentionally left blank. fnord.
 
@@ -1473,7 +1467,6 @@ Also, `.validateOrder()` validates that all required attributes are present in a
 [<< To index](http://sveawebpay.github.io/java-integration#index)
 
 ## 10. Frequently Asked Questions <a name="i10"></a>
-
 ### 10.1 Supported currencies <a name="i101"></a>
 **Q**: What currencies does each payment method support?
 
@@ -1500,6 +1493,69 @@ For invoice and part payment, the order amount is assumed to be made out in the 
 **A**: When you sign up with Svea you will be provided with a merchant id which is used for all hosted payment methods. For a merchant id, one or more payment methods may be enabled, such as credit cards, direct bank payments using various banks, PayPal etc. 
 
 To enable a new payment method, your merchant will need to be configured with various credentials as requested by Svea. Please ask your Svea integration manager for more information on what exact credentials are needed.
+
+## 11. Example servlets <a name="i11"></a>
+The provided examples show how to use the Svea java integration package to specify an order and send a payment request to Svea.
+
+### 11.1 Running the examples <a name="i111"></a>
+We assume that you are running a local installation of Tomcat 7 or later on localhost port 8080. 
+Build and deploy the examples to localhost using ant, see build.xml and edit build.properties with your tomcat installation path: 
+
+```
+$ pwd
+/c/projects/java-integration/java
+
+$ cd example/invoiceorder
+
+$ echo "remember to edit build.properties with your tomcat installation path (i.e. where we should deploy the example .war file)"
+
+$ ant deploy_invoiceorder
+Buildfile: c:\projects\java-integration\java\example\invoiceorder\build.xml
+
+clean:
+     [echo] Cleaning the build
+
+init:
+     [echo] Creating the build directory
+    [mkdir] Created dir: c:\projects\java-integration\java\example\invoiceorder\build\WEB-INF\classes
+    [mkdir] Created dir: c:\projects\java-integration\java\example\invoiceorder\build\WEB-INF\lib
+    [mkdir] Created dir: c:\projects\java-integration\java\example\invoiceorder\dist
+
+compile:
+     [echo] Compile the source files
+    [javac] Compiling 1 source file to c:\projects\java-integration\java\example\invoiceorder\build\WEB-INF\classes
+
+copy:
+     [copy] Copying 1 file to c:\projects\java-integration\java\example\invoiceorder\build\WEB-INF
+     [copy] Copying 2 files to c:\projects\java-integration\java\example\invoiceorder\build
+     [copy] Copying 1 file to c:\projects\java-integration\java\example\invoiceorder\build\WEB-INF\lib
+
+war:
+     [echo] Building the war file
+      [war] Building war: c:\projects\java-integration\java\example\invoiceorder\dist\InvoiceOrder.war
+
+deploy_invoiceorder:
+     [echo] Deploying .war to local Tomcat
+     [copy] Copying 1 file to C:\Program Files\Apache Software Foundation\Tomcat 7.0\webapps
+
+BUILD SUCCESSFUL
+Total time: 1 second
+$
+```
+(You may also build the examples using the main package ant target "examples".)
+
+You should now be able to access the example by going to http://localhost:8080/InvoiceOrder
+
+The web.xml file contains the servlet routing information for the InvoiceOrder application. 
+When you land on the index.jsp file it redirects you to /invoiceorder, which in turn passes the request to InvoiceOrderServlet as stated in web.xml.
+The backend InvoiceOrderServlet builds an order and sends a payment request to Svea. After the service responds, you're redirected to invoiceorder.jsp.
+The frontend invoiceorder.jsp file then presents the response result.
+
+### 11.2 Svea invoice order <a name="i112"></a>
+An example of a synchronous (invoice) order can be found in the example/invoiceorder folder.
+
+### 11.3 Card order <a name="i113"></a>
+An example of an asynchronous card order can be found in the example/cardorder folder.
 
 ## APPENDIX <a name="appendix"></a>
 
