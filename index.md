@@ -27,28 +27,28 @@ layout: index
     * [4.6 Examples](http://sveawebpay.github.io/java-integration#i46)
 * [5. WebPayItem reference](http://sveawebpay.github.io/java-integration#i5)
     * [5.1 Specifying item price](http://sveawebpay.github.io/java-integration#i51)
-    * [5.2 WebPayItem::orderRow()](http://sveawebpay.github.io/java-integration#i52)
-    * [5.3 WebPayItem::shippingFee()](http://sveawebpay.github.io/java-integration#i53)
-    * [5.4 WebPayItem::invoiceFee()](http://sveawebpay.github.io/java-integration#i54)
-    * [5.5 WebPayItem::fixedDiscount()](http://sveawebpay.github.io/java-integration#i55)
-    * [5.6 WebPayItem::relativeDiscount](http://sveawebpay.github.io/java-integration#i56)
-    * [5.7 WebPayItem::individualCustomer()](http://sveawebpay.github.io/java-integration#i57)
-    * [5.8 WebPayItem::companyCustomer()](http://sveawebpay.github.io/java-integration#i58)
-    * [5.9 WebPayItem::numberedOrderRow()](http://sveawebpay.github.io/java-integration#i59)
+    * [5.2 WebPayItem.orderRow()](http://sveawebpay.github.io/java-integration#i52)
+    * [5.3 WebPayItem.shippingFee()](http://sveawebpay.github.io/java-integration#i53)
+    * [5.4 WebPayItem.invoiceFee()](http://sveawebpay.github.io/java-integration#i54)
+    * [5.5 WebPayItem.fixedDiscount()](http://sveawebpay.github.io/java-integration#i55)
+    * [5.6 WebPayItem.relativeDiscount](http://sveawebpay.github.io/java-integration#i56)
+    * [5.7 WebPayItem.individualCustomer()](http://sveawebpay.github.io/java-integration#i57)
+    * [5.8 WebPayItem.companyCustomer()](http://sveawebpay.github.io/java-integration#i58)
+    * [5.9 WebPayItem.numberedOrderRow()](http://sveawebpay.github.io/java-integration#i59)
 * [6. WebPay entrypoint method reference](http://sveawebpay.github.io/java-integration#i6)
-    * [6.1 WebPay::createOrder()](http://sveawebpay.github.io/java-integration#i61)
-    * [6.2 WebPay::deliverOrder()](http://sveawebpay.github.io/java-integration#i62)
-    * [6.3 WebPay::getAddresses()](http://sveawebpay.github.io/java-integration#i63)
-    * [6.4 WebPay::getPaymentPlanParams()](http://sveawebpay.github.io/java-integration#i64)
-    * [6.5 WebPay::paymentPlanPricePerMonth()](http://sveawebpay.github.io/java-integration#i65)
+    * [6.1 WebPay.createOrder()](http://sveawebpay.github.io/java-integration#i61)
+    * [6.2 WebPay.deliverOrder()](http://sveawebpay.github.io/java-integration#i62)
+    * [6.3 WebPay.getAddresses()](http://sveawebpay.github.io/java-integration#i63)
+    * [6.4 WebPay.getPaymentPlanParams()](http://sveawebpay.github.io/java-integration#i64)
+    * [6.5 WebPay.paymentPlanPricePerMonth()](http://sveawebpay.github.io/java-integration#i65)
 * [7. WebPayAdmin entrypoint method reference](http://sveawebpay.github.io/java-integration#i7)
-    * [7.1 WebPayAdmin::cancelOrder()](http://sveawebpay.github.io/java-integration#i71)
-    * [7.2 WebPayAdmin::queryOrder()](http://sveawebpay.github.io/java-integration#i72)
-    * [7.3 WebPayAdmin::cancelOrderRows()](http://sveawebpay.github.io/java-integration#i73)
-    * [7.4 WebPayAdmin::creditOrderRows()](http://sveawebpay.github.io/java-integration#i74)
-    * [7.5 WebPayAdmin::addOrderRows()](http://sveawebpay.github.io/java-integration#i75)
-    * [7.6 WebPayAdmin::updateOrderRows()](http://sveawebpay.github.io/java-integration#i76)
-    * [7.7 WebPayAdmin::deliverOrderRows()](http://sveawebpay.github.io/java-integration#i77)
+    * [7.1 WebPayAdmin.cancelOrder()](http://sveawebpay.github.io/java-integration#i71)
+    * [7.2 WebPayAdmin.queryOrder()](http://sveawebpay.github.io/java-integration#i72)
+    * [7.3 WebPayAdmin.cancelOrderRows()](http://sveawebpay.github.io/java-integration#i73)
+    * [7.4 WebPayAdmin.creditOrderRows()](http://sveawebpay.github.io/java-integration#i74)
+    * [7.5 WebPayAdmin.addOrderRows()](http://sveawebpay.github.io/java-integration#i75)
+    * [7.6 WebPayAdmin.updateOrderRows()](http://sveawebpay.github.io/java-integration#i76)
+    * [7.7 WebPayAdmin.deliverOrderRows()](http://sveawebpay.github.io/java-integration#i77)
 * [8. SveaResponse](http://sveawebpay.github.io/java-integration#i8)
     * [8.1. Parsing an asynchronous service response](http://sveawebpay.github.io/java-integration#i81)
     * [8.2. Response accepted and result code](http://sveawebpay.github.io/java-integration#i82)
@@ -84,7 +84,7 @@ The WebPay API consists of the entrypoint methods in the WebPay and WebPayAdmin 
 Most service requests are synchronous and return a response immediately. For asynchronous hosted service payment requests, the customer will be redirected to i.e. the selected card payment provider or bank, and you will get a callback to a return url, where where you receive and parse the response.
 
 ### Package structure
-TheThe package is roughly organised as around the underlying Svea web- admin and hosted services, along with the integration package order builder abstraction class.
+The package is roughly organised as around the underlying Svea web-, admin- and hosted services, along with the integration package order builder abstraction class.
 
 <!---
 the above section 1.x text is taken from the WebPay/WebPayAdmin class docblock
@@ -143,7 +143,7 @@ The following is a complete example of how to place an order using the invoice p
 
 	// We'll also need information about the customer country, and sufficient information to identify the customer, see below:		
 	
-	// Begin the order creation process by creating an order builder object using the WebPay::createOrder() method:
+	// Begin the order creation process by creating an order builder object using the WebPay.createOrder() method:
 	CreateOrderBuilder myOrder = WebPay.createOrder(myConfig);
 
 	// We then add information to the order object by using the various methods in the CreateOrderBuilder class.
@@ -194,7 +194,7 @@ https://github.com/sveawebpay/java-integration/tree/master/java/example/creditin
 See the sample invoice order implementation in the <a href="https://github.com/sveawebpay/java-integration/tree/master/java/example/creditinvoiceorder" target="_blank">example/creditinvoiceorder</a> folder.
 
 ### 2.2 What just happened?
-Above, we start out by calling the API method WebPay::createOrder(), which returns an instance of the CreateOrderBuilder class.
+Above, we start out by calling the API method WebPay.createOrder(), which returns an instance of the CreateOrderBuilder class.
 
 Then, the class methods addOrderRow(), addCustomerDetails(), setOrderDate(), setCountryCode(), setCustomerReference(), and setClientOrderNumber() are used to populate the orderbuilder object with all required order information needed for an invoice order.
 
@@ -254,7 +254,7 @@ See the <a href="https://github.com/sveawebpay/java-integration/blob/master/java
 See [5.2](http://sveawebpay.github.io/java-integration#52) to 5.6 in the WebPayItem class documentation below for more information.
 
 ### 3.3 Customer identity <a name="i33"></a>
-Create a customer identity object using the WebPayItem::individualCustomer() or WebPayItem::companyCustomer() methods. Use the addCustomerDetails() method to add the customer information to the order.
+Create a customer identity object using the WebPayItem.individualCustomer() or WebPayItem.companyCustomer() methods. Use the addCustomerDetails() method to add the customer information to the order.
 
 Customer identity is required for Invoice and Payment plan orders. For Card and Direct bank orders it is optional but recommended.
 
@@ -551,7 +551,7 @@ Note that you can use WebPay.listPaymentMethods() entrypoint to get the various 
 ```java
 ...
 	HostedPayment<?> request = order
-    	.usePaymentMethod(PaymentMethod::KORTCERT)		// Use WebPay.listPaymentMethods() to get available payment methods, here we use Certitrade
+    	.usePaymentMethod(PaymentMethod.KORTCERT)		// Use WebPay.listPaymentMethods() to get available payment methods, here we use Certitrade
 		...												// any additional request options as dictated by the chosen payment method type
 	;		
 	PaymentForm form = request.getPaymentForm();
@@ -974,7 +974,7 @@ Use setNumberOfCreditDays() to specify the number of credit days for an invoice.
 
 (Deprecated -- to issue a credit invoice, you can specify credit order rows to deliver using setCreditInvoice() and addOrderRows(). Use the WebPayAdmin.creditOrderRow entrypoint instead.)
 
-To deliver an invoice, partpayment or card order in full, use the WebPay::deliverOrder entrypoint without specifying order rows.
+To deliver an invoice, partpayment or card order in full, use the WebPay.deliverOrder entrypoint without specifying order rows.
 
 When specifying orderrows, WebPay.deliverOrder is used in a similar way to WebPay.createOrder and makes use of the same order item information. Add order rows that you want delivered and send the request, specified rows will automatically be matched to the rows sent when creating the order.
 
@@ -984,10 +984,10 @@ We recommend storing the createOrder orderRow objects to ensure that deliverOrde
 Example to come later. Sorry.
 
 #### 6.2.3 On using WebPay.deliverOrder with order rows
-WebPay.deliverOrder may be used to partially deliver, amend or credit an order, by specifying order rows using the DeliverOrderBuilder addOrderRow() method. We recommend using WebPayAdmin::deliverOrderRows to partially deliver an order and WebPayAdmin::creditOrderRows to credit an order.
+WebPay.deliverOrder may be used to partially deliver, amend or credit an order, by specifying order rows using the DeliverOrderBuilder addOrderRow() method. We recommend using WebPayAdmin.deliverOrderRows to partially deliver an order and WebPayAdmin.creditOrderRows to credit an order.
 
 ##### 6.2.3.1 Partial delivery using WebPay.deliverOrder
-When using WebPay.deliverOrder to partially deliver an order, care must be taken that the order rows to deliver precisely match the order row specification used in the original WebPay::createOrder request. Unless all order rows in the deliverOrder request exactly match rows in the original createOrder request, unmatched order rows in the original order will be cancelled. See also 6.2.3.2 below.
+When using WebPay.deliverOrder to partially deliver an order, care must be taken that the order rows to deliver precisely match the order row specification used in the original WebPay.createOrder request. Unless all order rows in the deliverOrder request exactly match rows in the original createOrder request, unmatched order rows in the original order will be cancelled. See also 6.2.3.2 below.
 
 If on the other hand all deliver order rows match with original order rows, then the original order rows matched by the deliver order rows will be invoiced, with the invoice id being returned in the DeliverOrderResponse. The remaining original order rows will remain undelivered and may be delivered in a subsequent deliverOrder request.
 
@@ -1123,13 +1123,13 @@ This is a helper function provided to calculate the monthly price for the differ
 ## 7. WebPayAdmin entrypoint method reference <a name="i7"></a>
 The WebPayAdmin class methods are used to administrate orders after they have been accepted by Svea. It includes functions to update, deliver, cancel and credit orders et.al.
 
-* [7.1 WebPayAdmin::cancelOrder()](http://sveawebpay.github.io/java-integration#i71)
-* [7.2 WebPayAdmin::queryOrder()](http://sveawebpay.github.io/java-integration#i72)
-* [7.3 WebPayAdmin::cancelOrderRows()](http://sveawebpay.github.io/java-integration#i73)
-* [7.4 WebPayAdmin::creditOrderRows()](http://sveawebpay.github.io/java-integration#i74)
-* [7.5 WebPayAdmin::addOrderRows()](http://sveawebpay.github.io/java-integration#i75)
-* [7.6 WebPayAdmin::updateOrderRows()](http://sveawebpay.github.io/java-integration#i76)
-* [7.7 WebPayAdmin::deliverOrderRows()](http://sveawebpay.github.io/java-integration#i77)
+* [7.1 WebPayAdmin.cancelOrder()](http://sveawebpay.github.io/java-integration#i71)
+* [7.2 WebPayAdmin.queryOrder()](http://sveawebpay.github.io/java-integration#i72)
+* [7.3 WebPayAdmin.cancelOrderRows()](http://sveawebpay.github.io/java-integration#i73)
+* [7.4 WebPayAdmin.creditOrderRows()](http://sveawebpay.github.io/java-integration#i74)
+* [7.5 WebPayAdmin.addOrderRows()](http://sveawebpay.github.io/java-integration#i75)
+* [7.6 WebPayAdmin.updateOrderRows()](http://sveawebpay.github.io/java-integration#i76)
+* [7.7 WebPayAdmin.deliverOrderRows()](http://sveawebpay.github.io/java-integration#i77)
 
 ### 7.1 WebPayAdmin.cancelOrder() <a name="i71"></a>
 <!-- WebPayAdmin.cancelOrder() docblock below, replace @see with apidoc links -->
@@ -1508,16 +1508,16 @@ Used in usePaymentMethod($paymentMethod) and in usePayPage()->includePaymentMeth
 ```
 | Payment method                    | Description                                   |
 |-----------------------------------|-----------------------------------------------|
-| PaymentMethod::BANKAXESS          | Direct bank payments, Norway                  |
-| PaymentMethod::NORDEA_SE          | Direct bank payment, Nordea, Sweden.          |
-| PaymentMethod::SEB_SE             | Direct bank payment, private, SEB, Sweden.    |
-| PaymentMethod::SEBFTG_SE          | Direct bank payment, company, SEB, Sweden.    |
-| PaymentMethod::SHB_SE             | Direct bank payment, Handelsbanken, Sweden.   |
-| PaymentMethod::SWEDBANK_SE        | Direct bank payment, Swedbank, Sweden.        |
-| PaymentMethod::KORTCERT           | Card payments, Certitrade.                    |
-| PaymentMethod::PAYPAL             | Paypal                                        |
-| PaymentMethod::SKRILL             | Card payment with Dankort, Skrill.            |
-| PaymentMethod::INVOICE            | Invoice by PayPage.                           |
-| PaymentMethod::PAYMENTPLAN        | PaymentPlan by PayPage.                       |
+| PaymentMethod.BANKAXESS          | Direct bank payments, Norway                  |
+| PaymentMethod.NORDEA_SE          | Direct bank payment, Nordea, Sweden.          |
+| PaymentMethod.SEB_SE             | Direct bank payment, private, SEB, Sweden.    |
+| PaymentMethod.SEBFTG_SE          | Direct bank payment, company, SEB, Sweden.    |
+| PaymentMethod.SHB_SE             | Direct bank payment, Handelsbanken, Sweden.   |
+| PaymentMethod.SWEDBANK_SE        | Direct bank payment, Swedbank, Sweden.        |
+| PaymentMethod.KORTCERT           | Card payments, Certitrade.                    |
+| PaymentMethod.PAYPAL             | Paypal                                        |
+| PaymentMethod.SKRILL             | Card payment with Dankort, Skrill.            |
+| PaymentMethod.INVOICE            | Invoice by PayPage.                           |
+| PaymentMethod.PAYMENTPLAN        | PaymentPlan by PayPage.                       |
 ```
 [<< To top](http://sveawebpay.github.io/java-integration#index)
