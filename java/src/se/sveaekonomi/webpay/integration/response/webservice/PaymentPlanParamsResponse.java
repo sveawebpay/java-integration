@@ -6,11 +6,18 @@ import java.util.List;
 import org.w3c.dom.Element;
 import org.w3c.dom.NodeList;
 
-import se.sveaekonomi.webpay.integration.response.Response;
-
-public class PaymentPlanParamsResponse extends Response {
+public class PaymentPlanParamsResponse extends WebServiceResponse {
     
     private List<CampaignCode> campaignCodes;
+    
+    
+    public List<CampaignCode> getCampaignCodes() {
+        return campaignCodes;
+    }
+    public void setCampaignCodes(List<CampaignCode> campaignCodes) {
+        this.campaignCodes = campaignCodes;
+    }
+    
     
     public PaymentPlanParamsResponse(NodeList soapMessage) {
         super(soapMessage);
@@ -18,22 +25,12 @@ public class PaymentPlanParamsResponse extends Response {
         setValues(soapMessage);
     }
     
-    public List<CampaignCode> getCampaignCodes() {
-        return campaignCodes;
-    }
-    
-    public void setCampaignCodes(List<CampaignCode> campaignCodes) {
-        this.campaignCodes = campaignCodes;
-    }
-    
     private void setValues(NodeList soapMessage) {
         int size = soapMessage.getLength();
         
         for (int i = 0; i < size; i++) {
             Element node = (Element)soapMessage.item(i);
-            
-            // mandatory
-            
+             
             if (this.isOrderAccepted()) {
                 NodeList campaigns = node.getElementsByTagName("CampaignCodeInfo");
                 int numberOfCampaigns = campaigns.getLength();

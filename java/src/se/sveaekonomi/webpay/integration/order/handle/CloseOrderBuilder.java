@@ -7,6 +7,7 @@ import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 /**
  * Close an already created order
  * @author klar-sar
+ * @deprecated -- use WebPay::cancelOrder/CancelOrderBuilder
  */
 public class CloseOrderBuilder {
     private COUNTRYCODE countryCode;

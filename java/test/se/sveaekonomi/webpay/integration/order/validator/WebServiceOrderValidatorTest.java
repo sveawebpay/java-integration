@@ -321,7 +321,7 @@ public class WebServiceOrderValidatorTest {
     
     @Test
     public void testFailOnMissingOrderTypeForInvoiceOrder() {
-        String expectedMessage = "MISSING VALUE - setInvoiceDistributionType is requred for deliverInvoiceOrder.\n";
+        String expectedMessage = "MISSING VALUE - setInvoiceDistributionType is required for deliverInvoiceOrder.\n";
         
         HandleOrder handleOrder = WebPay.deliverOrder(SveaConfig.getDefaultConfig())
             .addOrderRow(TestingTool.createExVatBasedOrderRow("1"))
@@ -339,7 +339,7 @@ public class WebServiceOrderValidatorTest {
         
         try {
             WebPay.createOrder(SveaConfig.getDefaultConfig())
-                .addOrderRow(TestingTool.createPaymentPlanOrderRow())
+                .addOrderRow(TestingTool.createPaymentPlanOrderRow("1"))
                 .addCustomerDetails(TestingTool.createCompanyCustomer())
                 .setCountryCode(TestingTool.DefaultTestCountryCode)
                 .setOrderDate(TestingTool.DefaultTestDate)

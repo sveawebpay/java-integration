@@ -11,8 +11,6 @@ import se.sveaekonomi.webpay.integration.Respondable;
  */
 public interface Requestable {
 
-	// TODO add validateOrder()
-	
 	/**
 	 * prepareRequest() validates the order and returns an inspectable representation of the soap request data
 	 */

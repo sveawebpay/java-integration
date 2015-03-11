@@ -155,11 +155,11 @@ public class LowerTransactionRequest extends HostedAdminRequest <LowerTransactio
 			
 	    } catch (IllegalStateException ex) {
 	        throw new SveaWebPayException("IllegalStateException", ex);
-	    } 
+	    }
 		catch (IOException ex) {
 			//System.out.println(ex.toString());
 			//System.out.println(((HttpResponseException)ex).getStatusCode());
 	        throw new SveaWebPayException("IOException", ex);
-	    }		
-	} 
+	    }
+	}
 }

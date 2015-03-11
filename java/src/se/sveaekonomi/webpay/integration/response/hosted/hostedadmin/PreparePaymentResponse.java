@@ -23,9 +23,23 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 public class PreparePaymentResponse extends HostedAdminResponse {
 
 	private String rawResponse;
-	private String id;
+	private Long id;
     private String created;
 	
+    
+    public String getRawResponse() {
+		return rawResponse;
+	}
+
+    public Long getId() {
+		return id;
+	}
+
+    public String getCreated() {
+		return created;
+	}
+    
+    
 	public PreparePaymentResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
 		this.rawResponse = this.xml;
@@ -33,9 +47,6 @@ public class PreparePaymentResponse extends HostedAdminResponse {
 		this.setValues();
 	}
 
-	/** 
-	 * implement this to parse xml and set attributes according to response attributes 
-	 */
 	void setValues() {		
 				
 		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
@@ -60,7 +71,7 @@ public class PreparePaymentResponse extends HostedAdminResponse {
 				
 				if( this.isOrderAccepted() ) {	// don't attempt to parse a bad response
 
-					this.id = getTagValue(element, "id");
+					this.id = Long.valueOf(getTagValue(element, "id"));
 					this.created = getTagValue(element, "created");
 				}
 			}
@@ -71,18 +82,6 @@ public class PreparePaymentResponse extends HostedAdminResponse {
 		} catch (IOException e) {
 			throw new SveaWebPayException("IOException", e);
 		}
-	}
-	
-    public String getRawResponse() {
-		return rawResponse;
-	}
-
-    public String getId() {
-		return id;
-	}
-
-    public String getCreated() {
-		return created;
 	}
 }
 

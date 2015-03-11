@@ -50,17 +50,12 @@ public abstract class HostedAdminRequest<T extends HostedAdminRequest<T>> {
 	public HostedAdminRequest(ConfigurationProvider config, String method) {
 		this.config = config;
 		this.method = method;
-	}
-	
-    /**
-     * Required. 
-     */
-    @SuppressWarnings("unchecked")
-	public T setCountryCode( COUNTRYCODE countryCode ) {
-        this.countryCode = countryCode;
-        return (T) this;
-    }	
+	}    
     
+	public T setCountryCode( COUNTRYCODE countryCode) {
+		this.countryCode = countryCode;
+		return (T) this;
+	}
 	public COUNTRYCODE getCountryCode() {
 		return countryCode;
 	}

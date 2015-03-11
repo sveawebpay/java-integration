@@ -2,11 +2,32 @@ package se.sveaekonomi.webpay.integration.order.identity;
 
 public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
 
+	//  //ci
+	//  private String phoneNumber;
+	//  private String email;
+	//  private String ipAddress;
+	//  private String coAddress;
+	//  private String streetAddress;
+	//  private String housenumber;
+	//  private String zipCode;
+	//  private String locality;    	
+	//  //ic
+	//  private String ssn;
+	//  private String birthDate;
+	//  private String firstName;
+	//  private String lastName;
+	//  private String initials;
+	//  private String name;
+	
     private String ssn;
     private String birthDate;
     private String firstName;
     private String lastName;
     private String initials;
+    
+    // set by GetOrdersResponse
+    private String name;			// compounded fullName from webservice 
+    //private String streetAddress;	// compounds street + housenumber -- inherited from CustomerIdentity
     
     public IndividualCustomer() {
         super();
@@ -61,6 +82,23 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
         return this;
     }
     
+    public String getName() {
+		return name;
+	}
+
+	public void setName(String name) {
+		this.name = name;
+	}
+
+//	public String getStreetAddress() {
+//		return streetAddress;
+//	}
+//
+//	public void setStreetAddress(String streetAddress) {
+//		this.streetAddress = streetAddress;
+//	}
+
+    
     /**
      * Required for private customers in NL and DE
      * @param type yyyy(m)m(d)d
@@ -82,8 +120,8 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
     
     /**
      * Required for private Customers in NL and DE
-     * @param type firstName
-     * @param type lastName
+     * @param String firstName
+     * @param String lastName
      * @return IndividualCustomer
      */
     public IndividualCustomer setName(String firstName, String lastName) {
@@ -98,11 +136,12 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
     
     /**
      * Required for private customers in NL 
-     * @param type initials
+     * @param String initials
      * @return IndividualCustomer
      */
     public IndividualCustomer setInitials(String initials) {
         this.initials = initials;
         return this;
     }
+
 }

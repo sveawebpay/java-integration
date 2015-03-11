@@ -1,44 +1,44 @@
 package se.sveaekonomi.webpay.integration.order.row;
 
-import se.sveaekonomi.webpay.integration.util.constant.OrderRowStatus;
+import se.sveaekonomi.webpay.integration.util.constant.ORDERROWSTATUS;
 
 public class NumberedOrderRowBuilder extends OrderRowBuilder<NumberedOrderRowBuilder> {
 
     /** reference to invoice to credit */
-	private String creditInvoiceId;
+	private Long creditInvoiceId;
     /** if order has been delivered, reference to resulting invoice */
-	private String invoiceId;
+	private Long invoiceId;
     /** the order row number, starting with 1 for the first order row */
-	private int rowNumber;
+	private Integer rowNumber;
     /** one of: "NotDelivered" | "Delivered" | "Cancelled" */
-	private OrderRowStatus status;
+	private ORDERROWSTATUS status;
 
-	public String getCreditInvoiceId() {
+	public Long getCreditInvoiceId() {
 		return creditInvoiceId;
 		
 	}
-	public NumberedOrderRowBuilder setCreditInvoiceId(String creditInvoiceId) {
+	public NumberedOrderRowBuilder setCreditInvoiceId(Long creditInvoiceId) {
 		this.creditInvoiceId = creditInvoiceId;
 		return this;
 	}
-	public String getInvoiceId() {
+	public Long getInvoiceId() {
 		return invoiceId;
 	}
-	public NumberedOrderRowBuilder setInvoiceId(String invoiceId) {
+	public NumberedOrderRowBuilder setInvoiceId(Long invoiceId) {
 		this.invoiceId = invoiceId;
 		return this;
 	}
-	public int getRowNumber() {
+	public Integer getRowNumber() {
 		return rowNumber;
 	}
-	public NumberedOrderRowBuilder setRowNumber(int rowNumber) {
+	public NumberedOrderRowBuilder setRowNumber(Integer rowNumber) {
 		this.rowNumber = rowNumber;
 		return this;
 	}
-	public OrderRowStatus getStatus() {
+	public ORDERROWSTATUS getStatus() {
 		return status;
 	}
-	public NumberedOrderRowBuilder setStatus(OrderRowStatus status) {
+	public NumberedOrderRowBuilder setStatus(ORDERROWSTATUS status) {
 		this.status = status;
 		return this;
 	}	

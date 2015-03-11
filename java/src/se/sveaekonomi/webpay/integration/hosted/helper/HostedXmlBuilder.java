@@ -120,6 +120,11 @@ public class HostedXmlBuilder extends XMLBuilder {
 	
 		writeSimpleElement("customerrefno", order.getClientOrderNumber());
 		writeSimpleElement("currency", order.getCurrency());
+		
+		if( payment.getSubscriptionType() != null ) {
+			writeSimpleElement("subscriptiontype", payment.getSubscriptionType().toString());
+		}
+		
 		writeSimpleElement("amount", payment.getAmount().toString());
 	
 		if (payment.getVat() != null) {

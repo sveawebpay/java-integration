@@ -88,18 +88,18 @@ public class QueryTransactionTest {
 		//        <statuscode>0</statuscode>
 		//      </response>
                
-		assertEquals("587673", response.getTransactionId() );
+		assertEquals((Long)587673L, response.getTransactionId() );
 		assertEquals("test_cancelOrder_cancelCardOrder1413208130564", response.getClientOrderNumber() );
 		assertEquals("1130", response.getMerchantId());
 		assertEquals("SUCCESS", response.getStatus());
-		assertEquals("12500", response.getAmount());
+		assertEquals((Double)125.00, response.getAmount());
 		assertEquals("SEK", response.getCurrency());
-		assertEquals("2500", response.getVat());
-		assertEquals("12500", response.getCapturedAmount());
-		assertEquals("12500", response.getAuthorizedAmount());									
+		assertEquals((Double)25.00, response.getVat());
+		assertEquals((Double)125.00, response.getCapturedAmount());
+		assertEquals((Double)125.00, response.getAuthorizedAmount());									
 		assertEquals("2014-10-13 15:48:56.487", response.getCreated());					
 		assertEquals("CREDNONE", response.getCreditstatus());
-		assertEquals("0", response.getCreditedAmount());
+		assertEquals((Double)0.0, response.getCreditedAmount());
 		assertEquals("0", response.getMerchantResponseCode());					
 		assertEquals("KORTCERT", response.getPaymentMethod());
 		assertEquals(null, response.getCallbackUrl());
@@ -115,7 +115,7 @@ public class QueryTransactionTest {
 		assertEquals(null, response.getChname());
 		assertEquals(null, response.getAuthCode());			        
 
-        assertEquals( 1, response.getNumberedOrderRows().get(0).getRowNumber() );
+        assertEquals( (Integer)1, response.getNumberedOrderRows().get(0).getRowNumber() );
         assertEquals( Double.valueOf(1.00), response.getNumberedOrderRows().get(0).getQuantity() ); // first Double.valueOf disambiguates double/Double
         assertEquals( Double.valueOf(100.00), response.getNumberedOrderRows().get(0).getAmountExVat() );
         assertEquals( Double.valueOf(25.00), response.getNumberedOrderRows().get(0).getVatPercent() ); 
@@ -136,14 +136,14 @@ public class QueryTransactionTest {
         
         assertTrue( response.isOrderAccepted() );     
            
-		assertEquals( 1, response.getNumberedOrderRows().get(0).getRowNumber() );
+		assertEquals( (Integer)1, response.getNumberedOrderRows().get(0).getRowNumber() );
         assertEquals( Double.valueOf(1.00), response.getNumberedOrderRows().get(0).getQuantity() ); // first Double.valueOf disambiguates double/Double
         assertEquals( Double.valueOf(100.00), response.getNumberedOrderRows().get(0).getAmountExVat() );
         assertEquals( Double.valueOf(25.00), response.getNumberedOrderRows().get(0).getVatPercent() ); 
         assertEquals( "orderrow 1", response.getNumberedOrderRows().get(0).getName() );
         assertEquals( "description 1", response.getNumberedOrderRows().get(0).getDescription() );        	
 
-		assertEquals( 2, response.getNumberedOrderRows().get(1).getRowNumber() );
+		assertEquals( (Integer)2, response.getNumberedOrderRows().get(1).getRowNumber() );
         assertEquals( Double.valueOf(1.00), response.getNumberedOrderRows().get(1).getQuantity() ); // first Double.valueOf disambiguates double/Double
         assertEquals( Double.valueOf(100.00), response.getNumberedOrderRows().get(1).getAmountExVat() );
         assertEquals( Double.valueOf(25.00), response.getNumberedOrderRows().get(1).getVatPercent() ); 

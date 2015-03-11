@@ -20,8 +20,6 @@ import se.sveaekonomi.webpay.integration.response.webservice.DeliverOrderRespons
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.DISTRIBUTIONTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
-import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
 public class DeliverInvoiceOrderTest {
     
@@ -52,7 +50,7 @@ public class DeliverInvoiceOrderTest {
             .doRequest();
         
         assertTrue(response.isOrderAccepted());
-        assertEquals("Post", response.getInvoiceDistributionType());
+        assertEquals(DISTRIBUTIONTYPE.Post, response.getInvoiceDistributionType());
         assertNotNull(response.getOcr());
         assertTrue(0 < response.getOcr().length());
         assertEquals(0.0, response.getLowestAmountToPay(), 0);
