@@ -189,9 +189,9 @@ public class WebPayItem {
 	 * 		   .setArticleNumber()    	// String
 	 * 		   .setDiscountPercent()   	// double
 	 *         // numberedOrderRow
-	 * 		   .setCreditInvoiceId()   	// String
-	 * 		   .setInvoiceId()         	// String
-	 * 		   .setRowNumber()      	// int		 
+	 * 		   .setCreditInvoiceId()   	// Long
+	 * 		   .setInvoiceId()         	// Long
+	 * 		   .setRowNumber()      	// Integer		 
 	 * 		   .setStatus() 			// ORDERROWSTATUS
 	 *      ;
 	 */

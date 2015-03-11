@@ -232,7 +232,7 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse queryResponse = queryOrderBuilder.queryCardOrder().doRequest();         
         assertTrue( queryResponse.isOrderAccepted() );             
-        assertEquals( 1, queryResponse.getNumberedOrderRows().get(0).getRowNumber() );
+        assertEquals( (Integer)1, queryResponse.getNumberedOrderRows().get(0).getRowNumber() );
 
         DeliverOrderRowsBuilder deliverRequest = WebPayAdmin.deliverOrderRows(SveaConfig.getDefaultConfig())
     		.setTransactionId( queryResponse.getTransactionId() )
@@ -255,7 +255,7 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse originalOrder = queryOriginalOrder.queryCardOrder().doRequest();         
         assertTrue( originalOrder.isOrderAccepted() );             
-        assertEquals( 1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
+        assertEquals( (Integer)1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
 
         ArrayList<Integer> indexes = new ArrayList<Integer>();
         indexes.add(1);
@@ -333,7 +333,7 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse originalOrder = queryOriginalOrder.queryCardOrder().doRequest();                 
         assertTrue( originalOrder.isOrderAccepted() );             
-        assertEquals( 1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
+        assertEquals( (Integer)1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
 
         // do cancelOrderRows request and assert the response
         CancelOrderRowsBuilder cancelRequest = WebPayAdmin.cancelOrderRows(SveaConfig.getDefaultConfig())
@@ -369,7 +369,7 @@ public class WebPayAdminWebdriverTest {
         ;   
         QueryTransactionResponse originalOrder = queryOriginalOrder.queryCardOrder().doRequest();                 
         assertTrue( originalOrder.isOrderAccepted() );             
-        assertEquals( 1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
+        assertEquals( (Integer)1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
         
         // do cancelOrderRows request and assert the response
         ArrayList<Integer> indexes = new ArrayList<Integer>();
@@ -440,7 +440,7 @@ public class WebPayAdminWebdriverTest {
         ; 
         QueryTransactionResponse originalOrder = queryOriginalOrder.queryCardOrder().doRequest();                 
         assertTrue( originalOrder.isOrderAccepted() );             
-        assertEquals( 1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
+        assertEquals( (Integer)1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
         
         // do creditOrderRows request and assert the response
         ArrayList<Integer> indexes = new ArrayList<Integer>();
@@ -480,7 +480,7 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse originalOrder = queryOriginalOrder.queryCardOrder().doRequest();                 
         assertTrue( originalOrder.isOrderAccepted() );             
-        assertEquals( 1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
+        assertEquals( (Integer)1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
 
         // do creditOrderRows request and assert the response
 		@SuppressWarnings("rawtypes")
@@ -523,7 +523,7 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse originalOrder = queryOriginalOrder.queryCardOrder().doRequest();                 
         assertTrue( originalOrder.isOrderAccepted() );             
-        assertEquals( 1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
+        assertEquals( (Integer)1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
 
         // do creditOrderRows request and assert the response
 		@SuppressWarnings("rawtypes")
@@ -563,7 +563,7 @@ public class WebPayAdminWebdriverTest {
         ; 
         QueryTransactionResponse originalOrder = queryOriginalOrder.queryCardOrder().doRequest();                 
         assertTrue( originalOrder.isOrderAccepted() );             
-        assertEquals( 1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
+        assertEquals( (Integer)1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
         
         // do creditOrderRows request and assert the response
         ArrayList<Integer> indexes = new ArrayList<Integer>();
@@ -601,7 +601,7 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse originalOrder = queryOriginalOrder.queryCardOrder().doRequest();                 
         assertTrue( originalOrder.isOrderAccepted() );             
-        assertEquals( 1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
+        assertEquals( (Integer)1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
 
         // do creditOrderRows request and assert the response
 		@SuppressWarnings("rawtypes")
@@ -642,7 +642,7 @@ public class WebPayAdminWebdriverTest {
         ;                
         QueryTransactionResponse originalOrder = queryOriginalOrder.queryCardOrder().doRequest();                 
         assertTrue( originalOrder.isOrderAccepted() );             
-        assertEquals( 1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
+        assertEquals( (Integer)1, originalOrder.getNumberedOrderRows().get(0).getRowNumber() );
 
         // do creditOrderRows request and assert the response
 		@SuppressWarnings("rawtypes")
@@ -714,7 +714,7 @@ public class WebPayAdminWebdriverTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(123.99), Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
@@ -733,8 +733,8 @@ public class WebPayAdminWebdriverTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			
-	                .setCreditInvoiceId("9999999")
+	                .setInvoiceId(Long.valueOf("9999999"))
+	                .setCreditInvoiceId(Long.valueOf("9999999"))
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
 		;
@@ -754,7 +754,7 @@ public class WebPayAdminWebdriverTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(99.19), Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 1, updateOrderRow.getRowNumber() );
+		assertEquals( (Integer)1, updateOrderRow.getRowNumber() );
 	}
 
 	// paymentplan
@@ -803,7 +803,7 @@ public class WebPayAdminWebdriverTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(999.99), Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
@@ -822,8 +822,8 @@ public class WebPayAdminWebdriverTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			
-	                .setCreditInvoiceId("9999999")
+	                .setInvoiceId(Long.valueOf("9999999"))
+	                .setCreditInvoiceId(Long.valueOf("9999999"))
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
 		;
@@ -843,7 +843,7 @@ public class WebPayAdminWebdriverTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(1079.99), Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 1, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)1, updateOrderRow.getRowNumber() );			
 	}
 
     /// WebPayAdmin.addOrderRows() -------------------------------------------------------------------------------------
@@ -885,7 +885,7 @@ public class WebPayAdminWebdriverTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(99.99), Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
@@ -920,7 +920,7 @@ public class WebPayAdminWebdriverTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(79.99), Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 2, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, updateOrderRow.getRowNumber() );			
 	}		
 	//paymentplan
 	@Test
@@ -965,7 +965,7 @@ public class WebPayAdminWebdriverTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(1099.99), Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// add order row
 		AddOrderRowsBuilder addBuilder = WebPayAdmin.addOrderRows(SveaConfig.getDefaultConfig())
@@ -1000,7 +1000,7 @@ public class WebPayAdminWebdriverTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(1079.99), Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 2, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)2, updateOrderRow.getRowNumber() );			
 	}	
 }
 

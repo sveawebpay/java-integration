@@ -43,8 +43,8 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			
-	                .setCreditInvoiceId("9999999")
+	                .setInvoiceId(Long.valueOf("9999999"))
+	                .setCreditInvoiceId(Long.valueOf("9999999"))
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
 		;
@@ -87,12 +87,12 @@ public class UpdateOrderRowsIntegrationTest {
 		GetOrdersResponse queryOriginal = queryOrderBuilder.queryInvoiceOrder().doRequest();       
 		assertTrue(queryOriginal.isOrderAccepted());			
 		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = queryOriginal.getNumberedOrderRows();
-		assertEquals( 1, numberedOrderRows.size() );		
+		assertEquals( 1, numberedOrderRows.size() );
 		NumberedOrderRowBuilder orderRow = numberedOrderRows.get(0); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(99.99), Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
@@ -111,8 +111,8 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")
-	                .setCreditInvoiceId("9999999")
+	                .setInvoiceId(Long.valueOf("9999999"))
+	                .setCreditInvoiceId(Long.valueOf("9999999"))
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
 		;
@@ -127,12 +127,12 @@ public class UpdateOrderRowsIntegrationTest {
 		GetOrdersResponse queryUpdate = queryOrderBuilder.queryInvoiceOrder().doRequest();       
 		assertTrue(queryOriginal.isOrderAccepted());			
 		ArrayList<NumberedOrderRowBuilder> updateOrderRows = queryUpdate.getNumberedOrderRows();
-		assertEquals( 1, updateOrderRows.size() );		
+		assertEquals( 1, updateOrderRows.size() );
 		NumberedOrderRowBuilder updateOrderRow = updateOrderRows.get(0); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(79.99), Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 1, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)1, updateOrderRow.getRowNumber() );			
 	}
 
 	@Test
@@ -167,12 +167,12 @@ public class UpdateOrderRowsIntegrationTest {
 		GetOrdersResponse queryOriginal = queryOrderBuilder.queryInvoiceOrder().doRequest();       
 		assertTrue(queryOriginal.isOrderAccepted());			
 		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = queryOriginal.getNumberedOrderRows();
-		assertEquals( 1, numberedOrderRows.size() );		
+		assertEquals( 1, numberedOrderRows.size() );
 		NumberedOrderRowBuilder orderRow = numberedOrderRows.get(0); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(123.99), Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
@@ -191,8 +191,8 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			
-	                .setCreditInvoiceId("9999999")
+	                .setInvoiceId(Long.valueOf("9999999"))
+	                .setCreditInvoiceId(Long.valueOf("9999999"))
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
 		;
@@ -207,12 +207,12 @@ public class UpdateOrderRowsIntegrationTest {
 		GetOrdersResponse queryUpdate = queryOrderBuilder.queryInvoiceOrder().doRequest();       
 		assertTrue(queryOriginal.isOrderAccepted());			
 		ArrayList<NumberedOrderRowBuilder> updateOrderRows = queryUpdate.getNumberedOrderRows();
-		assertEquals( 1, updateOrderRows.size() );		
+		assertEquals( 1, updateOrderRows.size() );
 		NumberedOrderRowBuilder updateOrderRow = updateOrderRows.get(0); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(99.19), Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 1, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)1, updateOrderRow.getRowNumber() );			
 	}	
 	
 	@Test
@@ -247,11 +247,11 @@ public class UpdateOrderRowsIntegrationTest {
 		GetOrdersResponse queryOriginal = queryOrderBuilder.queryInvoiceOrder().doRequest();       
 		assertTrue(queryOriginal.isOrderAccepted());			
 		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = queryOriginal.getNumberedOrderRows();
-		assertEquals( 1, numberedOrderRows.size() );		
+		assertEquals( 1, numberedOrderRows.size() );
 		NumberedOrderRowBuilder orderRow = numberedOrderRows.get(0); 			
 		assertEquals( Double.valueOf(99.99), Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
@@ -270,8 +270,8 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			
-	                .setCreditInvoiceId("9999999")
+	                .setInvoiceId(Long.valueOf("9999999"))
+	                .setCreditInvoiceId(Long.valueOf("9999999"))
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
 		;
@@ -286,12 +286,12 @@ public class UpdateOrderRowsIntegrationTest {
 		GetOrdersResponse queryUpdate = queryOrderBuilder.queryInvoiceOrder().doRequest();       
 		assertTrue(queryOriginal.isOrderAccepted());			
 		ArrayList<NumberedOrderRowBuilder> updateOrderRows = queryUpdate.getNumberedOrderRows();
-		assertEquals( 1, updateOrderRows.size() );		
+		assertEquals( 1, updateOrderRows.size() );
 		NumberedOrderRowBuilder updateOrderRow = updateOrderRows.get(0); 			
 		assertEquals( Double.valueOf(79.99), Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 1, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)1, updateOrderRow.getRowNumber() );			
 	}
 	
 	@Test
@@ -326,12 +326,12 @@ public class UpdateOrderRowsIntegrationTest {
 		GetOrdersResponse queryOriginal = queryOrderBuilder.queryInvoiceOrder().doRequest();       
 		assertTrue(queryOriginal.isOrderAccepted());			
 		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = queryOriginal.getNumberedOrderRows();
-		assertEquals( 1, numberedOrderRows.size() );		
+		assertEquals( 1, numberedOrderRows.size() );
 		NumberedOrderRowBuilder orderRow = numberedOrderRows.get(0); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(123.99), Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
@@ -350,8 +350,8 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			
-	                .setCreditInvoiceId("9999999")
+	                .setInvoiceId(Long.valueOf("9999999"))
+	                .setCreditInvoiceId(Long.valueOf("9999999"))
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
 		;
@@ -366,12 +366,12 @@ public class UpdateOrderRowsIntegrationTest {
 		GetOrdersResponse queryUpdate = queryOrderBuilder.queryInvoiceOrder().doRequest();       
 		assertTrue(queryOriginal.isOrderAccepted());			
 		ArrayList<NumberedOrderRowBuilder> updateOrderRows = queryUpdate.getNumberedOrderRows();
-		assertEquals( 1, updateOrderRows.size() );		
+		assertEquals( 1, updateOrderRows.size() );
 		NumberedOrderRowBuilder updateOrderRow = updateOrderRows.get(0); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(99.19), Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 1, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)1, updateOrderRow.getRowNumber() );			
 	}
 	
 	// payment plan
@@ -413,12 +413,12 @@ public class UpdateOrderRowsIntegrationTest {
 		GetOrdersResponse queryOriginal = queryOrderBuilder.queryPaymentPlanOrder().doRequest();       
 		assertTrue(queryOriginal.isOrderAccepted());			
 		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = queryOriginal.getNumberedOrderRows();
-		assertEquals( 1, numberedOrderRows.size() );		
+		assertEquals( 1, numberedOrderRows.size() );
 		NumberedOrderRowBuilder orderRow = numberedOrderRows.get(0); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(999.99), Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
@@ -437,8 +437,8 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			
-	                .setCreditInvoiceId("9999999")
+	                .setInvoiceId(Long.valueOf("9999999"))
+	                .setCreditInvoiceId(Long.valueOf("9999999"))
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
 		;
@@ -453,12 +453,12 @@ public class UpdateOrderRowsIntegrationTest {
 		GetOrdersResponse queryUpdate = queryOrderBuilder.queryPaymentPlanOrder().doRequest();       
 		assertTrue(queryOriginal.isOrderAccepted());			
 		ArrayList<NumberedOrderRowBuilder> updateOrderRows = queryUpdate.getNumberedOrderRows();
-		assertEquals( 1, updateOrderRows.size() );		
+		assertEquals( 1, updateOrderRows.size() );
 		NumberedOrderRowBuilder updateOrderRow = updateOrderRows.get(0); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(1079.99), Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 1, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)1, updateOrderRow.getRowNumber() );			
 	}
 
 	@Test
@@ -499,12 +499,12 @@ public class UpdateOrderRowsIntegrationTest {
 		GetOrdersResponse queryOriginal = queryOrderBuilder.queryPaymentPlanOrder().doRequest();       
 		assertTrue(queryOriginal.isOrderAccepted());			
 		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = queryOriginal.getNumberedOrderRows();
-		assertEquals( 1, numberedOrderRows.size() );		
+		assertEquals( 1, numberedOrderRows.size() );
 		NumberedOrderRowBuilder orderRow = numberedOrderRows.get(0); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(1339.99), Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
@@ -523,8 +523,8 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			
-	                .setCreditInvoiceId("9999999")
+	                .setInvoiceId(Long.valueOf("9999999"))
+	                .setCreditInvoiceId(Long.valueOf("9999999"))
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
 		;
@@ -539,12 +539,12 @@ public class UpdateOrderRowsIntegrationTest {
 		GetOrdersResponse queryUpdate = queryOrderBuilder.queryPaymentPlanOrder().doRequest();       
 		assertTrue(queryOriginal.isOrderAccepted());			
 		ArrayList<NumberedOrderRowBuilder> updateOrderRows = queryUpdate.getNumberedOrderRows();
-		assertEquals( 1, updateOrderRows.size() );		
+		assertEquals( 1, updateOrderRows.size() );
 		NumberedOrderRowBuilder updateOrderRow = updateOrderRows.get(0); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(1339.99), Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 1, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)1, updateOrderRow.getRowNumber() );			
 	}	
 	
 	@Test
@@ -585,11 +585,11 @@ public class UpdateOrderRowsIntegrationTest {
 		GetOrdersResponse queryOriginal = queryOrderBuilder.queryPaymentPlanOrder().doRequest();       
 		assertTrue(queryOriginal.isOrderAccepted());			
 		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = queryOriginal.getNumberedOrderRows();
-		assertEquals( 1, numberedOrderRows.size() );		
+		assertEquals( 1, numberedOrderRows.size() );
 		NumberedOrderRowBuilder orderRow = numberedOrderRows.get(0); 			
 		assertEquals( Double.valueOf(999.99), Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
@@ -608,8 +608,8 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")			
-	                .setCreditInvoiceId("9999999")
+	                .setInvoiceId(Long.valueOf("9999999"))
+	                .setCreditInvoiceId(Long.valueOf("9999999"))
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
 		;
@@ -624,12 +624,12 @@ public class UpdateOrderRowsIntegrationTest {
 		GetOrdersResponse queryUpdate = queryOrderBuilder.queryPaymentPlanOrder().doRequest();       
 		assertTrue(queryOriginal.isOrderAccepted());			
 		ArrayList<NumberedOrderRowBuilder> updateOrderRows = queryUpdate.getNumberedOrderRows();
-		assertEquals( 1, updateOrderRows.size() );		
+		assertEquals( 1, updateOrderRows.size() );
 		NumberedOrderRowBuilder updateOrderRow = updateOrderRows.get(0); 			
 		assertEquals( Double.valueOf(1079.99), Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 1, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)1, updateOrderRow.getRowNumber() );			
 	}
 
 	@Test
@@ -670,12 +670,12 @@ public class UpdateOrderRowsIntegrationTest {
 		GetOrdersResponse queryOriginal = queryOrderBuilder.queryPaymentPlanOrder().doRequest();       
 		assertTrue(queryOriginal.isOrderAccepted());			
 		ArrayList<NumberedOrderRowBuilder> numberedOrderRows = queryOriginal.getNumberedOrderRows();
-		assertEquals( 1, numberedOrderRows.size() );		
+		assertEquals( 1, numberedOrderRows.size() );
 		NumberedOrderRowBuilder orderRow = numberedOrderRows.get(0); 			
 		assertEquals( (Double)Double.NaN, Double.valueOf(orderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(1239.99), Double.valueOf(orderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(orderRow.getVatPercent()) );	
-		assertEquals( 1, orderRow.getRowNumber() );	
+		assertEquals( (Integer)1, orderRow.getRowNumber() );	
 
 		// update order row
 		UpdateOrderRowsBuilder updateBuilder = WebPayAdmin.updateOrderRows(SveaConfig.getDefaultConfig())
@@ -694,8 +694,8 @@ public class UpdateOrderRowsIntegrationTest {
 	                .setVatDiscount(0)
 	                // NumberedOrderRow attributes:
 	                .setRowNumber(1)
-	                .setInvoiceId("9999999")
-	                .setCreditInvoiceId("9999999")
+	                .setInvoiceId(Long.valueOf("9999999"))
+	                .setCreditInvoiceId(Long.valueOf("9999999"))
 	                .setStatus(ORDERROWSTATUS.NOTDELIVERED)
 			)
 		;
@@ -715,7 +715,7 @@ public class UpdateOrderRowsIntegrationTest {
 		assertEquals( (Double)Double.NaN, Double.valueOf(updateOrderRow.getAmountExVat()) );
 		assertEquals( Double.valueOf(1339.19), Double.valueOf(updateOrderRow.getAmountIncVat()) );
 		assertEquals( Double.valueOf(24.00), Double.valueOf(updateOrderRow.getVatPercent()) );	
-		assertEquals( 1, updateOrderRow.getRowNumber() );			
+		assertEquals( (Integer)1, updateOrderRow.getRowNumber() );			
 	}
 
 }

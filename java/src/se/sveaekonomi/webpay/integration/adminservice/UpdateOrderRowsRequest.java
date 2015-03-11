@@ -174,9 +174,9 @@ public class UpdateOrderRowsRequest {
 							getVatPercentFromBuilderOrderRow( row) ) 
 						); 
 					SOAPElement creditInvoiceId = orderRow.addChildElement("CreditInvoiceId","dat");
-						creditInvoiceId.addTextNode( row.getCreditInvoiceId() == null ? "" : row.getCreditInvoiceId() );
+						creditInvoiceId.addTextNode( row.getCreditInvoiceId() == null ? "" : String.valueOf(row.getCreditInvoiceId()) );
 					SOAPElement invoiceId = orderRow.addChildElement("InvoiceId","dat");
-						invoiceId.addTextNode( row.getInvoiceId() == null ? "" : row.getInvoiceId() );
+						invoiceId.addTextNode( row.getInvoiceId() == null ? "" : String.valueOf(row.getInvoiceId()) );
     				SOAPElement rowNumber = orderRow.addChildElement("RowNumber", "dat");
     					rowNumber.addTextNode( String.valueOf(row.getRowNumber()) );  
     				SOAPElement status = orderRow.addChildElement("Status", "dat");
