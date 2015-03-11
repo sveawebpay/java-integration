@@ -819,8 +819,34 @@ Various service requests such as the WebPay .createOrder() and .getAddresses() m
 Note that not all responses define the same attributes. Also, what attributes are returned may vary between different countries and payment methods. In general, you should inspect the received response object attributes before relying on them for further requests.
 
 
+### 5.9 WebPayItem.numberedOrderRow() <a name="i59"></a>
+NumberedOrderRow extends the orderRow class, providing fields used by when i.e. administrating an invoice or payment plan order.
+It is returned in the various WebPayAdmin.queryOrder() responses, and used as input data in to methods that adminster individual order rows.
 
+#### 5.9.1 Usage
+```java
+...
+	NumberedOrderRow row = WebPayItem:.numberedOrderRow()
+	    // inherited from OrderRow
+	   .setAmountIncVat()		// Double
+	   .setVatPercent()       	// Double
+	   .setAmountExVat()       	// Double
+	   .setQuantity()          	// Double
+	   .setUnit()              	// String
+	   .setName()              	// String
+	   .setDescription() 		// String
+	   .setArticleNumber()    	// String
+	   .setDiscountPercent()   	// double
+	    // numberedOrderRow
+	   .setCreditInvoiceId()   	// String
+	   .setInvoiceId()         	// String
+	   .setRowNumber()      	// int		 
+	   .setStatus() 			// ORDERROWSTATUS
+	;
+...
+```
 
+See the NumberedOrderRowclass methods for details.
 
 
 ## 6. WebPay entrypoint method reference <a name="i6"></a>

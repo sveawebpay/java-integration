@@ -172,34 +172,29 @@ public class WebPayItem {
 	public static CompanyCustomer companyCustomer() {
 		return new CompanyCustomer();
 	}
-	
-	
-    /**
-     * This is an extension of the orderRow class, used in the WebPayAdmin.queryOrder() response and methods that adminster individual order rows.
+		
+	/**
+	 * NumberedOrderRow extends the orderRow class, providing fields used by when i.e. administrating an invoice or payment plan order.
+	 * It is returned in the various WebPayAdmin.queryOrder() responses, and used as input data in to methods that adminster individual order rows.
      * 
-     * NumberedOrderRow is returned with the WebPayAdmin.queryOrder() responses.
-     * Also used when supplying NumberedOrderRow items for the various WebPayAdmin 
-     * order row administration functions.
-     * 
-     * 		NumberedOrderRow myNumberedOrderRow = WebPayItem.numberedOrderRow()
-	 *      	//inherited from OrderRow
-	 *      	.setAmountExVat()               	// recommended to specify price using AmountExVat & VatPercent
-	 *      	.setVatPercent()                    // recommended to specify price using AmountExVat & VatPercent
-	 *      	.setAmountIncVat()              	// optional, need to use two out of three of the price specification methods
-	 *      	.setQuantity()                      // required
-	 *      	.setUnit()                         	// optional
-	 *      	.setName()                      	// optional
-	 *      	.setDescription()       			// optional
-	 *      	.setArticleNumber()                 // optional
-	 *      	.setDiscountPercent()               // optional
-	 *      	//unique to numberedOrderRow
-	 *      	.setCreditInvoiceId()         		// optional
-	 *      	.setInvoiceId()                     // optional
-	 *      	.setRowNumber()                     // optional    
-	 *      	.setStatus() 						// optional, an ORDERROWSTATUS
-     * 
-     * @return NumberedOrderRow
-     */
+	 *		NumberedOrderRow row = WebPayItem:.numberedOrderRow()
+	 *         // inherited from OrderRow
+	 * 		   .setAmountIncVat()		// Double
+	 * 		   .setVatPercent()       	// Double
+	 * 		   .setAmountExVat()       	// Double
+	 * 		   .setQuantity()          	// Double
+	 * 		   .setUnit()              	// String
+	 * 		   .setName()              	// String
+	 * 		   .setDescription() 		// String
+	 * 		   .setArticleNumber()    	// String
+	 * 		   .setDiscountPercent()   	// double
+	 *         // numberedOrderRow
+	 * 		   .setCreditInvoiceId()   	// String
+	 * 		   .setInvoiceId()         	// String
+	 * 		   .setRowNumber()      	// int		 
+	 * 		   .setStatus() 			// ORDERROWSTATUS
+	 *      ;
+	 */
 	public static NumberedOrderRowBuilder numberedOrderRow() {
 		return new NumberedOrderRowBuilder();
 	}
