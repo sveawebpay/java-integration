@@ -629,7 +629,21 @@ An example of an asynchronous card order can be found in the example/cardorder f
 An example of an recurring card order, both the setup transaction and a recurring payment, can be found in the example/cardorder_recur folder.
 
 ## 5. WebPayItem reference <a name="i5"></a>
+<!-- WebPayItem class docbloc below, replace @see with apidoc links -->
 The WebPayItem class provides entrypoint methods to the different row items that make up an order, as well as the customer identity information items.
+
+An order must contain one or more order rows. You may add invoice fees, shipping fees and discounts to an order.
+
+Note that while it is possible to add multiples of fee and discount rows, the package will group rows according to type before sending them to Svea:
+
+ 1. all order rows, in the order they were added using addOrderRow()
+ 2. any shipping fee rows, in the order they were added using addShippingFee()
+ 3. any invoice fee rows, in the order they were added using addShippingFee()
+ 4. any fixed discount rows, in the order they were added using addFixedDiscount()
+ 5. any relative discount rows, in the order they were added using addRelativeDiscount()
+ 
+Also, for relative discounts, or fixed discounts specified using only setAmountIncVat() or only setAmountExVat() there may be several discount rows added, should the order include more than one different vat rate. It is not recommended to specify more than one relative discount row per order, or  more than one fixed discount specified using only setAmountIncVat() or only setAmountExVat().
+
 
 See the class WebPayItem class for available order row items.
 
@@ -763,7 +777,7 @@ Use WebPayItem.individualCustomer() to add individual customer information to an
 
 #### 5.7.1 Using IndividualCustomer when specifying an order 
 Note that "required" below as a requirement only when using the invoice or payment plan payment methods, and that the required attributes vary between countries.
-(For card and direct bank orders, adding customer information to the order is optional, unless you're using getPaymentUrl() to set up a prepared payment.)
+For card and direct bank orders, adding customer information to the order is optional, unless you're using getPaymentUrl() to set up a prepared payment.
 
 ```java
 ...
@@ -783,12 +797,17 @@ Note that "required" below as a requirement only when using the invoice or payme
 ...
 ```
 
-See the IndividualCustomerclass methods for details on how to specify the item.
+See the IndividualCustomer class methods for details on how to specify the item.
 
 #### 5.7.2 A note on IndividualCustomer objects in service request response classes
-Various service requests such as the WebPay .createOrder() and .getAddresses() methods along with the WebPayAdmin .queryOrder() et al methods may return an IndividualCustomer object as (part) of the request response. 
+Various service requests such as the WebPay `.createOrder()` and `.getAddresses()` methods along with the WebPayAdmin `.queryOrder()` et al methods may return an IndividualCustomer object as (part) of the request response. 
 
 Note that not all responses define the same attributes. Also, what attributes are returned may vary between different countries and payment methods. In general, you should inspect the received response object attributes before relying on them for further requests.
+
+If defined, the customer `.getName()` method will contain the amalgated customer firstname and surname as returned by the various credit providers we use in the respective country. Unfortunately, there is no way of knowing the exact format of the amalgated name; i.e. "Joan Doe", "Joan, Doe", "Doe, Joan". 
+
+If defined, the customer firstname and surname are provided by the methods `.getFirstName()` and `.getLastName()`; if not, these methods return null.
+
 
 ### 5.8 WebPayItem.companyCustomer() <a name="i58"></a>
 <!-- WebPayItem.companyCustomer() docbloc below, replace @see with apidoc links -->
@@ -819,6 +838,10 @@ Note that "required" below as a requirement only when using the invoice payment 
 Various service requests such as the WebPay .createOrder() and .getAddresses() methods along with the WebPayAdmin .queryOrder() et al methods may return a CompanyCustomer object as (part) of the request response. 
 
 Note that not all responses define the same attributes. Also, what attributes are returned may vary between different countries and payment methods. In general, you should inspect the received response object attributes before relying on them for further requests.
+
+If defined, the customer `.getName()` method will contain the amalgated customer firstname and surname as returned by the various credit providers we use in the respective country. Unfortunately, there is no way of knowing the exact format of the amalgated name; i.e. "Joan Doe", "Joan, Doe", "Doe, Joan". 
+
+If defined, the customer firstname and surname are provided by the methods `.getFirstName()` and `.getLastName()`; if not, these methods return null.
 
 ### 5.9 WebPayItem.numberedOrderRow() <a name="i59"></a>
 NumberedOrderRow extends the orderRow class, providing fields used by when i.e. administrating an invoice or payment plan order.
