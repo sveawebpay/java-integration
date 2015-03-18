@@ -227,7 +227,7 @@ public class WebserviceRowFormatter {
                             orderRow.Description = formatDiscountRowDescription(name, description, (long) vatRate);
                         }
 
-                        double discountAtThisVatRateExVat = MathUtil.bankersRound(existingRow.getAmountExVat() * (amountAtThisVatRateExVat / totalAmountExVat)) ;                     
+                        double discountAtThisVatRateExVat = existingRow.getAmountExVat() * (amountAtThisVatRateExVat / totalAmountExVat) ; // don't round early, as we lose accuracy if need to reconvert to amountIncVat                    
 
                         if( usePriceIncludingVat ) {
                         	orderRow.PricePerUnit = -MathUtil.bankersRound( convertExVatToIncVat(discountAtThisVatRateExVat, vatRate) ); 
