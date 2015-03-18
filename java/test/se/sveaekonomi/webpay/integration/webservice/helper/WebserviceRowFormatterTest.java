@@ -285,11 +285,11 @@ public class WebserviceRowFormatterTest {
         ArrayList<SveaOrderRow> newRows = new WebserviceRowFormatter(order).formatRows();
                 
         Double totalDiscountIncVat = 0.0;
-        // 100*200/300 = 66.67 ex. 25% vat => discount 83.34 (incl. 16.67 vat @25%)
+        // 100*200/300 = 66.6667 ex. 25% vat => discount 83.33 (incl. 16.67 vat @25%)
         SveaOrderRow newRow = newRows.get(2);
         assertEquals("f100e", newRow.ArticleNumber);
         assertEquals("couponName: couponDesc (25%)", newRow.Description);
-        assertEquals(-83.34, newRow.PricePerUnit, 0);	// discount as incvat, as other order rows are incvat
+        assertEquals(-83.33, newRow.PricePerUnit, 0);	// discount as incvat, as other order rows are incvat
         assertTrue( newRow.PriceIncludingVat );			// discount as incvat, as other order rows are incvat
         assertEquals(25, newRow.VatPercent, 0);
         assertEquals(0, newRow.DiscountPercent, 0);
@@ -309,17 +309,17 @@ public class WebserviceRowFormatterTest {
         assertEquals("st", newRow.Unit);
         totalDiscountIncVat += newRow.PricePerUnit;
 
-        // mean vat based on exvat: (200/300=0,6667)*1,25 + (100/300=0,3333)*1,06) => 1.186673=1.1867
-        assertEquals(-100.00 * 1.1867, totalDiscountIncVat, 0.0001);	
+        // mean vat based on exvat: (200/300=0,6666)*1,25 + (100/300=0,3333)*1,06) =>  0.83325 + 0,3533 => 1.1866 => 83.33 + 35.33 = 118.66 
+        assertEquals(-100.00 * 1.1866, totalDiscountIncVat, 0.0001);	
         
         // check order total        
         double total = 
         		newRows.get(0).PricePerUnit * newRows.get(0).NumberOfUnits  +	// 250.00
         		newRows.get(1).PricePerUnit * newRows.get(1).NumberOfUnits  +	// 106.00
-        		newRows.get(2).PricePerUnit * newRows.get(2).NumberOfUnits  +	// -83.34
+        		newRows.get(2).PricePerUnit * newRows.get(2).NumberOfUnits  +	// -83.33
         		newRows.get(3).PricePerUnit * newRows.get(3).NumberOfUnits 		// -35.33
 		;        
-        assertEquals( 237.33, Double.valueOf(String.format(Locale.ENGLISH,"%.2f",total)), 0.001 );
+        assertEquals( 237.34, Double.valueOf(String.format(Locale.ENGLISH,"%.2f",total)), 0.001 );
     }    
 
     // iff no specified vatPercent => split discount incl. vat over the diffrent tax rates present in order
