@@ -2,7 +2,6 @@ package se.sveaekonomi.webpay.integration.webservice.svea_soap;
 
 import java.io.ByteArrayInputStream;
 import java.net.MalformedURLException;
-import java.net.URL;
 
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
@@ -16,7 +15,9 @@ import javax.xml.transform.stream.StreamSource;
 
 import org.w3c.dom.NodeList;
 
+import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 public class SveaSoapBuilder {
 
@@ -36,27 +37,27 @@ public class SveaSoapBuilder {
         }
     }
     
-    public NodeList createOrderEuRequest(String message, String urlEndpoint) {
-        return sendSoapMessage(message, urlEndpoint, "CreateOrderEu", "CreateOrderEuResult");
+    public NodeList createOrderEuRequest(String message, ConfigurationProvider config, PAYMENTTYPE orderType ) {
+        return sendSoapMessage(message, config, orderType, "CreateOrderEu", "CreateOrderEuResult");
     }
     
-    public NodeList closeOrderEuRequest(String message, String urlEndpoint) {
-        return sendSoapMessage(message, urlEndpoint, "CloseOrderEu", "CloseOrderEuResult");
+    public NodeList closeOrderEuRequest(String message, ConfigurationProvider config, PAYMENTTYPE orderType) {
+        return sendSoapMessage(message, config, orderType, "CloseOrderEu", "CloseOrderEuResult");
     }
     
-    public NodeList deliverOrderEuRequest(String message, String urlEndpoint) {
-        return sendSoapMessage(message, urlEndpoint, "DeliverOrderEu", "DeliverOrderEuResult");
+    public NodeList deliverOrderEuRequest(String message, ConfigurationProvider config, PAYMENTTYPE orderType) {
+        return sendSoapMessage(message, config, orderType, "DeliverOrderEu", "DeliverOrderEuResult");
     }
         
-    public NodeList createGetAddressesEuRequest(String message, String urlEndpoint) {
-        return sendSoapMessage(message, urlEndpoint, "GetAddresses", "GetAddressesResponse");
+    public NodeList createGetAddressesEuRequest(String message, ConfigurationProvider config, PAYMENTTYPE orderType) {
+        return sendSoapMessage(message, config, orderType, "GetAddresses", "GetAddressesResponse");
     }
     
-    public NodeList createGetPaymentPlanParamsEuRequest(String message, String urlEndpoint) {
-        return sendSoapMessage(message, urlEndpoint, "GetPaymentPlanParamsEu", "GetPaymentPlanParamsEuResponse");
+    public NodeList createGetPaymentPlanParamsEuRequest(String message, ConfigurationProvider config, PAYMENTTYPE orderType) {
+        return sendSoapMessage(message, config, orderType, "GetPaymentPlanParamsEu", "GetPaymentPlanParamsEuResponse");
     }
     
-    private NodeList sendSoapMessage(String message, String urlEndpoint, String requestHeader, String responseHeader) {
+    private NodeList sendSoapMessage(String message, ConfigurationProvider config, PAYMENTTYPE orderType, String requestHeader, String responseHeader) {
         try {
             MessageFactory factory = MessageFactory.newInstance();
             SOAPMessage outgoingMessage = factory.createMessage();
@@ -68,6 +69,12 @@ public class SveaSoapBuilder {
             MimeHeaders headers = outgoingMessage.getMimeHeaders();
             headers.addHeader("SOAPAction", namespace_soapAction + "/" +requestHeader);
             
+            headers.addHeader("X-Svea-Library-Name", "mockedlibraryname");
+            headers.addHeader("X-Svea-Library-Version", "mockedlibraryversion");
+            headers.addHeader("X-Svea-Integration-Platform", config.getIntegrationPlatform() );
+            headers.addHeader("X-Svea-Integration-Company", config.getIntegrationCompany() );
+            headers.addHeader("X-Svea-Integration-Version", config.getIntegrationVersion() );
+                        
             envelope.addNamespaceDeclaration(prefix, namespace_soapAction);
             
             byte[] buffer = message.getBytes();
@@ -76,16 +83,13 @@ public class SveaSoapBuilder {
             soapPart.setContent(source);
             
             // send message
-            URL endpoint = new URL(urlEndpoint);
-            SOAPMessage response = connection.call(outgoingMessage, endpoint);
+            SOAPMessage response = connection.call(outgoingMessage, config.getEndPoint(orderType) );
             
             connection.close();
             
             return response.getSOAPPart().getEnvelope().getElementsByTagName(responseHeader);
         } catch (SOAPException ex) {
             throw new SveaWebPayException("SOAP exception", ex);
-        } catch (MalformedURLException ex) {
-            throw new SveaWebPayException("Malformed URL", ex);
         }
     }
     

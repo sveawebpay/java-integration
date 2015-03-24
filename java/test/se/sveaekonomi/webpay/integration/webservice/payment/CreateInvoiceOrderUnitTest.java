@@ -26,6 +26,7 @@ import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse
 import se.sveaekonomi.webpay.integration.response.webservice.CustomerIdentityResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
@@ -151,9 +152,8 @@ public class CreateInvoiceOrderUnitTest {
 		WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
 
 		String xml = xmlBuilder.getCreateOrderEuXml(request.request);
-		String url = SveaConfig.getTestWebserviceUrl().toString();
 		String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
-		NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
+		NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, SveaConfig.getDefaultConfig(), PAYMENTTYPE.INVOICE);
 		CreateOrderResponse response = new CreateOrderResponse(soapResponse);
 		orderId = response.orderId;
 

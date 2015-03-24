@@ -9,6 +9,7 @@ import static org.junit.Assert.assertTrue;
 
 
 
+
 import org.junit.Test;
 import org.w3c.dom.NodeList;
 
@@ -24,6 +25,7 @@ import se.sveaekonomi.webpay.integration.order.row.ShippingFeeBuilder;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
+import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 import se.sveaekonomi.webpay.integration.webservice.handleorder.CloseOrder;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
@@ -151,7 +153,7 @@ public class CreateInvoiceOrderTest {
 		String xml = xmlBuilder.getCreateOrderEuXml(request.request);
 		String url = SveaConfig.getTestWebserviceUrl().toString();
 		String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
-		NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url);
+		NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, SveaConfig.getDefaultConfig(), PAYMENTTYPE.INVOICE);
 		CreateOrderResponse response = new CreateOrderResponse(soapResponse);
 		orderId = response.orderId;
 
