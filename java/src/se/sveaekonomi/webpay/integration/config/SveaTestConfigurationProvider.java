@@ -138,4 +138,19 @@ public class SveaTestConfigurationProvider implements ConfigurationProvider{
         
         return SveaConfig.getTestWebserviceUrl();
     }
+    
+    @Override
+    public String getIntegrationPlatform() {
+    	return "N/A - Integration package default SveaTestConfigurationProvider";
+    }
+
+    @Override
+    public String getIntegrationCompany() {
+    	return "N/A - Integration package default SveaTestConfigurationProvider.";
+    }    
+    
+    @Override
+    public String getIntegrationVersion() {
+    	return "N/A - Integration package default SveaTestConfigurationProvider.";
+    } 
 }
