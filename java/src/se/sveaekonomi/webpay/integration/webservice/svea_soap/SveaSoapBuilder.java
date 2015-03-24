@@ -2,6 +2,7 @@ package se.sveaekonomi.webpay.integration.webservice.svea_soap;
 
 import java.io.ByteArrayInputStream;
 import java.net.MalformedURLException;
+import java.net.URL;
 
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
@@ -49,7 +50,18 @@ public class SveaSoapBuilder {
         return sendSoapMessage(message, config, orderType, "DeliverOrderEu", "DeliverOrderEuResult");
     }
         
-    public NodeList createGetAddressesEuRequest(String message, ConfigurationProvider config, PAYMENTTYPE orderType) {
+    public NodeList createGetAddressesEuRequest(String message, ConfigurationProvider config) {
+    	PAYMENTTYPE orderType = PAYMENTTYPE.INVOICE;    	
+    	@SuppressWarnings("unused")
+		URL url;
+        try {
+        	url = config.getEndPoint( orderType );		// first try invoice credentials
+        }
+        catch( Exception e) {
+        	orderType = PAYMENTTYPE.PAYMENTPLAN;
+        	url = config.getEndPoint( orderType );		// will throw Exception if no credentials found
+        }
+    	    	
         return sendSoapMessage(message, config, orderType, "GetAddresses", "GetAddressesResponse");
     }
     
