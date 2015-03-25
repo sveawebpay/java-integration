@@ -4,7 +4,7 @@ import org.junit.Test;
 
 public class CloseOrderTest {
    
-	// see WebPayTest.java test_closeOrder
+	// see WebPayWebdriverTest.java test_closeOrder_closeInvoiceOrder
     @Test	
 	public void test_foo() {
 		assert( true );
