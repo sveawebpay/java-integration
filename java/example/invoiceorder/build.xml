@@ -4,7 +4,7 @@
 	<dirname property="InvoiceOrder.basedir" file="${ant.file.InvoiceOrder}" />
 	<property file="${InvoiceOrder.basedir}/build.properties" />		
 
-	<path id="classpath">
+	<path id="classpath_invoiceOrder">
 		<fileset dir="${InvoiceOrder.basedir}/${invoiceorder.lib.dir}" includes="servlet-api.jar" />
 		<fileset dir="${InvoiceOrder.basedir}/${invoiceorder.lib.dir}" includes="sveawebpay.jar" />
 	</path>
@@ -22,10 +22,10 @@
 		<mkdir dir="${InvoiceOrder.basedir}/${invoiceorder.dist.dir}" />
 	</target>
 
-	<target name="compile" depends="init">
+	<target name="compile" depends="">
 		<echo>Compile the source files</echo>
 		<javac srcdir="${InvoiceOrder.basedir}/${invoiceorder.src.dir}" destdir="${InvoiceOrder.basedir}/${invoiceorder.build.dir}/WEB-INF/classes">
-			<classpath refid="classpath" />
+			<classpath refid="classpath_invoiceOrder" />
 		</javac>
 	</target>
 

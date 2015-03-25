@@ -1,5 +1,5 @@
 <project name="sveawebpay" basedir="." default="clean-all">
- 
+ 		
 	<property name="java.encoding" value="UTF-8" />
 	<presetdef name="javac">
 		<javac includeantruntime="false" encoding="${java.encoding}" />
@@ -21,23 +21,34 @@
         <fileset dir="${test.lib.dir}" includes="**/*.jar"/>
         <path refid="src.jars" />
     </path>
-	
-   
+	   
     <property name="build.dir"   location="target"/>
     <property name="src.classes.dir" location="${build.dir}/classes"/>
     <property name="test.classes.dir" location="${build.dir}/testclasses"/>
     <property name="integrationtest.classes.dir" location="${build.dir}/integrationtestclasses"/>
-    <property name="jar.dir"     location="${build.dir}/jar"/>
+
+	<property name="jar.dir"     location="${build.dir}/jar"/>
     <property name="integration.report.dir"  location="${build.dir}/junitreport/integration"/>
     <property name="unit.report.dir"  location="${build.dir}/junitreport/unit"/>
     <property name="webdriver.report.dir"  location="${build.dir}/junitreport/webdriver"/>
+	
+	<property file="${src.dir}/info.properties" />
 	
     <target name="clean" >
         <delete dir="${build.dir}"/>
     </target>
 
+
+	
+	
 	<target name="src.compile">
-        <mkdir dir="${src.classes.dir}"/>
+
+		<!-- make sure info.properties file (w/integration package (library) version info) is available in jar file -->
+		<copy todir="${src.classes.dir}">
+			<fileset file="${src.dir}/info.properties" />
+		</copy>	
+		
+		<mkdir dir="${src.classes.dir}"/>
         <javac srcdir="${src.dir}" destdir="${src.classes.dir}" classpathref="src.jars">
         	<compilerarg value="-Xlint" />
 	    </javac>
@@ -63,8 +74,9 @@
         </path>
     </target>
 
-	
-    <target name="junit">    	
+
+	<!-- runs unit tests on compiled classes -->
+	<target name="junit">    	
     	<mkdir dir="${unit.report.dir}"/>
         
     	<junit printsummary="yes" >
@@ -81,14 +93,40 @@
         <antcall target="fail-unit-tests" inheritall="true" inheritrefs="true" />
     </target>
 
+	
+	<!-- runs unit tests on integration package jar -->
+    <target name="junit-on-jar" depends="jar">    	
+    	<mkdir dir="${unit.report.dir}"/>
+    	
+    	<!-- path to integration package jar file -->
+        <path id="test.against.jar.classpath">
+            <path location="${jar.dir}/${ant.project.name}.jar" />
+        	<path refid="test.jars" />
+            <path location="${test.classes.dir}" />
+        </path>
+        
+    	<junit printsummary="yes" >
+    		<jvmarg value="-Dfile.encoding=UTF-8"/>   		
+            <classpath refid="test.against.jar.classpath"/>    		 
+            <formatter type="xml"/>            
+            <batchtest fork="no" todir="${unit.report.dir}"  failureproperty="unittests.failed">
+                <fileset dir="${test.dir}" includes="**/*Test.java"/>
+            </batchtest>
+        </junit>
+        <antcall target="fail-unit-tests" inheritall="true" inheritrefs="true" />
+    </target>
+
+	
     <target name="fail-unit-tests" if="unittests.failed">
-        <concat>
+		<!-- don't spam with test results, please go to unit.report.dir and examine as needed
+    	<concat>
             <fileset dir="${unit.report.dir}" includes="TEST*"/>
         </concat>
+        -->
         <fail/>
     </target>
 
-		
+	<!-- writes all unit tests results to report.dir -->
     <target name="junitreport">
         <junitreport todir="${report.dir}">
             <fileset dir="${report.dir}" includes="TEST-*.xml"/>
@@ -96,12 +134,21 @@
         </junitreport>
     </target>
 
-	
+
+	<!-- build package jar file -->
     <target name="jar" depends="build">
-        <mkdir dir="${jar.dir}"/>
-        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${src.classes.dir}">
-            <manifest>
-                <attribute name="License" value="Apache 2.0 License"/>
+        <mkdir dir="${jar.dir}"/>    	    	    	
+        <jar destfile="${jar.dir}/${ant.project.name}.jar" basedir="${src.classes.dir}">        	
+        	<manifest>
+            	<section name="se.sveaekonomi.webpay.integration">
+	            	<attribute name="Specification-Title" value="${library_name}"/>
+	            	<attribute name="Specification-Version" value="${library_version}"/>
+	            	<attribute name="Specification-Vendor" value="Svea Ekonomi"/>
+	            	<attribute name="Implementation-Title" value="${library_name}"/>
+	            	<attribute name="Implementation-Version" value="${library_version}"/>
+	            	<attribute name="Implementation-Vendor" value="Svea Ekonomi"/>
+	            	<attribute name="License" value="Apache 2.0 License"/>            	
+            	</section>
             </manifest>
         </jar>
     </target>
@@ -142,24 +189,22 @@
     </target> 
 	
 	<target name="fail-integration-tests" if="integrationtests.failed">
+		<!-- don't spam with test results, please go to unit.report.dir and examine as needed
         <concat>
             <fileset dir="${integration.report.dir}" includes="TEST*"/>
         </concat>
+        -->
         <fail/>
 	</target>
 	
 
 	<!-- the WebPay and WebPayAdmin acceptance tests use selenium and a locally hosted exampel/cardorder, so won't run on Travis CI -->
     <target name="webdrivertest" depends="integrationtest.compile">
-        <mkdir dir="${webdriver.report.dir}"/>
-        
+        <mkdir dir="${webdriver.report.dir}"/> 
         <junit printsummary="yes" >
     		<jvmarg value="-Dfile.encoding=UTF-8"/>
-
-        	<classpath refid="all.integrationtest.classpath"/>
-           
+        	<classpath refid="all.integrationtest.classpath"/> 
             <formatter type="xml"/>
-            
             <batchtest fork="no" todir="${webdriver.report.dir}" failureproperty="webdrivertests.failed">
                 <fileset dir="${integrationtest.dir}" includes="**/*WebdriverTest.java" />
             </batchtest>
@@ -168,14 +213,17 @@
     </target> 
 
 	<target name="fail-webdriver-tests" if="webdrivertests.failed">
+		<!-- don't spam with test results, please go to unit.report.dir and examine as needed
         <concat>
             <fileset dir="${integration.report.dir}" includes="TEST*"/>
         </concat>
+		-->
         <fail/>
 	</target>		
+
 	
-	<include file="example/invoiceorder/build.xml" as="deploy_invoiceorder"/>
-	
+	<!-- build and deploy invoice order example -->
+	<include file="example/invoiceorder/build.xml" as="deploy_invoiceorder"/>	
 	<target name="invoiceorder_libs" depends="clean, build, jar"
 		description="builds integration package, copies example libs, builds example, deploys to http://[local tomcat installation]/InvoiceOrder">
 
@@ -192,9 +240,8 @@
 		description="builds example InvoiceOrder deploys to http://[local tomcat installation]/InvoiceOrder">
 	</target>
 	
-
+	<!-- build and deploy card order example -->
 	<include file="example/cardorder/build.xml" as="deploy_cardorder"/>	
-
 	<target name="cardorder_libs" depends="clean, build, jar"
 		description="builds integration package, copies example libs, builds example, deploys to http://[local tomcat installation]/CardOrder">
 
@@ -204,16 +251,15 @@
 			<fileset file="${src.lib.dir}/httpclient-4.3.4.jar" />
 			<fileset file="${src.lib.dir}/httpcore-4.3.2.jar" />			
 			<fileset file="${example.lib.dir}/servlet-api.jar" />
-		</copy>		
-		
+		</copy>				
 	</target>			
 	
 	<target name="cardorder" depends="cardorder_libs, deploy_cardorder.deploy_cardorder"
 		description="builds integration package, copies example libs, builds example, deploys to http://[local tomcat installation]/CardOrder">	
 	</target>			
 
-	<include file="example/creditinvoiceorder/build.xml" as="deploy_creditinvoiceorder"/>
-	
+	<!-- build and deploy credit invoice order example -->
+	<include file="example/creditinvoiceorder/build.xml" as="deploy_creditinvoiceorder"/>	
 	<target name="creditinvoiceorder_libs" depends="clean, build, jar"
 		description="builds integration package, copies example libs, builds example, deploys to http://[local tomcat installation]/CreditInvoiceOrder">
 
@@ -229,14 +275,16 @@
 	<target name="creditinvoiceorder" depends="creditinvoiceorder_libs, deploy_creditinvoiceorder.deploy_creditinvoiceorder" 
 		description="builds example CreditInvoiceOrder deploys to http://[local tomcat installation]/InvoiceOrder">
 	</target>
-			
+
+	
+	<!-- entrypoint build targets -->	
 	<target name="build" depends="src.compile, test.compile" description="Compile src and test"/>
     <target name="clean-build" depends="clean, build" description="Clean, then compile src and test"/>
     <target name="clean-test" depends="clean-build, junit" description="Clean, build and test"/>
-    <target name="clean-jar" depends="clean-test, jar" description="Clean, build, unit test and package a jar file"/>
+    <target name="clean-jar" depends="clean-test, jar, junit-on-jar" description="Clean, build, unit test and package a jar file"/>
     <target name="clean-integrationtest" depends="clean-jar, integrationtest.compile, integrationtest" description="Run integration tests from created jar file"/>
     <target name="clean-webdrivertest" depends="clean-jar, integrationtest.compile, cardorder, webdrivertest" description="Run webdriver smoke tests using cardorder example"/>
-	<target name="examples" depends="invoiceorder, cardorder, creditinvoiceorder" description="Build and deploy examples"/>
+	<target name="examples" depends="clean-jar, invoiceorder, cardorder, creditinvoiceorder" description="Build and deploy examples"/>
     <target name="clean-all" depends="clean-jar, integrationtest, webdrivertest, examples" description="Build, deploy examples, run all tests."/>		
 	
 </project>
