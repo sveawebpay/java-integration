@@ -26,7 +26,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  * 
  * @author Kristian Grossman-Madsen
  */
-public class DeliverOrdersRequest implements Requestable {
+public class DeliverOrdersRequest extends AdminServiceRequest implements Requestable {
 	
 	private String action;
 	public DeliverOrderBuilder builder;
@@ -136,6 +136,8 @@ public class DeliverOrdersRequest implements Requestable {
 	        MimeHeaders headers = soapMessage.getMimeHeaders();
 	        headers.addHeader("SOAPAction", soapActionPrefix + this.action);
 			        
+	    	setHeaderRequestProperties(headers, this.builder.getConfig());		
+	        
 	        soapMessage.saveChanges();
         
 		} catch (SOAPException e) {

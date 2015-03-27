@@ -19,7 +19,7 @@ import se.sveaekonomi.webpay.integration.order.handle.CancelOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.response.adminservice.CancelOrderRowsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
-public class CancelOrderRowsRequest {
+public class CancelOrderRowsRequest extends AdminServiceRequest {
 
 	private String action;
 	private CancelOrderRowsBuilder builder;
@@ -98,7 +98,9 @@ public class CancelOrderRowsRequest {
 		String soapActionPrefix = "http://tempuri.org/IAdminService/";		    	
 		MimeHeaders headers = soapMessage.getMimeHeaders();
 		headers.addHeader("SOAPAction", soapActionPrefix + this.action);
-			    
+
+    	setHeaderRequestProperties(headers, this.builder.getConfig());				
+		
 	    // SOAP Body
 	    SOAPBody body = envelope.getBody();
 	    SOAPElement deliverPartial = body.addChildElement("CancelOrderRows", "tem");

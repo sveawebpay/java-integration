@@ -21,7 +21,7 @@ import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.response.adminservice.CreditOrderRowsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
-public class CreditOrderRowsRequest {
+public class CreditOrderRowsRequest extends AdminServiceRequest {
 
 	private String action;
 	private CreditOrderRowsBuilder builder;
@@ -134,7 +134,9 @@ public class CreditOrderRowsRequest {
 		String soapActionPrefix = "http://tempuri.org/IAdminService/";		    	
 		MimeHeaders headers = soapMessage.getMimeHeaders();
 		headers.addHeader("SOAPAction", soapActionPrefix + this.action);
-			    
+
+    	setHeaderRequestProperties(headers, this.builder.getConfig());				
+		
 	    // SOAP Body
 	    SOAPBody body = envelope.getBody();
 	    SOAPElement deliverPartial = body.addChildElement("CreditInvoiceRows", "tem");

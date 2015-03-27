@@ -23,7 +23,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  * Handles Admin Webservice GetOrders request
  * @author Kristian Grossman-Madsen
  */
-public class GetOrdersRequest {
+public class GetOrdersRequest extends AdminServiceRequest {
 
 	private String action;
 	private QueryOrderBuilder builder;
@@ -120,6 +120,8 @@ public class GetOrdersRequest {
 						    	
         MimeHeaders headers = soapMessage.getMimeHeaders();
         headers.addHeader("SOAPAction", soapActionPrefix + this.action);
+        
+    	setHeaderRequestProperties(headers, this.builder.getConfig());		        
 					   
         soapMessage.saveChanges();
 

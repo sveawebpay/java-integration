@@ -52,7 +52,7 @@ public class GetRequestProperties {
 
 		libraryProperties.put("library_name", library_name);
 		libraryProperties.put("library_version", library_version);				
-		return libraryProperties;	
+		return libraryProperties;
 	}
 
 	public String defaultGetIntegrationPlatform() { return "Integration platform not available"; };
