@@ -48,19 +48,15 @@ public class ConfigurationProviderTestData implements ConfigurationProvider {
         
         return SveaConfig.getTestWebserviceUrl();
     }
-
     
-    @Override
     public String getIntegrationPlatform() {
     	return "Please provide your integration platform here.";
     }
 
-    @Override
     public String getIntegrationCompany() {
     	return "Please provide your integration company here.";
     }    
     
-    @Override
     public String getIntegrationVersion() {
     	return "Please provide your integration version here.";
     }     

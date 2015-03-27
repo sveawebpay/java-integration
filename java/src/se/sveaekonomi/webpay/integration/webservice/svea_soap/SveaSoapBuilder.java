@@ -22,7 +22,7 @@ import org.w3c.dom.NodeList;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
-import se.sveaekonomi.webpay.integration.util.request.GetLibraryProperties;
+import se.sveaekonomi.webpay.integration.util.request.GetRequestProperties;
 
 public class SveaSoapBuilder {
 
@@ -85,14 +85,17 @@ public class SveaSoapBuilder {
             MimeHeaders headers = outgoingMessage.getMimeHeaders();
             headers.addHeader("SOAPAction", namespace_soapAction + "/" +requestHeader);
             
-        	HashMap<String,String> properties = GetLibraryProperties.getSveaLibraryProperties();            
+        	HashMap<String,String> libraryproperties = GetRequestProperties.getSveaLibraryProperties();            
             
-            headers.addHeader("X-Svea-Library-Name", properties.get("library_version") + "1" );
-            headers.addHeader("X-Svea-Library-Version", properties.get("library_name") + "2" );
-            headers.addHeader("X-Svea-Integration-Platform", config.getIntegrationPlatform() );
-            headers.addHeader("X-Svea-Integration-Company", config.getIntegrationCompany() );
-            headers.addHeader("X-Svea-Integration-Version", config.getIntegrationVersion() );
-                        
+            headers.addHeader("X-Svea-Library-Name", libraryproperties.get("library_version") );
+            headers.addHeader("X-Svea-Library-Version", libraryproperties.get("library_name") );
+            
+        	HashMap<String,String> integrationproperties = GetRequestProperties.getSveaIntegrationProperties( config );            
+
+            headers.addHeader("X-Svea-Integration-Platform", integrationproperties.get("integrationplatform") );
+            headers.addHeader("X-Svea-Integration-Company", integrationproperties.get("integrationcompany") );
+            headers.addHeader("X-Svea-Integration-Version", integrationproperties.get("integrationversion") );
+
             envelope.addNamespaceDeclaration(prefix, namespace_soapAction);
             
             byte[] buffer = message.getBytes();

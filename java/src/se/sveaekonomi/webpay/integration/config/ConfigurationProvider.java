@@ -65,20 +65,26 @@ public interface ConfigurationProvider {
     /**
      * Use this to provide information about your integration platform (i.e. Magento, OpenCart et al), that will be sent to Svea with every service
      * request. Should return a string. The information provided is sent as plain text and should not include any confidential information.
+     * 
+     * Uncomment this if you wish to provide this information from your ConfigurationProvider implementation.
      */    
-    public String getIntegrationPlatform();
+    // public String getIntegrationPlatform();
     
     /**
      * Use this to provide information about the company providing this particular integration (i.e. Svea Ekonomi, for the Svea Opencart module, et al), that 
      * will be sent to Svea with every service request. Should return a string. The information provided is sent as plain text and should not include any 
      * confidential information.
+     * 
+     * Uncomment this if you wish to provide this information from your ConfigurationProvider implementation.
      */  
-    public String getIntegrationCompany();
+    // public String getIntegrationCompany();
     
     /**
      * Use this to provide information about the version of this particular integration integration platform (i.e. 2.0.1 et al), that will be sent to Svea
      * with every service request. Should return a string. The information provided is sent as plain text and should not include any confidential information.
+     * 
+     * Uncomment this if you wish to provide this information from your ConfigurationProvider implementation.
      */  
-    public String getIntegrationVersion();
+    // public String getIntegrationVersion();
    
 }

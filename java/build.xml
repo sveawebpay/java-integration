@@ -239,6 +239,7 @@
 	<target name="invoiceorder" depends="invoiceorder_libs, deploy_invoiceorder.deploy_invoiceorder" 
 		description="builds example InvoiceOrder deploys to http://[local tomcat installation]/InvoiceOrder">
 	</target>
+
 	
 	<!-- build and deploy card order example -->
 	<include file="example/cardorder/build.xml" as="deploy_cardorder"/>	
@@ -279,7 +280,7 @@
 	
 	<!-- entrypoint build targets -->	
 	<target name="build" depends="src.compile, test.compile" description="Compile src and test"/>
-    <target name="clean-build" depends="clean, build" description="Clean, then compile src and test"/>
+    <target name="clean-build" depends="clean, build" description="Clean, then compile src and test using resulting class files"/>
     <target name="clean-test" depends="clean-build, junit" description="Clean, build and test"/>
     <target name="clean-jar" depends="clean-test, jar, junit-on-jar" description="Clean, build, unit test and package a jar file"/>
     <target name="clean-integrationtest" depends="clean-jar, integrationtest.compile, integrationtest" description="Run integration tests from created jar file"/>
