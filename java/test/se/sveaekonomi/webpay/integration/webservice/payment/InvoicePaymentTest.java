@@ -67,7 +67,7 @@ public class InvoicePaymentTest {
 												        .useInvoicePayment()
 												        .prepareRequest();
         
-        assertEquals(79021, request.request.Auth.ClientNumber, 0);
+        assertEquals((Integer)79021, request.request.Auth.ClientNumber);
         assertEquals("sverigetest", request.request.Auth.Username);
         assertEquals("sverigetest", request.request.Auth.Password);
     }

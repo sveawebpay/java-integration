@@ -1,8 +1,11 @@
 package se.sveaekonomi.webpay.integration.webservice.svea_soap;
 
+import static org.junit.Assert.assertEquals;
+
 import java.io.ByteArrayInputStream;
 import java.net.MalformedURLException;
 import java.net.URL;
+import java.util.HashMap;
 
 import javax.xml.soap.MessageFactory;
 import javax.xml.soap.MimeHeaders;
@@ -19,6 +22,7 @@ import org.w3c.dom.NodeList;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
+import se.sveaekonomi.webpay.integration.util.request.GetLibraryProperties;
 
 public class SveaSoapBuilder {
 
@@ -81,8 +85,10 @@ public class SveaSoapBuilder {
             MimeHeaders headers = outgoingMessage.getMimeHeaders();
             headers.addHeader("SOAPAction", namespace_soapAction + "/" +requestHeader);
             
-            headers.addHeader("X-Svea-Library-Name", "mockedlibraryname");
-            headers.addHeader("X-Svea-Library-Version", "mockedlibraryversion");
+        	HashMap<String,String> properties = GetLibraryProperties.getSveaLibraryProperties();            
+            
+            headers.addHeader("X-Svea-Library-Name", properties.get("library_version") + "1" );
+            headers.addHeader("X-Svea-Library-Version", properties.get("library_name") + "2" );
             headers.addHeader("X-Svea-Integration-Platform", config.getIntegrationPlatform() );
             headers.addHeader("X-Svea-Integration-Company", config.getIntegrationCompany() );
             headers.addHeader("X-Svea-Integration-Version", config.getIntegrationVersion() );

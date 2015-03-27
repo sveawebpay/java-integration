@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.util.request;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertTrue;
 
 import java.util.HashMap;
 
@@ -12,7 +13,8 @@ public class GetLibraryPropertiesTest {
     public void testGetSveaLibraryProperties() {
     	HashMap<String,String> properties = GetLibraryProperties.getSveaLibraryProperties();
         
-        assertEquals("2.0.2", properties.get("library_version") );
+        assertTrue(properties.get("library_version").startsWith("2."));
         assertEquals("Java Integration Package", properties.get("library_name") );
     }
+	
 }
