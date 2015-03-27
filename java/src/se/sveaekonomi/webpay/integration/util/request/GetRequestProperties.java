@@ -7,6 +7,9 @@ import java.lang.reflect.Method;
 import java.util.HashMap;
 import java.util.Properties;
 
+import org.json.JSONException;
+import org.json.JSONObject;
+
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 
@@ -55,8 +58,6 @@ public class GetRequestProperties {
 		return libraryProperties;
 	}
 
-	public String defaultGetIntegrationPlatform() { return "Integration platform not available"; };
-	
 	public static HashMap<String, String> getSveaIntegrationProperties( ConfigurationProvider config ) {
 		
 		HashMap<String,String> integrationProperties = new HashMap<>();
@@ -86,4 +87,26 @@ public class GetRequestProperties {
 		}
 		return getIntegrationMethodReturnValue;
 	}
+	
+    /**
+     * Given a ConfigurationProvider, return a json string containing the Svea integration package (library) 
+     * and integration (from config) name, version et al. Used by HostedService requests.
+     */
+    public static String getLibraryAndPlatformPropertiesAsJson( ConfigurationProvider config ) {
+    	
+		HashMap<String,String> libraryproperties = GetRequestProperties.getSveaLibraryProperties();            
+		HashMap<String,String> integrationproperties = GetRequestProperties.getSveaIntegrationProperties( config );            
+        
+		JSONObject jsonComment = new JSONObject();
+		try {
+			jsonComment.put( "X-Svea-Library-Name", libraryproperties.get("library_version") );
+			jsonComment.put( "X-Svea-Library-Version", libraryproperties.get("library_name") );
+			jsonComment.put( "X-Svea-Integration-Platform", integrationproperties.get("integrationplatform") );
+			jsonComment.put( "X-Svea-Integration-Company", integrationproperties.get("integrationcompany") );
+			jsonComment.put( "X-Svea-Integration-Version", integrationproperties.get("integrationversion") );
+		} catch (JSONException e) {		
+			// ignored
+		}		
+		return jsonComment.toString();
+    }
 }
