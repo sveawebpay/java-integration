@@ -41,12 +41,16 @@ public class HostedPaymentTest {
             .setSubscriptionType(SUBSCRIPTIONTYPE.RECURRING)
          	.getPaymentForm()
     	;
-        
-        String wellformedXml =
-        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--{\"X-Svea-Integration-Version\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Integration-Platform\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Library-Name\":\"2.0.2\",\"X-Svea-Integration-Company\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Library-Version\":\"Java Integration Package\"}--><payment><customerrefno>33</customerrefno><currency>SEK</currency><subscriptiontype>RECURRING</subscriptiontype><amount>500</amount><vat>100</vat><returnurl>myurl</returnurl><iscompany>false</iscompany><orderrows><row><sku></sku><name></name><description></description><amount>500</amount><vat>100</vat><quantity>1.0</quantity></row><row><name></name><description></description><amount>0</amount><vat>0</vat><quantity>1.0</quantity></row><row><name></name><description></description><amount>0</amount><vat>0</vat><quantity>1.0</quantity><unit></unit></row><row><name></name><description></description><amount>0</amount><vat>0</vat><quantity>1.0</quantity></row></orderrows><addinvoicefee>false</addinvoicefee></payment>";   
-        
-        assertEquals(wellformedXml, form.getXmlMessage());
-    }		
+ 
+        // actual, expected response strings as parameter
+        String expectedXml =
+        "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--{\"X-Svea-Integration-Version\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Integration-Platform\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Library-Name\":\"Java Integration Package\",\"X-Svea-Integration-Company\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Library-Version\":\"2.0.2\"}--><payment><customerrefno>33</customerrefno><currency>SEK</currency><subscriptiontype>RECURRING</subscriptiontype><amount>500</amount><vat>100</vat><returnurl>myurl</returnurl><iscompany>false</iscompany><orderrows><row><sku></sku><name></name><description></description><amount>500</amount><vat>100</vat><quantity>1.0</quantity></row><row><name></name><description></description><amount>0</amount><vat>0</vat><quantity>1.0</quantity></row><row><name></name><description></description><amount>0</amount><vat>0</vat><quantity>1.0</quantity><unit></unit></row><row><name></name><description></description><amount>0</amount><vat>0</vat><quantity>1.0</quantity></row></orderrows><addinvoicefee>false</addinvoicefee></payment>";
+        String actualXml = form.getXmlMessage();
+
+        assertTrue( TestingTool.checkVersionInformationWithRequestXml( expectedXml, actualXml ) );
+	}
+	
+
 	
     @Test
     public void testCalculateRequestValuesNullExtraRows() {
