@@ -5,36 +5,6 @@ import static org.junit.Assert.*;
 import org.junit.Test;
 
 public class TestingToolTest {
-    
-//	@Test
-//	public void testCheckVersionInRequestXml_unlike_string_returns_false() {
-//
-//		String expectedXml = "2.0.1";
-//        
-//		String actualXml = "2.0.2";
-//		
-//        assertFalse( TestingTool.checkVersionInRequestXml(expectedXml, actualXml));
-//	}
-//
-//	@Test
-//	public void testCheckVersionInRequestXml_like_string_returns_true() {
-//
-//		String expectedXml = "2.0.2";
-//        
-//		String actualXml = "2.0.2";
-//		
-//        assertTrue( TestingTool.checkVersionInRequestXml(expectedXml, actualXml));
-//	}
-
-//	@Test
-//	public void testCheckVersionInRequestXml_like_string_returns_true2() {
-//
-//		String expectedXml = "2.0.2";
-//        
-//		String actualXml = "2.0.2";
-//		
-//        assertTrue( TestingTool.checkVersionInRequestXml(expectedXml, actualXml));
-//	}	
 	
 	@Test
 	public void testCheckVersionInRequestXml_same_xmlstring_returns_true() {
