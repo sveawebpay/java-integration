@@ -99,8 +99,8 @@ public class GetRequestProperties {
         
 		JSONObject jsonComment = new JSONObject();
 		try {
-			jsonComment.put( "X-Svea-Library-Name", libraryproperties.get("library_version") );
-			jsonComment.put( "X-Svea-Library-Version", libraryproperties.get("library_name") );
+			jsonComment.put( "X-Svea-Library-Name", libraryproperties.get("library_name") );
+			jsonComment.put( "X-Svea-Library-Version", libraryproperties.get("library_version") );
 			jsonComment.put( "X-Svea-Integration-Platform", integrationproperties.get("integrationplatform") );
 			jsonComment.put( "X-Svea-Integration-Company", integrationproperties.get("integrationcompany") );
 			jsonComment.put( "X-Svea-Integration-Version", integrationproperties.get("integrationversion") );
