@@ -50,7 +50,7 @@ public class ConfirmTransactionRequestTest extends TestCase {
 	
     	String expectedXmlMessage = 
 			"<?xml version=\"1.0\" encoding=\"UTF-8\"?>" +
-			"<!--{\"X-Svea-Integration-Version\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Integration-Platform\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Library-Name\":\"2.0.2\",\"X-Svea-Integration-Company\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Library-Version\":\"Java Integration Package\"}-->" +
+			"<!--{\"X-Svea-Integration-Version\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Integration-Platform\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Library-Name\":\"Java Integration Package\",\"X-Svea-Integration-Company\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Library-Version\":\"2.0.2\"}-->" +
 			"<confirm>" +
 				"<transactionid>123456</transactionid>" +
 				"<capturedate>14-12-01</capturedate>" + 
@@ -69,11 +69,11 @@ public class ConfirmTransactionRequestTest extends TestCase {
 		//String expectedXmlMessage = request.getRequestMessageXml();
 		//String expectedXmlMessageBase64 = Base64Util.encodeBase64String(expectedXmlMessage);
 		//System.out.println(expectedXmlMessageBase64);
-    	String expectedXmlMessageBase64 = "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48IS0teyJYLVN2ZWEtSW50ZWdyYXRpb24tVmVyc2lvbiI6IkludGVncmF0aW9uIHBhY2thZ2UgZGVmYXVsdCBTdmVhVGVzdENvbmZpZ3VyYXRpb25Qcm92aWRlci4iLCJYLVN2ZWEtSW50ZWdyYXRpb24tUGxhdGZvcm0iOiJJbnRlZ3JhdGlvbiBwYWNrYWdlIGRlZmF1bHQgU3ZlYVRlc3RDb25maWd1cmF0aW9uUHJvdmlkZXIuIiwiWC1TdmVhLUxpYnJhcnktTmFtZSI6IjIuMC4yIiwiWC1TdmVhLUludGVncmF0aW9uLUNvbXBhbnkiOiJJbnRlZ3JhdGlvbiBwYWNrYWdlIGRlZmF1bHQgU3ZlYVRlc3RDb25maWd1cmF0aW9uUHJvdmlkZXIuIiwiWC1TdmVhLUxpYnJhcnktVmVyc2lvbiI6IkphdmEgSW50ZWdyYXRpb24gUGFja2FnZSJ9LS0+PGNvbmZpcm0+PHRyYW5zYWN0aW9uaWQ+MTIzNDU2PC90cmFuc2FjdGlvbmlkPjxjYXB0dXJlZGF0ZT4xNC0xMi0wMTwvY2FwdHVyZWRhdGU+PC9jb25maXJtPg==";
+    	String expectedXmlMessageBase64 = "PD94bWwgdmVyc2lvbj0iMS4wIiBlbmNvZGluZz0iVVRGLTgiPz48IS0teyJYLVN2ZWEtSW50ZWdyYXRpb24tVmVyc2lvbiI6IkludGVncmF0aW9uIHBhY2thZ2UgZGVmYXVsdCBTdmVhVGVzdENvbmZpZ3VyYXRpb25Qcm92aWRlci4iLCJYLVN2ZWEtSW50ZWdyYXRpb24tUGxhdGZvcm0iOiJJbnRlZ3JhdGlvbiBwYWNrYWdlIGRlZmF1bHQgU3ZlYVRlc3RDb25maWd1cmF0aW9uUHJvdmlkZXIuIiwiWC1TdmVhLUxpYnJhcnktTmFtZSI6IkphdmEgSW50ZWdyYXRpb24gUGFja2FnZSIsIlgtU3ZlYS1JbnRlZ3JhdGlvbi1Db21wYW55IjoiSW50ZWdyYXRpb24gcGFja2FnZSBkZWZhdWx0IFN2ZWFUZXN0Q29uZmlndXJhdGlvblByb3ZpZGVyLiIsIlgtU3ZlYS1MaWJyYXJ5LVZlcnNpb24iOiIyLjAuMiJ9LS0+PGNvbmZpcm0+PHRyYW5zYWN0aW9uaWQ+MTIzNDU2PC90cmFuc2FjdGlvbmlkPjxjYXB0dXJlZGF0ZT4xNC0xMi0wMTwvY2FwdHVyZWRhdGU+PC9jb25maXJtPg==";
     	
     	//String expectedMacSha512 =  HashUtil.createHash(expectedXmlMessageBase64 + secretWord, HASHALGORITHM.SHA_512); // uncomment to get below xml  
 		//System.out.println(expectedMacSha512); // uncomment to get below xml    	
-    	String expectedMacSha512 = "b4b862c8be962459b0148da82f537714fe48e5d6182ac84c6844d20483b6a1d8d054f779671d7934bcd3d74b41e44783d50c3cbb142f8e06a92af8244dc6a23b";    	
+    	String expectedMacSha512 = "db9ec3054d29ffc225aba76b9c751bbfc340a4da67bc7fe8eaa6de74ff26d2fd8534e6d9ff537055e90b284cb2c066e34efe01fa17f20f9f17ca684c9649242e";    	
     	
     	Hashtable<String, String> requestFields = this.request.prepareRequest();
     	assertEquals( expectedXmlMessageBase64, requestFields.get("message") );

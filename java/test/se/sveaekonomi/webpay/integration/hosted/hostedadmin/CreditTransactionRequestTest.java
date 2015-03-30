@@ -26,7 +26,7 @@ public class CreditTransactionRequestTest extends TestCase {
     	this.request.setTransactionId( "123456" );    	
     	this.request.setCreditAmount(10);
     	
-    	String expectedXmlMessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--{\"X-Svea-Integration-Version\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Integration-Platform\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Library-Name\":\"2.0.2\",\"X-Svea-Integration-Company\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Library-Version\":\"Java Integration Package\"}--><credit><transactionid>123456</transactionid><amounttocredit>10</amounttocredit></credit>";
+    	String expectedXmlMessage = "<?xml version=\"1.0\" encoding=\"UTF-8\"?><!--{\"X-Svea-Integration-Version\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Integration-Platform\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Library-Name\":\"Java Integration Package\",\"X-Svea-Integration-Company\":\"Integration package default SveaTestConfigurationProvider.\",\"X-Svea-Library-Version\":\"2.0.2\"}--><credit><transactionid>123456</transactionid><amounttocredit>10</amounttocredit></credit>";
     	
     	assertEquals( expectedXmlMessage, request.getRequestMessageXml( SveaConfig.getDefaultConfig()) );    
     }
