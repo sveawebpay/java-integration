@@ -311,9 +311,9 @@ public class FixedDiscountRowsTest {
         // See file IntegrationTest/WebService/Payment/FixedDiscountRowsIntegrationTest for service response tests.        
     }    
     
-    // same order with discount exvat should be sent with PriceIncludingVat = true but with split discount rows based on order amounts ex vat
+    // same order with discount exvat should be sent with PriceIncludingVat = false and with split discount rows based on order amounts ex vat
     @Test
-    public void test_incvat_order_with_fixedDiscount_as_exvat_only_has_priceIncludingVat_true() {
+    public void test_incvat_order_with_fixedDiscount_as_exvat_only_has_priceIncludingVat_false() {
         CreateOrderBuilder order = FixedDiscountRowsTest.create_only_incvat_order_and_fee_rows_order();
         order.addDiscount(
     		WebPayItem.fixedDiscount()
@@ -326,28 +326,28 @@ public class FixedDiscountRowsTest {
         
         SveaRequest<SveaCreateOrder> request = order.useInvoicePayment().prepareRequest();
         // all invoice fee rows        
-        assertEquals(72.00, request.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit, 0);
+        assertEquals(60.00, request.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit, 0);
         assertEquals(20.0, request.request.CreateOrderInformation.OrderRows.get(0).VatPercent, 0);
-        assertEquals(true, request.request.CreateOrderInformation.OrderRows.get(0).PriceIncludingVat);
-        assertEquals(33.00, request.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit, 0);
+        assertEquals(false, request.request.CreateOrderInformation.OrderRows.get(0).PriceIncludingVat);
+        assertEquals(30.00, request.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit, 0);
         assertEquals(10, request.request.CreateOrderInformation.OrderRows.get(1).VatPercent, 0);
-        assertEquals(true, request.request.CreateOrderInformation.OrderRows.get(1).PriceIncludingVat);        
+        assertEquals(false, request.request.CreateOrderInformation.OrderRows.get(1).PriceIncludingVat);        
         // all shipping fee rows
-        assertEquals(17.60, request.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit, 0);
+        assertEquals(16.00, request.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit, 0);
         assertEquals(10, request.request.CreateOrderInformation.OrderRows.get(2).VatPercent, 0);
-        assertEquals(true, request.request.CreateOrderInformation.OrderRows.get(2).PriceIncludingVat);
+        assertEquals(false, request.request.CreateOrderInformation.OrderRows.get(2).PriceIncludingVat);
         // all invoice fee rows
-        assertEquals(8.80, request.request.CreateOrderInformation.OrderRows.get(3).PricePerUnit, 0);
+        assertEquals(8.00, request.request.CreateOrderInformation.OrderRows.get(3).PricePerUnit, 0);
         assertEquals(10, request.request.CreateOrderInformation.OrderRows.get(3).VatPercent, 0);
-        assertEquals(true, request.request.CreateOrderInformation.OrderRows.get(3).PriceIncludingVat);      
+        assertEquals(false, request.request.CreateOrderInformation.OrderRows.get(3).PriceIncludingVat);      
         // all discount rows
         // expected: fixedDiscount: 10 exvat => split across 10e *(60/60+30) @20% + 10e *(30/60+30) @10% => 6.6666e @20% + 3.3333e @10% => 8.00i + 3.67i
-        assertEquals(-8.00, request.request.CreateOrderInformation.OrderRows.get(4).PricePerUnit, 0);
+        assertEquals(-6.67, request.request.CreateOrderInformation.OrderRows.get(4).PricePerUnit, 0);
         assertEquals(20, request.request.CreateOrderInformation.OrderRows.get(4).VatPercent, 0);
-        assertEquals(true, request.request.CreateOrderInformation.OrderRows.get(4).PriceIncludingVat);        
-        assertEquals(-3.67, request.request.CreateOrderInformation.OrderRows.get(5).PricePerUnit, 0);
+        assertEquals(false, request.request.CreateOrderInformation.OrderRows.get(4).PriceIncludingVat);        
+        assertEquals(-3.33, request.request.CreateOrderInformation.OrderRows.get(5).PricePerUnit, 0);
         assertEquals(10, request.request.CreateOrderInformation.OrderRows.get(5).VatPercent, 0);
-        assertEquals(true, request.request.CreateOrderInformation.OrderRows.get(5).PriceIncludingVat);       
+        assertEquals(false, request.request.CreateOrderInformation.OrderRows.get(5).PriceIncludingVat);       
         
         // See file IntegrationTest/WebService/Payment/FixedDiscountRowsIntegrationTest for service response tests.
     }  
@@ -393,9 +393,9 @@ public class FixedDiscountRowsTest {
         // See file IntegrationTest/WebService/Payment/FixedDiscountRowsIntegrationTest for service response tests.
     }
     
-    // same order with discount exvat+vat should be sent with PriceIncludingVat = true with one discount row amount based on given exvat + vat
+    // same order with discount exvat+vat should be sent with PriceIncludingVat = false with one discount row amount based on given exvat + vat
     @Test
-    public void test_incvat_order_with_fixedDiscount_as_exvat_and_vatpercent_has_priceIncludingVat_true() {
+    public void test_incvat_order_with_fixedDiscount_as_exvat_and_vatpercent_has_priceIncludingVat_false() {
         CreateOrderBuilder order = FixedDiscountRowsTest.create_only_incvat_order_and_fee_rows_order();
         order.addDiscount(
     		WebPayItem.fixedDiscount()
@@ -408,25 +408,25 @@ public class FixedDiscountRowsTest {
         
         SveaRequest<SveaCreateOrder> request = order.useInvoicePayment().prepareRequest();
         // all invoice fee rows        
-        assertEquals(72.00, request.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit, 0);
+        assertEquals(60.00, request.request.CreateOrderInformation.OrderRows.get(0).PricePerUnit, 0);
         assertEquals(20.0, request.request.CreateOrderInformation.OrderRows.get(0).VatPercent, 0);
-        assertEquals(true, request.request.CreateOrderInformation.OrderRows.get(0).PriceIncludingVat);
-        assertEquals(33.00, request.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit, 0);
+        assertEquals(false, request.request.CreateOrderInformation.OrderRows.get(0).PriceIncludingVat);
+        assertEquals(30.00, request.request.CreateOrderInformation.OrderRows.get(1).PricePerUnit, 0);
         assertEquals(10, request.request.CreateOrderInformation.OrderRows.get(1).VatPercent, 0);
-        assertEquals(true, request.request.CreateOrderInformation.OrderRows.get(1).PriceIncludingVat);        
+        assertEquals(false, request.request.CreateOrderInformation.OrderRows.get(1).PriceIncludingVat);        
         // all shipping fee rows
-        assertEquals(17.60, request.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit, 0);
+        assertEquals(16.00, request.request.CreateOrderInformation.OrderRows.get(2).PricePerUnit, 0);
         assertEquals(10, request.request.CreateOrderInformation.OrderRows.get(2).VatPercent, 0);
-        assertEquals(true, request.request.CreateOrderInformation.OrderRows.get(2).PriceIncludingVat);
+        assertEquals(false, request.request.CreateOrderInformation.OrderRows.get(2).PriceIncludingVat);
         // all invoice fee rows
-        assertEquals(8.80, request.request.CreateOrderInformation.OrderRows.get(3).PricePerUnit, 0);
+        assertEquals(8.00, request.request.CreateOrderInformation.OrderRows.get(3).PricePerUnit, 0);
         assertEquals(10, request.request.CreateOrderInformation.OrderRows.get(3).VatPercent, 0);
-        assertEquals(true, request.request.CreateOrderInformation.OrderRows.get(3).PriceIncludingVat);           
+        assertEquals(false, request.request.CreateOrderInformation.OrderRows.get(3).PriceIncludingVat);           
         // all discount rows
         // expected: fixedDiscount: 11 incvat @10% => -10e @10% 
-        assertEquals(-11.00, request.request.CreateOrderInformation.OrderRows.get(4).PricePerUnit, 0);
+        assertEquals(-10.00, request.request.CreateOrderInformation.OrderRows.get(4).PricePerUnit, 0);
         assertEquals(10, request.request.CreateOrderInformation.OrderRows.get(4).VatPercent, 0);
-        assertEquals(true, request.request.CreateOrderInformation.OrderRows.get(4).PriceIncludingVat);        
+        assertEquals(false, request.request.CreateOrderInformation.OrderRows.get(4).PriceIncludingVat);        
         assertEquals( 5, request.request.CreateOrderInformation.OrderRows.size() );
         
         // See file IntegrationTest/WebService/Payment/FixedDiscountRowsIntegrationTest for service response tests.
