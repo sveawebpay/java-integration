@@ -28,7 +28,7 @@ public class QueryTransactionTest {
    
         // query order
         QueryOrderBuilder queryOrderBuilder = new QueryOrderBuilder( SveaConfig.getDefaultConfig() )
-        .setTransactionId( Long.toString(createdOrderId) )
+        .setTransactionId( createdOrderId )
             .setCountryCode( COUNTRYCODE.SE )
         ;                
         QueryTransactionResponse response = queryOrderBuilder.queryCardOrder().doRequest();         

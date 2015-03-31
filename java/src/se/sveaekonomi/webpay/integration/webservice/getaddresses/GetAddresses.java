@@ -170,17 +170,9 @@ public class GetAddresses {
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml = xmlBuilder.getGetAddressesXml(request.request);
         
-        URL url;
-        try {
-        	url = config.getEndPoint( PAYMENTTYPE.INVOICE );		// first try invoice credentials
-        }
-        catch( Exception e) {
-        	url = config.getEndPoint( PAYMENTTYPE.PAYMENTPLAN );	// will throw Exception if no credentials found
-        }
-        
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("GetAddresses", xml);
-        NodeList soapResponse = soapBuilder.createGetAddressesEuRequest(soapMessage, url.toString());
+        NodeList soapResponse = soapBuilder.createGetAddressesEuRequest(soapMessage, config);
         GetAddressesResponse response = new GetAddressesResponse(soapResponse);
         return response;
     }

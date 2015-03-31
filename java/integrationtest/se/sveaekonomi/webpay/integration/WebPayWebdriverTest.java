@@ -407,7 +407,7 @@ public class WebPayWebdriverTest {
 	// WebPay.closeOrder() ---------------------------------------------------------------------------------------------
 	// invoice
     @Test
-    public void test_closeOrder_closeInvoicyeOrder() {
+    public void test_closeOrder_closeInvoiceOrder() {
     	    	
     	// create an order using defaults
     	CreateOrderResponse order = TestingTool.createInvoiceTestOrder();

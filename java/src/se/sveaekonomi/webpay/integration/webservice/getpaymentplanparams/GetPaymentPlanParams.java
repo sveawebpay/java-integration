@@ -75,10 +75,9 @@ public class GetPaymentPlanParams {
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml = xmlBuilder.getGetPaymentPlanParamsXml(request.request);
-        URL url = this.config.getEndPoint(PAYMENTTYPE.PAYMENTPLAN);
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("GetPaymentPlanParamsEu", xml);
-        NodeList soapResponse = soapBuilder.createGetPaymentPlanParamsEuRequest(soapMessage, url.toString());
+        NodeList soapResponse = soapBuilder.createGetPaymentPlanParamsEuRequest(soapMessage, this.config, PAYMENTTYPE.PAYMENTPLAN);
         PaymentPlanParamsResponse response = new PaymentPlanParamsResponse(soapResponse);
         
         return response;

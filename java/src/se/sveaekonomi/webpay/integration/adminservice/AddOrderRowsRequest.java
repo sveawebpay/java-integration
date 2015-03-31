@@ -2,6 +2,7 @@ package se.sveaekonomi.webpay.integration.adminservice;
 
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.xml.bind.ValidationException;
 import javax.xml.soap.MessageFactory;
@@ -20,8 +21,9 @@ import se.sveaekonomi.webpay.integration.order.handle.AddOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.response.adminservice.AddOrderRowsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
+import se.sveaekonomi.webpay.integration.util.request.GetRequestProperties;
 
-public class AddOrderRowsRequest {
+public class AddOrderRowsRequest extends AdminServiceRequest {
 
 	private String action;
 	private AddOrderRowsBuilder builder;
@@ -121,12 +123,14 @@ public class AddOrderRowsRequest {
 		SOAPEnvelope envelope = soapPart.getEnvelope(); // adds namespace SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/
 	    envelope.addNamespaceDeclaration("dat", "http://schemas.datacontract.org/2004/07/DataObjects.Admin.Service");
 		envelope.addNamespaceDeclaration("dat1", "http://schemas.datacontract.org/2004/07/DataObjects.Webservice");	    
-	    envelope.addNamespaceDeclaration("tem", "http://tempuri.org/");	    
+	    envelope.addNamespaceDeclaration("tem", "http://tempuri.org/");
 
 	    // SOAP Headers
 		String soapActionPrefix = "http://tempuri.org/IAdminService/";		    	
 		MimeHeaders headers = soapMessage.getMimeHeaders();
 		headers.addHeader("SOAPAction", soapActionPrefix + this.action);
+		
+    	setHeaderRequestProperties(headers, this.builder.getConfig());		
 			    
 	    // SOAP Body
 	    SOAPBody body = envelope.getBody();
@@ -184,6 +188,8 @@ public class AddOrderRowsRequest {
 		    	
 		return soapMessage;
 	}
+
+
 
 	protected Double getPricePerUnitFromBuilderOrderRowAndPriceIncludingVatFlag( OrderRowBuilder row, boolean usePriceIncludingVatFlag) {
 		Double amount = 0.0;

@@ -99,11 +99,10 @@ public abstract class WebServicePayment {
         String xml = "";
         
         xml = xmlBuilder.getCreateOrderEuXml(request.request);
-        
-        URL url = this.createOrderBuilder.getConfig().getEndPoint(this.orderType);
+                
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("CreateOrderEu", xml);
-        NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, url.toString());
+        NodeList soapResponse = soapBuilder.createOrderEuRequest(soapMessage, this.createOrderBuilder.getConfig(), this.orderType );
         CreateOrderResponse response = new CreateOrderResponse(soapResponse);
         
         return response;

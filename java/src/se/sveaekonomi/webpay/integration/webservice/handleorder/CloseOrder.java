@@ -69,16 +69,14 @@ public class CloseOrder {
     }
     
     public CloseOrderResponse doRequest() {
-        URL url = order.getOrderType().equals("Invoice") ? 
-                order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE) 
-                : order.getConfig().getEndPoint(PAYMENTTYPE.PAYMENTPLAN);
+        PAYMENTTYPE orderType = order.getOrderType().equals("Invoice") ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN;
         SveaRequest<SveaCloseOrder> request = this.prepareRequest();
         
         WebServiceXmlBuilder xmlBuilder = new WebServiceXmlBuilder();
         String xml = xmlBuilder.getCloseOrderEuXml(request.request);
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("CloseOrderEu", xml);
-        NodeList soapResponse = soapBuilder.closeOrderEuRequest(soapMessage, url.toString());
+        NodeList soapResponse = soapBuilder.closeOrderEuRequest(soapMessage, order.getConfig(), orderType );
         CloseOrderResponse response = new CloseOrderResponse(soapResponse);
         return response;
     }
