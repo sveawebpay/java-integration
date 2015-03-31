@@ -96,17 +96,17 @@ public class GetRequestProperties {
     	
 		HashMap<String,String> libraryproperties = GetRequestProperties.getSveaLibraryProperties();            
 		HashMap<String,String> integrationproperties = GetRequestProperties.getSveaIntegrationProperties( config );            
-        
-		JSONObject jsonComment = new JSONObject();
-		try {
-			jsonComment.put( "X-Svea-Library-Name", libraryproperties.get("library_name") );
-			jsonComment.put( "X-Svea-Library-Version", libraryproperties.get("library_version") );
-			jsonComment.put( "X-Svea-Integration-Platform", integrationproperties.get("integrationplatform") );
-			jsonComment.put( "X-Svea-Integration-Company", integrationproperties.get("integrationcompany") );
-			jsonComment.put( "X-Svea-Integration-Version", integrationproperties.get("integrationversion") );
-		} catch (JSONException e) {		
-			// ignored
-		}		
-		return jsonComment.toString();
+      
+		// write json string in well-defined order, i.e in the order the test suite currently expects it
+		String json = String.format(
+				"{\"X-Svea-Integration-Version\":\"%s\",\"X-Svea-Integration-Platform\":\"%s\",\"X-Svea-Library-Name\":\"%s\",\"X-Svea-Integration-Company\":\"%s\",\"X-Svea-Library-Version\":\"%s\"}", 
+				integrationproperties.get("integrationversion"),
+				integrationproperties.get("integrationplatform"),
+				libraryproperties.get("library_name"),
+				integrationproperties.get("integrationcompany"),
+				libraryproperties.get("library_version")
+			)
+		;		
+		return json;
     }
 }

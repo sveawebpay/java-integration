@@ -1,12 +1,9 @@
 package se.sveaekonomi.webpay.integration.util.test;
 
-import static org.junit.Assert.assertEquals;
-
 import java.sql.Date;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 import org.openqa.selenium.Alert;

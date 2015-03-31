@@ -52,7 +52,8 @@
         <javac srcdir="${src.dir}" destdir="${src.classes.dir}" classpathref="src.jars">
         	<compilerarg value="-Xlint" />
 	    </javac>
-        <path id="compiled.src.classpath" location="${src.classes.dir}" >
+        <path id="compiled.src.classpath" >
+        	<path location="${src.classes.dir}" />
 			<path refid="src.jars" />
     	</path>
     </target>
