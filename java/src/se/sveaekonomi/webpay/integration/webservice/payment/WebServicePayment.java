@@ -1,7 +1,7 @@
 package se.sveaekonomi.webpay.integration.webservice.payment;
 
-import java.net.URL;
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import javax.xml.bind.ValidationException;
 
@@ -11,6 +11,7 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.validator.WebServiceOrderValidator;
 import se.sveaekonomi.webpay.integration.response.webservice.CreateOrderResponse;
+import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
 import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 import se.sveaekonomi.webpay.integration.webservice.helper.WebServiceXmlBuilder;
@@ -107,6 +108,75 @@ public abstract class WebServicePayment {
         
         return response;
     }
+    
+    public HashMap<String,Double> getRequestTotals() {
+    	HashMap<String,Double> requestTotals = new HashMap<String, Double>();
+    	Double total_exvat = 0D;
+    	Double total_incvat = 0D;
+    	Double total_vat = 0D;
+    	    	
+    	SveaRequest<SveaCreateOrder> preparedRequest = this.prepareRequest();
+    	ArrayList<SveaOrderRow> sveaOrderRows = preparedRequest.request.CreateOrderInformation.OrderRows;
+		//public String ArticleNumber = "";
+		//public String Description = "";
+		//public double PricePerUnit = 0;
+		//public double NumberOfUnits = 0;
+		//public String Unit = "";
+		//public double VatPercent = 0;
+		//public double DiscountPercent = 0;
+		//public Boolean PriceIncludingVat;
+    	
+    	for( SveaOrderRow row : sveaOrderRows ) {
+    		Double rowExVat = calculateOrderRowExVat( row );
+    		total_exvat += rowExVat;
+            Double rowVat = calculateTotalVatSumOfRows( row );
+            total_vat += rowVat;
+            total_incvat += MathUtil.bankersRound(rowExVat + rowVat);            
+            int foo=1;
+    	}
+    	
+    	requestTotals.put("total_exvat", MathUtil.bankersRound(total_exvat) );
+    	requestTotals.put("total_incvat", MathUtil.bankersRound(total_incvat) );
+    	requestTotals.put("total_vat", MathUtil.bankersRound(total_vat) );
+		return requestTotals;
+    }
+    
+    private Double calculateOrderRowExVat( SveaOrderRow row ) {
+    	Double rowsum_exvat = 0D;
+    	if( row.PriceIncludingVat ) {
+    		Double rowsum_incvat = getRowAmount(row);
+			rowsum_exvat = convertIncVatToExVat(row, rowsum_incvat);
+    	}
+    	else {
+    		rowsum_exvat = getRowAmount(row);
+    	}
+    	return MathUtil.bankersRound( rowsum_exvat );
+    }
+
+	protected double convertIncVatToExVat(SveaOrderRow row, Double rowsum_incvat) {
+		return rowsum_incvat / (1 + row.VatPercent/100.0);
+	}
+
+	protected double getRowAmount(SveaOrderRow row) {
+		return MathUtil.bankersRound(row.NumberOfUnits) *
+		MathUtil.bankersRound(row.PricePerUnit) *
+		(1 - (row.DiscountPercent /100.0) );
+	}
+    
+    private Double calculateTotalVatSumOfRows( SveaOrderRow row ) {
+    	Double exvat = 0D;
+    	if( row.PriceIncludingVat ) {
+    		Double rowsum_incvat = getRowAmount(row);
+    		exvat = convertIncVatToExVat(row, rowsum_incvat);
+    	}
+    	else {
+    		exvat = getRowAmount(row);    		
+    	}
+    	Double vatTimes100 = MathUtil.bankersRound(exvat) * row.VatPercent;
+    	Double vat =((vatTimes100 <= 0D) ? Math.ceil(vatTimes100) : Math.floor(vatTimes100)) /100.0; //java for .NET Math.Truncate -- round to nearest integer towards zero
+    	return vat;
+    }
+    
     
     public SveaCustomerIdentity formatCustomerIdentity() {
         boolean isCompany = false;
