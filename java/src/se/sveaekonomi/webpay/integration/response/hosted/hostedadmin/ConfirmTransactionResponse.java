@@ -36,6 +36,15 @@ public class ConfirmTransactionResponse extends HostedAdminResponse implements R
 	}
 
 	
+	public ConfirmTransactionResponse(String response, String mac, String secret) {
+		super(response, mac, secret);
+		this.rawResponse = this.xml;		
+		if( response != null ) {
+			this.setValues();
+		}
+	}
+	
+	@Deprecated
 	public ConfirmTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
 		this.rawResponse = this.xml;		

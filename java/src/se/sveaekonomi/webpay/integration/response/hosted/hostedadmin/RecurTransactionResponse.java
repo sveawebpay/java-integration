@@ -151,7 +151,13 @@ public class RecurTransactionResponse extends HostedAdminResponse implements Res
  		this.subscriptionId = subscriptionId;
  	} 
 
-    
+	public RecurTransactionResponse(String message, String mac, String secret ) {
+		super(message, mac, secret);
+		this.rawResponse = this.xml;		
+		this.setValues();
+	} 	
+ 	
+	@Deprecated
 	public RecurTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
 		this.rawResponse = this.xml;		

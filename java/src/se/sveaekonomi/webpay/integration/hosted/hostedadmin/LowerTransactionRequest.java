@@ -152,7 +152,7 @@ public class LowerTransactionRequest extends HostedAdminRequest <LowerTransactio
 	    	String xmlResponse = sendHostedAdminRequest(requestFields);
 	
 	    	// parse response	
-			return new LowerTransactionResponse( getResponseMessageFromXml(xmlResponse), this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode()) );
+			return new LowerTransactionResponse( getResponseMessageFromXml(xmlResponse), getResponseMacFromXml(xmlResponse), this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode()) );
 			
 	    } catch (IllegalStateException ex) {
 	        throw new SveaWebPayException("IllegalStateException", ex);

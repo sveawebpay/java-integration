@@ -135,6 +135,35 @@ public abstract class HostedAdminRequest<T extends HostedAdminRequest<T>> {
 		
 		return message;
 	}	
+	
+	/** extracts <mac> node contents from xml string */	
+	protected String getResponseMacFromXml(String xml) {
+	    
+	    String mac = null;
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+		try {
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document d1 = builder.parse(new InputSource(new StringReader(xml)));
+			NodeList nodeList = d1.getElementsByTagName("response");
+			int size = nodeList.getLength();
+
+			for (int i = 0; i < size; i++) {
+				Element element = (Element) nodeList.item(i);
+							
+				mac = getTagValue(element, "mac");								
+			}
+		} catch (ParserConfigurationException e) {
+			throw new SveaWebPayException("ParserConfigurationException", e);
+		} catch (SAXException e) {
+			throw new SveaWebPayException("SAXException", e);
+		} catch (IOException e) {
+			throw new SveaWebPayException("IOException", e);
+		}		
+		
+		return mac;
+	}
 
     private String getTagValue(Element elementNode, String tagName) {
         NodeList nodeList = elementNode.getElementsByTagName(tagName);

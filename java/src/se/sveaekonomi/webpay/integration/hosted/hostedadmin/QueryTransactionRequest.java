@@ -134,7 +134,7 @@ public class QueryTransactionRequest extends HostedAdminRequest<QueryTransaction
 	    	String xmlResponse = sendHostedAdminRequest(requestFields);
 	
 	    	// parse response	
-			return new QueryTransactionResponse( getResponseMessageFromXml(xmlResponse), this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode()) );
+			return new QueryTransactionResponse( getResponseMessageFromXml(xmlResponse), getResponseMacFromXml(xmlResponse), this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode()) );
 			
 	    } catch (IllegalStateException ex) {
 	        throw new SveaWebPayException("IllegalStateException", ex);

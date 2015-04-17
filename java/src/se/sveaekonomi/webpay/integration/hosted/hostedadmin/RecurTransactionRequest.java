@@ -177,7 +177,7 @@ public class RecurTransactionRequest extends HostedAdminRequest<RecurTransaction
 	    	String xmlResponse = sendHostedAdminRequest(requestFields);
 	
 	    	// parse response	
-			return new RecurTransactionResponse( getResponseMessageFromXml(xmlResponse), this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode()));
+			return new RecurTransactionResponse( getResponseMessageFromXml(xmlResponse), getResponseMacFromXml(xmlResponse), this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode()));
 			
 	    } catch (IllegalStateException ex) {
 	        throw new SveaWebPayException("IllegalStateException", ex);

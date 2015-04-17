@@ -39,11 +39,17 @@ public class PreparePaymentResponse extends HostedAdminResponse {
 		return created;
 	}
     
+
+	public PreparePaymentResponse(String message, String mac, String secret) {
+		super(message, mac, secret);
+		this.rawResponse = this.xml;		
+		this.setValues();
+	}
     
+	@Deprecated
 	public PreparePaymentResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
 		this.rawResponse = this.xml;
-		
 		this.setValues();
 	}
 

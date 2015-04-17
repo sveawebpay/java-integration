@@ -132,7 +132,7 @@ public class CreditTransactionRequest extends HostedAdminRequest<CreditTransacti
 	    	String xmlResponse = sendHostedAdminRequest(requestFields);
 	
 	    	// parse response	
-			return new CreditTransactionResponse( getResponseMessageFromXml(xmlResponse), this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode()) );
+			return new CreditTransactionResponse( getResponseMessageFromXml(xmlResponse), getResponseMacFromXml(xmlResponse), this.config.getSecretWord(PAYMENTTYPE.HOSTED, this.getCountryCode()) );
 			
 	    } catch (IllegalStateException ex) {
 	        throw new SveaWebPayException("IllegalStateException", ex);

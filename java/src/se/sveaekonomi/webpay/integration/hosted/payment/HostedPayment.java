@@ -318,12 +318,12 @@ public abstract class HostedPayment<T extends HostedPayment<T>> {
 		
 		String xmlResponse = client.execute(post, rh);
 
-		String messageInBase64 = getResponseMessageFromXml( xmlResponse );
 				
 		// parse response message into paymentUrl
 		PreparePaymentResponse parsedResponse = 
 			new PreparePaymentResponse(
-				messageInBase64, 
+				getResponseMessageFromXml( xmlResponse ),
+				getResponseMacFromXml( xmlResponse ),
 				createOrderBuilder.getConfig().getSecretWord(PAYMENTTYPE.HOSTED,createOrderBuilder.getCountryCode())
 			)
 		;
@@ -361,6 +361,35 @@ public abstract class HostedPayment<T extends HostedPayment<T>> {
 		}		
 		
 		return message;
+	}
+	
+	/** extracts <message> node contents from xml string */	
+	private String getResponseMacFromXml(String xml) {
+	    
+	    String mac = null;
+		
+		DocumentBuilderFactory factory = DocumentBuilderFactory.newInstance();
+
+		try {
+			DocumentBuilder builder = factory.newDocumentBuilder();
+			Document d1 = builder.parse(new InputSource(new StringReader(xml)));
+			NodeList nodeList = d1.getElementsByTagName("response");
+			int size = nodeList.getLength();
+
+			for (int i = 0; i < size; i++) {
+				Element element = (Element) nodeList.item(i);
+							
+				mac = getTagValue(element, "mac");								
+			}
+		} catch (ParserConfigurationException e) {
+			throw new SveaWebPayException("ParserConfigurationException", e);
+		} catch (SAXException e) {
+			throw new SveaWebPayException("SAXException", e);
+		} catch (IOException e) {
+			throw new SveaWebPayException("IOException", e);
+		}		
+		
+		return mac;
 	}
 	
     protected String getTagValue(Element elementNode, String tagName) {
