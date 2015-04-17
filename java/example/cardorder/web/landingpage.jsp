@@ -15,6 +15,10 @@ Your card order payment request response:
 	out.println( "<p id='svearesponse'>Raw response:</p>" );
 	String rawResponse = (String) request.getAttribute("raw_response");
 	out.println( "<span id='rawresponse'>" + rawResponse + "</span>" );
+	
+	out.println( "<p id='svearesponse'>Raw response_mac:</p>" );
+	String rawResponseMac = (String) request.getAttribute("raw_response_mac");
+	out.println( "<span id='rawresponse_mac'>" + rawResponseMac + "</span>" );
 
 	SveaResponse cardOrderResponse = (SveaResponse) request.getAttribute("cardorder_response");
 
