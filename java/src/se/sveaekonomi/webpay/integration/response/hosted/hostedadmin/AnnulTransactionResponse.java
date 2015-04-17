@@ -39,8 +39,15 @@ public class AnnulTransactionResponse extends HostedAdminResponse implements Res
 	public String getClientOrderNumber() {
 		return clientOrderNumber;
 	}
-    
 
+	
+	public AnnulTransactionResponse(String message, String mac, String secret) {
+		super(message, mac, secret);
+		this.rawResponse = this.xml;		
+		this.setValues();
+	}	
+
+	@Deprecated
 	public AnnulTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
 		this.rawResponse = this.xml;		

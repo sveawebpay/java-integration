@@ -84,6 +84,14 @@ public class QueryTransactionResponse extends HostedAdminResponse implements Res
 		this.transactionid = transactionid;
 	}
 
+	public QueryTransactionResponse(String message, String mac, String secret) {
+		super(message, mac, secret);
+		this.rawResponse = this.xml;
+		this.setNumberedOrderRows(new ArrayList<NumberedOrderRowBuilder>());
+		this.setValues();
+	}
+	
+	@Deprecated
 	public QueryTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
 		this.rawResponse = this.xml;

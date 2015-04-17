@@ -4,6 +4,8 @@ import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.Response;
 import se.sveaekonomi.webpay.integration.response.ResponseHelper;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
+import se.sveaekonomi.webpay.integration.util.security.HashUtil;
+import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 
 /**
  * Handles synchronous responses from hosted admin webservice requests
@@ -53,10 +55,27 @@ public abstract class HostedAdminResponse extends ResponseHelper implements Resp
 		this.xml = xml;
 	}
 	
+    public boolean validateMac( String message, String expectedMac, String secret ) {
+    	String actualMac = HashUtil.createHash(message + secret, HASHALGORITHM.SHA_512);    	
+    	return actualMac.equals(expectedMac);
+    }
+	
 	/**
 	 * Parse the response and return an appropriate ResponseClassObject
 	 * depending on what response we should
 	 */
+	public HostedAdminResponse(String message, String mac, String secret) {
+		if( this.validateMac( message, mac, secret ) ) {		
+			String xml = Base64Util.decodeBase64String(message);
+			this.setXml(xml);
+		}
+		else {
+			this.setOrderAccepted(false);
+            setErrorParams( 311 );	// 311 (BAD_MAC)			
+		}
+	}
+	
+	@Deprecated
 	public HostedAdminResponse(String responseXmlBase64, String secretWord) {
 		String xml = Base64Util.decodeBase64String(responseXmlBase64);
 		this.setXml(xml);

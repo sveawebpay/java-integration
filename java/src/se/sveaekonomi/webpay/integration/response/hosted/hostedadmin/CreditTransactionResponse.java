@@ -40,6 +40,13 @@ public class CreditTransactionResponse extends HostedAdminResponse {
 	}	
 	
 	
+	public CreditTransactionResponse(String message, String mac, String secret ) {
+		super(message, mac, secret );
+		this.rawResponse = this.xml;		
+		this.setValues();
+	}
+	
+	@Deprecated
 	public CreditTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
 		this.rawResponse = this.xml;		

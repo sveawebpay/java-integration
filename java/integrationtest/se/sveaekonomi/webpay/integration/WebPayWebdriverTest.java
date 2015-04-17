@@ -120,9 +120,18 @@ public class WebPayWebdriverTest {
 
         // wait for landing page to load and then create a HostedPaymentResponse from the response xml message
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));                
-        String raw_response = driver.findElementById("rawresponse").getText();                        
+        String raw_response = driver.findElementById("rawresponse").getText();            
+        //System.out.println("raw_response:\n" + raw_response + "\n");
 
-        HostedPaymentResponse cardOrderResponse = new HostedPaymentResponse( raw_response, SveaConfig.getDefaultConfig().getSecretWord(PAYMENTTYPE.HOSTED, COUNTRYCODE.SE) );
+        String raw_response_mac = driver.findElementById("rawresponse_mac").getText();            
+        //System.out.println("raw_response_mac:\n" + raw_response_mac + "\n");
+
+        
+        HostedPaymentResponse cardOrderResponse = new HostedPaymentResponse( 
+        		raw_response, 
+        		raw_response_mac,
+        		SveaConfig.getDefaultConfig().getSecretWord(PAYMENTTYPE.HOSTED, COUNTRYCODE.SE) 
+		);
              
         // close window
         driver.quit();
@@ -671,8 +680,9 @@ public class WebPayWebdriverTest {
         // wait for landing page to load and then create a HostedPaymentResponse from the response xml message
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));                
         String raw_response = driver.findElementById("rawresponse").getText();                        
+        String mac = driver.findElementById("rawresponse_mac").getText();                        
 
-        HostedPaymentResponse cardOrderResponse = new HostedPaymentResponse( raw_response, SveaConfig.getDefaultConfig().getSecretWord(PAYMENTTYPE.HOSTED, COUNTRYCODE.SE) );
+        HostedPaymentResponse cardOrderResponse = new HostedPaymentResponse( raw_response, mac, SveaConfig.getDefaultConfig().getSecretWord(PAYMENTTYPE.HOSTED, COUNTRYCODE.SE) );
              
         // close window
         driver.quit();

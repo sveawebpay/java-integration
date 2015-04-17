@@ -19,6 +19,8 @@ import se.sveaekonomi.webpay.integration.response.Response;
 import se.sveaekonomi.webpay.integration.response.ResponseHelper;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.security.Base64Util;
+import se.sveaekonomi.webpay.integration.util.security.HashUtil;
+import se.sveaekonomi.webpay.integration.util.security.HashUtil.HASHALGORITHM;
 
 /**
  * Handles the asynchronous response from the hosted payment solution 
@@ -71,6 +73,23 @@ public class HostedPaymentResponse extends ResponseHelper implements Response {
     private String expiryYear;
     private String authCode;
     
+    
+    public boolean validateMac( String message, String expectedMac, String secret ) {
+    	String actualMac = HashUtil.createHash(message + secret, HASHALGORITHM.SHA_512);    	
+    	return actualMac.equals(expectedMac);
+    }
+    
+    public HostedPaymentResponse( String message, String mac, String secret ) {    	
+    	if( this.validateMac( message, mac, secret ) ) {    	
+    		this.setValues( message );
+    	}
+    	else {
+            this.setOrderAccepted(false);
+            setErrorParams( 311 );	// 311 (BAD_MAC)
+    	}
+    }
+    
+    @Deprecated
     public HostedPaymentResponse(String responseXmlBase64, String secretWord) {
         this.setValues(responseXmlBase64);
     }
@@ -232,7 +251,7 @@ public class HostedPaymentResponse extends ResponseHelper implements Response {
                 break;
             case 100:
                 this.setResultCode(resultCode + " (INTERNAL_ERROR)");
-                this.setErrorMessage("Invalid – contact integrator.");
+                this.setErrorMessage("Invalid – contact integrator.");		// TODO check strange char?!?
                 break;
             case 101:
                 this.setResultCode(resultCode + " (XMLPARSEFAIL)");
