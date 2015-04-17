@@ -583,14 +583,15 @@ public class TestingTool {
         // wait for landing page to load and then parse out raw response
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));                
 	    String rawresponse = driver.findElementById("rawresponse").getText();                     
+	    String mac = driver.findElementById("rawresponse_mac").getText();                     
 	    
         // close window
         driver.quit();         
 	    
         // return the parsed HostedPaymentResponse object
 		ConfigurationProvider myConfig = new SveaTestConfigurationProvider();
-		String mySecretWord = myConfig.getSecretWord(PAYMENTTYPE.HOSTED, DefaultTestCountryCode);		
-		HostedPaymentResponse myResponse = new HostedPaymentResponse(rawresponse, mySecretWord);	    
+		String mySecretWord = myConfig.getSecretWord(PAYMENTTYPE.HOSTED, DefaultTestCountryCode);
+		HostedPaymentResponse myResponse = new HostedPaymentResponse(rawresponse, mac, mySecretWord);	    
 	    return myResponse; 
 	}
 	
@@ -654,7 +655,8 @@ public class TestingTool {
 
         // wait for landing page to load and then parse out raw response
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));                
-	    String rawresponse = driver.findElementById("rawresponse").getText();                     
+        String rawresponse = driver.findElementById("rawresponse").getText();                     
+        String mac = driver.findElementById("rawresponse_mac").getText();                     
 	    
         // close window
         driver.quit();         
@@ -662,7 +664,7 @@ public class TestingTool {
         // return the parsed HostedPaymentResponse object
 		ConfigurationProvider myConfig = new SveaTestConfigurationProvider();
 		String mySecretWord = myConfig.getSecretWord(PAYMENTTYPE.HOSTED, DefaultTestCountryCode);		
-		HostedPaymentResponse myResponse = new HostedPaymentResponse(rawresponse, mySecretWord);	    
+		HostedPaymentResponse myResponse = new HostedPaymentResponse(rawresponse, mac, mySecretWord);	    
 	    return myResponse; 
 	}
 	

@@ -89,7 +89,8 @@ public class HostedPaymentResponse extends ResponseHelper implements Response {
     	}
     }
     
-    public HostedPaymentResponse(String responseXmlBase64, String secretWord) {		// TODO secretWord not in use, see HostedPaymentResponse( msg, mac, secret)
+    @Deprecated
+    public HostedPaymentResponse(String responseXmlBase64, String secretWord) {
         this.setValues(responseXmlBase64);
     }
     
