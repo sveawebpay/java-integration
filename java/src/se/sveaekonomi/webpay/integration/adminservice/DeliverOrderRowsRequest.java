@@ -24,7 +24,7 @@ import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
  * 
  * @author Kristian Grossman-Madsen
  */
-public class DeliverOrderRowsRequest  {
+public class DeliverOrderRowsRequest extends AdminServiceRequest  {
 
 	private String action;
 	private DeliverOrderRowsBuilder builder;
@@ -110,7 +110,9 @@ public class DeliverOrderRowsRequest  {
 		MimeHeaders headers = soapMessage.getMimeHeaders();
 		headers.addHeader("SOAPAction", soapActionPrefix + this.action);
 			    
-	    // SOAP Body
+    	setHeaderRequestProperties(headers, this.builder.getConfig());		
+
+    	// SOAP Body
 	    SOAPBody body = envelope.getBody();
 	    SOAPElement deliverPartial = body.addChildElement("DeliverPartial", "tem");
 	    SOAPElement request = deliverPartial.addChildElement("request", "tem");

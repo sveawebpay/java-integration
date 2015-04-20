@@ -1,5 +1,6 @@
 package se.sveaekonomi.webpay.integration.adminservice;
 
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -22,7 +23,7 @@ import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.response.adminservice.UpdateOrderRowsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
-public class UpdateOrderRowsRequest {
+public class UpdateOrderRowsRequest extends AdminServiceRequest {
 
 	private String action;
 	private UpdateOrderRowsBuilder builder;
@@ -131,6 +132,8 @@ public class UpdateOrderRowsRequest {
 		String soapActionPrefix = "http://tempuri.org/IAdminService/";		    	
 		MimeHeaders headers = soapMessage.getMimeHeaders();
 		headers.addHeader("SOAPAction", soapActionPrefix + this.action);
+		
+    	setHeaderRequestProperties(headers, this.builder.getConfig());		
 			    
 	    // SOAP Body
 	    SOAPBody body = envelope.getBody();
@@ -272,7 +275,7 @@ public class UpdateOrderRowsRequest {
 	        URL url = builder.getConfig().getEndPoint(PAYMENTTYPE.ADMIN_TYPE);		
 			soapResponse = soapConnection.call( soapRequest, url.toString() );
 			
-			// DEBUG: print SOAP Response
+//			// DEBUG: print SOAP Response
 //			System.out.print("Response SOAP Message:");
 //			try {
 //				soapResponse.writeTo(System.out);

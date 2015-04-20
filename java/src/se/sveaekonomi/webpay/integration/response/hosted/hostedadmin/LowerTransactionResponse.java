@@ -41,6 +41,13 @@ public class LowerTransactionResponse extends HostedAdminResponse implements Res
 	}
     
 	
+	public LowerTransactionResponse(String message, String mac, String secret ) {
+		super(message, mac, secret);
+		this.rawResponse = this.xml;		
+		this.setValues();
+	}
+	
+	@Deprecated
 	public LowerTransactionResponse(String responseXmlBase64, String secretWord) {
 		super(responseXmlBase64, secretWord);
 		this.rawResponse = this.xml;		

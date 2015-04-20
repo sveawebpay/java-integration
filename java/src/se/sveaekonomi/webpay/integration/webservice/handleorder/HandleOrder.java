@@ -1,7 +1,5 @@
 package se.sveaekonomi.webpay.integration.webservice.handleorder;
 
-import java.net.URL;
-
 import javax.xml.bind.ValidationException;
 
 import org.w3c.dom.NodeList;
@@ -33,10 +31,10 @@ public class HandleOrder implements Requestable {
     
     protected SveaAuth getStoreAuthorization() {
          SveaAuth auth = new SveaAuth();
-         PAYMENTTYPE type = (order.getOrderType().toString().equals("Invoice") ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
-         auth.Username = order.getConfig().getUsername(type, order.getCountryCode());
-         auth.Password = order.getConfig().getPassword(type, order.getCountryCode());
-         auth.ClientNumber = order.getConfig().getClientNumber(type, order.getCountryCode());
+         PAYMENTTYPE orderType = (order.getOrderType().toString().equals("Invoice") ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
+         auth.Username = order.getConfig().getUsername(orderType, order.getCountryCode());
+         auth.Password = order.getConfig().getPassword(orderType, order.getCountryCode());
+         auth.ClientNumber = order.getConfig().getClientNumber(orderType, order.getCountryCode());
          return auth;
     }
     
@@ -89,7 +87,7 @@ public class HandleOrder implements Requestable {
     }
     
     public DeliverOrderResponse doRequest() {
-        URL url = order.getConfig().getEndPoint(PAYMENTTYPE.INVOICE);
+        PAYMENTTYPE orderType = (order.getOrderType().toString().equals("Invoice") ? PAYMENTTYPE.INVOICE : PAYMENTTYPE.PAYMENTPLAN);
         
         // prepare request xml
         SveaRequest<SveaDeliverOrder> request = this.prepareRequest();
@@ -100,7 +98,7 @@ public class HandleOrder implements Requestable {
         // send soap request
         SveaSoapBuilder soapBuilder = new SveaSoapBuilder();
         String soapMessage = soapBuilder.makeSoapMessage("DeliverOrderEu", xml);
-        NodeList soapResponse = soapBuilder.deliverOrderEuRequest(soapMessage, url.toString());
+        NodeList soapResponse = soapBuilder.deliverOrderEuRequest(soapMessage, order.getConfig(), orderType );
         DeliverOrderResponse response = new DeliverOrderResponse(soapResponse); 
         
         // if we received error 50036 from webservice , resend request with PriceIncludingVat flipped in request
@@ -111,7 +109,7 @@ public class HandleOrder implements Requestable {
             String flippedVatXml = xmlBuilder.getDeliverOrderEuXml(flippedVatRequest.request);
             SveaSoapBuilder newSoapBuilder = new SveaSoapBuilder();
             String flippedVatSoapMessage = newSoapBuilder.makeSoapMessage("DeliverOrderEu", flippedVatXml);
-            NodeList flippedVatSoapResponse = newSoapBuilder.deliverOrderEuRequest(flippedVatSoapMessage, url.toString());
+            NodeList flippedVatSoapResponse = newSoapBuilder.deliverOrderEuRequest(flippedVatSoapMessage, order.getConfig(), orderType);
             DeliverOrderResponse flippedVatResponse = new DeliverOrderResponse(flippedVatSoapResponse);   
             response = flippedVatResponse;
         }

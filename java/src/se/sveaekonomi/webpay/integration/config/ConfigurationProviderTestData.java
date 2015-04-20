@@ -48,4 +48,16 @@ public class ConfigurationProviderTestData implements ConfigurationProvider {
         
         return SveaConfig.getTestWebserviceUrl();
     }
+    
+    public String getIntegrationPlatform() {
+    	return "Please provide your integration platform here.";
+    }
+
+    public String getIntegrationCompany() {
+    	return "Please provide your integration company here.";
+    }    
+    
+    public String getIntegrationVersion() {
+    	return "Please provide your integration version here.";
+    }     
 }

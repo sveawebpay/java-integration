@@ -43,6 +43,11 @@ public class WebserviceRowFormatter {
         if (row.getAmountExVat() != null && row.getVatPercent() == null && row.getAmountIncVat() != null) {
         	flags.put("incvat_and_exvat_orderrow_found", Boolean.TRUE);
         }	
+        
+        if (row.getAmountExVat() != null && row.getVatPercent() == null && row.getAmountIncVat() == null) {		// fixedDiscount w/ exvat only
+        	flags.put("exvat_and_vatpercent_orderrow_found", Boolean.TRUE);
+        }	
+        
 	}	
 	
 	public WebserviceRowFormatter(OrderBuilder<?> order) {
@@ -60,6 +65,9 @@ public class WebserviceRowFormatter {
     		checkRowSpecificationType( row, rowSpecificationTypesFound);
     	}    	
     	for (ShippingFeeBuilder row : order.getShippingFeeRows()) {
+    		checkRowSpecificationType( row, rowSpecificationTypesFound);
+    	}
+    	for (FixedDiscountBuilder row : order.getFixedDiscountRows()) {
     		checkRowSpecificationType( row, rowSpecificationTypesFound);
     	}
     	

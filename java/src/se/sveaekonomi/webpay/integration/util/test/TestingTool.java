@@ -1,9 +1,11 @@
 package se.sveaekonomi.webpay.integration.util.test;
 
-import static org.junit.Assert.assertEquals;
-
 import java.sql.Date;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
+import org.json.JSONException;
+import org.json.JSONObject;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebElement;
@@ -581,14 +583,15 @@ public class TestingTool {
         // wait for landing page to load and then parse out raw response
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));                
 	    String rawresponse = driver.findElementById("rawresponse").getText();                     
+	    String mac = driver.findElementById("rawresponse_mac").getText();                     
 	    
         // close window
         driver.quit();         
 	    
         // return the parsed HostedPaymentResponse object
 		ConfigurationProvider myConfig = new SveaTestConfigurationProvider();
-		String mySecretWord = myConfig.getSecretWord(PAYMENTTYPE.HOSTED, DefaultTestCountryCode);		
-		HostedPaymentResponse myResponse = new HostedPaymentResponse(rawresponse, mySecretWord);	    
+		String mySecretWord = myConfig.getSecretWord(PAYMENTTYPE.HOSTED, DefaultTestCountryCode);
+		HostedPaymentResponse myResponse = new HostedPaymentResponse(rawresponse, mac, mySecretWord);	    
 	    return myResponse; 
 	}
 	
@@ -652,7 +655,8 @@ public class TestingTool {
 
         // wait for landing page to load and then parse out raw response
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));                
-	    String rawresponse = driver.findElementById("rawresponse").getText();                     
+        String rawresponse = driver.findElementById("rawresponse").getText();                     
+        String mac = driver.findElementById("rawresponse_mac").getText();                     
 	    
         // close window
         driver.quit();         
@@ -660,7 +664,51 @@ public class TestingTool {
         // return the parsed HostedPaymentResponse object
 		ConfigurationProvider myConfig = new SveaTestConfigurationProvider();
 		String mySecretWord = myConfig.getSecretWord(PAYMENTTYPE.HOSTED, DefaultTestCountryCode);		
-		HostedPaymentResponse myResponse = new HostedPaymentResponse(rawresponse, mySecretWord);	    
+		HostedPaymentResponse myResponse = new HostedPaymentResponse(rawresponse, mac, mySecretWord);	    
 	    return myResponse; 
 	}
+	
+    public static boolean checkVersionInformationWithRequestXml( String expectedXml, String actualXml ) {
+        
+        // check that actual X-Svea-Library-Version header contains a version string like "2.0.2"
+    	
+    	String version = TestingTool.decodeJson( TestingTool.getJsonFromXmlComment(actualXml), "X-Svea-Library-Version" );
+    	
+        Pattern libraryVersionPattern = Pattern.compile("(?:.*)?((?:(\\d+)\\.)+(?:(\\d+)\\.)+(\\*|\\d+))+"); // ignores prefix string, matches version #.#.#
+        Matcher matchLibraryVersionPattern = libraryVersionPattern.matcher(version);
+        boolean foundLibraryVersionPattern = matchLibraryVersionPattern.matches();    	
+    	        
+        Boolean allIsWell = foundLibraryVersionPattern;
+        if( foundLibraryVersionPattern ) {
+	        // replace real response xml version sequence with "2.0.2" before testing against known response string (since GetRequestProperties
+	        String patchedActualXml = actualXml.replace(version, "2.0.2");        	        	
+        	allIsWell = expectedXml.equals(patchedActualXml);
+        }
+        
+    	// return true iff all is well
+        return allIsWell;
+    }
+    
+    public static String getJsonFromXmlComment( String xml ) {
+    	
+        Pattern p = Pattern.compile("(?:.*)(?:<!--)(.*)(?:-->)(?:.*)"); // ignores prefix string, matches version #.#.#
+        Matcher m = p.matcher(xml);
+        boolean f = m.matches();    	
+                
+        return (f) ? m.group(1) : null;
+    }
+    
+    public static String decodeJson( String jsonString, String key ) {
+		String value = null;
+		try {
+			JSONObject json = new JSONObject(jsonString);
+			value = json.getString(key);
+		} catch (JSONException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		return value;
+    }
+    
+    
 }

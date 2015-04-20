@@ -30,6 +30,11 @@ public class LandingPageServlet extends HttpServlet implements Servlet {
 	}
 
 	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+		doPost(request, response);
+	}
+	
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 			
 		// get configuration object holding the Svea service login credentials and the secret word corresponding to our merchant id
@@ -47,6 +52,7 @@ public class LandingPageServlet extends HttpServlet implements Servlet {
 		// Pass service response to landingpage.jsp view as attribute in HttpServletRequest
 	    request.setAttribute("cardorder_response", myResponse);
 	    request.setAttribute("raw_response", request.getParameter("response"));
+	    request.setAttribute("raw_response_mac", request.getParameter("mac"));
 
 	    request.getRequestDispatcher("/landingpage.jsp").forward(request, response);				
 	}
