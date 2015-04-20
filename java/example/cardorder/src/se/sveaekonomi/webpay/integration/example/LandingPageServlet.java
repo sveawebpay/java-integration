@@ -30,6 +30,11 @@ public class LandingPageServlet extends HttpServlet implements Servlet {
 	}
 
 	@Override
+	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
+		doPost(request, response);
+	}
+	
+	@Override
 	protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {		
 			
 		// get configuration object holding the Svea service login credentials and the secret word corresponding to our merchant id
