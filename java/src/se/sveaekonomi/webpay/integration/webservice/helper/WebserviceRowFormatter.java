@@ -446,7 +446,7 @@ public class WebserviceRowFormatter {
 		return orderRow;
 	}
 
-	private String formatRowAndDescription( String name, String description ) {
+	public String formatRowAndDescription( String name, String description ) {
 		String formattedDescription;
 		
 		if (name != null) {

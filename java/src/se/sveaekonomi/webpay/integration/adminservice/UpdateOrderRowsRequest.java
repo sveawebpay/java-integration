@@ -1,6 +1,5 @@
 package se.sveaekonomi.webpay.integration.adminservice;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -157,7 +156,7 @@ public class UpdateOrderRowsRequest extends AdminServiceRequest {
 		    		SOAPElement articleNumber = orderRow.addChildElement("ArticleNumber", "dat1");
 		    			articleNumber.addTextNode( row.getArticleNumber() );
 	    			SOAPElement description = orderRow.addChildElement("Description", "dat1");
-	    				description.addTextNode( row.getName()+": "+row.getDescription() );
+	    				description.addTextNode( formatRowAndDescription(row.getName(), row.getDescription()) );
     				SOAPElement discountPercent = orderRow.addChildElement("DiscountPercent", "dat1");
 						discountPercent.addTextNode( String.valueOf(row.getDiscountPercent()) );
     				SOAPElement numberOfUnits = orderRow.addChildElement("NumberOfUnits", "dat1");
