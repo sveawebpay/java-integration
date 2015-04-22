@@ -6,6 +6,7 @@ import javax.xml.soap.MimeHeaders;
 
 import se.sveaekonomi.webpay.integration.config.ConfigurationProvider;
 import se.sveaekonomi.webpay.integration.util.request.GetRequestProperties;
+import se.sveaekonomi.webpay.integration.webservice.helper.WebserviceRowFormatter;
 
 public class AdminServiceRequest {
 
@@ -20,6 +21,11 @@ public class AdminServiceRequest {
         headers.addHeader("X-Svea-Integration-Platform", integrationproperties.get("integrationplatform") );
         headers.addHeader("X-Svea-Integration-Company", integrationproperties.get("integrationcompany") );
         headers.addHeader("X-Svea-Integration-Version", integrationproperties.get("integrationversion") );
+	}
+	
+	protected String formatRowAndDescription( String name, String description ) {
+		WebserviceRowFormatter wsrf = new WebserviceRowFormatter( null );		
+		return wsrf.formatRowAndDescription( name, description );
 	}
 	
 }

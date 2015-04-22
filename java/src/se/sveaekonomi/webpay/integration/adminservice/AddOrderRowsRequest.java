@@ -2,7 +2,6 @@ package se.sveaekonomi.webpay.integration.adminservice;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.xml.bind.ValidationException;
 import javax.xml.soap.MessageFactory;
@@ -21,7 +20,6 @@ import se.sveaekonomi.webpay.integration.order.handle.AddOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.response.adminservice.AddOrderRowsResponse;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
-import se.sveaekonomi.webpay.integration.util.request.GetRequestProperties;
 
 public class AddOrderRowsRequest extends AdminServiceRequest {
 
@@ -149,8 +147,8 @@ public class AddOrderRowsRequest extends AdminServiceRequest {
 		    	SOAPElement orderRow = orderRows.addChildElement("OrderRow", "dat1");
 		    		SOAPElement articleNumber = orderRow.addChildElement("ArticleNumber", "dat1");
 		    			articleNumber.addTextNode( row.getArticleNumber() );
-	    			SOAPElement description = orderRow.addChildElement("Description", "dat1");
-	    				description.addTextNode( row.getName()+": "+row.getDescription() );
+	    			SOAPElement description = orderRow.addChildElement("Description", "dat1");	    			
+	    				description.addTextNode( formatRowAndDescription(row.getName(), row.getDescription()) );
     				SOAPElement discountPercent = orderRow.addChildElement("DiscountPercent", "dat1");
 						discountPercent.addTextNode( String.valueOf(row.getDiscountPercent()) );
     				SOAPElement numberOfUnits = orderRow.addChildElement("NumberOfUnits", "dat1");
@@ -188,8 +186,6 @@ public class AddOrderRowsRequest extends AdminServiceRequest {
 		    	
 		return soapMessage;
 	}
-
-
 
 	protected Double getPricePerUnitFromBuilderOrderRowAndPriceIncludingVatFlag( OrderRowBuilder row, boolean usePriceIncludingVatFlag) {
 		Double amount = 0.0;
