@@ -331,6 +331,8 @@ For asynchronous payment methods, you must specify where to receive the request 
 
 `.setCancelUrl()` (optional, paypage only) Presents a cancel button on the PayPage. In case the payment method selection is cancelled by the user, Svea will redirect back to the cancel url. Unless a cancel url is specified, no cancel button will be presented at the PayPage.
 
+All of the above url:s should be specified in full, including the scheme part. I.e. always use an url on the format "http://myshop.com/callback", with a maximum length of 256 characters. (See http://www.w3.org/Addressing/URL/url-spec.txt). The callback url further needs to be publicly visible; it can't be on i.e. localhost or only accessible via a private ip address.
+
 The service response received is sent as a base64 encoded XML message. Feed this message to the HostedPaymentResponse response handler along with the customer credentials class to get a parsed a response object. For details, see [HostedPaymentResponse](http://sveawebpay.github.io/java-integration#8-HostedPaymentResponse) below.
 
 ### 3.6 Recommended payment method usage <a name="i36"></a>
