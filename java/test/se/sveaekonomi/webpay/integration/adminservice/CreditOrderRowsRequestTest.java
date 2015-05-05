@@ -2,10 +2,14 @@ package se.sveaekonomi.webpay.integration.adminservice;
 
 import static org.junit.Assert.*;
 
+import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Hashtable;
 
 import javax.xml.bind.ValidationException;
+import javax.xml.soap.SOAPException;
+import javax.xml.soap.SOAPMessage;
 
 import org.junit.Test;
 
@@ -328,4 +332,112 @@ public class CreditOrderRowsRequestTest {
         }
     }
 
+    /// characterizing unit tests for INTG-551
+	@Test
+    public void test_creditOrderRows_handles_creditOrderRows_specified_using_exvat_and_vatpercent() {
+    	
+    	CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
+    			.setInvoiceId( 123456789L )
+    			.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+    			.setCountryCode( COUNTRYCODE.SE )
+    			.addCreditOrderRow(
+    					WebPayItem.orderRow()
+    						.setAmountExVat(10.00)
+    						.setVatPercent(25)
+    						.setQuantity(1D)
+				)		
+		;
+    	CreditOrderRowsRequest request = builder.creditInvoiceOrderRows();
+    	try {
+			SOAPMessage soapRequest = request.prepareRequest();
+			
+			ByteArrayOutputStream outstream = new ByteArrayOutputStream();
+			try {
+				soapRequest.writeTo(outstream);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			String outstring = outstream.toString();			
+			
+			// 10.0 @ 25% w/PriceIncludingVat: false
+			String exprectedcreditrow = "(?:.*)(<dat1:OrderRow><dat1:ArticleNumber/><dat1:Description/><dat1:DiscountPercent>0.0</dat1:DiscountPercent><dat1:NumberOfUnits>1.0</dat1:NumberOfUnits><dat1:PriceIncludingVat>false</dat1:PriceIncludingVat><dat1:PricePerUnit>10.0</dat1:PricePerUnit><dat1:Unit>null</dat1:Unit><dat1:VatPercent>25.0</dat1:VatPercent></dat1:OrderRow>)(?:.*)";
+			assertTrue( outstring.matches(exprectedcreditrow) );        	
+			
+		} catch (SOAPException e) {
+			e.printStackTrace();
+		}    	
+    }
+	
+	@Test
+    public void test_creditOrderRows_handles_creditOrderRows_specified_using_incvat_and_vatpercent() {
+    	
+    	CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
+    			.setInvoiceId( 123456789L )
+    			.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+    			.setCountryCode( COUNTRYCODE.SE )
+    			.addCreditOrderRow(
+    					WebPayItem.orderRow()
+    						.setAmountIncVat(12.50)
+    						.setVatPercent(25)
+    						.setQuantity(1D)
+				)		
+		;
+    	CreditOrderRowsRequest request = builder.creditInvoiceOrderRows();
+    	try {
+			SOAPMessage soapRequest = request.prepareRequest();
+			
+			ByteArrayOutputStream outstream = new ByteArrayOutputStream();
+			try {
+				soapRequest.writeTo(outstream);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			String outstring = outstream.toString();			
+			
+			// 12.5 @ 25% w/PriceIncludingVat: true
+			String exprectedcreditrow = "(?:.*)(<dat1:OrderRow><dat1:ArticleNumber/><dat1:Description/><dat1:DiscountPercent>0.0</dat1:DiscountPercent><dat1:NumberOfUnits>1.0</dat1:NumberOfUnits><dat1:PriceIncludingVat>true</dat1:PriceIncludingVat><dat1:PricePerUnit>12.5</dat1:PricePerUnit><dat1:Unit>null</dat1:Unit><dat1:VatPercent>25.0</dat1:VatPercent></dat1:OrderRow>)(?:.*)";
+			assertTrue( outstring.matches(exprectedcreditrow) );        	
+			
+		} catch (SOAPException e) {
+			e.printStackTrace();
+		}    	
+    }	  
+    
+	@Test
+    public void test_creditOrderRows_handles_creditOrderRows_specified_using_incvat_and_exvat() {       
+    	
+    	CreditOrderRowsBuilder builder = WebPayAdmin.creditOrderRows(SveaConfig.getDefaultConfig())
+    			.setInvoiceId( 123456789L )
+    			.setInvoiceDistributionType(DISTRIBUTIONTYPE.Post)
+    			.setCountryCode( COUNTRYCODE.SE )
+    			.addCreditOrderRow(
+    					WebPayItem.orderRow()
+    						.setAmountIncVat(12.50)
+    						.setAmountExVat(10.00)
+    						.setQuantity(1D)
+				)		
+		;
+    	CreditOrderRowsRequest request = builder.creditInvoiceOrderRows();
+    	try {
+			SOAPMessage soapRequest = request.prepareRequest();
+			
+			ByteArrayOutputStream outstream = new ByteArrayOutputStream();
+			try {
+				soapRequest.writeTo(outstream);
+			} catch (IOException e1) {
+				// TODO Auto-generated catch block
+				e1.printStackTrace();
+			}
+			String outstring = outstream.toString();			
+			
+			// 12.5 @ 25% w/PriceIncludingVat: true
+			String exprectedcreditrow = "(?:.*)(<dat1:OrderRow><dat1:ArticleNumber/><dat1:Description/><dat1:DiscountPercent>0.0</dat1:DiscountPercent><dat1:NumberOfUnits>1.0</dat1:NumberOfUnits><dat1:PriceIncludingVat>true</dat1:PriceIncludingVat><dat1:PricePerUnit>12.5</dat1:PricePerUnit><dat1:Unit>null</dat1:Unit><dat1:VatPercent>25.0</dat1:VatPercent></dat1:OrderRow>)(?:.*)";
+			assertTrue( outstring.matches(exprectedcreditrow) );        	
+			
+		} catch (SOAPException e) {
+			e.printStackTrace();
+		}    	
+    }	
 }
