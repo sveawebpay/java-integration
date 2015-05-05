@@ -68,6 +68,10 @@ public class CreditOrderRowsRequest extends AdminServiceRequest {
     	
     	return flipPriceIncludingVat ? !usePriceIncludingVat : usePriceIncludingVat;
     }    
+
+    public SOAPMessage prepareRequest() throws SOAPException {	
+    	return prepareRequest( false );
+    }
     
 	public SOAPMessage prepareRequest( boolean resendOrderWithFlippedPriceIncludingVat ) throws SOAPException {	
 
@@ -158,7 +162,7 @@ public class CreditOrderRowsRequest extends AdminServiceRequest {
 			    for( OrderRowBuilder row : this.builder.getNewCreditOrderRows() ) {
 			    	SOAPElement orderRow = newCreditInvoiceRows.addChildElement("OrderRow", "dat1");
 			    		SOAPElement articleNumber = orderRow.addChildElement("ArticleNumber", "dat1");
-			    			articleNumber.addTextNode( row.getArticleNumber() );
+			    			articleNumber.addTextNode( (row.getArticleNumber() == null ) ? "" : row.getArticleNumber() );
 		    			SOAPElement description = orderRow.addChildElement("Description", "dat1");
 		    				description.addTextNode( formatRowAndDescription(row.getName(), row.getDescription()) );
 	    				SOAPElement discountPercent = orderRow.addChildElement("DiscountPercent", "dat1");

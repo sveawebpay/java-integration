@@ -154,7 +154,7 @@ public class UpdateOrderRowsRequest extends AdminServiceRequest {
 		    for( NumberedOrderRowBuilder row : this.builder.getUpdateOrderRows() ) {
 		    	SOAPElement orderRow = updatedOrderRows.addChildElement("NumberedOrderRow", "dat");
 		    		SOAPElement articleNumber = orderRow.addChildElement("ArticleNumber", "dat1");
-		    			articleNumber.addTextNode( row.getArticleNumber() );
+		    			articleNumber.addTextNode( (row.getArticleNumber() == null ) ? "" : row.getArticleNumber() );
 	    			SOAPElement description = orderRow.addChildElement("Description", "dat1");
 	    				description.addTextNode( formatRowAndDescription(row.getName(), row.getDescription()) );
     				SOAPElement discountPercent = orderRow.addChildElement("DiscountPercent", "dat1");
