@@ -644,7 +644,7 @@ public class CreateInvoiceOrderUnitTest {
 	
 	/// relative discount examples:        
 	@Test
-	public void test_relativeDiscount_with_single_vat_rates_order_sent_with_PriceIncludingVat_false() {
+	public void test_exvat_only_order_with_relativeDiscount_with_single_vat_rates_order_sent_with_PriceIncludingVat_false() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -712,7 +712,7 @@ public class CreateInvoiceOrderUnitTest {
 	}    
     
 	@Test
-	public void test_relativeDiscount_with_multiple_vat_rates_order_sent_with_PriceIncludingVat_false() {
+	public void test_exvat_only_order_with_relativeDiscount_with_multiple_vat_rates_order_sent_with_PriceIncludingVat_false() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -782,7 +782,7 @@ public class CreateInvoiceOrderUnitTest {
 	}	
 	
 	@Test
-	public void test_relativeDiscount_with_multiple_vat_rates_order_sent_with_PriceIncludingVat_true() {
+	public void test_incvat_only_order_with_relativeDiscount_with_multiple_vat_rates_order_sent_with_PriceIncludingVat_true() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -853,7 +853,7 @@ public class CreateInvoiceOrderUnitTest {
 		
     // fixed discount examples:        
 	@Test
-	public void test_fixedDiscount_with_amount_specified_as_exvat_and_given_vat_rate_order_sent_with_PriceIncludingVat_false() {
+	public void test_exvat_only_order_with_fixedDiscount_with_amount_specified_as_exvat_and_given_vat_rate_order_sent_with_PriceIncludingVat_false() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -921,7 +921,7 @@ public class CreateInvoiceOrderUnitTest {
 	}	
 	
 	@Test
-	public void test_fixedDiscount_with_amount_specified_as_exvat_and_given_vat_rate_order_sent_with_PriceIncludingVat_true() {
+	public void test_incvat_only_order_with__fixedDiscount_with_amount_specified_as_exvat_and_given_vat_rate_order_sent_with_PriceIncludingVat_false() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -989,7 +989,7 @@ public class CreateInvoiceOrderUnitTest {
 	}	
 
 	@Test
-	public void test_fixedDiscount_with_amount_specified_as_incvat_and_given_vat_rate_order_sent_with_PriceIncludingVat_false() {
+	public void test_exvat_only_order_fixedDiscount_with_amount_specified_as_incvat_and_given_vat_rate_order_sent_with_PriceIncludingVat_false() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -1024,7 +1024,7 @@ public class CreateInvoiceOrderUnitTest {
 				.setAmountIncVat(11.0)
 				.setVatPercent(10.0)
 				.setDiscountId("ElevenCrownsOff")
-				.setName("fixedDiscount: 10 @10% => 11kr")
+				.setName("fixedDiscount: 11i @10% => 11kr")
 			;   
 		
 		order.addOrderRow(exvatRow);
@@ -1057,7 +1057,7 @@ public class CreateInvoiceOrderUnitTest {
 	}	
 
 	@Test
-	public void test_fixedDiscount_with_amount_specified_as_incvat_and_given_vat_rate_order_sent_with_PriceIncludingVat_true() {
+	public void test_incvat_only_order_fixedDiscount_with_amount_specified_as_incvat_and_given_vat_rate_order_sent_with_PriceIncludingVat_true() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -1125,7 +1125,7 @@ public class CreateInvoiceOrderUnitTest {
 	}	
 	
 	@Test
-	public void test_fixedDiscount_amount_with_specified_as_exvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false() {
+	public void test_exvat_only_order_with_fixedDiscount_amount_specified_as_exvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -1195,7 +1195,7 @@ public class CreateInvoiceOrderUnitTest {
 	}	
 
 	@Test
-	public void test_fixedDiscount_amount_with_specified_as_exvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_true() {
+	public void test_incvat_only_order_with_fixedDiscount_amount_specified_as_exvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
@@ -1255,7 +1255,7 @@ public class CreateInvoiceOrderUnitTest {
 		assertEquals( (Object)10.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(3).VatPercent  ); // cast avoids deprecation				
 		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(3).PriceIncludingVat );
         // all discount rows
-        // expected: fixedDiscount: 10 off exvat, order row amount are 66% at 20% vat, 33% at 10% vat => 6.67ex @20% = 8.00 inc and 3.33ex @10% = 3.67inc 
+        // expected: fixedDiscount: 10 off exvat, order row amount are 66% @20% vat, 33% @10% vat => 6.67ex @20% = 8.00 inc and 3.33ex @10% = 3.67inc 
 		assertEquals( (Object)(-6.67), (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(4).PricePerUnit  ); // cast avoids deprecation
 		assertEquals( (Object)20.0, (Object)soapRequest.request.CreateOrderInformation.OrderRows.get(4).VatPercent  ); // cast avoids deprecation							
 		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(4).PriceIncludingVat );
@@ -1264,17 +1264,17 @@ public class CreateInvoiceOrderUnitTest {
 		assertEquals( false, soapRequest.request.CreateOrderInformation.OrderRows.get(5).PriceIncludingVat );
 	}		
 	
-	public void test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false() {
+	public void test_exvat_only_order_with_fixedDiscount_amount_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_false() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
 			.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
 		;				
 		OrderRowBuilder exvatRow = WebPayItem.orderRow()
-				.setAmountExVat(600.00)
-				.setVatPercent(20)			
-				.setQuantity(1.0)
-				.setName("exvatRow")
+			.setAmountExVat(600.00)
+			.setVatPercent(20)			
+			.setQuantity(1.0)
+			.setName("exvatRow")
 		;
 		OrderRowBuilder exvatRow2 = WebPayItem.orderRow()
 			.setAmountExVat(300.00)
@@ -1335,7 +1335,7 @@ public class CreateInvoiceOrderUnitTest {
 	}		
 
 	@Test
-	public void test_fixedDiscount_amount_with_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_true() {
+	public void test_incvat_only_order_with_fixedDiscount_amount_specified_as_incvat_and_calculated_vat_rate_order_sent_with_PriceIncludingVat_true() {
 		CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
 			.addCustomerDetails(TestingTool.createIndividualCustomer(COUNTRYCODE.SE))
 			.setCountryCode(TestingTool.DefaultTestCountryCode)
