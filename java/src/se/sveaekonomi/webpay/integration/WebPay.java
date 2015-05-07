@@ -9,6 +9,7 @@ import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.CloseOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.handle.DeliverOrderBuilder;
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
+import se.sveaekonomi.webpay.integration.util.calculation.Helper;
 import se.sveaekonomi.webpay.integration.webservice.getaddresses.GetAddresses;
 import se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams.GetPaymentPlanParams;
 import se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams.PaymentPlanPricePerMonth;
@@ -240,24 +241,16 @@ public class WebPay {
         return new GetPaymentPlanParams(config);
     }
     
-    /**
-     * This is a helper function provided to calculate the monthly price for the different payment plan options for a given sum. This information may be used when displaying i.e. payment options to the customer by checkout, or to fetch the lowest amount due per month for a given product price to display.
-     * 
-     * ```java
-     * ...
-     * 	// response is a List of Map items, each with keys 'campaignCode' and 'pricePerMonth' holding the individual campaign code and price due/month 
-     * 	List<Map<String, String>> response = WebPay.paymentPlanPricePerMonth(Double amount, PaymentPlanParamsResponse params);	
-     * ...
-     * ```
-     * 
-     */
+    // deprecated below    
+    /** @deprecated -- use Helper.paymentPlanPricePerMonth() instead */
+    public static List<Map<String, String>> paymentPlanPricePerMonth(Double amount, PaymentPlanParamsResponse params, Boolean ignoreMaxAndMinFlag ) {
+        return Helper.paymentPlanPricePerMonth(amount, params, ignoreMaxAndMinFlag);
+    }
+    /** @deprecated -- use Helper.paymentPlanPricePerMonth() instead */
     public static List<Map<String, String>> paymentPlanPricePerMonth(Double amount, PaymentPlanParamsResponse params) {
-        return new PaymentPlanPricePerMonth().calculate(amount, params);
+        return Helper.paymentPlanPricePerMonth(amount, params, false);
     }
 
-
-    
-    // deprecated below    
     /**
      * Start building request to close order.
      * @param config
