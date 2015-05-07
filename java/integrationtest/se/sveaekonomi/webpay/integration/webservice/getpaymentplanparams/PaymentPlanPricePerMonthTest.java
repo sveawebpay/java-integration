@@ -56,6 +56,7 @@ public class PaymentPlanPricePerMonthTest {
         List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(200.0, paymentPlanParams, true);        
         assertFalse(result.isEmpty());
         assertEquals("213060", result.get(0).get("campaignCode"));
+        assertEquals("Köp nu betala om 3 månader (räntefritt)", result.get(0).get("description"));        
         assertEquals("229", result.get(0).get("pricePerMonth"));        
     }      
     
@@ -88,6 +89,7 @@ public class PaymentPlanPricePerMonthTest {
         List<Map<String, String>> result = Helper.paymentPlanPricePerMonth(200.0, paymentPlanParams, true);        
         assertFalse(result.isEmpty());
         assertEquals("213060", result.get(0).get("campaignCode"));
+        assertEquals("Köp nu betala om 3 månader (räntefritt)", result.get(0).get("description"));        
         assertEquals("229", result.get(0).get("pricePerMonth"));        
     }  
 }

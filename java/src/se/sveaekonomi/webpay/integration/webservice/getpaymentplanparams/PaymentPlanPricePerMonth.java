@@ -29,6 +29,7 @@ public class PaymentPlanPricePerMonth {
                 Map<String, String> priceMap = new HashMap<String, String>();
                 Long pricePerMonth = Math.round(amount * monthlyAnnuityFactor + notificationFee);
                 priceMap.put("campaignCode", campaignCode.getCampaignCode());
+                priceMap.put("description", campaignCode.getDescription());
                 priceMap.put("pricePerMonth", pricePerMonth.toString());
                 pricesPerMonth.add(priceMap);
             }
