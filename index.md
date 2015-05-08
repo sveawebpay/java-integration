@@ -40,7 +40,6 @@ layout: index
     * [6.2 WebPay.deliverOrder()](http://sveawebpay.github.io/java-integration#i62)
     * [6.3 WebPay.getAddresses()](http://sveawebpay.github.io/java-integration#i63)
     * [6.4 WebPay.getPaymentPlanParams()](http://sveawebpay.github.io/java-integration#i64)
-    * [6.5 WebPay.paymentPlanPricePerMonth()](http://sveawebpay.github.io/java-integration#i65)
 * [7. WebPayAdmin entrypoint method reference](http://sveawebpay.github.io/java-integration#i7)
     * [7.1 WebPayAdmin.cancelOrder()](http://sveawebpay.github.io/java-integration#i71)
     * [7.2 WebPayAdmin.queryOrder()](http://sveawebpay.github.io/java-integration#i72)
@@ -53,7 +52,7 @@ layout: index
     * [8.1. Parsing an asynchronous service response](http://sveawebpay.github.io/java-integration#i81)
     * [8.2. Response accepted and result code](http://sveawebpay.github.io/java-integration#i82)
 * [9. Additional Developer Resources and notes](http://sveawebpay.github.io/java-integration#i9)
-    * [9.1 Helper class methods](http://sveawebpay.github.io/java-integration#i91)
+    * [9.1 Helper.paymentPlanPricePerMonth()](http://sveawebpay.github.io/java-integration#i91)
     * [9.2 Inspect prepareRequest(), validateOrder() methods](http://sveawebpay.github.io/java-integration#i92)
 * [10. Frequently Asked Questions](http://sveawebpay.github.io/java-integration#i10)
     * [10.1 Supported currencies](http://sveawebpay.github.io/java-integration#i101)
@@ -881,7 +880,6 @@ The WebPay class methods contains the functions needed to create orders and perf
 * [6.2 WebPay.deliverOrder()](http://sveawebpay.github.io/java-integration#i62)
 * [6.3 WebPay.getAddresses()](http://sveawebpay.github.io/java-integration#i63)
 * [6.4 WebPay.getPaymentPlanParams()](http://sveawebpay.github.io/java-integration#i64)
-* [6.5 WebPay.paymentPlanPricePerMonth()](http://sveawebpay.github.io/java-integration#i65)
 
 ### 6.1 WebPay.createOrder() <a name="i61"></a>
 <!-- WebPay.createOrder() docblock below, replace @see with apidoc links -->
@@ -1136,15 +1134,7 @@ Use getPaymentPlanParams() to fetch all campaigns associated with a given client
 See also class CampaignCode for individual campaign attributes.
 
 ### 6.5 WebPay.paymentPlanPricePerMonth() <a name="i65"></a>
-<!-- WebPay.paymentPlanPricePerMonth() docblock below, replace @see with apidoc links -->
-This is a helper function provided to calculate the monthly price for the different payment plan options for a given sum. This information may be used when displaying i.e. payment options to the customer by checkout, or to fetch the lowest amount due per month for a given product price to display.
-
-```java
-...
-	// response is a List of Map items, each with keys 'campaignCode' and 'pricePerMonth' holding the individual campaign code and price due/month 
-	List<Map<String, String>> response = WebPay.paymentPlanPricePerMonth(Double amount, PaymentPlanParamsResponse params);	
-...
-```
+Deprecated, please refer to [section 9.1](http://sveawebpay.github.io/java-integration#i91) on method Helper.paymentPlanPricePerMonth().
 
 [<< To index](http://sveawebpay.github.io/java-integration#index)
 
@@ -1483,8 +1473,25 @@ See the respective response classes for further information on response attribut
 [<< To index](http://sveawebpay.github.io/java-integration#index)
 
 ## 9. Additional Developer Resources and notes <a name="i9"></a>
-### 9.1 Helper class methods <a name="i91"></a>
-This space intentionally left blank. fnord.
+### 9.1 Helper.paymentPlanPricePerMonth() <a name="i91"></a>
+This is a helper function provided to calculate the monthly price for the different payment plan options for a given sum. This information may be used when displaying i.e. payment options to the customer by checkout, or to display the lowest amount due per month to display on a product level.
+
+If the ignoreMaxAndMinFlag is set to true, the returned array also contains the theoretical monthly installments for a given amount, even if the campaign may not actually be available to use in a payment request, should the amount fall outside of the actual campaign min/max limit. If the flag is set to false or left out, the values array will not include such amounts, which may cause the values array to be empty.
+
+```java
+...
+	PaymentPlanParamsResponse paymentPlanParams = 
+    	WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
+            .setCountryCode(TestingTool.DefaultTestCountryCode)
+            .doRequest();
+        
+	List<Map<String, String>> response = Helper.paymentPlanPricePerMonth(200.0, paymentPlanParams, true);        
+
+	String firstCampaign = response.get(0).get("campaignCode");							// i.e. [campaignCode] => 310012
+	String firstCampaignDescription = response.get(0).get("description");			// i.e. [description] => "Dela upp betalningen på 12 månader (räntefritt)"
+	String pricePerMonthForFirstCampaign = response.get(0).get("campaignCode");	// i.e. [pricePerMonth] => 201.66666666667
+...
+```
 
 ### 9.2 Inspect prepareRequest(), validateOrder() methods <a name="i92"></a>
 During module development or debugging, the `.prepareRequest()` method may be of use as an alternative to `.doRequest()` as the final step in the createOrder process. 
