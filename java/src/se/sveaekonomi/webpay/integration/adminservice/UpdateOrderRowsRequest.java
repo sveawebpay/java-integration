@@ -143,6 +143,7 @@ public class UpdateOrderRowsRequest extends AdminServiceRequest {
 	    			password.addTextNode(this.builder.getConfig().getPassword( this.builder.getOrderType(), this.builder.getCountryCode()));
 	    		SOAPElement username = authentication.addChildElement("Username", "dat");
 	    			username.addTextNode(this.builder.getConfig().getUsername( this.builder.getOrderType(), this.builder.getCountryCode()));
+	        // Settings -- optional, not sent by package
 			SOAPElement clientId = request.addChildElement("ClientId", "dat");
 				clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
 		    SOAPElement orderType = request.addChildElement("OrderType", "dat");
@@ -188,13 +189,13 @@ public class UpdateOrderRowsRequest extends AdminServiceRequest {
     	soapMessage.saveChanges();
     	
         // DEBUG: Print SOAP request 
-//		System.out.print("Request SOAP Message:");
-//		try {
-//			soapMessage.writeTo(System.out);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		System.out.println();
+		//System.out.print("Request SOAP Message:");
+		//try {
+		//	soapMessage.writeTo(System.out);
+		//} catch (IOException e) {
+		//	e.printStackTrace();
+		//}
+		//System.out.println();
 		    	
 		return soapMessage;
 	}
@@ -274,14 +275,14 @@ public class UpdateOrderRowsRequest extends AdminServiceRequest {
 	        URL url = builder.getConfig().getEndPoint(PAYMENTTYPE.ADMIN_TYPE);		
 			soapResponse = soapConnection.call( soapRequest, url.toString() );
 			
-//			// DEBUG: print SOAP Response
-//			System.out.print("Response SOAP Message:");
-//			try {
-//				soapResponse.writeTo(System.out);
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//			System.out.println();
+			// DEBUG: print SOAP Response
+			//System.out.print("Response SOAP Message:");
+			//try {
+			//	soapResponse.writeTo(System.out);
+			//} catch (IOException e) {
+			//	e.printStackTrace();
+			//}
+			//System.out.println();
 			
 			soapConnection.close();			
 		}

@@ -150,6 +150,7 @@ public class CreditOrderRowsRequest extends AdminServiceRequest {
 	    			password.addTextNode(this.builder.getConfig().getPassword( this.builder.getOrderType(), this.builder.getCountryCode()));
 	    		SOAPElement username = authentication.addChildElement("Username", "dat");
 	    			username.addTextNode(this.builder.getConfig().getUsername( this.builder.getOrderType(), this.builder.getCountryCode()));
+	        // Settings -- optional, not sent by package
 			SOAPElement clientId = request.addChildElement("ClientId", "dat");
 				clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
 	    	SOAPElement invoiceDistributionType = request.addChildElement("InvoiceDistributionType", "dat");
