@@ -98,7 +98,7 @@ There has also been an effort to consolidate the various request and response cl
 ### Compatibility
 Every effort has been made to keep this release backwards compatible with existing integrations based on 1.x of the Java integration package.
 
-For existing response classes any public attributes stay visible, though in several cases new getter/setter methods have been added that are the recommended way of accesing the returned data for new integrations.
+For existing response classes any public attributes stay visible, though in several cases new getter/setter methods have been added that are the recommended way of accessing the returned data for new integrations.
 
 For existing request classes overloaded setters have been provided that accept the previously returned attribute types, these are deprecated for new integrations.
 
