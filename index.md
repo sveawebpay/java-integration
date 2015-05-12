@@ -785,7 +785,7 @@ For card and direct bank orders, adding customer information to the order is opt
 	IndividualCustomer individual = WebPayItem.individualCustomer()
 		.setNationalIdNumber()	// String	// invoice, paymentplan: required for individual customers in SE, NO, DK, FI
 		.setName()       		// String	// invoice, paymentplan: required (firstname, lastname) for individual customers in NL and DE 
-		.setBirthDate()        	// String	// invoice, paymentplan: required for individual customers in NL and DE
+		.setBirthDate()        	// String	// invoice, paymentplan: required for individual customers in NL and DE, use date format yyyymmdd
 		.setInitials()         	// String	// invoice, paymentplan: required for individual customers in NL
 		.setCoAddress()      	// String	// invoice, paymentplan: optional
 		.setStreetAddress()     // String	// invoice, paymentplan: required (street, housenumber) for individual customers in NL and DE 
