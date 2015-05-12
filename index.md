@@ -1,4 +1,4 @@
----
+--- 
 layout: index
 ---
 # Svea Java Integration Package Documentation
