@@ -20,7 +20,7 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
 	//  private String name;
 	
     private String ssn;
-    private String birthDate;
+    private String birthDate;		// expected format yyyymmdd
     private String firstName;
     private String lastName;
     private String initials;
@@ -89,20 +89,10 @@ public class IndividualCustomer extends CustomerIdentity<IndividualCustomer> {
 	public void setName(String name) {
 		this.name = name;
 	}
-
-//	public String getStreetAddress() {
-//		return streetAddress;
-//	}
-//
-//	public void setStreetAddress(String streetAddress) {
-//		this.streetAddress = streetAddress;
-//	}
-
     
     /**
      * Required for private customers in NL and DE
-     * @param type yyyy(m)m(d)d
-     * 
+     * @param String on format "yyyymmdd"
      * @return IndividualCustomer
      */
     public IndividualCustomer setBirthDate(String date) {
