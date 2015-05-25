@@ -1,6 +1,7 @@
 package se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertFalse;
 import static org.junit.Assert.assertTrue;
 
 import java.util.List;
@@ -41,8 +42,39 @@ public class PaymentPlanPricePerMonthTest {
     public void testBuildPriceCalculatorWithLowPrice() {
         PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
         
-        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(200.0, paymentPlanParams);
-        
+        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(99.0, paymentPlanParams);	// lowest campaign is from 100.00       	 
         assertTrue(result.isEmpty());
+    }
+
+    @Test
+    public void testBuildPriceCalculatorWithLowPrice_and_ignoreMaxAndMinFlag_true_should_return_nonempty_result() {
+        PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
+        
+        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(200.0, paymentPlanParams);        
+        assertFalse(result.isEmpty());
+        assertEquals("410012", result.get(0).get("campaignCode"));
+        assertEquals("48", result.get(0).get("pricePerMonth"));        
+    }      
+    
+    // new (Helper.paymentPlanPricePerMonth)
+    @Test
+    public void testBuildPriceCalculator_new() {
+        PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
+        
+        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(2000.0, paymentPlanParams);      
+        assertEquals("213060", result.get(0).get("campaignCode"));
+        assertEquals("2029", result.get(0).get("pricePerMonth"));        
+        assertEquals("223060", result.get(1).get("campaignCode"));
+        assertEquals("2029", result.get(1).get("pricePerMonth"));
+        assertEquals("310012", result.get(2).get("campaignCode"));
+        assertEquals("202", result.get(2).get("pricePerMonth"));
+    }
+    
+    @Test
+    public void testBuildPriceCalculatorWithLowPrice_new() {
+        PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
+        
+        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(99.0, paymentPlanParams);        
+        assertTrue(result.isEmpty());        
     }
 }
