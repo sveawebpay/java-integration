@@ -1,6 +1,5 @@
 package se.sveaekonomi.webpay.integration.hosted.payment;
 
-
 import org.junit.Test;
 
 import static org.hamcrest.MatcherAssert.assertThat;
@@ -13,8 +12,6 @@ import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
-
-
 
 public class FixedDiscountVatCalculationTest {
 
@@ -131,7 +128,7 @@ public class FixedDiscountVatCalculationTest {
         assertThat( actualXml, containsString(expectedAmountAndVat) );
         
         String expectedDiscount = "<row><sku>fixedDiscount</sku><name>-240i@6%*1</name><description></description><amount>-24000</amount><vat>-1358</vat><quantity>1.0</quantity><unit></unit></row>";
-        assertThat( actualXml, containsString(expectedDiscount) );
+        assertThat( actualXml, containsString(expectedDiscount) );	// fails, contains <-1359> instead of expected <-1358>
 
         String expectedDiscount2 = "<row><sku>fixedDiscount2</sku><name>-20i@6%*1</name><description></description><amount>-2000</amount><vat>-113</vat><quantity>1.0</quantity><unit></unit></row>";
         assertThat( actualXml, containsString(expectedDiscount2) );  
@@ -174,11 +171,11 @@ public class FixedDiscountVatCalculationTest {
 			)
 	    ;
 	
-        PaymentForm form = order
-        		.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
-        		.setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
-        		.getPaymentForm()
+        HostedPayment payment = order
+    		.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
+    		.setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
 		;
+        PaymentForm form = payment.getPaymentForm();
         
         String actualXml = form.getXmlMessage();
         System.out.println(actualXml);
@@ -188,10 +185,10 @@ public class FixedDiscountVatCalculationTest {
         assertThat( actualXml, containsString(expectedAmountAndVat) );
         
         String expectedDiscount = "<row><sku>fixedDiscount</sku><name>-240i@6%*1</name><description></description><amount>-24000</amount><vat>-1358</vat><quantity>1.0</quantity><unit></unit></row>";
-        assertThat( actualXml, containsString(expectedDiscount) );
+        assertThat( actualXml, containsString(expectedDiscount) );	// fails, contains <-1359> instead of expected <-1358>
 
         String expectedDiscount2 = "<row><sku>fixedDiscount2</sku><name>-20i@6%*1</name><description></description><amount>-2000</amount><vat>-113</vat><quantity>1.0</quantity><unit></unit></row>";
         assertThat( actualXml, containsString(expectedDiscount2) );  
     }    
-    
+          
 }
