@@ -12,7 +12,6 @@ import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsRe
 import se.sveaekonomi.webpay.integration.util.calculation.Helper;
 import se.sveaekonomi.webpay.integration.webservice.getaddresses.GetAddresses;
 import se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams.GetPaymentPlanParams;
-import se.sveaekonomi.webpay.integration.webservice.getpaymentplanparams.PaymentPlanPricePerMonth;
 
 /**
  * @author klar-sar, Kristian Grossman-Madsen
