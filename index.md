@@ -1,14 +1,13 @@
---- 
+---
 layout: index
 ---
 # Svea Java Integration Package Documentation
 
-## Version 2.0.3
+## Version 2.0.2
 
 ## Index <a name="index"></a>
 
 * [I. Introduction](http://sveawebpay.github.io/java-integration#introduction)
-
 * [II. 2.0.0 release notes](http://sveawebpay.github.io/java-integration#200releasenotes)
 * [1. Installing and configuration](http://sveawebpay.github.io/java-integration#i1)
 * [2. "Hello World"](http://sveawebpay.github.io/java-integration#i2)
@@ -186,7 +185,7 @@ The following is a complete example of how to place an order using the invoice p
 				.setAmountIncVat(5.00)
 				.setVatPercent(12.00)
 				.setQuantity(2.0)
-				.setDescription("Korv med brÃ¶d") 
+				.setDescription("Korv med bröd") 
 		)
 	;		
 	
@@ -1489,7 +1488,7 @@ If the ignoreMaxAndMinFlag is set to true, the returned array also contains the 
 	List<Map<String, String>> response = Helper.paymentPlanPricePerMonth(200.0, paymentPlanParams, true);        
 
 	String firstCampaign = response.get(0).get("campaignCode");							// i.e. [campaignCode] => 310012
-	String firstCampaignDescription = response.get(0).get("description");			// i.e. [description] => "Dela upp betalningen på 12 månader (räntefritt)"
+	String firstCampaignDescription = response.get(0).get("description");			// i.e. [description] => "Dela upp betalningen p� 12 m�nader (r�ntefritt)"
 	String pricePerMonthForFirstCampaign = response.get(0).get("campaignCode");	// i.e. [pricePerMonth] => 201.66666666667
 ...
 ```
@@ -1595,4 +1594,3 @@ An example of a synchronous (invoice) order can be found in the example/invoiceo
 An example of an asynchronous card order can be found in the example/cardorder folder.
 
 [<< To top](http://sveawebpay.github.io/java-integration#index)
-
