@@ -3,7 +3,7 @@ layout: index
 ---
 # Svea Java Integration Package Documentation
 
-## Version 2.0.3
+## Version 2.0.3b
 
 ## Index <a name="index"></a>
 
