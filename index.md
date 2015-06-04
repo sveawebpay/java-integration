@@ -185,7 +185,7 @@ The following is a complete example of how to place an order using the invoice p
 				.setAmountIncVat(5.00)
 				.setVatPercent(12.00)
 				.setQuantity(2.0)
-				.setDescription("Korv med bröd") 
+				.setDescription("Korv med brÃ¶d") 
 		)
 	;		
 	
@@ -1488,7 +1488,7 @@ If the ignoreMaxAndMinFlag is set to true, the returned array also contains the 
 	List<Map<String, String>> response = Helper.paymentPlanPricePerMonth(200.0, paymentPlanParams, true);        
 
 	String firstCampaign = response.get(0).get("campaignCode");							// i.e. [campaignCode] => 310012
-	String firstCampaignDescription = response.get(0).get("description");			// i.e. [description] => "Dela upp betalningen p� 12 m�nader (r�ntefritt)"
+	String firstCampaignDescription = response.get(0).get("description");			// i.e. [description] => "Dela upp betalningen på 12 månader (räntefritt)"
 	String pricePerMonthForFirstCampaign = response.get(0).get("campaignCode");	// i.e. [pricePerMonth] => 201.66666666667
 ...
 ```
