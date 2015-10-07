@@ -45,7 +45,7 @@ public class PaymentPlanPricePerMonthTest {
     public void testBuildPriceCalculatorWithLowPrice() {
         PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
         
-        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(200.0, paymentPlanParams);        
+        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(99.0, paymentPlanParams);	// lowest campaign is from 100.00       	 
         assertTrue(result.isEmpty());
     }
 
@@ -53,11 +53,10 @@ public class PaymentPlanPricePerMonthTest {
     public void testBuildPriceCalculatorWithLowPrice_and_ignoreMaxAndMinFlag_true_should_return_nonempty_result() {
         PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
         
-        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(200.0, paymentPlanParams, true);        
+        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(200.0, paymentPlanParams);        
         assertFalse(result.isEmpty());
-        assertEquals("213060", result.get(0).get("campaignCode"));
-        assertEquals("Köp nu betala om 3 månader (räntefritt)", result.get(0).get("description"));        
-        assertEquals("229", result.get(0).get("pricePerMonth"));        
+        assertEquals("410012", result.get(0).get("campaignCode"));
+        assertEquals("48", result.get(0).get("pricePerMonth"));        
     }      
     
     // new (Helper.paymentPlanPricePerMonth)
@@ -78,7 +77,7 @@ public class PaymentPlanPricePerMonthTest {
     public void testBuildPriceCalculatorWithLowPrice_new() {
         PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
         
-        List<Map<String, String>> result = Helper.paymentPlanPricePerMonth(200.0, paymentPlanParams);        
+        List<Map<String, String>> result = Helper.paymentPlanPricePerMonth(99.0, paymentPlanParams);        
         assertTrue(result.isEmpty());        
     }
     
