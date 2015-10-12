@@ -8,8 +8,10 @@ import org.json.JSONException;
 import org.json.JSONObject;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.remote.RemoteWebDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.Select;
 import org.openqa.selenium.support.ui.WebDriverWait;
@@ -21,6 +23,7 @@ import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.config.SveaTestConfigurationProvider;
 import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.hosted.helper.PaymentForm;
+import se.sveaekonomi.webpay.integration.hosted.payment.PaymentMethodPayment;
 import se.sveaekonomi.webpay.integration.order.create.CreateOrderBuilder;
 import se.sveaekonomi.webpay.integration.order.identity.CompanyCustomer;
 import se.sveaekonomi.webpay.integration.order.identity.IndividualCustomer;
@@ -36,6 +39,7 @@ import se.sveaekonomi.webpay.integration.util.constant.COUNTRYCODE;
 import se.sveaekonomi.webpay.integration.util.constant.CURRENCY;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTMETHOD;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
+import se.sveaekonomi.webpay.integration.util.constant.SUBSCRIPTIONTYPE;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaCreateOrder;
 import se.sveaekonomi.webpay.integration.webservice.svea_soap.SveaRequest;
 
@@ -576,9 +580,8 @@ public class TestingTool {
         // submit credentials form, triggering redirect to returnurl
         driver.findElementById("perform-payment").click();                
         
-        // as our localhost landingpage is a http site, we get a popup
-        Alert alert = driver.switchTo().alert();
-        alert.accept();
+        // as our localhost landingpage may be a http site, we may get a popup 
+        interceptAndDismissAlert(driver);
 
         // wait for landing page to load and then parse out raw response
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));                
@@ -594,6 +597,16 @@ public class TestingTool {
 		HostedPaymentResponse myResponse = new HostedPaymentResponse(rawresponse, mac, mySecretWord);	    
 	    return myResponse; 
 	}
+
+	protected static void interceptAndDismissAlert(RemoteWebDriver driver) {
+		try {
+	        Alert alert = driver.switchTo().alert();
+	        alert.accept();
+        }
+        catch( NoAlertPresentException ex ) {
+        	//ignore if no popup seen
+        }
+	}
 	
 	/**
 	 * returns a card test order response from Svea 
@@ -601,7 +614,10 @@ public class TestingTool {
 	 * @param nameOfOriginatingTest
 	 * @return
 	 */
-	public static HostedPaymentResponse createCardTestOrderWithThreeRows( String nameOfOriginatingTest ) {
+	public static HostedPaymentResponse createCardTestOrderWithThreeRows(String nameOfOriginatingTest) {
+		return createCardTestOrderWithThreeRows( nameOfOriginatingTest, false );
+	}
+	public static HostedPaymentResponse createCardTestOrderWithThreeRows( String nameOfOriginatingTest, boolean useSetSubscriptionType ) {
 
 		// create order
 	    CreateOrderBuilder order = WebPay.createOrder(SveaConfig.getDefaultConfig())
@@ -616,11 +632,17 @@ public class TestingTool {
 	    ;
 	            
 	    // choose payment method and do request
-	    PaymentForm form = order.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
+	    PaymentMethodPayment request = (PaymentMethodPayment) order.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
 	            	.setReturnUrl("http://localhost:8080/CardOrder/landingpage")	// http => handle alert below
-	            	.getPaymentForm()
 		;
     
+        // check subscription true, setSubscriptionType!
+        if( useSetSubscriptionType == true ) {
+        	request.setSubscriptionType(SUBSCRIPTIONTYPE.RECURRING);
+        }	 
+
+        PaymentForm form = request.getPaymentForm();
+        	    
 	    // insert form in empty page
         FirefoxDriver driver = new FirefoxDriver();
         driver.get("about:blank");
@@ -649,9 +671,8 @@ public class TestingTool {
         // submit credentials form, triggering redirect to returnurl
         driver.findElementById("perform-payment").click();                
         
-        // as our localhost landingpage is a http site, we get a popup
-        Alert alert = driver.switchTo().alert();
-        alert.accept();
+        // as our localhost landingpage may be a http site, we may get a popup 
+        interceptAndDismissAlert(driver);
 
         // wait for landing page to load and then parse out raw response
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));                

@@ -9,6 +9,7 @@ import java.util.Date;
 import org.junit.Test;
 import org.openqa.selenium.Alert;
 import org.openqa.selenium.By;
+import org.openqa.selenium.NoAlertPresentException;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -160,7 +161,7 @@ public class WebPayWebdriverTest {
 	@Test 
 	public void test_createOrder_usePaymentMethodPayment_KORTCERT() {          
     	// create an order using defaults
-    	HostedPaymentResponse createCardOrderResponse = createCardOrder();    	
+    	HostedPaymentResponse createCardOrderResponse = (HostedPaymentResponse)TestingTool.createCardTestOrder("test_createOrder_usePaymentMethodPayment_KORTCERT");
     	assertTrue(createCardOrderResponse.isOrderAccepted());
 	}		
 	// directbank
@@ -174,7 +175,7 @@ public class WebPayWebdriverTest {
 	public void test_createOrder_perform_recurring_card_order_request() {          
     	// set up subscription card order
 		boolean useSetSubscriptionType = true;
-    	HostedPaymentResponse createCardOrderResponse = createCardOrder( useSetSubscriptionType );
+    	HostedPaymentResponse createCardOrderResponse = (HostedPaymentResponse)TestingTool.createCardTestOrderWithThreeRows("test_createOrder_perform_recurring_card_order_request", useSetSubscriptionType);
     	assertTrue(createCardOrderResponse.isOrderAccepted());
     	assertNotNull( createCardOrderResponse.getSubscriptionId() );    	    	
 
@@ -394,7 +395,7 @@ public class WebPayWebdriverTest {
     public void test_deliverOrder_deliverCardOrder() {
     	    	
     	// create an order using defaults
-    	HostedPaymentResponse order = createCardOrder();    	
+    	HostedPaymentResponse order = (HostedPaymentResponse)TestingTool.createCardTestOrder("test_deliverOrder_deliverCardOrder");
     	assertTrue(order.isOrderAccepted());
     	
     	// deliver order
@@ -674,8 +675,13 @@ public class WebPayWebdriverTest {
         driver.findElementById("perform-payment").click();        
         
         // as our localhost landingpage is a http site, we get a popup
-        Alert alert = driver.switchTo().alert();
-        alert.accept();
+		try {
+	        Alert alert = driver.switchTo().alert();
+	        alert.accept();
+        }
+        catch( NoAlertPresentException ex ) {
+        	//ignore if no popup seen
+        }
 
         // wait for landing page to load and then create a HostedPaymentResponse from the response xml message
         (new WebDriverWait(driver, 10)).until(ExpectedConditions.presenceOfElementLocated(By.id("accepted")));                
@@ -709,8 +715,7 @@ public class WebPayWebdriverTest {
     	
     	
     }
-    
- 
+     
     private double convertExVatToIncVat(double amountExVat, double vatPercent) {
     	return amountExVat * (1+vatPercent/100);
     }
