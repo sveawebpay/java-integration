@@ -134,11 +134,11 @@ You should have received the above credentials from Svea when creating a service
 ### 1.4 Using your own account credentials with the package
 The WebPay and WebPayAdmin entrypoint methods all require a config object when called. The easiest way to get such an object is to use the default SveaConfig.getDefaultConfig() method. It will return a config object with the Svea test account credentials as used by the integration package test suite.
 
-In order to use your own account credentials, you should implement the ConfigurationProvider interface in a class of your own -- your implementation could for instance fetch the needed credentials from a database instead of them being hardcoded in a source file. 
+In order to use your own account credentials, you should implement the ConfigurationProvider interface in a class of your own -- your implementation could for instance fetch the needed credentials from a database instead of them being hardcoded in a source file.
 
-That being said, the easiest way implement the ConfigurationProvider interface may be to copy the provided SveaTestConfigurationProvider.java twice, i.e. giving you a MyTestConfigurationProvider.java and a MyProductionConfigurationProvider.java. 
+That being said, the easiest way implement the ConfigurationProvider interface may be to copy the provided SveaTestConfigurationProvider.java twice, i.e. giving you a MyTestConfigurationProvider.java and a MyProductionConfigurationProvider.java.
 
-You could then replace the credentials in these files with your test and production credentials, respectively, and when calling the WebPay or WebPayAdmin entrypoint method instantiate a test or production configuration and pass in as the config argument. 
+You could then replace the credentials in these files with your test and production credentials, respectively, and when calling the WebPay or WebPayAdmin entrypoint method instantiate a test or production configuration and pass in as the config argument.
 
 [<< To index](http://sveawebpay.github.io/java-integration#index)
 
@@ -152,13 +152,13 @@ The following is a complete example of how to place an order using the invoice p
 
 	// get configuration object holding the Svea service login credentials
 	ConfigurationProvider myConfig = new SveaTestConfigurationProvider();
-			
-	// We assume that you've collected the following information about the order in your shop: 
-	
+
+	// We assume that you've collected the following information about the order in your shop:
+
 	// The customer has bought three items, one "Billy" which cost 700,99 kr excluding vat (25%) and two hotdogs for 5 kr (incl. vat).
 
-	// We'll also need information about the customer country, and sufficient information to identify the customer, see below:		
-	
+	// We'll also need information about the customer country, and sufficient information to identify the customer, see below:
+
 	// Begin the order creation process by creating an order builder object using the WebPay.createOrder() method:
 	CreateOrderBuilder myOrder = WebPay.createOrder(myConfig);
 
@@ -167,7 +167,7 @@ The following is a complete example of how to place an order using the invoice p
 	// We begin by adding any additional information required by the intended payment method, which for an invoice order means:
 	myOrder.setCountryCode(COUNTRYCODE.SE);
 	myOrder.setOrderDate(new java.sql.Date(new java.util.Date().getTime()));
-	
+
 	// To add the cart contents to the order we first create and specify a new orderRow item using methods from the Svea\OrderRow class:
 	OrderRowBuilder boughtItem = Item.orderRow();
 	boughtItem.setDescription("Billy");
@@ -175,33 +175,33 @@ The following is a complete example of how to place an order using the invoice p
 	boughtItem.setVatPercent(25);
 	boughtItem.setQuantity(1.0);
 
-	// Add boughtItem to the order: 
-	myOrder.addOrderRow( boughtItem ); 
-	
-	// Add a second item in a fluent fashion 
+	// Add boughtItem to the order:
+	myOrder.addOrderRow( boughtItem );
+
+	// Add a second item in a fluent fashion
 	myOrder
-		.addOrderRow( 
+		.addOrderRow(
 			Item.orderRow()
 				.setAmountIncVat(5.00)
 				.setVatPercent(12.00)
 				.setQuantity(2.0)
-				.setDescription("Korv med brÃ¶d") 
+				.setDescription("Korv med brÃ¶d")
 		)
-	;		
-	
-	// Next, we create a customer identity object, noting that for invoice orders Svea overrides any customer-provided address 
+	;
+
+	// Next, we create a customer identity object, noting that for invoice orders Svea overrides any customer-provided address
 	// w/verified credit report address in the create order request response.
 	IndividualCustomer customerInformation = WebPayItem.individualCustomer();
 	customerInformation.setNationalIdNumber("194605092222");			// sole required field for an invoice order customer in Sweden
-		
-	// Add the customer to the order: 
+
+	// Add the customer to the order:
 	myOrder.addCustomerDetails(customerInformation);
-	
+
 	// We have now completed specifying the order, and wish to send the payment request to Svea. To do so, we select the invoice payment method:
 	InvoicePayment myInvoiceOrderRequest = myOrder.useInvoicePayment();
 
 	// And then send the request to Svea using the doRequest method. We then immediately receive a create order response object in return
-	CreateOrderResponse myResponse = myInvoiceOrderRequest.doRequest();		
+	CreateOrderResponse myResponse = myInvoiceOrderRequest.doRequest();
 
 ```
 
@@ -239,7 +239,7 @@ Start by creating an order using the WebPay.createOrder method. Pass in your con
 
 ```
 ...
-	ConfigurationProvider config = new MyConfigurationProvider();	// MyConfiguration implements ConfigurationProvider 
+	ConfigurationProvider config = new MyConfigurationProvider();	// MyConfiguration implements ConfigurationProvider
 	CreateOrderBuilder myOrder = WebPay.createOrder(config);		// get an order builder class instance
 ...
 ```
@@ -252,11 +252,11 @@ Order row, fee and discount items can be added to the order. Together the indivi
 ```
 ...
 	myOrderRow = WebPayItem.orderRow();		// create the order row object
-	
+
 	myOrderRow.setQuantity(1);        		// required
 	myOrderRow.setAmountIncVat(12.50)		// recommended to specify price using AmountIncVat & VatPercent
 	myOrderRow.setVatPercent(25.00)			// recommended to specify price using AmountIncVat & VatPercent
-	
+
 	myOrder.addOrderRow( myOrderRow );       // add order row to the order
 ...
 	/* the above code expressed in a more compact, fluent style:
@@ -301,11 +301,11 @@ Set any additional attributes needed to complete the order using the OrderBuilde
 ...
 	myOrder
 	    ...
-	    .setCountryCode("SE")                  // required
-	    .setCurrency("SEK")                    // required for card payment, direct bank & PayPage payments. Ignored for invoice and payment plan.
-	    .setClientOrderNumber("A123456")       // required for card payment, direct payment, PaymentMethod & PayPage payments, max length 30 chars.
-	    .setCustomerReference("att: kgm")      // optional, ignored for card & direct bank orders, max length 30 chars.
-	    .setOrderDate("2015-03-09")            // required for invoice and payment plan payments
+	    .setCountryCode("SE")                  // Required
+	    .setCurrency("SEK")                    // Required for card payment, direct bank & PayPage payments. Ignored for invoice and payment plan.
+	    .setClientOrderNumber("A123456")       // Required for card payment, direct payment, Unique String(65). Optional for Invoice and Payment plan String(32).
+	    .setCustomerReference("att: kgm")      // Optional for invoice and payment plan String(32), ignored for card & direct bank orders.
+	    .setOrderDate("2015-03-09")            // Required for invoice and payment plan payments
 	;
 ...
 ```
@@ -374,15 +374,15 @@ First, make sure that you have added all required information to your order buil
 ```java
 ...
 	CreateOrderBuilder orderbuilder = WebPay.createOrder(config)
-	 	.addOrderRow()              		// required, see WebPayItem.orderRow() for order row specification
-	    .addFee()         			   		// optional, see WebPayItem for invoice, shipping fee
-	    .addDiscount()          			// optional, see WebPayItem for fixed, relative discount
-	    .addCustomerDetails()    			// required for invoice and payment plan payments, card getPaymentUrl. See WebPayItem for individual, company customer
-	    .setCountryCode()               	// required
-	    .setOrderDate()            			// required for invoice and payment plan payments
-	    .setCurrency()                 		// required for card payment, direct bank & PayPage payments only. Ignored for invoice and payment plan.
-	    .setClientOrderNumber()    			// required for card payment, direct payment, PaymentMethod & PayPage payments, max length 30 chars.
-	    .setCustomerReference()    			// optional, ignored for card & direct bank orders, max length 30 chars.
+	 	.addOrderRow()              		// Required, see WebPayItem.orderRow() for order row specification
+	    .addFee()                                   // Optional, see WebPayItem for invoice, shipping fee
+	    .addDiscount()          			// Optional, see WebPayItem for fixed, relative discount
+	    .addCustomerDetails()    			// Required for invoice and payment plan payments, card getPaymentUrl. See WebPayItem for individual, company customer
+	    .setCountryCode()                           // Required
+	    .setOrderDate()            			// Required for invoice and payment plan payments
+	    .setCurrency()                 		// Required for card payment, direct bank & PayPage payments only. Ignored for invoice and payment plan.
+	    .setClientOrderNumber()    			// Required for card payment, direct payment, Unique String(65). Optional for Invoice and Payment plan String(32).
+	    .setCustomerReference()    			// Optional for invoice and payment plan String(32), ignored for card & direct bank orders.
 	;
 ...
 ```
@@ -399,7 +399,7 @@ To perform an invoice payment, select .useInvoicePayment(). This will return an 
 	    .addCustomerDetails()    			// required for invoice and payment plan payments, see WebPayItem for individual, company customer
 	    .setCountryCode()               	// required
 	    .setOrderDate()            			// required for invoice and payment plan payments
-	;		
+	;
 	InvoicePayment myInvoiceOrderRequest = myOrder.useInvoicePayment();
 	CreateOrderResponse myResponse = myInvoiceOrderRequest.doRequest();
 ...
@@ -414,9 +414,9 @@ To perform an invoice payment, select .usePaymentPlanPayment(). This will return
 The Payment plan payment method is restricted to individual customers and can not be used by legal entities, i.e. companies or organisations.
 
 First use WebPay.getPaymentPlanParams() to get the various campaigns in an instance of GetPaymentPlanParams. Then chose a campaign to pass as parameter to the .usePaymentPlanPayment() method.
-		
+
 ```java
-...		
+...
 	// get payment plan params
     PaymentPlanParamsResponse myParams = WebPay.getPaymentPlanParams(myConfig)
 			.setCountryCode()				// required
@@ -424,7 +424,7 @@ First use WebPay.getPaymentPlanParams() to get the various campaigns in an insta
 
 	// select campaign to use
     String myCampaign = myParams
-    	.getCampaignCodes()					
+    	.getCampaignCodes()
     	.get(0)
     	.getCampaignCode();
 
@@ -434,7 +434,7 @@ First use WebPay.getPaymentPlanParams() to get the various campaigns in an insta
 	    .addCustomerDetails()    			// required for invoice and payment plan payments, see WebPayItem for individual, company customer
 	    .setCountryCode()               	// required
 	    .setOrderDate()            			// required for invoice and payment plan payments
-	;	
+	;
 
     // choose payment plan payment method, passing in the campaign and do request
     CreateOrderResponse response = myOrder
@@ -442,14 +442,14 @@ First use WebPay.getPaymentPlanParams() to get the various campaigns in an insta
     	.doRequest()
 	;
 ...
-```		
+```
 
 #### 4.2.1 Example
 Example to come later. Sorry.
 
 
 ### 4.3 Card payment <a name="i43"></a>
-Select i.e. .usePaymentMethod(PAYMENTMETHOD.KORTCERT) to perform a card payment via the Certitrade card payment provider. 
+Select i.e. .usePaymentMethod(PAYMENTMETHOD.KORTCERT) to perform a card payment via the Certitrade card payment provider.
 
 You will then use .getPaymentForm() to fetch a prepared html request form, which you may then use to redirect the customer to Certitrade, where they can enter their credit card credentials and complete the payment.
 
@@ -459,16 +459,16 @@ You may also use the .getUrl() method to get an url which you may direct the cus
 Get an  instance of PaymentForm containing the request XML data and the complete html form as a string, along with the form elements in an array.
 
 ```java
-...		
+...
 	CreateOrderBuilder orderbuilder = WebPay.createOrder(config)
-	 	.addOrderRow()              		// required, see WebPayItem.orderRow() for order row specification
-	    .setCountryCode()               	// required
-	    .setCurrency()                 		// required for card payment, direct bank & PayPage payments only. Ignored for invoice and payment plan.
-	    .setClientOrderNumber()    			// required for card payment, direct payment, PaymentMethod & PayPage payments, max length 30 chars.
+	 	.addOrderRow()              		// Required, see WebPayItem.orderRow() for order row specification
+	    .setCountryCode()                           // Required
+	    .setCurrency()                 		// Required for card payment, direct bank & PayPage payments only. Ignored for invoice and payment plan.
+	    .setClientOrderNumber()    			// Required for card payment, direct payment, Unique String(65). Optional for Invoice and Payment plan String(32).
 	;
-            
+
     // choose payment method
-    PaymentMethodPayment request = (PaymentMethodPayment) order.usePaymentMethod(PAYMENTMETHOD.KORTCERT);	
+    PaymentMethodPayment request = (PaymentMethodPayment) order.usePaymentMethod(PAYMENTMETHOD.KORTCERT);
 
 	// then perform any additional asynchronous request settings needed and receive request information
 	request.
@@ -480,30 +480,30 @@ Get an  instance of PaymentForm containing the request XML data and the complete
 
 	// get the PaymentForm instance containing the request html form
     PaymentForm form = request.getPaymentForm();
-        
-...	
+
+...
 ```
 
 ##### 4.3.1.1 Runnable card order example, using .getPaymentForm()
 A complete, runnable example of an invoice order can be found in the examples/cardorder folder.
 
 #### 4.3.2 .getPaymentUrl()
-Get an url containing a link to a prepared payment. 
+Get an url containing a link to a prepared payment.
 
 To get a payment url you also need to supply the customer ip address in the order builder customer identity.
 
 ```java
-...		
+...
 	CreateOrderBuilder orderbuilder = WebPay.createOrder(config)
-	 	.addOrderRow()              		// required, see WebPayItem.orderRow() for order row specification
-	    .addCustomerDetails()    			// required for invoice and payment plan payments, card getPaymentUrl. See WebPayItem for individual, company customer
-	    .setCountryCode()               	// required
-	    .setCurrency()                 		// required for card payment, direct bank & PayPage payments only. Ignored for invoice and payment plan.
-	    .setClientOrderNumber()    			// required for card payment, direct payment, PaymentMethod & PayPage payments, max length 30 chars.
+            .addOrderRow()              		// Required, see WebPayItem.orderRow() for order row specification
+	    .addCustomerDetails()    			// Required for invoice and payment plan payments, card getPaymentUrl. See WebPayItem for individual, company customer
+	    .setCountryCode()                           // Required
+	    .setCurrency()                 		// Required for card payment, direct bank & PayPage payments only. Ignored for invoice and payment plan.
+	    .setClientOrderNumber()    			// Required for card payment, direct payment, Unique String(65). Optional for Invoice and Payment plan String(32).
 	;
-            
+
     // choose payment method
-    PaymentMethodPayment request = (PaymentMethodPayment) order.usePaymentMethod(PAYMENTMETHOD.KORTCERT);	
+    PaymentMethodPayment request = (PaymentMethodPayment) order.usePaymentMethod(PAYMENTMETHOD.KORTCERT);
 
 	// then perform any additional asynchronous request settings needed and receive request information
 	request.
@@ -512,10 +512,10 @@ To get a payment url you also need to supply the customer ip address in the orde
 		.setCancelUrl()						// optional, applies to paypage only
 		.setPayPageLanguageCode()			// optional, defaults to english
 	;
-	
+
 	// get the PaymentUrl instance containing the url to the prepared payment request
-    PaymentUrl url = request.getPaymentUrl();        
-...	
+    PaymentUrl url = request.getPaymentUrl();
+...
 ```
 
 #### 4.3.3 Recurring card payments
@@ -532,16 +532,16 @@ An example of an recurring card order, both the setup transaction and a recurrin
 Select i.e. .usePaymentMethod(PAYMENTMETHOD.NORDEA_SE) to perform a direct bank transfer payment using the Swedish bank Nordea.
 
 ```java
-...		
+...
 	CreateOrderBuilder orderbuilder = WebPay.createOrder(config)
-	 	.addOrderRow()              		// required, see WebPayItem.orderRow() for order row specification
-	    .setCountryCode()               	// required
-	    .setCurrency()                 		// required for card payment, direct bank & PayPage payments only. Ignored for invoice and payment plan.
-	    .setClientOrderNumber()    			// required for card payment, direct payment, PaymentMethod & PayPage payments, max length 30 chars.
+            .addOrderRow()              		// Required, see WebPayItem.orderRow() for order row specification
+	    .setCountryCode()                           // Required
+	    .setCurrency()                 		// Required for card payment, direct bank & PayPage payments only. Ignored for invoice and payment plan.
+	    .setClientOrderNumber()    			// Required for card payment, direct payment, Unique String(65). Optional for Invoice and Payment plan String(32).
 	;
-            
+
     // choose payment method
-    PaymentMethodPayment request = (PaymentMethodPayment) order.usePaymentMethod(PAYMENTMETHOD.NORDEA_SE);	
+    PaymentMethodPayment request = (PaymentMethodPayment) order.usePaymentMethod(PAYMENTMETHOD.NORDEA_SE);
 
 	// then perform any additional asynchronous request settings needed and receive request information
 	request.
@@ -550,8 +550,8 @@ Select i.e. .usePaymentMethod(PAYMENTMETHOD.NORDEA_SE) to perform a direct bank 
 	;
 
 	// get the PaymentForm instance containing the request html form
-    PaymentForm form = request.getPaymentForm();        
-...	
+    PaymentForm form = request.getPaymentForm();
+...
 ```
 
 ### 4.5 Using the Svea PayPage <a name="i45"></a>
@@ -567,9 +567,9 @@ Note that you can use WebPay.listPaymentMethods() entrypoint to get the various 
 	HostedPayment<?> request = order
     	.usePaymentMethod(PaymentMethod.KORTCERT)		// Use WebPay.listPaymentMethods() to get available payment methods, here we use Certitrade
 		...												// any additional request options as dictated by the chosen payment method type
-	;		
+	;
 	PaymentForm form = request.getPaymentForm();
-...	
+...
 ```
 
 #### 4.5.2 Select a card payment method
@@ -578,11 +578,11 @@ Send user to PayPage to select from available card payment methods (only), after
 ```java
 ...
 	CardPayment request = order
-    	.usePayPageCardOnly()							
+    	.usePayPageCardOnly()
 		...												// any additional request options as dictated by the chosen payment method type
-	;		
+	;
 	PaymentForm form = request.getPaymentForm();
-...	
+...
 ```
 
 #### 4.5.3 Select a direct bank payment method
@@ -591,27 +591,27 @@ Send user to PayPage to select from available bank payment methods (only), after
 ```java
 ...
 	DirectPayment request = order
-    	.usePayPageDirectBankOnly()						 
+    	.usePayPageDirectBankOnly()
 		...												// any additional request options as dictated by the chosen payment method type
-	;		
+	;
 	PaymentForm form = request.getPaymentForm();
-...	
+...
 ```
 
 #### 4.5.4 Specifying available payment methods to present
-Send user to PayPage to select from the available payment methods, specifying which payment methods to present to and/or hide. Use the PayPagePayment class methods to customise which payment methods to display. 
+Send user to PayPage to select from the available payment methods, specifying which payment methods to present to and/or hide. Use the PayPagePayment class methods to customise which payment methods to display.
 
 ```java
 ...
 	PayPagePayment  request = order
-    	.usePayPage()						 					
+    	.usePayPage()
 			.excludeCardPaymentMethods()				// see class PayPagePayment for method details
 			.excludeDirectPaymentMethods()
 			.excludePaymentMethods()
 			.includePaymentMethods()
-	;		
+	;
 	PaymentForm form = request.getPaymentForm();
-...	
+...
 ```
 
 Use the WebPay.listPaymentMethods() entrypoint method to find out which payment methods are configured for your specific merchant id.
@@ -642,7 +642,7 @@ Note that while it is possible to add multiples of fee and discount rows, the pa
  3. any invoice fee rows, in the order they were added using addShippingFee()
  4. any fixed discount rows, in the order they were added using addFixedDiscount()
  5. any relative discount rows, in the order they were added using addRelativeDiscount()
- 
+
 Also, for relative discounts, or fixed discounts specified using only setAmountIncVat() or only setAmountExVat() there may be several discount rows added, should the order include more than one different vat rate. It is not recommended to specify more than one relative discount row per order, or  more than one fixed discount specified using only setAmountIncVat() or only setAmountExVat().
 
 
@@ -671,8 +671,8 @@ Specify the item price using precisely two of these methods in order to specify 
 	    .setAmountExVat()       // Double	// optional, use precisely two of the price specification methods
 	    .setQuantity()          // Double   // required
 	    .setUnit()              // String	// optional
-	    .setName()              // String	// optional, note that invoice & payment plan orders will merge "name" with "description" 
-	    .setDescription() 		// String	// optional, note that invoice & payment plan orders will merge "name" with "description" 
+	    .setName()              // String	// optional, note that invoice & payment plan orders will merge "name" with "description"
+	    .setDescription() 		// String	// optional, note that invoice & payment plan orders will merge "name" with "description"
 	    .setArticleNumber()     // String	// optional
 	    .setDiscountPercent()   // double 	// optional
 	);
@@ -720,14 +720,14 @@ Specify the item price using precisely two of these methods in order to specify 
         ->setDiscountPercent()  // double 	// optional
     );
 ...
-```	
+```
 See the InvoiceFeeBuilder class methods for details on how to specify the item.
 
 ### 5.5 WebPayItem.fixedDiscount() <a name="i55"></a>
 <!-- WebPayItem.fixedDiscount() docbloc below, replace @see with apidoc links -->
 Use WebPayItem.fixedDiscount() when the discount or coupon is expressed as a fixed discount amount.
 
-If no vat rate is given, the package will distribute the the discount amount across the different order row vat rates present in the order. This will ensure that the correct discount vat is applied to the order -- if there are several vat rates present in the order, the discount will be split proportionally across the order row vat rates. 
+If no vat rate is given, the package will distribute the the discount amount across the different order row vat rates present in the order. This will ensure that the correct discount vat is applied to the order -- if there are several vat rates present in the order, the discount will be split proportionally across the order row vat rates.
 
 See the tests for examples of the resulting discount rows and exact behaviour when the discount is specified using setAmountIncVat() and setAmountExVat in orders with different vat rates present.
 
@@ -754,7 +754,7 @@ Use WebPayItem.relativeDiscount() when the discount or coupon is expressed as a 
 
 The discount will be calculated based on the total sum of all order rows specified using .addOrderRow(), it does not apply to invoice or shipping fees.
 
-The package will distribute the the discount amount across the different order row vat rates present in the order. This will ensure that the correct discount vat is applied to the order -- if there are several vat rates present in the order, the discount will be split across the order row vat rates. 
+The package will distribute the the discount amount across the different order row vat rates present in the order. This will ensure that the correct discount vat is applied to the order -- if there are several vat rates present in the order, the discount will be split across the order row vat rates.
 
 Specify the discount using RelativeDiscountBuilder methods:
 
@@ -776,7 +776,7 @@ See the RelativeDiscountBuilder class methods for details on how to specify the 
 <!-- WebPayItem.individualCustomer() docbloc below, replace @see with apidoc links -->
 Use WebPayItem.individualCustomer() to add individual customer information to an order.
 
-#### 5.7.1 Using IndividualCustomer when specifying an order 
+#### 5.7.1 Using IndividualCustomer when specifying an order
 Note that "required" below as a requirement only when using the invoice or payment plan payment methods, and that the required attributes vary between countries.
 For card and direct bank orders, adding customer information to the order is optional, unless you're using getPaymentUrl() to set up a prepared payment.
 
@@ -784,16 +784,16 @@ For card and direct bank orders, adding customer information to the order is opt
 ...
 	IndividualCustomer individual = WebPayItem.individualCustomer()
 		.setNationalIdNumber()	// String	// invoice, paymentplan: required for individual customers in SE, NO, DK, FI
-		.setName()       		// String	// invoice, paymentplan: required (firstname, lastname) for individual customers in NL and DE 
+		.setName()       		// String	// invoice, paymentplan: required (firstname, lastname) for individual customers in NL and DE
 		.setBirthDate()        	// String	// invoice, paymentplan: required for individual customers in NL and DE, use date format yyyymmdd
 		.setInitials()         	// String	// invoice, paymentplan: required for individual customers in NL
 		.setCoAddress()      	// String	// invoice, paymentplan: optional
-		.setStreetAddress()     // String	// invoice, paymentplan: required (street, housenumber) for individual customers in NL and DE 
+		.setStreetAddress()     // String	// invoice, paymentplan: required (street, housenumber) for individual customers in NL and DE
 		.setZipCode)            // String	// invoice, paymentplan: required in NL and DE
 		.setLocality()          // String	// invoice, paymentplan: required in NL and DE
 		.setPhoneNumber()       // String	// invoice, paymentplan: optional but desirable
 		.setEmail()         	// String	// invoice, paymentplan: optional but desirable
-		.setIpAddress()       	// String	// invoice, paymentplan: optional but desirable; card: required for getPaymentUrl() orders only		
+		.setIpAddress()       	// String	// invoice, paymentplan: optional but desirable; card: required for getPaymentUrl() orders only
 	;
 ...
 ```
@@ -801,11 +801,11 @@ For card and direct bank orders, adding customer information to the order is opt
 See the IndividualCustomer class methods for details on how to specify the item.
 
 #### 5.7.2 A note on IndividualCustomer objects in service request response classes
-Various service requests such as the WebPay `.createOrder()` and `.getAddresses()` methods along with the WebPayAdmin `.queryOrder()` et al methods may return an IndividualCustomer object as (part) of the request response. 
+Various service requests such as the WebPay `.createOrder()` and `.getAddresses()` methods along with the WebPayAdmin `.queryOrder()` et al methods may return an IndividualCustomer object as (part) of the request response.
 
 Note that not all responses define the same attributes. Also, what attributes are returned may vary between different countries and payment methods. In general, you should inspect the received response object attributes before relying on them for further requests.
 
-If defined, the customer `.getName()` method will contain the amalgated customer firstname and surname as returned by the various credit providers we use in the respective country. Unfortunately, there is no way of knowing the exact format of the amalgated name; i.e. "Joan Doe", "Joan, Doe", "Doe, Joan". 
+If defined, the customer `.getName()` method will contain the amalgated customer firstname and surname as returned by the various credit providers we use in the respective country. Unfortunately, there is no way of knowing the exact format of the amalgated name; i.e. "Joan Doe", "Joan, Doe", "Doe, Joan".
 
 If defined, the customer firstname and surname are provided by the methods `.getFirstName()` and `.getLastName()`; if not, these methods return null.
 
@@ -814,7 +814,7 @@ If defined, the customer firstname and surname are provided by the methods `.get
 <!-- WebPayItem.companyCustomer() docbloc below, replace @see with apidoc links -->
 Use WebPayItem.companyCustomer() to add customer information to an order.
 
-#### 5.8.1 Using CompanyCustomer when specifying an order 
+#### 5.8.1 Using CompanyCustomer when specifying an order
 Note that "required" below as a requirement only when using the invoice payment methods, and that the required attributes vary between countries.
 (For card and direct bank orders, adding customer information to the order is optional, unless you're using getPaymentUrl() to set up a prepared payment.)
 
@@ -836,11 +836,11 @@ Note that "required" below as a requirement only when using the invoice payment 
 ...
 ```
 #### 5.8.2 A note on CompanyCustomer objects in service request response classes
-Various service requests such as the WebPay .createOrder() and .getAddresses() methods along with the WebPayAdmin .queryOrder() et al methods may return a CompanyCustomer object as (part) of the request response. 
+Various service requests such as the WebPay .createOrder() and .getAddresses() methods along with the WebPayAdmin .queryOrder() et al methods may return a CompanyCustomer object as (part) of the request response.
 
 Note that not all responses define the same attributes. Also, what attributes are returned may vary between different countries and payment methods. In general, you should inspect the received response object attributes before relying on them for further requests.
 
-If defined, the customer `.getName()` method will contain the amalgated customer firstname and surname as returned by the various credit providers we use in the respective country. Unfortunately, there is no way of knowing the exact format of the amalgated name; i.e. "Joan Doe", "Joan, Doe", "Doe, Joan". 
+If defined, the customer `.getName()` method will contain the amalgated customer firstname and surname as returned by the various credit providers we use in the respective country. Unfortunately, there is no way of knowing the exact format of the amalgated name; i.e. "Joan Doe", "Joan, Doe", "Doe, Joan".
 
 If defined, the customer firstname and surname are provided by the methods `.getFirstName()` and `.getLastName()`; if not, these methods return null.
 
@@ -865,7 +865,7 @@ It is returned in the various WebPayAdmin.queryOrder() responses, and used as in
 	    // numberedOrderRow
 	   .setCreditInvoiceId()   	// Long
 	   .setInvoiceId()         	// Long
-	   .setRowNumber()      	// Integer	 
+	   .setRowNumber()      	// Integer
 	   .setStatus() 			// ORDERROWSTATUS
 	;
 ...
@@ -890,40 +890,40 @@ using doRequest, and parsing the response received from Svea.
 
 Invoice and payment plan orders will perform a synchronous payment request, and will return a response object immediately following the doRequest call.
 
-Hosted payment methods like Card, Direct Bank and any payment methods accessed via the PayPage, are asynchronous. Having selecting an asynchronous payment method you generally use a request class method to get a payment form 
-object in return. The form is then posted to Svea, where the customer is redirected to the card payment provider service or bank. After the customer completes the payment, a response is sent back to your provided return url, 
+Hosted payment methods like Card, Direct Bank and any payment methods accessed via the PayPage, are asynchronous. Having selecting an asynchronous payment method you generally use a request class method to get a payment form
+object in return. The form is then posted to Svea, where the customer is redirected to the card payment provider service or bank. After the customer completes the payment, a response is sent back to your provided return url,
 where it can be processed and inspected.
 
-Card, Direct Bank, and other hosted methods accessed via PayPage are asynchronous. Asynchronous payment methods provide an html form containing a formatted message to send to Svea, which in turn will send a request response 
+Card, Direct Bank, and other hosted methods accessed via PayPage are asynchronous. Asynchronous payment methods provide an html form containing a formatted message to send to Svea, which in turn will send a request response
 to the specified return url, where the response can be parsed using the SveaResponse class. You should also be prepared to receive the request response on the specified alternative callback url which is used, amongst others,
 if i.e. the customer does not return to the store after the order payment have been completed.
 
-To create an invoice or partpayment order using useInvoicePayment or usePaymentPlanPayment, you do not need to explicitly specify which payment methods are available. 
+To create an invoice or partpayment order using useInvoicePayment or usePaymentPlanPayment, you do not need to explicitly specify which payment methods are available.
 
 When creating a card or direct bank order, you can minimize the number of steps in the checkout process by explicitly specifying i.e. usePaymentMethod(PAYMENTMETHOD.KORTCERT) instead of going through useCardPayment.
 
-Get an order builder instance using the WebPay.deliverOrder entrypoint, then provide more information about the transaction using DeliverOrderBuilder methods: 
+Get an order builder instance using the WebPay.deliverOrder entrypoint, then provide more information about the transaction using DeliverOrderBuilder methods:
 
 When redirecting the customer to the PayPage, you can use methods in PayPagePayment, i.e. excludePaymentMethods, to first specify which available payment methods to show or exclude, followed by the doRequest call.
 
 ```java
 ...
 	CreateOrderBuilder orderbuilder = WebPay.createOrder(config)
-		.addOrderRow()              		// required, see WebPayItem.orderRow() for order row specification
-		.addFee()         			   		// optional, see WebPayItem for invoice, shipping fee
-		.addDiscount()          			// optional, see WebPayItem for fixed, relative discount
-		.addCustomerDetails()    			// required for invoice and payment plan payments, see WebPayItem for individual, company customer
-		.setCountryCode()               	// required
-		.setOrderDate()            			// required for invoice and payment plan payments
-		.setCurrency()                 		// required for card payment, direct bank & PayPage payments only. Ignored for invoice and payment plan.
-		.setClientOrderNumber()    			// required for card payment, direct payment, PaymentMethod & PayPage payments, max length 30 chars.
-		.setCustomerReference()    			// optional, ignored for card & direct bank orders, max length 30 chars.
+		.addOrderRow()                                  // Required, see WebPayItem.orderRow() for order row specification
+		.addFee()         			   	// Optional, see WebPayItem for invoice, shipping fee
+		.addDiscount()          			// Optional, see WebPayItem for fixed, relative discount
+		.addCustomerDetails()    			// Required for invoice and payment plan payments, see WebPayItem for individual, company customer
+		.setCountryCode()                               // Required
+		.setOrderDate()            			// Required for invoice and payment plan payments
+		.setCurrency()                                  // Required for card payment, direct bank & PayPage payments only. Ignored for invoice and payment plan.
+		.setClientOrderNumber()    			// Required for card payment, direct payment, Unique String(65). Optional for Invoice and Payment plan String(32).
+		.setCustomerReference()    			// Optional for invoice and payment plan String(32), ignored for card & direct bank orders.
     ;
-     
+
      // then select a synchronous payment method (invoice, part payment) request class and send request
      response = orderbuilder.useInvoicePayment().doRequest();    	// returns CreateOrderResponse
      response = orderbuilder.usePaymentPlanPayment().doRequest();	// returns CreateOrderResponse
-     
+
      // or select an asynchronous payment method (card, direct bank et al.) request class
      request = orderbuilder
      	.usePaymentMethod(PAYMENTMETHOD.KORTCERT)	// returns HostedPayment<?>
@@ -950,10 +950,10 @@ When redirecting the customer to the PayPage, you can use methods in PayPagePaym
 <!-- WebPay.deliverOrder() docblock below, replace @see with apidoc links -->
 Use the WebPay.deliverOrder() entrypoint when you deliver an order to the customer. Supports Invoice, Payment Plan and Card orders. (Direct Bank orders are not supported.)
 
-The deliver order request should generally be sent to Svea once the ordered items have been sent out, or otherwise delivered, to the customer. 
+The deliver order request should generally be sent to Svea once the ordered items have been sent out, or otherwise delivered, to the customer.
 
 For invoice and partpayment orders, the deliver order request triggers the invoice being sent out to the customer by Svea. (This assumes that your account
-has auto-approval of invoices turned on, please contact Svea if unsure). 
+has auto-approval of invoices turned on, please contact Svea if unsure).
 
 For card orders, the deliver order request confirms the card transaction, which in turn allows nightly batch processing of the transaction by Svea. (Delivering card orders is only needed if your account has auto-confirm turned off, please contact Svea if unsure.)
 
@@ -962,14 +962,14 @@ use WebPayAdmin.deliverOrderRows().
 
 For more information on using deliverOrder to partially deliver and/or credit
 an order, see 6.2.3 below.
- 
-Get an order builder instance using the WebPay.deliverOrder entrypoint, then provide more information about the transaction using DeliverOrderBuilder methods: 
+
+Get an order builder instance using the WebPay.deliverOrder entrypoint, then provide more information about the transaction using DeliverOrderBuilder methods:
 
 ```java
 ...
 	 DeliverOrderBuilder request = WebPay.deliverOrder(config)
          .setOrderId()                  // invoice or payment plan only, required
-         .setTransactionId()            // card only, optional, alias for setOrderId 
+         .setTransactionId()            // card only, optional, alias for setOrderId
          .setCountryCode()              // required
          .setInvoiceDistributionType()  // invoice only, required
          .setNumberOfCreditDays()       // invoice only, optional
@@ -1060,12 +1060,12 @@ Example (cont. from 6.2.3.2):
 
 ### 6.3 WebPay.getAddresses() <a name="i63"></a>
 <!-- WebPay.getAddresses() docblock below, replace @see with apidoc links -->
-Use the WebPay.getAddresses() entrypoint to fetch a list of addresses associated with a given customer identity. Company addresses additionally has an AddressSelector attribute that uniquely identifies the address. Only applicable 
+Use the WebPay.getAddresses() entrypoint to fetch a list of addresses associated with a given customer identity. Company addresses additionally has an AddressSelector attribute that uniquely identifies the address. Only applicable
 for SE, NO and DK invoice and part payment orders. Note that in Norway, company customers only are supported.
 
 Get an instance using the WebPayAdmin.getAddresses entrypoint, then provide more information about the customer and send the request using the GetAddresses methods:
 
-Use setCountryCode() to supply the country code that corresponds to the account credentials used for the address lookup. Note that this means that you cannot look up a user in a foreign country, this is a consequence of the fact 
+Use setCountryCode() to supply the country code that corresponds to the account credentials used for the address lookup. Note that this means that you cannot look up a user in a foreign country, this is a consequence of the fact
 that the invoice and partpayment payment methods don't support foreign orders.
 
 Use setCustomerIdentifier() to provide the exact credentials needed to identify the customer according to country:
@@ -1092,7 +1092,7 @@ The final doRequest() will then send the getAddresses request to Svea and return
 
 	// get the list of customer addresses from the response using either getIndividualCustomers() or getCompanyCustomers()
 	ArrayList<IndividualCustomer> addresses = response.getIndividualCustomers();
-	ArrayList<CompanyCustomer> addresses = response.getCompanyCustomers(); 
+	ArrayList<CompanyCustomer> addresses = response.getCompanyCustomers();
 ```
 
 #### 6.3.2 Deprecated methods
@@ -1104,12 +1104,12 @@ The following methods are deprecated starting with 1.6.1 of the package:
 	.setCompany()                       // deprecated -- lookup the addresses associated with a legal entity (i.e. company)
 	.setOrderTypeInvoice()              // deprecated -- supply the method that corresponds to the account credentials used for the address lookup
 	.setOrderTypePaymentPlan()          // deprecated -- supply the method that corresponds to the account credentials used for the address lookup
-	
+
 	//GetAddressResponse
 	.getXXX()							// deprecated -- get value of customer attribute XXX for first associated customer address
 ```
 
-(Note that if your integration is currently set to use different (test/production) credentials for invoice and payment plan you may need to use the 
+(Note that if your integration is currently set to use different (test/production) credentials for invoice and payment plan you may need to use the
 deprecated methods setOrderTypeInvoice() or setOrderTypePaymentPlan() to explicity state which ConfigurationProvider credentials to be use in request.)
 
 [<< To top](https://github.com/sveawebpay/java-integration/tree/master#java-integration-package-api-for-sveawebpay)
@@ -1127,7 +1127,7 @@ Use getPaymentPlanParams() to fetch all campaigns associated with a given client
 
 	// receive response and get CampaignCodes from response
 	PaymentPlanParamsResponse response = request->doRequest();
- 	List<CampaignCode> campaignCodes = response.getCampaignCodes(); 
+ 	List<CampaignCode> campaignCodes = response.getCampaignCodes();
 ...
 ```
 
@@ -1161,8 +1161,8 @@ Get an instance using the WebPayAdmin.queryOrder entrypoint, then provide more i
 ...
     request = WebPayAdmin.cancelOrder(config)
          .setOrderId()		// required, use SveaOrderId recieved with createOrder response
-         .setTransactionId	// optional, card or direct bank only, alias for setOrderId 
-         .setCountryCode()	// required, use same country code as in createOrder request      
+         .setTransactionId	// optional, card or direct bank only, alias for setOrderId
+         .setCountryCode()	// required, use same country code as in createOrder request
     ;
     // then select the corresponding request class and send request
     response = request.cancelInvoiceOrder().doRequest();		// returns CloseOrderResponse
@@ -1187,8 +1187,8 @@ Get an instance using the WebPayAdmin.queryOrder entrypoint, then provide more i
 ...
     request = WebPayAdmin.queryOrder(config)
          .setOrderId()          	// required
-         .setTransactionId()	   	// optional, card or direct bank only, alias for setOrderId 
-         .setCountryCode()      	// required      
+         .setTransactionId()	   	// optional, card or direct bank only, alias for setOrderId
+         .setCountryCode()      	// required
     ;
     // then select the corresponding request class and send request
     response = request.queryInvoiceOrder().doRequest();			// returns GetOrdersResponse
@@ -1212,28 +1212,28 @@ Supports Invoice, Payment Plan and Card orders. (Direct Bank orders are not supp
 
 For Invoice and Payment Plan orders, the order row status is updated at Svea following each successful request.
 
-For card orders, the request can only be sent once, and if all original order rows are cancelled, the order then 
+For card orders, the request can only be sent once, and if all original order rows are cancelled, the order then
 receives status ANNULLED at Svea.
 
-Get an order builder instance using the WebPayAdmin.cancelOrderRows entrypoint, then provide more information about 
+Get an order builder instance using the WebPayAdmin.cancelOrderRows entrypoint, then provide more information about
 the transaction and send the request using the CancelOrderRowsBuilder methods:
 
-Use setRowToCancel() or setRowsToCancel() to specify the order row(s) to cancel. The order row indexes should 
+Use setRowToCancel() or setRowsToCancel() to specify the order row(s) to cancel. The order row indexes should
 correspond to those returned by i.e. WebPayAdmin.queryOrder();
 
-For card orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass in a copy of the original order rows. 
-The original order rows can be retrieved using WebPayAdmin.queryOrder(); the numberedOrderRows attribute contains 
-the serverside order rows w/indexes. Note that if a card order has been modified (i.e. rows cancelled or credited) 
+For card orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass in a copy of the original order rows.
+The original order rows can be retrieved using WebPayAdmin.queryOrder(); the numberedOrderRows attribute contains
+the serverside order rows w/indexes. Note that if a card order has been modified (i.e. rows cancelled or credited)
 after the initial order creation, the returned order rows will not be accurate.
 
 ```java
 ...
 		CancelOrderRowsBuilder request = WebPayAdmin.cancelOrderRows(config)
 	        .setOrderId()          			// required
-	        .setTransactionId()	   			// optional, card only, alias for setOrderId 
-	        .setCountryCode()      			// required    	
-	        .setRowToCancel()	   			// required, index of original order rows you wish to cancel 
-	        .addNumberedOrderRow()			// required for card orders, should match original row indexes 
+	        .setTransactionId()	   			// optional, card only, alias for setOrderId
+	        .setCountryCode()      			// required
+	        .setRowToCancel()	   			// required, index of original order rows you wish to cancel
+	        .addNumberedOrderRow()			// required for card orders, should match original row indexes
     	;
     	// then select the corresponding request class and send request
     	response = request.cancelInvoiceOrderRows().doRequest();		// returns CancelOrderRowsResponse
@@ -1241,7 +1241,7 @@ after the initial order creation, the returned order rows will not be accurate.
     	response = request.cancelCardOrderRows().doRequest()			// returns LowerTransactionResponse
 ...
 ```
-    
+
 See class CancelOrderRowsBuilder.
 See class CancelOrderRowsResponse.
 See class LowerTransactionResponse.
@@ -1251,21 +1251,21 @@ See class LowerTransactionResponse.
 The WebPayAdmin.creditOrderRows entrypoint method is used to credit rows in an order after it has been delivered.
 Supports invoice, card and direct bank orders. (To credit a payment plan order, please contact Svea customer service.)
 
-If you wish to credit an amount not present in the original order, use addCreditOrderRow() or addCreditOrderRows() 
+If you wish to credit an amount not present in the original order, use addCreditOrderRow() or addCreditOrderRows()
 and supply a new order row for the amount to credit. This is the recommended way to credit a card or direct bank order.
 
-If you wish to credit an invoice order row in full, you can specify the index of the order row to credit using setRowToCredit(). 
-The corresponding order row at Svea will then be credited. (For card or direct bank orders you need to first query and then 
+If you wish to credit an invoice order row in full, you can specify the index of the order row to credit using setRowToCredit().
+The corresponding order row at Svea will then be credited. (For card or direct bank orders you need to first query and then
 supply the corresponding numbered order rows using the addNumberedOrderRows() method.)
 
-Following the request Svea will issue a credit invoice including the original order rows specified using setRowToCredit(), 
+Following the request Svea will issue a credit invoice including the original order rows specified using setRowToCredit(),
 as well as any new credit order rows specified using addCreditOrderRow(). For card or direct bank orders, the order row amount
-will be credited to the customer. 
+will be credited to the customer.
 
 Note: when using addCreditOrderRows, you may only use WebPayItem.orderRow with price specified as amountExVat and vatPercent.
 
-Get an order builder instance using the WebPayAdmin.creditOrderRows entrypoint, then provide more information about the 
-transaction and send the request using the creditOrderRowsBuilder methods:     
+Get an order builder instance using the WebPayAdmin.creditOrderRows entrypoint, then provide more information about the
+transaction and send the request using the creditOrderRowsBuilder methods:
 
 ```java
 ...
@@ -1326,15 +1326,15 @@ Example to come later.
 
 The WebPayAdmin.addOrderRows() method is used to add individual order rows to undelivered or partially delivered invoice and payment plan orders. Supports invoice and payment plan orders.
 
-The order row status of the order will be updated at Svea to reflect the added order rows following a successful request. If the new order total amount exceeds the original order total amount, a new credit control is first 
+The order row status of the order will be updated at Svea to reflect the added order rows following a successful request. If the new order total amount exceeds the original order total amount, a new credit control is first
 made, which may result in the request being denied. For payment plan orders, the unew order total amount must be within the original order campaign limits, or the request will be denied.
 
-Get an order builder instance using the WebPayAdmin.addOrderRows() entrypoint, then provide more information about the transaction and send the request using the AddOrderRowsBuilder methods:   
+Get an order builder instance using the WebPayAdmin.addOrderRows() entrypoint, then provide more information about the transaction and send the request using the AddOrderRowsBuilder methods:
 
 Use setCountryCode() to specify the country code matching the original create order request.
 
-Use addUpdateOrderRow() with a new WebPayItem.orderRow() object, add the new order row attributes using the OrderRowBuilder member functions. Notably, the setRowNumber() method specifies which of the original order rows 
-to update. That order row will be replaced in full by the new NumberedOrderRow. 
+Use addUpdateOrderRow() with a new WebPayItem.orderRow() object, add the new order row attributes using the OrderRowBuilder member functions. Notably, the setRowNumber() method specifies which of the original order rows
+to update. That order row will be replaced in full by the new NumberedOrderRow.
 
 Use addOrderRow() with a new WebPayItem.orderRow() object. Add the new order row attributes using the OrderRowBuilder member functions.
 
@@ -1366,12 +1366,12 @@ The WebPayAdmin.updateOrderRows() method is used to update individual order rows
 
 The order row status of the order is updated at Svea to reflect the updated order rows. If the updated rows' order total amount exceeds the original order total amount, an error is returned by the service.
 
-Get an order builder instance using the WebPayAdmin.updateOrderRows() entrypoint, then provide more information about the transaction and send the request using the UpdateOrderRowsBuilder methods:   
+Get an order builder instance using the WebPayAdmin.updateOrderRows() entrypoint, then provide more information about the transaction and send the request using the UpdateOrderRowsBuilder methods:
 
 Use setCountryCode() to specify the country code matching the original create order request.
 
-Use addUpdateOrderRow() with a new WebPayItem.numberedOrderRow() object. Add the updated order row attributes using the NumberedOrderRowBuilder member functions. Notably, the setRowNumber() method specifies which of the 
-original order rows will be replaced, in full, with the new NumberedOrderRow. 
+Use addUpdateOrderRow() with a new WebPayItem.numberedOrderRow() object. Add the updated order row attributes using the NumberedOrderRowBuilder member functions. Notably, the setRowNumber() method specifies which of the
+original order rows will be replaced, in full, with the new NumberedOrderRow.
 
 Then use either updateInvoiceOrderRows() or updatePaymentPlanOrderRows() to get a request object, which ever matches the payment method used in the original order.
 
@@ -1400,7 +1400,7 @@ The WebPayAdmin.deliverOrderRows entrypoint method is used to deliver individual
 
 For Invoice orders, the order row status is updated at Svea following each successful request.
 
-For card orders, an order can only be delivered once, and any non-delivered order rows will be cancelled (i.e. the order amount will be lowered by the sum of the non-delivered order rows). A delivered card order has status 
+For card orders, an order can only be delivered once, and any non-delivered order rows will be cancelled (i.e. the order amount will be lowered by the sum of the non-delivered order rows). A delivered card order has status
 CONFIRMED at Svea.
 
 Get an order builder instance using the WebPayAdmin.deliverOrderRows entrypoint, then provide more information about the transaction and send the request using
@@ -1408,18 +1408,18 @@ the DeliverOrderRowsBuilder methods:
 
 Use setRowToDeliver() or setRowsToDeliver() to specify the order row(s) to deliver. The order row indexes should correspond to those returned by i.e. WebPayAdmin.queryOrder();
 
-For card orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass in a copy of the original order rows. The original order rows can be retrieved using WebPayAdmin.queryOrder(); the numberedOrderRows attribute 
+For card orders, use addNumberedOrderRow() or addNumberedOrderRows() to pass in a copy of the original order rows. The original order rows can be retrieved using WebPayAdmin.queryOrder(); the numberedOrderRows attribute
 contains the serverside order rows w/indexes. Note that if a card order has been modified (i.e. rows cancelled or credited) after the initial order creation, the returned order rows will not be accurate.
 
 ```java
 ...
 	DeliverOrderRowsBuilder request = WebPayAdmin.deliverOrderRows(config)
          .setOrderId()          			// required
-         .setTransactionId()	   			// optional, card only, alias for setOrderId 
-         .setCountryCode()      			// required    	
+         .setTransactionId()	   			// optional, card only, alias for setOrderId
+         .setCountryCode()      			// required
          .setInvoiceDistributionType()		// required, invoice only
-         .setRowToDeliver()	   				// required, index of original order rows you wish to deliver 
-         .addNumberedOrderRow()				// required for card orders, should match original row indexes 
+         .setRowToDeliver()	   				// required, index of original order rows you wish to deliver
+         .addNumberedOrderRow()				// required for card orders, should match original row indexes
 	;
 	// then select the corresponding request class and send request
  	response = request.deliverInvoiceOrderRows().doRequest();	// returns DeliverOrderRowsResponse
@@ -1453,8 +1453,8 @@ First, create an instance of SveaResponse, passing it the resulting xml response
 
 	HostedPaymentResponse parsedResponse = (HostedPaymentResponse) new SveaResponse(		// SveaResponse is an alias for HostedPaymentResponse
 		myUnparsedResponse.getParameter("response"),	// the post "response", i.e. the base64 encoded response message
-		mySecretWord									// the secret word for our merchant id 
-  	;  
+		mySecretWord									// the secret word for our merchant id
+  	;
 ...
 ```
 
@@ -1480,12 +1480,12 @@ If the ignoreMaxAndMinFlag is set to true, the returned array also contains the 
 
 ```java
 ...
-	PaymentPlanParamsResponse paymentPlanParams = 
+	PaymentPlanParamsResponse paymentPlanParams =
     	WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig())
             .setCountryCode(TestingTool.DefaultTestCountryCode)
             .doRequest();
-        
-	List<Map<String, String>> response = Helper.paymentPlanPricePerMonth(200.0, paymentPlanParams, true);        
+
+	List<Map<String, String>> response = Helper.paymentPlanPricePerMonth(200.0, paymentPlanParams, true);
 
 	String firstCampaign = response.get(0).get("campaignCode");							// i.e. [campaignCode] => 310012
 	String firstCampaignDescription = response.get(0).get("description");			// i.e. [description] => "Dela upp betalningen på 12 månader (räntefritt)"
@@ -1494,7 +1494,7 @@ If the ignoreMaxAndMinFlag is set to true, the returned array also contains the 
 ```
 
 ### 9.2 Inspect prepareRequest(), validateOrder() methods <a name="i92"></a>
-During module development or debugging, the `.prepareRequest()` method may be of use as an alternative to `.doRequest()` as the final step in the createOrder process. 
+During module development or debugging, the `.prepareRequest()` method may be of use as an alternative to `.doRequest()` as the final step in the createOrder process.
 
 Generally, a call to `.prepareRequest()` will do everything that `.doRequest()` does, but it does not send the SOAP request to Svea, instead you may inspect the returned result for any problems.
 
@@ -1526,7 +1526,7 @@ For invoice and part payment, the order amount is assumed to be made out in the 
 ### 10.2 Other payment method credentials <a name="i102"></a>
 **Q**: What credentials do I need to make use of i.e. PayPal as a payment method through the PayPage?
 
-**A**: When you sign up with Svea you will be provided with a merchant id which is used for all hosted payment methods. For a merchant id, one or more payment methods may be enabled, such as credit cards, direct bank payments using various banks, PayPal etc. 
+**A**: When you sign up with Svea you will be provided with a merchant id which is used for all hosted payment methods. For a merchant id, one or more payment methods may be enabled, such as credit cards, direct bank payments using various banks, PayPal etc.
 
 To enable a new payment method, your merchant will need to be configured with various credentials as requested by Svea. Please ask your Svea integration manager for more information on what exact credentials are needed.
 
@@ -1534,8 +1534,8 @@ To enable a new payment method, your merchant will need to be configured with va
 The provided examples show how to use the Svea java integration package to specify an order and send a payment request to Svea.
 
 ### 11.1 Running the examples <a name="i111"></a>
-We assume that you are running a local installation of Tomcat 7 or later on localhost port 8080. 
-Build and deploy the examples to localhost using ant, see build.xml and edit build.properties with your tomcat installation path: 
+We assume that you are running a local installation of Tomcat 7 or later on localhost port 8080.
+Build and deploy the examples to localhost using ant, see build.xml and edit build.properties with your tomcat installation path:
 
 ```
 $ pwd
@@ -1582,7 +1582,7 @@ $
 
 You should now be able to access the example by going to http://localhost:8080/InvoiceOrder
 
-The web.xml file contains the servlet routing information for the InvoiceOrder application. 
+The web.xml file contains the servlet routing information for the InvoiceOrder application.
 When you land on the index.jsp file it redirects you to /invoiceorder, which in turn passes the request to InvoiceOrderServlet as stated in web.xml.
 The backend InvoiceOrderServlet builds an order and sends a payment request to Svea. After the service responds, you're redirected to invoiceorder.jsp.
 The frontend invoiceorder.jsp file then presents the response result.
