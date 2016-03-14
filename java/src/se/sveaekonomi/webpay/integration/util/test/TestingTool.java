@@ -49,7 +49,7 @@ public class TestingTool {
     public static final String DefaultTestClientOrderNumber = "33";
     public static final String DefaultTestCustomerReferenceNumber = "ref33";
     public static final String DefaultTestIndividualNationalIdNumber = "194605092222";
-    public static final String DefaultTestCompanyNationalIdNumber = "164608142222";
+    public static final String DefaultTestCompanyNationalIdNumber = "194608142222";		// "enskild firma"
     public static final Date DefaultTestDate = java.sql.Date.valueOf("2012-12-12");
     public static final Long DefaultOrderId = 987654L;
 	

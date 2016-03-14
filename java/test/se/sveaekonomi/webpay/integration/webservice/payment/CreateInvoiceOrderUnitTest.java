@@ -1490,7 +1490,7 @@ public class CreateInvoiceOrderUnitTest {
 		assertFalse( response.isIndividualIdentity() );
 		assertTrue( response.customerIdentity instanceof CustomerIdentityResponse );
 		assertEquals("Company", response.customerIdentity.getCustomerType());
-		assertEquals("164608142222", response.customerIdentity.getNationalIdNumber());
+		assertEquals(TestingTool.DefaultTestCompanyNationalIdNumber, response.customerIdentity.getNationalIdNumber());
 		assertEquals("Persson, Tess T", response.customerIdentity.getFullName());
 		assertEquals("Testgatan 1", response.customerIdentity.getStreet());
 		assertEquals("c/o Eriksson, Erik", response.customerIdentity.getCoAddress());
@@ -1528,7 +1528,7 @@ public class CreateInvoiceOrderUnitTest {
 		assertEquals("Stan", c.getLocality());
 		//cc
 		assertEquals( "Persson, Tess T", c.getCompanyName() );
-		assertEquals( "164608142222", c.getNationalIdNumber() );
+		assertEquals( TestingTool.DefaultTestCompanyNationalIdNumber, c.getNationalIdNumber() );
 		assertEquals( null, c.getVatNumber() );
 		assertEquals( null, c.getAddressSelector() );		
 	}
