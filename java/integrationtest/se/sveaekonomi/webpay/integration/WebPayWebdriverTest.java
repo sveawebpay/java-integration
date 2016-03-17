@@ -218,9 +218,8 @@ public class WebPayWebdriverTest {
 		DeliverOrdersResponse response = request.doRequest();
 		assertThat( response, instanceOf(DeliverOrdersResponse.class) );
 		assertEquals(false, response.isOrderAccepted());
-		assertEquals("1000", response.getResultCode());	// probably a bug, ought to be 20004
-		//assertEquals("20004", response.getResultCode());
-		//assertEquals("An order with the provided id does not exist.", response.getErrorMessage());			
+		assertEquals("20004", response.getResultCode());
+		assertEquals("No order found for orderId: 123456", response.getErrorMessage());			
     }
    
     @Test
