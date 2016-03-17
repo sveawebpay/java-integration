@@ -9,6 +9,10 @@ branches:
     - develop
     - master
 
+addons:
+  # set short to avoid https://github.com/travis-ci/travis-ci/issues/5227
+  hostname: test-openjdk7
+
 before_script: cd java
 
 script: ant clean-integrationtest 
