@@ -104,24 +104,25 @@ public class CancelOrderRowsRequest extends AdminServiceRequest {
 	    // SOAP Body
 	    SOAPBody body = envelope.getBody();
 	    SOAPElement deliverPartial = body.addChildElement("CancelOrderRows", "tem");
-	    SOAPElement request = deliverPartial.addChildElement("request", "tem");
-	    	SOAPElement authentication = request.addChildElement("Authentication", "dat");
-			SOAPElement password = authentication.addChildElement("Password", "dat");	    			
-				password.addTextNode(this.builder.getConfig().getPassword( this.builder.getOrderType(), this.builder.getCountryCode()));
-			SOAPElement username = authentication.addChildElement("Username", "dat");
-				username.addTextNode(this.builder.getConfig().getUsername( this.builder.getOrderType(), this.builder.getCountryCode()));
-		SOAPElement clientId = request.addChildElement("ClientId", "dat");
-			clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber( this.builder.getOrderType(), this.builder.getCountryCode() )));
-	  
-			SOAPElement orderRowNumbers = request.addChildElement("OrderRowNumbers", "dat");
-    		for( Integer rowIndex : this.builder.getRowsToCancel() ) {
-    			orderRowNumbers.addChildElement("long","arr").addTextNode( Integer.toString( rowIndex ) );
-    		}
-    		
-		    SOAPElement orderType = request.addChildElement("OrderType", "dat");
-	    		orderType.addTextNode( this.builder.getOrderType().toString() );
-		    SOAPElement sveaOrderId = request.addChildElement("SveaOrderId", "dat");
-		    	sveaOrderId.addTextNode(String.valueOf(this.builder.getOrderId()));
+		    SOAPElement request = deliverPartial.addChildElement("request", "tem");
+		    	SOAPElement authentication = request.addChildElement("Authentication", "dat");
+					SOAPElement password = authentication.addChildElement("Password", "dat");	    			
+						password.addTextNode(this.builder.getConfig().getPassword( this.builder.getOrderType(), this.builder.getCountryCode()));
+					SOAPElement username = authentication.addChildElement("Username", "dat");
+						username.addTextNode(this.builder.getConfig().getUsername( this.builder.getOrderType(), this.builder.getCountryCode()));
+		        // Settings -- optional, not sent by package
+				SOAPElement clientId = request.addChildElement("ClientId", "dat");
+					clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber( this.builder.getOrderType(), this.builder.getCountryCode() )));
+		  
+				SOAPElement orderRowNumbers = request.addChildElement("OrderRowNumbers", "dat");
+		    		for( Integer rowIndex : this.builder.getRowsToCancel() ) {
+		    			orderRowNumbers.addChildElement("long","arr").addTextNode( Integer.toString( rowIndex ) );
+		    		}
+	    		
+			    SOAPElement orderType = request.addChildElement("OrderType", "dat");
+		    		orderType.addTextNode( this.builder.getOrderType().toString() );
+			    SOAPElement sveaOrderId = request.addChildElement("SveaOrderId", "dat");
+			    	sveaOrderId.addTextNode(String.valueOf(this.builder.getOrderId()));
 	    	
     	soapMessage.saveChanges();
     	

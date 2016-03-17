@@ -12,10 +12,13 @@ import org.junit.Test;
 import se.sveaekonomi.webpay.integration.WebPay;
 import se.sveaekonomi.webpay.integration.config.SveaConfig;
 import se.sveaekonomi.webpay.integration.response.webservice.PaymentPlanParamsResponse;
+import se.sveaekonomi.webpay.integration.util.calculation.Helper;
 import se.sveaekonomi.webpay.integration.util.test.TestingTool;
 
 public class PaymentPlanPricePerMonthTest {
     
+	Double priceBelowAnyCampaignMinValue = 99.0; // lowest campaign is from 100.00       	 
+	
     private PaymentPlanParamsResponse getParamsForTesting() {
         GetPaymentPlanParams request = WebPay.getPaymentPlanParams(SveaConfig.getDefaultConfig());
         PaymentPlanParamsResponse response = request
@@ -25,6 +28,8 @@ public class PaymentPlanPricePerMonthTest {
         return response;
     }
     
+    
+    // legacy (WebPay.paymentPlanPricePerMonth)
     @Test
     public void testBuildPriceCalculator() {
         PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
@@ -42,18 +47,16 @@ public class PaymentPlanPricePerMonthTest {
     public void testBuildPriceCalculatorWithLowPrice() {
         PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
         
-        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(99.0, paymentPlanParams);	// lowest campaign is from 100.00       	 
+        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(priceBelowAnyCampaignMinValue, paymentPlanParams);	
         assertTrue(result.isEmpty());
     }
 
     @Test
-    public void testBuildPriceCalculatorWithLowPrice_and_ignoreMaxAndMinFlag_true_should_return_nonempty_result() {
+    public void testBuildPriceCalculatorWithLowPrice_and_ignoreMaxAndMinFlag_false_should_return_empty_result() {
         PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
         
-        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(200.0, paymentPlanParams);        
-        assertFalse(result.isEmpty());
-        assertEquals("410012", result.get(0).get("campaignCode"));
-        assertEquals("48", result.get(0).get("pricePerMonth"));        
+        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(priceBelowAnyCampaignMinValue, paymentPlanParams);        
+        assertTrue(result.isEmpty());
     }      
     
     // new (Helper.paymentPlanPricePerMonth)
@@ -61,7 +64,7 @@ public class PaymentPlanPricePerMonthTest {
     public void testBuildPriceCalculator_new() {
         PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
         
-        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(2000.0, paymentPlanParams);      
+        List<Map<String, String>> result = Helper.paymentPlanPricePerMonth(2000.0, paymentPlanParams);      
         assertEquals("213060", result.get(0).get("campaignCode"));
         assertEquals("2029", result.get(0).get("pricePerMonth"));        
         assertEquals("223060", result.get(1).get("campaignCode"));
@@ -74,7 +77,18 @@ public class PaymentPlanPricePerMonthTest {
     public void testBuildPriceCalculatorWithLowPrice_new() {
         PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
         
-        List<Map<String, String>> result = WebPay.paymentPlanPricePerMonth(99.0, paymentPlanParams);        
+        List<Map<String, String>> result = Helper.paymentPlanPricePerMonth(priceBelowAnyCampaignMinValue, paymentPlanParams);        
         assertTrue(result.isEmpty());        
     }
+    
+    @Test
+    public void testBuildPriceCalculatorWithLowPrice_and_ignoreMaxAndMinFlag_true_should_return_nonempty_result_new() {
+        PaymentPlanParamsResponse paymentPlanParams = getParamsForTesting();
+        
+        List<Map<String, String>> result = Helper.paymentPlanPricePerMonth(99.0, paymentPlanParams, true);        
+        assertFalse(result.isEmpty());
+        assertEquals("213060", result.get(0).get("campaignCode"));
+        assertEquals("Köp nu betala om 3 månader (räntefritt)", result.get(0).get("description"));        
+        assertEquals("128", result.get(0).get("pricePerMonth"));        
+    }  
 }

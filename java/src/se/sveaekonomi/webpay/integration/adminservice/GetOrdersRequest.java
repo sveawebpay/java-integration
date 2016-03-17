@@ -1,5 +1,6 @@
 package se.sveaekonomi.webpay.integration.adminservice;
 
+import java.io.IOException;
 import java.net.URL;
 
 import javax.xml.bind.ValidationException;
@@ -101,20 +102,20 @@ public class GetOrdersRequest extends AdminServiceRequest {
 		    			soapBodyElem2.addTextNode(this.builder.getConfig().getPassword( this.builder.getOrderType(), this.builder.getCountryCode()));
 		    		SOAPElement soapBodyElem3 = soapBodyElem1.addChildElement("Username", "dat");
 		    			soapBodyElem3.addTextNode(this.builder.getConfig().getUsername( this.builder.getOrderType(), this.builder.getCountryCode()));
-	    		
-		    		SOAPElement soapBodyElem4 = soapBodyElem.addChildElement("OrdersToRetrieve", "dat");
-		    			SOAPElement soapBodyElem5 = soapBodyElem4.addChildElement("GetOrderInformation", "dat");
-		    				SOAPElement soapBodyElem6 = soapBodyElem5.addChildElement("ClientId", "dat");
-						    	soapBodyElem6.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
-						    SOAPElement soapBodyElem7 = soapBodyElem5.addChildElement("OrderType", "dat");
-						    	if( this.builder.getOrderType() == PAYMENTTYPE.INVOICE ) {
-						    		soapBodyElem7.addTextNode("Invoice");
-						    	}
-						    	if( this.builder.getOrderType() == PAYMENTTYPE.PAYMENTPLAN ) {
-						    		soapBodyElem7.addTextNode("PaymentPlan");
-						    	}						    	
-						    SOAPElement soapBodyElem8 = soapBodyElem5.addChildElement("SveaOrderId", "dat");
-						    	soapBodyElem8.addTextNode(String.valueOf(this.builder.getOrderId()));
+    	        // Settings -- optional, not sent by package	    		
+	    		SOAPElement soapBodyElem4 = soapBodyElem.addChildElement("OrdersToRetrieve", "dat");
+	    			SOAPElement soapBodyElem5 = soapBodyElem4.addChildElement("GetOrderInformation", "dat");
+	    				SOAPElement soapBodyElem6 = soapBodyElem5.addChildElement("ClientId", "dat");
+					    	soapBodyElem6.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
+					    SOAPElement soapBodyElem7 = soapBodyElem5.addChildElement("OrderType", "dat");
+					    	if( this.builder.getOrderType() == PAYMENTTYPE.INVOICE ) {
+					    		soapBodyElem7.addTextNode("Invoice");
+					    	}
+					    	if( this.builder.getOrderType() == PAYMENTTYPE.PAYMENTPLAN ) {
+					    		soapBodyElem7.addTextNode("PaymentPlan");
+					    	}						    	
+					    SOAPElement soapBodyElem8 = soapBodyElem5.addChildElement("SveaOrderId", "dat");
+					    	soapBodyElem8.addTextNode(String.valueOf(this.builder.getOrderId()));
 						    	
         String soapActionPrefix = "http://tempuri.org/IAdminService/";
 						    	
@@ -126,9 +127,14 @@ public class GetOrdersRequest extends AdminServiceRequest {
         soapMessage.saveChanges();
 
 		// DEBUG: print SOAP Request
-//		System.out.print("Request SOAP Message:");
-//		soapMessage.writeTo(System.out);
-//		System.out.println();
+		//System.out.print("Request SOAP Message:");
+		//try {
+		//	soapMessage.writeTo(System.out);
+		//} catch (IOException e) {
+		//	// TODO Auto-generated catch block
+		//	e.printStackTrace();
+		//}
+		//System.out.println();
 
         return soapMessage;
 	}
@@ -155,13 +161,13 @@ public class GetOrdersRequest extends AdminServiceRequest {
 	    	soapResponse = soapConnection.call( soapRequest, url.toString() );
         
 			// DEBUG: print SOAP Response
-//			System.out.print("Response SOAP Message:");
-//			try {
-//				soapResponse.writeTo(System.out);
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//			System.out.println();
+			//System.out.print("Response SOAP Message:");
+			//try {
+			//	soapResponse.writeTo(System.out);
+			//} catch (IOException e) {
+			//	e.printStackTrace();
+			//}
+			//System.out.println();
         
 	    	soapConnection.close();
 		}

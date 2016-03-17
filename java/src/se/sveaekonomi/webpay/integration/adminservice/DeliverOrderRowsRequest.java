@@ -121,12 +121,14 @@ public class DeliverOrderRowsRequest extends AdminServiceRequest  {
 	    			password.addTextNode(this.builder.getConfig().getPassword( this.builder.getOrderType(), this.builder.getCountryCode()));
 	    		SOAPElement username = authentication.addChildElement("Username", "dat");
 	    			username.addTextNode(this.builder.getConfig().getUsername( this.builder.getOrderType(), this.builder.getCountryCode()));
+	        // Settings -- optional, not sent by package
 	    	SOAPElement invoiceDistributionType = request.addChildElement("InvoiceDistributionType", "dat");
 	    		invoiceDistributionType.addTextNode(this.builder.getInvoiceDistributionType().toString());    		
 			SOAPElement orderToDeliver = request.addChildElement("OrderToDeliver", "dat");
 				SOAPElement clientId = orderToDeliver.addChildElement("ClientId", "dat");
 					clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
-			    SOAPElement orderType = orderToDeliver.addChildElement("OrderType", "dat");
+				// OrderType -- optional, should ignored for EU clients (which is all that the integration package supports)
+				SOAPElement orderType = orderToDeliver.addChildElement("OrderType", "dat");
 			    	orderType.addTextNode("Invoice"); // deliverPartial only applies to Invoice orders
 			    SOAPElement sveaOrderId = orderToDeliver.addChildElement("SveaOrderId", "dat");
 			    	sveaOrderId.addTextNode(String.valueOf(this.builder.getOrderId()));
@@ -138,13 +140,13 @@ public class DeliverOrderRowsRequest extends AdminServiceRequest  {
     	soapMessage.saveChanges();
     	
         // DEBUG: Print SOAP request 
-//		System.out.print("Request SOAP Message:");
-//		try {
-//			soapMessage.writeTo(System.out);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		System.out.println();
+		//System.out.print("Request SOAP Message:");
+		//try {
+		//	soapMessage.writeTo(System.out);
+		//} catch (IOException e) {
+		//	e.printStackTrace();
+		//}
+		//System.out.println();
 		    	
 		return soapMessage;
 
@@ -172,13 +174,13 @@ public class DeliverOrderRowsRequest extends AdminServiceRequest  {
 			soapResponse = soapConnection.call( soapRequest, url.toString() );
 			
 			// DEBUG: print SOAP Response
-//			System.out.print("Response SOAP Message:");
-//			try {
-//				soapResponse.writeTo(System.out);
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//			System.out.println();
+			//System.out.print("Response SOAP Message:");
+			//try {
+			//	soapResponse.writeTo(System.out);
+			//} catch (IOException e) {
+			//	e.printStackTrace();
+			//}
+			//System.out.println();
 			
 			soapConnection.close();			
 		}

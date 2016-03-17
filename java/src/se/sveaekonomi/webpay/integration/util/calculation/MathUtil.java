@@ -12,8 +12,16 @@ public class MathUtil {
 		return (long) bankersRound(value); // Return as long and take rounded decimals in to account
     }
 
-    public static double bankersRound(double value) {
-    	return new BigDecimal(value).setScale(2, RoundingMode.HALF_EVEN).round(new MathContext(0)).doubleValue();
+    public static double bankersRound( double value ) {
+    	return bankersRound( value, 2 );
+    }
+    
+    public static double bankersRound(double value, int precision) {
+    	BigDecimal rounded = new BigDecimal( String.valueOf(value) ); 
+    	rounded = rounded.setScale(precision, RoundingMode.HALF_EVEN);
+    	rounded = rounded.round( new MathContext(0,RoundingMode.HALF_EVEN) );
+    	double retval = rounded.doubleValue();
+		return retval;
     }
 
     public static double reverseVatRate(double rate) {

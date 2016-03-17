@@ -2,7 +2,6 @@ package se.sveaekonomi.webpay.integration.adminservice;
 
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.HashMap;
 
 import javax.xml.bind.ValidationException;
 import javax.xml.soap.MessageFactory;
@@ -20,8 +19,8 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.AddOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.response.adminservice.AddOrderRowsResponse;
+import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
-import se.sveaekonomi.webpay.integration.util.request.GetRequestProperties;
 
 public class AddOrderRowsRequest extends AdminServiceRequest {
 
@@ -141,6 +140,7 @@ public class AddOrderRowsRequest extends AdminServiceRequest {
 	    			password.addTextNode(this.builder.getConfig().getPassword( this.builder.getOrderType(), this.builder.getCountryCode()));
 	    		SOAPElement username = authentication.addChildElement("Username", "dat");
 	    			username.addTextNode(this.builder.getConfig().getUsername( this.builder.getOrderType(), this.builder.getCountryCode()));
+	        // Settings -- optional, not sent by package
 			SOAPElement clientId = request.addChildElement("ClientId", "dat");
 				clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber( this.builder.getOrderType(), this.builder.getCountryCode() )));
 		    	
@@ -148,9 +148,9 @@ public class AddOrderRowsRequest extends AdminServiceRequest {
 		    for( OrderRowBuilder row : this.builder.getOrderRows() ) {
 		    	SOAPElement orderRow = orderRows.addChildElement("OrderRow", "dat1");
 		    		SOAPElement articleNumber = orderRow.addChildElement("ArticleNumber", "dat1");
-		    			articleNumber.addTextNode( row.getArticleNumber() );
-	    			SOAPElement description = orderRow.addChildElement("Description", "dat1");
-	    				description.addTextNode( row.getName()+": "+row.getDescription() );
+		    			articleNumber.addTextNode( (row.getArticleNumber() == null ) ? "" : row.getArticleNumber() );
+	    			SOAPElement description = orderRow.addChildElement("Description", "dat1");	    			
+	    				description.addTextNode( formatRowAndDescription(row.getName(), row.getDescription()) );
     				SOAPElement discountPercent = orderRow.addChildElement("DiscountPercent", "dat1");
 						discountPercent.addTextNode( String.valueOf(row.getDiscountPercent()) );
     				SOAPElement numberOfUnits = orderRow.addChildElement("NumberOfUnits", "dat1");
@@ -188,8 +188,6 @@ public class AddOrderRowsRequest extends AdminServiceRequest {
 		    	
 		return soapMessage;
 	}
-
-
 
 	protected Double getPricePerUnitFromBuilderOrderRowAndPriceIncludingVatFlag( OrderRowBuilder row, boolean usePriceIncludingVatFlag) {
 		Double amount = 0.0;
@@ -239,7 +237,7 @@ public class AddOrderRowsRequest extends AdminServiceRequest {
 		if( row.getAmountIncVat() != null && row.getAmountExVat() != null ) {
 			vatPercent = OrderRowBuilder.calculateVatPercentFromAmountExVatAndAmountIncVat( row.getAmountExVat(), row.getAmountIncVat() );
 		}        
-		return vatPercent;
+		return MathUtil.bankersRound(vatPercent); // webpay eu webservice limits VatPercent to max 2 decimals, else results in error 20024
 	}	
 
 	public AddOrderRowsResponse doRequest() {

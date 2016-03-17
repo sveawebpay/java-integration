@@ -120,16 +120,18 @@ public class DeliverOrdersRequest extends AdminServiceRequest implements Request
 			    			soapBodyElem2.addTextNode(this.builder.getConfig().getPassword( PAYMENTTYPE.fromOrderType(this.builder.getOrderType()), this.builder.getCountryCode()));
 			    		SOAPElement soapBodyElem3 = soapBodyElem1.addChildElement("Username", "dat");
 			    			soapBodyElem3.addTextNode(this.builder.getConfig().getUsername( PAYMENTTYPE.fromOrderType(this.builder.getOrderType()), this.builder.getCountryCode()));
-		    	    	SOAPElement invoiceDistributionType = request.addChildElement("InvoiceDistributionType", "dat");
-				    		invoiceDistributionType.addTextNode(this.builder.getInvoiceDistributionType().toString());   
-			    		SOAPElement soapBodyElem4 = request.addChildElement("OrdersToDeliver", "dat");
-			    			SOAPElement soapBodyElem5 = soapBodyElem4.addChildElement("DeliverOrderInformation", "dat");
-			    				SOAPElement soapBodyElem6 = soapBodyElem5.addChildElement("ClientId", "dat");
-							    	soapBodyElem6.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(PAYMENTTYPE.fromOrderType(this.builder.getOrderType()), this.builder.getCountryCode())));
-							    SOAPElement soapBodyElem7 = soapBodyElem5.addChildElement("OrderType", "dat");
-						    		soapBodyElem7.addTextNode(this.builder.getOrderType().toString());							    	
-							    SOAPElement soapBodyElem8 = soapBodyElem5.addChildElement("SveaOrderId", "dat");
-							    	soapBodyElem8.addTextNode(String.valueOf(this.builder.getOrderId()));
+	    	        // Settings -- optional, not sent by package
+	    	    	SOAPElement invoiceDistributionType = request.addChildElement("InvoiceDistributionType", "dat");
+			    		invoiceDistributionType.addTextNode(this.builder.getInvoiceDistributionType().toString());   
+		    		SOAPElement soapBodyElem4 = request.addChildElement("OrdersToDeliver", "dat");
+		    			SOAPElement soapBodyElem5 = soapBodyElem4.addChildElement("DeliverOrderInformation", "dat");
+		    				SOAPElement soapBodyElem6 = soapBodyElem5.addChildElement("ClientId", "dat");
+						    	soapBodyElem6.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(PAYMENTTYPE.fromOrderType(this.builder.getOrderType()), this.builder.getCountryCode())));
+							// OrderType -- optional, should ignored for EU clients (which is all that the integration package supports)
+						    SOAPElement soapBodyElem7 = soapBodyElem5.addChildElement("OrderType", "dat");
+					    		soapBodyElem7.addTextNode(this.builder.getOrderType().toString());							    	
+						    SOAPElement soapBodyElem8 = soapBodyElem5.addChildElement("SveaOrderId", "dat");
+						    	soapBodyElem8.addTextNode(String.valueOf(this.builder.getOrderId()));
 							    	
 	        String soapActionPrefix = "http://tempuri.org/IAdminService/";
 							    	
@@ -146,13 +148,13 @@ public class DeliverOrdersRequest extends AdminServiceRequest implements Request
 		}
         
         // DEBUG: Print SOAP request 
-//		System.out.print("Request SOAP Message:");
-//		try {
-//			soapMessage.writeTo(System.out);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		System.out.println();
+		//System.out.print("Request SOAP Message:");
+		//try {
+		//	soapMessage.writeTo(System.out);
+		//} catch (IOException e) {
+		//	e.printStackTrace();
+		//}
+		//System.out.println();
 
         return soapMessage; 
 	};    
@@ -174,13 +176,13 @@ public class DeliverOrdersRequest extends AdminServiceRequest implements Request
 			soapResponse = soapConnection.call( soapRequest, url.toString() );
 			
 			// DEBUG: print SOAP Response
-//			System.out.print("Response SOAP Message:");
-//			try {
-//				soapResponse.writeTo(System.out);
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//			System.out.println();
+			//System.out.print("Response SOAP Message:");
+			//try {
+			//	soapResponse.writeTo(System.out);
+			//} catch (IOException e) {
+			//	e.printStackTrace();
+			//}
+			//System.out.println();
 			
 			soapConnection.close();			
 		}

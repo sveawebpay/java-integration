@@ -394,18 +394,9 @@ public class WebserviceRowFormatter {
         return newOrderRow;
     }
     
-    private String formatDiscountRowDescription(String name, String description, long vatRate) {
-        String formattedDescription;
-        if (name != null) {
-            formattedDescription = name + (description == null ? "" : ": " + description);
-        }
-        else {
-            formattedDescription = description != null ? description : "";
-        }
-
-        formattedDescription += " (" + vatRate + "%)";
-
-        return formattedDescription;
+    private String formatDiscountRowDescription(String name, String description, long vatRate) {    	
+        String formattedDescription = formatRowAndDescription( name, description );
+        return formattedDescription += " (" + vatRate + "%)";
     }
 
 	private void formatOrderRows(boolean usePriceIncludingVat) {
@@ -446,12 +437,7 @@ public class WebserviceRowFormatter {
 			orderRow.ArticleNumber = articleNumber;
 		}
 
-		if (name != null) {
-			orderRow.Description = name + (description == null ? "" : ": " + description);
-		}
-		else {
-			orderRow.Description = description == null ? "" : description;
-		}
+		orderRow.Description = formatRowAndDescription( name, description );
 
 		if (unit != null) {
 			orderRow.Unit = unit;
@@ -460,6 +446,20 @@ public class WebserviceRowFormatter {
 		return orderRow;
 	}
 
+	public String formatRowAndDescription( String name, String description ) {
+		String formattedDescription;
+		
+		if (name != null) {
+			formattedDescription = name + (description == null ? "" : (": " + description));
+		}
+		else {
+			formattedDescription = description == null ? "" : description;
+		}	
+		
+		return formattedDescription;
+	}	
+	
+	
 	// serializeAmountAndVat gives preference to ExVat and vatPercent, and PriceIncludingVat flag is not set (=legacy PricePerUnit specification)
 	private SveaOrderRow serializeAmountAndVat(Double amountExVat, Double vatPercent, Double amountIncVat, SveaOrderRow orderRow) {
 		if (vatPercent != null && amountExVat != null) {

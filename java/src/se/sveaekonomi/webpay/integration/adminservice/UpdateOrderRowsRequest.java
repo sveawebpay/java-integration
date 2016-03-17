@@ -1,6 +1,5 @@
 package se.sveaekonomi.webpay.integration.adminservice;
 
-import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 
@@ -144,6 +143,7 @@ public class UpdateOrderRowsRequest extends AdminServiceRequest {
 	    			password.addTextNode(this.builder.getConfig().getPassword( this.builder.getOrderType(), this.builder.getCountryCode()));
 	    		SOAPElement username = authentication.addChildElement("Username", "dat");
 	    			username.addTextNode(this.builder.getConfig().getUsername( this.builder.getOrderType(), this.builder.getCountryCode()));
+	        // Settings -- optional, not sent by package
 			SOAPElement clientId = request.addChildElement("ClientId", "dat");
 				clientId.addTextNode(String.valueOf(this.builder.getConfig().getClientNumber(this.builder.getOrderType(), this.builder.getCountryCode())));
 		    SOAPElement orderType = request.addChildElement("OrderType", "dat");
@@ -155,9 +155,9 @@ public class UpdateOrderRowsRequest extends AdminServiceRequest {
 		    for( NumberedOrderRowBuilder row : this.builder.getUpdateOrderRows() ) {
 		    	SOAPElement orderRow = updatedOrderRows.addChildElement("NumberedOrderRow", "dat");
 		    		SOAPElement articleNumber = orderRow.addChildElement("ArticleNumber", "dat1");
-		    			articleNumber.addTextNode( row.getArticleNumber() );
+		    			articleNumber.addTextNode( (row.getArticleNumber() == null ) ? "" : row.getArticleNumber() );
 	    			SOAPElement description = orderRow.addChildElement("Description", "dat1");
-	    				description.addTextNode( row.getName()+": "+row.getDescription() );
+	    				description.addTextNode( formatRowAndDescription(row.getName(), row.getDescription()) );
     				SOAPElement discountPercent = orderRow.addChildElement("DiscountPercent", "dat1");
 						discountPercent.addTextNode( String.valueOf(row.getDiscountPercent()) );
     				SOAPElement numberOfUnits = orderRow.addChildElement("NumberOfUnits", "dat1");
@@ -189,13 +189,13 @@ public class UpdateOrderRowsRequest extends AdminServiceRequest {
     	soapMessage.saveChanges();
     	
         // DEBUG: Print SOAP request 
-//		System.out.print("Request SOAP Message:");
-//		try {
-//			soapMessage.writeTo(System.out);
-//		} catch (IOException e) {
-//			e.printStackTrace();
-//		}
-//		System.out.println();
+		//System.out.print("Request SOAP Message:");
+		//try {
+		//	soapMessage.writeTo(System.out);
+		//} catch (IOException e) {
+		//	e.printStackTrace();
+		//}
+		//System.out.println();
 		    	
 		return soapMessage;
 	}
@@ -275,14 +275,14 @@ public class UpdateOrderRowsRequest extends AdminServiceRequest {
 	        URL url = builder.getConfig().getEndPoint(PAYMENTTYPE.ADMIN_TYPE);		
 			soapResponse = soapConnection.call( soapRequest, url.toString() );
 			
-//			// DEBUG: print SOAP Response
-//			System.out.print("Response SOAP Message:");
-//			try {
-//				soapResponse.writeTo(System.out);
-//			} catch (IOException e) {
-//				e.printStackTrace();
-//			}
-//			System.out.println();
+			// DEBUG: print SOAP Response
+			//System.out.print("Response SOAP Message:");
+			//try {
+			//	soapResponse.writeTo(System.out);
+			//} catch (IOException e) {
+			//	e.printStackTrace();
+			//}
+			//System.out.println();
 			
 			soapConnection.close();			
 		}

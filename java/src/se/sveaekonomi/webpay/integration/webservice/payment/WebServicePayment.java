@@ -132,7 +132,6 @@ public abstract class WebServicePayment {
             Double rowVat = calculateTotalVatSumOfRows( row );
             total_vat += rowVat;
             total_incvat += MathUtil.bankersRound(rowExVat + rowVat);            
-            int foo=1;
     	}
     	
     	requestTotals.put("total_exvat", MathUtil.bankersRound(total_exvat) );
