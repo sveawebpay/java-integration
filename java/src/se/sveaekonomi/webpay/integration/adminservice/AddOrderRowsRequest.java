@@ -19,6 +19,7 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 import se.sveaekonomi.webpay.integration.order.handle.AddOrderRowsBuilder;
 import se.sveaekonomi.webpay.integration.order.row.OrderRowBuilder;
 import se.sveaekonomi.webpay.integration.response.adminservice.AddOrderRowsResponse;
+import se.sveaekonomi.webpay.integration.util.calculation.MathUtil;
 import se.sveaekonomi.webpay.integration.util.constant.PAYMENTTYPE;
 
 public class AddOrderRowsRequest extends AdminServiceRequest {
@@ -236,7 +237,7 @@ public class AddOrderRowsRequest extends AdminServiceRequest {
 		if( row.getAmountIncVat() != null && row.getAmountExVat() != null ) {
 			vatPercent = OrderRowBuilder.calculateVatPercentFromAmountExVatAndAmountIncVat( row.getAmountExVat(), row.getAmountIncVat() );
 		}        
-		return vatPercent;
+		return MathUtil.bankersRound(vatPercent); // webpay eu webservice limits VatPercent to max 2 decimals, else results in error 20024
 	}	
 
 	public AddOrderRowsResponse doRequest() {

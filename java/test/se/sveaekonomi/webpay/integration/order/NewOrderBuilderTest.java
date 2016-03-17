@@ -32,7 +32,7 @@ public class NewOrderBuilderTest {
                 .useInvoicePayment()
                 .prepareRequest();
         
-         assertEquals("164608142222", request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber);
+         assertEquals(TestingTool.DefaultTestCompanyNationalIdNumber, request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber);
          assertEquals("1", request.request.CreateOrderInformation.OrderRows.get(0).ArticleNumber);
          assertEquals("2", request.request.CreateOrderInformation.OrderRows.get(1).ArticleNumber);
     }
@@ -49,6 +49,6 @@ public class NewOrderBuilderTest {
         .useInvoicePayment()
         .prepareRequest();
         
-        assertEquals("164608142222", request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber); 
+        assertEquals(TestingTool.DefaultTestCompanyNationalIdNumber, request.request.CreateOrderInformation.CustomerIdentity.NationalIdNumber); 
     }
 }
