@@ -207,6 +207,7 @@ public abstract class HostedPayment<T extends HostedPayment<T>> {
 			.setCustomerRefNo(this.createOrderBuilder.getClientOrderNumber())
 			.setSubscriptionId(this.getSubscriptionId())
 			.setCurrency(this.createOrderBuilder.getCurrency())
+			.setVat(String.valueOf(this.getVat()))
 		;
 		RecurTransactionResponse recurResponse = recurRequest.doRequest();			
 

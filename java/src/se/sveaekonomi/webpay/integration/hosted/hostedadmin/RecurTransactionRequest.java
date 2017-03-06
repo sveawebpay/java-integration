@@ -33,6 +33,7 @@ public class RecurTransactionRequest extends HostedAdminRequest<RecurTransaction
 	String customerRefNo;
 	String subscriptionId;
 	String currency;
+	String vat;
 	
 	public RecurTransactionRequest setAmount(String amount) {
 		this.amount = amount;
@@ -69,6 +70,15 @@ public class RecurTransactionRequest extends HostedAdminRequest<RecurTransaction
 	public RecurTransactionRequest( ConfigurationProvider config ) {
 		super(config, "recur");
 	}
+
+	public String getVat() {
+		return this.vat;
+	}
+
+	public RecurTransactionRequest setVat(String vat) {
+		this.vat = vat;
+		return this;
+	}
 	
 	/**
 	 * should return the request message xml for the method in question
@@ -93,6 +103,11 @@ public class RecurTransactionRequest extends HostedAdminRequest<RecurTransaction
 					xmlw.writeStartElement("subscriptionid");
 						xmlw.writeCharacters(this.getSubscriptionId());
 					xmlw.writeEndElement();
+					if( this.getVat() != null ) {
+						xmlw.writeStartElement("vat");
+							xmlw.writeCharacters(this.getVat());
+						xmlw.writeEndElement();
+					}
 					if( this.getCurrency() != null ) {
 						xmlw.writeStartElement("currency");
 							xmlw.writeCharacters(this.getCurrency());
