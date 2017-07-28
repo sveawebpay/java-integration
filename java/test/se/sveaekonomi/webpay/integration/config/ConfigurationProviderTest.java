@@ -47,7 +47,7 @@ public class ConfigurationProviderTest {
         		defaultConf.getSecretWord(PAYMENTTYPE.HOSTED, countryCode));
 
         assertEquals(defaultConf.getEndPoint(PAYMENTTYPE.HOSTED), new URL("https://test.sveaekonomi.se/webpay/payment"));
-        assertEquals(defaultConf.getEndPoint(PAYMENTTYPE.INVOICE), new URL("https://webservices.sveaekonomi.se/webpay_test/SveaWebPay.asmx?WSDL"));
+        assertEquals(defaultConf.getEndPoint(PAYMENTTYPE.INVOICE), new URL("https://webpaywsstage.svea.com/SveaWebPay.asmx?WSDL"));
     }
 
     @Test
@@ -129,7 +129,7 @@ public class ConfigurationProviderTest {
     public void testProductionUrls() throws MalformedURLException
     {
         assertEquals(new URL("https://webpay.sveaekonomi.se/webpay/payment"), SveaConfig.getProdPayPageUrl());
-        assertEquals(new URL("https://webservices.sveaekonomi.se/webpay/SveaWebPay.asmx?WSDL"), SveaConfig.getProdWebserviceUrl());
+        assertEquals(new URL("https://webpayws.svea.com/SveaWebPay.asmx?WSDL"), SveaConfig.getProdWebserviceUrl());
     }
     
     @Test

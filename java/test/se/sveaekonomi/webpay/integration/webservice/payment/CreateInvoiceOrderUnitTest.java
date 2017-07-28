@@ -1491,11 +1491,11 @@ public class CreateInvoiceOrderUnitTest {
 		assertTrue( response.customerIdentity instanceof CustomerIdentityResponse );
 		assertEquals("Company", response.customerIdentity.getCustomerType());
 		assertEquals(TestingTool.DefaultTestCompanyNationalIdNumber, response.customerIdentity.getNationalIdNumber());
-		assertEquals("Persson, Tess T", response.customerIdentity.getFullName());
-		assertEquals("Testgatan 1", response.customerIdentity.getStreet());
-		assertEquals("c/o Eriksson, Erik", response.customerIdentity.getCoAddress());
-		assertEquals("99999", response.customerIdentity.getZipCode());
-		assertEquals("Stan", response.customerIdentity.getCity());
+		assertEquals("Test", response.customerIdentity.getFullName());
+		assertEquals("Testaregatan 1", response.customerIdentity.getStreet());
+		assertEquals(null, response.customerIdentity.getCoAddress());
+		assertEquals("11111", response.customerIdentity.getZipCode());
+		assertEquals("Solna", response.customerIdentity.getCity());
 		assertEquals("SE", response.customerIdentity.getCountryCode());
 				
 		
@@ -1521,13 +1521,13 @@ public class CreateInvoiceOrderUnitTest {
 		assertEquals( null, c.getPhoneNumber() );
 		assertEquals( null, c.getEmail() );
 		assertEquals( null, c.getIpAddress() );
-		assertEquals( "c/o Eriksson, Erik", c.getCoAddress() );
-		assertEquals( "Testgatan 1", c.getStreetAddress() );
+		assertEquals( null, c.getCoAddress() );
+		assertEquals( "Testaregatan 1", c.getStreetAddress() );
 		assertEquals( null, c.getHouseNumber() );
-		assertEquals("99999", c.getZipCode());
-		assertEquals("Stan", c.getLocality());
+		assertEquals("11111", c.getZipCode());
+		assertEquals("Solna", c.getLocality());
 		//cc
-		assertEquals( "Persson, Tess T", c.getCompanyName() );
+		assertEquals( "Test", c.getCompanyName() );
 		assertEquals( TestingTool.DefaultTestCompanyNationalIdNumber, c.getNationalIdNumber() );
 		assertEquals( null, c.getVatNumber() );
 		assertEquals( null, c.getAddressSelector() );		

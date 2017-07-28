@@ -9,13 +9,13 @@ public class SveaConfig {
     
     private static final String SWP_TEST_URL = "https://test.sveaekonomi.se/webpay/payment";
     private static final String SWP_PROD_URL = "https://webpay.sveaekonomi.se/webpay/payment";
-    private static final String SWP_TEST_WS_URL = "https://webservices.sveaekonomi.se/webpay_test/SveaWebPay.asmx?WSDL";
-    private static final String SWP_PROD_WS_URL = "https://webservices.sveaekonomi.se/webpay/SveaWebPay.asmx?WSDL";
+    private static final String SWP_TEST_WS_URL = "https://webpaywsstage.svea.com/SveaWebPay.asmx?WSDL";
+    private static final String SWP_PROD_WS_URL = "https://webpayws.svea.com/SveaWebPay.asmx?WSDL";
     private static final String SWP_TEST_HOSTED_ADMIN_URL = "https://test.sveaekonomi.se/webpay/rest/";		// ends with "/" as we need to add request method
     private static final String SWP_PROD_HOSTED_ADMIN_URL = "https://webpay.sveaekonomi.se/webpay/rest/";   // ends with "/" as we need to add request method 
     
-    private static final String SWP_TEST_ADMIN_URL = "https://partnerweb.sveaekonomi.se/WebPayAdminService_test/AdminService.svc/backward"; // /backward => SOAP 1.1
-    private static final String SWP_PROD_ADMIN_URL = "https://partnerweb.sveaekonomi.se/WebPayAdminService/AdminService.svc/backward"; // /backward => SOAP 1.1
+    private static final String SWP_TEST_ADMIN_URL = "https://webpayadminservicestage.svea.com/AdminService.svc/backward"; // /backward => SOAP 1.1
+    private static final String SWP_PROD_ADMIN_URL = "https://webpayadminservice.svea.com/AdminService.svc/backward"; // /backward => SOAP 1.1
     
     public static URL getProdWebserviceUrl() {
         return getUrlFromString(SWP_PROD_WS_URL);

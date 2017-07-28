@@ -23,7 +23,8 @@ public class RecurTransactionRequestTest extends TestCase {
 			.setCustomerRefNo( "123456" )
 			.setSubscriptionId( "9999999" )
 			.setCurrency("SEK")
-			.setAmount("10000")					
+			.setAmount("10000")
+			.setVat("1200")
 		;			
 		
     	String expectedXmlMessage = 
@@ -33,6 +34,7 @@ public class RecurTransactionRequestTest extends TestCase {
 				"<amount>10000</amount>" +				
 				"<customerrefno>123456</customerrefno>" +
 				"<subscriptionid>9999999</subscriptionid>" +
+				"<vat>1200</vat>" +
 				"<currency>SEK</currency>" +
 			"</recur>"
 		;  	
@@ -59,12 +61,12 @@ public class RecurTransactionRequestTest extends TestCase {
 		;
 
 		try {
-			RecurTransactionResponse response = request.doRecur();				
+			RecurTransactionResponse response = request.doRecur();
 		}
 		catch (Exception e){			
 			// fail on validation error			
 			fail("Unexpected Exception.");
-		}	 
+		}
     }    
 	
 	@Test
