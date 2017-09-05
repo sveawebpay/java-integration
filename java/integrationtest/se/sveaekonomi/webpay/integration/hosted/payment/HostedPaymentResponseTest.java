@@ -42,7 +42,7 @@ public class HostedPaymentResponseTest {
             .setClientOrderNumber(Long.toString((new Date()).getTime()))
             .setCurrency(TestingTool.DefaultTestCurrency)
             .usePaymentMethod(PAYMENTMETHOD.INVOICE)
-            	.setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+            	.setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
             	.getPaymentForm();
         
         String base64Payment = form.getXmlMessageBase64();
@@ -75,7 +75,7 @@ public class HostedPaymentResponseTest {
             .setCurrency(TestingTool.DefaultTestCurrency)
             //.setCampaignCode(), see below
             .usePaymentMethod(PAYMENTMETHOD.PAYMENTPLAN)
-            	.setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+            	.setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
             	.getPaymentForm();
         
         String base64Payment = form.getXmlMessageBase64();
@@ -99,7 +99,7 @@ public class HostedPaymentResponseTest {
             .setClientOrderNumber(Long.toString((new Date()).getTime()))
             .setCurrency(TestingTool.DefaultTestCurrency)
             .usePaymentMethod(PAYMENTMETHOD.KORTCERT)
-            	.setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+            	.setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
             	.getPaymentForm();
         
         String base64Payment = form.getXmlMessageBase64();
@@ -123,7 +123,7 @@ public class HostedPaymentResponseTest {
             .setClientOrderNumber(Long.toString((new Date()).getTime()))
             .setCurrency(TestingTool.DefaultTestCurrency)
             .usePayPageCardOnly()
-            .setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+            .setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
             .getPaymentForm();
         
         WebResponse result = postRequest(form);
@@ -144,7 +144,7 @@ public class HostedPaymentResponseTest {
             .setClientOrderNumber(Long.toString((new Date()).getTime()))
             .setCurrency(TestingTool.DefaultTestCurrency)
             .usePaymentMethod(PAYMENTMETHOD.NORDEA_SE)
-            .setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+            .setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
             .getPaymentForm();
         
         WebResponse result = postRequest(form);

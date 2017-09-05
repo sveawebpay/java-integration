@@ -36,7 +36,7 @@ public class HostedPaymentsRequestTest {
         .setClientOrderNumber( "test5")
         .setCurrency(CURRENCY.EUR)
     	.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
-        	.setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+        	.setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
         	.getPaymentForm();
         
         Assert.assertNotNull(form);
@@ -54,7 +54,7 @@ public class HostedPaymentsRequestTest {
 //        <currency>EUR</currency>
 //        <amount>500</amount>
 //        <vat>100</vat>
-//        <returnurl>https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml</returnurl>
+//        <returnurl>https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml</returnurl>
 //        <iscompany>false</iscompany>
 //        <orderrows><row><sku>665</sku>
 //        <name>Orderrow1</name>
