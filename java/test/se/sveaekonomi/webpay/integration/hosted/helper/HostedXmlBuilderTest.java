@@ -374,7 +374,7 @@ public class HostedXmlBuilderTest {
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(WebPayItem.companyCustomer())
                 .usePayPageDirectBankOnly()
-                .setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+                .setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
                 .getPaymentForm()
                 .getXmlMessage();
         
@@ -390,7 +390,7 @@ public class HostedXmlBuilderTest {
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(WebPayItem.companyCustomer())
                 .usePayPageCardOnly()
-                .setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+                .setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
                 .getPaymentForm()
                 .getXmlMessage();
         
@@ -406,7 +406,7 @@ public class HostedXmlBuilderTest {
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(WebPayItem.companyCustomer())
                 .usePayPage()
-                .setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+                .setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
                 .getPaymentForm()
                 .getXmlMessage();
         
@@ -424,7 +424,7 @@ public class HostedXmlBuilderTest {
                 .addCustomerDetails(WebPayItem.companyCustomer())
                 .usePayPage()
                 .setPayPageLanguage(LANGUAGECODE.sv)
-                .setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+                .setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
                 .getPaymentForm()
                 .getXmlMessage();
         
@@ -440,7 +440,7 @@ public class HostedXmlBuilderTest {
                 .addOrderRow(TestingTool.createMiniOrderRow())
                         .addCustomerDetails(WebPayItem.companyCustomer())
                 .usePayPage()
-                .setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+                .setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
                 .setPaymentMethod(PAYMENTMETHOD.PAYPAL)
                 .getPaymentForm()
                 .getXmlMessage();
@@ -457,7 +457,7 @@ public class HostedXmlBuilderTest {
                 .addOrderRow(TestingTool.createMiniOrderRow())
                 .addCustomerDetails(WebPayItem.companyCustomer())
                 .usePayPage()  
-                .setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+                .setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
                 .setPaymentMethod(PAYMENTMETHOD.INVOICE)
                 .getPaymentForm()
                 .getXmlMessage();

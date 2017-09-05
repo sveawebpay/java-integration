@@ -114,7 +114,7 @@ public class FixedDiscountVatCalculationTest {
 	
         PaymentForm form = order
         		.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
-        		.setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+        		.setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
         		.getPaymentForm()
 		;
         
@@ -170,7 +170,7 @@ public class FixedDiscountVatCalculationTest {
 	
         HostedPayment payment = order
     		.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
-    		.setReturnUrl("https://test.sveaekonomi.se/webpay-admin/admin/merchantresponsetest.xhtml")
+    		.setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
 		;
         PaymentForm form = payment.getPaymentForm();
         

@@ -1,6 +1,6 @@
 # Java Integration Package API for Svea WebPay
 
-Version 2.0.6
+Version 2.0.7
 
 | Branch                            | Build status                               |
 |---------------------------------- |------------------------------------------- |

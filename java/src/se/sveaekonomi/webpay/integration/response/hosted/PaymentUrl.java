@@ -53,8 +53,8 @@ public class PaymentUrl implements Response {
 		if( response.isOrderAccepted() ) {
 			this.id = response.getId();
 			this.created = response.getCreated();
-			this.url = "https://webpay.sveaekonomi.se/webpay/preparedpayment/".concat(String.valueOf(this.id));
-			this.testUrl = "https://test.sveaekonomi.se/webpay/preparedpayment/".concat(String.valueOf(this.id));		
+			this.url = "https://webpaypaymentgateway.svea.com/webpay/preparedpayment/".concat(String.valueOf(this.id));
+			this.testUrl = "https://webpaypaymentgatewaytest.svea.com/webpay/preparedpayment/".concat(String.valueOf(this.id));
 		}
 	}
 
