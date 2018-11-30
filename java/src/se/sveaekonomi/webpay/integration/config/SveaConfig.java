@@ -7,11 +7,11 @@ import se.sveaekonomi.webpay.integration.exception.SveaWebPayException;
 
 public class SveaConfig {
     
-    private static final String SWP_TEST_URL = "https://webpaypaymentgatewaytest.svea.com/webpay/payment";
+    private static final String SWP_TEST_URL = "https://webpaypaymentgatewaystage.svea.com/webpay/payment";
     private static final String SWP_PROD_URL = "https://webpaypaymentgateway.svea.com/webpay/payment";
     private static final String SWP_TEST_WS_URL = "https://webpaywsstage.svea.com/SveaWebPay.asmx?WSDL";
     private static final String SWP_PROD_WS_URL = "https://webpayws.svea.com/SveaWebPay.asmx?WSDL";
-    private static final String SWP_TEST_HOSTED_ADMIN_URL = "https://webpaypaymentgatewaytest.svea.com/webpay/rest/";		// ends with "/" as we need to add request method
+    private static final String SWP_TEST_HOSTED_ADMIN_URL = "https://webpaypaymentgatewaystage.svea.com/webpay/rest/";		// ends with "/" as we need to add request method
     private static final String SWP_PROD_HOSTED_ADMIN_URL = "https://webpaypaymentgateway.svea.com/webpay/rest/";   // ends with "/" as we need to add request method
     
     private static final String SWP_TEST_ADMIN_URL = "https://webpayadminservicestage.svea.com/AdminService.svc/backward"; // /backward => SOAP 1.1

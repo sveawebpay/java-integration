@@ -43,7 +43,7 @@ public class HostedPaymentsRequestIntegrationTest {
 			.setClientOrderNumber(  new String( "test_HostedPayment_getPaymentUrl_xml#" + new java.util.Date().getTime() ) )
 			.setCurrency(CURRENCY.EUR)
 			.usePaymentMethod(PAYMENTMETHOD.KORTCERT)
-				.setReturnUrl("https://webpaypaymentgatewaytest.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
+				.setReturnUrl("https://webpaypaymentgatewaystage.svea.com/webpay-admin/admin/merchantresponsetest.xhtml")
 				.setPayPageLanguageCode(LANGUAGECODE.sv )
 				.getPaymentUrl();
 		} catch (IllegalStateException | IOException e) {

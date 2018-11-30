@@ -54,7 +54,7 @@ public class PaymentUrl implements Response {
 			this.id = response.getId();
 			this.created = response.getCreated();
 			this.url = "https://webpaypaymentgateway.svea.com/webpay/preparedpayment/".concat(String.valueOf(this.id));
-			this.testUrl = "https://webpaypaymentgatewaytest.svea.com/webpay/preparedpayment/".concat(String.valueOf(this.id));
+			this.testUrl = "https://webpaypaymentgatewaystage.svea.com/webpay/preparedpayment/".concat(String.valueOf(this.id));
 		}
 	}
 
